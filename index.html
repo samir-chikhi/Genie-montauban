@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Génie — Tiers-Lieu de Montauban | Coworking & ESS</title>
+  <meta name="description" content="Génie est un tiers-lieu ancré dans l'économie sociale et solidaire à Montauban. Bureaux privatifs, coworking, salles de réunion. À 1 min de la gare SNCF. Accessible PMR.">
+  <meta name="keywords" content="coworking montauban, tiers lieu montauban, espace collaboratif, ESS, économie sociale solidaire, bureau partagé, salle réunion montauban">
+  <meta name="author" content="Génie Montauban">
+  <meta property="og:title" content="Génie — Tiers-Lieu de Montauban">
+  <meta property="og:description" content="Espace de coworking, bureaux et salles de réunion au cœur de Montauban. ESS, innovation sociale, communauté.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://samir-chikhi.github.io/Genie/">
+  <link rel="canonical" href="https://samir-chikhi.github.io/Genie/">
+  <!-- Google Fonts -->
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ═══════════════════════════════════════════════
+       VARIABLES & RESET
+    ═══════════════════════════════════════════════ */
+    :root {
+      --navy:   #1C2B3A;
+      --gold:   #C9993E;
+      --gold-l: #E8C06A;
+      --cream:  #F7F3ED;
+      --white:  #FFFFFF;
+      --ink:    #1C2B3A;
+      --muted:  #6B7A8A;
+      --light:  #EDE8E1;
+      --sage:   #4A7C6F;
+      --brick:  #8B3A2A;
+      --border: rgba(28,43,58,.12);
+      --shadow: 0 4px 32px rgba(28,43,58,.10);
+      --r:      12px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      color: var(--ink);
+      background: var(--white);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; border: none; background: none; font-family: inherit; }
+
+    /* ═══════════════════════════════════════════════
+       NAVIGATION
+    ═══════════════════════════════════════════════ */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%;
+      height: 72px;
+      background: rgba(255,255,255,.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      transition: box-shadow .3s;
+    }
+    nav.scrolled { box-shadow: var(--shadow); }
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .nav-logo img { height: 44px; width: auto; }
+    .nav-logo-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px; font-weight: 900;
+      color: var(--navy); letter-spacing: -.5px;
+    }
+    .nav-logo-sub {
+      font-size: 11px; color: var(--muted); letter-spacing: .8px;
+      text-transform: uppercase; display: block; margin-top: -3px;
+    }
+    .nav-links {
+      display: flex; align-items: center; gap: 32px; list-style: none;
+    }
+    .nav-links a {
+      font-size: 14px; font-weight: 500; color: var(--muted);
+      transition: color .2s; letter-spacing: .2px;
+    }
+    .nav-links a:hover { color: var(--navy); }
+    .nav-cta {
+      background: var(--gold); color: var(--white);
+      padding: 10px 22px; border-radius: 8px;
+      font-size: 14px; font-weight: 600;
+      transition: background .2s, transform .15s;
+    }
+    .nav-cta:hover { background: #b8882e; transform: translateY(-1px); color: var(--white); }
+    .nav-burger { display: none; flex-direction: column; gap: 5px; padding: 4px; }
+    .nav-burger span { width: 24px; height: 2px; background: var(--navy); border-radius: 2px; transition: .3s; }
+
+    /* ═══════════════════════════════════════════════
+       HERO
+    ═══════════════════════════════════════════════ */
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      background: var(--navy);
+      position: relative; overflow: hidden;
+      padding: 120px 5% 80px;
+    }
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 60% 80% at 80% 50%, rgba(201,153,62,.15) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 40% at 10% 80%, rgba(74,124,111,.12) 0%, transparent 50%);
+    }
+    .hero-grid {
+      position: absolute; inset: 0; z-index: 0; opacity: .05;
+      background-image: linear-gradient(var(--cream) 1px, transparent 1px),
+                        linear-gradient(90deg, var(--cream) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    .hero-content {
+      position: relative; z-index: 1;
+      max-width: 680px;
+    }
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(201,153,62,.2); border: 1px solid rgba(201,153,62,.4);
+      color: var(--gold-l); padding: 6px 14px; border-radius: 20px;
+      font-size: 12px; font-weight: 600; letter-spacing: .8px;
+      text-transform: uppercase; margin-bottom: 28px;
+    }
+    .hero-tag::before { content: ''; width: 6px; height: 6px; background: var(--gold); border-radius: 50%; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.8)} }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      font-weight: 900; line-height: 1.05;
+      color: var(--white); margin-bottom: 24px;
+      letter-spacing: -1px;
+    }
+    .hero h1 em { color: var(--gold); font-style: italic; }
+    .hero-sub {
+      font-size: 1.1rem; color: rgba(255,255,255,.7);
+      line-height: 1.7; margin-bottom: 40px; max-width: 540px;
+      font-weight: 300;
+    }
+    .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 56px; }
+    .btn-primary {
+      background: var(--gold); color: var(--white);
+      padding: 14px 28px; border-radius: 10px;
+      font-size: 15px; font-weight: 600;
+      transition: all .2s; display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-primary:hover { background: #b8882e; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201,153,62,.4); }
+    .btn-ghost {
+      background: rgba(255,255,255,.1); color: var(--white);
+      padding: 14px 28px; border-radius: 10px; border: 1px solid rgba(255,255,255,.25);
+      font-size: 15px; font-weight: 500;
+      transition: all .2s;
+    }
+    .btn-ghost:hover { background: rgba(255,255,255,.18); }
+    .hero-stats {
+      display: flex; gap: 40px; flex-wrap: wrap;
+      border-top: 1px solid rgba(255,255,255,.1); padding-top: 40px;
+    }
+    .hero-stat-n {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.4rem; font-weight: 900; color: var(--gold); line-height: 1;
+    }
+    .hero-stat-l { font-size: 12px; color: rgba(255,255,255,.55); letter-spacing: .5px; margin-top: 4px; }
+    .hero-visual {
+      position: absolute; right: 5%; top: 50%; transform: translateY(-50%);
+      width: min(440px, 40%); z-index: 1;
+    }
+    .hero-card-stack { position: relative; width: 100%; }
+    .hero-card {
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 16px; padding: 24px;
+      backdrop-filter: blur(8px);
+      transition: transform .3s;
+    }
+    .hero-card:hover { transform: translateY(-4px); }
+    .hero-card + .hero-card { margin-top: 16px; }
+    .hero-card-title { font-size: 13px; font-weight: 600; color: var(--gold); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px; }
+    .hero-card-body { font-size: 15px; color: rgba(255,255,255,.8); }
+    .hero-card-meta { font-size: 12px; color: rgba(255,255,255,.45); margin-top: 8px; font-family: 'DM Mono', monospace; }
+
+    /* ═══════════════════════════════════════════════
+       SECTIONS COMMUNES
+    ═══════════════════════════════════════════════ */
+    section { padding: 96px 5%; }
+    .section-tag {
+      display: inline-block; font-size: 11px; font-weight: 700;
+      letter-spacing: 1.2px; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 900; line-height: 1.1; color: var(--navy);
+      margin-bottom: 16px; letter-spacing: -.5px;
+    }
+    .section-sub {
+      font-size: 1.05rem; color: var(--muted);
+      line-height: 1.7; max-width: 560px;
+    }
+    .section-head { margin-bottom: 56px; }
+
+    /* ═══════════════════════════════════════════════
+       BANDEAU INFOS
+    ═══════════════════════════════════════════════ */
+    .infobanner {
+      background: var(--navy); padding: 20px 5%;
+      display: flex; align-items: center; justify-content: center;
+      gap: 40px; flex-wrap: wrap;
+    }
+    .infobanner-item {
+      display: flex; align-items: center; gap: 10px;
+      color: rgba(255,255,255,.8); font-size: 14px; font-weight: 500;
+    }
+    .infobanner-item svg { color: var(--gold); flex-shrink: 0; }
+
+    /* ═══════════════════════════════════════════════
+       ESPACES
+    ═══════════════════════════════════════════════ */
+    #espaces { background: var(--cream); }
+    .espaces-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+    }
+    .espace-card {
+      background: var(--white); border-radius: var(--r);
+      border: 1px solid var(--border); overflow: hidden;
+      transition: transform .25s, box-shadow .25s;
+    }
+    .espace-card:hover { transform: translateY(-6px); box-shadow: var(--shadow); }
+    .espace-card-top {
+      background: var(--navy); padding: 28px 24px 20px;
+      display: flex; align-items: flex-start; justify-content: space-between;
+    }
+    .espace-icon { font-size: 2rem; }
+    .espace-badge {
+      font-size: 11px; font-weight: 700; letter-spacing: .6px;
+      text-transform: uppercase; background: rgba(201,153,62,.25);
+      color: var(--gold-l); padding: 4px 10px; border-radius: 20px;
+    }
+    .espace-card-body { padding: 20px 24px 24px; }
+    .espace-ref { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+    .espace-nom { font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+    .espace-desc { font-size: 13.5px; color: var(--muted); line-height: 1.6; margin-bottom: 16px; }
+    .espace-info { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
+    .espace-info-item { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 4px; }
+    .espace-prix {
+      display: flex; justify-content: space-between; align-items: center;
+      background: var(--cream); border-radius: 8px; padding: 10px 14px;
+    }
+    .espace-prix-from { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+    .espace-prix-val { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; color: var(--brick); }
+
+    /* ═══════════════════════════════════════════════
+       TARIFS
+    ═══════════════════════════════════════════════ */
+    #tarifs { background: var(--white); }
+    .tarifs-intro {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
+      margin-bottom: 56px; align-items: start;
+    }
+    .profils-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .profil-card {
+      border: 2px solid var(--border); border-radius: var(--r);
+      padding: 20px; transition: border-color .2s;
+    }
+    .profil-card:hover { border-color: var(--gold); }
+    .profil-icon { font-size: 1.5rem; margin-bottom: 8px; }
+    .profil-nom { font-weight: 700; font-size: 14px; color: var(--navy); margin-bottom: 4px; }
+    .profil-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+    .tarifs-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .tarifs-table th {
+      background: var(--navy); color: var(--white);
+      padding: 12px 16px; text-align: left; font-weight: 600;
+      font-size: 12px; letter-spacing: .4px;
+    }
+    .tarifs-table th:first-child { border-radius: 8px 0 0 0; }
+    .tarifs-table th:last-child { border-radius: 0 8px 0 0; }
+    .tarifs-table td { padding: 10px 16px; border-bottom: 1px solid var(--border); }
+    .tarifs-table tr:hover td { background: var(--cream); }
+    .tarifs-table .free { color: var(--sage); font-weight: 700; }
+    .tarifs-note {
+      margin-top: 20px; font-size: 13px; color: var(--muted);
+      background: var(--cream); border-radius: 8px; padding: 14px 18px;
+      border-left: 3px solid var(--gold);
+    }
+
+    /* ═══════════════════════════════════════════════
+       VALEURS / IDENTITÉ
+    ═══════════════════════════════════════════════ */
+    #valeurs { background: var(--navy); color: var(--white); }
+    #valeurs .section-title { color: var(--white); }
+    #valeurs .section-tag { color: var(--gold); }
+    #valeurs .section-sub { color: rgba(255,255,255,.65); }
+    .valeurs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .valeur-card {
+      background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+      border-radius: var(--r); padding: 28px 24px;
+      transition: background .25s;
+    }
+    .valeur-card:hover { background: rgba(255,255,255,.1); }
+    .valeur-icon { font-size: 2rem; margin-bottom: 14px; }
+    .valeur-title { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 700; color: var(--gold); margin-bottom: 10px; }
+    .valeur-text { font-size: 14px; color: rgba(255,255,255,.65); line-height: 1.7; }
+
+    /* ═══════════════════════════════════════════════
+       SERVICES
+    ═══════════════════════════════════════════════ */
+    #services { background: var(--cream); }
+    .services-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+    .service-card {
+      background: var(--white); border-radius: var(--r);
+      border: 1px solid var(--border); padding: 24px;
+      display: flex; flex-direction: column; gap: 10px;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .service-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+    .service-icon { font-size: 1.8rem; }
+    .service-title { font-weight: 700; font-size: 15px; color: var(--navy); }
+    .service-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+    .service-tag {
+      display: inline-block; font-size: 11px; font-weight: 600;
+      padding: 3px 10px; border-radius: 20px;
+      background: rgba(201,153,62,.15); color: var(--gold);
+    }
+
+    /* ═══════════════════════════════════════════════
+       ADHÉSION
+    ═══════════════════════════════════════════════ */
+    #adhesion { background: var(--white); }
+    .adhesion-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
+    .adhesion-card {
+      border-radius: var(--r); border: 2px solid var(--border);
+      padding: 32px; transition: border-color .25s, transform .25s;
+    }
+    .adhesion-card:hover { border-color: var(--gold); transform: translateY(-4px); }
+    .adhesion-card.featured {
+      border-color: var(--gold); background: linear-gradient(135deg, #fffbf3, #fef6e4);
+    }
+    .adhesion-tag {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .8px; color: var(--gold); margin-bottom: 8px;
+    }
+    .adhesion-nom { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+    .adhesion-prix { font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 900; color: var(--brick); line-height: 1; margin-bottom: 16px; }
+    .adhesion-prix span { font-size: 1rem; font-weight: 400; color: var(--muted); }
+    .adhesion-avantages { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .adhesion-avantages li { font-size: 13.5px; color: var(--ink); display: flex; gap: 8px; align-items: flex-start; }
+    .adhesion-avantages li::before { content: '✓'; color: var(--sage); font-weight: 700; flex-shrink: 0; margin-top: 2px; }
+
+    /* ═══════════════════════════════════════════════
+       ACCÈS / CONTACT
+    ═══════════════════════════════════════════════ */
+    #contact { background: var(--cream); }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+    .contact-infos { display: flex; flex-direction: column; gap: 20px; }
+    .contact-item { display: flex; gap: 14px; align-items: flex-start; }
+    .contact-item-icon {
+      width: 44px; height: 44px; border-radius: 10px;
+      background: var(--navy); color: var(--gold);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; flex-shrink: 0;
+    }
+    .contact-item-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); margin-bottom: 2px; }
+    .contact-item-val { font-size: 15px; font-weight: 500; color: var(--navy); }
+    .contact-map {
+      border-radius: var(--r); overflow: hidden;
+      border: 1px solid var(--border); height: 340px;
+    }
+    .contact-map iframe { width: 100%; height: 100%; border: none; }
+    .contact-form { display: flex; flex-direction: column; gap: 14px; margin-top: 24px; }
+    .contact-form input,
+    .contact-form textarea {
+      border: 1.5px solid var(--border); border-radius: 8px;
+      padding: 12px 16px; font-family: inherit; font-size: 14px;
+      color: var(--ink); background: var(--white);
+      transition: border-color .2s; resize: vertical;
+    }
+    .contact-form input:focus,
+    .contact-form textarea:focus { outline: none; border-color: var(--gold); }
+    .contact-form textarea { min-height: 100px; }
+    .contact-form .btn-primary { align-self: flex-start; }
+
+    /* ═══════════════════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════════════════ */
+    footer {
+      background: var(--navy); color: rgba(255,255,255,.7);
+      padding: 56px 5% 32px;
+    }
+    .footer-grid {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px;
+      margin-bottom: 40px;
+    }
+    .footer-brand-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem; font-weight: 900; color: var(--white); margin-bottom: 6px;
+    }
+    .footer-brand-sub { font-size: 12px; letter-spacing: .8px; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; }
+    .footer-brand-desc { font-size: 13.5px; line-height: 1.7; max-width: 280px; }
+    .footer-col-title { font-size: 13px; font-weight: 700; color: var(--white); text-transform: uppercase; letter-spacing: .6px; margin-bottom: 16px; }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .footer-links a { font-size: 13.5px; color: rgba(255,255,255,.6); transition: color .2s; }
+    .footer-links a:hover { color: var(--gold); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,.08); padding-top: 28px;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
+    }
+    .footer-bottom p { font-size: 12.5px; }
+    .footer-legal { display: flex; gap: 20px; }
+    .footer-legal a { font-size: 12.5px; color: rgba(255,255,255,.5); transition: color .2s; }
+    .footer-legal a:hover { color: var(--gold); }
+
+    /* ═══════════════════════════════════════════════
+       COOKIE BANNER
+    ═══════════════════════════════════════════════ */
+    #cookie-banner {
+      position: fixed; bottom: 20px; left: 20px; right: 20px;
+      background: var(--navy); color: var(--white);
+      padding: 20px 24px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 20px; flex-wrap: wrap; z-index: 999;
+      box-shadow: 0 8px 40px rgba(0,0,0,.4);
+      transform: translateY(120%); transition: transform .4s cubic-bezier(.34,1.56,.64,1);
+    }
+    #cookie-banner.show { transform: translateY(0); }
+    #cookie-banner p { font-size: 13.5px; color: rgba(255,255,255,.8); flex: 1; min-width: 200px; }
+    .cookie-btns { display: flex; gap: 10px; flex-shrink: 0; }
+    .cookie-accept {
+      background: var(--gold); color: var(--white);
+      padding: 8px 18px; border-radius: 8px; font-size: 13px; font-weight: 600;
+    }
+    .cookie-refuse {
+      background: rgba(255,255,255,.1); color: rgba(255,255,255,.8);
+      padding: 8px 18px; border-radius: 8px; font-size: 13px;
+      border: 1px solid rgba(255,255,255,.2);
+    }
+
+    /* ═══════════════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════════════ */
+    @media (max-width: 1024px) {
+      .hero-visual { display: none; }
+      .hero-content { max-width: 100%; }
+      .tarifs-intro { grid-template-columns: 1fr; }
+      .valeurs-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      section { padding: 64px 5%; }
+      .nav-links { display: none; }
+      .nav-links.open {
+        display: flex; flex-direction: column;
+        position: fixed; top: 72px; left: 0; right: 0; bottom: 0;
+        background: var(--white); padding: 32px 5%;
+        align-items: flex-start; gap: 20px;
+        border-top: 1px solid var(--border);
+        animation: slideDown .3s ease;
+      }
+      @keyframes slideDown { from{opacity:0;transform:translateY(-10px)} to{opacity:1;transform:none} }
+      .nav-links.open a { font-size: 18px; color: var(--ink); }
+      .nav-burger { display: flex; }
+      .contact-grid { grid-template-columns: 1fr; }
+      .valeurs-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .hero-actions { flex-direction: column; }
+      .btn-primary, .btn-ghost { text-align: center; justify-content: center; }
+      .profils-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ NAVIGATION ═══ -->
+<nav id="main-nav">
+  <a href="#" class="nav-logo">
+    <img src="logo.png" alt="Génie Montauban - Le Tiers Lieu" style="height:48px;width:auto">
+  </a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#espaces">Espaces</a></li>
+    <li><a href="#tarifs">Tarifs</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#adhesion">Adhésion</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="reservation.html" class="nav-cta">Réserver</a></li>
+  </ul>
+  <button class="nav-burger" id="nav-burger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero" id="accueil">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-tag">📍 12 rue du Génie, Montauban · 200m de la gare SNCF</div>
+    <h1>Le lieu où vos <em>projets</em> prennent vie</h1>
+    <p class="hero-sub">Tiers-lieu ancré dans l'économie sociale et solidaire. Bureaux privatifs, coworking, salles de réunion — une communauté d'entrepreneurs, d'associations et d'acteurs du territoire.</p>
+    <div class="hero-actions">
+      <a href="reservation.html" class="btn-primary">Réserver un espace →</a>
+      <a href="#espaces" class="btn-ghost">Découvrir les espaces</a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="hero-stat-n">12</div>
+        <div class="hero-stat-l">Espaces disponibles</div>
+      </div>
+      <div>
+        <div class="hero-stat-n">300+</div>
+        <div class="hero-stat-l">m² modulables</div>
+      </div>
+      <div>
+        <div class="hero-stat-n">PMR</div>
+        <div class="hero-stat-l">Accessible</div>
+      </div>
+      <div>
+        <div class="hero-stat-n">ESS</div>
+        <div class="hero-stat-l">Ancrée localement</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-card-stack">
+      <div class="hero-card">
+        <div class="hero-card-title">Salle Antoine Bourdelle</div>
+        <div class="hero-card-body">Grande salle 40 pers. · Vidéoprojecteur · Sono</div>
+        <div class="hero-card-meta">À partir de 15 €/h · RDC</div>
+      </div>
+      <div class="hero-card">
+        <div class="hero-card-title">Coworking Rousseau</div>
+        <div class="hero-card-body">Open space 20 postes · Fibre · Café inclus</div>
+        <div class="hero-card-meta">15 €/jour · 1er étage</div>
+      </div>
+      <div class="hero-card">
+        <div class="hero-card-title">Bureau Louise Michel</div>
+        <div class="hero-card-body">Bureau privé 4 pers. · Calme · Visio</div>
+        <div class="hero-card-meta">20 €/jour · RDC</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ BANDEAU ═══ -->
+<div class="infobanner">
+  <div class="infobanner-item">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+    Lun–Ven 8h–19h · Sam sur réservation
+  </div>
+  <div class="infobanner-item">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+    Communauté ESS & entrepreneurs
+  </div>
+  <div class="infobanner-item">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+    200m de la gare SNCF · Accès PMR
+  </div>
+  <div class="infobanner-item">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+    WiFi fibre · Imprimante · Café
+  </div>
+</div>
+
+<!-- ═══ ESPACES ═══ -->
+<section id="espaces">
+  <div class="section-head">
+    <span class="section-tag">Nos espaces</span>
+    <h2 class="section-title">Douze espaces, chacun<br>avec sa personnalité</h2>
+    <p class="section-sub">Des noms qui portent une histoire — bureaux privatifs en bail, nomades à la journée, coworking et salles de réunion. Chaque espace a sa référence et son étage.</p>
+  </div>
+
+  <!-- SALLES DE RÉUNION -->
+  <h3 style="font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--navy);margin-bottom:20px;padding-bottom:8px;border-bottom:3px solid var(--gold)">🏛️ Salles de réunion</h3>
+  <div class="espaces-grid" style="margin-bottom:48px">
+
+    <div class="espace-card">
+      <div class="espace-card-top">
+        <div class="espace-icon">🏛️</div>
+        <span class="espace-badge">40 personnes</span>
+      </div>
+      <div class="espace-card-body">
+        <div class="espace-ref">Bureau 0-02 · Rez-de-chaussée</div>
+        <div class="espace-nom">Antoine Bourdelle</div>
+        <div class="espace-desc">Grande salle lumineuse avec terrasse, vidéoprojecteur et sono. Idéale pour formations, assemblées et événements.</div>
+        <div class="espace-prix">
+          <div><div class="espace-prix-from">À partir de</div><div class="espace-prix-val">15 €<small style="font-size:.7em;font-weight:400">/h</small></div></div>
+          <a href="reservation.html" class="btn-primary" style="padding:8px 16px;font-size:13px">Réserver →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="espace-card">
+      <div class="espace-card-top">
+        <div class="espace-icon">🤝</div>
+        <span class="espace-badge">20 personnes</span>
+      </div>
+      <div class="espace-card-body">
+        <div class="espace-ref">Bureau 1-11 · 1er étage</div>
+        <div class="espace-nom">Célestin Freinet</div>
+        <div class="espace-desc">Salle modulable équipée paperboard. Disponible à la demi-journée, journée ou en bail mensuel (360€/mois).</div>
+        <div class="espace-prix">
+          <div><div class="espace-prix-from">À partir de</div><div class="espace-prix-val">12 €<small style="font-size:.7em;font-weight:400">/h</small></div></div>
+          <a href="reservation.html" class="btn-primary" style="padding:8px 16px;font-size:13px">Réserver →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="espace-card">
+      <div class="espace-card-top">
+        <div class="espace-icon">📋</div>
+        <span class="espace-badge">20 personnes</span>
+      </div>
+      <div class="espace-card-body">
+        <div class="espace-ref">Bureau 1-12 · 1er étage</div>
+        <div class="espace-nom">Olympe de Gouges</div>
+        <div class="espace-desc">Salle de réunion lumineuse avec écran TV et paperboard. Idéale pour réunions de travail et présentations.</div>
+        <div class="espace-prix">
+          <div><div class="espace-prix-from">À partir de</div><div class="espace-prix-val">12 €<small style="font-size:.7em;font-weight:400">/h</small></div></div>
+          <a href="reservation.html" class="btn-primary" style="padding:8px 16px;font-size:13px">Réserver →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="espace-card">
+      <div class="espace-card-top">
+        <div class="espace-icon">♿</div>
+        <span class="espace-badge">PMR · 4 pers.</span>
+      </div>
+      <div class="espace-card-body">
+        <div class="espace-ref">Bureau -1-14 · Rez-de-jardin</div>
+        <div class="espace-nom">Maria Montessori</div>
+        <div class="espace-desc">Salle totalement accessible PMR. Usage flexible : réunion ou bureau nomade privé. Accès direct rez-de-jardin.</div>
+        <div class="espace-prix">
+          <div><div class="espace-prix-from">À partir de</div><div class="espace-prix-val">8 €<small style="font-size:.7em;font-weight:400">/h</small></div></div>
+          <a href="reservation.html" class="btn-primary" style="padding:8px 16px;font-size:13px">Réserver →</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- BUREAUX NOMADES & COWORKING -->
+  <h3 style="font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--navy);margin-bottom:20px;padding-bottom:8px;border-bottom:3px solid var(--gold)">💻 Bureaux nomades & Coworking</h3>
+  <div class="espaces-grid" style="margin-bottom:48px">
+
+    <div class="espace-card">
+      <div class="espace-card-top">
+        <div class="espace-icon">🚪</div>
+        <span class="espace-badge">Bureau privé · 7m²</span>
+      </div>
+      <div class="espace-card-body">
+        <div class="espace-ref">Bureau 1-13 · 1er étage</div>
+        <div class="espace-nom">Aristote</div>
+        <div class="espace-desc">Bureau privé nomade, connexion fibre, calme garanti. Parfait pour télétravail et visioconférence.</div>
+        <div class="espace-prix">
+          <div><div class="espace-prix-from">À partir de</div><div class="espace-prix-val">10 €<small style="font-size:.7em;font-weight:400">/½j</small></div></div>
+          <a href="reservation.html" class="btn-primary" style="padding:8px 16px;font-size:13px">Réserver →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="espace-card">
+      <div class="espace-card-top">
+        <div class="espace-icon">💻</div>
+        <span class="espace-badge">Coworking · 28m²</span>
+      </div>
+      <div class="espace-card-body">
+        <div class="espace-ref">Bureau 1-10 · 1er étage</div>
+        <div class="espace-nom">Jean-Jacques Rousseau</div>
+        <div class="espace-desc">Grand espace coworking ouvert 28m², imprimante partagée, café inclus. Ambiance collaborative idéale.</div>
+        <div class="espace-prix">
+          <div><div class="espace-prix-from">À partir de</div><div class="espace-prix-val">10 €<small style="font-size:.7em;font-weight:400">/½j</small></div></div>
+          <a href="reservation.html" class="btn-primary" style="padding:8px 16px;font-size:13px">Réserver →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="espace-card">
+      <div class="espace-card-top">
+        <div class="espace-icon">♿</div>
+        <span class="espace-badge">Privé · PMR · 12m²</span>
+      </div>
+      <div class="espace-card-body">
+        <div class="espace-ref">Bureau -1-14 · Rez-de-jardin</div>
+        <div class="espace-nom">Maria Montessori</div>
+        <div class="espace-desc">Bureau privé nomade accessible PMR. Usage flexible réunion ou bureau. 10€/½j, 15€/j, 60€/semaine, 140€/mois.</div>
+        <div class="espace-prix">
+          <div><div class="espace-prix-from">À partir de</div><div class="espace-prix-val">10 €<small style="font-size:.7em;font-weight:400">/½j</small></div></div>
+          <a href="reservation.html" class="btn-primary" style="padding:8px 16px;font-size:13px">Réserver →</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- BUREAUX PRIVATIFS EN BAIL -->
+  <h3 style="font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--navy);margin-bottom:12px;padding-bottom:8px;border-bottom:3px solid var(--gold)">🔑 Bureaux privatifs — Location longue durée</h3>
+  <p style="color:var(--muted);font-size:14px;margin-bottom:24px">Location à partir de 12 €/m²/mois HC (charges comprises : électricité, fibre, eau, ménage parties communes + 23% du loyer)</p>
+  <div class="espaces-grid">
+
+    <div class="espace-card">
+      <div class="espace-card-top" style="background:#2A3F52">
+        <div class="espace-icon">🏢</div>
+        <span class="espace-badge">15 m²</span>
+      </div>
+      <div class="espace-card-body">
+        <div class="espace-ref">Bureau 0-01 · Rez-de-chaussée</div>
+        <div class="espace-nom">Louise Michel</div>
+        <div class="espace-prix" style="flex-direction:column;align-items:flex-start;gap:6px">
+          <div style="font-size:12px;color:var(--muted)">Bail mensuel : <strong>225€/mois</strong> · Bail 1 an : <strong>195€/mois</strong> · Bail 3/6/9 : <strong>180€/mois</strong></div>
+          <a href="mailto:genie.montauban@gmail.com?subject=Location bureau Louise Michel" class="btn-primary" style="padding:8px 16px;font-size:13px">Nous contacter →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="espace-card">
+      <div class="espace-card-top" style="background:#2A3F52">
+        <div class="espace-icon">🏢</div>
+        <span class="espace-badge">24 m²</span>
+      </div>
+      <div class="espace-card-body">
+        <div class="espace-ref">Bureau 0-03 · Rez-de-chaussée</div>
+        <div class="espace-nom">Philippe Meirieu</div>
+        <div class="espace-prix" style="flex-direction:column;align-items:flex-start;gap:6px">
+          <div style="font-size:12px;color:var(--muted)">Bail mensuel : <strong>360€/mois</strong> · Bail 1 an : <strong>312€/mois</strong> · Bail 3/6/9 : <strong>288€/mois</strong></div>
+          <a href="mailto:genie.montauban@gmail.com?subject=Location bureau Philippe Meirieu" class="btn-primary" style="padding:8px 16px;font-size:13px">Nous contacter →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="espace-card">
+      <div class="espace-card-top" style="background:#2A3F52">
+        <div class="espace-icon">🏢</div>
+        <span class="espace-badge">19 m²</span>
+      </div>
+      <div class="espace-card-body">
+        <div class="espace-ref">Bureau 0-04 · Rez-de-chaussée</div>
+        <div class="espace-nom">Antoine Lavoisier</div>
+        <div class="espace-prix" style="flex-direction:column;align-items:flex-start;gap:6px">
+          <div style="font-size:12px;color:var(--muted)">Bail mensuel : <strong>285€/mois</strong> · Bail 1 an : <strong>247€/mois</strong> · Bail 3/6/9 : <strong>228€/mois</strong></div>
+          <a href="mailto:genie.montauban@gmail.com?subject=Location bureau Antoine Lavoisier" class="btn-primary" style="padding:8px 16px;font-size:13px">Nous contacter →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="espace-card">
+      <div class="espace-card-top" style="background:#2A3F52">
+        <div class="espace-icon">🏢</div>
+        <span class="espace-badge">17 m²</span>
+      </div>
+      <div class="espace-card-body">
+        <div class="espace-ref">Bureau 1-07 · 1er étage</div>
+        <div class="espace-nom">Aimée Césaire</div>
+        <div class="espace-prix" style="flex-direction:column;align-items:flex-start;gap:6px">
+          <div style="font-size:12px;color:var(--muted)">Bail mensuel : <strong>255€/mois</strong> · Bail 1 an : <strong>221€/mois</strong> · Bail 3/6/9 : <strong>204€/mois</strong></div>
+          <a href="mailto:genie.montauban@gmail.com?subject=Location bureau Aimée Césaire" class="btn-primary" style="padding:8px 16px;font-size:13px">Nous contacter →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="espace-card">
+      <div class="espace-card-top" style="background:#2A3F52">
+        <div class="espace-icon">🏢</div>
+        <span class="espace-badge">17 m²</span>
+      </div>
+      <div class="espace-card-body">
+        <div class="espace-ref">Bureau 1-08 · 1er étage</div>
+        <div class="espace-nom">Condorcet</div>
+        <div class="espace-prix" style="flex-direction:column;align-items:flex-start;gap:6px">
+          <div style="font-size:12px;color:var(--muted)">Bail mensuel : <strong>255€/mois</strong> · Bail 1 an : <strong>221€/mois</strong> · Bail 3/6/9 : <strong>204€/mois</strong></div>
+          <a href="mailto:genie.montauban@gmail.com?subject=Location bureau Condorcet" class="btn-primary" style="padding:8px 16px;font-size:13px">Nous contacter →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="espace-card">
+      <div class="espace-card-top" style="background:#2A3F52">
+        <div class="espace-icon">🏢</div>
+        <span class="espace-badge">16 m²</span>
+      </div>
+      <div class="espace-card-body">
+        <div class="espace-ref">Bureau 1-09 · 1er étage</div>
+        <div class="espace-nom">Baden Powell</div>
+        <div class="espace-prix" style="flex-direction:column;align-items:flex-start;gap:6px">
+          <div style="font-size:12px;color:var(--muted)">Bail mensuel : <strong>240€/mois</strong> · Bail 1 an : <strong>208€/mois</strong> · Bail 3/6/9 : <strong>192€/mois</strong></div>
+          <a href="mailto:genie.montauban@gmail.com?subject=Location bureau Baden Powell" class="btn-primary" style="padding:8px 16px;font-size:13px">Nous contacter →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="espace-card">
+      <div class="espace-card-top" style="background:#2A3F52">
+        <div class="espace-icon">🏢</div>
+        <span class="espace-badge">24 m²</span>
+      </div>
+      <div class="espace-card-body">
+        <div class="espace-ref">Bureau 1-11 · 1er étage</div>
+        <div class="espace-nom">Célestin Freinet</div>
+        <div class="espace-prix" style="flex-direction:column;align-items:flex-start;gap:6px">
+          <div style="font-size:12px;color:var(--muted)">Bail mensuel : <strong>360€/mois</strong> · Bail 1 an : <strong>312€/mois</strong> · Bail 3/6/9 : <strong>288€/mois</strong></div>
+          <a href="mailto:genie.montauban@gmail.com?subject=Location bureau Célestin Freinet" class="btn-primary" style="padding:8px 16px;font-size:13px">Nous contacter →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="espace-card">
+      <div class="espace-card-top" style="background:#2A3F52">
+        <div class="espace-icon">♿</div>
+        <span class="espace-badge">PMR · 12 m²</span>
+      </div>
+      <div class="espace-card-body">
+        <div class="espace-ref">Bureau -1-14 · Rez-de-jardin</div>
+        <div class="espace-nom">Maria Montessori</div>
+        <div class="espace-prix" style="flex-direction:column;align-items:flex-start;gap:6px">
+          <div style="font-size:12px;color:var(--muted)">Bail mensuel : <strong>180€/mois</strong> · Bail 1 an : <strong>156€/mois</strong> · Bail 3/6/9 : <strong>144€/mois</strong></div>
+          <a href="mailto:genie.montauban@gmail.com?subject=Location bureau Maria Montessori" class="btn-primary" style="padding:8px 16px;font-size:13px">Nous contacter →</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ TARIFS ═══ -->
+<section id="tarifs">
+  <div class="section-head">
+    <span class="section-tag">Grille tarifaire 2026</span>
+    <h2 class="section-title">Des tarifs adaptés<br>à chaque profil</h2>
+    <p class="section-sub">Tarifs dégressifs selon votre statut. Les associations syndicales et de Villebourbon bénéficient de la gratuité.</p>
+  </div>
+  <div class="tarifs-intro">
+    <div>
+      <h3 style="font-family:'Playfair Display',serif;font-size:1.3rem;margin-bottom:16px;color:var(--navy)">Vos 4 profils tarifaires</h3>
+      <div class="profils-grid">
+        <div class="profil-card">
+          <div class="profil-icon">🏢</div>
+          <div class="profil-nom">CCFA / Tarif plein</div>
+          <div class="profil-desc">Entreprises, professions libérales, prestataires externes</div>
+        </div>
+        <div class="profil-card">
+          <div class="profil-icon">🤝</div>
+          <div class="profil-nom">Adhérent Génie</div>
+          <div class="profil-desc">Membres de l'Association Génie — réduction ~20 %</div>
+        </div>
+        <div class="profil-card">
+          <div class="profil-icon">🔑</div>
+          <div class="profil-nom">Locataire</div>
+          <div class="profil-desc">Locataires permanents du tiers-lieu — tarif préférentiel</div>
+        </div>
+        <div class="profil-card" style="border-color:var(--sage)">
+          <div class="profil-icon">🌿</div>
+          <div class="profil-nom">Asso / Syndicat</div>
+          <div class="profil-desc">Associations de Villebourbon et syndicats — <strong style="color:var(--sage)">gratuit</strong></div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <h3 style="font-family:'Playfair Display',serif;font-size:1.3rem;margin-bottom:16px;color:var(--navy)">Salles de réunion</h3>
+      <table class="tarifs-table">
+        <thead>
+          <tr><th>Espace</th><th>Heure</th><th>½ journée</th><th>Journée</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Bourdelle</strong> (40p)</td><td>30 / 24 / 15 €</td><td>100 / 80 / 50 €</td><td>160 / 130 / 80 €</td></tr>
+          <tr><td><strong>Freinet</strong> (20p)</td><td>22 / 18 / 12 €</td><td>70 / 60 / 35 €</td><td>120 / 90 / 60 €</td></tr>
+          <tr><td><strong>Gouges</strong> (20p)</td><td>22 / 18 / 12 €</td><td>70 / 60 / 35 €</td><td>120 / 90 / 60 €</td></tr>
+          <tr><td><strong>Montessori</strong> (PMR)</td><td>15 / 12 / 8 €</td><td>50 / 40 / 25 €</td><td>80 / 65 / 40 €</td></tr>
+          <tr><td colspan="2" style="font-style:italic;color:var(--muted);font-size:12px">Asso / Villebourbon</td><td colspan="2" class="free">Gratuit</td></tr>
+        </tbody>
+      </table>
+      <div class="tarifs-note">Tarifs dans l'ordre : CCFA / Adhérent / Locataire</div>
+
+      <h3 style="font-family:'Playfair Display',serif;font-size:1.3rem;margin:24px 0 16px;color:var(--navy)">Bureaux nomades & Coworking</h3>
+      <table class="tarifs-table">
+        <thead>
+          <tr><th>Espace</th><th>½ journée</th><th>Journée</th><th>Semaine</th><th>Mois</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Louise Michel</strong></td><td>10 €</td><td>20 €</td><td>70 €</td><td>150 €</td></tr>
+          <tr><td><strong>Rousseau</strong></td><td>10 €</td><td>15 €</td><td>50 €</td><td>120 €</td></tr>
+          <tr><td><strong>Montessori</strong></td><td>10 €</td><td>15 €</td><td>60 €</td><td>140 €</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:16px">
+    <a href="reservation.html" class="btn-primary" style="display:inline-flex">Réserver maintenant →</a>
+  </div>
+</section>
+
+<!-- ═══ VALEURS ═══ -->
+<section id="valeurs">
+  <div class="section-head" style="max-width:600px">
+    <span class="section-tag">Notre identité</span>
+    <h2 class="section-title">Un tiers-lieu engagé<br>et ancré</h2>
+    <p class="section-sub">Génie n'est pas qu'un espace de travail. C'est un projet politique et social, enraciné dans le territoire de Montauban.</p>
+  </div>
+  <div class="valeurs-grid">
+    <div class="valeur-card">
+      <div class="valeur-icon">🌱</div>
+      <div class="valeur-title">Économie Sociale & Solidaire</div>
+      <div class="valeur-text">Portée par l'Association Génie, notre structure est ancrée dans les valeurs de l'ESS : solidarité, utilité sociale, gouvernance démocratique.</div>
+    </div>
+    <div class="valeur-card">
+      <div class="valeur-icon">🤝</div>
+      <div class="valeur-title">Coopération territoriale</div>
+      <div class="valeur-text">Entrepreneurs, associations, collectifs — Génie crée des ponts entre acteurs du territoire montalbannais et tarn-et-garonnais.</div>
+    </div>
+    <div class="valeur-card">
+      <div class="valeur-icon">⚡</div>
+      <div class="valeur-title">Innovation sociale</div>
+      <div class="valeur-text">Nos locataires et membres développent des projets à fort impact local. Génie est un accélérateur d'initiatives citoyennes et professionnelles.</div>
+    </div>
+    <div class="valeur-card">
+      <div class="valeur-icon">♿</div>
+      <div class="valeur-title">Inclusion & accessibilité</div>
+      <div class="valeur-text">Accès PMR, tarifs solidaires pour les associations, gratuité pour les syndicats et associations de Villebourbon — l'inclusion est structurelle.</div>
+    </div>
+    <div class="valeur-card">
+      <div class="valeur-icon">📍</div>
+      <div class="valeur-title">Ancrage local fort</div>
+      <div class="valeur-text">12 rue du Génie, à 1 minute de la gare SNCF. Une localisation stratégique qui rend Génie accessible à tous les professionnels de passage ou basés à Montauban.</div>
+    </div>
+    <div class="valeur-card">
+      <div class="valeur-icon">🏛️</div>
+      <div class="valeur-title">Expertise & accompagnement</div>
+      <div class="valeur-text">Derrière Génie, 27 ans d'expérience en développement territorial, ingénierie de formation et ESS — au service de vos projets.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SERVICES ═══ -->
+<section id="services">
+  <div class="section-head">
+    <span class="section-tag">Services inclus</span>
+    <h2 class="section-title">Tout ce qu'il faut<br>pour travailler bien</h2>
+    <p class="section-sub">Accès, équipements et services compris dans chaque réservation.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-icon">📶</div>
+      <div class="service-title">WiFi fibre haut débit</div>
+      <div class="service-desc">Connexion ultra-rapide incluse dans tous les espaces, idéale pour visioconférence et travail en ligne.</div>
+      <span class="service-tag">Inclus</span>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">☕</div>
+      <div class="service-title">Café & machine à boissons</div>
+      <div class="service-desc">Café, thé et boissons chaudes en libre service dans les espaces coworking.</div>
+      <span class="service-tag">Coworking</span>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🖨️</div>
+      <div class="service-title">Impression & numérisation</div>
+      <div class="service-desc">Imprimante multifonction partagée accessible depuis tous les espaces.</div>
+      <span class="service-tag">Inclus</span>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">📽️</div>
+      <div class="service-title">Vidéoprojecteur & écrans</div>
+      <div class="service-desc">Équipement de présentation dans les salles Bourdelle (vidéoprojecteur + sono) et Gouges (écran TV).</div>
+      <span class="service-tag">Salles équipées</span>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🔐</div>
+      <div class="service-title">Accès sécurisé</div>
+      <div class="service-desc">Accès par code badge disponible 24h/7j pour les locataires permanents. Option badge +25€/mois.</div>
+      <span class="service-tag">Option 24/7</span>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🅿️</div>
+      <div class="service-title">Stationnement & transports</div>
+      <div class="service-desc">1 min à pied de la gare SNCF. Stationnement en voirie à proximité immédiate.</div>
+      <span class="service-tag">Localisation idéale</span>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🤝</div>
+      <div class="service-title">Réseau & mise en relation</div>
+      <div class="service-desc">Accès à la communauté Génie — réseautage, échanges de compétences, partenariats ESS.</div>
+      <span class="service-tag">Membres</span>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">📅</div>
+      <div class="service-title">Réservation en ligne</div>
+      <div class="service-desc">Système de réservation intégré — choisissez votre créneau, votre espace et confirmez instantanément.</div>
+      <span class="service-tag">24h/24</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ADHÉSION ═══ -->
+<section id="adhesion">
+  <div class="section-head">
+    <span class="section-tag">Rejoindre Génie</span>
+    <h2 class="section-title">Adhérez à la communauté</h2>
+    <p class="section-sub">L'adhésion à l'Association Génie vous donne accès à des tarifs préférentiels et vous intègre dans notre réseau territorial.</p>
+  </div>
+  <div class="adhesion-grid">
+    <div class="adhesion-card">
+      <div class="adhesion-tag">Individuel</div>
+      <div class="adhesion-nom">Membre Individuel</div>
+      <div class="adhesion-prix">50 € <span>/ an</span></div>
+      <ul class="adhesion-avantages">
+        <li>Tarifs adhérent sur toutes les salles (~20% de réduction)</li>
+        <li>Accès aux événements membres</li>
+        <li>Participation à la gouvernance de l'association</li>
+        <li>Intégration dans l'annuaire Génie</li>
+        <li>Newsletter et offres prioritaires</li>
+      </ul>
+    </div>
+    <div class="adhesion-card featured">
+      <div class="adhesion-tag">Professionnel</div>
+      <div class="adhesion-nom">Membre Professionnel</div>
+      <div class="adhesion-prix">150 € <span>/ an</span></div>
+      <ul class="adhesion-avantages">
+        <li>Tous les avantages du membre individuel</li>
+        <li>Tarifs adhérent pour toute l'équipe (jusqu'à 3 personnes)</li>
+        <li>Présentation dans les supports Génie</li>
+        <li>Participation aux commissions thématiques</li>
+        <li>Accès prioritaire aux nouveaux espaces</li>
+      </ul>
+    </div>
+    <div class="adhesion-card">
+      <div class="adhesion-tag">Association</div>
+      <div class="adhesion-nom">Membre Associatif</div>
+      <div class="adhesion-prix">30 € <span>/ an</span></div>
+      <ul class="adhesion-avantages">
+        <li>Tarifs adhérent pour les permanents</li>
+        <li>Espace de domiciliation possible</li>
+        <li>Participation aux réseaux ESS locaux</li>
+        <li>Mutualisations de services possibles</li>
+        <li>Soutien aux projets d'utilité sociale</li>
+      </ul>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:36px">
+    <a href="#contact" class="btn-primary" style="display:inline-flex">Demander un formulaire d'adhésion →</a>
+  </div>
+</section>
+
+<!-- ═══ CONTACT ═══ -->
+<section id="contact">
+  <div class="section-head">
+    <span class="section-tag">Nous trouver</span>
+    <h2 class="section-title">Venez nous rencontrer</h2>
+    <p class="section-sub">Une question ? Une visite ? Contactez-nous ou passez directement au tiers-lieu.</p>
+  </div>
+  <div class="contact-grid">
+    <div>
+      <div class="contact-infos">
+        <div class="contact-item">
+          <div class="contact-item-icon">📍</div>
+          <div>
+            <div class="contact-item-label">Adresse</div>
+            <div class="contact-item-val">12 rue du Génie<br>82000 Montauban</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-icon">📞</div>
+          <div>
+            <div class="contact-item-label">Téléphone</div>
+            <div class="contact-item-val"><a href="tel:+33651509718" style="color:var(--gold)">06 51 50 97 18</a></div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-icon">✉️</div>
+          <div>
+            <div class="contact-item-label">Email</div>
+            <div class="contact-item-val"><a href="mailto:genie.montauban@gmail.com" style="color:var(--gold)">genie.montauban@gmail.com</a></div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-icon">🕐</div>
+          <div>
+            <div class="contact-item-label">Horaires</div>
+            <div class="contact-item-val">Lun–Ven : 8h–19h<br>Sam : sur réservation</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-icon">🚆</div>
+          <div>
+            <div class="contact-item-label">Accès</div>
+            <div class="contact-item-val">200m de la gare SNCF<br>Bus ligne 1 — arrêt Gare</div>
+          </div>
+        </div>
+      </div>
+      <form class="contact-form" onsubmit="sendContact(event)">
+        <input type="text" id="c-nom" placeholder="Votre nom" required>
+        <input type="email" id="c-email" placeholder="Votre email" required>
+        <input type="text" id="c-sujet" placeholder="Sujet (visite, réservation, adhésion…)">
+        <textarea id="c-message" placeholder="Votre message…"></textarea>
+        <button type="submit" class="btn-primary">Envoyer →</button>
+        <div id="c-feedback" style="font-size:13px;color:var(--sage);display:none">✓ Message envoyé ! Nous vous répondons sous 24h.</div>
+      </form>
+    </div>
+    <div>
+      <div class="contact-map">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2866.3!2d1.3570!3d44.0174!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12aecf1c6e4b6e0d%3A0x1!2s12+rue+du+G%C3%A9nie%2C+82000+Montauban!5e0!3m2!1sfr!2sfr!4v1700000000"
+          allowfullscreen loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+      <div style="margin-top:20px;background:var(--navy);border-radius:var(--r);padding:20px 24px;color:rgba(255,255,255,.8)">
+        <div style="font-family:'Playfair Display',serif;color:var(--white);font-size:1.1rem;margin-bottom:10px">Vous souhaitez visiter ?</div>
+        <p style="font-size:13.5px;line-height:1.7;margin-bottom:14px">Nous organisons des visites du tiers-lieu sur rendez-vous. Une heure pour découvrir les espaces, rencontrer la communauté et trouver la formule qui vous correspond.</p>
+        <a href="mailto:genie.montauban@gmail.com?subject=Demande de visite Génie" class="btn-primary" style="font-size:13px;padding:10px 18px;display:inline-flex">Demander une visite →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand-name">Génie</div>
+      <div class="footer-brand-sub">Tiers-Lieu · Montauban</div>
+      <p class="footer-brand-desc">Un espace de coworking et de collaboration ancré dans l'économie sociale et solidaire, au service du territoire montalbannais.</p>
+    </div>
+    <div>
+      <div class="footer-col-title">Espaces</div>
+      <ul class="footer-links">
+        <li><a href="#espaces">Antoine Bourdelle</a></li>
+        <li><a href="#espaces">Célestin Freinet</a></li>
+        <li><a href="#espaces">Olympe de Gouges</a></li>
+        <li><a href="#espaces">Louise Michel</a></li>
+        <li><a href="#espaces">Jean-Jacques Rousseau</a></li>
+        <li><a href="#espaces">Maria Montessori</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Navigation</div>
+      <ul class="footer-links">
+        <li><a href="#tarifs">Tarifs 2026</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#adhesion">Adhésion</a></li>
+        <li><a href="reservation.html">Réservation</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Légal</div>
+      <ul class="footer-links">
+        <li><a href="mentions-legales.html">Mentions légales</a></li>
+        <li><a href="cgv.html">CGV</a></li>
+        <li><a href="confidentialite.html">Confidentialité</a></li>
+      </ul>
+      <div style="margin-top:20px">
+        <div class="footer-col-title">Contact</div>
+        <p style="font-size:13px;line-height:1.7">12 rue du Génie<br>82000 Montauban<br>📞 <a href="tel:+33651509718" style="color:var(--gold)">06 51 50 97 18</a><br><a href="mailto:genie.montauban@gmail.com" style="color:var(--gold)">genie.montauban@gmail.com</a></p>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Association Génie Montauban — Tous droits réservés</p>
+    <div class="footer-legal">
+      <a href="mentions-legales.html">Mentions légales</a>
+      <a href="confidentialite.html">Confidentialité</a>
+      <a href="cgv.html">CGV</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══ COOKIE BANNER ═══ -->
+<div id="cookie-banner">
+  <p>🍪 Ce site utilise des cookies pour améliorer votre expérience. En continuant, vous acceptez notre <a href="confidentialite.html" style="color:var(--gold)">politique de confidentialité</a>.</p>
+  <div class="cookie-btns">
+    <button class="cookie-accept" onclick="acceptCookies()">Accepter</button>
+    <button class="cookie-refuse" onclick="refuseCookies()">Refuser</button>
+  </div>
+</div>
+
+<script>
+  // Navigation sticky
+  const nav = document.getElementById('main-nav');
+  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 10));
+
+  // Mobile menu
+  const burger = document.getElementById('nav-burger');
+  const navLinks = document.getElementById('nav-links');
+  burger.addEventListener('click', () => {
+    navLinks.classList.toggle('open');
+    burger.querySelectorAll('span').forEach((s,i) => {
+      if(navLinks.classList.contains('open')) {
+        if(i===0) s.style.transform='rotate(45deg) translate(5px,5px)';
+        if(i===1) s.style.opacity='0';
+        if(i===2) s.style.transform='rotate(-45deg) translate(5px,-5px)';
+      } else {
+        s.style.transform=''; s.style.opacity='';
+      }
+    });
+  });
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    navLinks.classList.remove('open');
+    burger.querySelectorAll('span').forEach(s => { s.style.transform=''; s.style.opacity=''; });
+  }));
+
+  // Contact form
+  function sendContact(e) {
+    e.preventDefault();
+    const nom = document.getElementById('c-nom').value;
+    const email = document.getElementById('c-email').value;
+    const sujet = document.getElementById('c-sujet').value || 'Contact Génie';
+    const message = document.getElementById('c-message').value;
+    const mailto = `mailto:genie.montauban@gmail.com?subject=${encodeURIComponent('[Génie] '+sujet)}&body=${encodeURIComponent('Nom : '+nom+'\nEmail : '+email+'\n\n'+message)}`;
+    window.location.href = mailto;
+    document.getElementById('c-feedback').style.display = 'block';
+  }
+
+  // Cookies
+  function acceptCookies() {
+    localStorage.setItem('cookie_consent', 'accepted');
+    document.getElementById('cookie-banner').classList.remove('show');
+  }
+  function refuseCookies() {
+    localStorage.setItem('cookie_consent', 'refused');
+    document.getElementById('cookie-banner').classList.remove('show');
+  }
+  if (!localStorage.getItem('cookie_consent')) {
+    setTimeout(() => document.getElementById('cookie-banner').classList.add('show'), 1500);
+  }
+
+  // Smooth scroll pour les ancres
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if(target) { e.preventDefault(); target.scrollIntoView({behavior:'smooth', block:'start'}); }
+    });
+  });
+</script>
+</body>
+</html>
