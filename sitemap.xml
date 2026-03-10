@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://samir-chikhi.github.io/Genie/</loc>
+    <loc>https://samir-chikhi.github.io/Genie-montauban/</loc>
     <lastmod>2026-01-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://samir-chikhi.github.io/Genie/reservation.html</loc>
+    <loc>https://samir-chikhi.github.io/Genie-montauban/reservation.html</loc>
     <lastmod>2026-01-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://samir-chikhi.github.io/Genie/mentions-legales.html</loc>
+    <loc>https://samir-chikhi.github.io/Genie-montauban/mentions-legales.html</loc>
     <lastmod>2026-01-01</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://samir-chikhi.github.io/Genie/cgv.html</loc>
+    <loc>https://samir-chikhi.github.io/Genie-montauban/cgv.html</loc>
     <lastmod>2026-01-01</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://samir-chikhi.github.io/Genie/confidentialite.html</loc>
+    <loc>https://samir-chikhi.github.io/Genie-montauban/confidentialite.html</loc>
     <lastmod>2026-01-01</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>

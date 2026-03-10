@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 Disallow: /admin.html
-Sitemap: https://samir-chikhi.github.io/Genie/sitemap.xml
+Sitemap: https://samir-chikhi.github.io/Genie-montauban/sitemap.xml
