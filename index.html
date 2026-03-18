@@ -3,1048 +3,829 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Réserver — Génie Montauban</title>
+<title>Génie — Tiers-Lieu de Montauban | Coworking & ESS</title>
+<meta name="description" content="Génie, tiers-lieu ESS à Montauban. Bureaux privatifs, coworking, salles de réunion. 200m de la gare SNCF.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet">
 <style>
-/* ============================
-   VARIABLES & RESET
-============================ */
 :root {
-  --bleu:       #1E4A6E;
-  --bleu-md:    #2E6DA4;
-  --bleu-lt:    #EBF4FF;
-  --vert:       #27AE60;
-  --vert-lt:    #E8F8F0;
-  --or:         #C9993E;
-  --or-lt:      #FFF7E6;
-  --rouge:      #E53E3E;
-  --rouge-lt:   #FFF0F0;
-  --texte:      #1A2638;
-  --muted:      #6B7A8D;
-  --fond:       #F4F6F9;
-  --bord:       #E2E8F0;
-  --blanc:      #FFFFFF;
-  --nuit:       #2D3748;
-  --nuit-lt:    #EDF2F7;
-  --shadow-sm:  0 1px 4px rgba(0,0,0,.07);
-  --shadow-md:  0 4px 20px rgba(0,0,0,.10);
-  --radius:     10px;
+  --bleu:#1E4A6E; --bleu-md:#2E6DA4; --bleu-lt:#EBF4FF;
+  --vert:#27AE60; --vert-lt:#E8F8F0;
+  --or:#C9993E; --or-lt:#FFF7E6;
+  --texte:#1A2638; --muted:#6B7A8D;
+  --fond:#F4F6F9; --bord:#E2E8F0; --blanc:#fff;
+  --rouge:#E53E3E;
 }
-*, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
-html { scroll-behavior: smooth; }
-body { font-family:'DM Sans',sans-serif; background:var(--fond); color:var(--texte); font-size:15px; line-height:1.6; }
-a { color:var(--bleu); }
-button, input, select, textarea { font-family:inherit; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;color:var(--texte);font-size:15px;line-height:1.6;}
 
-/* ============================
-   HEADER
-============================ */
-.header {
-  background: var(--bleu);
-  height: 56px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
-  position: sticky; top:0; z-index:200;
-  box-shadow: 0 2px 12px rgba(0,0,0,.18);
-}
-.header a { color:#fff; text-decoration:none; font-weight:700; font-size:15px; display:flex; align-items:center; gap:6px; }
-.header a:hover { opacity:.85; }
-.header .h-badge { background:var(--vert); color:#fff; font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; }
-
-/* ============================
-   HERO
-============================ */
-.hero {
-  background: linear-gradient(135deg, #162f47 0%, var(--bleu-md) 100%);
-  padding: 36px 20px 28px;
-  text-align: center;
-  color: #fff;
-  position: relative;
-  overflow: hidden;
-}
-.hero::before {
-  content:'';
-  position:absolute; inset:0;
-  background: radial-gradient(ellipse at 70% 50%, rgba(39,174,96,.15) 0%, transparent 60%);
-  pointer-events:none;
-}
-.hero h1 { font-family:'DM Serif Display',serif; font-size:2.1rem; margin-bottom:6px; }
-.hero p { color:rgba(255,255,255,.75); font-size:14px; }
-.hero-chips { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-top:14px; }
-.hero-chips span {
-  background:rgba(255,255,255,.13);
-  border:1px solid rgba(255,255,255,.25);
-  border-radius:20px; padding:4px 12px; font-size:12px;
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:var(--bleu);box-shadow:0 2px 12px rgba(0,0,0,.2);}
+.nav-inner{max-width:1100px;margin:0 auto;padding:0 20px;height:60px;display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.nav-logo img{height:36px;}
+.nav-logo span{color:#fff;font-weight:700;font-size:17px;}
+.nav-links{display:flex;gap:6px;align-items:center;}
+.nav-links a{color:rgba(255,255,255,.85);text-decoration:none;font-size:13px;font-weight:500;padding:6px 10px;border-radius:6px;transition:all .18s;}
+.nav-links a:hover{background:rgba(255,255,255,.15);color:#fff;}
+.nav-links .btn-reserver{background:var(--vert);color:#fff;padding:7px 16px;border-radius:20px;font-weight:700;}
+.nav-links .btn-reserver:hover{background:#219a52;}
+.nav-toggle{display:none;background:none;border:none;color:#fff;font-size:24px;cursor:pointer;}
+@media(max-width:768px){
+  .nav-links{display:none;position:absolute;top:60px;left:0;right:0;background:var(--bleu);flex-direction:column;padding:16px;gap:4px;}
+  .nav-links.open{display:flex;}
+  .nav-toggle{display:block;}
 }
 
-/* ============================
-   LAYOUT
-============================ */
-.layout {
-  max-width:1140px; margin:0 auto;
-  display:grid; grid-template-columns:1fr 340px; gap:20px;
-  padding:20px 16px 60px;
-}
-@media(max-width:860px){ .layout{ grid-template-columns:1fr; } }
+/* HERO */
+.hero{background:linear-gradient(135deg,#12293f 0%,var(--bleu-md) 100%);color:#fff;padding:80px 20px 60px;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 40%,rgba(39,174,96,.18) 0%,transparent 60%);pointer-events:none;}
+.hero-tag{display:inline-block;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:20px;padding:5px 16px;font-size:12px;font-weight:600;letter-spacing:.5px;margin-bottom:20px;}
+.hero h1{font-family:'DM Serif Display',serif;font-size:3rem;line-height:1.15;margin-bottom:16px;max-width:700px;margin-left:auto;margin-right:auto;}
+.hero h1 em{color:#7ECBA1;font-style:italic;}
+.hero p{font-size:16px;color:rgba(255,255,255,.8);max-width:520px;margin:0 auto 28px;}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.btn-hero-primary{background:var(--vert);color:#fff;padding:13px 28px;border-radius:30px;text-decoration:none;font-weight:700;font-size:15px;transition:all .2s;box-shadow:0 4px 16px rgba(39,174,96,.4);}
+.btn-hero-primary:hover{background:#219a52;transform:translateY(-1px);}
+.btn-hero-outline{background:rgba(255,255,255,.12);color:#fff;padding:13px 28px;border-radius:30px;text-decoration:none;font-weight:600;font-size:15px;border:1.5px solid rgba(255,255,255,.35);transition:all .2s;}
+.btn-hero-outline:hover{background:rgba(255,255,255,.2);}
+.hero-stats{display:flex;gap:32px;justify-content:center;flex-wrap:wrap;margin-top:48px;padding-top:40px;border-top:1px solid rgba(255,255,255,.15);}
+.hero-stat .num{font-family:'DM Serif Display',serif;font-size:2.2rem;color:#7ECBA1;}
+.hero-stat .lbl{font-size:12px;color:rgba(255,255,255,.65);margin-top:2px;}
+@media(max-width:600px){.hero h1{font-size:2rem;}.hero-stats{gap:20px;}}
 
-/* ============================
-   CARD
-============================ */
-.card {
-  background:var(--blanc);
-  border-radius:12px;
-  box-shadow:var(--shadow-sm);
-  padding:22px;
-  margin-bottom:16px;
-  border:1px solid var(--bord);
-  animation: fadeUp .35s ease both;
-}
-@keyframes fadeUp { from{ opacity:0; transform:translateY(10px); } to{ opacity:1; transform:none; } }
+/* SECTIONS */
+section{padding:64px 20px;}
+section:nth-child(even){background:var(--fond);}
+.container{max-width:1100px;margin:0 auto;}
+.section-header{text-align:center;margin-bottom:48px;}
+.section-header h2{font-family:'DM Serif Display',serif;font-size:2.1rem;margin-bottom:10px;}
+.section-header h2 em{color:var(--vert);font-style:italic;}
+.section-header p{color:var(--muted);max-width:520px;margin:0 auto;font-size:15px;}
 
-.card-title {
-  font-weight:700; font-size:15px; color:var(--bleu);
-  display:flex; align-items:center; gap:8px;
-  margin-bottom:16px; padding-bottom:12px;
-  border-bottom:2px solid var(--fond);
-}
-.step-badge {
-  background:var(--bleu); color:#fff;
-  width:24px; height:24px; border-radius:50%;
-  display:flex; align-items:center; justify-content:center;
-  font-size:12px; font-weight:800; flex-shrink:0;
-}
-.step-badge.done { background:var(--vert); }
-.step-badge.done::after { content:'✓'; font-size:13px; }
+/* ESPACES */
+.espaces-tabs{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:32px;}
+.espace-tab{padding:7px 18px;border-radius:20px;border:1.5px solid var(--bord);background:var(--blanc);cursor:pointer;font-size:13px;font-weight:600;color:var(--muted);transition:all .18s;}
+.espace-tab.active,.espace-tab:hover{background:var(--bleu);border-color:var(--bleu);color:#fff;}
+.espaces-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;}
+.espace-card{background:var(--blanc);border-radius:14px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.07);border:1px solid var(--bord);transition:all .22s;}
+.espace-card:hover{transform:translateY(-3px);box-shadow:0 8px 30px rgba(0,0,0,.12);}
+.espace-card-header{padding:20px 20px 14px;display:flex;align-items:flex-start;gap:12px;}
+.espace-ico{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.espace-ico.reunion{background:#EBF4FF;}
+.espace-ico.nomade{background:#E8F8F0;}
+.espace-ico.coworking{background:#FFF7E6;}
+.espace-card h3{font-size:16px;font-weight:700;margin-bottom:2px;}
+.espace-card .sous-titre{font-size:12px;color:var(--muted);}
+.espace-card-body{padding:0 20px 20px;}
+.espace-desc{font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.5;}
+.espace-prix-box{display:flex;align-items:center;justify-content:space-between;background:var(--fond);border-radius:8px;padding:10px 14px;margin-bottom:12px;}
+.espace-prix-box .prix{font-weight:800;font-size:18px;color:var(--bleu);}
+.espace-prix-box .unite{font-size:12px;color:var(--muted);}
+.btn-reserver-card{display:block;text-align:center;background:var(--bleu);color:#fff;padding:9px;border-radius:8px;text-decoration:none;font-weight:700;font-size:13px;transition:all .18s;}
+.btn-reserver-card:hover{background:var(--bleu-md);}
+.espace-hidden{display:none;}
 
-/* ============================
-   FILTRE TABS
-============================ */
-.filter-tabs { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:14px; }
-.filter-tab {
-  padding:5px 14px; border-radius:20px;
-  border:1.5px solid var(--bord);
-  background:var(--blanc); cursor:pointer;
-  font-size:12px; font-weight:600; color:var(--muted);
-  transition:all .18s;
-}
-.filter-tab:hover { border-color:var(--bleu-md); color:var(--bleu); }
-.filter-tab.active { background:var(--bleu); border-color:var(--bleu); color:#fff; }
+/* TARIFS */
+.tarifs-table-wrap{overflow-x:auto;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.07);}
+table{width:100%;border-collapse:collapse;background:var(--blanc);font-size:13px;}
+thead tr{background:var(--bleu);color:#fff;}
+th{padding:12px 14px;text-align:left;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.4px;white-space:nowrap;}
+td{padding:11px 14px;border-bottom:1px solid var(--bord);}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:#FAFBFC;}
+.tarif-note{font-size:11px;color:var(--muted);margin-top:10px;text-align:center;}
 
-/* ============================
-   ESPACES GRID
-============================ */
-.espaces-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(175px,1fr)); gap:10px; }
-.espace-btn {
-  border:2px solid var(--bord); border-radius:10px;
-  padding:13px 11px; cursor:pointer; background:var(--blanc);
-  transition:all .2s; text-align:left; position:relative;
-}
-.espace-btn:hover { border-color:var(--bleu-md); background:var(--bleu-lt); }
-.espace-btn.selected { border-color:var(--bleu); background:var(--bleu-lt); box-shadow:0 0 0 3px rgba(30,74,110,.15); }
-.espace-btn .eb-ico { font-size:22px; display:block; margin-bottom:6px; }
-.espace-btn .eb-nom { font-weight:700; font-size:13px; display:block; }
-.espace-btn .eb-sub { font-size:11px; color:var(--muted); display:block; margin-top:2px; }
-.espace-btn .eb-prix { font-size:11px; color:var(--vert); font-weight:700; display:block; margin-top:5px; }
-.espace-btn .eb-dispo { position:absolute; top:8px; right:8px; width:8px; height:8px; border-radius:50%; background:var(--vert); }
-.espace-btn .eb-dispo.loading { background:var(--or); animation:pulse .8s infinite; }
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+/* SERVICES */
+.services-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;}
+.service-card{background:var(--blanc);border-radius:12px;padding:20px;border:1px solid var(--bord);display:flex;flex-direction:column;gap:8px;}
+.service-ico{font-size:24px;}
+.service-card h4{font-weight:700;font-size:14px;}
+.service-card p{font-size:12px;color:var(--muted);line-height:1.5;}
+.service-badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;background:var(--vert-lt);color:var(--vert);margin-top:auto;}
 
-/* ============================
-   PROFIL TARIFAIRE
-============================ */
-.profils-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; }
-@media(max-width:480px){ .profils-grid{ grid-template-columns:1fr; } }
-.profil-btn {
-  border:2px solid var(--bord); border-radius:8px;
-  padding:11px 12px; cursor:pointer; background:var(--blanc);
-  transition:all .18s; text-align:left;
-}
-.profil-btn:hover { border-color:var(--bleu-md); }
-.profil-btn.selected { border-color:var(--vert); background:var(--vert-lt); }
-.profil-btn .pb-label { font-weight:700; font-size:13px; display:block; }
-.profil-btn .pb-desc { font-size:11px; color:var(--muted); display:block; margin-top:2px; }
+/* ADHÉSION */
+.adhesion-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:32px;}
+@media(max-width:900px){.adhesion-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:560px){.adhesion-grid{grid-template-columns:1fr;}}
+.adh-card{background:var(--blanc);border:2px solid var(--bord);border-radius:14px;padding:22px 18px;display:flex;flex-direction:column;gap:8px;transition:all .2s;}
+.adh-card:hover{box-shadow:0 6px 24px rgba(0,0,0,.1);transform:translateY(-2px);}
+.adh-card.featured{border-color:var(--vert);}
+.adh-badge{display:inline-block;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;background:var(--fond);color:var(--muted);text-transform:uppercase;letter-spacing:.4px;width:fit-content;}
+.adh-badge.green{background:var(--vert-lt);color:var(--vert);}
+.adh-badge.blue{background:var(--bleu-lt);color:var(--bleu);}
+.adh-ico{font-size:26px;}
+.adh-card h3{font-size:16px;font-weight:700;}
+.adh-prix{font-size:22px;font-weight:800;color:var(--bleu);}
+.adh-prix span{font-size:13px;font-weight:400;color:var(--muted);}
+.adh-card ul{list-style:none;flex:1;}
+.adh-card ul li{font-size:12px;color:var(--muted);padding:3px 0;display:flex;gap:6px;}
+.adh-card ul li::before{content:'✓';color:var(--vert);font-weight:700;flex-shrink:0;}
+.btn-adh{display:block;text-align:center;padding:9px 16px;border-radius:8px;font-weight:700;font-size:13px;text-decoration:none;cursor:pointer;transition:all .2s;border:2px solid var(--bleu);color:var(--bleu);background:var(--blanc);margin-top:auto;}
+.btn-adh:hover{background:var(--bleu);color:#fff;}
+.btn-adh.green{background:var(--vert);color:#fff;border-color:var(--vert);}
+.btn-adh.green:hover{background:#219a52;}
 
-/* ============================
-   CALENDRIER
-============================ */
-.cal-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
-.cal-header h3 { font-size:15px; font-weight:700; }
-.cal-nav-btn {
-  background:none; border:1.5px solid var(--bord);
-  width:32px; height:32px; border-radius:8px;
-  cursor:pointer; font-size:18px; line-height:1;
-  display:flex; align-items:center; justify-content:center;
-  transition:all .18s; color:var(--texte);
-}
-.cal-nav-btn:hover { background:var(--bleu); color:#fff; border-color:var(--bleu); }
+/* MODES PAIEMENT */
+.paiement-bloc{background:var(--fond);border:1px solid var(--bord);border-radius:10px;padding:20px 24px;margin-bottom:32px;}
+.paiement-bloc h4{font-weight:700;font-size:14px;margin-bottom:12px;}
+.paiement-tags{display:flex;flex-wrap:wrap;gap:8px;}
+.paiement-tag{background:var(--blanc);border:1px solid var(--bord);border-radius:8px;padding:6px 14px;font-size:13px;}
 
-.cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:3px; text-align:center; }
-.cal-dow { font-size:10px; font-weight:700; color:var(--muted); padding:4px 0; text-transform:uppercase; }
-.cal-day {
-  aspect-ratio:1; display:flex; align-items:center; justify-content:center;
-  border-radius:7px; font-size:13px; cursor:pointer;
-  border:1.5px solid transparent; transition:all .16s; position:relative;
-}
-.cal-day.empty { cursor:default; }
-.cal-day.past { color:#CBD5E0; cursor:not-allowed; }
-.cal-day.dispo:hover { background:var(--bleu-lt); border-color:var(--bleu-md); }
-.cal-day.partial { background:var(--or-lt); color:var(--or); font-weight:600; }
-.cal-day.partial:hover { background:#FDEECE; border-color:var(--or); }
-.cal-day.full { background:var(--rouge-lt); color:var(--rouge); cursor:not-allowed; }
-.cal-day.selected { background:var(--bleu); color:#fff; font-weight:800; border-color:var(--bleu); }
-.cal-day.today::after { content:''; position:absolute; bottom:3px; left:50%; transform:translateX(-50%); width:4px; height:4px; border-radius:50%; background:var(--vert); }
+/* FORMULAIRE ADHÉSION */
+.formulaire-adh{background:var(--blanc);border:2px solid var(--bleu);border-radius:14px;padding:28px;}
+.formulaire-adh h3{font-size:18px;font-weight:700;color:var(--bleu);margin-bottom:6px;}
+.formulaire-adh>p{font-size:13px;color:var(--muted);margin-bottom:20px;}
+.form-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+@media(max-width:560px){.form-grid-2{grid-template-columns:1fr;}}
+.form-full{grid-column:1/-1;}
+.fg{display:flex;flex-direction:column;gap:4px;}
+.fg label{font-size:12px;font-weight:700;color:var(--texte);}
+.fg label .req{color:var(--rouge);}
+.fg input,.fg select,.fg textarea{border:1.5px solid var(--bord);border-radius:8px;padding:9px 11px;font-size:14px;font-family:inherit;color:var(--texte);background:var(--blanc);transition:border .18s;}
+.fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:var(--bleu-md);box-shadow:0 0 0 3px rgba(46,109,164,.12);}
+.fg textarea{resize:vertical;min-height:70px;}
+.fg .hint{font-size:11px;color:var(--muted);}
+.form-actions{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:16px;}
+.btn-submit-adh{background:var(--vert);color:#fff;border:none;border-radius:8px;padding:12px 24px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;}
+.btn-submit-adh:hover{background:#219a52;transform:translateY(-1px);}
+.btn-dl-adh{color:var(--bleu);font-weight:600;text-decoration:none;font-size:14px;border:1.5px solid var(--bleu);border-radius:8px;padding:10px 18px;transition:all .18s;}
+.btn-dl-adh:hover{background:var(--bleu-lt);}
+.adh-success{display:none;background:var(--vert-lt);border:1px solid var(--vert);border-radius:8px;padding:14px 16px;margin-top:14px;color:#1a6b3a;font-size:14px;}
+.adh-nomail{display:none;background:var(--or-lt);border:1px solid var(--or);border-radius:8px;padding:14px 16px;margin-top:14px;color:#744210;font-size:13px;}
+.rgpd-label{display:flex;align-items:flex-start;gap:8px;cursor:pointer;font-size:12px;color:var(--muted);}
+.rgpd-label input{margin-top:2px;width:15px;height:15px;flex-shrink:0;}
 
-.cal-legend { display:flex; gap:12px; flex-wrap:wrap; margin-top:10px; font-size:11px; color:var(--muted); }
-.cal-legend span { display:flex; align-items:center; gap:4px; }
-.ldot { width:9px; height:9px; border-radius:50%; display:inline-block; }
+/* CONTACT */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start;}
+@media(max-width:700px){.contact-grid{grid-template-columns:1fr;}}
+.contact-infos{display:flex;flex-direction:column;gap:16px;}
+.contact-item{display:flex;gap:14px;align-items:flex-start;}
+.contact-item .ci-ico{width:40px;height:40px;background:var(--bleu-lt);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.contact-item .ci-label{font-size:11px;color:var(--muted);text-transform:uppercase;font-weight:700;letter-spacing:.4px;}
+.contact-item .ci-val{font-weight:600;font-size:14px;margin-top:2px;}
+.contact-item .ci-val a{color:var(--bleu);text-decoration:none;}
+.contact-form-bloc{background:var(--blanc);border:1px solid var(--bord);border-radius:14px;padding:24px;}
+.contact-form-bloc h3{font-size:16px;font-weight:700;margin-bottom:16px;color:var(--bleu);}
+.contact-success{display:none;background:var(--vert-lt);border:1px solid var(--vert);border-radius:8px;padding:12px;margin-top:12px;color:#1a6b3a;font-size:13px;}
+.contact-nomail{display:none;background:var(--bleu-lt);border:1px solid #90CDF4;border-radius:8px;padding:12px;margin-top:12px;color:#2B6CB0;font-size:13px;}
 
-/* ============================
-   CRÉNEAUX 24H
-============================ */
-.creneaux-block { margin-top:16px; border-top:1px solid var(--fond); padding-top:16px; }
-.creneaux-title { font-weight:700; font-size:13px; margin-bottom:8px; display:flex; align-items:center; gap:8px; }
-.badge-small {
-  font-size:10px; font-weight:700; padding:2px 8px;
-  border-radius:10px; background:var(--nuit); color:#fff;
-}
-.info-tip {
-  font-size:12px; padding:9px 12px; border-radius:8px;
-  margin-bottom:12px; display:flex; gap:8px;
-  background:var(--bleu-lt); border:1px solid #BEE3F8; color:#2B6CB0;
-}
-.info-tip.warn { background:var(--or-lt); border-color:#F6AD55; color:#744210; }
+/* FOOTER */
+footer{background:var(--bleu);color:rgba(255,255,255,.8);padding:48px 20px 24px;}
+.footer-grid{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:32px;margin-bottom:40px;}
+@media(max-width:768px){.footer-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:480px){.footer-grid{grid-template-columns:1fr;}}
+.footer-brand p{font-size:13px;margin-top:8px;line-height:1.6;opacity:.75;}
+.footer-col h4{color:#fff;font-weight:700;font-size:13px;margin-bottom:12px;text-transform:uppercase;letter-spacing:.5px;}
+.footer-col a{display:block;color:rgba(255,255,255,.7);text-decoration:none;font-size:13px;margin-bottom:6px;transition:color .15s;}
+.footer-col a:hover{color:#fff;}
+.footer-bottom{max-width:1100px;margin:0 auto;padding-top:24px;border-top:1px solid rgba(255,255,255,.15);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;font-size:12px;opacity:.6;}
 
-.creneaux-grid { display:grid; grid-template-columns:repeat(6,1fr); gap:3px; }
-@media(max-width:480px){ .creneaux-grid{ grid-template-columns:repeat(4,1fr); } }
-.creneau-btn {
-  padding:6px 2px; border-radius:6px;
-  border:1.5px solid var(--bord);
-  text-align:center; font-size:11px; font-weight:500;
-  cursor:pointer; transition:all .14s;
-  background:var(--blanc); color:var(--texte);
-}
-.creneau-btn:hover:not(.indispo,.loading-c) { border-color:var(--bleu-md); background:var(--bleu-lt); }
-.creneau-btn.nuit { background:var(--nuit-lt); color:#5A6A7E; border-color:#D3DCE6; }
-.creneau-btn.nuit:hover:not(.indispo) { background:#D8E1EB; border-color:var(--bleu); color:var(--bleu); }
-.creneau-btn.selected { background:var(--bleu); border-color:var(--bleu); color:#fff; font-weight:700; }
-.creneau-btn.indispo { background:var(--rouge-lt); color:#F56565; border-color:#FED7D7; cursor:not-allowed; font-size:10px; }
-.creneau-btn.loading-c { opacity:.4; cursor:wait; }
-
-.duree-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:5px; margin-top:12px; }
-.duree-btn {
-  padding:7px 3px; border:1.5px solid var(--bord);
-  border-radius:7px; text-align:center;
-  cursor:pointer; font-size:12px; font-weight:600;
-  background:var(--blanc); transition:all .14s;
-}
-.duree-btn:hover { border-color:var(--bleu-md); background:var(--bleu-lt); }
-.duree-btn.selected { background:var(--bleu); border-color:var(--bleu); color:#fff; }
-
-/* ============================
-   OPTIONS
-============================ */
-.option-row {
-  display:flex; align-items:flex-start; gap:10px;
-  padding:11px; border:1.5px solid var(--bord);
-  border-radius:8px; margin-bottom:8px; cursor:pointer; transition:all .18s;
-}
-.option-row:hover { border-color:var(--bleu-md); background:var(--bleu-lt); }
-.option-row.on { border-color:var(--vert); background:var(--vert-lt); }
-.option-row input[type=checkbox] { margin-top:2px; accent-color:var(--vert); width:15px; height:15px; flex-shrink:0; }
-.opt-label { font-weight:700; font-size:13px; }
-.opt-desc { font-size:11px; color:var(--muted); margin-top:1px; }
-.opt-prix { font-weight:700; color:var(--vert); margin-left:auto; font-size:13px; white-space:nowrap; flex-shrink:0; }
-
-.equip-grid { display:flex; flex-wrap:wrap; gap:8px; margin-top:6px; }
-.equip-tag {
-  display:flex; align-items:center; gap:5px;
-  font-size:12px; padding:5px 10px;
-  border:1.5px solid var(--bord); border-radius:20px;
-  cursor:pointer; background:var(--blanc); transition:all .15s;
-}
-.equip-tag:hover { border-color:var(--bleu-md); background:var(--bleu-lt); }
-.equip-tag.on { border-color:var(--vert); background:var(--vert-lt); color:var(--bleu); font-weight:600; }
-.equip-tag input { display:none; }
-
-/* ============================
-   FORMULAIRE
-============================ */
-.form-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-@media(max-width:500px){ .form-grid{ grid-template-columns:1fr; } }
-.form-col-full { grid-column:1/-1; }
-.fg { display:flex; flex-direction:column; gap:4px; }
-.fg label { font-size:12px; font-weight:700; color:var(--texte); }
-.fg label .req { color:var(--rouge); }
-.fg input, .fg select, .fg textarea {
-  border:1.5px solid var(--bord); border-radius:8px;
-  padding:9px 11px; font-size:14px; color:var(--texte);
-  background:var(--blanc); transition:border .18s, box-shadow .18s;
-}
-.fg input:focus, .fg select:focus, .fg textarea:focus {
-  outline:none; border-color:var(--bleu-md);
-  box-shadow:0 0 0 3px rgba(46,109,164,.12);
-}
-.fg textarea { resize:vertical; min-height:72px; }
-.field-hint { font-size:11px; color:var(--muted); }
-
-/* ============================
-   SIDEBAR RÉCAP
-============================ */
-.sidebar { position:sticky; top:68px; align-self:start; }
-.recap-card { background:var(--blanc); border-radius:12px; box-shadow:var(--shadow-md); overflow:hidden; border:1px solid var(--bord); }
-.recap-head { background:var(--bleu); color:#fff; padding:14px 18px; }
-.recap-head h2 { font-size:15px; font-weight:700; }
-.recap-head p { font-size:11px; opacity:.75; margin-top:2px; }
-.recap-body { padding:18px; }
-.recap-row { display:flex; justify-content:space-between; align-items:flex-start; padding:7px 0; border-bottom:1px solid var(--fond); font-size:13px; }
-.recap-row:last-child { border-bottom:none; }
-.recap-row .rl { color:var(--muted); }
-.recap-row .rv { font-weight:600; text-align:right; max-width:58%; }
-.recap-total { background:var(--vert-lt); border-radius:8px; padding:12px 14px; margin:12px 0; display:flex; justify-content:space-between; align-items:center; }
-.recap-total .rt-l { font-weight:700; color:var(--vert); font-size:13px; }
-.recap-total .rt-v { font-family:'DM Serif Display',serif; font-size:28px; font-weight:400; color:var(--vert); }
-
-.info-box { border-radius:8px; padding:9px 12px; font-size:12px; margin-bottom:10px; display:flex; gap:7px; align-items:flex-start; }
-.info-box.blue { background:var(--bleu-lt); border:1px solid #90CDF4; color:#2B6CB0; }
-.info-box.warn { background:var(--or-lt); border:1px solid #F6AD55; color:#744210; }
-.info-box.nuit { background:var(--nuit-lt); border:1px solid #A0AEC0; color:#4A5568; }
-
-.btn-submit {
-  width:100%; background:linear-gradient(135deg,var(--vert),#2ECC71);
-  color:#fff; border:none; border-radius:10px;
-  padding:14px; font-size:15px; font-weight:700;
-  cursor:pointer; transition:all .2s;
-  display:flex; align-items:center; justify-content:center; gap:8px;
-  box-shadow:0 4px 16px rgba(39,174,96,.3);
-}
-.btn-submit:hover:not(:disabled) { transform:translateY(-1px); box-shadow:0 6px 20px rgba(39,174,96,.4); }
-.btn-submit:disabled { opacity:.45; cursor:not-allowed; transform:none; box-shadow:none; }
-.btn-note { font-size:11px; color:var(--muted); text-align:center; margin-top:6px; }
-
-/* ============================
-   DISPONIBILITÉS DU JOUR
-============================ */
-.dispo-card { background:var(--blanc); border-radius:12px; box-shadow:var(--shadow-sm); padding:18px; margin-top:14px; border:1px solid var(--bord); }
-.dispo-card h4 { font-size:14px; font-weight:700; color:var(--bleu); margin-bottom:4px; }
-.dispo-card .dispo-date { font-size:12px; color:var(--muted); margin-bottom:12px; }
-.dispo-list { display:flex; flex-direction:column; gap:5px; max-height:220px; overflow-y:auto; }
-.dispo-item { display:flex; align-items:center; gap:8px; padding:7px 10px; border-radius:7px; background:var(--fond); font-size:12px; }
-.dispo-item .di-heure { font-weight:700; color:var(--bleu); width:100px; flex-shrink:0; }
-.dispo-item .di-espace { flex:1; }
-.dispo-chip { padding:2px 8px; border-radius:10px; font-size:10px; font-weight:700; }
-.dispo-chip.libre { background:#C6F6D5; color:#276749; }
-.dispo-chip.occupe { background:#FED7D7; color:#742A2A; }
-.dispo-empty { text-align:center; font-size:12px; color:var(--vert); font-weight:600; padding:10px; }
-
-/* ============================
-   LOADING
-============================ */
-.loading-overlay { text-align:center; padding:16px; font-size:13px; color:var(--muted); }
-.spinner { display:inline-block; width:18px; height:18px; border:2px solid var(--bord); border-top-color:var(--bleu); border-radius:50%; animation:spin .6s linear infinite; margin-right:6px; vertical-align:middle; }
-@keyframes spin{ to{ transform:rotate(360deg); } }
-
-/* ============================
-   ÉCRAN SUCCÈS
-============================ */
-.success-screen {
-  display:none; text-align:center; padding:48px 24px;
-  background:var(--blanc); border-radius:12px;
-  box-shadow:var(--shadow-sm); border:1px solid var(--bord);
-}
-.success-screen.active { display:block; animation:fadeUp .4s ease; }
-.success-icon { font-size:64px; margin-bottom:16px; }
-.success-screen h2 { font-family:'DM Serif Display',serif; font-size:1.8rem; color:var(--vert); margin-bottom:8px; }
-.success-screen p { color:var(--muted); font-size:14px; line-height:1.7; }
-.success-id { display:inline-block; background:var(--fond); border:1px solid var(--bord); border-radius:8px; padding:6px 14px; font-weight:700; font-size:13px; margin:12px 0; color:var(--bleu); }
-.btn-reset { margin-top:20px; padding:10px 24px; background:var(--bleu); color:#fff; border:none; border-radius:8px; cursor:pointer; font-size:14px; font-weight:700; }
-
-/* scrollbar */
-.dispo-list::-webkit-scrollbar { width:4px; }
-.dispo-list::-webkit-scrollbar-thumb { background:var(--bord); border-radius:4px; }
+/* UTILITAIRES */
+.badge-ess{display:inline-flex;align-items:center;gap:6px;background:var(--vert-lt);color:var(--vert);border:1px solid rgba(39,174,96,.3);border-radius:20px;padding:5px 14px;font-size:12px;font-weight:700;}
 </style>
 </head>
 <body>
 
-<!-- ===== HEADER ===== -->
-<header class="header">
-  <a href="https://genie-montauban.fr">← <span>Génie Montauban</span></a>
-  <span class="h-badge">🔐 Accès 24h/7j</span>
-</header>
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="#">
+      <img src="logo.png" alt="Génie Montauban">
+      <span>Génie</span>
+    </a>
+    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')">☰</button>
+    <div class="nav-links">
+      <a href="#espaces">Espaces</a>
+      <a href="#tarifs">Tarifs</a>
+      <a href="#services">Services</a>
+      <a href="#adhesion">Adhésion</a>
+      <a href="#contact">Contact</a>
+      <a href="reservation.html" class="btn-reserver">Réserver →</a>
+    </div>
+  </div>
+</nav>
 
-<!-- ===== HERO ===== -->
+<!-- HERO -->
 <div class="hero">
-  <h1>Réserver un espace</h1>
-  <p>Salles de réunion · Bureaux nomades · Coworking · 12 rue du Génie, Montauban</p>
-  <div class="hero-chips">
-    <span>🕐 Créneaux 24h/24</span>
-    <span>📅 Dispo en temps réel</span>
-    <span>✅ Confirmation sous 24h</span>
-    <span>♿ PMR accessible</span>
+  <div class="hero-tag">📍 12 rue du Génie · 200m de la gare SNCF</div>
+  <h1>Le lieu où vos <em>projets</em> prennent vie</h1>
+  <p>Tiers-lieu ancré dans l'économie sociale et solidaire. Bureaux privatifs, coworking, salles de réunion — une communauté d'entrepreneurs et d'associations.</p>
+  <div class="hero-btns">
+    <a href="reservation.html" class="btn-hero-primary">Réserver un espace →</a>
+    <a href="#espaces" class="btn-hero-outline">Découvrir les espaces</a>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="num">12</div><div class="lbl">Espaces disponibles</div></div>
+    <div class="hero-stat"><div class="num">300+</div><div class="lbl">m² modulables</div></div>
+    <div class="hero-stat"><div class="num">PMR</div><div class="lbl">Accessible</div></div>
+    <div class="hero-stat"><div class="num">24h</div><div class="lbl">Accès badge 7j/7</div></div>
   </div>
 </div>
 
-<!-- ===== LAYOUT ===== -->
-<div class="layout">
+<!-- ESPACES -->
+<section id="espaces">
+  <div class="container">
+    <div class="section-header">
+      <h2>Douze espaces, chacun avec sa <em>personnalité</em></h2>
+      <p>Salles de réunion, bureaux nomades, coworking et bureaux privatifs en bail longue durée.</p>
+    </div>
 
-  <!-- COLONNE PRINCIPALE -->
-  <div id="main-form">
+    <div class="espaces-tabs">
+      <button class="espace-tab active" onclick="filtrerEspaces('tous',this)">Tous</button>
+      <button class="espace-tab" onclick="filtrerEspaces('reunion',this)">🏛️ Salles de réunion</button>
+      <button class="espace-tab" onclick="filtrerEspaces('nomade',this)">💼 Bureaux nomades</button>
+      <button class="espace-tab" onclick="filtrerEspaces('coworking',this)">💻 Coworking</button>
+      <button class="espace-tab" onclick="filtrerEspaces('bail',this)">🔑 Bail longue durée</button>
+    </div>
 
-    <!-- ÉTAPE 1 -->
-    <div class="card" id="card-espace">
-      <div class="card-title">
-        <span class="step-badge" id="sb1">1</span>
-        Choisissez votre espace
-        <span id="loading-espaces" style="display:none"><span class="spinner"></span>Chargement des dispos…</span>
+    <div class="espaces-grid">
+      <!-- RÉUNION -->
+      <div class="espace-card" data-type="reunion">
+        <div class="espace-card-header">
+          <div class="espace-ico reunion">🏛️</div>
+          <div><h3>Antoine Bourdelle</h3><div class="sous-titre">Salle 40 pers. · Bureau 0-02 · RDC</div></div>
+        </div>
+        <div class="espace-card-body">
+          <p class="espace-desc">Grande salle lumineuse avec terrasse, vidéoprojecteur et sono. Idéale pour formations, assemblées et événements.</p>
+          <div class="espace-prix-box"><span class="prix">30 €</span><span class="unite">/heure (tarif plein)</span></div>
+          <a href="reservation.html" class="btn-reserver-card">Réserver →</a>
+        </div>
       </div>
 
-      <div class="filter-tabs">
-        <button class="filter-tab active" onclick="filtrer('tous',this)">Tous</button>
-        <button class="filter-tab" onclick="filtrer('reunion',this)">🏛️ Réunion</button>
-        <button class="filter-tab" onclick="filtrer('nomade',this)">💼 Nomade</button>
-        <button class="filter-tab" onclick="filtrer('coworking',this)">💻 Coworking</button>
+      <div class="espace-card" data-type="reunion">
+        <div class="espace-card-header">
+          <div class="espace-ico reunion">🤝</div>
+          <div><h3>Célestin Freinet</h3><div class="sous-titre">Salle 20 pers. · Bureau 1-11 · 1er</div></div>
+        </div>
+        <div class="espace-card-body">
+          <p class="espace-desc">Salle modulable équipée paperboard. Disponible à la demi-journée, journée ou en bail mensuel.</p>
+          <div class="espace-prix-box"><span class="prix">22 €</span><span class="unite">/heure (tarif plein)</span></div>
+          <a href="reservation.html" class="btn-reserver-card">Réserver →</a>
+        </div>
       </div>
 
-      <div class="espaces-grid" id="espaces-grid">
-        <div class="espace-btn" data-espace="Bourdelle" data-type="reunion" data-tarif-h="30" onclick="selEspace(this)">
-          <span class="eb-ico">🏛️</span>
-          <span class="eb-nom">Antoine Bourdelle</span>
-          <span class="eb-sub">Salle 40 pers. · RDC</span>
-          <span class="eb-prix">dès 30 €/h</span>
-          <span class="eb-dispo" id="dispo-Bourdelle"></span>
+      <div class="espace-card" data-type="reunion">
+        <div class="espace-card-header">
+          <div class="espace-ico reunion">📋</div>
+          <div><h3>Olympe de Gouges</h3><div class="sous-titre">Salle 20 pers. · Bureau 1-12 · 1er</div></div>
         </div>
-        <div class="espace-btn" data-espace="Freinet" data-type="reunion" data-tarif-h="22" onclick="selEspace(this)">
-          <span class="eb-ico">🤝</span>
-          <span class="eb-nom">Célestin Freinet</span>
-          <span class="eb-sub">Salle 20 pers. · 1er</span>
-          <span class="eb-prix">dès 22 €/h</span>
-          <span class="eb-dispo" id="dispo-Freinet"></span>
+        <div class="espace-card-body">
+          <p class="espace-desc">Salle lumineuse avec écran TV et paperboard. Idéale pour réunions de travail et présentations.</p>
+          <div class="espace-prix-box"><span class="prix">22 €</span><span class="unite">/heure (tarif plein)</span></div>
+          <a href="reservation.html" class="btn-reserver-card">Réserver →</a>
         </div>
-        <div class="espace-btn" data-espace="Gouges" data-type="reunion" data-tarif-h="22" onclick="selEspace(this)">
-          <span class="eb-ico">📋</span>
-          <span class="eb-nom">Olympe de Gouges</span>
-          <span class="eb-sub">Salle 20 pers. · 1er</span>
-          <span class="eb-prix">dès 22 €/h</span>
-          <span class="eb-dispo" id="dispo-Gouges"></span>
+      </div>
+
+      <div class="espace-card" data-type="reunion">
+        <div class="espace-card-header">
+          <div class="espace-ico reunion">♿</div>
+          <div><h3>Maria Montessori</h3><div class="sous-titre">PMR · 4 pers. · Rez-de-jardin</div></div>
         </div>
-        <div class="espace-btn" data-espace="Montessori" data-type="reunion" data-tarif-h="15" onclick="selEspace(this)">
-          <span class="eb-ico">♿</span>
-          <span class="eb-nom">Maria Montessori</span>
-          <span class="eb-sub">PMR · 4 pers. · RDJ</span>
-          <span class="eb-prix">dès 15 €/h</span>
-          <span class="eb-dispo" id="dispo-Montessori"></span>
+        <div class="espace-card-body">
+          <p class="espace-desc">Salle totalement accessible PMR. Usage flexible : réunion ou bureau nomade privé. Accès direct rez-de-jardin.</p>
+          <div class="espace-prix-box"><span class="prix">15 €</span><span class="unite">/heure (tarif plein)</span></div>
+          <a href="reservation.html" class="btn-reserver-card">Réserver →</a>
         </div>
-        <div class="espace-btn" data-espace="Aristote" data-type="nomade" data-tarif-h="10" onclick="selEspace(this)">
-          <span class="eb-ico">🚪</span>
-          <span class="eb-nom">Aristote</span>
-          <span class="eb-sub">Bureau privé · 1er</span>
-          <span class="eb-prix">10 €/½ journée</span>
-          <span class="eb-dispo" id="dispo-Aristote"></span>
+      </div>
+
+      <!-- NOMADE -->
+      <div class="espace-card" data-type="nomade">
+        <div class="espace-card-header">
+          <div class="espace-ico nomade">🚪</div>
+          <div><h3>Aristote</h3><div class="sous-titre">Bureau nomade privé · 7m² · 1er</div></div>
         </div>
-        <div class="espace-btn" data-espace="Rousseau" data-type="coworking" data-tarif-h="10" onclick="selEspace(this)">
-          <span class="eb-ico">💻</span>
-          <span class="eb-nom">Jean-Jacques Rousseau</span>
-          <span class="eb-sub">Coworking 20 postes · 1er</span>
-          <span class="eb-prix">10 €/½ journée</span>
-          <span class="eb-dispo" id="dispo-Rousseau"></span>
+        <div class="espace-card-body">
+          <p class="espace-desc">Bureau privé nomade, connexion fibre, calme garanti. Parfait pour télétravail et visioconférence.</p>
+          <div class="espace-prix-box"><span class="prix">10 €</span><span class="unite">/½ journée</span></div>
+          <a href="reservation.html" class="btn-reserver-card">Réserver →</a>
+        </div>
+      </div>
+
+      <!-- COWORKING -->
+      <div class="espace-card" data-type="coworking">
+        <div class="espace-card-header">
+          <div class="espace-ico coworking">💻</div>
+          <div><h3>Jean-Jacques Rousseau</h3><div class="sous-titre">Coworking · 28m² · 20 postes · 1er</div></div>
+        </div>
+        <div class="espace-card-body">
+          <p class="espace-desc">Grand espace coworking ouvert, imprimante partagée, café inclus. Ambiance collaborative idéale.</p>
+          <div class="espace-prix-box"><span class="prix">10 €</span><span class="unite">/½ journée</span></div>
+          <a href="reservation.html" class="btn-reserver-card">Réserver →</a>
+        </div>
+      </div>
+
+      <!-- BAIL -->
+      <div class="espace-card espace-hidden" data-type="bail">
+        <div class="espace-card-header">
+          <div class="espace-ico nomade">🏢</div>
+          <div><h3>Bureau Aristote (0-01)</h3><div class="sous-titre">15 m² · Rez-de-chaussée</div></div>
+        </div>
+        <div class="espace-card-body">
+          <p class="espace-desc">Bail mensuel : 225€/mois · Bail 1 an : 195€/mois · Bail 3/6/9 : 180€/mois. Charges comprises.</p>
+          <div class="espace-prix-box"><span class="prix">180 €</span><span class="unite">/mois (bail 3/6/9)</span></div>
+          <a href="mailto:genie.montauban@gmail.com?subject=Location bureau Aristote" class="btn-reserver-card">Nous contacter →</a>
+        </div>
+      </div>
+
+      <div class="espace-card espace-hidden" data-type="bail">
+        <div class="espace-card-header">
+          <div class="espace-ico nomade">🏢</div>
+          <div><h3>Bureau Philippe Meirieu (0-03)</h3><div class="sous-titre">24 m² · Rez-de-chaussée</div></div>
+        </div>
+        <div class="espace-card-body">
+          <p class="espace-desc">Bail mensuel : 360€/mois · Bail 1 an : 312€/mois · Bail 3/6/9 : 288€/mois. Charges comprises.</p>
+          <div class="espace-prix-box"><span class="prix">288 €</span><span class="unite">/mois (bail 3/6/9)</span></div>
+          <a href="mailto:genie.montauban@gmail.com?subject=Location bureau Philippe Meirieu" class="btn-reserver-card">Nous contacter →</a>
+        </div>
+      </div>
+
+      <div class="espace-card espace-hidden" data-type="bail">
+        <div class="espace-card-header">
+          <div class="espace-ico nomade">🏢</div>
+          <div><h3>Bureau Aimée Césaire (1-07)</h3><div class="sous-titre">17 m² · 1er étage</div></div>
+        </div>
+        <div class="espace-card-body">
+          <p class="espace-desc">Bail mensuel : 255€/mois · Bail 1 an : 221€/mois · Bail 3/6/9 : 204€/mois. Charges comprises.</p>
+          <div class="espace-prix-box"><span class="prix">204 €</span><span class="unite">/mois (bail 3/6/9)</span></div>
+          <a href="mailto:genie.montauban@gmail.com?subject=Location bureau Aimée Césaire" class="btn-reserver-card">Nous contacter →</a>
+        </div>
+      </div>
+
+      <div class="espace-card espace-hidden" data-type="bail">
+        <div class="espace-card-header">
+          <div class="espace-ico nomade">🏢</div>
+          <div><h3>Bureau Condorcet (1-08)</h3><div class="sous-titre">17 m² · 1er étage</div></div>
+        </div>
+        <div class="espace-card-body">
+          <p class="espace-desc">Bail mensuel : 255€/mois · Bail 1 an : 221€/mois · Bail 3/6/9 : 204€/mois. Charges comprises.</p>
+          <div class="espace-prix-box"><span class="prix">204 €</span><span class="unite">/mois (bail 3/6/9)</span></div>
+          <a href="mailto:genie.montauban@gmail.com?subject=Location bureau Condorcet" class="btn-reserver-card">Nous contacter →</a>
+        </div>
+      </div>
+
+      <div class="espace-card espace-hidden" data-type="bail">
+        <div class="espace-card-header">
+          <div class="espace-ico nomade">🏢</div>
+          <div><h3>Bureau Baden Powell (1-09)</h3><div class="sous-titre">16 m² · 1er étage</div></div>
+        </div>
+        <div class="espace-card-body">
+          <p class="espace-desc">Bail mensuel : 240€/mois · Bail 1 an : 208€/mois · Bail 3/6/9 : 192€/mois. Charges comprises.</p>
+          <div class="espace-prix-box"><span class="prix">192 €</span><span class="unite">/mois (bail 3/6/9)</span></div>
+          <a href="mailto:genie.montauban@gmail.com?subject=Location bureau Baden Powell" class="btn-reserver-card">Nous contacter →</a>
+        </div>
+      </div>
+
+      <div class="espace-card espace-hidden" data-type="bail">
+        <div class="espace-card-header">
+          <div class="espace-ico reunion">♿</div>
+          <div><h3>Bureau Maria Montessori (-1-14)</h3><div class="sous-titre">PMR · 12 m² · Rez-de-jardin</div></div>
+        </div>
+        <div class="espace-card-body">
+          <p class="espace-desc">Bail mensuel : 180€/mois · Bail 1 an : 156€/mois · Bail 3/6/9 : 144€/mois. Accès PMR.</p>
+          <div class="espace-prix-box"><span class="prix">144 €</span><span class="unite">/mois (bail 3/6/9)</span></div>
+          <a href="mailto:genie.montauban@gmail.com?subject=Location bureau Montessori" class="btn-reserver-card">Nous contacter →</a>
         </div>
       </div>
     </div>
-
-    <!-- ÉTAPE 2 -->
-    <div class="card" id="card-profil" style="display:none">
-      <div class="card-title"><span class="step-badge" id="sb2">2</span> Votre profil tarifaire</div>
-      <div class="profils-grid">
-        <div class="profil-btn" onclick="selProfil(this,'plein','Tarif plein (Entreprise)')">
-          <span class="pb-label">🏢 Tarif plein</span>
-          <span class="pb-desc">Entreprises, professions libérales</span>
-        </div>
-        <div class="profil-btn" onclick="selProfil(this,'adherent','Adhérent Génie')">
-          <span class="pb-label">🤝 Adhérent Génie</span>
-          <span class="pb-desc">Membres association — ≈ −20%</span>
-        </div>
-        <div class="profil-btn" onclick="selProfil(this,'locataire','Locataire Génie')">
-          <span class="pb-label">🔑 Locataire</span>
-          <span class="pb-desc">Locataires permanents</span>
-        </div>
-        <div class="profil-btn" onclick="selProfil(this,'asso','Association / Syndicat')">
-          <span class="pb-label">🌿 Asso / Syndicat</span>
-          <span class="pb-desc">Villebourbon & syndicats — gratuit</span>
-        </div>
-      </div>
-      <p class="field-hint" style="margin-top:8px">ℹ️ L'équipe Génie vérifie votre statut lors de la confirmation.</p>
-    </div>
-
-    <!-- ÉTAPE 3 -->
-    <div class="card" id="card-date" style="display:none">
-      <div class="card-title"><span class="step-badge" id="sb3">3</span> Date et horaire</div>
-
-      <!-- Calendrier -->
-      <div class="cal-header">
-        <button class="cal-nav-btn" onclick="navMois(-1)">‹</button>
-        <h3 id="cal-titre"></h3>
-        <button class="cal-nav-btn" onclick="navMois(1)">›</button>
-      </div>
-      <div class="cal-grid" id="cal-grid"></div>
-      <div class="cal-legend">
-        <span><span class="ldot" style="background:var(--bleu)"></span>Sélectionné</span>
-        <span><span class="ldot" style="background:var(--or-lt);border:1px solid var(--or)"></span>Partiel</span>
-        <span><span class="ldot" style="background:var(--rouge-lt);border:1px solid var(--rouge)"></span>Complet</span>
-      </div>
-
-      <!-- Créneaux -->
-      <div id="creneaux-block" class="creneaux-block" style="display:none">
-        <div class="creneaux-title">
-          Heure de début
-          <span class="badge-small">⏱ 24h/24</span>
-        </div>
-        <div class="info-tip" id="tip-nuit" style="display:none">
-          <span>🌙</span>
-          <span>Créneau hors horaires d'ouverture (8h–20h). Un badge d'accès 24h/7j est nécessaire (+25€/mois). L'équipe organisera votre accès lors de la confirmation.</span>
-        </div>
-        <div id="creneaux-grid" class="creneaux-grid"></div>
-
-        <!-- Durée -->
-        <div style="margin-top:14px">
-          <div class="creneaux-title">Durée</div>
-          <div id="duree-grid" class="duree-grid"></div>
-        </div>
-
-        <!-- Participants -->
-        <div style="margin-top:14px">
-          <label style="font-size:13px;font-weight:700;display:block;margin-bottom:6px;">👥 Nombre de participants</label>
-          <input type="number" id="nb-part" placeholder="ex. 6" min="1" max="40" style="width:130px;border:1.5px solid var(--bord);border-radius:8px;padding:8px 11px;font-size:14px;" oninput="majRecap()">
-        </div>
-      </div>
-    </div>
-
-    <!-- ÉTAPE 4 -->
-    <div class="card" id="card-options" style="display:none">
-      <div class="card-title"><span class="step-badge" id="sb4">4</span> Options complémentaires</div>
-
-      <div class="option-row" id="opt-badge-row" onclick="togOpt(this,'badge',25)">
-        <input type="checkbox" id="chk-badge">
-        <div style="flex:1">
-          <div class="opt-label">🔑 Accès badge 24h/7j</div>
-          <div class="opt-desc">Nécessaire pour les créneaux hors horaires (avant 8h ou après 20h)</div>
-        </div>
-        <span class="opt-prix">+25 €/mois</span>
-      </div>
-
-      <div class="option-row" onclick="togOpt(this,'adhesion',50)">
-        <input type="checkbox" id="chk-adhesion">
-        <div style="flex:1">
-          <div class="opt-label">🤝 Adhésion Génie (annuelle)</div>
-          <div class="opt-desc">Tarifs préférentiels, accès communauté ESS, droits en AG</div>
-        </div>
-        <span class="opt-prix">+50 €/an</span>
-      </div>
-
-      <div style="margin-top:14px">
-        <div style="font-weight:700;font-size:13px;margin-bottom:8px;">📦 Équipements souhaités</div>
-        <div class="equip-grid">
-          <label class="equip-tag"><input type="checkbox" value="Vidéoprojecteur"> 📽️ Vidéoprojecteur</label>
-          <label class="equip-tag"><input type="checkbox" value="Écran TV"> 📺 Écran TV</label>
-          <label class="equip-tag"><input type="checkbox" value="Paperboard"> 📋 Paperboard</label>
-          <label class="equip-tag"><input type="checkbox" value="Sono / micro"> 🎤 Sono / micro</label>
-          <label class="equip-tag"><input type="checkbox" value="Tables supp."> 🪑 Tables supp.</label>
-          <label class="equip-tag"><input type="checkbox" value="Chaises supp."> 💺 Chaises supp.</label>
-          <label class="equip-tag"><input type="checkbox" value="Webcam visio"> 📷 Webcam visio</label>
-          <label class="equip-tag"><input type="checkbox" value="Rallonge"> 🔌 Rallonge</label>
-        </div>
-        <p class="field-hint" style="margin-top:6px">Des frais peuvent s'appliquer selon disponibilité — confirmés par l'équipe.</p>
-      </div>
-    </div>
-
-    <!-- ÉTAPE 5 -->
-    <div class="card" id="card-contact" style="display:none">
-      <div class="card-title"><span class="step-badge" id="sb5">5</span> Vos coordonnées</div>
-      <div class="form-grid">
-        <div class="fg"><label>Prénom <span class="req">*</span></label><input type="text" id="f-prenom" placeholder="Marie" oninput="majRecap()"></div>
-        <div class="fg"><label>Nom <span class="req">*</span></label><input type="text" id="f-nom" placeholder="Dupont" oninput="majRecap()"></div>
-        <div class="fg"><label>Email <span class="req">*</span></label><input type="email" id="f-email" placeholder="marie@structure.fr" oninput="majRecap()"></div>
-        <div class="fg"><label>Téléphone</label><input type="tel" id="f-tel" placeholder="06 XX XX XX XX"></div>
-        <div class="fg form-col-full"><label>Organisation / Structure</label><input type="text" id="f-struct" placeholder="Association XYZ, Auto-entrepreneur…"></div>
-        <div class="fg form-col-full">
-          <label>Message ou précisions</label>
-          <textarea id="f-msg" placeholder="Précisions sur votre événement, besoins spécifiques, etc."></textarea>
-        </div>
-      </div>
-      <p class="field-hint" style="margin-top:10px">🔒 Données utilisées uniquement pour votre réservation. Conservation 3 ans. Droits : genie.montauban@gmail.com</p>
-    </div>
-
-    <!-- SUCCÈS -->
-    <div class="success-screen" id="success">
-      <div class="success-icon">🎉</div>
-      <h2>Demande envoyée !</h2>
-      <div class="success-id" id="success-id"></div>
-      <p>Votre demande a été enregistrée dans notre système.<br>L'équipe Génie vous confirme par email sous <strong>24h ouvrées</strong>.<br><br>Pour toute urgence : <a href="tel:+33651509718">06 51 50 97 18</a></p>
-      <button class="btn-reset" onclick="resetForm()">← Nouvelle réservation</button>
-    </div>
-
   </div>
+</section>
 
-  <!-- SIDEBAR -->
-  <div class="sidebar">
+<!-- TARIFS -->
+<section id="tarifs">
+  <div class="container">
+    <div class="section-header">
+      <h2>Des tarifs adaptés à <em>chaque profil</em></h2>
+      <p>Tarifs dégressifs selon votre statut. Les associations de Villebourbon et syndicats bénéficient de la gratuité.</p>
+    </div>
 
-    <!-- RÉCAP -->
-    <div class="recap-card">
-      <div class="recap-head">
-        <h2>📋 Récapitulatif</h2>
-        <p>Mise à jour en temps réel</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px;">
+      <div>
+        <h3 style="font-size:15px;font-weight:700;margin-bottom:12px;color:var(--bleu);">Salles de réunion</h3>
+        <div class="tarifs-table-wrap">
+          <table>
+            <thead><tr><th>Espace</th><th>Heure</th><th>½ journée</th><th>Journée</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Bourdelle</strong> (40p)</td><td>30/24/15 €</td><td>100/80/50 €</td><td>160/130/80 €</td></tr>
+              <tr><td><strong>Freinet</strong> (20p)</td><td>22/18/12 €</td><td>70/60/35 €</td><td>120/90/60 €</td></tr>
+              <tr><td><strong>Gouges</strong> (20p)</td><td>22/18/12 €</td><td>70/60/35 €</td><td>120/90/60 €</td></tr>
+              <tr><td><strong>Montessori</strong> (PMR)</td><td>15/12/8 €</td><td>50/40/25 €</td><td>80/65/40 €</td></tr>
+              <tr><td>Asso/Villebourbon</td><td colspan="3" style="color:var(--vert);font-weight:700;">Gratuit</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="tarif-note">Ordre des tarifs : Plein / Adhérent / Locataire</p>
       </div>
-      <div class="recap-body">
-        <div class="recap-row"><span class="rl">Espace</span><span class="rv" id="r-espace">—</span></div>
-        <div class="recap-row"><span class="rl">Profil</span><span class="rv" id="r-profil">—</span></div>
-        <div class="recap-row"><span class="rl">Date</span><span class="rv" id="r-date">—</span></div>
-        <div class="recap-row"><span class="rl">Horaire</span><span class="rv" id="r-horaire">—</span></div>
-        <div class="recap-row"><span class="rl">Durée</span><span class="rv" id="r-duree">—</span></div>
-        <div class="recap-row"><span class="rl">Participants</span><span class="rv" id="r-part">—</span></div>
 
-        <div class="recap-total">
-          <span class="rt-l">Estimation</span>
-          <span class="rt-v" id="r-total">0 €</span>
+      <div>
+        <h3 style="font-size:15px;font-weight:700;margin-bottom:12px;color:var(--bleu);">Bureaux nomades & Coworking</h3>
+        <div class="tarifs-table-wrap">
+          <table>
+            <thead><tr><th>Espace</th><th>½ journée</th><th>Journée</th><th>Semaine</th><th>Mois</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Aristote</strong></td><td>10 €</td><td>20 €</td><td>70 €</td><td>150 €</td></tr>
+              <tr><td><strong>Rousseau</strong></td><td>10 €</td><td>15 €</td><td>50 €</td><td>120 €</td></tr>
+              <tr><td><strong>Montessori</strong></td><td>10 €</td><td>15 €</td><td>60 €</td><td>140 €</td></tr>
+            </tbody>
+          </table>
         </div>
-
-        <div class="info-box blue" id="ib-tarif" style="display:none">
-          <span>💡</span><span>Tarif estimatif, confirmé selon votre statut.</span>
+        <div style="margin-top:16px;">
+          <a href="reservation.html" style="display:inline-block;background:var(--bleu);color:#fff;padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:700;font-size:13px;">Réserver maintenant →</a>
         </div>
-        <div class="info-box nuit" id="ib-nuit" style="display:none">
-          <span>🌙</span><span>Créneau hors horaires — badge requis.</span>
-        </div>
-
-        <button class="btn-submit" id="btn-submit" onclick="soumettre()" disabled>
-          <span id="btn-txt">📅 Envoyer ma demande</span>
-          <span id="btn-spin" style="display:none"><span class="spinner"></span></span>
-        </button>
-        <p class="btn-note">Confirmation par email sous 24h · <a href="tel:+33651509718">06 51 50 97 18</a></p>
       </div>
     </div>
 
-    <!-- DISPO DU JOUR -->
-    <div class="dispo-card" id="dispo-card" style="display:none">
-      <h4>📅 Occupations du jour</h4>
-      <div class="dispo-date" id="dispo-date-label"></div>
-      <div class="dispo-list" id="dispo-list"></div>
-    </div>
-
-    <!-- CONTACT -->
-    <div style="background:var(--blanc);border-radius:12px;box-shadow:var(--shadow-sm);padding:16px;margin-top:14px;border:1px solid var(--bord)">
-      <div style="font-weight:700;font-size:14px;color:var(--bleu);margin-bottom:10px;">💬 Besoin d'aide ?</div>
-      <a href="tel:+33651509718" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;background:var(--bleu);color:#fff;border-radius:8px;text-decoration:none;font-weight:700;font-size:14px;margin-bottom:8px;">📞 06 51 50 97 18</a>
-      <a href="mailto:genie.montauban@gmail.com" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:9px;background:var(--fond);color:var(--bleu);border-radius:8px;text-decoration:none;font-weight:600;font-size:13px;border:1.5px solid var(--bord);">✉️ genie.montauban@gmail.com</a>
-    </div>
-
+    @media(max-width:700px){
+      /* inline fix */
+    }
   </div>
-</div>
+</section>
 
-<!-- ===== SCRIPT ===== -->
+<!-- SERVICES -->
+<section id="services">
+  <div class="container">
+    <div class="section-header">
+      <h2>Tout ce qu'il faut pour <em>travailler bien</em></h2>
+      <p>Accès, équipements et services compris dans chaque réservation.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card"><div class="service-ico">📶</div><h4>WiFi fibre haut débit</h4><p>Connexion ultra-rapide incluse, idéale pour visioconférence et travail en ligne.</p><span class="service-badge">Inclus</span></div>
+      <div class="service-card"><div class="service-ico">☕</div><h4>Café & boissons</h4><p>Café, thé et boissons chaudes en libre service dans les espaces coworking.</p><span class="service-badge">Coworking</span></div>
+      <div class="service-card"><div class="service-ico">🖨️</div><h4>Impression & scan</h4><p>Imprimante multifonction partagée accessible depuis tous les espaces.</p><span class="service-badge">Inclus</span></div>
+      <div class="service-card"><div class="service-ico">📽️</div><h4>Vidéoprojecteur & écrans</h4><p>Équipement de présentation dans Bourdelle (VP+sono) et Gouges (écran TV).</p><span class="service-badge">Salles équipées</span></div>
+      <div class="service-card"><div class="service-ico">🔐</div><h4>Accès sécurisé 24h/7j</h4><p>Accès par badge disponible 24h/7j pour les locataires permanents.</p><span class="service-badge">Option +25€/mois</span></div>
+      <div class="service-card"><div class="service-ico">🅿️</div><h4>Transports & parking</h4><p>1 min à pied de la gare SNCF. Stationnement en voirie à proximité immédiate.</p><span class="service-badge">Localisation idéale</span></div>
+      <div class="service-card"><div class="service-ico">🤝</div><h4>Réseau & mise en relation</h4><p>Accès à la communauté Génie — réseautage, échanges de compétences, ESS.</p><span class="service-badge">Membres</span></div>
+      <div class="service-card"><div class="service-ico">📅</div><h4>Réservation en ligne 24h/24</h4><p>Choisissez votre créneau, votre espace et confirmez instantanément.</p><span class="service-badge">24h/24</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ADHÉSION -->
+<section id="adhesion">
+  <div class="container">
+    <div class="section-header">
+      <h2>Adhérez à la <em>communauté</em></h2>
+      <p>L'adhésion vous intègre dans notre réseau ESS et vous ouvre des tarifs préférentiels sur tous nos espaces.</p>
+    </div>
+
+    <div class="adhesion-grid">
+      <div class="adh-card">
+        <div class="adh-badge">Particulier</div>
+        <div class="adh-ico">🤲</div>
+        <h3>Sympathisant</h3>
+        <div class="adh-prix">min. 10 € <span>/an</span></div>
+        <ul>
+          <li>Soutien à l'association</li>
+          <li>Newsletter & actualités Génie</li>
+          <li>Cotisation libre à partir de 10 €</li>
+          <li>Admission immédiate</li>
+        </ul>
+        <a class="btn-adh" href="#formulaire-adhesion" onclick="prefillAdh('Sympathisant – Particulier (min. 10€/an)')">Adhérer →</a>
+      </div>
+
+      <div class="adh-card featured">
+        <div class="adh-badge green">16–30 ans</div>
+        <div class="adh-ico">🌱</div>
+        <h3>Membre jeune</h3>
+        <div class="adh-prix">15–40 € <span>/an</span></div>
+        <ul>
+          <li>Voix délibérative en AG</li>
+          <li>Éligible au Conseil d'Administration</li>
+          <li>Quota CA garanti (20%)</li>
+          <li>Tarifs adhérent sur tous les espaces</li>
+          <li>Newsletter & offres prioritaires</li>
+        </ul>
+        <a class="btn-adh green" href="#formulaire-adhesion" onclick="prefillAdh('Membre jeune – 16-30 ans (15–40€/an)')">Adhérer →</a>
+      </div>
+
+      <div class="adh-card featured">
+        <div class="adh-badge blue">Particulier</div>
+        <div class="adh-ico">💚</div>
+        <h3>Membre actif</h3>
+        <div class="adh-prix">30–80 € <span>/an</span></div>
+        <ul>
+          <li>Voix délibérative en AG</li>
+          <li>Éligible au Conseil d'Administration</li>
+          <li>Tarifs préférentiels (≈ −20%)</li>
+          <li>Intégration annuaire Génie</li>
+          <li>Tarif progressif selon revenus</li>
+        </ul>
+        <p style="font-size:11px;color:var(--muted);text-align:center;">30€ · 45€ · 60€ · 80€ (soutien)</p>
+        <a class="btn-adh" href="#formulaire-adhesion" onclick="prefillAdh('Membre actif – Particulier (30–80€/an)')">Adhérer →</a>
+      </div>
+
+      <div class="adh-card">
+        <div class="adh-badge">Personne morale</div>
+        <div class="adh-ico">🏛️</div>
+        <h3>Association</h3>
+        <div class="adh-prix">50 € <span>/an</span></div>
+        <ul>
+          <li>Voix délibérative en AG</li>
+          <li>Éligible au CA</li>
+          <li>Tarifs adhérent pour les permanents</li>
+          <li>Domiciliation possible</li>
+          <li>Réseaux ESS locaux</li>
+        </ul>
+        <a class="btn-adh" href="#formulaire-adhesion" onclick="prefillAdh('Membre actif – Association (50€/an)')">Adhérer →</a>
+      </div>
+
+      <div class="adh-card">
+        <div class="adh-badge">Personne morale</div>
+        <div class="adh-ico">🏢</div>
+        <h3>Entreprise / ESS</h3>
+        <div class="adh-prix">150 € <span>/an</span></div>
+        <ul>
+          <li>Voix délibérative en AG</li>
+          <li>Éligible au CA</li>
+          <li>Tarifs adhérent pour toute l'équipe</li>
+          <li>Présentation dans les supports Génie</li>
+          <li>Commissions thématiques ESS</li>
+        </ul>
+        <a class="btn-adh" href="#formulaire-adhesion" onclick="prefillAdh('Membre actif – Entreprise/ESS (150€/an)')">Adhérer →</a>
+      </div>
+
+      <div class="adh-card">
+        <div class="adh-badge">Personne morale</div>
+        <div class="adh-ico">🏗️</div>
+        <h3>Collectivité</h3>
+        <div class="adh-prix">Sur convention</div>
+        <ul>
+          <li>Voix consultative</li>
+          <li>Convention de partenariat dédiée</li>
+          <li>Modalités sur mesure</li>
+        </ul>
+        <a class="btn-adh" href="mailto:genie.montauban@gmail.com?subject=Adhésion Collectivité">Nous contacter →</a>
+      </div>
+    </div>
+
+    <!-- MODES PAIEMENT -->
+    <div class="paiement-bloc">
+      <h4>💳 Modes de paiement acceptés</h4>
+      <div class="paiement-tags">
+        <span class="paiement-tag">🏦 Chèque à l'ordre de « Association Génie »</span>
+        <span class="paiement-tag">💶 Espèces (au siège)</span>
+        <span class="paiement-tag">🔁 Virement bancaire</span>
+        <span class="paiement-tag">🌐 HelloAsso (en ligne)</span>
+        <span class="paiement-tag">📅 Échéancier 3/6/10 mois (sans frais)</span>
+      </div>
+    </div>
+
+    <!-- FORMULAIRE ADHÉSION -->
+    <div class="formulaire-adh" id="formulaire-adhesion">
+      <h3>📝 Adhérer en ligne</h3>
+      <p>Remplissez ce formulaire ou téléchargez la fiche PDF à retourner par email ou en main propre.</p>
+
+      <div class="form-grid-2">
+        <div class="fg">
+          <label>Type d'adhésion <span class="req">*</span></label>
+          <select id="adh-type">
+            <option value="">— Choisir mon profil —</option>
+            <option value="Sympathisant – Particulier (min. 10€/an)">🤲 Sympathisant – Particulier (min. 10€/an)</option>
+            <option value="Membre jeune – 16-30 ans (15–40€/an)">🌱 Membre jeune 16–30 ans (15–40€/an)</option>
+            <option value="Membre actif – Particulier (30–80€/an)">💚 Membre actif – Particulier (30–80€/an)</option>
+            <option value="Membre actif – Association (50€/an)">🏛️ Membre actif – Association (50€/an)</option>
+            <option value="Membre actif – Entreprise/ESS (150€/an)">🏢 Membre actif – Entreprise/ESS (150€/an)</option>
+            <option value="Membre partenaire – Collectivité (convention)">🏗️ Membre partenaire – Collectivité</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Montant de cotisation <span class="req">*</span></label>
+          <input type="number" id="adh-montant" placeholder="ex. 45" min="10" step="5">
+          <span class="hint">Selon votre profil et vos revenus</span>
+        </div>
+        <div class="fg">
+          <label>Prénom <span class="req">*</span></label>
+          <input type="text" id="adh-prenom" placeholder="Marie">
+        </div>
+        <div class="fg">
+          <label>Nom / Structure <span class="req">*</span></label>
+          <input type="text" id="adh-nom" placeholder="Dupont ou Association XYZ">
+        </div>
+        <div class="fg">
+          <label>Email <span class="req">*</span></label>
+          <input type="email" id="adh-email" placeholder="marie@structure.fr">
+        </div>
+        <div class="fg">
+          <label>Téléphone</label>
+          <input type="tel" id="adh-tel" placeholder="06 XX XX XX XX">
+        </div>
+        <div class="fg form-full">
+          <label>Adresse postale</label>
+          <input type="text" id="adh-adresse" placeholder="12 rue de la Paix, 82000 Montauban">
+        </div>
+        <div class="fg form-full">
+          <label>Mode de paiement souhaité</label>
+          <select id="adh-paiement">
+            <option value="HelloAsso (en ligne)">🌐 HelloAsso (en ligne)</option>
+            <option value="Virement bancaire">🔁 Virement bancaire</option>
+            <option value="Chèque">🏦 Chèque</option>
+            <option value="Espèces (au siège)">💶 Espèces (au siège)</option>
+            <option value="Échéancier">📅 Échéancier</option>
+          </select>
+        </div>
+        <div class="fg form-full">
+          <label class="rgpd-label">
+            <input type="checkbox" id="adh-rgpd">
+            J'accepte que mes données personnelles soient utilisées pour la gestion de mon adhésion (conservation 3 ans, droits : genie.montauban@gmail.com) <span class="req">*</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn-submit-adh" onclick="envoyerAdhesion()">✉️ Envoyer ma demande d'adhésion</button>
+        <a class="btn-dl-adh" href="Fiche_Adhesion_GENIE_2026.pdf" download>⬇️ Télécharger la fiche PDF</a>
+      </div>
+
+      <div class="adh-success" id="adh-success">
+        🎉 <strong>Demande envoyée !</strong> L'équipe Génie vous contacte sous 48h pour finaliser votre adhésion.
+      </div>
+      <div class="adh-nomail" id="adh-nomail">
+        💡 <strong>Votre messagerie va s'ouvrir.</strong> Si aucune fenêtre n'apparaît, écrivez directement à <strong>genie.montauban@gmail.com</strong> avec votre type d'adhésion et vos coordonnées.
+      </div>
+
+      <p style="font-size:11px;color:var(--muted);margin-top:12px;">
+        Bulletin à retourner par email à <strong>genie.montauban@gmail.com</strong> ou au <strong>12 rue du Génie, 82000 Montauban</strong>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="section-header">
+      <h2>Venez nous <em>rencontrer</em></h2>
+      <p>Une question ? Une visite ? Contactez-nous ou passez directement au tiers-lieu.</p>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-infos">
+        <div class="contact-item">
+          <div class="ci-ico">📍</div>
+          <div><div class="ci-label">Adresse</div><div class="ci-val">12 rue du Génie<br>82000 Montauban</div></div>
+        </div>
+        <div class="contact-item">
+          <div class="ci-ico">📞</div>
+          <div><div class="ci-label">Téléphone</div><div class="ci-val"><a href="tel:+33651509718">06 51 50 97 18</a></div></div>
+        </div>
+        <div class="contact-item">
+          <div class="ci-ico">✉️</div>
+          <div><div class="ci-label">Email</div><div class="ci-val"><a href="mailto:genie.montauban@gmail.com">genie.montauban@gmail.com</a></div></div>
+        </div>
+        <div class="contact-item">
+          <div class="ci-ico">🕐</div>
+          <div><div class="ci-label">Horaires</div><div class="ci-val">Lun–Ven : 8h–19h<br>Sam : sur réservation</div></div>
+        </div>
+        <div class="contact-item">
+          <div class="ci-ico">🚆</div>
+          <div><div class="ci-label">Accès</div><div class="ci-val">200m de la gare SNCF<br>Bus ligne 1 — arrêt Gare</div></div>
+        </div>
+        <div style="margin-top:8px">
+          <a href="reservation.html" style="display:inline-block;background:var(--bleu);color:#fff;padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:700;font-size:13px;">📅 Demander une visite →</a>
+        </div>
+      </div>
+
+      <div class="contact-form-bloc">
+        <h3>✉️ Nous écrire</h3>
+        <div class="form-grid-2" style="grid-template-columns:1fr 1fr;">
+          <div class="fg"><label>Prénom</label><input type="text" id="c-prenom" placeholder="Marie"></div>
+          <div class="fg"><label>Nom</label><input type="text" id="c-nom" placeholder="Dupont"></div>
+          <div class="fg form-full"><label>Email <span class="req">*</span></label><input type="email" id="c-email" placeholder="marie@exemple.fr"></div>
+          <div class="fg form-full"><label>Sujet</label><input type="text" id="c-sujet" placeholder="Question sur les tarifs…"></div>
+          <div class="fg form-full"><label>Message <span class="req">*</span></label><textarea id="c-message" placeholder="Votre message…" style="min-height:100px"></textarea></div>
+        </div>
+        <button onclick="envoyerContact()" style="margin-top:12px;background:var(--bleu);color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;">Envoyer →</button>
+        <div class="contact-success" id="contact-success">✅ Message envoyé ! Nous vous répondons sous 24h.</div>
+        <div class="contact-nomail" id="contact-nomail">
+          💡 Votre messagerie va s'ouvrir. Si rien ne se passe, écrivez directement à <strong>genie.montauban@gmail.com</strong>
+          ou appelez le <strong>06 51 50 97 18</strong>.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div style="color:#fff;font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:6px;">Génie</div>
+      <p>Tiers-Lieu · Montauban<br>Un espace de coworking et de collaboration ancré dans l'économie sociale et solidaire, au service du territoire montalbannais.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Espaces</h4>
+      <a href="#espaces">Antoine Bourdelle</a>
+      <a href="#espaces">Célestin Freinet</a>
+      <a href="#espaces">Olympe de Gouges</a>
+      <a href="#espaces">Aristote</a>
+      <a href="#espaces">Jean-Jacques Rousseau</a>
+      <a href="#espaces">Maria Montessori</a>
+    </div>
+    <div class="footer-col">
+      <h4>Navigation</h4>
+      <a href="#tarifs">Tarifs 2026</a>
+      <a href="#services">Services</a>
+      <a href="#adhesion">Adhésion</a>
+      <a href="reservation.html">Réservation</a>
+      <a href="#contact">Contact</a>
+      <a href="admin.html">Admin ↗</a>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <a href="tel:+33651509718">06 51 50 97 18</a>
+      <a href="mailto:genie.montauban@gmail.com">genie.montauban@gmail.com</a>
+      <a href="#contact">12 rue du Génie<br>82000 Montauban</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Association Génie Montauban — Tous droits réservés</span>
+    <div style="display:flex;gap:16px;">
+      <a href="mentions-legales.html" style="color:inherit">Mentions légales</a>
+      <a href="confidentialite.html" style="color:inherit">Confidentialité</a>
+      <a href="cgv.html" style="color:inherit">CGV</a>
+    </div>
+  </div>
+</footer>
+
 <script>
-// ============================================================
-// CONFIGURATION — À METTRE À JOUR APRÈS DÉPLOIEMENT DU SCRIPT
-// Remplacez l'URL ci-dessous par l'URL de votre Apps Script déployé
-// ============================================================
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw5f4eTOV6q9n7OCo0m29fmECgUoML4xrn0QsUG1k2OmSUGYQQrkiPIu_Cs7x_qROiA/exec';
-// Exemple : 'https://script.google.com/macros/s/AKfycbx.../exec'
-
-// ============================================================
-const TARIFS = {
-  Bourdelle:   { plein:30, adherent:24, locataire:15, asso:0 },
-  Freinet:     { plein:22, adherent:18, locataire:12, asso:0 },
-  Gouges:      { plein:22, adherent:18, locataire:12, asso:0 },
-  Montessori:  { plein:15, adherent:12, locataire:8,  asso:0 },
-  Aristote:    { plein:10, adherent:10, locataire:10, asso:0 },
-  Rousseau:    { plein:10, adherent:10, locataire:10, asso:0 },
-};
-
-let S = {
-  espace: null, profilCode: 'plein', profil: null,
-  date: null, heure: null, duree: 1,
-  opts: { badge: false, adhesion: false },
-  cal: null, // { y, m }
-  reservations: {}, // données réelles du backend
-  loadingDispo: false,
-};
-
-// ===== INIT =====
-window.onload = function() {
-  const now = new Date();
-  S.cal = { y: now.getFullYear(), m: now.getMonth() };
-  renderCal();
-  // Coche les équipements
-  document.querySelectorAll('.equip-tag input').forEach(cb => {
-    cb.addEventListener('change', function() {
-      this.closest('.equip-tag').classList.toggle('on', this.checked);
-    });
-  });
-};
-
-// ===== FILTRE ESPACES =====
-function filtrer(type, btn) {
-  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+// ===== ESPACES FILTRE =====
+function filtrerEspaces(type, btn) {
+  document.querySelectorAll('.espace-tab').forEach(t => t.classList.remove('active'));
   btn.classList.add('active');
-  document.querySelectorAll('.espace-btn').forEach(b => {
-    b.style.display = (type === 'tous' || b.dataset.type === type) ? '' : 'none';
+  document.querySelectorAll('.espace-card').forEach(c => {
+    if (type === 'tous') { c.style.display = c.classList.contains('espace-hidden') ? 'none' : ''; }
+    else { c.style.display = c.dataset.type === type ? '' : 'none'; }
   });
-}
-
-// ===== SÉLECTION ESPACE =====
-function selEspace(el) {
-  document.querySelectorAll('.espace-btn').forEach(b => b.classList.remove('selected'));
-  el.classList.add('selected');
-  S.espace = el.dataset.espace;
-  S.heure = null; S.date = null;
-  afficher('card-profil');
-  afficher('card-date');
-  afficher('card-options');
-  afficher('card-contact');
-  document.getElementById('creneaux-block').style.display = 'none';
-  renderCal();
-  majRecap();
-}
-
-// ===== SÉLECTION PROFIL =====
-function selProfil(el, code, label) {
-  document.querySelectorAll('.profil-btn').forEach(b => b.classList.remove('selected'));
-  el.classList.add('selected');
-  S.profilCode = code; S.profil = label;
-  majRecap();
-}
-
-// ===== CALENDRIER =====
-function navMois(d) {
-  S.cal.m += d;
-  if (S.cal.m > 11) { S.cal.m = 0; S.cal.y++; }
-  if (S.cal.m < 0)  { S.cal.m = 11; S.cal.y--; }
-  renderCal();
-}
-
-function renderCal() {
-  const { y, m } = S.cal;
-  const mNoms = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
-  document.getElementById('cal-titre').textContent = mNoms[m] + ' ' + y;
-
-  const grid = document.getElementById('cal-grid');
-  grid.innerHTML = '';
-  ['Lu','Ma','Me','Je','Ve','Sa','Di'].forEach(j => {
-    const el = document.createElement('div'); el.className = 'cal-dow'; el.textContent = j; grid.appendChild(el);
-  });
-
-  const premier = new Date(y, m, 1);
-  const offset = (premier.getDay() + 6) % 7;
-  const nbJours = new Date(y, m+1, 0).getDate();
-  const today = new Date(); today.setHours(0,0,0,0);
-
-  for (let i = 0; i < offset; i++) {
-    const v = document.createElement('div'); v.className = 'cal-day empty'; grid.appendChild(v);
-  }
-
-  for (let d = 1; d <= nbJours; d++) {
-    const date = new Date(y, m, d);
-    const dateStr = fmtDate(date);
-    const el = document.createElement('div');
-    el.className = 'cal-day';
-    el.textContent = d;
-
-    if (date.toDateString() === today.toDateString()) el.classList.add('today');
-
-    if (date < today) {
-      el.classList.add('past');
-    } else {
-      const occ = S.espace && S.reservations[S.espace] && S.reservations[S.espace][dateStr];
-      if (occ && occ.length >= 40) el.classList.add('full');
-      else if (occ && occ.length > 0) el.classList.add('partial');
-      else el.classList.add('dispo');
-
-      if (S.date === dateStr) el.classList.add('selected');
-      el.onclick = () => selDate(dateStr, el, date);
-    }
-    grid.appendChild(el);
+  // Pour "tous" : afficher seulement les non-hidden
+  if (type === 'tous') {
+    document.querySelectorAll('.espace-card:not(.espace-hidden)').forEach(c => c.style.display = '');
+    document.querySelectorAll('.espace-card.espace-hidden').forEach(c => c.style.display = 'none');
   }
 }
 
-async function selDate(dateStr, el, dateObj) {
-  S.date = dateStr; S.heure = null;
-  document.querySelectorAll('.cal-day').forEach(d => d.classList.remove('selected'));
-  el.classList.add('selected');
-
-  // Charger les vraies dispos depuis le backend
-  await chargerDispos(dateStr);
-  renderCreneaux();
-  afficherDispoJour(dateStr, dateObj);
-  majRecap();
+// ===== ADHÉSION =====
+function prefillAdh(type) {
+  setTimeout(() => {
+    const sel = document.getElementById('adh-type');
+    if (sel) sel.value = type;
+    document.getElementById('formulaire-adhesion').scrollIntoView({ behavior:'smooth', block:'start' });
+  }, 100);
 }
 
-// ===== CHARGER DISPO DEPUIS BACKEND =====
-async function chargerDispos(dateStr) {
-  if (APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbw5f4eTOV6q9n7OCo0m29fmECgUoML4xrn0QsUG1k2OmSUGYQQrkiPIu_Cs7x_qROiA/exec') return; // Pas encore configuré
-  if (!S.espace) return;
+async function envoyerAdhesion() {
+  const type = document.getElementById('adh-type').value;
+  const montant = document.getElementById('adh-montant').value;
+  const prenom = document.getElementById('adh-prenom').value;
+  const nom = document.getElementById('adh-nom').value;
+  const email = document.getElementById('adh-email').value;
+  const rgpd = document.getElementById('adh-rgpd').checked;
 
-  document.getElementById('loading-espaces').style.display = 'inline-flex';
-  S.loadingDispo = true;
-  renderCreneauxLoading();
-
-  try {
-    const url = `${APPS_SCRIPT_URL}?action=GET_RESERVATIONS&espace=${encodeURIComponent(S.espace)}&dateDebut=${dateStr}&dateFin=${dateStr}`;
-    const resp = await fetch(url);
-    const data = await resp.json();
-    if (data.success) {
-      S.reservations = data.occupations || {};
-      renderCal(); // Rafraîchir couleurs calendrier
-    }
-  } catch(e) {
-    console.warn('Backend non disponible, mode offline');
+  if (!type || !prenom || !nom || !email || !montant) {
+    alert('Merci de remplir les champs obligatoires (type, prénom, nom, email, montant).'); return;
   }
-
-  S.loadingDispo = false;
-  document.getElementById('loading-espaces').style.display = 'none';
-}
-
-// ===== CRÉNEAUX =====
-function renderCreneauxLoading() {
-  const grid = document.getElementById('creneaux-grid');
-  grid.innerHTML = '';
-  for (let i = 0; i < 48; i++) {
-    const el = document.createElement('div');
-    el.className = 'creneau-btn loading-c';
-    el.textContent = '…';
-    grid.appendChild(el);
-  }
-  document.getElementById('creneaux-block').style.display = 'block';
-}
-
-function renderCreneaux() {
-  const block = document.getElementById('creneaux-block');
-  const grid = document.getElementById('creneaux-grid');
-  block.style.display = 'block';
-  grid.innerHTML = '';
-
-  const occup = S.espace && S.date && S.reservations[S.espace] && S.reservations[S.espace][S.date] || [];
-
-  for (let h = 0; h < 24; h++) {
-    for (let mn of [0, 30]) {
-      const label = pad(h) + ':' + (mn === 0 ? '00' : '30');
-      const el = document.createElement('div');
-      el.className = 'creneau-btn';
-      el.textContent = label;
-
-      if (h < 8 || h >= 20) el.classList.add('nuit');
-      if (occup.includes(label)) {
-        el.classList.add('indispo');
-        el.title = 'Créneau réservé';
-      } else {
-        if (S.heure === label) el.classList.add('selected');
-        el.onclick = () => selHeure(label, el);
-      }
-      grid.appendChild(el);
-    }
-  }
-  renderDuree();
-}
-
-function selHeure(h, el) {
-  S.heure = h;
-  document.querySelectorAll('.creneau-btn').forEach(c => c.classList.remove('selected'));
-  el.classList.add('selected');
-  const hNum = parseInt(h.split(':')[0]);
-  const isNuit = hNum < 8 || hNum >= 20;
-  document.getElementById('tip-nuit').style.display = isNuit ? 'flex' : 'none';
-  document.getElementById('ib-nuit').style.display = isNuit ? 'flex' : 'none';
-  if (isNuit) {
-    document.getElementById('chk-badge').checked = true;
-    document.getElementById('opt-badge-row').classList.add('on');
-    S.opts.badge = true;
-  }
-  renderDuree();
-  majRecap();
-}
-
-function renderDuree() {
-  const grid = document.getElementById('duree-grid');
-  grid.innerHTML = '';
-  const opts = [{v:.5,l:'30 min'},{v:1,l:'1h'},{v:1.5,l:'1h30'},{v:2,l:'2h'},
-                {v:3,l:'3h'},{v:4,l:'4h'},{v:5,l:'5h'},{v:6,l:'6h'},{v:8,l:'Journée'},{v:12,l:'12h 🌙'}];
-  opts.forEach(o => {
-    const el = document.createElement('div');
-    el.className = 'duree-btn' + (S.duree === o.v ? ' selected' : '');
-    el.textContent = o.l;
-    el.onclick = () => { S.duree = o.v; renderDuree(); majRecap(); };
-    grid.appendChild(el);
-  });
-}
-
-// ===== OPTIONS =====
-function togOpt(el, key, prix) {
-  el.classList.toggle('on');
-  const cb = el.querySelector('input[type=checkbox]');
-  cb.checked = !cb.checked;
-  S.opts[key] = cb.checked;
-  majRecap();
-}
-
-// ===== DISPO DU JOUR (sidebar) =====
-function afficherDispoJour(dateStr, dateObj) {
-  const card = document.getElementById('dispo-card');
-  const liste = document.getElementById('dispo-list');
-  const label = document.getElementById('dispo-date-label');
-  card.style.display = 'block';
-  label.textContent = dateObj.toLocaleDateString('fr-FR', { weekday:'long', day:'numeric', month:'long' });
-  liste.innerHTML = '';
-
-  const espaces = ['Bourdelle','Freinet','Gouges','Montessori','Aristote','Rousseau'];
-  let hasOcc = false;
-
-  espaces.forEach(esp => {
-    const occ = S.reservations[esp] && S.reservations[esp][dateStr];
-    if (occ && occ.length > 0) {
-      hasOcc = true;
-      // Trouver les plages continues
-      const heureDebut = occ[0];
-      const derniere = occ[occ.length - 1];
-      const [hF, mF] = derniere.split(':').map(Number);
-      const finMin = hF * 60 + mF + 30;
-      const heureFin = pad(Math.floor(finMin/60)%24)+':'+(finMin%60===0?'00':'30');
-
-      const item = document.createElement('div');
-      item.className = 'dispo-item';
-      item.innerHTML = `<span class="di-heure">${heureDebut}–${heureFin}</span><span class="di-espace">${esp}</span><span class="dispo-chip occupe">Occupé</span>`;
-      liste.appendChild(item);
-    }
-  });
-
-  if (!hasOcc) {
-    liste.innerHTML = '<div class="dispo-empty">✅ Tous les espaces sont libres</div>';
-  }
-}
-
-// ===== CALCUL =====
-function heureFin() {
-  if (!S.heure || !S.duree) return '';
-  const [h, m] = S.heure.split(':').map(Number);
-  const tot = h * 60 + m + Math.round(S.duree * 60);
-  return pad(Math.floor(tot/60)%24)+':'+(tot%60===0?'00':'30');
-}
-
-function calcTotal() {
-  if (!S.espace || !S.heure || !S.profil) return 0;
-  const tarif = TARIFS[S.espace][S.profilCode] || 0;
-  let t = tarif * S.duree;
-  if (S.opts.badge) t += 25;
-  if (S.opts.adhesion) t += 50;
-  return Math.round(t);
-}
-
-// ===== MAJ RÉCAP =====
-function majRecap() {
-  document.getElementById('r-espace').textContent = S.espace || '—';
-  document.getElementById('r-profil').textContent = S.profil || '—';
-
-  if (S.date) {
-    const d = new Date(S.date + 'T12:00:00');
-    document.getElementById('r-date').textContent = d.toLocaleDateString('fr-FR',{weekday:'short',day:'numeric',month:'short'});
-  } else document.getElementById('r-date').textContent = '—';
-
-  if (S.heure) {
-    document.getElementById('r-horaire').textContent = S.heure + ' → ' + (heureFin() || '?');
-  } else document.getElementById('r-horaire').textContent = '—';
-
-  document.getElementById('r-duree').textContent = S.duree ? S.duree + 'h' : '—';
-  document.getElementById('r-part').textContent = document.getElementById('nb-part')?.value || '—';
-
-  const total = calcTotal();
-  document.getElementById('r-total').textContent = total > 0 ? total + ' €' : '0 €';
-  document.getElementById('ib-tarif').style.display = S.profil ? 'flex' : 'none';
-
-  const prenom = document.getElementById('f-prenom')?.value;
-  const nom = document.getElementById('f-nom')?.value;
-  const email = document.getElementById('f-email')?.value;
-  const ok = S.espace && S.profil && S.date && S.heure && prenom && nom && email;
-  document.getElementById('btn-submit').disabled = !ok;
-}
-
-// ===== SOUMETTRE =====
-async function soumettre() {
-  const prenom = document.getElementById('f-prenom').value;
-  const nom = document.getElementById('f-nom').value;
-  const email = document.getElementById('f-email').value;
-
-  if (!prenom || !nom || !email) { alert('Merci de remplir les champs obligatoires.'); return; }
-
-  const equips = [...document.querySelectorAll('.equip-tag input:checked')].map(c => c.value).join(', ');
+  if (!rgpd) { alert("Merci d'accepter la politique de données personnelles."); return; }
 
   const payload = {
-    action: 'RESERVER',
-    espace: S.espace,
-    profil: S.profil,
-    profilCode: S.profilCode,
-    date: S.date,
-    heureDebut: S.heure,
-    duree: S.duree,
-    participants: document.getElementById('nb-part').value,
+    action: 'ADHERER',
+    typeAdhesion: type,
+    montant: montant,
+    modePaiement: document.getElementById('adh-paiement').value,
     prenom: prenom, nom: nom, email: email,
-    tel: document.getElementById('f-tel').value,
-    structure: document.getElementById('f-struct').value,
-    message: document.getElementById('f-msg').value + (equips ? '\nÉquipements : ' + equips : ''),
-    montantEstime: calcTotal(),
-    optionBadge: S.opts.badge,
-    optionAdhesion: S.opts.adhesion,
+    tel: document.getElementById('adh-tel').value,
+    adresse: document.getElementById('adh-adresse').value,
   };
 
-  document.getElementById('btn-txt').style.display = 'none';
-  document.getElementById('btn-spin').style.display = 'inline';
-  document.getElementById('btn-submit').disabled = true;
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw5f4eTOV6q9n7OCo0m29fmECgUoML4xrn0QsUG1k2OmSUGYQQrkiPIu_Cs7x_qROiA/exec';
 
-  let resId = 'RES-' + Date.now();
+  try {
+    fetch(APPS_SCRIPT_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload), mode:'no-cors' });
+  } catch(e) {}
 
-  if (APPS_SCRIPT_URL !== 'https://script.google.com/macros/s/AKfycbw5f4eTOV6q9n7OCo0m29fmECgUoML4xrn0QsUG1k2OmSUGYQQrkiPIu_Cs7x_qROiA/exec') {
-    try {
-      const resp = await fetch(APPS_SCRIPT_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-        mode: 'no-cors' // Google Apps Script nécessite no-cors
-      });
-      // En mode no-cors on ne peut pas lire la réponse, mais la requête passe
-    } catch(e) {
-      console.warn('Erreur fetch:', e);
-    }
-  } else {
-    // Mode démo : juste afficher le succès
-    await new Promise(r => setTimeout(r, 1200));
-  }
+  document.getElementById('adh-nomail').style.display = 'block';
+  document.getElementById('adh-success').style.display = 'block';
 
-  afficherSucces(resId, prenom);
+  // Fallback email
+  const sujet = `Adhésion Génie - ${type} - ${prenom} ${nom}`;
+  const corps = `Demande d'adhésion\n\nType : ${type}\nMontant : ${montant} €\nNom : ${prenom} ${nom}\nEmail : ${email}\nTél : ${document.getElementById('adh-tel').value}\nAdresse : ${document.getElementById('adh-adresse').value}\nPaiement : ${document.getElementById('adh-paiement').value}`;
+  setTimeout(() => { window.location.href = `mailto:genie.montauban@gmail.com?subject=${encodeURIComponent(sujet)}&body=${encodeURIComponent(corps)}`; }, 500);
 }
 
-function afficherSucces(id, prenom) {
-  document.getElementById('main-form').querySelectorAll('.card').forEach(c => c.style.display = 'none');
-  const s = document.getElementById('success');
-  s.classList.add('active');
-  document.getElementById('success-id').textContent = 'Référence : ' + id;
-}
+// ===== CONTACT =====
+function envoyerContact() {
+  const email = document.getElementById('c-email').value;
+  const message = document.getElementById('c-message').value;
+  if (!email || !message) { alert('Merci de remplir email et message.'); return; }
 
-function resetForm() {
-  S = { espace:null, profilCode:'plein', profil:null, date:null, heure:null, duree:1, opts:{badge:false,adhesion:false}, cal:S.cal, reservations:{}, loadingDispo:false };
-  document.getElementById('success').classList.remove('active');
-  document.querySelectorAll('.card').forEach(c => c.style.display = '');
-  ['card-profil','card-date','card-options','card-contact'].forEach(id => {
-    const el = document.getElementById(id); if(el) el.style.display = 'none';
-  });
-  document.getElementById('creneaux-block').style.display = 'none';
-  document.getElementById('dispo-card').style.display = 'none';
-  document.querySelectorAll('.espace-btn,.profil-btn').forEach(b => b.classList.remove('selected'));
-  renderCal();
-  majRecap();
-}
+  const prenom = document.getElementById('c-prenom').value;
+  const nom = document.getElementById('c-nom').value;
+  const sujet = document.getElementById('c-sujet').value || 'Contact depuis genie-montauban.fr';
+  const corps = `${prenom} ${nom}\n${email}\n\n${message}`;
 
-// ===== UTILS =====
-function fmtDate(d) {
-  return d.getFullYear()+'-'+pad(d.getMonth()+1,2)+'-'+pad(d.getDate(),2);
+  document.getElementById('contact-nomail').style.display = 'block';
+  document.getElementById('contact-success').style.display = 'block';
+  window.location.href = `mailto:genie.montauban@gmail.com?subject=${encodeURIComponent(sujet)}&body=${encodeURIComponent(corps)}`;
 }
-function pad(n) { return String(n).padStart(2,'0'); }
-function afficher(id) { const el=document.getElementById(id); if(el) el.style.display=''; }
 </script>
 </body>
 </html>
