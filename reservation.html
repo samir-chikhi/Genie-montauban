@@ -3,729 +3,1048 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="canonical" href="https://samir-chikhi.github.io/Genie/reservation.html">
-  <title>Réserver — Génie Montauban</title>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,400&family=Cabinet+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<title>Réserver — Génie Montauban</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet">
 <style>
-:root{ --ink:#1C1410;--brick:#C4622D;--brick-light:#E8804F;--cream:#F7F2EA;--warm:#FDFAF6;--sage:#4A6741;--sage-light:#EEF3ED;--steel:#2C4A6E;--steel-light:#EDF1F7;--border:#DDD5C8;--muted:#8C7B6B; }
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(--ink)}
-header{background:var(--ink);padding:56px 20px;text-align:center}
-.tag{display:inline-block;background:var(--brick);color:#fff;font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:5px 14px;border-radius:20px;margin-bottom:14px;font-weight:600}
-header h1{font-family:'Fraunces',serif;font-size:clamp(30px,5vw,54px);color:var(--cream);font-weight:900;line-height:1.05}
-header h1 em{color:var(--brick-light);font-style:italic}
-header p{color:rgba(247,242,234,.6);font-size:15px;margin-top:10px}
-.wrap{max-width:960px;margin:0 auto;padding:40px 20px}
-/* CATÉGORIES */
-.cat-tabs{display:flex;gap:10px;margin-bottom:28px;flex-wrap:wrap}
-.cat-tab{padding:10px 22px;border-radius:30px;border:2px solid var(--border);background:#fff;font-size:14px;font-weight:600;cursor:pointer;transition:.2s;font-family:inherit;color:var(--muted)}
-.cat-tab:hover{border-color:var(--brick);color:var(--brick)}
-.cat-tab.active{background:var(--ink);color:#fff;border-color:var(--ink)}
-.sec-title{font-family:'Fraunces',serif;font-size:24px;font-weight:700;margin-bottom:6px}
-.sec-sub{color:var(--muted);font-size:14px;margin-bottom:24px}
-/* ESPACES */
-.espaces-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-bottom:40px}
-.ec{background:#fff;border-radius:14px;border:2px solid var(--border);padding:20px;cursor:pointer;transition:.2s;position:relative;display:flex;flex-direction:column}
-.ec:hover{border-color:var(--brick);transform:translateY(-2px);box-shadow:0 6px 20px rgba(196,98,45,.12)}
-.ec.sel{border-color:var(--brick);background:#FEF7F3}
-.ec.unavail{opacity:.5;cursor:not-allowed}
-.ec.sel::after{content:'✓';position:absolute;top:10px;right:12px;background:var(--brick);color:#fff;width:24px;height:24px;border-radius:50%;text-align:center;line-height:24px;font-size:13px;font-weight:700}
-.ec-badges{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
-.badge-cat{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
-.bc-reunion{background:#EDF4FF;color:#1D4ED8}
-.bc-cowork{background:var(--sage-light);color:var(--sage)}
-.bc-bureau{background:#F3E8FF;color:#7C3AED}
-.ec-name{font-family:'Fraunces',serif;font-size:17px;font-weight:700;margin-bottom:2px}
-.ec-ref{font-size:11px;color:var(--muted);margin-bottom:6px}
-.ec-cap{font-size:13px;color:var(--muted);margin-bottom:8px}
-.ec-desc{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:14px;flex:1}
-.ec-prix{background:var(--cream);border-radius:8px;padding:10px 12px}
-.ec-prix-from{font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:2px}
-.ec-prix-val{font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--brick)}
-.ec-prix-unit{font-size:12px;color:var(--muted)}
-/* FORM */
-.form-sec{background:#fff;border-radius:18px;padding:32px;border:1px solid var(--border);box-shadow:0 4px 20px rgba(28,20,16,.08);margin-bottom:32px}
-.step-hd{display:flex;align-items:center;gap:12px;margin-bottom:22px}
-.step-n{width:34px;height:34px;background:var(--brick);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;flex-shrink:0}
-.step-title{font-family:'Fraunces',serif;font-size:19px;font-weight:700}
-.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.fg{display:flex;flex-direction:column;gap:5px}.fg.full{grid-column:1/-1}
-label{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
-.req{color:var(--brick)}
-input,select,textarea{padding:11px 14px;border-radius:10px;border:1.5px solid var(--border);font-family:inherit;font-size:14px;background:var(--warm);color:var(--ink);transition:.15s;outline:none;width:100%}
-input:focus,select:focus,textarea:focus{border-color:var(--brick);box-shadow:0 0 0 3px rgba(196,98,45,.1)}
-textarea{resize:vertical;min-height:75px}
-/* PROFIL */
-.profil-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:4px}
-.profil-card{border:2px solid var(--border);border-radius:10px;padding:12px 14px;cursor:pointer;transition:.2s}
-.profil-card:hover{border-color:var(--brick)}
-.profil-card.sel{border-color:var(--brick);background:#FEF7F3}
-.profil-name{font-weight:700;font-size:14px;margin-bottom:2px}
-.profil-desc{font-size:11px;color:var(--muted)}
-.profil-prix{font-family:'Fraunces',serif;font-size:16px;font-weight:700;color:var(--brick);margin-top:6px}
-/* DURÉE */
-.duree-tabs{display:flex;gap:7px;flex-wrap:wrap}
-.dtab{padding:8px 16px;border-radius:8px;border:1.5px solid var(--border);background:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:.15s;font-family:inherit;color:var(--ink)}
-.dtab:hover{border-color:var(--brick)}
-.dtab.active{background:var(--brick);color:#fff;border-color:var(--brick)}
-/* OPTIONS */
-.options-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
-.opt-card{border:2px solid var(--border);border-radius:10px;padding:12px 14px;cursor:pointer;transition:.2s;display:flex;align-items:flex-start;gap:10px}
-.opt-card:hover{border-color:var(--sage)}
-.opt-card.sel{border-color:var(--sage);background:var(--sage-light)}
-.opt-check{width:20px;height:20px;border-radius:5px;border:2px solid var(--border);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:.15s}
-.opt-card.sel .opt-check{background:var(--sage);border-color:var(--sage);color:#fff}
-.opt-name{font-weight:700;font-size:13px}
-.opt-desc{font-size:11px;color:var(--muted);margin-top:2px}
-.opt-prix{font-family:'Fraunces',serif;font-size:15px;font-weight:700;color:var(--sage);margin-top:4px}
-/* RÉCAP PRIX */
-.prix-box{background:linear-gradient(135deg,#FEF3E2,#FDF7EF);border:2px solid #F0C080;border-radius:14px;padding:20px 24px;margin-top:18px}
-.prix-hd{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
-.prix-hd h4{font-family:'Fraunces',serif;font-size:15px;font-weight:700}
-.prix-total{font-family:'Fraunces',serif;font-size:32px;font-weight:900;color:var(--brick)}
-.prix-lines{font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:4px}
-.prix-line{display:flex;justify-content:space-between}
-.prix-line span:last-child{font-weight:600;color:var(--ink)}
-/* CONFLIT */
-.conflict-box{background:#FFF8E1;border:1.5px solid #FFE082;border-radius:10px;padding:12px 16px;font-size:13px;color:#7B5E00;margin-top:12px}
-/* GRATUIT */
-.gratuit-info{background:var(--sage-light);border:1.5px solid #B5D4B0;border-radius:10px;padding:12px 16px;font-size:13px;color:var(--sage);margin-top:12px}
-/* SUBMIT */
-.submit-btn{width:100%;background:var(--brick);color:#fff;border:none;padding:16px;border-radius:12px;font-size:16px;font-weight:700;font-family:inherit;cursor:pointer;transition:.2s;margin-top:20px;display:flex;align-items:center;justify-content:center;gap:10px}
-.submit-btn:hover{background:var(--brick-light);transform:translateY(-1px);box-shadow:0 6px 20px rgba(196,98,45,.3)}
-.submit-btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
-/* SUCCÈS */
-.success{display:none;text-align:center;padding:60px 20px;max-width:620px;margin:0 auto}
-.success.show{display:block}
-.success-icon{font-size:70px;margin-bottom:18px}
-.success h2{font-family:'Fraunces',serif;font-size:30px;margin-bottom:10px}
-.success p{color:var(--muted);font-size:15px;margin-bottom:20px}
-.success-card{background:#fff;border-radius:14px;border:1px solid var(--border);padding:22px;text-align:left;margin:20px 0}
-.success-card h3{font-family:'Fraunces',serif;font-size:17px;margin-bottom:14px}
-.sd{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #F0EBE3;font-size:14px}
-.sd:last-child{border-bottom:none}
-.sd span:first-child{color:var(--muted)}.sd span:last-child{font-weight:600}
-.loading-bar{position:fixed;top:0;left:0;right:0;height:3px;background:var(--brick);z-index:9999;display:none}
-.loading-bar.active{display:block;animation:lb 1.5s ease-in-out infinite}
-@keyframes lb{0%{transform:scaleX(0);transform-origin:left}50%{transform:scaleX(.7);transform-origin:left}51%{transform-origin:right}100%{transform:scaleX(0);transform-origin:right}}
-footer{background:var(--ink);padding:36px 20px;text-align:center;color:rgba(247,242,234,.4);font-size:13px;margin-top:40px}
-footer strong{color:var(--cream)}
-.hidden{display:none!important}
-.info-bar{background:var(--steel-light);border:1px solid #C5D5E8;border-radius:10px;padding:12px 16px;font-size:13px;color:var(--steel);margin-bottom:20px}
-@media(max-width:600px){.fgrid,.profil-grid,.options-grid{grid-template-columns:1fr}.fg.full{grid-column:1}}
+/* ============================
+   VARIABLES & RESET
+============================ */
+:root {
+  --bleu:       #1E4A6E;
+  --bleu-md:    #2E6DA4;
+  --bleu-lt:    #EBF4FF;
+  --vert:       #27AE60;
+  --vert-lt:    #E8F8F0;
+  --or:         #C9993E;
+  --or-lt:      #FFF7E6;
+  --rouge:      #E53E3E;
+  --rouge-lt:   #FFF0F0;
+  --texte:      #1A2638;
+  --muted:      #6B7A8D;
+  --fond:       #F4F6F9;
+  --bord:       #E2E8F0;
+  --blanc:      #FFFFFF;
+  --nuit:       #2D3748;
+  --nuit-lt:    #EDF2F7;
+  --shadow-sm:  0 1px 4px rgba(0,0,0,.07);
+  --shadow-md:  0 4px 20px rgba(0,0,0,.10);
+  --radius:     10px;
+}
+*, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
+html { scroll-behavior: smooth; }
+body { font-family:'DM Sans',sans-serif; background:var(--fond); color:var(--texte); font-size:15px; line-height:1.6; }
+a { color:var(--bleu); }
+button, input, select, textarea { font-family:inherit; }
+
+/* ============================
+   HEADER
+============================ */
+.header {
+  background: var(--bleu);
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  position: sticky; top:0; z-index:200;
+  box-shadow: 0 2px 12px rgba(0,0,0,.18);
+}
+.header a { color:#fff; text-decoration:none; font-weight:700; font-size:15px; display:flex; align-items:center; gap:6px; }
+.header a:hover { opacity:.85; }
+.header .h-badge { background:var(--vert); color:#fff; font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; }
+
+/* ============================
+   HERO
+============================ */
+.hero {
+  background: linear-gradient(135deg, #162f47 0%, var(--bleu-md) 100%);
+  padding: 36px 20px 28px;
+  text-align: center;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content:'';
+  position:absolute; inset:0;
+  background: radial-gradient(ellipse at 70% 50%, rgba(39,174,96,.15) 0%, transparent 60%);
+  pointer-events:none;
+}
+.hero h1 { font-family:'DM Serif Display',serif; font-size:2.1rem; margin-bottom:6px; }
+.hero p { color:rgba(255,255,255,.75); font-size:14px; }
+.hero-chips { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-top:14px; }
+.hero-chips span {
+  background:rgba(255,255,255,.13);
+  border:1px solid rgba(255,255,255,.25);
+  border-radius:20px; padding:4px 12px; font-size:12px;
+}
+
+/* ============================
+   LAYOUT
+============================ */
+.layout {
+  max-width:1140px; margin:0 auto;
+  display:grid; grid-template-columns:1fr 340px; gap:20px;
+  padding:20px 16px 60px;
+}
+@media(max-width:860px){ .layout{ grid-template-columns:1fr; } }
+
+/* ============================
+   CARD
+============================ */
+.card {
+  background:var(--blanc);
+  border-radius:12px;
+  box-shadow:var(--shadow-sm);
+  padding:22px;
+  margin-bottom:16px;
+  border:1px solid var(--bord);
+  animation: fadeUp .35s ease both;
+}
+@keyframes fadeUp { from{ opacity:0; transform:translateY(10px); } to{ opacity:1; transform:none; } }
+
+.card-title {
+  font-weight:700; font-size:15px; color:var(--bleu);
+  display:flex; align-items:center; gap:8px;
+  margin-bottom:16px; padding-bottom:12px;
+  border-bottom:2px solid var(--fond);
+}
+.step-badge {
+  background:var(--bleu); color:#fff;
+  width:24px; height:24px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:12px; font-weight:800; flex-shrink:0;
+}
+.step-badge.done { background:var(--vert); }
+.step-badge.done::after { content:'✓'; font-size:13px; }
+
+/* ============================
+   FILTRE TABS
+============================ */
+.filter-tabs { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:14px; }
+.filter-tab {
+  padding:5px 14px; border-radius:20px;
+  border:1.5px solid var(--bord);
+  background:var(--blanc); cursor:pointer;
+  font-size:12px; font-weight:600; color:var(--muted);
+  transition:all .18s;
+}
+.filter-tab:hover { border-color:var(--bleu-md); color:var(--bleu); }
+.filter-tab.active { background:var(--bleu); border-color:var(--bleu); color:#fff; }
+
+/* ============================
+   ESPACES GRID
+============================ */
+.espaces-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(175px,1fr)); gap:10px; }
+.espace-btn {
+  border:2px solid var(--bord); border-radius:10px;
+  padding:13px 11px; cursor:pointer; background:var(--blanc);
+  transition:all .2s; text-align:left; position:relative;
+}
+.espace-btn:hover { border-color:var(--bleu-md); background:var(--bleu-lt); }
+.espace-btn.selected { border-color:var(--bleu); background:var(--bleu-lt); box-shadow:0 0 0 3px rgba(30,74,110,.15); }
+.espace-btn .eb-ico { font-size:22px; display:block; margin-bottom:6px; }
+.espace-btn .eb-nom { font-weight:700; font-size:13px; display:block; }
+.espace-btn .eb-sub { font-size:11px; color:var(--muted); display:block; margin-top:2px; }
+.espace-btn .eb-prix { font-size:11px; color:var(--vert); font-weight:700; display:block; margin-top:5px; }
+.espace-btn .eb-dispo { position:absolute; top:8px; right:8px; width:8px; height:8px; border-radius:50%; background:var(--vert); }
+.espace-btn .eb-dispo.loading { background:var(--or); animation:pulse .8s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+/* ============================
+   PROFIL TARIFAIRE
+============================ */
+.profils-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; }
+@media(max-width:480px){ .profils-grid{ grid-template-columns:1fr; } }
+.profil-btn {
+  border:2px solid var(--bord); border-radius:8px;
+  padding:11px 12px; cursor:pointer; background:var(--blanc);
+  transition:all .18s; text-align:left;
+}
+.profil-btn:hover { border-color:var(--bleu-md); }
+.profil-btn.selected { border-color:var(--vert); background:var(--vert-lt); }
+.profil-btn .pb-label { font-weight:700; font-size:13px; display:block; }
+.profil-btn .pb-desc { font-size:11px; color:var(--muted); display:block; margin-top:2px; }
+
+/* ============================
+   CALENDRIER
+============================ */
+.cal-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+.cal-header h3 { font-size:15px; font-weight:700; }
+.cal-nav-btn {
+  background:none; border:1.5px solid var(--bord);
+  width:32px; height:32px; border-radius:8px;
+  cursor:pointer; font-size:18px; line-height:1;
+  display:flex; align-items:center; justify-content:center;
+  transition:all .18s; color:var(--texte);
+}
+.cal-nav-btn:hover { background:var(--bleu); color:#fff; border-color:var(--bleu); }
+
+.cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:3px; text-align:center; }
+.cal-dow { font-size:10px; font-weight:700; color:var(--muted); padding:4px 0; text-transform:uppercase; }
+.cal-day {
+  aspect-ratio:1; display:flex; align-items:center; justify-content:center;
+  border-radius:7px; font-size:13px; cursor:pointer;
+  border:1.5px solid transparent; transition:all .16s; position:relative;
+}
+.cal-day.empty { cursor:default; }
+.cal-day.past { color:#CBD5E0; cursor:not-allowed; }
+.cal-day.dispo:hover { background:var(--bleu-lt); border-color:var(--bleu-md); }
+.cal-day.partial { background:var(--or-lt); color:var(--or); font-weight:600; }
+.cal-day.partial:hover { background:#FDEECE; border-color:var(--or); }
+.cal-day.full { background:var(--rouge-lt); color:var(--rouge); cursor:not-allowed; }
+.cal-day.selected { background:var(--bleu); color:#fff; font-weight:800; border-color:var(--bleu); }
+.cal-day.today::after { content:''; position:absolute; bottom:3px; left:50%; transform:translateX(-50%); width:4px; height:4px; border-radius:50%; background:var(--vert); }
+
+.cal-legend { display:flex; gap:12px; flex-wrap:wrap; margin-top:10px; font-size:11px; color:var(--muted); }
+.cal-legend span { display:flex; align-items:center; gap:4px; }
+.ldot { width:9px; height:9px; border-radius:50%; display:inline-block; }
+
+/* ============================
+   CRÉNEAUX 24H
+============================ */
+.creneaux-block { margin-top:16px; border-top:1px solid var(--fond); padding-top:16px; }
+.creneaux-title { font-weight:700; font-size:13px; margin-bottom:8px; display:flex; align-items:center; gap:8px; }
+.badge-small {
+  font-size:10px; font-weight:700; padding:2px 8px;
+  border-radius:10px; background:var(--nuit); color:#fff;
+}
+.info-tip {
+  font-size:12px; padding:9px 12px; border-radius:8px;
+  margin-bottom:12px; display:flex; gap:8px;
+  background:var(--bleu-lt); border:1px solid #BEE3F8; color:#2B6CB0;
+}
+.info-tip.warn { background:var(--or-lt); border-color:#F6AD55; color:#744210; }
+
+.creneaux-grid { display:grid; grid-template-columns:repeat(6,1fr); gap:3px; }
+@media(max-width:480px){ .creneaux-grid{ grid-template-columns:repeat(4,1fr); } }
+.creneau-btn {
+  padding:6px 2px; border-radius:6px;
+  border:1.5px solid var(--bord);
+  text-align:center; font-size:11px; font-weight:500;
+  cursor:pointer; transition:all .14s;
+  background:var(--blanc); color:var(--texte);
+}
+.creneau-btn:hover:not(.indispo,.loading-c) { border-color:var(--bleu-md); background:var(--bleu-lt); }
+.creneau-btn.nuit { background:var(--nuit-lt); color:#5A6A7E; border-color:#D3DCE6; }
+.creneau-btn.nuit:hover:not(.indispo) { background:#D8E1EB; border-color:var(--bleu); color:var(--bleu); }
+.creneau-btn.selected { background:var(--bleu); border-color:var(--bleu); color:#fff; font-weight:700; }
+.creneau-btn.indispo { background:var(--rouge-lt); color:#F56565; border-color:#FED7D7; cursor:not-allowed; font-size:10px; }
+.creneau-btn.loading-c { opacity:.4; cursor:wait; }
+
+.duree-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:5px; margin-top:12px; }
+.duree-btn {
+  padding:7px 3px; border:1.5px solid var(--bord);
+  border-radius:7px; text-align:center;
+  cursor:pointer; font-size:12px; font-weight:600;
+  background:var(--blanc); transition:all .14s;
+}
+.duree-btn:hover { border-color:var(--bleu-md); background:var(--bleu-lt); }
+.duree-btn.selected { background:var(--bleu); border-color:var(--bleu); color:#fff; }
+
+/* ============================
+   OPTIONS
+============================ */
+.option-row {
+  display:flex; align-items:flex-start; gap:10px;
+  padding:11px; border:1.5px solid var(--bord);
+  border-radius:8px; margin-bottom:8px; cursor:pointer; transition:all .18s;
+}
+.option-row:hover { border-color:var(--bleu-md); background:var(--bleu-lt); }
+.option-row.on { border-color:var(--vert); background:var(--vert-lt); }
+.option-row input[type=checkbox] { margin-top:2px; accent-color:var(--vert); width:15px; height:15px; flex-shrink:0; }
+.opt-label { font-weight:700; font-size:13px; }
+.opt-desc { font-size:11px; color:var(--muted); margin-top:1px; }
+.opt-prix { font-weight:700; color:var(--vert); margin-left:auto; font-size:13px; white-space:nowrap; flex-shrink:0; }
+
+.equip-grid { display:flex; flex-wrap:wrap; gap:8px; margin-top:6px; }
+.equip-tag {
+  display:flex; align-items:center; gap:5px;
+  font-size:12px; padding:5px 10px;
+  border:1.5px solid var(--bord); border-radius:20px;
+  cursor:pointer; background:var(--blanc); transition:all .15s;
+}
+.equip-tag:hover { border-color:var(--bleu-md); background:var(--bleu-lt); }
+.equip-tag.on { border-color:var(--vert); background:var(--vert-lt); color:var(--bleu); font-weight:600; }
+.equip-tag input { display:none; }
+
+/* ============================
+   FORMULAIRE
+============================ */
+.form-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+@media(max-width:500px){ .form-grid{ grid-template-columns:1fr; } }
+.form-col-full { grid-column:1/-1; }
+.fg { display:flex; flex-direction:column; gap:4px; }
+.fg label { font-size:12px; font-weight:700; color:var(--texte); }
+.fg label .req { color:var(--rouge); }
+.fg input, .fg select, .fg textarea {
+  border:1.5px solid var(--bord); border-radius:8px;
+  padding:9px 11px; font-size:14px; color:var(--texte);
+  background:var(--blanc); transition:border .18s, box-shadow .18s;
+}
+.fg input:focus, .fg select:focus, .fg textarea:focus {
+  outline:none; border-color:var(--bleu-md);
+  box-shadow:0 0 0 3px rgba(46,109,164,.12);
+}
+.fg textarea { resize:vertical; min-height:72px; }
+.field-hint { font-size:11px; color:var(--muted); }
+
+/* ============================
+   SIDEBAR RÉCAP
+============================ */
+.sidebar { position:sticky; top:68px; align-self:start; }
+.recap-card { background:var(--blanc); border-radius:12px; box-shadow:var(--shadow-md); overflow:hidden; border:1px solid var(--bord); }
+.recap-head { background:var(--bleu); color:#fff; padding:14px 18px; }
+.recap-head h2 { font-size:15px; font-weight:700; }
+.recap-head p { font-size:11px; opacity:.75; margin-top:2px; }
+.recap-body { padding:18px; }
+.recap-row { display:flex; justify-content:space-between; align-items:flex-start; padding:7px 0; border-bottom:1px solid var(--fond); font-size:13px; }
+.recap-row:last-child { border-bottom:none; }
+.recap-row .rl { color:var(--muted); }
+.recap-row .rv { font-weight:600; text-align:right; max-width:58%; }
+.recap-total { background:var(--vert-lt); border-radius:8px; padding:12px 14px; margin:12px 0; display:flex; justify-content:space-between; align-items:center; }
+.recap-total .rt-l { font-weight:700; color:var(--vert); font-size:13px; }
+.recap-total .rt-v { font-family:'DM Serif Display',serif; font-size:28px; font-weight:400; color:var(--vert); }
+
+.info-box { border-radius:8px; padding:9px 12px; font-size:12px; margin-bottom:10px; display:flex; gap:7px; align-items:flex-start; }
+.info-box.blue { background:var(--bleu-lt); border:1px solid #90CDF4; color:#2B6CB0; }
+.info-box.warn { background:var(--or-lt); border:1px solid #F6AD55; color:#744210; }
+.info-box.nuit { background:var(--nuit-lt); border:1px solid #A0AEC0; color:#4A5568; }
+
+.btn-submit {
+  width:100%; background:linear-gradient(135deg,var(--vert),#2ECC71);
+  color:#fff; border:none; border-radius:10px;
+  padding:14px; font-size:15px; font-weight:700;
+  cursor:pointer; transition:all .2s;
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  box-shadow:0 4px 16px rgba(39,174,96,.3);
+}
+.btn-submit:hover:not(:disabled) { transform:translateY(-1px); box-shadow:0 6px 20px rgba(39,174,96,.4); }
+.btn-submit:disabled { opacity:.45; cursor:not-allowed; transform:none; box-shadow:none; }
+.btn-note { font-size:11px; color:var(--muted); text-align:center; margin-top:6px; }
+
+/* ============================
+   DISPONIBILITÉS DU JOUR
+============================ */
+.dispo-card { background:var(--blanc); border-radius:12px; box-shadow:var(--shadow-sm); padding:18px; margin-top:14px; border:1px solid var(--bord); }
+.dispo-card h4 { font-size:14px; font-weight:700; color:var(--bleu); margin-bottom:4px; }
+.dispo-card .dispo-date { font-size:12px; color:var(--muted); margin-bottom:12px; }
+.dispo-list { display:flex; flex-direction:column; gap:5px; max-height:220px; overflow-y:auto; }
+.dispo-item { display:flex; align-items:center; gap:8px; padding:7px 10px; border-radius:7px; background:var(--fond); font-size:12px; }
+.dispo-item .di-heure { font-weight:700; color:var(--bleu); width:100px; flex-shrink:0; }
+.dispo-item .di-espace { flex:1; }
+.dispo-chip { padding:2px 8px; border-radius:10px; font-size:10px; font-weight:700; }
+.dispo-chip.libre { background:#C6F6D5; color:#276749; }
+.dispo-chip.occupe { background:#FED7D7; color:#742A2A; }
+.dispo-empty { text-align:center; font-size:12px; color:var(--vert); font-weight:600; padding:10px; }
+
+/* ============================
+   LOADING
+============================ */
+.loading-overlay { text-align:center; padding:16px; font-size:13px; color:var(--muted); }
+.spinner { display:inline-block; width:18px; height:18px; border:2px solid var(--bord); border-top-color:var(--bleu); border-radius:50%; animation:spin .6s linear infinite; margin-right:6px; vertical-align:middle; }
+@keyframes spin{ to{ transform:rotate(360deg); } }
+
+/* ============================
+   ÉCRAN SUCCÈS
+============================ */
+.success-screen {
+  display:none; text-align:center; padding:48px 24px;
+  background:var(--blanc); border-radius:12px;
+  box-shadow:var(--shadow-sm); border:1px solid var(--bord);
+}
+.success-screen.active { display:block; animation:fadeUp .4s ease; }
+.success-icon { font-size:64px; margin-bottom:16px; }
+.success-screen h2 { font-family:'DM Serif Display',serif; font-size:1.8rem; color:var(--vert); margin-bottom:8px; }
+.success-screen p { color:var(--muted); font-size:14px; line-height:1.7; }
+.success-id { display:inline-block; background:var(--fond); border:1px solid var(--bord); border-radius:8px; padding:6px 14px; font-weight:700; font-size:13px; margin:12px 0; color:var(--bleu); }
+.btn-reset { margin-top:20px; padding:10px 24px; background:var(--bleu); color:#fff; border:none; border-radius:8px; cursor:pointer; font-size:14px; font-weight:700; }
+
+/* scrollbar */
+.dispo-list::-webkit-scrollbar { width:4px; }
+.dispo-list::-webkit-scrollbar-thumb { background:var(--bord); border-radius:4px; }
 </style>
 </head>
 <body>
-<div class="loading-bar" id="loading-bar"></div>
 
-<header>
-  <div class="tag">Tiers-lieu ESS · 12 rue du Génie, Montauban</div>
-  <h1>Réservez à<br><em>Génie</em> Montauban</h1>
-  <p>Salles de réunion · Bureaux nomades · Coworking · Lun–Ven 8h–19h | Sam sur réservation</p>
+<!-- ===== HEADER ===== -->
+<header class="header">
+  <a href="https://genie-montauban.fr">← <span>Génie Montauban</span></a>
+  <span class="h-badge">🔐 Accès 24h/7j</span>
 </header>
 
-<div id="main-content">
-<div class="wrap">
-
-  <!-- CATÉGORIES -->
-  <div class="cat-tabs">
-    <button class="cat-tab active" onclick="setCat('tout')">Tous les espaces</button>
-    <button class="cat-tab" onclick="setCat('reunion')">🏛️ Salles de réunion</button>
-    <button class="cat-tab" onclick="setCat('nomade')">💼 Bureaux nomades</button>
+<!-- ===== HERO ===== -->
+<div class="hero">
+  <h1>Réserver un espace</h1>
+  <p>Salles de réunion · Bureaux nomades · Coworking · 12 rue du Génie, Montauban</p>
+  <div class="hero-chips">
+    <span>🕐 Créneaux 24h/24</span>
+    <span>📅 Dispo en temps réel</span>
+    <span>✅ Confirmation sous 24h</span>
+    <span>♿ PMR accessible</span>
   </div>
-
-  <div class="sec-title" id="cat-title">Choisissez votre espace</div>
-  <div class="sec-sub">Cliquez sur l'espace qui correspond à votre besoin</div>
-  <div class="espaces-grid" id="espaces-grid"></div>
-
-  <!-- ÉTAPE 2 : PROFIL (salles seulement) -->
-  <div class="form-sec" id="sec-profil" style="display:none">
-    <div class="step-hd"><div class="step-n">2</div><div class="step-title">Votre profil tarifaire</div></div>
-    <div class="info-bar">ℹ️ Les tarifs des salles de réunion varient selon votre statut. Choisissez votre profil — l'équipe Génie vérifiera lors de la confirmation.</div>
-    <div class="profil-grid" id="profil-grid"></div>
-    <div class="gratuit-info hidden" id="gratuit-info">🌱 <strong>Tarif gratuit disponible</strong> pour les associations loi 1901 de Villebourbon et syndicats de travailleurs de Montauban. Conditions : adhésion Génie (50€/an) + réservation 72h à l'avance + sous réserve de disponibilité.</div>
-  </div>
-
-  <!-- ÉTAPE 3 : DATE & DURÉE -->
-  <div class="form-sec" id="sec-date">
-    <div class="step-hd"><div class="step-n" id="step-date-n">2</div><div class="step-title">Date et durée</div></div>
-    <div class="fgrid">
-      <div class="fg">
-        <label>Date <span class="req">*</span></label>
-        <input type="date" id="f-date" onchange="updatePrix()">
-      </div>
-      <div class="fg" id="fg-type">
-        <label>Durée</label>
-        <div class="duree-tabs" id="duree-tabs"></div>
-      </div>
-      <div class="fg" id="fg-hdebut">
-        <label>Heure de début</label>
-        <select id="f-hdebut" onchange="updatePrix()">
-          <option>08:00</option><option>08:30</option><option selected>09:00</option><option>09:30</option>
-          <option>10:00</option><option>10:30</option><option>11:00</option><option>11:30</option>
-          <option>12:00</option><option>12:30</option><option>13:00</option><option>13:30</option>
-          <option>14:00</option><option>14:30</option><option>15:00</option><option>15:30</option>
-          <option>16:00</option><option>16:30</option><option>17:00</option><option>17:30</option>
-        </select>
-      </div>
-      <div class="fg" id="fg-nbh" style="display:none">
-        <label>Nombre d'heures</label>
-        <select id="f-nbh" onchange="updatePrix()">
-          <option value="1">1h</option><option value="2" selected>2h</option><option value="3">3h</option>
-          <option value="4">4h</option><option value="5">5h</option><option value="6">6h</option><option value="7">7h</option><option value="8">8h</option>
-        </select>
-      </div>
-      <div class="fg"><label>Participants</label><input type="number" id="f-part" min="1" value="1" onchange="updatePrix()"></div>
-      <div class="fg"><label>Objet de la réservation</label><input type="text" id="f-objet" placeholder="Réunion, formation, atelier…"></div>
-    </div>
-    <div id="conflict-zone"></div>
-    <div class="prix-box" id="prix-box" style="display:none">
-      <div class="prix-hd">
-        <h4>💰 Récapitulatif</h4>
-        <div class="prix-total" id="prix-total">0 €</div>
-      </div>
-      <div class="prix-lines" id="prix-lines"></div>
-    </div>
-  </div>
-
-  <!-- ÉTAPE 4 : OPTIONS -->
-  <div class="form-sec" id="sec-options">
-    <div class="step-hd"><div class="step-n" id="step-opt-n">3</div><div class="step-title">Options complémentaires</div></div>
-    <div class="options-grid">
-      <div class="opt-card" id="opt-badge" onclick="toggleOpt('badge')">
-        <div class="opt-check" id="chk-badge"></div>
-        <div>
-          <div class="opt-name">🔑 Accès badge 24h/7j</div>
-          <div class="opt-desc">Accès hors horaires et jours d'ouverture</div>
-          <div class="opt-prix">25 € / mois</div>
-        </div>
-      </div>
-      <div class="opt-card" id="opt-adhesion" onclick="toggleOpt('adhesion')">
-        <div class="opt-check" id="chk-adhesion"></div>
-        <div>
-          <div class="opt-name">🤝 Adhésion Génie</div>
-          <div class="opt-desc">Tarifs préférentiels, accès communauté</div>
-          <div class="opt-prix">50 € / an</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ÉTAPE FINALE : COORDONNÉES -->
-  <div class="form-sec" id="sec-contact">
-    <div class="step-hd"><div class="step-n" id="step-contact-n">4</div><div class="step-title">Vos coordonnées</div></div>
-    <div class="fgrid">
-      <div class="fg"><label>Prénom <span class="req">*</span></label><input type="text" id="f-prenom" placeholder="Marie"></div>
-      <div class="fg"><label>Nom <span class="req">*</span></label><input type="text" id="f-nom" placeholder="Dupont"></div>
-      <div class="fg"><label>Email <span class="req">*</span></label><input type="email" id="f-email" placeholder="marie@exemple.fr"></div>
-      <div class="fg"><label>Téléphone</label><input type="tel" id="f-tel" placeholder="06 xx xx xx xx"></div>
-      <div class="fg full"><label>Organisation / Structure</label><input type="text" id="f-orga" placeholder="Association, entreprise, indépendant…"></div>
-      <div class="fg full"><label>Message complémentaire</label><textarea id="f-message" placeholder="Besoins spécifiques, matériel, configuration…"></textarea></div>
-    </div>
-    <button class="submit-btn" id="submit-btn" onclick="submit()">📅 Envoyer ma demande de réservation</button>
-    <p style="text-align:center;font-size:12px;color:var(--muted);margin-top:10px">Confirmation par email sous 24h ouvrées par l'équipe Génie · 06 51 50 97 18</p>
-  </div>
-
-</div><!-- /wrap -->
-</div><!-- /main-content -->
-
-<div class="success" id="success">
-  <div class="success-icon">🎉</div>
-  <h2>Demande envoyée !</h2>
-  <p>Votre demande est enregistrée.<br>L'équipe Génie vous confirme par email sous 24h.</p>
-  <div class="success-card" id="success-details"></div>
-  <button class="submit-btn" style="max-width:320px;margin:0 auto" onclick="window.location.reload()">← Nouvelle réservation</button>
 </div>
 
-<footer>
-  <strong>Génie Montauban</strong> — Le Tiers-Lieu ESS<br>
-  12 rue du Génie 82000 Montauban · 06 51 50 97 18 · genie.montauban@gmail.com<br>
-  Lundi–Vendredi 8h–19h | Samedi sur réservation
-</footer>
+<!-- ===== LAYOUT ===== -->
+<div class="layout">
 
+  <!-- COLONNE PRINCIPALE -->
+  <div id="main-form">
+
+    <!-- ÉTAPE 1 -->
+    <div class="card" id="card-espace">
+      <div class="card-title">
+        <span class="step-badge" id="sb1">1</span>
+        Choisissez votre espace
+        <span id="loading-espaces" style="display:none"><span class="spinner"></span>Chargement des dispos…</span>
+      </div>
+
+      <div class="filter-tabs">
+        <button class="filter-tab active" onclick="filtrer('tous',this)">Tous</button>
+        <button class="filter-tab" onclick="filtrer('reunion',this)">🏛️ Réunion</button>
+        <button class="filter-tab" onclick="filtrer('nomade',this)">💼 Nomade</button>
+        <button class="filter-tab" onclick="filtrer('coworking',this)">💻 Coworking</button>
+      </div>
+
+      <div class="espaces-grid" id="espaces-grid">
+        <div class="espace-btn" data-espace="Bourdelle" data-type="reunion" data-tarif-h="30" onclick="selEspace(this)">
+          <span class="eb-ico">🏛️</span>
+          <span class="eb-nom">Antoine Bourdelle</span>
+          <span class="eb-sub">Salle 40 pers. · RDC</span>
+          <span class="eb-prix">dès 30 €/h</span>
+          <span class="eb-dispo" id="dispo-Bourdelle"></span>
+        </div>
+        <div class="espace-btn" data-espace="Freinet" data-type="reunion" data-tarif-h="22" onclick="selEspace(this)">
+          <span class="eb-ico">🤝</span>
+          <span class="eb-nom">Célestin Freinet</span>
+          <span class="eb-sub">Salle 20 pers. · 1er</span>
+          <span class="eb-prix">dès 22 €/h</span>
+          <span class="eb-dispo" id="dispo-Freinet"></span>
+        </div>
+        <div class="espace-btn" data-espace="Gouges" data-type="reunion" data-tarif-h="22" onclick="selEspace(this)">
+          <span class="eb-ico">📋</span>
+          <span class="eb-nom">Olympe de Gouges</span>
+          <span class="eb-sub">Salle 20 pers. · 1er</span>
+          <span class="eb-prix">dès 22 €/h</span>
+          <span class="eb-dispo" id="dispo-Gouges"></span>
+        </div>
+        <div class="espace-btn" data-espace="Montessori" data-type="reunion" data-tarif-h="15" onclick="selEspace(this)">
+          <span class="eb-ico">♿</span>
+          <span class="eb-nom">Maria Montessori</span>
+          <span class="eb-sub">PMR · 4 pers. · RDJ</span>
+          <span class="eb-prix">dès 15 €/h</span>
+          <span class="eb-dispo" id="dispo-Montessori"></span>
+        </div>
+        <div class="espace-btn" data-espace="Aristote" data-type="nomade" data-tarif-h="10" onclick="selEspace(this)">
+          <span class="eb-ico">🚪</span>
+          <span class="eb-nom">Aristote</span>
+          <span class="eb-sub">Bureau privé · 1er</span>
+          <span class="eb-prix">10 €/½ journée</span>
+          <span class="eb-dispo" id="dispo-Aristote"></span>
+        </div>
+        <div class="espace-btn" data-espace="Rousseau" data-type="coworking" data-tarif-h="10" onclick="selEspace(this)">
+          <span class="eb-ico">💻</span>
+          <span class="eb-nom">Jean-Jacques Rousseau</span>
+          <span class="eb-sub">Coworking 20 postes · 1er</span>
+          <span class="eb-prix">10 €/½ journée</span>
+          <span class="eb-dispo" id="dispo-Rousseau"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ÉTAPE 2 -->
+    <div class="card" id="card-profil" style="display:none">
+      <div class="card-title"><span class="step-badge" id="sb2">2</span> Votre profil tarifaire</div>
+      <div class="profils-grid">
+        <div class="profil-btn" onclick="selProfil(this,'plein','Tarif plein (Entreprise)')">
+          <span class="pb-label">🏢 Tarif plein</span>
+          <span class="pb-desc">Entreprises, professions libérales</span>
+        </div>
+        <div class="profil-btn" onclick="selProfil(this,'adherent','Adhérent Génie')">
+          <span class="pb-label">🤝 Adhérent Génie</span>
+          <span class="pb-desc">Membres association — ≈ −20%</span>
+        </div>
+        <div class="profil-btn" onclick="selProfil(this,'locataire','Locataire Génie')">
+          <span class="pb-label">🔑 Locataire</span>
+          <span class="pb-desc">Locataires permanents</span>
+        </div>
+        <div class="profil-btn" onclick="selProfil(this,'asso','Association / Syndicat')">
+          <span class="pb-label">🌿 Asso / Syndicat</span>
+          <span class="pb-desc">Villebourbon & syndicats — gratuit</span>
+        </div>
+      </div>
+      <p class="field-hint" style="margin-top:8px">ℹ️ L'équipe Génie vérifie votre statut lors de la confirmation.</p>
+    </div>
+
+    <!-- ÉTAPE 3 -->
+    <div class="card" id="card-date" style="display:none">
+      <div class="card-title"><span class="step-badge" id="sb3">3</span> Date et horaire</div>
+
+      <!-- Calendrier -->
+      <div class="cal-header">
+        <button class="cal-nav-btn" onclick="navMois(-1)">‹</button>
+        <h3 id="cal-titre"></h3>
+        <button class="cal-nav-btn" onclick="navMois(1)">›</button>
+      </div>
+      <div class="cal-grid" id="cal-grid"></div>
+      <div class="cal-legend">
+        <span><span class="ldot" style="background:var(--bleu)"></span>Sélectionné</span>
+        <span><span class="ldot" style="background:var(--or-lt);border:1px solid var(--or)"></span>Partiel</span>
+        <span><span class="ldot" style="background:var(--rouge-lt);border:1px solid var(--rouge)"></span>Complet</span>
+      </div>
+
+      <!-- Créneaux -->
+      <div id="creneaux-block" class="creneaux-block" style="display:none">
+        <div class="creneaux-title">
+          Heure de début
+          <span class="badge-small">⏱ 24h/24</span>
+        </div>
+        <div class="info-tip" id="tip-nuit" style="display:none">
+          <span>🌙</span>
+          <span>Créneau hors horaires d'ouverture (8h–20h). Un badge d'accès 24h/7j est nécessaire (+25€/mois). L'équipe organisera votre accès lors de la confirmation.</span>
+        </div>
+        <div id="creneaux-grid" class="creneaux-grid"></div>
+
+        <!-- Durée -->
+        <div style="margin-top:14px">
+          <div class="creneaux-title">Durée</div>
+          <div id="duree-grid" class="duree-grid"></div>
+        </div>
+
+        <!-- Participants -->
+        <div style="margin-top:14px">
+          <label style="font-size:13px;font-weight:700;display:block;margin-bottom:6px;">👥 Nombre de participants</label>
+          <input type="number" id="nb-part" placeholder="ex. 6" min="1" max="40" style="width:130px;border:1.5px solid var(--bord);border-radius:8px;padding:8px 11px;font-size:14px;" oninput="majRecap()">
+        </div>
+      </div>
+    </div>
+
+    <!-- ÉTAPE 4 -->
+    <div class="card" id="card-options" style="display:none">
+      <div class="card-title"><span class="step-badge" id="sb4">4</span> Options complémentaires</div>
+
+      <div class="option-row" id="opt-badge-row" onclick="togOpt(this,'badge',25)">
+        <input type="checkbox" id="chk-badge">
+        <div style="flex:1">
+          <div class="opt-label">🔑 Accès badge 24h/7j</div>
+          <div class="opt-desc">Nécessaire pour les créneaux hors horaires (avant 8h ou après 20h)</div>
+        </div>
+        <span class="opt-prix">+25 €/mois</span>
+      </div>
+
+      <div class="option-row" onclick="togOpt(this,'adhesion',50)">
+        <input type="checkbox" id="chk-adhesion">
+        <div style="flex:1">
+          <div class="opt-label">🤝 Adhésion Génie (annuelle)</div>
+          <div class="opt-desc">Tarifs préférentiels, accès communauté ESS, droits en AG</div>
+        </div>
+        <span class="opt-prix">+50 €/an</span>
+      </div>
+
+      <div style="margin-top:14px">
+        <div style="font-weight:700;font-size:13px;margin-bottom:8px;">📦 Équipements souhaités</div>
+        <div class="equip-grid">
+          <label class="equip-tag"><input type="checkbox" value="Vidéoprojecteur"> 📽️ Vidéoprojecteur</label>
+          <label class="equip-tag"><input type="checkbox" value="Écran TV"> 📺 Écran TV</label>
+          <label class="equip-tag"><input type="checkbox" value="Paperboard"> 📋 Paperboard</label>
+          <label class="equip-tag"><input type="checkbox" value="Sono / micro"> 🎤 Sono / micro</label>
+          <label class="equip-tag"><input type="checkbox" value="Tables supp."> 🪑 Tables supp.</label>
+          <label class="equip-tag"><input type="checkbox" value="Chaises supp."> 💺 Chaises supp.</label>
+          <label class="equip-tag"><input type="checkbox" value="Webcam visio"> 📷 Webcam visio</label>
+          <label class="equip-tag"><input type="checkbox" value="Rallonge"> 🔌 Rallonge</label>
+        </div>
+        <p class="field-hint" style="margin-top:6px">Des frais peuvent s'appliquer selon disponibilité — confirmés par l'équipe.</p>
+      </div>
+    </div>
+
+    <!-- ÉTAPE 5 -->
+    <div class="card" id="card-contact" style="display:none">
+      <div class="card-title"><span class="step-badge" id="sb5">5</span> Vos coordonnées</div>
+      <div class="form-grid">
+        <div class="fg"><label>Prénom <span class="req">*</span></label><input type="text" id="f-prenom" placeholder="Marie" oninput="majRecap()"></div>
+        <div class="fg"><label>Nom <span class="req">*</span></label><input type="text" id="f-nom" placeholder="Dupont" oninput="majRecap()"></div>
+        <div class="fg"><label>Email <span class="req">*</span></label><input type="email" id="f-email" placeholder="marie@structure.fr" oninput="majRecap()"></div>
+        <div class="fg"><label>Téléphone</label><input type="tel" id="f-tel" placeholder="06 XX XX XX XX"></div>
+        <div class="fg form-col-full"><label>Organisation / Structure</label><input type="text" id="f-struct" placeholder="Association XYZ, Auto-entrepreneur…"></div>
+        <div class="fg form-col-full">
+          <label>Message ou précisions</label>
+          <textarea id="f-msg" placeholder="Précisions sur votre événement, besoins spécifiques, etc."></textarea>
+        </div>
+      </div>
+      <p class="field-hint" style="margin-top:10px">🔒 Données utilisées uniquement pour votre réservation. Conservation 3 ans. Droits : genie.montauban@gmail.com</p>
+    </div>
+
+    <!-- SUCCÈS -->
+    <div class="success-screen" id="success">
+      <div class="success-icon">🎉</div>
+      <h2>Demande envoyée !</h2>
+      <div class="success-id" id="success-id"></div>
+      <p>Votre demande a été enregistrée dans notre système.<br>L'équipe Génie vous confirme par email sous <strong>24h ouvrées</strong>.<br><br>Pour toute urgence : <a href="tel:+33651509718">06 51 50 97 18</a></p>
+      <button class="btn-reset" onclick="resetForm()">← Nouvelle réservation</button>
+    </div>
+
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+
+    <!-- RÉCAP -->
+    <div class="recap-card">
+      <div class="recap-head">
+        <h2>📋 Récapitulatif</h2>
+        <p>Mise à jour en temps réel</p>
+      </div>
+      <div class="recap-body">
+        <div class="recap-row"><span class="rl">Espace</span><span class="rv" id="r-espace">—</span></div>
+        <div class="recap-row"><span class="rl">Profil</span><span class="rv" id="r-profil">—</span></div>
+        <div class="recap-row"><span class="rl">Date</span><span class="rv" id="r-date">—</span></div>
+        <div class="recap-row"><span class="rl">Horaire</span><span class="rv" id="r-horaire">—</span></div>
+        <div class="recap-row"><span class="rl">Durée</span><span class="rv" id="r-duree">—</span></div>
+        <div class="recap-row"><span class="rl">Participants</span><span class="rv" id="r-part">—</span></div>
+
+        <div class="recap-total">
+          <span class="rt-l">Estimation</span>
+          <span class="rt-v" id="r-total">0 €</span>
+        </div>
+
+        <div class="info-box blue" id="ib-tarif" style="display:none">
+          <span>💡</span><span>Tarif estimatif, confirmé selon votre statut.</span>
+        </div>
+        <div class="info-box nuit" id="ib-nuit" style="display:none">
+          <span>🌙</span><span>Créneau hors horaires — badge requis.</span>
+        </div>
+
+        <button class="btn-submit" id="btn-submit" onclick="soumettre()" disabled>
+          <span id="btn-txt">📅 Envoyer ma demande</span>
+          <span id="btn-spin" style="display:none"><span class="spinner"></span></span>
+        </button>
+        <p class="btn-note">Confirmation par email sous 24h · <a href="tel:+33651509718">06 51 50 97 18</a></p>
+      </div>
+    </div>
+
+    <!-- DISPO DU JOUR -->
+    <div class="dispo-card" id="dispo-card" style="display:none">
+      <h4>📅 Occupations du jour</h4>
+      <div class="dispo-date" id="dispo-date-label"></div>
+      <div class="dispo-list" id="dispo-list"></div>
+    </div>
+
+    <!-- CONTACT -->
+    <div style="background:var(--blanc);border-radius:12px;box-shadow:var(--shadow-sm);padding:16px;margin-top:14px;border:1px solid var(--bord)">
+      <div style="font-weight:700;font-size:14px;color:var(--bleu);margin-bottom:10px;">💬 Besoin d'aide ?</div>
+      <a href="tel:+33651509718" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;background:var(--bleu);color:#fff;border-radius:8px;text-decoration:none;font-weight:700;font-size:14px;margin-bottom:8px;">📞 06 51 50 97 18</a>
+      <a href="mailto:genie.montauban@gmail.com" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:9px;background:var(--fond);color:var(--bleu);border-radius:8px;text-decoration:none;font-weight:600;font-size:13px;border:1.5px solid var(--bord);">✉️ genie.montauban@gmail.com</a>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== SCRIPT ===== -->
 <script>
-// ═══════════════════════════════════════════════════════
-// ⚠️ COLLE ICI L'URL DE TON APPS SCRIPT APRÈS DÉPLOIEMENT
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzJqg0Wi2CNZE9KLIt1ObGXWbsF8xKo5p8YTGel8cGs_Nv5jObW1MXh9juKtN8CNNYIsg/exec';
-// ═══════════════════════════════════════════════════════
+// ============================================================
+// CONFIGURATION — À METTRE À JOUR APRÈS DÉPLOIEMENT DU SCRIPT
+// Remplacez l'URL ci-dessous par l'URL de votre Apps Script déployé
+// ============================================================
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw5f4eTOV6q9n7OCo0m29fmECgUoML4xrn0QsUG1k2OmSUGYQQrkiPIu_Cs7x_qROiA/exec';
+// Exemple : 'https://script.google.com/macros/s/AKfycbx.../exec'
 
-// ─── DONNÉES ESPACES ────────────────────────────────────
-// Profils tarifaires pour les salles de réunion
-// Ordre : [CCFA, Adhérent, Locataire, Association(gratuit)]
-const PROFILS = [
-  { id:'ccfa',      label:'CCFA exclusivement', desc:'Réservation CCFA uniquement',       color:'#7C3AED' },
-  { id:'adherent',  label:'Adhérent Génie',      desc:'Membres de l\'association Génie',   color:'#2563EB' },
-  { id:'locataire', label:'Locataire / Extérieur',desc:'Entreprise, particulier, public',  color:'var(--brick)' },
-  { id:'asso',      label:'Association / Syndicat',desc:'Loi 1901 Villebourbon + syndicats — sous conditions', color:'var(--sage)' }
-];
+// ============================================================
+const TARIFS = {
+  Bourdelle:   { plein:30, adherent:24, locataire:15, asso:0 },
+  Freinet:     { plein:22, adherent:18, locataire:12, asso:0 },
+  Gouges:      { plein:22, adherent:18, locataire:12, asso:0 },
+  Montessori:  { plein:15, adherent:12, locataire:8,  asso:0 },
+  Aristote:    { plein:10, adherent:10, locataire:10, asso:0 },
+  Rousseau:    { plein:10, adherent:10, locataire:10, asso:0 },
+};
 
-// Espaces réservables
-// type: 'reunion' | 'nomade' | 'both'
-// Pour type 'both' : l'utilisateur choisit l'usage
-// tarifs_reunion : { ccfa, adherent, locataire } x { heure, demi, journee }
-// tarifs_nomade  : { demi, journee, semaine, mois }
-const ESPACES = [
-  {
-    id: 'bourdelle',
-    nom: 'Antoine Bourdelle',
-    ref: 'Bureau 0-02',
-    type: 'reunion',
-    capacite: 40,
-    etage: 'Rez-de-chaussée',
-    desc: 'Grande salle lumineuse avec terrasse, vidéoprojecteur, sono — idéale formations et assemblées',
-    icon: '🏛️',
-    tarifs_reunion: {
-      ccfa:      { heure:30, demi:100, journee:160 },
-      adherent:  { heure:24, demi:80,  journee:130 },
-      locataire: { heure:15, demi:50,  journee:80  },
-      asso:      { heure:0,  demi:0,   journee:0   }
-    }
-  },
-  {
-    id: 'freinet',
-    nom: 'Célestin Freinet',
-    ref: 'Bureau 1-11',
-    type: 'both',
-    usages: ['reunion','bail'],
-    capacite: 20,
-    etage: '1er étage',
-    desc: 'Salle modulable, paperboard, disponible à la journée ou en bail mensuel',
-    icon: '📋',
-    tarifs_reunion: {
-      ccfa:      { heure:22, demi:70,  journee:120 },
-      adherent:  { heure:18, demi:60,  journee:90  },
-      locataire: { heure:12, demi:35,  journee:60  },
-      asso:      { heure:0,  demi:0,   journee:0   }
-    },
-    tarifs_bail: { mensuel:375, an:325, bail369:300 }
-  },
-  {
-    id: 'gouges',
-    nom: 'Olympe de Gouges',
-    ref: 'Bureau 1-12',
-    type: 'reunion',
-    capacite: 20,
-    etage: '1er étage',
-    desc: 'Salle de réunion lumineuse, écran TV, paperboard, accès 1er étage',
-    icon: '🤝',
-    tarifs_reunion: {
-      ccfa:      { heure:22, demi:70,  journee:120 },
-      adherent:  { heure:18, demi:60,  journee:90  },
-      locataire: { heure:12, demi:35,  journee:60  },
-      asso:      { heure:0,  demi:0,   journee:0   }
-    }
-  },
-  {
-    id: 'michel',
-    nom: 'Louise Michel',
-    ref: 'Bureau 0-01',
-    type: 'nomade',
-    sous_type: 'prive',
-    capacite: 4,
-    etage: 'Rez-de-chaussée',
-    desc: 'Bureau privé nomade, connexion fibre, calme garanti — idéal télétravail et visioconférence',
-    icon: '🚪',
-    tarifs_nomade: { demi:10, journee:20, semaine:70, mois:150 }
-  },
-  {
-    id: 'rousseau',
-    nom: 'Jean-Jacques Rousseau',
-    ref: 'Bureau 1-10',
-    type: 'nomade',
-    sous_type: 'coworking',
-    capacite: 20,
-    etage: '1er étage',
-    desc: 'Grand espace coworking ouvert, imprimante, café, ambiance collaborative',
-    icon: '💻',
-    tarifs_nomade: { demi:10, journee:15, semaine:50, mois:120 }
-  },
-  {
-    id: 'montessori',
-    nom: 'Maria Montessori',
-    ref: 'Bureau -1-14',
-    type: 'both',
-    usages: ['reunion','nomade'],
-    capacite: 4,
-    etage: 'Rez-de-Jardin (PMR)',
-    desc: 'Salle accessible PMR, usage flexible : réunion ou bureau nomade privé — rez-de-jardin',
-    icon: '♿',
-    tarifs_reunion: {
-      ccfa:      { heure:15, demi:50, journee:80 },
-      adherent:  { heure:12, demi:40, journee:65 },
-      locataire: { heure:8,  demi:25, journee:40 },
-      asso:      { heure:0,  demi:0,  journee:0  }
-    },
-    tarifs_nomade: { demi:10, journee:15, semaine:60, mois:140 }
-  }
-];
+let S = {
+  espace: null, profilCode: 'plein', profil: null,
+  date: null, heure: null, duree: 1,
+  opts: { badge: false, adhesion: false },
+  cal: null, // { y, m }
+  reservations: {}, // données réelles du backend
+  loadingDispo: false,
+};
 
-const DL = { heure:"À l'heure", demi:"½ journée (4h)", journee:"Journée (8h)", semaine:"Semaine", mois:"Mois" };
-const fMoney = n => n===0 ? 'Gratuit' : Number(n).toLocaleString('fr-FR',{minimumFractionDigits:2})+' €';
-const fDate  = d => d ? new Date(d+'T12:00:00').toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'}) : '';
-const genId  = () => 'RSV-'+Date.now().toString(36).toUpperCase();
-const gv     = id => (document.getElementById(id)?.value||'').trim();
-
-// ─── ÉTAT ────────────────────────────────────────────────
-let selectedEspace  = null;
-let selectedUsage   = 'reunion';  // 'reunion' | 'nomade' | 'bail'
-let selectedProfil  = null;
-let selectedDuree   = null;
-let optBadge        = false;
-let optAdhesion     = false;
-let reservations    = [];
-let currentCat      = 'tout';
-
-// ─── RENDU ESPACES ───────────────────────────────────────
-function setCat(cat) {
-  currentCat = cat;
-  document.querySelectorAll('.cat-tab').forEach((t,i) => {
-    t.classList.toggle('active', ['tout','reunion','nomade'][i]===cat);
+// ===== INIT =====
+window.onload = function() {
+  const now = new Date();
+  S.cal = { y: now.getFullYear(), m: now.getMonth() };
+  renderCal();
+  // Coche les équipements
+  document.querySelectorAll('.equip-tag input').forEach(cb => {
+    cb.addEventListener('change', function() {
+      this.closest('.equip-tag').classList.toggle('on', this.checked);
+    });
   });
-  renderEspaces();
-}
+};
 
-function renderEspaces() {
-  const grid = document.getElementById('espaces-grid');
-  let list = ESPACES;
-  if (currentCat === 'reunion') list = ESPACES.filter(e => e.type==='reunion' || (e.type==='both' && e.usages.includes('reunion')));
-  if (currentCat === 'nomade')  list = ESPACES.filter(e => e.type==='nomade'  || (e.type==='both' && e.usages.includes('nomade')));
-
-  grid.innerHTML = list.map(e => {
-    const cats = [];
-    if (e.type==='reunion' || (e.type==='both'&&e.usages.includes('reunion'))) cats.push('<span class="badge-cat bc-reunion">Salle réunion</span>');
-    if (e.type==='nomade'  || (e.type==='both'&&e.usages.includes('nomade')))  cats.push('<span class="badge-cat bc-cowork">Bureau nomade</span>');
-    if (e.type==='both'    && e.usages.includes('bail'))                       cats.push('<span class="badge-cat bc-bureau">Bail disponible</span>');
-
-    // Prix affiché : tarif le plus bas visible
-    let prixFrom = '', prixUnit = '';
-    if (e.tarifs_reunion) { prixFrom = e.tarifs_reunion.locataire.heure+'€'; prixUnit = '/ heure (tarif locataire)'; }
-    else if (e.tarifs_nomade) { prixFrom = e.tarifs_nomade.demi+'€'; prixUnit = '/ demi-journée'; }
-
-    const sel = selectedEspace?.id === e.id;
-    return `<div class="ec${sel?' sel':''}" onclick="selectEspace('${e.id}')">
-      <div class="ec-badges">${cats.join('')}</div>
-      <div class="ec-name">${e.icon} ${e.nom}</div>
-      <div class="ec-ref">${e.ref} · ${e.etage}</div>
-      <div class="ec-cap">👥 Jusqu'à ${e.capacite} personnes</div>
-      <div class="ec-desc">${e.desc}</div>
-      <div class="ec-prix">
-        <div class="ec-prix-from">À partir de</div>
-        <div><span class="ec-prix-val">${prixFrom}</span> <span class="ec-prix-unit">${prixUnit}</span></div>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-function selectEspace(id) {
-  selectedEspace = ESPACES.find(e => e.id === id);
-  selectedProfil = null;
-  selectedDuree  = null;
-  renderEspaces();
-
-  // Gérer les espaces "both" avec usage au choix
-  if (selectedEspace.type === 'both') {
-    // Montessori : reunion ou nomade
-    if (selectedEspace.usages.includes('reunion') && selectedEspace.usages.includes('nomade')) {
-      showUsageChoice();
-      return;
-    }
-    // Freinet : reunion ou bail (bail = contact direct, pas de réservation en ligne)
-  }
-
-  // Déterminer l'usage par défaut
-  if (selectedEspace.type === 'reunion' || (selectedEspace.type==='both' && selectedEspace.usages.includes('reunion'))) {
-    selectedUsage = 'reunion';
-  } else {
-    selectedUsage = 'nomade';
-  }
-
-  setupForm();
-  document.getElementById('sec-profil').scrollIntoView({behavior:'smooth', block:'start'});
-}
-
-function showUsageChoice() {
-  // Injection d'un choix usage inline
-  const existingChoice = document.getElementById('usage-choice-modal');
-  if (existingChoice) existingChoice.remove();
-
-  const div = document.createElement('div');
-  div.id = 'usage-choice-modal';
-  div.style.cssText = 'position:fixed;inset:0;background:rgba(28,20,16,.5);z-index:999;display:flex;align-items:center;justify-content:center;padding:20px';
-  div.innerHTML = `
-    <div style="background:#fff;border-radius:16px;padding:32px;max-width:420px;width:100%">
-      <div style="font-family:'Fraunces',serif;font-size:20px;font-weight:700;margin-bottom:6px">Maria Montessori · -1-14</div>
-      <p style="font-size:13px;color:var(--muted);margin-bottom:22px">Cet espace est disponible en deux modes. Comment souhaitez-vous le réserver ?</p>
-      <div style="display:grid;gap:10px">
-        <button onclick="selectUsage('reunion')" style="padding:14px;border-radius:10px;border:2px solid var(--border);background:#fff;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;text-align:left">
-          🏛️ <strong>Salle de réunion</strong><br><span style="font-size:12px;color:var(--muted)">À l'heure / ½j / journée · 4 personnes · Accès PMR</span>
-        </button>
-        <button onclick="selectUsage('nomade')" style="padding:14px;border-radius:10px;border:2px solid var(--border);background:#fff;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;text-align:left">
-          🚪 <strong>Bureau nomade privé</strong><br><span style="font-size:12px;color:var(--muted)">½j / journée / semaine / mois · Tarif coworking</span>
-        </button>
-        <button onclick="document.getElementById('usage-choice-modal').remove()" style="padding:10px;border-radius:8px;border:1px solid var(--border);background:var(--cream);font-family:inherit;font-size:13px;cursor:pointer">Annuler</button>
-      </div>
-    </div>`;
-  document.body.appendChild(div);
-}
-
-function selectUsage(usage) {
-  selectedUsage = usage;
-  document.getElementById('usage-choice-modal')?.remove();
-  setupForm();
-  document.getElementById('sec-profil').scrollIntoView({behavior:'smooth', block:'start'});
-}
-
-// ─── CONFIGURATION DU FORMULAIRE SELON L'ESPACE ─────────
-function setupForm() {
-  const isReunion = selectedUsage === 'reunion';
-  const isNomade  = selectedUsage === 'nomade';
-
-  // Profil (seulement pour salles)
-  const secProfil = document.getElementById('sec-profil');
-  secProfil.style.display = isReunion ? 'block' : 'none';
-  document.getElementById('step-date-n').textContent  = isReunion ? '3' : '2';
-  document.getElementById('step-opt-n').textContent   = isReunion ? '4' : '3';
-  document.getElementById('step-contact-n').textContent = isReunion ? '5' : '4';
-
-  if (isReunion) renderProfilCards();
-
-  // Onglets durée
-  renderDureeTabs();
-  updatePrix();
-}
-
-function renderProfilCards() {
-  document.getElementById('profil-grid').innerHTML = PROFILS.map(p => {
-    const t = selectedEspace.tarifs_reunion[p.id];
-    const ex = t ? `À partir de ${t.heure===0?'Gratuit':t.heure+'€/h'}` : '';
-    return `<div class="profil-card${selectedProfil===p.id?' sel':''}" onclick="selectProfil('${p.id}')">
-      <div class="profil-name" style="color:${p.color}">${p.label}</div>
-      <div class="profil-desc">${p.desc}</div>
-      <div class="profil-prix">${ex}</div>
-    </div>`;
-  }).join('');
-
-  document.getElementById('gratuit-info').classList.toggle('hidden', selectedProfil !== 'asso');
-}
-
-function selectProfil(id) {
-  selectedProfil = id;
-  renderProfilCards();
-  if (id === 'asso') document.getElementById('gratuit-info').classList.remove('hidden');
-  updatePrix();
-}
-
-function renderDureeTabs() {
-  let durees = [];
-  if (selectedUsage === 'reunion') durees = ['heure','demi','journee'];
-  else durees = ['demi','journee','semaine','mois'];
-
-  if (!selectedDuree || !durees.includes(selectedDuree)) selectedDuree = durees[0];
-
-  document.getElementById('duree-tabs').innerHTML = durees.map(d =>
-    `<button class="dtab${selectedDuree===d?' active':''}" onclick="selectDuree('${d}')">${DL[d]}</button>`
-  ).join('');
-
-  // Afficher/masquer heure début et nb heures
-  const showHeure = selectedUsage === 'reunion'; // salles : heure de début toujours utile
-  const showNbH   = selectedUsage === 'reunion' && selectedDuree === 'heure';
-  document.getElementById('fg-hdebut').style.display = showHeure ? '' : 'none';
-  document.getElementById('fg-nbh').style.display    = showNbH   ? '' : 'none';
-}
-
-function selectDuree(d) {
-  selectedDuree = d;
-  renderDureeTabs();
-  updatePrix();
-}
-
-// ─── CALCUL PRIX ─────────────────────────────────────────
-function calcMontant() {
-  if (!selectedEspace || !selectedDuree) return { base:0, badge:0, adhesion:0, total:0 };
-
-  let base = 0;
-  if (selectedUsage === 'reunion') {
-    if (!selectedProfil) return { base:0, badge:0, adhesion:0, total:0 };
-    const t = selectedEspace.tarifs_reunion[selectedProfil];
-    if (selectedDuree === 'heure') {
-      const nbH = parseInt(gv('f-nbh'))||1;
-      base = t.heure * nbH;
-    } else if (selectedDuree === 'demi')    base = t.demi;
-    else if (selectedDuree === 'journee')   base = t.journee;
-  } else {
-    const t = selectedEspace.tarifs_nomade;
-    if      (selectedDuree === 'demi')    base = t.demi;
-    else if (selectedDuree === 'journee') base = t.journee;
-    else if (selectedDuree === 'semaine') base = t.semaine;
-    else if (selectedDuree === 'mois')    base = t.mois;
-  }
-
-  const badge    = optBadge    ? 25 : 0;
-  const adhesion = optAdhesion ? 50 : 0;
-  return { base, badge, adhesion, total: base + badge + adhesion };
-}
-
-function heureFin(hd, duree, nbH) {
-  if (!hd) return '';
-  const [h,m] = hd.split(':').map(Number);
-  let t = h*60+m;
-  if (duree==='heure') t += (nbH||1)*60;
-  else if (duree==='demi') t += 240;
-  else if (duree==='journee') t += 480;
-  else t += 60;
-  return `${String(Math.floor(t/60)%24).padStart(2,'0')}:${String(t%60).padStart(2,'0')}`;
-}
-
-function updatePrix() {
-  if (!selectedEspace) { document.getElementById('prix-box').style.display='none'; return; }
-  if (selectedUsage==='reunion' && !selectedProfil) { document.getElementById('prix-box').style.display='none'; return; }
-
-  const m = calcMontant();
-  const hd = gv('f-hdebut');
-  const nbH = parseInt(gv('f-nbh'))||1;
-  const hf = selectedUsage==='reunion' ? heureFin(hd, selectedDuree, nbH) : '';
-
-  document.getElementById('prix-box').style.display = 'block';
-  document.getElementById('prix-total').textContent = fMoney(m.total);
-
-  const lines = [];
-  // Ligne espace
-  let dureeLabel = DL[selectedDuree]||selectedDuree;
-  if (selectedUsage==='reunion' && selectedDuree==='heure') dureeLabel += ` × ${nbH}h`;
-  if (hf) dureeLabel += ` · ${hd} → ${hf}`;
-  lines.push([`${selectedEspace.nom} — ${dureeLabel}`, fMoney(m.base)]);
-  if (m.badge)    lines.push(['Accès badge 24h/7j', '+25 €/mois']);
-  if (m.adhesion) lines.push(['Adhésion Génie', '+50 €/an']);
-
-  document.getElementById('prix-lines').innerHTML = lines.map(([l,v])=>
-    `<div class="prix-line"><span>${l}</span><span>${v}</span></div>`
-  ).join('');
-
-  if (m.base === 0 && selectedProfil === 'asso') {
-    document.getElementById('prix-total').textContent = 'GRATUIT*';
-    document.getElementById('prix-lines').innerHTML += `<div style="font-size:11px;color:var(--sage);margin-top:6px">*Sous réserve de validation et d'adhésion Génie (50€/an)</div>`;
-  }
-
-  checkConflict(hd, hf);
-}
-
-function checkConflict(hd, hf) {
-  const date = gv('f-date');
-  const el = document.getElementById('conflict-zone');
-  if (!selectedEspace || !date || selectedUsage==='nomade') { el.innerHTML=''; return; }
-  const conflicts = reservations.filter(r => {
-    if (r.espace!==selectedEspace.id || r.date!==date || r.statut==='cancelled') return false;
-    const rf = r.heureFin || '';
-    return hd && rf && r.heureDebut < hf && rf > hd;
+// ===== FILTRE ESPACES =====
+function filtrer(type, btn) {
+  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.espace-btn').forEach(b => {
+    b.style.display = (type === 'tous' || b.dataset.type === type) ? '' : 'none';
   });
-  el.innerHTML = conflicts.length
-    ? `<div class="conflict-box">⚠️ Créneau potentiellement occupé — l'équipe Génie vérifiera la disponibilité à la confirmation.</div>`
-    : '';
 }
 
-// ─── OPTIONS ─────────────────────────────────────────────
-function toggleOpt(opt) {
-  if (opt==='badge') {
-    optBadge = !optBadge;
-    document.getElementById('opt-badge').classList.toggle('sel', optBadge);
-    document.getElementById('chk-badge').textContent = optBadge ? '✓' : '';
-  } else {
-    optAdhesion = !optAdhesion;
-    document.getElementById('opt-adhesion').classList.toggle('sel', optAdhesion);
-    document.getElementById('chk-adhesion').textContent = optAdhesion ? '✓' : '';
+// ===== SÉLECTION ESPACE =====
+function selEspace(el) {
+  document.querySelectorAll('.espace-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  S.espace = el.dataset.espace;
+  S.heure = null; S.date = null;
+  afficher('card-profil');
+  afficher('card-date');
+  afficher('card-options');
+  afficher('card-contact');
+  document.getElementById('creneaux-block').style.display = 'none';
+  renderCal();
+  majRecap();
+}
+
+// ===== SÉLECTION PROFIL =====
+function selProfil(el, code, label) {
+  document.querySelectorAll('.profil-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  S.profilCode = code; S.profil = label;
+  majRecap();
+}
+
+// ===== CALENDRIER =====
+function navMois(d) {
+  S.cal.m += d;
+  if (S.cal.m > 11) { S.cal.m = 0; S.cal.y++; }
+  if (S.cal.m < 0)  { S.cal.m = 11; S.cal.y--; }
+  renderCal();
+}
+
+function renderCal() {
+  const { y, m } = S.cal;
+  const mNoms = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+  document.getElementById('cal-titre').textContent = mNoms[m] + ' ' + y;
+
+  const grid = document.getElementById('cal-grid');
+  grid.innerHTML = '';
+  ['Lu','Ma','Me','Je','Ve','Sa','Di'].forEach(j => {
+    const el = document.createElement('div'); el.className = 'cal-dow'; el.textContent = j; grid.appendChild(el);
+  });
+
+  const premier = new Date(y, m, 1);
+  const offset = (premier.getDay() + 6) % 7;
+  const nbJours = new Date(y, m+1, 0).getDate();
+  const today = new Date(); today.setHours(0,0,0,0);
+
+  for (let i = 0; i < offset; i++) {
+    const v = document.createElement('div'); v.className = 'cal-day empty'; grid.appendChild(v);
   }
-  updatePrix();
+
+  for (let d = 1; d <= nbJours; d++) {
+    const date = new Date(y, m, d);
+    const dateStr = fmtDate(date);
+    const el = document.createElement('div');
+    el.className = 'cal-day';
+    el.textContent = d;
+
+    if (date.toDateString() === today.toDateString()) el.classList.add('today');
+
+    if (date < today) {
+      el.classList.add('past');
+    } else {
+      const occ = S.espace && S.reservations[S.espace] && S.reservations[S.espace][dateStr];
+      if (occ && occ.length >= 40) el.classList.add('full');
+      else if (occ && occ.length > 0) el.classList.add('partial');
+      else el.classList.add('dispo');
+
+      if (S.date === dateStr) el.classList.add('selected');
+      el.onclick = () => selDate(dateStr, el, date);
+    }
+    grid.appendChild(el);
+  }
 }
 
-// ─── SOUMISSION ───────────────────────────────────────────
-async function submit() {
-  const prenom = gv('f-prenom'), nom = gv('f-nom'), email = gv('f-email'), date = gv('f-date');
-  if (!selectedEspace) { alert('Veuillez choisir un espace.'); return; }
-  if (selectedUsage==='reunion' && !selectedProfil) { alert('Veuillez choisir votre profil tarifaire.'); return; }
-  if (!selectedDuree) { alert('Veuillez choisir une durée.'); return; }
-  if (!prenom||!nom||!email||!date) { alert('Veuillez remplir les champs obligatoires (*).'); return; }
+async function selDate(dateStr, el, dateObj) {
+  S.date = dateStr; S.heure = null;
+  document.querySelectorAll('.cal-day').forEach(d => d.classList.remove('selected'));
+  el.classList.add('selected');
 
-  if (SCRIPT_URL === 'VOTRE_URL_ICI') { alert('⚠️ URL Apps Script non configurée.'); return; }
+  // Charger les vraies dispos depuis le backend
+  await chargerDispos(dateStr);
+  renderCreneaux();
+  afficherDispoJour(dateStr, dateObj);
+  majRecap();
+}
 
-  const nbH = parseInt(gv('f-nbh'))||1;
-  const hd  = gv('f-hdebut');
-  const hf  = heureFin(hd, selectedDuree, nbH);
-  const m   = calcMontant();
-  const now = new Date().toISOString();
+// ===== CHARGER DISPO DEPUIS BACKEND =====
+async function chargerDispos(dateStr) {
+  if (APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbw5f4eTOV6q9n7OCo0m29fmECgUoML4xrn0QsUG1k2OmSUGYQQrkiPIu_Cs7x_qROiA/exec') return; // Pas encore configuré
+  if (!S.espace) return;
 
-  const options = [];
-  if (optBadge)    options.push('Accès badge 24h/7j (25€/mois)');
-  if (optAdhesion) options.push('Adhésion Génie (50€/an)');
-
-  const resa = {
-    id: genId(), prenom, nom, email,
-    tel: gv('f-tel'), orga: gv('f-orga'),
-    espace: selectedEspace.id,
-    nomEspace: selectedEspace.nom,
-    usage: selectedUsage,
-    profil: selectedUsage==='reunion' ? selectedProfil : '',
-    date, typeDuree: selectedDuree, nbHeures: String(nbH),
-    heureDebut: hd, heureFin: hf,
-    montant: String(m.total), montantBase: String(m.base),
-    options: options.join(', '),
-    statut: 'pending',
-    participants: String(parseInt(gv('f-part'))||1),
-    objet: gv('f-objet'),
-    message: gv('f-message'),
-    createdAt: now, updatedAt: now
-  };
-
-  const btn = document.getElementById('submit-btn');
-  btn.disabled=true; btn.textContent='⏳ Envoi en cours…';
-  setLoading(true);
+  document.getElementById('loading-espaces').style.display = 'inline-flex';
+  S.loadingDispo = true;
+  renderCreneauxLoading();
 
   try {
-    await fetch(SCRIPT_URL, {
-      method:'POST', headers:{'Content-Type':'text/plain'},
-      body: JSON.stringify({ action:'addResa', resa }), redirect:'follow'
-    });
-    setLoading(false);
-    document.getElementById('main-content').style.display='none';
-    document.getElementById('success').classList.add('show');
-
-    const dl = selectedDuree==='heure'?`${nbH}h (${hd}→${hf})`:DL[selectedDuree];
-    const profilLabel = selectedUsage==='reunion' ? PROFILS.find(p=>p.id===selectedProfil)?.label : 'Bureau nomade';
-
-    document.getElementById('success-details').innerHTML = `
-      <h3>📋 Récapitulatif</h3>
-      <div class="sd"><span>Référence</span><span style="color:var(--brick);font-family:'Fraunces',serif;font-size:16px">${resa.id}</span></div>
-      <div class="sd"><span>Espace</span><span>${selectedEspace.nom} (${selectedEspace.ref})</span></div>
-      <div class="sd"><span>Profil</span><span>${profilLabel}</span></div>
-      <div class="sd"><span>Date</span><span>${fDate(date)}</span></div>
-      <div class="sd"><span>Durée</span><span>${dl}</span></div>
-      <div class="sd"><span>Participants</span><span>${resa.participants}</span></div>
-      ${options.length ? `<div class="sd"><span>Options</span><span>${options.join(' + ')}</span></div>` : ''}
-      <div class="sd"><span>Montant estimé</span><span style="font-size:18px;color:var(--brick);font-family:'Fraunces',serif">${fMoney(m.total)}${m.base===0&&selectedProfil==='asso'?' (sous réserve validation)':''}</span></div>
-      <div class="sd"><span>Statut</span><span>⏳ En attente de confirmation</span></div>`;
-
-    // Email auto
-    const sub  = encodeURIComponent(`Demande réservation Génie — ${resa.id}`);
-    const body = encodeURIComponent(`Bonjour ${prenom},\n\nNous avons bien reçu votre demande de réservation.\n\nRéférence : ${resa.id}\nEspace : ${selectedEspace.nom} (${selectedEspace.ref})\nDate : ${fDate(date)}\nDurée : ${dl}\nProfil : ${profilLabel}\nMontant estimé : ${fMoney(m.total)}\n${options.length?'Options : '+options.join(', ')+'\n':''}\nConfirmation sous 24h.\n\nÉquipe Génie Montauban\n06 51 50 97 18\ngenie.montauban@gmail.com`);
-    setTimeout(() => { window.location.href = `mailto:${email}?subject=${sub}&body=${body}`; }, 800);
+    const url = `${APPS_SCRIPT_URL}?action=GET_RESERVATIONS&espace=${encodeURIComponent(S.espace)}&dateDebut=${dateStr}&dateFin=${dateStr}`;
+    const resp = await fetch(url);
+    const data = await resp.json();
+    if (data.success) {
+      S.reservations = data.occupations || {};
+      renderCal(); // Rafraîchir couleurs calendrier
+    }
   } catch(e) {
-    setLoading(false); btn.disabled=false; btn.textContent='📅 Envoyer ma demande de réservation';
-    alert('Erreur : ' + e.message);
+    console.warn('Backend non disponible, mode offline');
+  }
+
+  S.loadingDispo = false;
+  document.getElementById('loading-espaces').style.display = 'none';
+}
+
+// ===== CRÉNEAUX =====
+function renderCreneauxLoading() {
+  const grid = document.getElementById('creneaux-grid');
+  grid.innerHTML = '';
+  for (let i = 0; i < 48; i++) {
+    const el = document.createElement('div');
+    el.className = 'creneau-btn loading-c';
+    el.textContent = '…';
+    grid.appendChild(el);
+  }
+  document.getElementById('creneaux-block').style.display = 'block';
+}
+
+function renderCreneaux() {
+  const block = document.getElementById('creneaux-block');
+  const grid = document.getElementById('creneaux-grid');
+  block.style.display = 'block';
+  grid.innerHTML = '';
+
+  const occup = S.espace && S.date && S.reservations[S.espace] && S.reservations[S.espace][S.date] || [];
+
+  for (let h = 0; h < 24; h++) {
+    for (let mn of [0, 30]) {
+      const label = pad(h) + ':' + (mn === 0 ? '00' : '30');
+      const el = document.createElement('div');
+      el.className = 'creneau-btn';
+      el.textContent = label;
+
+      if (h < 8 || h >= 20) el.classList.add('nuit');
+      if (occup.includes(label)) {
+        el.classList.add('indispo');
+        el.title = 'Créneau réservé';
+      } else {
+        if (S.heure === label) el.classList.add('selected');
+        el.onclick = () => selHeure(label, el);
+      }
+      grid.appendChild(el);
+    }
+  }
+  renderDuree();
+}
+
+function selHeure(h, el) {
+  S.heure = h;
+  document.querySelectorAll('.creneau-btn').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  const hNum = parseInt(h.split(':')[0]);
+  const isNuit = hNum < 8 || hNum >= 20;
+  document.getElementById('tip-nuit').style.display = isNuit ? 'flex' : 'none';
+  document.getElementById('ib-nuit').style.display = isNuit ? 'flex' : 'none';
+  if (isNuit) {
+    document.getElementById('chk-badge').checked = true;
+    document.getElementById('opt-badge-row').classList.add('on');
+    S.opts.badge = true;
+  }
+  renderDuree();
+  majRecap();
+}
+
+function renderDuree() {
+  const grid = document.getElementById('duree-grid');
+  grid.innerHTML = '';
+  const opts = [{v:.5,l:'30 min'},{v:1,l:'1h'},{v:1.5,l:'1h30'},{v:2,l:'2h'},
+                {v:3,l:'3h'},{v:4,l:'4h'},{v:5,l:'5h'},{v:6,l:'6h'},{v:8,l:'Journée'},{v:12,l:'12h 🌙'}];
+  opts.forEach(o => {
+    const el = document.createElement('div');
+    el.className = 'duree-btn' + (S.duree === o.v ? ' selected' : '');
+    el.textContent = o.l;
+    el.onclick = () => { S.duree = o.v; renderDuree(); majRecap(); };
+    grid.appendChild(el);
+  });
+}
+
+// ===== OPTIONS =====
+function togOpt(el, key, prix) {
+  el.classList.toggle('on');
+  const cb = el.querySelector('input[type=checkbox]');
+  cb.checked = !cb.checked;
+  S.opts[key] = cb.checked;
+  majRecap();
+}
+
+// ===== DISPO DU JOUR (sidebar) =====
+function afficherDispoJour(dateStr, dateObj) {
+  const card = document.getElementById('dispo-card');
+  const liste = document.getElementById('dispo-list');
+  const label = document.getElementById('dispo-date-label');
+  card.style.display = 'block';
+  label.textContent = dateObj.toLocaleDateString('fr-FR', { weekday:'long', day:'numeric', month:'long' });
+  liste.innerHTML = '';
+
+  const espaces = ['Bourdelle','Freinet','Gouges','Montessori','Aristote','Rousseau'];
+  let hasOcc = false;
+
+  espaces.forEach(esp => {
+    const occ = S.reservations[esp] && S.reservations[esp][dateStr];
+    if (occ && occ.length > 0) {
+      hasOcc = true;
+      // Trouver les plages continues
+      const heureDebut = occ[0];
+      const derniere = occ[occ.length - 1];
+      const [hF, mF] = derniere.split(':').map(Number);
+      const finMin = hF * 60 + mF + 30;
+      const heureFin = pad(Math.floor(finMin/60)%24)+':'+(finMin%60===0?'00':'30');
+
+      const item = document.createElement('div');
+      item.className = 'dispo-item';
+      item.innerHTML = `<span class="di-heure">${heureDebut}–${heureFin}</span><span class="di-espace">${esp}</span><span class="dispo-chip occupe">Occupé</span>`;
+      liste.appendChild(item);
+    }
+  });
+
+  if (!hasOcc) {
+    liste.innerHTML = '<div class="dispo-empty">✅ Tous les espaces sont libres</div>';
   }
 }
 
-function setLoading(on) { document.getElementById('loading-bar').className='loading-bar'+(on?' active':''); }
-
-// ─── INIT ─────────────────────────────────────────────────
-document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
-document.getElementById('f-date').min   = new Date().toISOString().split('T')[0];
-renderEspaces();
-
-// Chargement données existantes (conflits)
-if (SCRIPT_URL !== 'VOTRE_URL_ICI') {
-  fetch(SCRIPT_URL+'?action=getAll', {redirect:'follow'})
-    .then(r=>r.json()).then(d=>{ if(d.reservations) reservations=d.reservations; })
-    .catch(()=>{});
+// ===== CALCUL =====
+function heureFin() {
+  if (!S.heure || !S.duree) return '';
+  const [h, m] = S.heure.split(':').map(Number);
+  const tot = h * 60 + m + Math.round(S.duree * 60);
+  return pad(Math.floor(tot/60)%24)+':'+(tot%60===0?'00':'30');
 }
+
+function calcTotal() {
+  if (!S.espace || !S.heure || !S.profil) return 0;
+  const tarif = TARIFS[S.espace][S.profilCode] || 0;
+  let t = tarif * S.duree;
+  if (S.opts.badge) t += 25;
+  if (S.opts.adhesion) t += 50;
+  return Math.round(t);
+}
+
+// ===== MAJ RÉCAP =====
+function majRecap() {
+  document.getElementById('r-espace').textContent = S.espace || '—';
+  document.getElementById('r-profil').textContent = S.profil || '—';
+
+  if (S.date) {
+    const d = new Date(S.date + 'T12:00:00');
+    document.getElementById('r-date').textContent = d.toLocaleDateString('fr-FR',{weekday:'short',day:'numeric',month:'short'});
+  } else document.getElementById('r-date').textContent = '—';
+
+  if (S.heure) {
+    document.getElementById('r-horaire').textContent = S.heure + ' → ' + (heureFin() || '?');
+  } else document.getElementById('r-horaire').textContent = '—';
+
+  document.getElementById('r-duree').textContent = S.duree ? S.duree + 'h' : '—';
+  document.getElementById('r-part').textContent = document.getElementById('nb-part')?.value || '—';
+
+  const total = calcTotal();
+  document.getElementById('r-total').textContent = total > 0 ? total + ' €' : '0 €';
+  document.getElementById('ib-tarif').style.display = S.profil ? 'flex' : 'none';
+
+  const prenom = document.getElementById('f-prenom')?.value;
+  const nom = document.getElementById('f-nom')?.value;
+  const email = document.getElementById('f-email')?.value;
+  const ok = S.espace && S.profil && S.date && S.heure && prenom && nom && email;
+  document.getElementById('btn-submit').disabled = !ok;
+}
+
+// ===== SOUMETTRE =====
+async function soumettre() {
+  const prenom = document.getElementById('f-prenom').value;
+  const nom = document.getElementById('f-nom').value;
+  const email = document.getElementById('f-email').value;
+
+  if (!prenom || !nom || !email) { alert('Merci de remplir les champs obligatoires.'); return; }
+
+  const equips = [...document.querySelectorAll('.equip-tag input:checked')].map(c => c.value).join(', ');
+
+  const payload = {
+    action: 'RESERVER',
+    espace: S.espace,
+    profil: S.profil,
+    profilCode: S.profilCode,
+    date: S.date,
+    heureDebut: S.heure,
+    duree: S.duree,
+    participants: document.getElementById('nb-part').value,
+    prenom: prenom, nom: nom, email: email,
+    tel: document.getElementById('f-tel').value,
+    structure: document.getElementById('f-struct').value,
+    message: document.getElementById('f-msg').value + (equips ? '\nÉquipements : ' + equips : ''),
+    montantEstime: calcTotal(),
+    optionBadge: S.opts.badge,
+    optionAdhesion: S.opts.adhesion,
+  };
+
+  document.getElementById('btn-txt').style.display = 'none';
+  document.getElementById('btn-spin').style.display = 'inline';
+  document.getElementById('btn-submit').disabled = true;
+
+  let resId = 'RES-' + Date.now();
+
+  if (APPS_SCRIPT_URL !== 'https://script.google.com/macros/s/AKfycbw5f4eTOV6q9n7OCo0m29fmECgUoML4xrn0QsUG1k2OmSUGYQQrkiPIu_Cs7x_qROiA/exec') {
+    try {
+      const resp = await fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+        mode: 'no-cors' // Google Apps Script nécessite no-cors
+      });
+      // En mode no-cors on ne peut pas lire la réponse, mais la requête passe
+    } catch(e) {
+      console.warn('Erreur fetch:', e);
+    }
+  } else {
+    // Mode démo : juste afficher le succès
+    await new Promise(r => setTimeout(r, 1200));
+  }
+
+  afficherSucces(resId, prenom);
+}
+
+function afficherSucces(id, prenom) {
+  document.getElementById('main-form').querySelectorAll('.card').forEach(c => c.style.display = 'none');
+  const s = document.getElementById('success');
+  s.classList.add('active');
+  document.getElementById('success-id').textContent = 'Référence : ' + id;
+}
+
+function resetForm() {
+  S = { espace:null, profilCode:'plein', profil:null, date:null, heure:null, duree:1, opts:{badge:false,adhesion:false}, cal:S.cal, reservations:{}, loadingDispo:false };
+  document.getElementById('success').classList.remove('active');
+  document.querySelectorAll('.card').forEach(c => c.style.display = '');
+  ['card-profil','card-date','card-options','card-contact'].forEach(id => {
+    const el = document.getElementById(id); if(el) el.style.display = 'none';
+  });
+  document.getElementById('creneaux-block').style.display = 'none';
+  document.getElementById('dispo-card').style.display = 'none';
+  document.querySelectorAll('.espace-btn,.profil-btn').forEach(b => b.classList.remove('selected'));
+  renderCal();
+  majRecap();
+}
+
+// ===== UTILS =====
+function fmtDate(d) {
+  return d.getFullYear()+'-'+pad(d.getMonth()+1,2)+'-'+pad(d.getDate(),2);
+}
+function pad(n) { return String(n).padStart(2,'0'); }
+function afficher(id) { const el=document.getElementById(id); if(el) el.style.display=''; }
 </script>
 </body>
 </html>
