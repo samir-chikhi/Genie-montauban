@@ -572,7 +572,7 @@ button, input, select, textarea { font-family:inherit; }
           <textarea id="f-msg" placeholder="Précisions sur votre événement, besoins spécifiques, etc."></textarea>
         </div>
       </div>
-      <p class="field-hint" style="margin-top:10px">🔒 Données utilisées uniquement pour votre réservation. Conservation 3 ans. Droits : genie.montauban@gmail.com</p>
+      <p class="field-hint" style="margin-top:10px">🔒 Données utilisées uniquement pour votre réservation. Conservation 3 ans. Droits : <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4d2a2823242863202223392c382f2c230d2a202c2421632e2220">[email&#160;protected]</a></p>
     </div>
 
     <!-- SUCCÈS -->
@@ -634,14 +634,14 @@ button, input, select, textarea { font-family:inherit; }
     <div style="background:var(--blanc);border-radius:12px;box-shadow:var(--shadow-sm);padding:16px;margin-top:14px;border:1px solid var(--bord)">
       <div style="font-weight:700;font-size:14px;color:var(--bleu);margin-bottom:10px;">💬 Besoin d'aide ?</div>
       <a href="tel:+33651509718" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;background:var(--bleu);color:#fff;border-radius:8px;text-decoration:none;font-weight:700;font-size:14px;margin-bottom:8px;">📞 06 51 50 97 18</a>
-      <a href="mailto:genie.montauban@gmail.com" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:9px;background:var(--fond);color:var(--bleu);border-radius:8px;text-decoration:none;font-weight:600;font-size:13px;border:1.5px solid var(--bord);">✉️ genie.montauban@gmail.com</a>
+      <a href="/cdn-cgi/l/email-protection#9dfaf8f3f4f8b3f0f2f3e9fce8fffcf3ddfaf0fcf4f1b3fef2f0" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:9px;background:var(--fond);color:var(--bleu);border-radius:8px;text-decoration:none;font-weight:600;font-size:13px;border:1.5px solid var(--bord);">✉️ <span class="__cf_email__" data-cfemail="e483818a8d81ca898b8a90859186858aa48389858d88ca878b89">[email&#160;protected]</span></a>
     </div>
 
   </div>
 </div>
 
 <!-- ===== SCRIPT ===== -->
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ============================================================
 // CONFIGURATION — À METTRE À JOUR APRÈS DÉPLOIEMENT DU SCRIPT
 // Remplacez l'URL ci-dessous par l'URL de votre Apps Script déployé
@@ -1034,17 +1034,4 @@ function resetForm() {
   });
   document.getElementById('creneaux-block').style.display = 'none';
   document.getElementById('dispo-card').style.display = 'none';
-  document.querySelectorAll('.espace-btn,.profil-btn').forEach(b => b.classList.remove('selected'));
-  renderCal();
-  majRecap();
-}
-
-// ===== UTILS =====
-function fmtDate(d) {
-  return d.getFullYear()+'-'+pad(d.getMonth()+1,2)+'-'+pad(d.getDate(),2);
-}
-function pad(n) { return String(n).padStart(2,'0'); }
-function afficher(id) { const el=document.getElementById(id); if(el) el.style.display=''; }
-</script>
-</body>
-</html>
+  document.querySelectorAll('.espace-btn,.
