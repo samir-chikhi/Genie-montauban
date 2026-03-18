@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Génie Montauban</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bleu:#1E4A6E; --bleu-md:#2E6DA4; --bleu-lt:#EBF4FF;
+  --vert:#27AE60; --vert-lt:#E8F8F0;
+  --or:#C9993E; --or-lt:#FFF7E6;
+  --rouge:#E53E3E; --rouge-lt:#FFF0F0;
+  --texte:#1A2638; --muted:#6B7A8D;
+  --fond:#F0F4F8; --bord:#E2E8F0; --blanc:#fff;
+  --shadow:0 2px 12px rgba(0,0,0,.08);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--fond);color:var(--texte);font-size:14px;}
+a{color:var(--bleu);}
+
+/* ===== LOGIN ===== */
+#login-screen {
+  min-height:100vh; display:flex; align-items:center; justify-content:center;
+  background:linear-gradient(135deg,#162f47,var(--bleu-md));
+}
+.login-box {
+  background:var(--blanc); border-radius:16px;
+  padding:40px 36px; width:100%; max-width:380px;
+  box-shadow:0 20px 60px rgba(0,0,0,.25);
+}
+.login-box h1 { font-family:'DM Serif Display',serif; font-size:1.8rem; margin-bottom:4px; }
+.login-box p { color:var(--muted); font-size:13px; margin-bottom:24px; }
+.login-box input {
+  width:100%; border:1.5px solid var(--bord); border-radius:8px;
+  padding:11px 13px; font-size:15px; font-family:inherit;
+  margin-bottom:12px; transition:border .18s;
+}
+.login-box input:focus { outline:none; border-color:var(--bleu-md); }
+.btn-login {
+  width:100%; background:var(--bleu); color:#fff;
+  border:none; border-radius:8px; padding:12px;
+  font-size:15px; font-weight:700; cursor:pointer;
+  font-family:inherit; transition:all .18s;
+}
+.btn-login:hover { background:var(--bleu-md); }
+.login-err { color:var(--rouge); font-size:12px; margin-top:6px; display:none; }
+
+/* ===== ADMIN LAYOUT ===== */
+#admin-screen { display:none; min-height:100vh; flex-direction:column; }
+.admin-header {
+  background:var(--bleu); color:#fff;
+  height:56px; display:flex; align-items:center;
+  padding:0 20px; justify-content:space-between;
+  position:sticky; top:0; z-index:100;
+  box-shadow:0 2px 12px rgba(0,0,0,.2);
+}
+.admin-header h1 { font-family:'DM Serif Display',serif; font-size:1.3rem; }
+.admin-header .ah-right { display:flex; align-items:center; gap:12px; }
+.btn-logout {
+  background:rgba(255,255,255,.15); color:#fff;
+  border:1px solid rgba(255,255,255,.3); border-radius:6px;
+  padding:5px 12px; cursor:pointer; font-size:12px; font-weight:700;
+}
+
+/* ===== STATS BAR ===== */
+.stats-bar {
+  display:grid; grid-template-columns:repeat(4,1fr); gap:12px;
+  padding:16px 20px;
+}
+@media(max-width:700px){.stats-bar{grid-template-columns:repeat(2,1fr);}}
+.stat-card {
+  background:var(--blanc); border-radius:10px; padding:14px 16px;
+  box-shadow:var(--shadow); border-left:4px solid var(--bord);
+}
+.stat-card.blue { border-left-color:var(--bleu); }
+.stat-card.green { border-left-color:var(--vert); }
+.stat-card.orange { border-left-color:var(--or); }
+.stat-card.red { border-left-color:var(--rouge); }
+.stat-num { font-family:'DM Serif Display',serif; font-size:2rem; color:var(--texte); line-height:1; }
+.stat-label { font-size:11px; color:var(--muted); margin-top:2px; font-weight:600; text-transform:uppercase; letter-spacing:.4px; }
+
+/* ===== TABS ===== */
+.admin-tabs {
+  display:flex; gap:0; border-bottom:2px solid var(--bord);
+  padding:0 20px; background:var(--blanc);
+}
+.admin-tab {
+  padding:12px 18px; cursor:pointer; font-weight:700;
+  font-size:13px; color:var(--muted); border:none;
+  background:none; border-bottom:3px solid transparent;
+  margin-bottom:-2px; transition:all .18s; font-family:inherit;
+}
+.admin-tab:hover { color:var(--texte); }
+.admin-tab.active { color:var(--bleu); border-bottom-color:var(--bleu); }
+
+/* ===== PANEL ===== */
+.admin-panel { padding:20px; display:none; }
+.admin-panel.active { display:block; }
+
+/* ===== FILTRES ===== */
+.filters-bar { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; align-items:center; }
+.filter-chip {
+  padding:5px 14px; border-radius:20px; font-size:12px; font-weight:700;
+  border:1.5px solid var(--bord); background:var(--blanc); cursor:pointer;
+  color:var(--muted); transition:all .15s;
+}
+.filter-chip:hover { border-color:var(--bleu-md); color:var(--bleu); }
+.filter-chip.active { background:var(--bleu); border-color:var(--bleu); color:#fff; }
+.filter-chip.vert { background:var(--vert); border-color:var(--vert); color:#fff; }
+.filter-chip.or { background:var(--or); border-color:var(--or); color:#fff; }
+.filter-chip.rouge { background:var(--rouge); border-color:var(--rouge); color:#fff; }
+
+.search-input {
+  padding:7px 12px; border:1.5px solid var(--bord); border-radius:8px;
+  font-size:13px; font-family:inherit; width:220px;
+}
+.search-input:focus { outline:none; border-color:var(--bleu-md); }
+
+/* ===== TABLE ===== */
+.table-wrap { overflow-x:auto; border-radius:10px; box-shadow:var(--shadow); }
+table { width:100%; border-collapse:collapse; background:var(--blanc); font-size:13px; }
+thead tr { background:var(--bleu); color:#fff; }
+th { padding:10px 12px; text-align:left; font-weight:700; font-size:11px; text-transform:uppercase; letter-spacing:.4px; white-space:nowrap; }
+td { padding:10px 12px; border-bottom:1px solid var(--bord); vertical-align:middle; }
+tr:hover td { background:#FAFBFC; }
+tr:last-child td { border-bottom:none; }
+
+.statut-badge {
+  display:inline-block; padding:3px 9px; border-radius:10px;
+  font-size:10px; font-weight:800; letter-spacing:.3px; white-space:nowrap;
+}
+.s-attente { background:#FFF3CD; color:#856404; }
+.s-confirme { background:#D4EDDA; color:#155724; }
+.s-annule { background:#F8D7DA; color:#721C24; }
+.s-termine { background:#E2E3E5; color:#383D41; }
+
+.btn-action {
+  padding:4px 10px; border-radius:6px; cursor:pointer;
+  font-size:11px; font-weight:700; border:1.5px solid; transition:all .15s;
+  font-family:inherit;
+}
+.btn-confirmer { background:var(--vert-lt); color:var(--vert); border-color:var(--vert); }
+.btn-confirmer:hover { background:var(--vert); color:#fff; }
+.btn-annuler { background:var(--rouge-lt); color:var(--rouge); border-color:var(--rouge); }
+.btn-annuler:hover { background:var(--rouge); color:#fff; }
+
+/* ===== CALENDRIER ADMIN ===== */
+.cal-admin-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; }
+.cal-admin-day {
+  border:1px solid var(--bord); border-radius:6px;
+  min-height:70px; padding:6px; background:var(--blanc); position:relative;
+}
+.cal-admin-day .cad-num { font-size:11px; font-weight:700; color:var(--muted); }
+.cal-admin-day.today .cad-num { color:var(--vert); }
+.cal-event {
+  background:var(--bleu-lt); border-left:3px solid var(--bleu);
+  border-radius:3px; padding:2px 5px; font-size:10px;
+  margin-top:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  font-weight:600; color:var(--bleu);
+}
+.cal-event.confirme { background:var(--vert-lt); border-left-color:var(--vert); color:var(--vert); }
+.cal-event.attente { background:var(--or-lt); border-left-color:var(--or); color:#856404; }
+.cal-admin-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+.cal-admin-header h3 { font-size:15px; font-weight:700; }
+.cal-admin-dow { font-size:11px; font-weight:700; color:var(--muted); text-align:center; padding:5px 0; text-transform:uppercase; }
+
+/* ===== MODAL ===== */
+.modal-bg {
+  display:none; position:fixed; inset:0;
+  background:rgba(0,0,0,.45); z-index:500;
+  align-items:center; justify-content:center;
+}
+.modal-bg.open { display:flex; }
+.modal {
+  background:var(--blanc); border-radius:14px;
+  padding:28px; width:100%; max-width:520px;
+  box-shadow:0 20px 60px rgba(0,0,0,.2);
+  max-height:90vh; overflow-y:auto;
+}
+.modal h2 { font-family:'DM Serif Display',serif; font-size:1.4rem; margin-bottom:16px; }
+.modal-row { display:flex; justify-content:space-between; padding:7px 0; border-bottom:1px solid var(--fond); font-size:13px; }
+.modal-row .ml { color:var(--muted); }
+.modal-row .mv { font-weight:600; }
+.modal-actions { display:flex; gap:8px; margin-top:16px; flex-wrap:wrap; }
+.btn-close { background:var(--fond); color:var(--texte); border:1.5px solid var(--bord); border-radius:8px; padding:9px 18px; cursor:pointer; font-weight:700; font-family:inherit; }
+.msg-admin-input { width:100%; border:1.5px solid var(--bord); border-radius:8px; padding:9px 11px; font-size:13px; font-family:inherit; margin-top:8px; resize:vertical; min-height:60px; }
+.msg-admin-input:focus { outline:none; border-color:var(--bleu-md); }
+
+/* ===== LOADING ===== */
+.loading-block { text-align:center; padding:40px; color:var(--muted); }
+.spinner { display:inline-block; width:20px; height:20px; border:2px solid var(--bord); border-top-color:var(--bleu); border-radius:50%; animation:spin .6s linear infinite; vertical-align:middle; margin-right:6px; }
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* ===== REFRESH ===== */
+.btn-refresh {
+  padding:6px 12px; background:var(--blanc); color:var(--bleu);
+  border:1.5px solid var(--bleu); border-radius:7px;
+  cursor:pointer; font-size:12px; font-weight:700;
+  font-family:inherit; transition:all .15s; margin-left:auto;
+}
+.btn-refresh:hover { background:var(--bleu); color:#fff; }
+</style>
+</head>
+<body>
+
+<!-- ===== LOGIN ===== -->
+<div id="login-screen">
+  <div class="login-box">
+    <h1>Génie Admin</h1>
+    <p>Tableau de bord — Réservations & Adhésions</p>
+    <input type="password" id="pwd" placeholder="Mot de passe" onkeydown="if(event.key==='Enter')login()">
+    <button class="btn-login" onclick="login()">Se connecter →</button>
+    <div class="login-err" id="login-err">❌ Mot de passe incorrect</div>
+  </div>
+</div>
+
+<!-- ===== ADMIN ===== -->
+<div id="admin-screen">
+
+  <header class="admin-header">
+    <h1>🏛️ Génie — Administration</h1>
+    <div class="ah-right">
+      <span id="last-update" style="font-size:11px;opacity:.7;"></span>
+      <button class="btn-logout" onclick="logout()">Déconnexion</button>
+    </div>
+  </header>
+
+  <!-- STATS -->
+  <div class="stats-bar">
+    <div class="stat-card blue">
+      <div class="stat-num" id="stat-total">—</div>
+      <div class="stat-label">Réservations totales</div>
+    </div>
+    <div class="stat-card orange">
+      <div class="stat-num" id="stat-attente">—</div>
+      <div class="stat-label">En attente</div>
+    </div>
+    <div class="stat-card green">
+      <div class="stat-num" id="stat-confirme">—</div>
+      <div class="stat-label">Confirmées</div>
+    </div>
+    <div class="stat-card red">
+      <div class="stat-num" id="stat-adh">—</div>
+      <div class="stat-label">Adhésions en attente</div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="admin-tabs">
+    <button class="admin-tab active" onclick="showTab('reservations',this)">📅 Réservations</button>
+    <button class="admin-tab" onclick="showTab('adhesions',this)">🤝 Adhésions</button>
+    <button class="admin-tab" onclick="showTab('calendrier',this)">🗓️ Calendrier</button>
+  </div>
+
+  <!-- PANEL RÉSERVATIONS -->
+  <div class="admin-panel active" id="panel-reservations">
+    <div class="filters-bar">
+      <button class="filter-chip active" onclick="filtreRes('tous',this)">Toutes</button>
+      <button class="filter-chip" onclick="filtreRes('EN_ATTENTE',this)" style="background:var(--or-lt);border-color:var(--or);color:#856404;">⏳ En attente</button>
+      <button class="filter-chip" onclick="filtreRes('CONFIRME',this)" style="background:var(--vert-lt);border-color:var(--vert);color:var(--vert);">✅ Confirmées</button>
+      <button class="filter-chip" onclick="filtreRes('ANNULE',this)" style="background:var(--rouge-lt);border-color:var(--rouge);color:var(--rouge);">❌ Annulées</button>
+      <input class="search-input" id="search-res" placeholder="🔍 Nom, email, espace…" oninput="renderTableRes()">
+      <button class="btn-refresh" onclick="charger()">🔄 Actualiser</button>
+    </div>
+
+    <div id="table-res-wrap">
+      <div class="loading-block"><span class="spinner"></span>Chargement…</div>
+    </div>
+  </div>
+
+  <!-- PANEL ADHÉSIONS -->
+  <div class="admin-panel" id="panel-adhesions">
+    <div class="filters-bar">
+      <button class="filter-chip active" onclick="filtreAdh('tous',this)">Toutes</button>
+      <button class="filter-chip" onclick="filtreAdh('EN_ATTENTE',this)" style="background:var(--or-lt);border-color:var(--or);color:#856404;">⏳ En attente</button>
+      <button class="filter-chip" onclick="filtreAdh('CONFIRME',this)" style="background:var(--vert-lt);border-color:var(--vert);color:var(--vert);">✅ Traitées</button>
+      <input class="search-input" id="search-adh" placeholder="🔍 Nom, email, type…" oninput="renderTableAdh()">
+      <button class="btn-refresh" onclick="charger()">🔄 Actualiser</button>
+    </div>
+
+    <div id="table-adh-wrap">
+      <div class="loading-block"><span class="spinner"></span>Chargement…</div>
+    </div>
+  </div>
+
+  <!-- PANEL CALENDRIER -->
+  <div class="admin-panel" id="panel-calendrier">
+    <div class="cal-admin-header">
+      <button class="btn-refresh" style="margin-left:0" onclick="navCalAdmin(-1)">‹ Mois préc.</button>
+      <h3 id="cal-admin-titre"></h3>
+      <button class="btn-refresh" onclick="navCalAdmin(1)">Mois suiv. ›</button>
+    </div>
+    <div class="cal-admin-grid" id="cal-admin-dow"></div>
+    <div class="cal-admin-grid" id="cal-admin-grid"></div>
+  </div>
+
+</div>
+
+<!-- MODAL DÉTAIL -->
+<div class="modal-bg" id="modal-bg" onclick="if(event.target===this)fermerModal()">
+  <div class="modal" id="modal">
+    <h2 id="modal-titre"></h2>
+    <div id="modal-content"></div>
+    <div class="modal-actions" id="modal-actions"></div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// CONFIG — Même URL que reservation.html
+// ============================================================
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw5f4eTOV6q9n7OCo0m29fmECgUoML4xrn0QsUG1k2OmSUGYQQrkiPIu_Cs7x_qROiA/exec';
+// Mode démo si pas encore configuré
+const DEMO_MODE = APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbw5f4eTOV6q9n7OCo0m29fmECgUoML4xrn0QsUG1k2OmSUGYQQrkiPIu_Cs7x_qROiA/exec';
+// ============================================================
+
+let AUTH_TOKEN = null;
+let DATA = { reservations: [], adhesions: [] };
+let filtreResActif = 'tous';
+let filtreAdhActif = 'tous';
+let calAdminMois = null;
+
+// ===== DONNÉES DÉMO =====
+const DEMO_DATA = {
+  reservations: [
+    { id:'RES-001', statut:'EN_ATTENTE', dateCreation:'2026-03-18T09:00:00Z', espace:'Bourdelle', profil:'Tarif plein', date:'2026-03-20', heureDebut:'14:00', heureFin:'17:00', duree:3, participants:12, prenom:'Marie', nom:'Dupont', email:'marie.dupont@gmail.com', tel:'06 11 22 33 44', structure:'Association Action82', montant:90, message:'Formation ESS' },
+    { id:'RES-002', statut:'CONFIRME', dateCreation:'2026-03-17T11:00:00Z', espace:'Aristote', profil:'Adhérent Génie', date:'2026-03-19', heureDebut:'09:00', heureFin:'12:30', duree:3.5, participants:1, prenom:'Pierre', nom:'Martin', email:'pierre.martin@free.fr', tel:'06 55 44 33 22', structure:'Auto-entrepreneur', montant:35, message:'' },
+    { id:'RES-003', statut:'EN_ATTENTE', dateCreation:'2026-03-18T14:30:00Z', espace:'Freinet', profil:'Association / Syndicat', date:'2026-03-22', heureDebut:'10:00', heureFin:'12:00', duree:2, participants:8, prenom:'Sophie', nom:'Bernard', email:'sophie@syndicat82.fr', tel:'05 63 XX XX XX', structure:'Syndicat CFDT', montant:0, message:'Réunion mensuelle' },
+    { id:'RES-004', statut:'ANNULE', dateCreation:'2026-03-15T10:00:00Z', espace:'Gouges', profil:'Locataire Génie', date:'2026-03-18', heureDebut:'08:00', heureFin:'09:00', duree:1, participants:2, prenom:'Luc', nom:'Petit', email:'luc@startup.io', tel:'', structure:'StartupXYZ', montant:18, message:'' },
+  ],
+  adhesions: [
+    { id:'ADH-001', statut:'EN_ATTENTE', dateCreation:'2026-03-18T08:00:00Z', typeAdhesion:'Membre actif – Particulier (30–80€/an)', montant:45, modePaiement:'HelloAsso', prenom:'Claire', nom:'Fontaine', email:'claire.fontaine@hotmail.fr', tel:'06 77 88 99 00', adresse:'25 rue des Arts, 82000 Montauban', notes:'' },
+    { id:'ADH-002', statut:'CONFIRME', dateCreation:'2026-03-16T15:00:00Z', typeAdhesion:'Membre actif – Association (50€/an)', montant:50, modePaiement:'Virement bancaire', prenom:'Jean', nom:'Lenoir', email:'contact@assolenoir.fr', tel:'05 63 11 22 33', adresse:'7 allée des Mimosas, 82200 Moissac', notes:'Vérifié le 17/03' },
+  ]
+};
+
+// ===== LOGIN =====
+async function login() {
+  const pwd = document.getElementById('pwd').value;
+  if (!pwd) return;
+
+  if (DEMO_MODE) {
+    // Mode démo : accepte tout mot de passe
+    AUTH_TOKEN = 'demo-token';
+    ouvrirAdmin();
+    return;
+  }
+
+  try {
+    const resp = await fetch(APPS_SCRIPT_URL, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ action:'ADMIN_LOGIN', password:pwd })
+    });
+    const data = await resp.json();
+    if (data.success) {
+      AUTH_TOKEN = data.token;
+      ouvrirAdmin();
+    } else {
+      document.getElementById('login-err').style.display = 'block';
+    }
+  } catch(e) {
+    document.getElementById('login-err').textContent = '⚠️ Impossible de contacter le serveur — mode démo activé';
+    document.getElementById('login-err').style.display = 'block';
+    AUTH_TOKEN = 'demo-token';
+    setTimeout(ouvrirAdmin, 1200);
+  }
+}
+
+function logout() {
+  AUTH_TOKEN = null; DATA = { reservations:[], adhesions:[] };
+  document.getElementById('admin-screen').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('pwd').value = '';
+}
+
+function ouvrirAdmin() {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('admin-screen').style.display = 'flex';
+  document.getElementById('admin-screen').style.flexDirection = 'column';
+  const now = new Date();
+  calAdminMois = { y:now.getFullYear(), m:now.getMonth() };
+  charger();
+}
+
+// ===== CHARGER DONNÉES =====
+async function charger() {
+  if (DEMO_MODE) {
+    DATA = DEMO_DATA;
+    majStats();
+    renderTableRes();
+    renderTableAdh();
+    renderCalAdmin();
+    document.getElementById('last-update').textContent = 'Mode démo · ' + new Date().toLocaleTimeString('fr-FR');
+    return;
+  }
+
+  try {
+    const resp = await fetch(APPS_SCRIPT_URL, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ action:'ADMIN_GET_ALL', token:AUTH_TOKEN })
+    });
+    const data = await resp.json();
+    if (data.success) {
+      DATA = data;
+      majStats();
+      renderTableRes();
+      renderTableAdh();
+      renderCalAdmin();
+      document.getElementById('last-update').textContent = 'Mis à jour : ' + new Date().toLocaleTimeString('fr-FR');
+    }
+  } catch(e) {
+    DATA = DEMO_DATA; // Fallback démo
+    majStats(); renderTableRes(); renderTableAdh(); renderCalAdmin();
+    document.getElementById('last-update').textContent = '⚠️ Mode démo (serveur inaccessible)';
+  }
+}
+
+// ===== STATS =====
+function majStats() {
+  const res = DATA.reservations;
+  const adh = DATA.adhesions;
+  document.getElementById('stat-total').textContent = res.length;
+  document.getElementById('stat-attente').textContent = res.filter(r=>r.statut==='EN_ATTENTE').length;
+  document.getElementById('stat-confirme').textContent = res.filter(r=>r.statut==='CONFIRME').length;
+  document.getElementById('stat-adh').textContent = adh.filter(a=>a.statut==='EN_ATTENTE').length;
+}
+
+// ===== TABLE RÉSERVATIONS =====
+function renderTableRes() {
+  const search = document.getElementById('search-res').value.toLowerCase();
+  let items = DATA.reservations.filter(r => {
+    if (filtreResActif !== 'tous' && r.statut !== filtreResActif) return false;
+    if (search && !JSON.stringify(r).toLowerCase().includes(search)) return false;
+    return true;
+  });
+
+  const html = `
+  <div class="table-wrap">
+    <table>
+      <thead><tr>
+        <th>Réf.</th><th>Statut</th><th>Espace</th><th>Date & Horaire</th>
+        <th>Client</th><th>Profil</th><th>Montant</th><th>Actions</th>
+      </tr></thead>
+      <tbody>
+        ${items.length === 0 ? '<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:24px">Aucune réservation trouvée</td></tr>' :
+          items.map(r => `
+          <tr>
+            <td><code style="font-size:11px;color:var(--muted)">${r.id}</code></td>
+            <td><span class="statut-badge s-${r.statut.toLowerCase().replace('_','-')}">${statutLabel(r.statut)}</span></td>
+            <td><strong>${r.espace}</strong></td>
+            <td style="white-space:nowrap">${r.date}<br><small style="color:var(--muted)">${r.heureDebut}→${r.heureFin}</small></td>
+            <td>${r.prenom} ${r.nom}<br><small style="color:var(--muted)">${r.email}</small></td>
+            <td style="font-size:12px">${r.profil}</td>
+            <td><strong>${r.montant || 0} €</strong></td>
+            <td>
+              <div style="display:flex;gap:4px;flex-wrap:wrap">
+                <button class="btn-action" onclick='detailRes(${JSON.stringify(r)})' style="background:var(--bleu-lt);color:var(--bleu);border-color:var(--bleu)">👁 Détail</button>
+                ${r.statut === 'EN_ATTENTE' ? `<button class="btn-action btn-confirmer" onclick="majStatut('${r.id}','CONFIRME','reservation')">✅</button>` : ''}
+                ${r.statut !== 'ANNULE' ? `<button class="btn-action btn-annuler" onclick="majStatut('${r.id}','ANNULE','reservation')">❌</button>` : ''}
+              </div>
+            </td>
+          </tr>`).join('')}
+      </tbody>
+    </table>
+  </div>`;
+  document.getElementById('table-res-wrap').innerHTML = html;
+}
+
+// ===== TABLE ADHÉSIONS =====
+function renderTableAdh() {
+  const search = document.getElementById('search-adh').value.toLowerCase();
+  let items = DATA.adhesions.filter(a => {
+    if (filtreAdhActif !== 'tous' && a.statut !== filtreAdhActif) return false;
+    if (search && !JSON.stringify(a).toLowerCase().includes(search)) return false;
+    return true;
+  });
+
+  const html = `
+  <div class="table-wrap">
+    <table>
+      <thead><tr>
+        <th>Réf.</th><th>Statut</th><th>Type d'adhésion</th>
+        <th>Membre</th><th>Montant</th><th>Paiement</th><th>Date</th><th>Actions</th>
+      </tr></thead>
+      <tbody>
+        ${items.length === 0 ? '<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:24px">Aucune adhésion trouvée</td></tr>' :
+          items.map(a => `
+          <tr>
+            <td><code style="font-size:11px;color:var(--muted)">${a.id}</code></td>
+            <td><span class="statut-badge s-${a.statut.toLowerCase().replace('_','-')}">${statutLabel(a.statut)}</span></td>
+            <td style="font-size:12px;max-width:180px">${a.typeAdhesion}</td>
+            <td>${a.prenom} ${a.nom}<br><small style="color:var(--muted)">${a.email}</small></td>
+            <td><strong>${a.montant} €</strong></td>
+            <td style="font-size:12px">${a.modePaiement || '—'}</td>
+            <td style="font-size:11px;color:var(--muted)">${new Date(a.dateCreation).toLocaleDateString('fr-FR')}</td>
+            <td>
+              <div style="display:flex;gap:4px">
+                ${a.statut === 'EN_ATTENTE' ? `<button class="btn-action btn-confirmer" onclick="majStatut('${a.id}','CONFIRME','adhesion')">✅ Valider</button>` : ''}
+                ${a.statut !== 'ANNULE' ? `<button class="btn-action btn-annuler" onclick="majStatut('${a.id}','ANNULE','adhesion')">❌</button>` : ''}
+              </div>
+            </td>
+          </tr>`).join('')}
+      </tbody>
+    </table>
+  </div>`;
+  document.getElementById('table-adh-wrap').innerHTML = html;
+}
+
+// ===== CALENDRIER ADMIN =====
+function renderCalAdmin() {
+  if (!calAdminMois) return;
+  const { y, m } = calAdminMois;
+  const mNoms = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+  document.getElementById('cal-admin-titre').textContent = mNoms[m] + ' ' + y;
+
+  const dowEl = document.getElementById('cal-admin-dow');
+  dowEl.innerHTML = '';
+  ['Lu','Ma','Me','Je','Ve','Sa','Di'].forEach(j => {
+    const el = document.createElement('div'); el.className = 'cal-admin-dow'; el.textContent = j; dowEl.appendChild(el);
+  });
+
+  const grid = document.getElementById('cal-admin-grid');
+  grid.innerHTML = '';
+  const offset = (new Date(y,m,1).getDay()+6)%7;
+  const nbJ = new Date(y,m+1,0).getDate();
+  const today = new Date(); today.setHours(0,0,0,0);
+
+  for (let i = 0; i < offset; i++) {
+    const el = document.createElement('div'); el.style.display = 'block'; grid.appendChild(el);
+  }
+
+  for (let d = 1; d <= nbJ; d++) {
+    const dateStr = y+'-'+pad(m+1)+'-'+pad(d);
+    const date = new Date(y,m,d);
+    const el = document.createElement('div');
+    el.className = 'cal-admin-day';
+    if (date.toDateString() === today.toDateString()) el.classList.add('today');
+
+    el.innerHTML = `<div class="cad-num">${d}</div>`;
+
+    // Ajouter les réservations du jour
+    DATA.reservations.filter(r => r.date === dateStr && r.statut !== 'ANNULE').forEach(r => {
+      const ev = document.createElement('div');
+      ev.className = 'cal-event ' + (r.statut === 'CONFIRME' ? 'confirme' : 'attente');
+      ev.textContent = r.heureDebut + ' ' + r.espace.substring(0,6);
+      ev.title = r.prenom + ' ' + r.nom + ' — ' + r.espace;
+      ev.style.cursor = 'pointer';
+      ev.onclick = () => detailRes(r);
+      el.appendChild(ev);
+    });
+
+    grid.appendChild(el);
+  }
+}
+
+function navCalAdmin(d) {
+  calAdminMois.m += d;
+  if (calAdminMois.m > 11) { calAdminMois.m = 0; calAdminMois.y++; }
+  if (calAdminMois.m < 0) { calAdminMois.m = 11; calAdminMois.y--; }
+  renderCalAdmin();
+}
+
+// ===== DÉTAIL RÉSERVATION =====
+function detailRes(r) {
+  document.getElementById('modal-titre').textContent = '📅 ' + r.espace + ' — ' + r.date;
+  document.getElementById('modal-content').innerHTML = `
+    <div class="modal-row"><span class="ml">Référence</span><span class="mv">${r.id}</span></div>
+    <div class="modal-row"><span class="ml">Statut</span><span class="mv"><span class="statut-badge s-${r.statut.toLowerCase().replace('_','-')}">${statutLabel(r.statut)}</span></span></div>
+    <div class="modal-row"><span class="ml">Espace</span><span class="mv">${r.espace}</span></div>
+    <div class="modal-row"><span class="ml">Date</span><span class="mv">${r.date}</span></div>
+    <div class="modal-row"><span class="ml">Horaire</span><span class="mv">${r.heureDebut} → ${r.heureFin}</span></div>
+    <div class="modal-row"><span class="ml">Durée</span><span class="mv">${r.duree}h</span></div>
+    <div class="modal-row"><span class="ml">Participants</span><span class="mv">${r.participants || '—'}</span></div>
+    <div class="modal-row"><span class="ml">Profil</span><span class="mv">${r.profil}</span></div>
+    <div class="modal-row"><span class="ml">Montant</span><span class="mv">${r.montant} €</span></div>
+    <div class="modal-row"><span class="ml">Nom</span><span class="mv">${r.prenom} ${r.nom}</span></div>
+    <div class="modal-row"><span class="ml">Email</span><span class="mv"><a href="mailto:${r.email}">${r.email}</a></span></div>
+    <div class="modal-row"><span class="ml">Tél.</span><span class="mv">${r.tel || '—'}</span></div>
+    <div class="modal-row"><span class="ml">Structure</span><span class="mv">${r.structure || '—'}</span></div>
+    <div class="modal-row"><span class="ml">Message</span><span class="mv" style="max-width:65%;text-align:right;font-size:12px">${r.message || '—'}</span></div>
+    ${r.statut === 'EN_ATTENTE' ? `<div style="margin-top:12px"><label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px">Message de confirmation (optionnel)</label><textarea class="msg-admin-input" id="msg-conf" placeholder="Ex : Votre réservation est bien confirmée. La clé sera disponible à l'accueil…"></textarea></div>` : ''}
+  `;
+  const actions = document.getElementById('modal-actions');
+  actions.innerHTML = `<button class="btn-close" onclick="fermerModal()">Fermer</button>`;
+  if (r.statut === 'EN_ATTENTE') {
+    actions.innerHTML += `<button class="btn-action btn-confirmer" style="padding:9px 16px;font-size:13px" onclick="majStatutModal('${r.id}','CONFIRME','reservation')">✅ Confirmer & envoyer email</button>`;
+    actions.innerHTML += `<button class="btn-action btn-annuler" style="padding:9px 16px;font-size:13px" onclick="majStatutModal('${r.id}','ANNULE','reservation')">❌ Annuler</button>`;
+  }
+  document.getElementById('modal-bg').classList.add('open');
+}
+
+function fermerModal() {
+  document.getElementById('modal-bg').classList.remove('open');
+}
+
+// ===== MAJ STATUT =====
+async function majStatut(id, statut, type) {
+  const msgEl = document.getElementById('msg-conf');
+  const messageAdmin = msgEl ? msgEl.value : '';
+
+  if (DEMO_MODE) {
+    const arr = type === 'reservation' ? DATA.reservations : DATA.adhesions;
+    const item = arr.find(r => r.id === id);
+    if (item) { item.statut = statut; majStats(); renderTableRes(); renderTableAdh(); renderCalAdmin(); }
+    fermerModal();
+    return;
+  }
+
+  try {
+    await fetch(APPS_SCRIPT_URL, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ action:'ADMIN_UPDATE_STATUS', id, statut, type, messageAdmin, token:AUTH_TOKEN })
+    });
+  } catch(e) { console.warn('Erreur update:', e); }
+
+  await charger();
+  fermerModal();
+}
+
+function majStatutModal(id, statut, type) { majStatut(id, statut, type); }
+
+// ===== TABS =====
+function showTab(id, btn) {
+  document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+}
+
+// ===== FILTRES =====
+function filtreRes(val, btn) {
+  filtreResActif = val;
+  document.querySelectorAll('#panel-reservations .filter-chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  renderTableRes();
+}
+function filtreAdh(val, btn) {
+  filtreAdhActif = val;
+  document.querySelectorAll('#panel-adhesions .filter-chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  renderTableAdh();
+}
+
+// ===== UTILS =====
+function statutLabel(s) {
+  return { EN_ATTENTE:'⏳ En attente', CONFIRME:'✅ Confirmé', ANNULE:'❌ Annulé', TERMINE:'🏁 Terminé' }[s] || s;
+}
+function pad(n) { return String(n).padStart(2,'0'); }
+</script>
+</body>
+</html>
