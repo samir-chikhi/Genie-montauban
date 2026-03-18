@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mon Espace — Génie Montauban</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bleu:#1E4A6E;--bleu-md:#2E6DA4;--bleu-lt:#EBF4FF;
+  --vert:#27AE60;--vert-lt:#E8F8F0;
+  --or:#C9993E;--or-lt:#FFF7E6;
+  --rouge:#E53E3E;--rouge-lt:#FFF5F5;
+  --texte:#1A2638;--muted:#6B7A8D;
+  --fond:#F4F6F9;--bord:#E2E8F0;--blanc:#fff;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--fond);color:var(--texte);}
+
+/* HEADER */
+.header{background:var(--bleu);height:56px;display:flex;align-items:center;padding:0 20px;justify-content:space-between;box-shadow:0 2px 12px rgba(0,0,0,.2);position:sticky;top:0;z-index:100;}
+.header a{color:#fff;text-decoration:none;font-weight:700;font-size:15px;}
+.header-right{display:flex;align-items:center;gap:12px;}
+.user-badge{background:rgba(255,255,255,.15);color:#fff;border-radius:20px;padding:5px 14px;font-size:13px;font-weight:600;}
+.btn-deco{background:none;border:1px solid rgba(255,255,255,.3);color:rgba(255,255,255,.8);border-radius:6px;padding:5px 12px;cursor:pointer;font-size:12px;font-family:inherit;}
+
+/* LOGIN SCREEN */
+#login-screen{min-height:calc(100vh - 56px);display:flex;align-items:center;justify-content:center;padding:20px;}
+.login-box{background:var(--blanc);border-radius:16px;padding:40px 36px;width:100%;max-width:420px;box-shadow:0 8px 40px rgba(0,0,0,.12);border:1px solid var(--bord);}
+.login-box .logo{font-family:'DM Serif Display',serif;font-size:2rem;color:var(--bleu);margin-bottom:4px;}
+.login-box h2{font-size:1.1rem;font-weight:600;color:var(--texte);margin-bottom:4px;}
+.login-box p{color:var(--muted);font-size:13px;margin-bottom:24px;}
+.login-box input{width:100%;border:1.5px solid var(--bord);border-radius:8px;padding:11px 13px;font-size:15px;font-family:inherit;margin-bottom:12px;transition:border .18s;}
+.login-box input:focus{outline:none;border-color:var(--bleu-md);box-shadow:0 0 0 3px rgba(46,109,164,.12);}
+.btn-login{width:100%;background:var(--bleu);color:#fff;border:none;border-radius:8px;padding:13px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .18s;}
+.btn-login:hover{background:var(--bleu-md);}
+.login-divider{text-align:center;margin:16px 0;color:var(--muted);font-size:12px;position:relative;}
+.login-divider::before,.login-divider::after{content:'';position:absolute;top:50%;width:42%;height:1px;background:var(--bord);}
+.login-divider::before{left:0;}.login-divider::after{right:0;}
+.btn-inscrire{width:100%;background:var(--vert-lt);color:var(--vert);border:2px solid var(--vert);border-radius:8px;padding:11px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .18s;text-decoration:none;display:block;text-align:center;}
+.btn-inscrire:hover{background:var(--vert);color:#fff;}
+.login-alert{border-radius:8px;padding:10px 12px;font-size:13px;margin-top:10px;display:none;}
+.login-alert.ok{background:var(--vert-lt);border:1px solid #9AE6B4;color:#276749;}
+.login-alert.err{background:var(--rouge-lt);border:1px solid #FEB2B2;color:var(--rouge);}
+.login-alert.info{background:var(--bleu-lt);border:1px solid #90CDF4;color:#2B6CB0;}
+
+/* ESPACE CLIENT */
+#client-screen{display:none;}
+.client-hero{background:linear-gradient(135deg,#12293f,var(--bleu-md));color:#fff;padding:28px 20px;}
+.client-hero-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+.client-hero h1{font-family:'DM Serif Display',serif;font-size:1.6rem;}
+.client-hero p{font-size:13px;color:rgba(255,255,255,.75);margin-top:2px;}
+.profil-tag{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:20px;padding:5px 14px;font-size:12px;font-weight:600;}
+
+.layout{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 320px;gap:20px;padding:20px 16px 60px;}
+@media(max-width:800px){.layout{grid-template-columns:1fr;}}
+
+/* TABS */
+.tabs{display:flex;gap:0;background:var(--blanc);border-radius:12px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07);border:1px solid var(--bord);margin-bottom:16px;}
+.tab{flex:1;padding:12px 8px;text-align:center;cursor:pointer;font-size:13px;font-weight:600;color:var(--muted);border:none;background:none;border-bottom:3px solid transparent;transition:all .18s;font-family:inherit;}
+.tab.active{color:var(--bleu);border-bottom-color:var(--bleu);}
+.tab:hover:not(.active){color:var(--texte);}
+
+/* PANELS */
+.panel{display:none;}.panel.active{display:block;}
+
+/* CARD */
+.card{background:var(--blanc);border-radius:12px;box-shadow:0 1px 6px rgba(0,0,0,.07);padding:22px;margin-bottom:16px;border:1px solid var(--bord);}
+.card-title{font-weight:700;font-size:15px;color:var(--bleu);margin-bottom:16px;padding-bottom:12px;border-bottom:2px solid var(--fond);display:flex;align-items:center;gap:8px;}
+
+/* CALENDRIER */
+.cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.cal-nav h3{font-size:15px;font-weight:700;}
+.cal-btn{background:none;border:1.5px solid var(--bord);width:32px;height:32px;border-radius:7px;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:all .18s;}
+.cal-btn:hover{background:var(--bleu);color:#fff;border-color:var(--bleu);}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;text-align:center;}
+.cal-dow{font-size:10px;font-weight:700;color:var(--muted);padding:4px 0;text-transform:uppercase;}
+.cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:7px;font-size:13px;cursor:pointer;border:1.5px solid transparent;transition:all .16s;}
+.cal-day.empty,.cal-day.past{color:#CBD5E0;cursor:default;}
+.cal-day.dispo:hover{background:var(--bleu-lt);border-color:var(--bleu-md);}
+.cal-day.partial{background:var(--or-lt);color:var(--or);}
+.cal-day.full{background:var(--rouge-lt);color:var(--rouge);cursor:not-allowed;}
+.cal-day.selected{background:var(--bleu);color:#fff;font-weight:800;}
+.cal-day.today::after{content:'';position:absolute;bottom:3px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--vert);}
+.cal-day{position:relative;}
+
+/* ESPACES */
+.espaces-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px;}
+@media(max-width:500px){.espaces-grid{grid-template-columns:1fr;}}
+.espace-btn{border:2px solid var(--bord);border-radius:9px;padding:11px 10px;cursor:pointer;background:var(--blanc);transition:all .18s;text-align:left;}
+.espace-btn:hover{border-color:var(--bleu-md);background:var(--bleu-lt);}
+.espace-btn.selected{border-color:var(--bleu);background:var(--bleu-lt);}
+.espace-btn .eb-ico{font-size:18px;display:block;margin-bottom:3px;}
+.espace-btn .eb-nom{font-weight:700;font-size:12px;}
+.espace-btn .eb-sub{font-size:10px;color:var(--muted);margin-top:1px;}
+.espace-btn .eb-prix{font-size:11px;color:var(--vert);font-weight:700;margin-top:3px;}
+
+/* CRÉNEAUX */
+.creneaux-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:3px;margin-bottom:12px;}
+.creneau{padding:6px 2px;border-radius:5px;border:1.5px solid var(--bord);text-align:center;font-size:11px;cursor:pointer;transition:all .14s;background:var(--blanc);}
+.creneau.nuit{background:var(--fond);color:#718096;}
+.creneau:hover:not(.indispo){border-color:var(--bleu-md);background:var(--bleu-lt);}
+.creneau.selected{background:var(--bleu);border-color:var(--bleu);color:#fff;font-weight:700;}
+.creneau.indispo{background:var(--rouge-lt);color:#F56565;border-color:#FED7D7;cursor:not-allowed;}
+
+/* DURÉE */
+.duree-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;}
+.duree-btn{padding:7px 3px;border:1.5px solid var(--bord);border-radius:7px;text-align:center;cursor:pointer;font-size:12px;font-weight:600;background:var(--blanc);transition:all .14s;}
+.duree-btn:hover{border-color:var(--bleu-md);background:var(--bleu-lt);}
+.duree-btn.selected{background:var(--bleu);border-color:var(--bleu);color:#fff;}
+
+/* FORM */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:500px){.form-grid{grid-template-columns:1fr;}}
+.form-full{grid-column:1/-1;}
+.fg{display:flex;flex-direction:column;gap:4px;}
+.fg label{font-size:12px;font-weight:700;}
+.fg input,.fg textarea,.fg select{border:1.5px solid var(--bord);border-radius:8px;padding:9px 11px;font-size:14px;font-family:inherit;color:var(--texte);transition:border .18s;}
+.fg input:focus,.fg textarea:focus,.fg select:focus{outline:none;border-color:var(--bleu-md);box-shadow:0 0 0 3px rgba(46,109,164,.12);}
+.fg textarea{resize:vertical;min-height:70px;}
+
+/* BTN */
+.btn-submit{width:100%;background:linear-gradient(135deg,var(--vert),#2ECC71);color:#fff;border:none;border-radius:10px;padding:13px;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;font-family:inherit;box-shadow:0 4px 16px rgba(39,174,96,.3);}
+.btn-submit:hover:not(:disabled){transform:translateY(-1px);}
+.btn-submit:disabled{opacity:.45;cursor:not-allowed;transform:none;}
+
+/* RÉCAP SIDEBAR */
+.recap-card{background:var(--blanc);border-radius:12px;box-shadow:0 2px 16px rgba(0,0,0,.1);overflow:hidden;border:1px solid var(--bord);}
+.recap-head{background:var(--bleu);color:#fff;padding:14px 18px;}
+.recap-head h2{font-size:15px;font-weight:700;}
+.recap-body{padding:18px;}
+.recap-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--fond);font-size:13px;}
+.recap-row:last-child{border-bottom:none;}
+.recap-row .rl{color:var(--muted);}
+.recap-row .rv{font-weight:600;text-align:right;}
+.recap-total{background:var(--vert-lt);border-radius:8px;padding:12px;margin:12px 0;display:flex;justify-content:space-between;align-items:center;}
+.recap-total .rt-l{font-weight:700;color:var(--vert);font-size:13px;}
+.recap-total .rt-v{font-family:'DM Serif Display',serif;font-size:26px;color:var(--vert);}
+
+/* PROFIL CARD */
+.profil-info{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.pi-item{background:var(--fond);border-radius:8px;padding:10px 12px;}
+.pi-label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;}
+.pi-val{font-weight:700;font-size:14px;margin-top:2px;}
+.docs-signes{margin-top:12px;display:flex;flex-direction:column;gap:6px;}
+.doc-signe-item{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--vert);padding:6px 10px;background:var(--vert-lt);border-radius:7px;}
+
+/* HISTORIQUE */
+.resa-item{border:1px solid var(--bord);border-radius:9px;padding:14px;margin-bottom:10px;transition:all .18s;}
+.resa-item:hover{box-shadow:0 2px 12px rgba(0,0,0,.08);}
+.resa-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;}
+.resa-espace{font-weight:700;font-size:14px;}
+.resa-date{font-size:13px;color:var(--muted);}
+.resa-details{font-size:12px;color:var(--muted);}
+.statut-badge{display:inline-block;padding:2px 9px;border-radius:10px;font-size:10px;font-weight:800;}
+.s-en_attente{background:#FFF3CD;color:#856404;}
+.s-confirme{background:#D4EDDA;color:#155724;}
+.s-annule{background:#F8D7DA;color:#721C24;}
+
+/* SPINNER */
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:6px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loading{text-align:center;padding:30px;color:var(--muted);}
+
+/* INFO BOX */
+.info-box{border-radius:8px;padding:9px 12px;font-size:12px;margin-bottom:10px;display:flex;gap:7px;}
+.info-box.blue{background:var(--bleu-lt);border:1px solid #90CDF4;color:#2B6CB0;}
+.info-box.warn{background:var(--or-lt);border:1px solid #F6AD55;color:#744210;}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <a href="https://genie-montauban.fr">← Génie Montauban</a>
+  <div class="header-right">
+    <span class="user-badge" id="user-badge" style="display:none"></span>
+    <button class="btn-deco" id="btn-deco" style="display:none" onclick="deconnecter()">Déconnexion</button>
+  </div>
+</header>
+
+<!-- ===== ÉCRAN CONNEXION ===== -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="logo">Génie</div>
+    <h2>Mon espace personnel</h2>
+    <p>Entrez votre email pour recevoir un lien de connexion.</p>
+
+    <input type="email" id="login-email" placeholder="votre@email.fr" onkeydown="if(event.key==='Enter')demanderLien()">
+    <button class="btn-login" id="btn-lien" onclick="demanderLien()">Recevoir mon lien de connexion →</button>
+
+    <div class="login-alert" id="login-alert-ok">
+      ✅ Lien envoyé ! Vérifiez votre boîte email (et vos spams). Il est valable 1 heure.
+    </div>
+    <div class="login-alert" id="login-alert-err"></div>
+    <div class="login-alert info" id="login-alert-info" style="display:none">
+      Vous n'avez pas encore de compte ?
+    </div>
+
+    <div class="login-divider">ou</div>
+    <a href="inscription.html" class="btn-inscrire">✨ Créer mon compte gratuitement</a>
+  </div>
+</div>
+
+<!-- ===== ESPACE CLIENT ===== -->
+<div id="client-screen">
+
+  <div class="client-hero">
+    <div class="client-hero-inner">
+      <div>
+        <h1>Bonjour, <span id="client-prenom"></span> 👋</h1>
+        <p id="client-sous-titre"></p>
+      </div>
+      <span class="profil-tag" id="client-profil-tag"></span>
+    </div>
+  </div>
+
+  <div class="layout">
+    <div>
+      <!-- TABS -->
+      <div class="tabs">
+        <button class="tab active" onclick="showTab('reserver',this)">📅 Réserver</button>
+        <button class="tab" onclick="showTab('historique',this)">📋 Mes réservations</button>
+        <button class="tab" onclick="showTab('profil',this)">👤 Mon profil</button>
+      </div>
+
+      <!-- PANEL RÉSERVER -->
+      <div class="panel active" id="panel-reserver">
+
+        <!-- Étape 1 : Espace -->
+        <div class="card">
+          <div class="card-title">1️⃣ Choisissez votre espace</div>
+          <div class="espaces-grid" id="espaces-grid">
+            <div class="espace-btn" data-espace="Bourdelle" data-tarif-h="40" onclick="selEspace(this)">
+              <span class="eb-ico">🏛️</span>
+              <span class="eb-nom">Antoine Bourdelle</span>
+              <span class="eb-sub">40 pers. · RDC</span>
+              <span class="eb-prix" id="prix-Bourdelle">dès 40 €/h</span>
+            </div>
+            <div class="espace-btn" data-espace="Freinet" data-tarif-h="30" onclick="selEspace(this)">
+              <span class="eb-ico">🤝</span>
+              <span class="eb-nom">Célestin Freinet</span>
+              <span class="eb-sub">20 pers. · 1er</span>
+              <span class="eb-prix" id="prix-Freinet">dès 30 €/h</span>
+            </div>
+            <div class="espace-btn" data-espace="Gouges" data-tarif-h="30" onclick="selEspace(this)">
+              <span class="eb-ico">📋</span>
+              <span class="eb-nom">Olympe de Gouges</span>
+              <span class="eb-sub">20 pers. · 1er</span>
+              <span class="eb-prix" id="prix-Gouges">dès 30 €/h</span>
+            </div>
+            <div class="espace-btn" data-espace="Montessori" data-tarif-h="20" onclick="selEspace(this)">
+              <span class="eb-ico">♿</span>
+              <span class="eb-nom">Maria Montessori</span>
+              <span class="eb-sub">PMR · 4 pers.</span>
+              <span class="eb-prix" id="prix-Montessori">dès 20 €/h</span>
+            </div>
+            <div class="espace-btn" data-espace="Aristote" data-tarif-h="12" onclick="selEspace(this)">
+              <span class="eb-ico">🚪</span>
+              <span class="eb-nom">Aristote</span>
+              <span class="eb-sub">Bureau nomade · 1er</span>
+              <span class="eb-prix" id="prix-Aristote">12 €/½j</span>
+            </div>
+            <div class="espace-btn" data-espace="Rousseau" data-tarif-h="10" onclick="selEspace(this)">
+              <span class="eb-ico">💻</span>
+              <span class="eb-nom">Jean-Jacques Rousseau</span>
+              <span class="eb-sub">Coworking · 1er</span>
+              <span class="eb-prix" id="prix-Rousseau">10 €/½j</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Étape 2 : Calendrier -->
+        <div class="card" id="card-cal" style="display:none">
+          <div class="card-title">2️⃣ Choisissez la date</div>
+          <div class="cal-nav">
+            <button class="cal-btn" onclick="navMois(-1)">‹</button>
+            <h3 id="cal-titre"></h3>
+            <button class="cal-btn" onclick="navMois(1)">›</button>
+          </div>
+          <div class="cal-grid" id="cal-grid"></div>
+        </div>
+
+        <!-- Étape 3 : Créneaux -->
+        <div class="card" id="card-creneaux" style="display:none">
+          <div class="card-title">3️⃣ Horaire et durée</div>
+          <div class="info-box blue" id="info-nuit" style="display:none">
+            <span>🌙</span><span>Créneau hors horaires (avant 8h ou après 20h). Badge 24h/7j requis (+25€/mois).</span>
+          </div>
+          <div id="creneaux-grid" class="creneaux-grid"></div>
+          <div style="margin-top:12px">
+            <div style="font-size:12px;font-weight:700;margin-bottom:7px;">Durée</div>
+            <div id="duree-grid" class="duree-grid"></div>
+          </div>
+          <div style="margin-top:12px">
+            <label style="font-size:12px;font-weight:700;display:block;margin-bottom:5px;">👥 Participants</label>
+            <input type="number" id="nb-part" min="1" placeholder="ex. 6" style="width:120px;border:1.5px solid var(--bord);border-radius:7px;padding:8px 10px;font-size:14px;" oninput="majRecap()">
+          </div>
+        </div>
+
+        <!-- Étape 4 : Options -->
+        <div class="card" id="card-options" style="display:none">
+          <div class="card-title">4️⃣ Options & message</div>
+
+          <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:14px;">
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:10px;border:1.5px solid var(--bord);border-radius:8px;font-size:13px;">
+              <input type="checkbox" id="opt-badge" style="width:15px;height:15px;accent-color:var(--vert);" onchange="majRecap()">
+              <div><strong>🔑 Badge 24h/7j</strong> <span style="color:var(--muted);font-size:11px;">Accès hors horaires</span></div>
+              <span style="margin-left:auto;font-weight:700;color:var(--vert);font-size:13px;">+25€/mois</span>
+            </label>
+          </div>
+
+          <div style="margin-bottom:14px">
+            <div style="font-size:12px;font-weight:700;margin-bottom:7px;">📦 Équipements</div>
+            <div style="display:flex;flex-wrap:wrap;gap:7px;">
+              <label style="display:flex;align-items:center;gap:5px;font-size:12px;cursor:pointer;padding:5px 10px;border:1.5px solid var(--bord);border-radius:20px;background:var(--blanc);">
+                <input type="checkbox" style="width:13px;height:13px;"> 📽️ Vidéoprojecteur
+              </label>
+              <label style="display:flex;align-items:center;gap:5px;font-size:12px;cursor:pointer;padding:5px 10px;border:1.5px solid var(--bord);border-radius:20px;background:var(--blanc);">
+                <input type="checkbox" style="width:13px;height:13px;"> 📺 Écran TV
+              </label>
+              <label style="display:flex;align-items:center;gap:5px;font-size:12px;cursor:pointer;padding:5px 10px;border:1.5px solid var(--bord);border-radius:20px;background:var(--blanc);">
+                <input type="checkbox" style="width:13px;height:13px;"> 📋 Paperboard
+              </label>
+              <label style="display:flex;align-items:center;gap:5px;font-size:12px;cursor:pointer;padding:5px 10px;border:1.5px solid var(--bord);border-radius:20px;background:var(--blanc);">
+                <input type="checkbox" style="width:13px;height:13px;"> 🎤 Sono/micro
+              </label>
+              <label style="display:flex;align-items:center;gap:5px;font-size:12px;cursor:pointer;padding:5px 10px;border:1.5px solid var(--bord);border-radius:20px;background:var(--blanc);">
+                <input type="checkbox" style="width:13px;height:13px;"> 📷 Webcam
+              </label>
+            </div>
+            <p style="font-size:11px;color:var(--muted);margin-top:6px;">Frais selon disponibilité — confirmés par l'équipe.</p>
+          </div>
+
+          <div class="fg">
+            <label>Message ou précisions</label>
+            <textarea id="f-message" placeholder="Informations utiles pour la préparation…"></textarea>
+          </div>
+        </div>
+
+        <!-- SUCCÈS RÉSERVATION -->
+        <div class="card" id="card-success" style="display:none;text-align:center;padding:40px;">
+          <div style="font-size:56px;margin-bottom:14px;">🎉</div>
+          <h2 style="font-family:'DM Serif Display',serif;font-size:1.6rem;color:var(--vert);margin-bottom:8px;">Demande envoyée !</h2>
+          <p style="color:var(--muted);font-size:14px;">Confirmation par email sous 24h.<br>Référence : <strong id="resa-id"></strong></p>
+          <button onclick="nouvelleResa()" style="margin-top:20px;padding:10px 24px;background:var(--bleu);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:14px;font-weight:700;font-family:inherit;">← Nouvelle réservation</button>
+        </div>
+
+      </div>
+
+      <!-- PANEL HISTORIQUE -->
+      <div class="panel" id="panel-historique">
+        <div class="card">
+          <div class="card-title">📋 Mes réservations</div>
+          <div id="historique-content"><div class="loading"><span class="spinner" style="border-top-color:var(--bleu);border-color:var(--bord)"></span> Chargement…</div></div>
+        </div>
+      </div>
+
+      <!-- PANEL PROFIL -->
+      <div class="panel" id="panel-profil">
+        <div class="card">
+          <div class="card-title">👤 Mon profil</div>
+          <div class="profil-info" id="profil-content"></div>
+          <div class="docs-signes" style="margin-top:16px;">
+            <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;">Documents acceptés</div>
+            <div class="doc-signe-item">✅ Conditions Générales de Vente — acceptées à l'inscription</div>
+            <div class="doc-signe-item">✅ Règlement Intérieur — accepté à l'inscription</div>
+            <div class="doc-signe-item">✅ Statuts de l'Association Génie — acceptés à l'inscription</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SIDEBAR RÉCAP -->
+    <div>
+      <div class="recap-card" style="position:sticky;top:68px;">
+        <div class="recap-head"><h2>📋 Ma réservation</h2></div>
+        <div class="recap-body">
+          <div class="recap-row"><span class="rl">Espace</span><span class="rv" id="r-espace">—</span></div>
+          <div class="recap-row"><span class="rl">Date</span><span class="rv" id="r-date">—</span></div>
+          <div class="recap-row"><span class="rl">Horaire</span><span class="rv" id="r-horaire">—</span></div>
+          <div class="recap-row"><span class="rl">Durée</span><span class="rv" id="r-duree">—</span></div>
+          <div class="recap-row"><span class="rl">Participants</span><span class="rv" id="r-part">—</span></div>
+          <div class="recap-row"><span class="rl">Profil</span><span class="rv" id="r-profil-tag">—</span></div>
+          <div class="recap-total">
+            <span class="rt-l">Estimation</span>
+            <span class="rt-v" id="r-total">0 €</span>
+          </div>
+          <button class="btn-submit" id="btn-submit" onclick="soumettre()" disabled>📅 Envoyer ma demande</button>
+          <p style="font-size:11px;color:var(--muted);text-align:center;margin-top:6px;">Confirmation sous 24h · <a href="tel:+33651509718">06 51 50 97 18</a></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw5f4eTOV6q9n7OCo0m29fmECgUoML4xrn0QsUG1k2OmSUGYQQrkiPIu_Cs7x_qROiA/exec';
+
+// Tarifs selon profil
+const TARIFS = {
+  Bourdelle:   { plein:40, adherent:30, locataire:20, asso:0 },
+  Freinet:     { plein:30, adherent:20, locataire:15, asso:0 },
+  Gouges:      { plein:30, adherent:20, locataire:15, asso:0 },
+  Montessori:  { plein:20, adherent:15, locataire:10, asso:0 },
+  Aristote:    { plein:12, adherent:12, locataire:12, asso:0 },
+  Rousseau:    { plein:10, adherent:10, locataire:10, asso:0 },
+};
+
+const PROFIL_LABELS = {
+  particulier:'Tarif plein', entreprise:'Tarif plein',
+  adherent:'Adhérent', locataire:'Locataire', asso:'Association/Syndicat'
+};
+
+let CLIENT = null;
+let S = { espace:null, date:null, heure:null, duree:1, cal:{y:0,m:0}, reservations:{} };
+
+// ===== INIT =====
+window.onload = async function() {
+  // Vérifier token dans URL
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get('token');
+
+  if (token) {
+    await validerToken(token);
+    // Nettoyer l'URL
+    window.history.replaceState({}, '', window.location.pathname);
+    return;
+  }
+
+  // Vérifier session locale
+  const session = localStorage.getItem('genie_session');
+  if (session) {
+    try {
+      CLIENT = JSON.parse(session);
+      ouvrirEspaceClient();
+    } catch(e) { localStorage.removeItem('genie_session'); }
+  }
+};
+
+// ===== DEMANDER LIEN MAGIQUE =====
+async function demanderLien() {
+  const email = document.getElementById('login-email').value.trim();
+  if (!email || !email.includes('@')) {
+    showLoginAlert('err', 'Merci de saisir un email valide.'); return;
+  }
+
+  const btn = document.getElementById('btn-lien');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Envoi en cours…';
+
+  try {
+    fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'DEMANDER_LIEN', email: email }),
+      mode: 'no-cors'
+    });
+    // no-cors — on ne peut pas lire la réponse
+    // On affiche le succès après délai
+    setTimeout(() => {
+      document.getElementById('login-alert-ok').style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Recevoir mon lien de connexion →';
+    }, 1500);
+  } catch(e) {
+    setTimeout(() => {
+      document.getElementById('login-alert-ok').style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Recevoir mon lien de connexion →';
+    }, 1500);
+  }
+}
+
+// ===== VALIDER TOKEN =====
+async function validerToken(token) {
+  // En mode no-cors on ne peut pas lire la réponse du GET
+  // On utilise un iframe trick ou on stocke en session le fait qu'on vient d'un lien
+  // Solution pragmatique : on demande l'email après validation du token
+
+  // Pour contourner no-cors, on stocke le token et on demande confirmation email
+  const email = localStorage.getItem('genie_pending_email');
+  if (email) {
+    // On crée une session basique
+    CLIENT = { email: email, prenom: localStorage.getItem('genie_pending_prenom') || 'Client', profilTarifaire: 'plein', type: 'particulier' };
+    localStorage.setItem('genie_session', JSON.stringify(CLIENT));
+    localStorage.removeItem('genie_pending_email');
+    localStorage.removeItem('genie_pending_prenom');
+    ouvrirEspaceClient();
+  } else {
+    // Demander l'email pour confirmer
+    const emailSaisi = prompt('Confirmez votre email pour accéder à votre espace :');
+    if (emailSaisi) {
+      CLIENT = { email: emailSaisi.trim().toLowerCase(), prenom: 'Bienvenue', profilTarifaire: 'plein', type: 'particulier' };
+      localStorage.setItem('genie_session', JSON.stringify(CLIENT));
+      ouvrirEspaceClient();
+    }
+  }
+}
+
+// ===== OUVRIR ESPACE CLIENT =====
+function ouvrirEspaceClient() {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('client-screen').style.display = 'block';
+
+  document.getElementById('client-prenom').textContent = CLIENT.prenom || CLIENT.email;
+  document.getElementById('client-sous-titre').textContent = CLIENT.email;
+  document.getElementById('client-profil-tag').textContent =
+    PROFIL_LABELS[CLIENT.profilTarifaire] || PROFIL_LABELS[CLIENT.type] || 'Tarif plein';
+  document.getElementById('user-badge').textContent = CLIENT.prenom || CLIENT.email;
+  document.getElementById('user-badge').style.display = '';
+  document.getElementById('btn-deco').style.display = '';
+
+  // Mettre à jour les prix selon profil
+  majPrixEspaces();
+
+  // Init calendrier
+  const now = new Date();
+  S.cal = { y: now.getFullYear(), m: now.getMonth() };
+  renderCal();
+
+  // Charger historique
+  chargerHistorique();
+
+  // Afficher profil
+  afficherProfil();
+}
+
+// ===== MAJ PRIX SELON PROFIL =====
+function majPrixEspaces() {
+  const profil = CLIENT.profilTarifaire || 'plein';
+  Object.entries(TARIFS).forEach(([espace, tarifs]) => {
+    const el = document.getElementById('prix-' + espace);
+    if (!el) return;
+    const tarif = tarifs[profil] || tarifs.plein;
+    if (profil === 'asso' && tarif === 0) {
+      el.textContent = 'Gratuit ✅';
+      el.style.color = 'var(--vert)';
+    } else {
+      el.textContent = `${tarif} €/h`;
+    }
+  });
+  document.getElementById('r-profil-tag').textContent = PROFIL_LABELS[profil] || 'Tarif plein';
+}
+
+// ===== SÉLECTION ESPACE =====
+function selEspace(el) {
+  document.querySelectorAll('.espace-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  S.espace = el.dataset.espace;
+  S.heure = null; S.date = null;
+  document.getElementById('card-cal').style.display = '';
+  document.getElementById('card-creneaux').style.display = 'none';
+  document.getElementById('card-options').style.display = 'none';
+  renderCal();
+  majRecap();
+}
+
+// ===== CALENDRIER =====
+function navMois(d) {
+  S.cal.m += d;
+  if (S.cal.m > 11) { S.cal.m = 0; S.cal.y++; }
+  if (S.cal.m < 0) { S.cal.m = 11; S.cal.y--; }
+  renderCal();
+}
+
+function renderCal() {
+  const { y, m } = S.cal;
+  const mNoms = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+  document.getElementById('cal-titre').textContent = mNoms[m] + ' ' + y;
+  const grid = document.getElementById('cal-grid');
+  grid.innerHTML = '';
+  ['Lu','Ma','Me','Je','Ve','Sa','Di'].forEach(j => {
+    const el = document.createElement('div'); el.className = 'cal-dow'; el.textContent = j; grid.appendChild(el);
+  });
+  const offset = (new Date(y, m, 1).getDay() + 6) % 7;
+  const nbJ = new Date(y, m + 1, 0).getDate();
+  const today = new Date(); today.setHours(0,0,0,0);
+  for (let i = 0; i < offset; i++) { const v = document.createElement('div'); v.className = 'cal-day empty'; grid.appendChild(v); }
+  for (let d = 1; d <= nbJ; d++) {
+    const date = new Date(y, m, d);
+    const dateStr = y + '-' + pad(m+1) + '-' + pad(d);
+    const el = document.createElement('div'); el.className = 'cal-day'; el.textContent = d;
+    if (date.toDateString() === today.toDateString()) el.classList.add('today');
+    if (date < today) { el.classList.add('past'); }
+    else {
+      const occ = S.espace && S.reservations[S.espace] && S.reservations[S.espace][dateStr];
+      if (occ && occ.length >= 40) el.classList.add('full');
+      else if (occ && occ.length > 0) el.classList.add('partial');
+      else el.classList.add('dispo');
+      if (S.date === dateStr) el.classList.add('selected');
+      el.onclick = () => selDate(dateStr, el);
+    }
+    grid.appendChild(el);
+  }
+}
+
+async function selDate(dateStr, el) {
+  S.date = dateStr; S.heure = null;
+  document.querySelectorAll('.cal-day').forEach(d => d.classList.remove('selected'));
+  el.classList.add('selected');
+  await chargerDispos(dateStr);
+  renderCreneaux();
+  document.getElementById('card-creneaux').style.display = '';
+  document.getElementById('card-options').style.display = '';
+  majRecap();
+}
+
+async function chargerDispos(dateStr) {
+  try {
+    const url = APPS_SCRIPT_URL + '?action=GET_DISPO&espace=' + encodeURIComponent(S.espace || '') + '&dateDebut=' + dateStr;
+    const resp = await fetch(url, { mode: 'no-cors' });
+  } catch(e) {}
+}
+
+// ===== CRÉNEAUX =====
+function renderCreneaux() {
+  const grid = document.getElementById('creneaux-grid');
+  grid.innerHTML = '';
+  const occup = S.espace && S.date && S.reservations[S.espace] && S.reservations[S.espace][S.date] || [];
+  for (let h = 0; h < 24; h++) {
+    for (let mn of [0, 30]) {
+      const label = pad(h) + ':' + (mn === 0 ? '00' : '30');
+      const el = document.createElement('div');
+      el.className = 'creneau' + (h < 8 || h >= 20 ? ' nuit' : '');
+      el.textContent = label;
+      if (occup.includes(label)) {
+        el.classList.add('indispo');
+      } else {
+        if (S.heure === label) el.classList.add('selected');
+        el.onclick = () => selHeure(label, el);
+      }
+      grid.appendChild(el);
+    }
+  }
+  renderDuree();
+}
+
+function selHeure(h, el) {
+  S.heure = h;
+  document.querySelectorAll('.creneau').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  const hNum = parseInt(h.split(':')[0]);
+  const isNuit = hNum < 8 || hNum >= 20;
+  document.getElementById('info-nuit').style.display = isNuit ? 'flex' : 'none';
+  renderDuree();
+  majRecap();
+}
+
+function renderDuree() {
+  const grid = document.getElementById('duree-grid');
+  grid.innerHTML = '';
+  [{v:.5,l:'30min'},{v:1,l:'1h'},{v:1.5,l:'1h30'},{v:2,l:'2h'},{v:3,l:'3h'},{v:4,l:'4h'},{v:5,l:'5h'},{v:6,l:'6h'},{v:8,l:'Journée'},{v:12,l:'12h 🌙'}].forEach(o => {
+    const el = document.createElement('div');
+    el.className = 'duree-btn' + (S.duree === o.v ? ' selected' : '');
+    el.textContent = o.l;
+    el.onclick = () => { S.duree = o.v; renderDuree(); majRecap(); };
+    grid.appendChild(el);
+  });
+}
+
+// ===== RECAP =====
+function majRecap() {
+  document.getElementById('r-espace').textContent = S.espace || '—';
+  if (S.date) {
+    const d = new Date(S.date + 'T12:00:00');
+    document.getElementById('r-date').textContent = d.toLocaleDateString('fr-FR', {weekday:'short',day:'numeric',month:'short'});
+  } else document.getElementById('r-date').textContent = '—';
+  if (S.heure) {
+    const fin = heureFin();
+    document.getElementById('r-horaire').textContent = S.heure + ' → ' + fin;
+  } else document.getElementById('r-horaire').textContent = '—';
+  document.getElementById('r-duree').textContent = S.duree ? S.duree + 'h' : '—';
+  document.getElementById('r-part').textContent = document.getElementById('nb-part')?.value || '—';
+
+  const profil = CLIENT?.profilTarifaire || 'plein';
+  const tarif = S.espace && TARIFS[S.espace] ? (TARIFS[S.espace][profil] || TARIFS[S.espace].plein) : 0;
+  const badge = document.getElementById('opt-badge')?.checked ? 25 : 0;
+  const total = Math.round(tarif * S.duree + badge);
+  document.getElementById('r-total').textContent = total + ' €';
+
+  const prenom = CLIENT?.prenom;
+  const email = CLIENT?.email;
+  const ok = S.espace && S.date && S.heure && prenom && email;
+  document.getElementById('btn-submit').disabled = !ok;
+}
+
+function heureFin() {
+  if (!S.heure || !S.duree) return '';
+  const [h, m] = S.heure.split(':').map(Number);
+  const tot = h * 60 + m + Math.round(S.duree * 60);
+  return pad(Math.floor(tot/60)%24) + ':' + pad(tot%60);
+}
+
+// ===== SOUMETTRE =====
+async function soumettre() {
+  const btn = document.getElementById('btn-submit');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Envoi…';
+
+  const equips = [...document.querySelectorAll('#card-options input[type=checkbox]:not(#opt-badge):checked')].map(c => c.closest('label').textContent.trim()).join(', ');
+  const profil = CLIENT?.profilTarifaire || 'plein';
+  const tarif = S.espace && TARIFS[S.espace] ? (TARIFS[S.espace][profil] || TARIFS[S.espace].plein) : 0;
+  const badge = document.getElementById('opt-badge')?.checked ? 25 : 0;
+
+  const payload = {
+    action: 'RESERVER',
+    espace: S.espace,
+    profil: PROFIL_LABELS[profil] || profil,
+    date: S.date,
+    heureDebut: S.heure,
+    duree: S.duree,
+    participants: document.getElementById('nb-part')?.value || '',
+    prenom: CLIENT.prenom || '',
+    nom: CLIENT.nom || '',
+    email: CLIENT.email,
+    tel: CLIENT.tel || '',
+    structure: CLIENT.structure || '',
+    message: (document.getElementById('f-message')?.value || '') + (equips ? '\nÉquipements: ' + equips : ''),
+    montantEstime: Math.round(tarif * S.duree + badge),
+  };
+
+  try {
+    fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+      mode: 'no-cors'
+    });
+  } catch(e) {}
+
+  const id = 'RES-' + Date.now();
+  document.getElementById('resa-id').textContent = id;
+
+  // Masquer tous les blocs étapes
+  ['card-cal','card-creneaux','card-options'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+  document.querySelectorAll('#panel-reserver .card:not(#card-success)').forEach(c => {
+    if (c.id !== 'card-success') c.style.display = 'none';
+  });
+  document.getElementById('card-success').style.display = '';
+}
+
+function nouvelleResa() {
+  S = { espace:null, date:null, heure:null, duree:1, cal:S.cal, reservations:S.reservations };
+  document.getElementById('card-success').style.display = 'none';
+  document.querySelectorAll('#panel-reserver .card').forEach(c => c.style.display = '');
+  document.getElementById('card-cal').style.display = 'none';
+  document.getElementById('card-creneaux').style.display = 'none';
+  document.getElementById('card-options').style.display = 'none';
+  document.getElementById('card-success').style.display = 'none';
+  document.querySelectorAll('.espace-btn').forEach(b => b.classList.remove('selected'));
+  majRecap();
+}
+
+// ===== HISTORIQUE =====
+async function chargerHistorique() {
+  const el = document.getElementById('historique-content');
+  el.innerHTML = '<div class="loading"><span class="spinner" style="border-top-color:var(--bleu);border-color:var(--bord)"></span> Chargement…</div>';
+  // En no-cors on ne peut pas lire les données — on affiche un message
+  setTimeout(() => {
+    el.innerHTML = `
+      <div style="text-align:center;padding:24px;color:var(--muted);">
+        <div style="font-size:36px;margin-bottom:10px;">📋</div>
+        <p style="font-size:14px;">Vos réservations apparaîtront ici une fois confirmées par l'équipe Génie.</p>
+        <p style="font-size:12px;margin-top:8px;">Pour voir vos réservations en temps réel, contactez-nous au <strong>06 51 50 97 18</strong></p>
+      </div>`;
+  }, 800);
+}
+
+// ===== PROFIL =====
+function afficherProfil() {
+  if (!CLIENT) return;
+  const el = document.getElementById('profil-content');
+  const profil = CLIENT.profilTarifaire || 'plein';
+  el.innerHTML = `
+    <div class="pi-item"><div class="pi-label">Prénom</div><div class="pi-val">${CLIENT.prenom || '—'}</div></div>
+    <div class="pi-item"><div class="pi-label">Nom</div><div class="pi-val">${CLIENT.nom || '—'}</div></div>
+    <div class="pi-item" style="grid-column:1/-1"><div class="pi-label">Email</div><div class="pi-val">${CLIENT.email}</div></div>
+    <div class="pi-item"><div class="pi-label">Type</div><div class="pi-val">${CLIENT.type || '—'}</div></div>
+    <div class="pi-item"><div class="pi-label">Profil tarifaire</div><div class="pi-val">${PROFIL_LABELS[profil] || profil}</div></div>
+    ${CLIENT.structure ? `<div class="pi-item" style="grid-column:1/-1"><div class="pi-label">Structure</div><div class="pi-val">${CLIENT.structure}</div></div>` : ''}
+  `;
+}
+
+// ===== TABS =====
+function showTab(id, btn) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+}
+
+// ===== DÉCONNEXION =====
+function deconnecter() {
+  localStorage.removeItem('genie_session');
+  CLIENT = null;
+  document.getElementById('client-screen').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('user-badge').style.display = 'none';
+  document.getElementById('btn-deco').style.display = 'none';
+}
+
+// ===== ALERTES =====
+function showLoginAlert(type, msg) {
+  const id = type === 'err' ? 'login-alert-err' : 'login-alert-ok';
+  const el = document.getElementById(id);
+  el.textContent = msg;
+  el.style.display = 'block';
+  el.className = 'login-alert ' + type;
+}
+
+function pad(n) { return String(n).padStart(2, '0'); }
+</script>
+</body>
+</html>

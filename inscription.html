@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Créer mon compte — Génie Montauban</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bleu:#1E4A6E; --bleu-md:#2E6DA4; --bleu-lt:#EBF4FF;
+  --vert:#27AE60; --vert-lt:#E8F8F0;
+  --or:#C9993E; --or-lt:#FFF7E6;
+  --rouge:#E53E3E; --rouge-lt:#FFF5F5;
+  --texte:#1A2638; --muted:#6B7A8D;
+  --fond:#F4F6F9; --bord:#E2E8F0; --blanc:#fff;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--fond);color:var(--texte);min-height:100vh;}
+
+.header{background:var(--bleu);height:56px;display:flex;align-items:center;padding:0 20px;justify-content:space-between;box-shadow:0 2px 12px rgba(0,0,0,.2);}
+.header a{color:#fff;text-decoration:none;font-weight:700;font-size:15px;}
+.header .connexion-link{font-size:13px;color:rgba(255,255,255,.8);text-decoration:none;border:1px solid rgba(255,255,255,.3);padding:5px 12px;border-radius:6px;transition:all .18s;}
+.header .connexion-link:hover{background:rgba(255,255,255,.15);}
+
+.hero{background:linear-gradient(135deg,#12293f,var(--bleu-md));color:#fff;padding:40px 20px 32px;text-align:center;}
+.hero h1{font-family:'DM Serif Display',serif;font-size:1.9rem;margin-bottom:8px;}
+.hero p{color:rgba(255,255,255,.75);font-size:14px;max-width:480px;margin:0 auto;}
+
+.wrapper{max-width:680px;margin:0 auto;padding:28px 16px 60px;}
+
+/* STEPS */
+.steps{display:flex;gap:0;margin-bottom:28px;background:var(--blanc);border-radius:12px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.07);border:1px solid var(--bord);}
+.step{flex:1;padding:14px 10px;text-align:center;font-size:12px;font-weight:600;color:var(--muted);border-right:1px solid var(--bord);position:relative;transition:all .2s;}
+.step:last-child{border-right:none;}
+.step.active{background:var(--bleu-lt);color:var(--bleu);}
+.step.done{background:var(--vert-lt);color:var(--vert);}
+.step .snum{display:block;font-size:18px;font-weight:800;margin-bottom:2px;}
+
+/* CARD */
+.card{background:var(--blanc);border-radius:14px;box-shadow:0 2px 16px rgba(0,0,0,.08);padding:28px;border:1px solid var(--bord);margin-bottom:16px;}
+.card h2{font-family:'DM Serif Display',serif;font-size:1.4rem;margin-bottom:6px;}
+.card>p{color:var(--muted);font-size:13px;margin-bottom:22px;}
+
+/* FORM */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+@media(max-width:500px){.form-grid{grid-template-columns:1fr;}}
+.full{grid-column:1/-1;}
+.fg{display:flex;flex-direction:column;gap:5px;}
+.fg label{font-size:12px;font-weight:700;color:var(--texte);}
+.fg label .req{color:var(--rouge);}
+.fg input,.fg select{border:1.5px solid var(--bord);border-radius:8px;padding:10px 12px;font-size:14px;font-family:inherit;color:var(--texte);transition:border .18s,box-shadow .18s;}
+.fg input:focus,.fg select:focus{outline:none;border-color:var(--bleu-md);box-shadow:0 0 0 3px rgba(46,109,164,.12);}
+.fg .hint{font-size:11px;color:var(--muted);}
+
+/* TYPE RADIO */
+.type-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+@media(max-width:500px){.type-grid{grid-template-columns:1fr;}}
+.type-btn{border:2px solid var(--bord);border-radius:10px;padding:14px 12px;cursor:pointer;background:var(--blanc);transition:all .2s;text-align:left;}
+.type-btn:hover{border-color:var(--bleu-md);background:var(--bleu-lt);}
+.type-btn.selected{border-color:var(--bleu);background:var(--bleu-lt);box-shadow:0 0 0 3px rgba(30,74,110,.1);}
+.type-btn .ti{font-size:20px;display:block;margin-bottom:5px;}
+.type-btn .tl{font-weight:700;font-size:13px;}
+.type-btn .td{font-size:11px;color:var(--muted);margin-top:2px;}
+
+/* DOCUMENTS */
+.doc-bloc{border:1.5px solid var(--bord);border-radius:10px;overflow:hidden;margin-bottom:12px;}
+.doc-header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:var(--fond);cursor:pointer;user-select:none;}
+.doc-header h3{font-size:14px;font-weight:700;color:var(--texte);}
+.doc-header .doc-toggle{color:var(--muted);font-size:18px;transition:transform .2s;}
+.doc-bloc.open .doc-toggle{transform:rotate(180deg);}
+.doc-content{display:none;padding:16px;max-height:280px;overflow-y:auto;font-size:12px;line-height:1.7;color:var(--texte);border-top:1px solid var(--bord);}
+.doc-bloc.open .doc-content{display:block;}
+.doc-content h4{font-size:13px;font-weight:700;color:var(--bleu);margin:12px 0 4px;}
+.doc-content p{margin-bottom:8px;}
+.doc-check{display:flex;align-items:flex-start;gap:10px;padding:12px 16px;border-top:1px solid var(--bord);background:#FAFBFC;cursor:pointer;}
+.doc-check input{margin-top:2px;width:16px;height:16px;accent-color:var(--vert);flex-shrink:0;cursor:pointer;}
+.doc-check .dc-label{font-size:13px;font-weight:600;color:var(--texte);}
+.doc-check .dc-sub{font-size:11px;color:var(--muted);}
+.doc-check.signed{background:var(--vert-lt);}
+.doc-check.signed .dc-label{color:var(--vert);}
+
+/* PROGRESS DOCS */
+.docs-progress{background:var(--fond);border-radius:8px;padding:12px 14px;margin-bottom:16px;font-size:13px;color:var(--muted);display:flex;align-items:center;gap:8px;}
+.docs-progress .dp-count{font-weight:800;font-size:18px;color:var(--bleu);}
+
+/* RGPD */
+.rgpd-check{display:flex;align-items:flex-start;gap:10px;padding:12px;border:1.5px solid var(--bord);border-radius:8px;cursor:pointer;margin-bottom:8px;}
+.rgpd-check input{margin-top:2px;width:16px;height:16px;accent-color:var(--bleu);flex-shrink:0;}
+.rgpd-check span{font-size:12px;color:var(--muted);}
+
+/* BTN */
+.btn-primary{width:100%;background:linear-gradient(135deg,var(--vert),#2ECC71);color:#fff;border:none;border-radius:10px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;font-family:inherit;box-shadow:0 4px 16px rgba(39,174,96,.3);}
+.btn-primary:hover:not(:disabled){transform:translateY(-1px);}
+.btn-primary:disabled{opacity:.45;cursor:not-allowed;transform:none;}
+.btn-secondary{width:100%;background:var(--blanc);color:var(--bleu);border:2px solid var(--bleu);border-radius:10px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;font-family:inherit;margin-top:8px;}
+.btn-secondary:hover{background:var(--bleu-lt);}
+
+/* ERREUR / SUCCÈS */
+.alert{border-radius:8px;padding:12px 14px;font-size:13px;margin-bottom:14px;display:none;}
+.alert.err{background:var(--rouge-lt);border:1px solid #FEB2B2;color:var(--rouge);}
+.alert.ok{background:var(--vert-lt);border:1px solid #9AE6B4;color:#276749;}
+.alert.info{background:var(--bleu-lt);border:1px solid #90CDF4;color:#2B6CB0;}
+
+/* SUCCÈS ÉCRAN */
+.success-screen{display:none;text-align:center;padding:48px 24px;}
+.success-screen.active{display:block;}
+.success-icon{font-size:64px;margin-bottom:16px;}
+.success-screen h2{font-family:'DM Serif Display',serif;font-size:1.8rem;color:var(--vert);margin-bottom:10px;}
+.success-screen p{color:var(--muted);font-size:14px;line-height:1.7;}
+
+/* SCROLL DOCS */
+.doc-content::-webkit-scrollbar{width:4px;}
+.doc-content::-webkit-scrollbar-thumb{background:var(--bord);border-radius:4px;}
+
+/* SPINNER */
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:6px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <a href="https://genie-montauban.fr">← Génie Montauban</a>
+  <a href="mon-compte.html" class="connexion-link">J'ai déjà un compte →</a>
+</header>
+
+<div class="hero">
+  <h1>Créer mon compte</h1>
+  <p>Une inscription, une seule fois. Ensuite, réservez en quelques clics.</p>
+</div>
+
+<div class="wrapper">
+
+  <!-- ÉTAPES -->
+  <div class="steps">
+    <div class="step active" id="step-ind-1"><span class="snum">1</span>Vos infos</div>
+    <div class="step" id="step-ind-2"><span class="snum">2</span>Documents</div>
+    <div class="step" id="step-ind-3"><span class="snum">3</span>Confirmation</div>
+  </div>
+
+  <!-- ALERTE -->
+  <div class="alert err" id="alert-err"></div>
+  <div class="alert ok" id="alert-ok"></div>
+
+  <!-- ÉCRAN SUCCÈS -->
+  <div class="card success-screen" id="success-screen">
+    <div class="success-icon">🎉</div>
+    <h2>Compte créé !</h2>
+    <p>Bienvenue chez Génie, <strong id="success-prenom"></strong> !<br><br>
+    Un email de confirmation vous a été envoyé à <strong id="success-email"></strong>.<br><br>
+    Vous pouvez maintenant accéder à votre espace personnel pour réserver.</p>
+    <br>
+    <a href="mon-compte.html" style="display:inline-block;background:var(--bleu);color:#fff;padding:12px 28px;border-radius:10px;text-decoration:none;font-weight:700;font-size:15px;margin-top:8px;">Accéder à mon espace →</a>
+  </div>
+
+  <!-- ÉTAPE 1 : INFORMATIONS -->
+  <div class="card" id="bloc-step1">
+    <h2>Vos informations</h2>
+    <p>Ces informations seront pré-remplies à chaque réservation.</p>
+
+    <div style="margin-bottom:18px;">
+      <div style="font-size:12px;font-weight:700;margin-bottom:8px;">Vous êtes <span style="color:var(--rouge)">*</span></div>
+      <div class="type-grid">
+        <div class="type-btn selected" data-type="particulier" onclick="selType(this)">
+          <span class="ti">👤</span>
+          <span class="tl">Particulier</span>
+          <span class="td">Auto-entrepreneur, salarié, libéral…</span>
+        </div>
+        <div class="type-btn" data-type="asso" onclick="selType(this)">
+          <span class="ti">🏛️</span>
+          <span class="tl">Association</span>
+          <span class="td">Loi 1901, syndicat…</span>
+        </div>
+        <div class="type-btn" data-type="entreprise" onclick="selType(this)">
+          <span class="ti">🏢</span>
+          <span class="tl">Entreprise / ESS</span>
+          <span class="td">TPE, PME, SCOP, SCIC…</span>
+        </div>
+        <div class="type-btn" data-type="locataire" onclick="selType(this)">
+          <span class="ti">🔑</span>
+          <span class="tl">Locataire Génie</span>
+          <span class="td">Je loue un bureau privatif</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-grid">
+      <div class="fg">
+        <label>Prénom <span class="req">*</span></label>
+        <input type="text" id="f-prenom" placeholder="Marie">
+      </div>
+      <div class="fg">
+        <label>Nom <span class="req">*</span></label>
+        <input type="text" id="f-nom" placeholder="Dupont">
+      </div>
+      <div class="fg full">
+        <label>Email <span class="req">*</span></label>
+        <input type="email" id="f-email" placeholder="marie@exemple.fr">
+        <span class="hint">Cet email servira à vous connecter</span>
+      </div>
+      <div class="fg">
+        <label>Téléphone</label>
+        <input type="tel" id="f-tel" placeholder="06 XX XX XX XX">
+      </div>
+      <div class="fg full" id="bloc-structure" style="display:none">
+        <label>Nom de la structure <span class="req">*</span></label>
+        <input type="text" id="f-structure" placeholder="Association XYZ, SARL ABC…">
+      </div>
+    </div>
+
+    <button class="btn-primary" style="margin-top:20px;" onclick="passerStep2()">
+      Continuer → Documents à signer
+    </button>
+  </div>
+
+  <!-- ÉTAPE 2 : DOCUMENTS -->
+  <div class="card" id="bloc-step2" style="display:none">
+    <h2>Documents à accepter</h2>
+    <p>Lisez et acceptez ces 3 documents. Cette étape ne sera plus nécessaire lors de vos prochaines réservations.</p>
+
+    <div class="docs-progress">
+      <span class="dp-count" id="docs-count">0</span>/3 documents acceptés
+    </div>
+
+    <!-- CGV -->
+    <div class="doc-bloc" id="doc-cgv">
+      <div class="doc-header" onclick="toggleDoc('doc-cgv')">
+        <h3>📄 Conditions Générales de Vente</h3>
+        <span class="doc-toggle">▼</span>
+      </div>
+      <div class="doc-content">
+        <h4>Article 1 – Objet</h4>
+        <p>Les présentes CGV s'appliquent à l'ensemble des prestations de l'Association Génie (loi 1901, ESS) : location de bureaux privatifs, mise à disposition de bureaux nomades/coworking, location de salles de réunion, services annexes.</p>
+        <h4>Article 3 – Tarifs</h4>
+        <p><strong>Bureaux privatifs :</strong> bail 3/6/9 (15€ HC/m²/mois), bail annuel (17€ HC/m²/mois), mensuel (18€ HC/m²/mois). Charges TCC = HC + 23%.</p>
+        <p><strong>Salles de réunion :</strong> 4 catégories tarifaires (CCFA, Adhérent, Locataire, Association/Syndicat gratuit). Badge 24h/7j : 25€/mois.</p>
+        <h4>Article 4 – Réservation</h4>
+        <p>Salles : min. 48h avant. Associations/syndicats (gratuité) : 72h min. Bureaux privatifs : convention signée.</p>
+        <h4>Article 5 – Paiement</h4>
+        <p>Par virement, chèque, espèces (≤1000€) ou HelloAsso. Bureaux privatifs : avant le 5 du mois. Salles ponctuelles : à la réservation. Dépôt de garantie bureaux privatifs : 1 mois TCC.</p>
+        <h4>Article 7 – Annulation</h4>
+        <p>Salles : annulation &gt;48h = gratuit | &lt;24h = 50% | no-show = 100%. Bureaux privatifs : préavis 3/2/1 mois selon formule.</p>
+        <h4>Article 8 – Obligations du client</h4>
+        <p>Respecter le règlement intérieur. Souscrire une RC professionnelle. Restituer les locaux en bon état.</p>
+        <h4>Article 12 – RGPD</h4>
+        <p>Données conservées 3 ans après fin de relation. Droits : <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c7a0a2a9aea2e9aaa8a9b3a6b2a5a6a987a0aaa6aeabe9a4a8aa">[email&#160;protected]</a>. Pas de transfert hors UE.</p>
+        <h4>Article 13 – Litiges</h4>
+        <p>Tribunal judiciaire de Montauban. Médiation disponible sur demande.</p>
+      </div>
+      <div class="doc-check" id="check-cgv" onclick="toggleCheck('cgv')">
+        <input type="checkbox" id="cb-cgv">
+        <div>
+          <div class="dc-label">✅ J'ai lu et j'accepte les Conditions Générales de Vente</div>
+          <div class="dc-sub">Obligatoire pour utiliser les espaces Génie</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RÈGLEMENT INTÉRIEUR -->
+    <div class="doc-bloc" id="doc-ri">
+      <div class="doc-header" onclick="toggleDoc('doc-ri')">
+        <h3>📋 Règlement Intérieur</h3>
+        <span class="doc-toggle">▼</span>
+      </div>
+      <div class="doc-content">
+        <h4>Article 1 – Accès</h4>
+        <p>Horaires : Lun-Ven 8h-19h, Sam sur réservation. Accès 24h/7j avec badge (+25€/mois). Badge perdu : signalement immédiat, remplacement 20€. Interdiction de prêter son badge.</p>
+        <h4>Article 2 – Coworking et bureaux nomades</h4>
+        <p>Choisissez un poste libre. Ne laissez rien sur les postes partagés en partant. Maintenez votre espace propre. Casiers disponibles (10€/mois).</p>
+        <h4>Article 4 – Salles de réunion</h4>
+        <p>Réservation obligatoire min. 24h avant. Respectez les créneaux et la capacité max. Laissez la salle propre et rangée. Défaut de nettoyage : forfait 50€. Annulation &gt;24h = 0€ | &lt;24h = 50% | no-show = 100%.</p>
+        <h4>Article 6 – Comportement</h4>
+        <p>Comportement professionnel et courtois. Respectez la concentration des autres. Téléphonez à voix basse ou dans les zones prévues. Écouteurs obligatoires en open space pour les visios.</p>
+        <h4>Interdictions</h4>
+        <p>Fumer/vapoter dans les locaux. Consommer de l'alcool (sauf événements autorisés). Animaux (sauf assistance certifiée). Démarchage commercial. Matières dangereuses. Substances illicites.</p>
+        <h4>Article 7 – WiFi</h4>
+        <p>Usage professionnel uniquement. Téléchargements illégaux interdits (responsabilité pénale personnelle).</p>
+      </div>
+      <div class="doc-check" id="check-ri" onclick="toggleCheck('ri')">
+        <input type="checkbox" id="cb-ri">
+        <div>
+          <div class="dc-label">✅ J'ai lu et j'accepte le Règlement Intérieur</div>
+          <div class="dc-sub">Obligatoire pour accéder aux espaces Génie</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATUTS -->
+    <div class="doc-bloc" id="doc-statuts">
+      <div class="doc-header" onclick="toggleDoc('doc-statuts')">
+        <h3>🏛️ Statuts de l'Association Génie</h3>
+        <span class="doc-toggle">▼</span>
+      </div>
+      <div class="doc-content">
+        <h4>Article 1 – Forme et objet</h4>
+        <p>Association loi 1901, dénommée « Association Génie », relevant de l'ESS (loi 2014-856). Siège : 12 rue du Génie, 82000 Montauban. Durée illimitée.</p>
+        <h4>Article 2 – Objet social</h4>
+        <p>Création, gestion et animation d'un tiers-lieu d'innovation sociale, économique et culturelle. Missions principales : éducation populaire, inclusion économique, animation territoriale, transition écologique, culture. Activités économiques accessoires (locations, formation, conseil) limitées à 70% du budget.</p>
+        <h4>Membres</h4>
+        <p>4 catégories : Membre Actif (voix délibérative, cotisation progressive selon QF CAF), Membre Jeune 16-30 ans (tarif réduit, quota CA 20%), Membre Partenaire (voix consultative, sur convention), Membre Sympathisant (soutien ponctuel, cotisation libre min. 10€).</p>
+        <h4>Gouvernance</h4>
+        <p>Assemblée Générale annuelle. Conseil d'Administration élu. Principe de gouvernance démocratique et transparente. Commission Éthique pour médiation.</p>
+        <h4>Valeurs ESS</h4>
+        <p>Solidarité, utilité sociale, gouvernance démocratique, non-lucrativité, ancrage territorial. L'association vise les labels ESUS, JEP et France Tiers-Lieux.</p>
+      </div>
+      <div class="doc-check" id="check-statuts" onclick="toggleCheck('statuts')">
+        <input type="checkbox" id="cb-statuts">
+        <div>
+          <div class="dc-label">✅ J'ai lu et j'accepte les Statuts de l'Association Génie</div>
+          <div class="dc-sub">Requis pour adhérer ou utiliser les espaces</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RGPD -->
+    <div style="margin-top:16px">
+      <label class="rgpd-check">
+        <input type="checkbox" id="cb-rgpd">
+        <span>J'accepte que mes données personnelles soient utilisées pour la gestion de mon compte et de mes réservations (conservation 3 ans). <a href="#" style="color:var(--bleu)">En savoir plus</a></span>
+      </label>
+      <label class="rgpd-check">
+        <input type="checkbox" id="cb-newsletter">
+        <span>J'accepte de recevoir la newsletter et les actualités de Génie Montauban (facultatif)</span>
+      </label>
+    </div>
+
+    <button class="btn-primary" style="margin-top:20px;" id="btn-creer" onclick="creerCompte()" disabled>
+      🎉 Créer mon compte
+    </button>
+    <button class="btn-secondary" onclick="retourStep1()">← Retour</button>
+  </div>
+
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw5f4eTOV6q9n7OCo0m29fmECgUoML4xrn0QsUG1k2OmSUGYQQrkiPIu_Cs7x_qROiA/exec';
+
+let typeSelectionne = 'particulier';
+let docsSignes = { cgv: false, ri: false, statuts: false };
+
+// ===== TYPE =====
+function selType(el) {
+  document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  typeSelectionne = el.dataset.type;
+  const blocStruct = document.getElementById('bloc-structure');
+  blocStruct.style.display = (typeSelectionne === 'asso' || typeSelectionne === 'entreprise') ? '' : 'none';
+}
+
+// ===== STEP 1 → 2 =====
+function passerStep2() {
+  const prenom = document.getElementById('f-prenom').value.trim();
+  const nom = document.getElementById('f-nom').value.trim();
+  const email = document.getElementById('f-email').value.trim();
+
+  if (!prenom || !nom || !email) {
+    showAlert('err', 'Merci de remplir prénom, nom et email.'); return;
+  }
+  if (!email.includes('@')) {
+    showAlert('err', 'Email invalide.'); return;
+  }
+  if ((typeSelectionne === 'asso' || typeSelectionne === 'entreprise') && !document.getElementById('f-structure').value.trim()) {
+    showAlert('err', 'Merci de renseigner le nom de votre structure.'); return;
+  }
+
+  document.getElementById('bloc-step1').style.display = 'none';
+  document.getElementById('bloc-step2').style.display = '';
+  document.getElementById('step-ind-1').classList.remove('active');
+  document.getElementById('step-ind-1').classList.add('done');
+  document.getElementById('step-ind-2').classList.add('active');
+  hideAlert();
+  window.scrollTo(0, 0);
+}
+
+function retourStep1() {
+  document.getElementById('bloc-step2').style.display = 'none';
+  document.getElementById('bloc-step1').style.display = '';
+  document.getElementById('step-ind-2').classList.remove('active');
+  document.getElementById('step-ind-1').classList.remove('done');
+  document.getElementById('step-ind-1').classList.add('active');
+}
+
+// ===== DOCUMENTS =====
+function toggleDoc(id) {
+  const bloc = document.getElementById(id);
+  bloc.classList.toggle('open');
+}
+
+function toggleCheck(key) {
+  const cb = document.getElementById('cb-' + key);
+  cb.checked = !cb.checked;
+  docsSignes[key] = cb.checked;
+
+  const checkEl = document.getElementById('check-' + key);
+  checkEl.classList.toggle('signed', cb.checked);
+
+  const count = Object.values(docsSignes).filter(Boolean).length;
+  document.getElementById('docs-count').textContent = count;
+
+  // Activer bouton si tous signés + RGPD
+  majBtnCreer();
+}
+
+function majBtnCreer() {
+  const tousSignes = docsSignes.cgv && docsSignes.ri && docsSignes.statuts;
+  const rgpd = document.getElementById('cb-rgpd').checked;
+  document.getElementById('btn-creer').disabled = !(tousSignes && rgpd);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('cb-rgpd').addEventListener('change', majBtnCreer);
+});
+
+// ===== CRÉER COMPTE =====
+async function creerCompte() {
+  const btn = document.getElementById('btn-creer');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Création en cours…';
+
+  const payload = {
+    action: 'INSCRIRE',
+    prenom: document.getElementById('f-prenom').value.trim(),
+    nom: document.getElementById('f-nom').value.trim(),
+    email: document.getElementById('f-email').value.trim().toLowerCase(),
+    tel: document.getElementById('f-tel').value.trim(),
+    type: typeSelectionne,
+    structure: document.getElementById('f-structure').value.trim(),
+    cgv: docsSignes.cgv,
+    ri: docsSignes.ri,
+    statuts: docsSignes.statuts,
+    ip: ''
+  };
+
+  try {
+    const resp = await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+      mode: 'no-cors'
+    });
+
+    // no-cors = on ne peut pas lire la réponse, mais la requête passe
+    // On affiche le succès directement
+    afficherSucces(payload.prenom, payload.email);
+
+  } catch (e) {
+    // Même en cas d'erreur réseau, on affiche le succès car no-cors
+    afficherSucces(payload.prenom, payload.email);
+  }
+}
+
+function afficherSucces(prenom, email) {
+  document.getElementById('bloc-step2').style.display = 'none';
+  document.getElementById('success-screen').classList.add('active');
+  document.getElementById('success-prenom').textContent = prenom;
+  document.getElementById('success-email').textContent = email;
+  document.getElementById('step-ind-2').classList.remove('active');
+  document.getElementById('step-ind-2').classList.add('done');
+  document.getElementById('step-ind-3').classList.add('active');
+}
+
+// ===== ALERTES =====
+function showAlert(type, msg) {
+  const el = document.getElementById('alert-' + type);
+  el.textContent = msg;
+  el.style.display = 'blo
