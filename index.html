@@ -1183,8 +1183,50 @@ async function envoyerAdhesion() {
 
   const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw5f4eTOV6q9n7OCo0m29fmECgUoML4xrn0QsUG1k2OmSUGYQQrkiPIu_Cs7x_qROiA/exec';
 
+  const btn = document.querySelector('.btn-submit-adh');
+  const orig = btn ? btn.textContent : '';
+  if (btn) btn.textContent = 'Envoi…';
+
   try {
     fetch(APPS_SCRIPT_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload), mode:'no-cors' });
-  } catch(e) {}
+    setTimeout(() => {
+      alert('✅ Demande d\'adhésion envoyée ! Nous vous contacterons sous 48h.');
+      if (btn) btn.textContent = orig;
+    }, 800);
+  } catch(e) {
+    alert('Erreur lors de l\'envoi. Écrivez-nous à genie.montauban@gmail.com');
+    if (btn) btn.textContent = orig;
+  }
+}
 
- 
+// ===== CONTACT =====
+async function envoyerContact() {
+  const prenom = document.getElementById('c-prenom').value.trim();
+  const nom = document.getElementById('c-nom').value.trim();
+  const email = document.getElementById('c-email').value.trim();
+  const sujet = document.getElementById('c-sujet').value.trim();
+  const message = document.getElementById('c-message').value.trim();
+
+  if (!email || !message) {
+    alert('Merci de remplir au moins votre email et votre message.'); return;
+  }
+
+  const payload = {
+    action: 'CONTACT',
+    prenom: prenom, nom: nom, email: email,
+    sujet: sujet, message: message
+  };
+
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw5f4eTOV6q9n7OCo0m29fmECgUoML4xrn0QsUG1k2OmSUGYQQrkiPIu_Cs7x_qROiA/exec';
+
+  try {
+    fetch(APPS_SCRIPT_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload), mode:'no-cors' });
+    document.getElementById('contact-success').style.display = 'block';
+    document.getElementById('contact-nomail').style.display = 'none';
+  } catch(e) {
+    document.getElementById('contact-nomail').style.display = 'block';
+  }
+}
+</script>
+</body>
+</html>
