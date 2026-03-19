@@ -143,11 +143,47 @@ textarea{resize:vertical;min-height:65px}
 .amount{font-family:'Fraunces',serif;font-weight:700}
 .info-bar{background:var(--steel-light);border:1px solid #C5D5E8;border-radius:8px;padding:10px 14px;font-size:12px;color:var(--steel);margin-bottom:16px}
 @media(max-width:1100px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
+/* ===== MOBILE ===== */
+.mob-toggle{display:none;background:none;border:none;cursor:pointer;padding:6px;border-radius:8px;color:var(--ink);font-size:22px;line-height:1;margin-right:8px}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(28,20,16,.5);z-index:49}
+@media(max-width:768px){
+  .sidebar{transform:translateX(-260px);transition:transform .25s ease;z-index:51;width:260px}
+  .sidebar.open{transform:translateX(0)}
+  .sidebar-overlay.open{display:block}
+  .main{margin-left:0}
+  .mob-toggle{display:inline-flex;align-items:center;justify-content:center}
+  .topbar{padding:11px 14px}
+  .content{padding:14px}
+  .stats-grid{grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px}
+  .stat-card{padding:13px}
+  .stat-value{font-size:24px}
+  #page-dashboard>div[style]{grid-template-columns:1fr !important;gap:14px}
+  .fgrid{grid-template-columns:1fr !important}
+  .dgrid{grid-template-columns:1fr !important}
+  .modal{border-radius:14px 14px 0 0;position:fixed;bottom:0;left:0;right:0;max-width:100%;max-height:88vh;margin:0}
+  .overlay{align-items:flex-end;padding:0}
+  .mfoot{flex-wrap:wrap}
+  .mfoot .btn{flex:1 1 auto;justify-content:center}
+  .card-hd{flex-wrap:wrap;gap:8px}
+  .plan-nav{flex-wrap:wrap;gap:8px}
+  .wlbl{min-width:0;font-size:15px}
+  .filter-bar{gap:6px}
+  .filter-bar input,.filter-bar select{width:100%}
+  .toasts{right:10px;left:10px;bottom:12px}
+  .toast{max-width:100%}
+  td,th{padding:8px 10px}
+}
+@media(max-width:480px){
+  .stats-grid{grid-template-columns:1fr 1fr;gap:8px}
+  .topbar h2{font-size:16px}
+  .content{padding:10px}
+}
 </style>
 </head>
 <body>
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
 <div class="layout">
-  <aside class="sidebar">
+  <aside class="sidebar" id="sidebar">
     <div class="logo"><h1>Gé<span>nie</span></h1><p>Administration · Tiers-Lieu</p></div>
     <nav class="nav">
       <div class="nav-s">Principal</div>
@@ -166,7 +202,10 @@ textarea{resize:vertical;min-height:65px}
 
   <div class="main">
     <div class="topbar">
-      <h2 id="ptitle">Tableau de bord</h2>
+      <div style="display:flex;align-items:center;gap:4px">
+        <button class="mob-toggle" onclick="toggleSidebar()" aria-label="Menu">☰</button>
+        <h2 id="ptitle">Tableau de bord</h2>
+      </div>
       <div class="topact" id="topbar-actions"></div>
     </div>
     <div class="content">
@@ -732,7 +771,12 @@ function printResa(id) {
 
 // ─── NAVIGATION ──────────────────────────────────────────
 const PAGE_T = { dashboard:'Tableau de bord', planning:'Planning semaine', reservations:'Réservations', clients:'Clients', espaces:'Espaces & Tarifs 2026', donnees:'Données & Configuration' };
-function go(name) {
+function toggleSidebar() {
+  const s=document.getElementById('sidebar'), o=document.getElementById('sidebar-overlay');
+  s.classList.toggle('open'); o.classList.toggle('open');
+}
+function closeSidebarMobile() { if(window.innerWidth<=768){ const s=document.getElementById('sidebar'),o=document.getElementById('sidebar-overlay'); s.classList.remove('open');o.classList.remove('open'); } }
+function go(name) { closeSidebarMobile();
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   document.getElementById('page-'+name).classList.add('active');
