@@ -26,8 +26,25 @@ function doPost(e) {
 
   const action = data.action || '';
 
+  // Vérification du token partagé (API key simple)
+  const scriptProperties = PropertiesService.getScriptProperties();
+  const expectedToken = scriptProperties.getProperty('API_SHARED_KEY');
+  const providedToken =
+    (data && data.token) ||
+    (e && e.parameter && e.parameter.token) ||
+    '';
+
+  if (!expectedToken || providedToken !== expectedToken) {
+    return repondre({ ok: false, erreur: 'Accès non autorisé' });
+  }
+
   try {
-    if (action === 'RESERVER')  return repondre(traiterReservation(data));
+    if (action === 'RESERVER') {
+      if (!validerReservationPayload(data)) {
+        return repondre({ ok: false, erreur: 'Données de réservation invalides ou incomplètes' });
+      }
+      return repondre(traiterReservation(data));
+    }
     if (action === 'ADHERER')   return repondre(traiterAdhesion(data));
     if (action === 'CONTACT')   return repondre(traiterContact(data));
     return repondre({ ok: false, erreur: 'Action inconnue : ' + action });
@@ -38,6 +55,16 @@ function doPost(e) {
 
 function doGet(e) {
   const action = e.parameter.action || '';
+
+  // Vérification du token partagé (API key simple)
+  const scriptProperties = PropertiesService.getScriptProperties();
+  const expectedToken = scriptProperties.getProperty('API_SHARED_KEY');
+  const providedToken = (e && e.parameter && e.parameter.token) || '';
+
+  if (!expectedToken || providedToken !== expectedToken) {
+    return repondreJSON({ ok: false, erreur: 'Accès non autorisé' });
+  }
+
   try {
     if (action === 'GET_RESERVATIONS') return repondreJSON(getReservations(e));
     return repondreJSON({ ok: true, message: 'API Génie Montauban opérationnelle' });
@@ -47,6 +74,53 @@ function doGet(e) {
 }
 
 // ─── RÉSERVATION ─────────────────────────────────────────────────
+/**
+ * Valide les champs essentiels pour une réservation avant de lancer les effets de bord.
+ */
+function validerReservationPayload(d) {
+  if (!d) return false;
+
+  // Champs obligatoires de base
+  const requiredStringFields = [
+    'espace',
+    'profil',
+    'date',
+    'heureDebut',
+    'prenom',
+    'nom',
+    'email'
+  ];
+
+  for (var i = 0; i < requiredStringFields.length; i++) {
+    var field = requiredStringFields[i];
+    if (!d[field] || typeof d[field] !== 'string') {
+      return false;
+    }
+  }
+
+  // Durée obligatoire et numérique positive
+  if (d.duree === undefined || d.duree === null || isNaN(Number(d.duree)) || Number(d.duree) <= 0) {
+    return false;
+  }
+
+  // Date au format simple AAAA-MM-JJ (validation basique)
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(d.date)) {
+    return false;
+  }
+
+  // Heure de début au format H ou HH ou HH:MM (validation basique)
+  if (!/^\d{1,2}(:\d{2})?$/.test(d.heureDebut)) {
+    return false;
+  }
+
+  // Email forme simple
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.email)) {
+    return false;
+  }
+
+  return true;
+}
+
 function traiterReservation(d) {
   const ref = 'RES-' + Date.now();
 
