@@ -63,6 +63,7 @@
       transition: box-shadow .3s;
     }
     nav.scrolled { box-shadow: var(--shadow); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; width: 100%; }
     .nav-logo {
       display: flex; align-items: center; gap: 10px;
     }
@@ -99,7 +100,7 @@
     ═══════════════════════════════════════════════ */
     .hero {
       min-height: 100vh;
-      display: flex; align-items: center;
+      display: flex; flex-direction: column; align-items: flex-start; justify-content: center;
       background: var(--navy);
       position: relative; overflow: hidden;
       padding: 120px 5% 80px;
@@ -120,6 +121,9 @@
       position: relative; z-index: 1;
       max-width: 680px;
     }
+    .hero-tag, .hero h1, .hero > p, .hero-btns, .hero-actions, .hero-stats {
+      position: relative; z-index: 1;
+    }
     .hero-tag {
       display: inline-flex; align-items: center; gap: 8px;
       background: rgba(201,153,62,.2); border: 1px solid rgba(201,153,62,.4);
@@ -137,35 +141,35 @@
       letter-spacing: -1px;
     }
     .hero h1 em { color: var(--gold); font-style: italic; }
-    .hero-sub {
+    .hero-sub, .hero > p, .hero-content > p {
       font-size: 1.1rem; color: rgba(255,255,255,.7);
       line-height: 1.7; margin-bottom: 40px; max-width: 540px;
       font-weight: 300;
     }
-    .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 56px; }
-    .btn-primary {
+    .hero-actions, .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 56px; }
+    .btn-primary, .btn-hero-primary {
       background: var(--gold); color: var(--white);
       padding: 14px 28px; border-radius: 10px;
       font-size: 15px; font-weight: 600;
       transition: all .2s; display: inline-flex; align-items: center; gap: 8px;
     }
-    .btn-primary:hover { background: #b8882e; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201,153,62,.4); }
-    .btn-ghost {
+    .btn-primary:hover, .btn-hero-primary:hover { background: #b8882e; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201,153,62,.4); }
+    .btn-ghost, .btn-hero-outline {
       background: rgba(255,255,255,.1); color: var(--white);
       padding: 14px 28px; border-radius: 10px; border: 1px solid rgba(255,255,255,.25);
       font-size: 15px; font-weight: 500;
       transition: all .2s;
     }
-    .btn-ghost:hover { background: rgba(255,255,255,.18); }
+    .btn-ghost:hover, .btn-hero-outline:hover { background: rgba(255,255,255,.18); }
     .hero-stats {
       display: flex; gap: 40px; flex-wrap: wrap;
       border-top: 1px solid rgba(255,255,255,.1); padding-top: 40px;
     }
-    .hero-stat-n {
+    .hero-stat-n, .hero-stat .num {
       font-family: 'Playfair Display', serif;
       font-size: 2.4rem; font-weight: 900; color: var(--gold); line-height: 1;
     }
-    .hero-stat-l { font-size: 12px; color: rgba(255,255,255,.55); letter-spacing: .5px; margin-top: 4px; }
+    .hero-stat-l, .hero-stat .lbl { font-size: 12px; color: rgba(255,255,255,.55); letter-spacing: .5px; margin-top: 4px; }
     .hero-visual {
       position: absolute; right: 5%; top: 50%; transform: translateY(-50%);
       width: min(440px, 40%); z-index: 1;
@@ -220,9 +224,34 @@
     .infobanner-item svg { color: var(--gold); flex-shrink: 0; }
 
     /* ═══════════════════════════════════════════════
+       LAYOUT HELPERS
+    ═══════════════════════════════════════════════ */
+    .container { max-width: 1200px; margin: 0 auto; }
+    .section-header { margin-bottom: 36px; }
+    .section-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      font-weight: 900; color: var(--navy); line-height: 1.1;
+      margin-bottom: 10px; letter-spacing: -.5px;
+    }
+    .section-header p { font-size: 1rem; color: var(--muted); line-height: 1.6; }
+
+    /* ═══════════════════════════════════════════════
        ESPACES
     ═══════════════════════════════════════════════ */
     #espaces { background: var(--cream); }
+    .espaces-tabs {
+      display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 32px;
+    }
+    .espace-tab {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: 8px; padding: 9px 16px;
+      font-size: 14px; font-weight: 500; color: var(--muted);
+      cursor: pointer; transition: all .2s;
+    }
+    .espace-tab:hover, .espace-tab.active {
+      background: var(--navy); color: var(--white); border-color: var(--navy);
+    }
     .espaces-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -256,6 +285,43 @@
     }
     .espace-prix-from { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
     .espace-prix-val { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; color: var(--brick); }
+    /* HTML alias classes */
+    .espace-card-header {
+      background: var(--navy); padding: 20px 20px 16px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .espace-card-header h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+    .espace-card-header .sous-titre { font-size: 12px; color: rgba(255,255,255,.55); font-family: 'DM Mono', monospace; }
+    .espace-ico {
+      width: 42px; height: 42px; border-radius: 10px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; background: rgba(201,153,62,.25);
+    }
+    .espace-ico.reunion { background: rgba(201,153,62,.25); }
+    .espace-ico.nomade { background: rgba(74,124,111,.3); }
+    .espace-ico.coworking { background: rgba(139,58,42,.25); }
+    .espace-ico.bail { background: rgba(255,255,255,.15); }
+    .espace-prix-box {
+      display: flex; align-items: baseline; gap: 6px;
+      background: var(--cream); border-radius: 8px; padding: 10px 14px; margin: 12px 0;
+    }
+    .espace-prix-box .prix { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; color: var(--brick); }
+    .espace-prix-box .unite { font-size: 12px; color: var(--muted); }
+    .btn-reserver-card {
+      display: block; text-align: center;
+      background: var(--gold); color: var(--white);
+      padding: 10px 18px; border-radius: 8px;
+      font-size: 14px; font-weight: 600;
+      transition: background .2s;
+    }
+    .btn-reserver-card:hover { background: #b8882e; color: var(--white); }
+    .btn-reserver {
+      background: var(--gold); color: var(--white);
+      padding: 10px 22px; border-radius: 8px;
+      font-size: 14px; font-weight: 600;
+      transition: background .2s;
+    }
+    .btn-reserver:hover { background: #b8882e; color: var(--white); }
 
     /* ═══════════════════════════════════════════════
        TARIFS
@@ -453,25 +519,53 @@
       .footer-grid { grid-template-columns: 1fr 1fr; }
     }
     @media (max-width: 768px) {
-      section { padding: 64px 5%; }
+      section { padding: 48px 4%; }
       .nav-links { display: none; }
       .nav-links.open {
         display: flex; flex-direction: column;
         position: fixed; top: 72px; left: 0; right: 0; bottom: 0;
-        background: var(--white); padding: 32px 5%;
-        align-items: flex-start; gap: 20px;
+        background: var(--white); padding: 28px 5%;
+        align-items: flex-start; gap: 16px;
         border-top: 1px solid var(--border);
+        overflow-y: auto;
         animation: slideDown .3s ease;
+        z-index: 999;
       }
       @keyframes slideDown { from{opacity:0;transform:translateY(-10px)} to{opacity:1;transform:none} }
-      .nav-links.open a { font-size: 18px; color: var(--ink); }
+      .nav-links.open a { font-size: 18px; color: var(--ink); padding: 6px 0; }
       .nav-burger { display: flex; }
       .contact-grid { grid-template-columns: 1fr; }
       .valeurs-grid { grid-template-columns: 1fr; }
       .footer-grid { grid-template-columns: 1fr; }
-      .hero-actions { flex-direction: column; }
-      .btn-primary, .btn-ghost { text-align: center; justify-content: center; }
+      .hero { min-height: auto; padding: 100px 5% 56px; }
+      .hero h1 { font-size: clamp(2rem, 8vw, 2.8rem); margin-bottom: 16px; }
+      .hero-tag { margin-bottom: 18px; font-size: 11px; }
+      .hero-actions, .hero-btns { flex-direction: column; gap: 10px; margin-bottom: 36px; }
+      .btn-primary, .btn-ghost, .btn-hero-primary, .btn-hero-outline { text-align: center; justify-content: center; width: 100%; }
+      .hero-stats { gap: 20px; padding-top: 28px; }
+      .hero-stat-n, .hero-stat .num { font-size: 1.8rem; }
       .profils-grid { grid-template-columns: 1fr; }
+      .espaces-grid { grid-template-columns: 1fr; gap: 14px; }
+      .adhesion-grid { grid-template-columns: 1fr; gap: 14px; }
+      .tarifs-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 8px; }
+      .tarifs-table-wrap table { min-width: 360px; font-size: 13px; }
+      .form-grid-2 { grid-template-columns: 1fr !important; }
+      .section-header h2 { font-size: clamp(1.4rem, 5vw, 2rem); }
+      .hero-stat { min-width: 70px; }
+      .hero-stats { gap: 12px; }
+    }
+    @media (max-width: 480px) {
+      section { padding: 40px 4%; }
+      .espaces-tabs { gap: 6px; flex-wrap: wrap; }
+      .espace-tab { padding: 7px 12px; font-size: 12px; flex-shrink: 0; }
+      .adh-card { padding: 20px 16px; }
+      .paiement-tags { gap: 6px; }
+      .paiement-tag { font-size: 12px; padding: 5px 10px; }
+      .btn-submit-adh, .btn-dl-adh { width: 100%; text-align: center; justify-content: center; }
+      .form-actions { flex-direction: column; gap: 10px; }
+      .contact-form-bloc { padding: 16px; }
+      footer { padding: 40px 16px 24px; }
+      .footer-grid { gap: 24px; }
     }
   </style>
 </head>
@@ -484,7 +578,7 @@
       <img src="logo.png" alt="Génie Montauban">
       <span>Génie</span>
     </a>
-    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')">☰</button>
+    <button class="nav-burger" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">☰</button>
     <div class="nav-links">
       <a href="#espaces">Espaces</a>
       <a href="#tarifs">Tarifs</a>
@@ -614,7 +708,7 @@
         <div class="espace-card-body">
           <p class="espace-desc">Bail mensuel : 225€/mois · Bail 1 an : 195€/mois · Bail 3/6/9 : 180€/mois. Charges comprises.</p>
           <div class="espace-prix-box"><span class="prix">180 €</span><span class="unite">/mois (bail 3/6/9)</span></div>
-          <a href="/cdn-cgi/l/email-protection#eb8c8e85828ec58684859f8a9e898a85ab8c868a8287c5888486d4989e89818e889fd6a784888a9f828485cb899e998e8a9ecbaa9982989f849f8e" class="btn-reserver-card">Nous contacter →</a>
+          <a href="mailto:genie.montauban@gmail.com?subject=Location bureau Louise Michel" class="btn-reserver-card">Nous contacter →</a>
         </div>
       </div>
 
@@ -626,7 +720,7 @@
         <div class="espace-card-body">
           <p class="espace-desc">Bail mensuel : 360€/mois · Bail 1 an : 312€/mois · Bail 3/6/9 : 288€/mois. Charges comprises.</p>
           <div class="espace-prix-box"><span class="prix">288 €</span><span class="unite">/mois (bail 3/6/9)</span></div>
-          <a href="/cdn-cgi/l/email-protection#5235373c3b377c3f3d3c26332730333c12353f333b3e7c313d3f6d212730383731266f1e3d3133263b3d3c7230272037332772023a3b3e3b222237721f373b203b3727" class="btn-reserver-card">Nous contacter →</a>
+          <a href="mailto:genie.montauban@gmail.com?subject=Location bureau Philippe Meirieu" class="btn-reserver-card">Nous contacter →</a>
         </div>
       </div>
 
@@ -638,7 +732,7 @@
         <div class="espace-card-body">
           <p class="espace-desc">Bail mensuel : 255€/mois · Bail 1 an : 221€/mois · Bail 3/6/9 : 204€/mois. Charges comprises.</p>
           <div class="espace-prix-box"><span class="prix">204 €</span><span class="unite">/mois (bail 3/6/9)</span></div>
-          <a href="/cdn-cgi/l/email-protection#8deae8e3e4e8a3e0e2e3f9ecf8efece3cdeae0ece4e1a3eee2e0b2fef8efe7e8eef9b0c1e2eeecf9e4e2e3adeff8ffe8ecf8adcce4e04e24e8adce4e24feece4ffe8" class="btn-reserver-card">Nous contacter →</a>
+          <a href="mailto:genie.montauban@gmail.com?subject=Location bureau Aimée Césaire" class="btn-reserver-card">Nous contacter →</a>
         </div>
       </div>
 
@@ -650,7 +744,7 @@
         <div class="espace-card-body">
           <p class="espace-desc">Bail mensuel : 255€/mois · Bail 1 an : 221€/mois · Bail 3/6/9 : 204€/mois. Charges comprises.</p>
           <div class="espace-prix-box"><span class="prix">204 €</span><span class="unite">/mois (bail 3/6/9)</span></div>
-          <a href="/cdn-cgi/l/email-protection#a6c1c3c8cfc388cbc9c8d2c7d3c4c7c8e6c1cbc7cfca88c5c9cb99d5d3c4ccc3c5d29beac9c5c7d2cfc9c886c4d3d4c3c7d386e5c9c8c2c9d4c5c3d2" class="btn-reserver-card">Nous contacter →</a>
+          <a href="mailto:genie.montauban@gmail.com?subject=Location bureau Condorcet" class="btn-reserver-card">Nous contacter →</a>
         </div>
       </div>
 
@@ -662,7 +756,7 @@
         <div class="espace-card-body">
           <p class="espace-desc">Bail mensuel : 240€/mois · Bail 1 an : 208€/mois · Bail 3/6/9 : 192€/mois. Charges comprises.</p>
           <div class="espace-prix-box"><span class="prix">192 €</span><span class="unite">/mois (bail 3/6/9)</span></div>
-          <a href="/cdn-cgi/l/email-protection#0c6b6962656922616362786d796e6d624c6b616d6560226f6361337f796e66696f783140636f6d786563622c6e797e696d792c4e6d6869622c5c637b696060" class="btn-reserver-card">Nous contacter →</a>
+          <a href="mailto:genie.montauban@gmail.com?subject=Location bureau Baden Powell" class="btn-reserver-card">Nous contacter →</a>
         </div>
       </div>
 
@@ -674,7 +768,7 @@
         <div class="espace-card-body">
           <p class="espace-desc">Bail mensuel : 180€/mois · Bail 1 an : 156€/mois · Bail 3/6/9 : 144€/mois. Accès PMR.</p>
           <div class="espace-prix-box"><span class="prix">144 €</span><span class="unite">/mois (bail 3/6/9)</span></div>
-          <a href="/cdn-cgi/l/email-protection#e98e8c87808cc78486879d889c8b8887a98e84888085c78a8684d69a9c8b838c8a9dd4a5868a889d808687c98b9c9b8c889cc9a486879d8c9a9a869b80" class="btn-reserver-card">Nous contacter →</a>
+          <a href="mailto:genie.montauban@gmail.com?subject=Location bureau Montessori" class="btn-reserver-card">Nous contacter →</a>
         </div>
       </div>
     </div>
@@ -689,7 +783,7 @@
       <p>Tarifs dégressifs selon votre statut. Les associations de Villebourbon et syndicats bénéficient de la gratuité.</p>
     </div>
 
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px;">
+    <div class="tarifs-intro">
       <div>
         <h3 style="font-size:15px;font-weight:700;margin-bottom:12px;color:var(--bleu);">Salles de réunion</h3>
         <div class="tarifs-table-wrap">
@@ -725,9 +819,6 @@
       </div>
     </div>
 
-    @media(max-width:700px){
-      /* inline fix */
-    }
   </div>
 </section>
 
@@ -845,7 +936,7 @@
           <li>Convention de partenariat dédiée</li>
           <li>Modalités sur mesure</li>
         </ul>
-        <a class="btn-adh" href="/cdn-cgi/l/email-protection#9afdfff4f3ffb4f7f5f4eefbeff8fbf4dafdf7fbf3f6b4f9f5f7a5e9eff8f0fff9eea7dbfef25933e9f3f5f4bad9f5f6f6fff9eef3ecf3ee5933">Nous contacter →</a>
+        <a class="btn-adh" href="mailto:genie.montauban@gmail.com?subject=Adhésion Collectivité">Nous contacter →</a>
       </div>
     </div>
 
@@ -917,7 +1008,7 @@
         <div class="fg form-full">
           <label class="rgpd-label">
             <input type="checkbox" id="adh-rgpd">
-            J'accepte que mes données personnelles soient utilisées pour la gestion de mon adhésion (conservation 3 ans, droits : <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="462123282f23682b292832273324272806212b272f2a6825292b">[email&#160;protected]</a>) <span class="req">*</span>
+            J'accepte que mes données personnelles soient utilisées pour la gestion de mon adhésion (conservation 3 ans, droits : genie.montauban@gmail.com) <span class="req">*</span>
           </label>
         </div>
       </div>
@@ -931,11 +1022,11 @@
         🎉 <strong>Demande envoyée !</strong> L'équipe Génie vous contacte sous 48h pour finaliser votre adhésion.
       </div>
       <div class="adh-nomail" id="adh-nomail">
-        💡 <strong>Votre messagerie va s'ouvrir.</strong> Si aucune fenêtre n'apparaît, écrivez directement à <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="2d4a4843444803404243594c584f4c436d4a404c4441034e4240">[email&#160;protected]</a></strong> avec votre type d'adhésion et vos coordonnées.
+        💡 <strong>Votre messagerie va s'ouvrir.</strong> Si aucune fenêtre n'apparaît, écrivez directement à <strong><a href="mailto:genie.montauban@gmail.com">genie.montauban@gmail.com</a></strong> avec votre type d'adhésion et vos coordonnées.
       </div>
 
       <p style="font-size:11px;color:var(--muted);margin-top:12px;">
-        Bulletin à retourner par email à <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="6d0a0803040843000203190c180f0c032d0a000c0401430e0200">[email&#160;protected]</a></strong> ou au <strong>12 rue du Génie, 82000 Montauban</strong>
+        Bulletin à retourner par email à <strong><a href="mailto:genie.montauban@gmail.com">genie.montauban@gmail.com</a></strong> ou au <strong>12 rue du Génie, 82000 Montauban</strong>
       </p>
     </div>
   </div>
@@ -960,7 +1051,7 @@
         </div>
         <div class="contact-item">
           <div class="ci-ico">✉️</div>
-          <div><div class="ci-label">Email</div><div class="ci-val"><a href="/cdn-cgi/l/email-protection#a7c0c2c9cec289cac8c9d3c6d2c5c6c9e7c0cac6cecb89c4c8ca"><span class="__cf_email__" data-cfemail="b1d6d4dfd8d49fdcdedfc5d0c4d3d0dff1d6dcd0d8dd9fd2dedc">[email&#160;protected]</span></a></div></div>
+          <div><div class="ci-label">Email</div><div class="ci-val"><a href="mailto:genie.montauban@gmail.com">genie.montauban@gmail.com</a></div></div>
         </div>
         <div class="contact-item">
           <div class="ci-ico">🕐</div>
@@ -987,7 +1078,7 @@
         <button onclick="envoyerContact()" style="margin-top:12px;background:var(--bleu);color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;">Envoyer →</button>
         <div class="contact-success" id="contact-success">✅ Message envoyé ! Nous vous répondons sous 24h.</div>
         <div class="contact-nomail" id="contact-nomail">
-          💡 Votre messagerie va s'ouvrir. Si rien ne se passe, écrivez directement à <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f295979c9b97dc9f9d9c86938790939cb2959f939b9edc919d9f">[email&#160;protected]</a></strong>
+          💡 Votre messagerie va s'ouvrir. Si rien ne se passe, écrivez directement à <strong><a href="mailto:genie.montauban@gmail.com">genie.montauban@gmail.com</a></strong>
           ou appelez le <strong>06 51 50 97 18</strong>.
         </div>
       </div>
@@ -1023,7 +1114,7 @@
     <div class="footer-col">
       <h4>Contact</h4>
       <a href="tel:+33651509718">06 51 50 97 18</a>
-      <a href="/cdn-cgi/l/email-protection#3057555e59551e5d5f5e44514552515e70575d51595c1e535f5d"><span class="__cf_email__" data-cfemail="a2c5c7cccbc78ccfcdccd6c3d7c0c3cce2c5cfc3cbce8cc1cdcf">[email&#160;protected]</span></a>
+      <a href="mailto:genie.montauban@gmail.com">genie.montauban@gmail.com</a>
       <a href="#contact">12 rue du Génie<br>82000 Montauban</a>
     </div>
   </div>
@@ -1037,7 +1128,12 @@
   </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
+// ===== MOBILE NAV =====
+document.querySelectorAll('.nav-links a').forEach(a => {
+  a.addEventListener('click', () => document.querySelector('.nav-links').classList.remove('open'));
+});
+
 // ===== ESPACES FILTRE =====
 function filtrerEspaces(type, btn) {
   document.querySelectorAll('.espace-tab').forEach(t => t.classList.remove('active'));

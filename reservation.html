@@ -274,6 +274,25 @@ button, input, select, textarea { font-family:inherit; }
 ============================ */
 .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
 @media(max-width:500px){ .form-grid{ grid-template-columns:1fr; } }
+/* ===== MOBILE ===== */
+@media(max-width:860px){
+  .layout{ padding:12px 10px 40px; }
+  .sidebar{ position:static; }
+}
+@media(max-width:480px){
+  .hero h1{ font-size:1.6rem; }
+  .creneau-btn{ min-height:38px; padding:8px 2px; font-size:11px; }
+  .creneaux-grid{ grid-template-columns:repeat(3,1fr); gap:4px; }
+  .duree-grid{ grid-template-columns:repeat(4,1fr); }
+  .duree-btn{ padding:9px 3px; min-height:38px; }
+  .espaces-grid{ grid-template-columns:repeat(2,1fr); }
+  .card{ padding:14px; }
+}
+@media(max-width:360px){
+  .creneaux-grid{ grid-template-columns:repeat(3,1fr); }
+  .hero h1{ font-size:1.4rem; }
+  .layout{ padding:8px 8px 32px; }
+}
 .form-col-full { grid-column:1/-1; }
 .fg { display:flex; flex-direction:column; gap:4px; }
 .fg label { font-size:12px; font-weight:700; color:var(--texte); }
@@ -408,39 +427,39 @@ button, input, select, textarea { font-family:inherit; }
       </div>
 
       <div class="espaces-grid" id="espaces-grid">
-        <div class="espace-btn" data-espace="Bourdelle" data-type="reunion" data-tarif-h="30" onclick="selEspace(this)">
+        <div class="espace-btn" data-espace="Bourdelle" data-type="reunion" data-tarif-h="40" onclick="selEspace(this)">
           <span class="eb-ico">🏛️</span>
           <span class="eb-nom">Antoine Bourdelle</span>
           <span class="eb-sub">Salle 40 pers. · RDC</span>
-          <span class="eb-prix">dès 30 €/h</span>
+          <span class="eb-prix">dès 40 €/h</span>
           <span class="eb-dispo" id="dispo-Bourdelle"></span>
         </div>
-        <div class="espace-btn" data-espace="Freinet" data-type="reunion" data-tarif-h="22" onclick="selEspace(this)">
+        <div class="espace-btn" data-espace="Freinet" data-type="reunion" data-tarif-h="30" onclick="selEspace(this)">
           <span class="eb-ico">🤝</span>
           <span class="eb-nom">Célestin Freinet</span>
           <span class="eb-sub">Salle 20 pers. · 1er</span>
-          <span class="eb-prix">dès 22 €/h</span>
+          <span class="eb-prix">dès 30 €/h</span>
           <span class="eb-dispo" id="dispo-Freinet"></span>
         </div>
-        <div class="espace-btn" data-espace="Gouges" data-type="reunion" data-tarif-h="22" onclick="selEspace(this)">
+        <div class="espace-btn" data-espace="Gouges" data-type="reunion" data-tarif-h="30" onclick="selEspace(this)">
           <span class="eb-ico">📋</span>
           <span class="eb-nom">Olympe de Gouges</span>
           <span class="eb-sub">Salle 20 pers. · 1er</span>
-          <span class="eb-prix">dès 22 €/h</span>
+          <span class="eb-prix">dès 30 €/h</span>
           <span class="eb-dispo" id="dispo-Gouges"></span>
         </div>
-        <div class="espace-btn" data-espace="Montessori" data-type="reunion" data-tarif-h="15" onclick="selEspace(this)">
+        <div class="espace-btn" data-espace="Montessori" data-type="reunion" data-tarif-h="20" onclick="selEspace(this)">
           <span class="eb-ico">♿</span>
           <span class="eb-nom">Maria Montessori</span>
           <span class="eb-sub">PMR · 4 pers. · RDJ</span>
-          <span class="eb-prix">dès 15 €/h</span>
+          <span class="eb-prix">dès 20 €/h</span>
           <span class="eb-dispo" id="dispo-Montessori"></span>
         </div>
-        <div class="espace-btn" data-espace="Aristote" data-type="nomade" data-tarif-h="10" onclick="selEspace(this)">
+        <div class="espace-btn" data-espace="Aristote" data-type="nomade" data-tarif-h="12" onclick="selEspace(this)">
           <span class="eb-ico">🚪</span>
           <span class="eb-nom">Aristote</span>
           <span class="eb-sub">Bureau privé · 1er</span>
-          <span class="eb-prix">10 €/½ journée</span>
+          <span class="eb-prix">12 €/½ journée</span>
           <span class="eb-dispo" id="dispo-Aristote"></span>
         </div>
         <div class="espace-btn" data-espace="Rousseau" data-type="coworking" data-tarif-h="10" onclick="selEspace(this)">
@@ -572,7 +591,7 @@ button, input, select, textarea { font-family:inherit; }
           <textarea id="f-msg" placeholder="Précisions sur votre événement, besoins spécifiques, etc."></textarea>
         </div>
       </div>
-      <p class="field-hint" style="margin-top:10px">🔒 Données utilisées uniquement pour votre réservation. Conservation 3 ans. Droits : <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4d2a2823242863202223392c382f2c230d2a202c2421632e2220">[email&#160;protected]</a></p>
+      <p class="field-hint" style="margin-top:10px">🔒 Données utilisées uniquement pour votre réservation. Conservation 3 ans. Droits : genie.montauban@gmail.com</p>
     </div>
 
     <!-- SUCCÈS -->
@@ -634,14 +653,14 @@ button, input, select, textarea { font-family:inherit; }
     <div style="background:var(--blanc);border-radius:12px;box-shadow:var(--shadow-sm);padding:16px;margin-top:14px;border:1px solid var(--bord)">
       <div style="font-weight:700;font-size:14px;color:var(--bleu);margin-bottom:10px;">💬 Besoin d'aide ?</div>
       <a href="tel:+33651509718" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;background:var(--bleu);color:#fff;border-radius:8px;text-decoration:none;font-weight:700;font-size:14px;margin-bottom:8px;">📞 06 51 50 97 18</a>
-      <a href="/cdn-cgi/l/email-protection#9dfaf8f3f4f8b3f0f2f3e9fce8fffcf3ddfaf0fcf4f1b3fef2f0" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:9px;background:var(--fond);color:var(--bleu);border-radius:8px;text-decoration:none;font-weight:600;font-size:13px;border:1.5px solid var(--bord);">✉️ <span class="__cf_email__" data-cfemail="e483818a8d81ca898b8a90859186858aa48389858d88ca878b89">[email&#160;protected]</span></a>
+      <a href="mailto:genie.montauban@gmail.com" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:9px;background:var(--fond);color:var(--bleu);border-radius:8px;text-decoration:none;font-weight:600;font-size:13px;border:1.5px solid var(--bord);">✉️ genie.montauban@gmail.com</a>
     </div>
 
   </div>
 </div>
 
 <!-- ===== SCRIPT ===== -->
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 // ============================================================
 // CONFIGURATION — À METTRE À JOUR APRÈS DÉPLOIEMENT DU SCRIPT
 // Remplacez l'URL ci-dessous par l'URL de votre Apps Script déployé
@@ -651,11 +670,11 @@ const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw5f4eTOV6q9n7O
 
 // ============================================================
 const TARIFS = {
-  Bourdelle:   { plein:30, adherent:24, locataire:15, asso:0 },
-  Freinet:     { plein:22, adherent:18, locataire:12, asso:0 },
-  Gouges:      { plein:22, adherent:18, locataire:12, asso:0 },
-  Montessori:  { plein:15, adherent:12, locataire:8,  asso:0 },
-  Aristote:    { plein:10, adherent:10, locataire:10, asso:0 },
+  Bourdelle:   { plein:40, adherent:30, locataire:20, asso:0 },
+  Freinet:     { plein:30, adherent:20, locataire:15, asso:0 },
+  Gouges:      { plein:30, adherent:20, locataire:15, asso:0 },
+  Montessori:  { plein:20, adherent:15, locataire:10, asso:0 },
+  Aristote:    { plein:12, adherent:12, locataire:12, asso:0 },
   Rousseau:    { plein:10, adherent:10, locataire:10, asso:0 },
 };
 
@@ -1034,4 +1053,17 @@ function resetForm() {
   });
   document.getElementById('creneaux-block').style.display = 'none';
   document.getElementById('dispo-card').style.display = 'none';
-  document.querySelectorAll('.espace-btn,.
+  document.querySelectorAll('.espace-btn,.profil-btn').forEach(b => b.classList.remove('selected'));
+  renderCal();
+  majRecap();
+}
+
+// ===== UTILS =====
+function fmtDate(d) {
+  return d.getFullYear()+'-'+pad(d.getMonth()+1,2)+'-'+pad(d.getDate(),2);
+}
+function pad(n) { return String(n).padStart(2,'0'); }
+function afficher(id) { const el=document.getElementById(id); if(el) el.style.display=''; }
+</script>
+</body>
+</html>
