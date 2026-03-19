@@ -3,651 +3,1028 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin — Génie Montauban</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<title>Génie Montauban — Administration</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;700;900&family=Cabinet+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bleu:#1E4A6E; --bleu-md:#2E6DA4; --bleu-lt:#EBF4FF;
-  --vert:#27AE60; --vert-lt:#E8F8F0;
-  --or:#C9993E; --or-lt:#FFF7E6;
-  --rouge:#E53E3E; --rouge-lt:#FFF0F0;
-  --texte:#1A2638; --muted:#6B7A8D;
-  --fond:#F0F4F8; --bord:#E2E8F0; --blanc:#fff;
-  --shadow:0 2px 12px rgba(0,0,0,.08);
+:root{--ink:#1C1410;--brick:#C4622D;--brick-light:#E8804F;--cream:#F7F2EA;--warm:#FDFAF6;--gold:#C8973A;--sage:#4A6741;--sage-light:#EEF3ED;--steel:#2C4A6E;--steel-light:#EDF1F7;--border:#DDD5C8;--muted:#8C7B6B;--red:#C0392B;--red-light:#FDF0EE;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(--ink);font-size:14px}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:250px;background:var(--ink);position:fixed;top:0;left:0;bottom:0;display:flex;flex-direction:column;z-index:50}
+.logo{padding:22px 20px;border-bottom:1px solid rgba(255,255,255,.08)}
+.logo h1{font-family:'Fraunces',serif;font-size:22px;font-weight:900;color:var(--cream)}
+.logo h1 span{color:var(--brick-light)}
+.logo p{color:var(--muted);font-size:10px;margin-top:2px;text-transform:uppercase;letter-spacing:1px}
+.nav{flex:1;padding:14px 10px;overflow-y:auto}
+.nav-s{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,.25);padding:10px 10px 5px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:8px;color:rgba(255,255,255,.6);cursor:pointer;transition:.15s;font-size:13px;font-weight:500;margin-bottom:1px}
+.nav-item:hover{background:rgba(255,255,255,.07);color:#fff}
+.nav-item.active{background:var(--brick);color:#fff}
+.sync-bar{padding:10px 14px;border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:8px}
+.dot{width:8px;height:8px;border-radius:50%;background:#4CAF50;flex-shrink:0}
+.dot.loading{background:var(--gold);animation:pulse 1s infinite}
+.dot.error{background:var(--red)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.sync-txt{font-size:11px;color:rgba(255,255,255,.35)}
+.main{margin-left:250px;flex:1}
+.topbar{background:var(--warm);border-bottom:1px solid var(--border);padding:13px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:40}
+.topbar h2{font-family:'Fraunces',serif;font-size:19px;font-weight:700}
+.topact{display:flex;gap:8px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;border:none;transition:.15s;font-family:inherit}
+.btn-primary{background:var(--brick);color:#fff}.btn-primary:hover{background:var(--brick-light)}
+.btn-secondary{background:#fff;color:var(--ink);border:1px solid var(--border)}.btn-secondary:hover{background:var(--cream)}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}.btn-ghost:hover{background:var(--cream);color:var(--ink)}
+.btn-danger{background:var(--red-light);color:var(--red);border:1px solid #F5C6C2}.btn-danger:hover{background:var(--red);color:#fff}
+.btn-sage{background:var(--sage);color:#fff}.btn-sage:hover{background:#3a5433}
+.btn-sm{padding:5px 9px;font-size:12px}
+.content{padding:24px 28px}
+.page{display:none}.page.active{display:block}
+/* SETUP */
+.setup-banner{background:var(--steel);color:#fff;border-radius:12px;padding:22px;margin-bottom:22px;display:none}
+.setup-banner.show{display:block}
+.setup-banner h3{font-family:'Fraunces',serif;font-size:17px;margin-bottom:8px}
+.setup-banner p{font-size:13px;opacity:.85;margin-bottom:12px}
+.setup-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.setup-row input{flex:1;min-width:280px;padding:9px 13px;border-radius:8px;border:none;font-size:13px;font-family:inherit}
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.stat-card{background:#fff;border-radius:12px;padding:18px;border:1px solid var(--border)}
+.stat-label{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:6px}
+.stat-value{font-family:'Fraunces',serif;font-size:30px;font-weight:700;line-height:1}
+.stat-sub{font-size:12px;color:var(--muted);margin-top:5px}
+.sc-brick .stat-value{color:var(--brick)}.sc-gold .stat-value{color:var(--gold)}.sc-sage .stat-value{color:var(--sage)}.sc-steel .stat-value{color:var(--steel)}
+/* CARD */
+.card{background:#fff;border-radius:12px;border:1px solid var(--border);overflow:hidden}
+.card-hd{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.card-hd h3{font-family:'Fraunces',serif;font-size:15px;font-weight:700}
+.card-body{padding:18px}
+/* TABLE */
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:var(--cream);padding:9px 13px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);font-weight:600;border-bottom:1px solid var(--border)}
+td{padding:11px 13px;border-bottom:1px solid #F0EBE3;vertical-align:middle}
+tr:last-child td{border-bottom:none}tr:hover td{background:#FEFCF9}
+/* BADGES */
+.badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600}
+.b-confirmed{background:#E8F5E9;color:#2E7D32}
+.b-pending{background:#FFF8E1;color:#E65100}
+.b-cancelled{background:#FDECEA;color:#B71C1C}
+.b-completed{background:var(--steel-light);color:var(--steel)}
+/* ESPACE BADGES */
+.eb{display:inline-flex;align-items:center;padding:3px 9px;border-radius:6px;font-size:11px;font-weight:600}
+.eb-bourdelle{background:#EDE9FE;color:#5B21B6}
+.eb-freinet{background:#E0F2FE;color:#0369A1}
+.eb-gouges{background:#FCE7F3;color:#9D174D}
+.eb-michel{background:#F0FDF4;color:#166534}
+.eb-rousseau{background:#FEF9C3;color:#854D0E}
+.eb-montessori{background:var(--sage-light);color:var(--sage)}
+/* FORM */
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.fg{display:flex;flex-direction:column;gap:5px}.fg.full{grid-column:1/-1}
+label{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+input,select,textarea{padding:9px 12px;border-radius:8px;border:1.5px solid var(--border);font-family:inherit;font-size:13px;background:#fff;color:var(--ink);outline:none;transition:.15s;width:100%}
+input:focus,select:focus,textarea:focus{border-color:var(--brick);box-shadow:0 0 0 3px rgba(196,98,45,.1)}
+textarea{resize:vertical;min-height:65px}
+/* MODAL */
+.overlay{position:fixed;inset:0;background:rgba(28,20,16,.5);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
+.overlay.open{display:flex}
+.modal{background:#fff;border-radius:16px;width:100%;max-width:620px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(28,20,16,.2)}
+.mhd{padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#fff;z-index:1}
+.mhd h3{font-family:'Fraunces',serif;font-size:18px;font-weight:700}
+.mclose{background:var(--cream);border:none;cursor:pointer;width:28px;height:28px;border-radius:50%;font-size:17px;line-height:28px}
+.mbody{padding:22px}
+.mfoot{padding:14px 22px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+/* PLANNING */
+.plan-nav{display:flex;align-items:center;gap:14px;margin-bottom:18px;flex-wrap:wrap}
+.wlbl{font-family:'Fraunces',serif;font-size:17px;font-weight:700;min-width:200px;text-align:center}
+.plan-grid{background:#fff;border-radius:12px;border:1px solid var(--border);overflow:auto}
+.plan-days{display:grid;grid-template-columns:80px repeat(6,1fr);border-bottom:2px solid var(--border);min-width:600px}
+.dh{padding:9px 5px;text-align:center;font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted)}
+.dh.today{background:var(--brick);color:#fff}
+.dh:first-child{border-right:1px solid var(--border)}
+.plan-body{display:grid;grid-template-columns:80px repeat(6,1fr);min-width:600px}
+.time-col{border-right:1px solid var(--border)}
+.ts{height:44px;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--muted);font-weight:600;border-bottom:1px solid #F5F0E8}
+.dcol{border-right:1px solid #F5F0E8;position:relative}.dcol:last-child{border-right:none}
+.slot{height:44px;border-bottom:1px solid #F5F0E8;position:relative;cursor:pointer}.slot:hover{background:var(--cream)}
+.ev{position:absolute;left:1px;right:1px;border-radius:4px;padding:2px 5px;font-size:10px;font-weight:600;overflow:hidden;cursor:pointer;z-index:2;line-height:1.3;border-left:3px solid}
+.ev-bourdelle{background:#EDE9FE;color:#5B21B6;border-color:#7C3AED}
+.ev-freinet{background:#E0F2FE;color:#0369A1;border-color:#0284C7}
+.ev-gouges{background:#FCE7F3;color:#9D174D;border-color:#DB2777}
+.ev-michel{background:#F0FDF4;color:#166534;border-color:#16A34A}
+.ev-rousseau{background:#FEF9C3;color:#854D0E;border-color:#CA8A04}
+.ev-montessori{background:var(--sage-light);color:var(--sage);border-color:var(--sage)}
+/* PRIX BOX */
+.prix-recap{background:var(--cream);border-radius:8px;padding:12px 14px;margin-top:12px;display:none}
+/* OCC */
+.occ-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.occ-name{width:130px;font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.occ-bg{flex:1;background:var(--border);border-radius:20px;height:8px;overflow:hidden}
+.occ-fill{height:100%;border-radius:20px}
+.occ-pct{width:36px;text-align:right;font-size:12px;font-weight:700}
+/* DETAIL */
+.dgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.di{background:var(--cream);border-radius:8px;padding:11px 13px}
+.di label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:3px}
+.di span{font-size:14px;font-weight:500}
+.di.full{grid-column:1/-1}
+/* LOADER */
+.loader{position:fixed;inset:0;background:rgba(28,20,16,.55);z-index:9998;display:none;align-items:center;justify-content:center}
+.loader-box{background:#fff;border-radius:16px;padding:28px 44px;text-align:center}
+.spinner{width:34px;height:34px;border:3px solid var(--border);border-top-color:var(--brick);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+/* TOASTS */
+.toasts{position:fixed;bottom:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:7px}
+.toast{background:var(--ink);color:#fff;padding:10px 16px;border-radius:9px;font-size:13px;font-weight:500;box-shadow:0 8px 24px rgba(28,20,16,.2);transform:translateY(8px);opacity:0;transition:.25s;display:flex;align-items:center;gap:7px;max-width:280px}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.ok{border-left:4px solid #4CAF50}.toast.err{border-left:4px solid var(--red)}.toast.info{border-left:4px solid var(--steel)}
+.filter-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:18px}
+.filter-bar input,.filter-bar select{padding:7px 11px;font-size:13px;width:auto}
+.amount{font-family:'Fraunces',serif;font-weight:700}
+.info-bar{background:var(--steel-light);border:1px solid #C5D5E8;border-radius:8px;padding:10px 14px;font-size:12px;color:var(--steel);margin-bottom:16px}
+@media(max-width:1100px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
+/* ===== MOBILE ===== */
+.mob-toggle{display:none;background:none;border:none;cursor:pointer;padding:6px;border-radius:8px;color:var(--ink);font-size:22px;line-height:1;margin-right:8px}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(28,20,16,.5);z-index:49}
+@media(max-width:768px){
+  .sidebar{transform:translateX(-260px);transition:transform .25s ease;z-index:51;width:260px}
+  .sidebar.open{transform:translateX(0)}
+  .sidebar-overlay.open{display:block}
+  .main{margin-left:0}
+  .mob-toggle{display:inline-flex;align-items:center;justify-content:center}
+  .topbar{padding:11px 14px}
+  .content{padding:14px}
+  .stats-grid{grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px}
+  .stat-card{padding:13px}
+  .stat-value{font-size:24px}
+  #page-dashboard>div[style]{grid-template-columns:1fr !important;gap:14px}
+  .fgrid{grid-template-columns:1fr !important}
+  .dgrid{grid-template-columns:1fr !important}
+  .modal{border-radius:14px 14px 0 0;position:fixed;bottom:0;left:0;right:0;max-width:100%;max-height:88vh;margin:0}
+  .overlay{align-items:flex-end;padding:0}
+  .mfoot{flex-wrap:wrap}
+  .mfoot .btn{flex:1 1 auto;justify-content:center}
+  .card-hd{flex-wrap:wrap;gap:8px}
+  .plan-nav{flex-wrap:wrap;gap:8px}
+  .wlbl{min-width:0;font-size:15px}
+  .filter-bar{gap:6px}
+  .filter-bar input,.filter-bar select{width:100%}
+  .toasts{right:10px;left:10px;bottom:12px}
+  .toast{max-width:100%}
+  td,th{padding:8px 10px}
 }
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'DM Sans',sans-serif;background:var(--fond);color:var(--texte);font-size:14px;}
-a{color:var(--bleu);}
-
-/* ===== LOGIN ===== */
-#login-screen {
-  min-height:100vh; display:flex; align-items:center; justify-content:center;
-  background:linear-gradient(135deg,#162f47,var(--bleu-md));
+@media(max-width:480px){
+  .stats-grid{grid-template-columns:1fr 1fr;gap:8px}
+  .topbar h2{font-size:16px}
+  .content{padding:10px}
 }
-.login-box {
-  background:var(--blanc); border-radius:16px;
-  padding:40px 36px; width:100%; max-width:380px;
-  box-shadow:0 20px 60px rgba(0,0,0,.25);
-}
-.login-box h1 { font-family:'DM Serif Display',serif; font-size:1.8rem; margin-bottom:4px; }
-.login-box p { color:var(--muted); font-size:13px; margin-bottom:24px; }
-.login-box input {
-  width:100%; border:1.5px solid var(--bord); border-radius:8px;
-  padding:11px 13px; font-size:15px; font-family:inherit;
-  margin-bottom:12px; transition:border .18s;
-}
-.login-box input:focus { outline:none; border-color:var(--bleu-md); }
-.btn-login {
-  width:100%; background:var(--bleu); color:#fff;
-  border:none; border-radius:8px; padding:12px;
-  font-size:15px; font-weight:700; cursor:pointer;
-  font-family:inherit; transition:all .18s;
-}
-.btn-login:hover { background:var(--bleu-md); }
-.login-err { color:var(--rouge); font-size:12px; margin-top:6px; display:none; }
-
-/* ===== ADMIN LAYOUT ===== */
-#admin-screen { display:none; min-height:100vh; flex-direction:column; }
-.admin-header {
-  background:var(--bleu); color:#fff;
-  height:56px; display:flex; align-items:center;
-  padding:0 20px; justify-content:space-between;
-  position:sticky; top:0; z-index:100;
-  box-shadow:0 2px 12px rgba(0,0,0,.2);
-}
-.admin-header h1 { font-family:'DM Serif Display',serif; font-size:1.3rem; }
-.admin-header .ah-right { display:flex; align-items:center; gap:12px; }
-.btn-logout {
-  background:rgba(255,255,255,.15); color:#fff;
-  border:1px solid rgba(255,255,255,.3); border-radius:6px;
-  padding:5px 12px; cursor:pointer; font-size:12px; font-weight:700;
-}
-
-/* ===== STATS BAR ===== */
-.stats-bar {
-  display:grid; grid-template-columns:repeat(4,1fr); gap:12px;
-  padding:16px 20px;
-}
-@media(max-width:700px){.stats-bar{grid-template-columns:repeat(2,1fr);}}
-.stat-card {
-  background:var(--blanc); border-radius:10px; padding:14px 16px;
-  box-shadow:var(--shadow); border-left:4px solid var(--bord);
-}
-.stat-card.blue { border-left-color:var(--bleu); }
-.stat-card.green { border-left-color:var(--vert); }
-.stat-card.orange { border-left-color:var(--or); }
-.stat-card.red { border-left-color:var(--rouge); }
-.stat-num { font-family:'DM Serif Display',serif; font-size:2rem; color:var(--texte); line-height:1; }
-.stat-label { font-size:11px; color:var(--muted); margin-top:2px; font-weight:600; text-transform:uppercase; letter-spacing:.4px; }
-
-/* ===== TABS ===== */
-.admin-tabs {
-  display:flex; gap:0; border-bottom:2px solid var(--bord);
-  padding:0 20px; background:var(--blanc);
-}
-.admin-tab {
-  padding:12px 18px; cursor:pointer; font-weight:700;
-  font-size:13px; color:var(--muted); border:none;
-  background:none; border-bottom:3px solid transparent;
-  margin-bottom:-2px; transition:all .18s; font-family:inherit;
-}
-.admin-tab:hover { color:var(--texte); }
-.admin-tab.active { color:var(--bleu); border-bottom-color:var(--bleu); }
-
-/* ===== PANEL ===== */
-.admin-panel { padding:20px; display:none; }
-.admin-panel.active { display:block; }
-
-/* ===== FILTRES ===== */
-.filters-bar { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; align-items:center; }
-.filter-chip {
-  padding:5px 14px; border-radius:20px; font-size:12px; font-weight:700;
-  border:1.5px solid var(--bord); background:var(--blanc); cursor:pointer;
-  color:var(--muted); transition:all .15s;
-}
-.filter-chip:hover { border-color:var(--bleu-md); color:var(--bleu); }
-.filter-chip.active { background:var(--bleu); border-color:var(--bleu); color:#fff; }
-.filter-chip.vert { background:var(--vert); border-color:var(--vert); color:#fff; }
-.filter-chip.or { background:var(--or); border-color:var(--or); color:#fff; }
-.filter-chip.rouge { background:var(--rouge); border-color:var(--rouge); color:#fff; }
-
-.search-input {
-  padding:7px 12px; border:1.5px solid var(--bord); border-radius:8px;
-  font-size:13px; font-family:inherit; width:220px;
-}
-.search-input:focus { outline:none; border-color:var(--bleu-md); }
-
-/* ===== TABLE ===== */
-.table-wrap { overflow-x:auto; border-radius:10px; box-shadow:var(--shadow); }
-table { width:100%; border-collapse:collapse; background:var(--blanc); font-size:13px; }
-thead tr { background:var(--bleu); color:#fff; }
-th { padding:10px 12px; text-align:left; font-weight:700; font-size:11px; text-transform:uppercase; letter-spacing:.4px; white-space:nowrap; }
-td { padding:10px 12px; border-bottom:1px solid var(--bord); vertical-align:middle; }
-tr:hover td { background:#FAFBFC; }
-tr:last-child td { border-bottom:none; }
-
-.statut-badge {
-  display:inline-block; padding:3px 9px; border-radius:10px;
-  font-size:10px; font-weight:800; letter-spacing:.3px; white-space:nowrap;
-}
-.s-attente { background:#FFF3CD; color:#856404; }
-.s-confirme { background:#D4EDDA; color:#155724; }
-.s-annule { background:#F8D7DA; color:#721C24; }
-.s-termine { background:#E2E3E5; color:#383D41; }
-
-.btn-action {
-  padding:4px 10px; border-radius:6px; cursor:pointer;
-  font-size:11px; font-weight:700; border:1.5px solid; transition:all .15s;
-  font-family:inherit;
-}
-.btn-confirmer { background:var(--vert-lt); color:var(--vert); border-color:var(--vert); }
-.btn-confirmer:hover { background:var(--vert); color:#fff; }
-.btn-annuler { background:var(--rouge-lt); color:var(--rouge); border-color:var(--rouge); }
-.btn-annuler:hover { background:var(--rouge); color:#fff; }
-
-/* ===== CALENDRIER ADMIN ===== */
-.cal-admin-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; }
-.cal-admin-day {
-  border:1px solid var(--bord); border-radius:6px;
-  min-height:70px; padding:6px; background:var(--blanc); position:relative;
-}
-.cal-admin-day .cad-num { font-size:11px; font-weight:700; color:var(--muted); }
-.cal-admin-day.today .cad-num { color:var(--vert); }
-.cal-event {
-  background:var(--bleu-lt); border-left:3px solid var(--bleu);
-  border-radius:3px; padding:2px 5px; font-size:10px;
-  margin-top:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-  font-weight:600; color:var(--bleu);
-}
-.cal-event.confirme { background:var(--vert-lt); border-left-color:var(--vert); color:var(--vert); }
-.cal-event.attente { background:var(--or-lt); border-left-color:var(--or); color:#856404; }
-.cal-admin-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
-.cal-admin-header h3 { font-size:15px; font-weight:700; }
-.cal-admin-dow { font-size:11px; font-weight:700; color:var(--muted); text-align:center; padding:5px 0; text-transform:uppercase; }
-
-/* ===== MODAL ===== */
-.modal-bg {
-  display:none; position:fixed; inset:0;
-  background:rgba(0,0,0,.45); z-index:500;
-  align-items:center; justify-content:center;
-}
-.modal-bg.open { display:flex; }
-.modal {
-  background:var(--blanc); border-radius:14px;
-  padding:28px; width:100%; max-width:520px;
-  box-shadow:0 20px 60px rgba(0,0,0,.2);
-  max-height:90vh; overflow-y:auto;
-}
-.modal h2 { font-family:'DM Serif Display',serif; font-size:1.4rem; margin-bottom:16px; }
-.modal-row { display:flex; justify-content:space-between; padding:7px 0; border-bottom:1px solid var(--fond); font-size:13px; }
-.modal-row .ml { color:var(--muted); }
-.modal-row .mv { font-weight:600; }
-.modal-actions { display:flex; gap:8px; margin-top:16px; flex-wrap:wrap; }
-.btn-close { background:var(--fond); color:var(--texte); border:1.5px solid var(--bord); border-radius:8px; padding:9px 18px; cursor:pointer; font-weight:700; font-family:inherit; }
-.msg-admin-input { width:100%; border:1.5px solid var(--bord); border-radius:8px; padding:9px 11px; font-size:13px; font-family:inherit; margin-top:8px; resize:vertical; min-height:60px; }
-.msg-admin-input:focus { outline:none; border-color:var(--bleu-md); }
-
-/* ===== LOADING ===== */
-.loading-block { text-align:center; padding:40px; color:var(--muted); }
-.spinner { display:inline-block; width:20px; height:20px; border:2px solid var(--bord); border-top-color:var(--bleu); border-radius:50%; animation:spin .6s linear infinite; vertical-align:middle; margin-right:6px; }
-@keyframes spin{to{transform:rotate(360deg);}}
-
-/* ===== REFRESH ===== */
-.btn-refresh {
-  padding:6px 12px; background:var(--blanc); color:var(--bleu);
-  border:1.5px solid var(--bleu); border-radius:7px;
-  cursor:pointer; font-size:12px; font-weight:700;
-  font-family:inherit; transition:all .15s; margin-left:auto;
-}
-.btn-refresh:hover { background:var(--bleu); color:#fff; }
 </style>
 </head>
 <body>
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <div class="logo"><h1>Gé<span>nie</span></h1><p>Administration · Tiers-Lieu</p></div>
+    <nav class="nav">
+      <div class="nav-s">Principal</div>
+      <div class="nav-item active" onclick="go('dashboard')">📊 Tableau de bord</div>
+      <div class="nav-item" onclick="go('planning')">📅 Planning</div>
+      <div class="nav-item" onclick="go('reservations')">📋 Réservations</div>
+      <div class="nav-s">Gestion</div>
+      <div class="nav-item" onclick="go('clients')">👥 Clients</div>
+      <div class="nav-item" onclick="go('espaces')">🏢 Espaces & Tarifs</div>
+      <div class="nav-s">Outils</div>
+      <div class="nav-item" onclick="go('donnees')">💾 Données & Config</div>
+    </nav>
+    <div class="sync-bar"><div class="dot loading" id="dot"></div><span class="sync-txt" id="sync-txt">Connexion…</span></div>
+    <div style="padding:6px 14px;font-size:10px;color:rgba(255,255,255,.12);text-align:center">v5.0 · Génie 2026</div>
+  </aside>
 
-<!-- ===== LOGIN ===== -->
-<div id="login-screen">
-  <div class="login-box">
-    <h1>Génie Admin</h1>
-    <p>Tableau de bord — Réservations & Adhésions</p>
-    <input type="password" id="pwd" placeholder="Mot de passe" onkeydown="if(event.key==='Enter')login()">
-    <button class="btn-login" onclick="login()">Se connecter →</button>
-    <div class="login-err" id="login-err">❌ Mot de passe incorrect</div>
+  <div class="main">
+    <div class="topbar">
+      <div style="display:flex;align-items:center;gap:4px">
+        <button class="mob-toggle" onclick="toggleSidebar()" aria-label="Menu">☰</button>
+        <h2 id="ptitle">Tableau de bord</h2>
+      </div>
+      <div class="topact" id="topbar-actions"></div>
+    </div>
+    <div class="content">
+
+      <div class="setup-banner" id="setup-banner">
+        <h3>⚙️ Configuration requise</h3>
+        <p>Colle l'URL de ton Apps Script déployé (format : <code>https://script.google.com/macros/s/…/exec</code>)</p>
+        <div class="setup-row">
+          <input type="text" id="url-input" placeholder="https://script.google.com/macros/s/XXXX/exec">
+          <button class="btn btn-primary" onclick="saveUrl()">✅ Connecter</button>
+        </div>
+      </div>
+
+      <!-- DASHBOARD -->
+      <div id="page-dashboard" class="page active">
+        <div class="stats-grid" id="stats"></div>
+        <div style="display:grid;grid-template-columns:2fr 1fr;gap:18px">
+          <div class="card">
+            <div class="card-hd"><h3>Réservations récentes</h3><button class="btn btn-sm btn-ghost" onclick="go('reservations')">Voir tout →</button></div>
+            <div class="tw"><table><thead><tr><th>Client</th><th>Espace</th><th>Date</th><th>Profil</th><th>Montant</th><th>Statut</th></tr></thead><tbody id="recent-body"></tbody></table></div>
+          </div>
+          <div class="card">
+            <div class="card-hd"><h3>Occupation (30j)</h3></div>
+            <div class="card-body" id="occ-bars"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PLANNING -->
+      <div id="page-planning" class="page">
+        <div class="plan-nav">
+          <div style="display:flex;gap:7px">
+            <button class="btn btn-secondary btn-sm" onclick="shiftWeek(-1)">◀</button>
+            <button class="btn btn-secondary btn-sm" onclick="shiftWeek(0)">Auj.</button>
+            <button class="btn btn-secondary btn-sm" onclick="shiftWeek(1)">▶</button>
+          </div>
+          <div class="wlbl" id="week-lbl"></div>
+          <select id="plan-filter" onchange="renderPlanning()" style="padding:6px 10px;font-size:12px;width:auto;border:1px solid var(--border);border-radius:8px">
+            <option value="">Tous les espaces</option>
+            <option value="bourdelle">Bourdelle</option>
+            <option value="freinet">Freinet</option>
+            <option value="gouges">De Gouges</option>
+            <option value="michel">Louise Michel</option>
+            <option value="rousseau">Rousseau</option>
+            <option value="montessori">Montessori</option>
+          </select>
+        </div>
+        <div class="plan-grid">
+          <div class="plan-days" id="plan-days"></div>
+          <div class="plan-body" id="plan-body"></div>
+        </div>
+      </div>
+
+      <!-- RÉSERVATIONS -->
+      <div id="page-reservations" class="page">
+        <div class="filter-bar">
+          <input type="text" id="f-search" placeholder="🔍 Rechercher…" oninput="renderTable()" style="flex:1;min-width:160px">
+          <select id="f-statut" onchange="renderTable()">
+            <option value="">Tous statuts</option>
+            <option value="confirmed">Confirmée</option>
+            <option value="pending">En attente</option>
+            <option value="completed">Terminée</option>
+            <option value="cancelled">Annulée</option>
+          </select>
+          <select id="f-espace" onchange="renderTable()">
+            <option value="">Tous espaces</option>
+            <option value="bourdelle">Bourdelle</option>
+            <option value="freinet">Freinet</option>
+            <option value="gouges">De Gouges</option>
+            <option value="michel">Louise Michel</option>
+            <option value="rousseau">Rousseau</option>
+            <option value="montessori">Montessori</option>
+          </select>
+          <select id="f-usage" onchange="renderTable()">
+            <option value="">Tous usages</option>
+            <option value="reunion">Réunion</option>
+            <option value="nomade">Nomade</option>
+          </select>
+          <button class="btn btn-primary" onclick="openModal('mresa')">➕ Nouvelle</button>
+        </div>
+        <div class="card"><div class="tw"><table><thead><tr><th>#</th><th>Client</th><th>Espace</th><th>Usage/Profil</th><th>Date</th><th>Horaire</th><th>Durée</th><th>Montant</th><th>Options</th><th>Statut</th><th></th></tr></thead><tbody id="resa-body"></tbody></table></div></div>
+      </div>
+
+      <!-- CLIENTS -->
+      <div id="page-clients" class="page">
+        <div class="filter-bar"><input type="text" id="f-client" placeholder="🔍 Rechercher…" oninput="renderClients()" style="flex:1;min-width:200px"></div>
+        <div class="card"><div class="tw"><table><thead><tr><th>Nom</th><th>Email</th><th>Tél.</th><th>Organisation</th><th>Réservations</th><th>CA Total</th></tr></thead><tbody id="client-body"></tbody></table></div></div>
+      </div>
+
+      <!-- ESPACES & TARIFS -->
+      <div id="page-espaces" class="page">
+        <div class="info-bar">ℹ️ Tarifs 2026 Génie Montauban. Modifications sauvegardées dans Google Sheets.</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(380px,1fr));gap:18px" id="espaces-grid"></div>
+      </div>
+
+      <!-- DONNÉES -->
+      <div id="page-donnees" class="page">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+          <div class="card">
+            <div class="card-hd"><h3>🔗 Connexion Apps Script</h3></div>
+            <div class="card-body">
+              <div style="background:var(--cream);border-radius:8px;padding:9px 12px;font-size:11px;word-break:break-all;color:var(--muted);margin-bottom:12px" id="url-display">—</div>
+              <button class="btn btn-secondary btn-sm" onclick="showSetup()">✏️ Modifier</button>
+              <a id="sheet-link" href="https://docs.google.com/spreadsheets/d/17dxvMah1AlINEN2InJzuTSJ4UtuC_QAg5bo3Snq2YYs/edit" target="_blank" class="btn btn-sage btn-sm" style="text-decoration:none;margin-left:6px">📋 Google Sheets</a>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-hd"><h3>📧 Contact</h3></div>
+            <div class="card-body">
+              <div class="fg"><label>Email</label><input type="email" id="cfg-email" value="genie.montauban@gmail.com"></div>
+              <div class="fg" style="margin-top:10px"><label>Téléphone</label><input type="tel" id="cfg-tel" value="06 51 50 97 18"></div>
+              <button class="btn btn-primary btn-sm" style="margin-top:12px" onclick="saveCfg()">Enregistrer</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-hd"><h3>🔄 Synchronisation</h3></div>
+            <div class="card-body">
+              <p style="font-size:13px;color:var(--muted);margin-bottom:12px">Auto-refresh toutes les <strong>30 secondes</strong>.</p>
+              <button class="btn btn-primary btn-sm" onclick="loadData(true)">🔄 Forcer sync</button>
+              <div style="margin-top:10px;padding:10px;background:var(--cream);border-radius:8px;font-size:12px;color:var(--muted)" id="data-info"></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-hd"><h3>⬇️ Export</h3></div>
+            <div class="card-body">
+              <button class="btn btn-secondary btn-sm" onclick="exportCSV()">⬇️ Export CSV complet</button>
+              <div style="margin-top:14px;border-top:1px solid var(--border);padding-top:14px">
+                <button class="btn btn-danger btn-sm" onclick="clearAll()">🗑️ Tout supprimer</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
   </div>
 </div>
 
-<!-- ===== ADMIN ===== -->
-<div id="admin-screen">
-
-  <header class="admin-header">
-    <h1>🏛️ Génie — Administration</h1>
-    <div class="ah-right">
-      <span id="last-update" style="font-size:11px;opacity:.7;"></span>
-      <button class="btn-logout" onclick="logout()">Déconnexion</button>
+<!-- MODAL RÉSERVATION -->
+<div class="overlay" id="mresa">
+  <div class="modal">
+    <div class="mhd"><h3 id="mresa-title">Nouvelle réservation</h3><button class="mclose" onclick="closeModal('mresa')">×</button></div>
+    <div class="mbody">
+      <div class="fgrid">
+        <div class="fg"><label>Prénom *</label><input id="r-prenom" placeholder="Marie"></div>
+        <div class="fg"><label>Nom *</label><input id="r-nom" placeholder="Dupont"></div>
+        <div class="fg"><label>Email *</label><input type="email" id="r-email"></div>
+        <div class="fg"><label>Téléphone</label><input type="tel" id="r-tel"></div>
+        <div class="fg"><label>Organisation</label><input id="r-orga"></div>
+        <div class="fg">
+          <label>Espace *</label>
+          <select id="r-espace" onchange="updateModalUsage()">
+            <option value="">— Choisir —</option>
+            <option value="bourdelle">Antoine Bourdelle (0-02) · 40 pers.</option>
+            <option value="freinet">Célestin Freinet (1-11) · 20 pers.</option>
+            <option value="gouges">Olympe de Gouges (1-12) · 20 pers.</option>
+            <option value="michel">Louise Michel (0-01) · Nomade privé</option>
+            <option value="rousseau">Jean-Jacques Rousseau (1-10) · Coworking</option>
+            <option value="montessori">Maria Montessori (-1-14) · PMR</option>
+          </select>
+        </div>
+        <div class="fg" id="r-usage-fg">
+          <label>Usage</label>
+          <select id="r-usage" onchange="updateModalDurees()">
+            <option value="reunion">Salle de réunion</option>
+            <option value="nomade">Bureau nomade</option>
+          </select>
+        </div>
+        <div class="fg" id="r-profil-fg">
+          <label>Profil tarifaire</label>
+          <select id="r-profil" onchange="calcModalPrix()">
+            <option value="ccfa">CCFA exclusivement</option>
+            <option value="adherent">Adhérent Génie</option>
+            <option value="locataire">Locataire / Extérieur</option>
+            <option value="asso">Association / Syndicat (gratuit)</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Durée</label>
+          <select id="r-duree" onchange="calcModalPrix()">
+            <option value="heure">À l'heure</option>
+            <option value="demi">½ journée (4h)</option>
+            <option value="journee">Journée (8h)</option>
+          </select>
+        </div>
+        <div class="fg" id="r-hdebut-fg">
+          <label>Heure début</label>
+          <select id="r-hdebut" onchange="calcModalPrix()">
+            <option>08:00</option><option>08:30</option><option selected>09:00</option><option>09:30</option>
+            <option>10:00</option><option>10:30</option><option>11:00</option><option>11:30</option>
+            <option>12:00</option><option>12:30</option><option>13:00</option><option>13:30</option>
+            <option>14:00</option><option>14:30</option><option>15:00</option><option>15:30</option>
+            <option>16:00</option><option>16:30</option><option>17:00</option>
+          </select>
+        </div>
+        <div class="fg" id="r-nbh-fg">
+          <label>Nb heures</label>
+          <select id="r-nbh" onchange="calcModalPrix()">
+            <option value="1">1h</option><option value="2" selected>2h</option><option value="3">3h</option>
+            <option value="4">4h</option><option value="5">5h</option><option value="6">6h</option><option value="7">7h</option><option value="8">8h</option>
+          </select>
+        </div>
+        <div class="fg"><label>Date *</label><input type="date" id="r-date"></div>
+        <div class="fg"><label>Statut</label>
+          <select id="r-statut">
+            <option value="confirmed">Confirmée</option>
+            <option value="pending">En attente</option>
+          </select>
+        </div>
+        <div class="fg"><label>Participants</label><input type="number" id="r-part" min="1" value="1"></div>
+        <div class="fg full"><label>Objet</label><textarea id="r-objet" placeholder="Réunion, formation, atelier…"></textarea></div>
+        <div class="fg full">
+          <label>Options supplémentaires</label>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:4px">
+            <label style="text-transform:none;letter-spacing:0;font-size:13px;font-weight:500;display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" id="r-badge"> Accès badge 24h/7j (+25€/mois)</label>
+            <label style="text-transform:none;letter-spacing:0;font-size:13px;font-weight:500;display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" id="r-adhesion"> Adhésion Génie (+50€/an)</label>
+          </div>
+        </div>
+      </div>
+      <div class="prix-recap" id="modal-prix"></div>
     </div>
-  </header>
-
-  <!-- STATS -->
-  <div class="stats-bar">
-    <div class="stat-card blue">
-      <div class="stat-num" id="stat-total">—</div>
-      <div class="stat-label">Réservations totales</div>
-    </div>
-    <div class="stat-card orange">
-      <div class="stat-num" id="stat-attente">—</div>
-      <div class="stat-label">En attente</div>
-    </div>
-    <div class="stat-card green">
-      <div class="stat-num" id="stat-confirme">—</div>
-      <div class="stat-label">Confirmées</div>
-    </div>
-    <div class="stat-card red">
-      <div class="stat-num" id="stat-adh">—</div>
-      <div class="stat-label">Adhésions en attente</div>
+    <div class="mfoot">
+      <button class="btn btn-ghost" onclick="closeModal('mresa')">Annuler</button>
+      <button class="btn btn-secondary" onclick="saveResa(true)">💾 Enregistrer</button>
+      <button class="btn btn-primary" onclick="saveResa(false)">💾 + Email client</button>
     </div>
   </div>
-
-  <!-- TABS -->
-  <div class="admin-tabs">
-    <button class="admin-tab active" onclick="showTab('reservations',this)">📅 Réservations</button>
-    <button class="admin-tab" onclick="showTab('adhesions',this)">🤝 Adhésions</button>
-    <button class="admin-tab" onclick="showTab('calendrier',this)">🗓️ Calendrier</button>
-  </div>
-
-  <!-- PANEL RÉSERVATIONS -->
-  <div class="admin-panel active" id="panel-reservations">
-    <div class="filters-bar">
-      <button class="filter-chip active" onclick="filtreRes('tous',this)">Toutes</button>
-      <button class="filter-chip" onclick="filtreRes('EN_ATTENTE',this)" style="background:var(--or-lt);border-color:var(--or);color:#856404;">⏳ En attente</button>
-      <button class="filter-chip" onclick="filtreRes('CONFIRME',this)" style="background:var(--vert-lt);border-color:var(--vert);color:var(--vert);">✅ Confirmées</button>
-      <button class="filter-chip" onclick="filtreRes('ANNULE',this)" style="background:var(--rouge-lt);border-color:var(--rouge);color:var(--rouge);">❌ Annulées</button>
-      <input class="search-input" id="search-res" placeholder="🔍 Nom, email, espace…" oninput="renderTableRes()">
-      <button class="btn-refresh" onclick="charger()">🔄 Actualiser</button>
-    </div>
-
-    <div id="table-res-wrap">
-      <div class="loading-block"><span class="spinner"></span>Chargement…</div>
-    </div>
-  </div>
-
-  <!-- PANEL ADHÉSIONS -->
-  <div class="admin-panel" id="panel-adhesions">
-    <div class="filters-bar">
-      <button class="filter-chip active" onclick="filtreAdh('tous',this)">Toutes</button>
-      <button class="filter-chip" onclick="filtreAdh('EN_ATTENTE',this)" style="background:var(--or-lt);border-color:var(--or);color:#856404;">⏳ En attente</button>
-      <button class="filter-chip" onclick="filtreAdh('CONFIRME',this)" style="background:var(--vert-lt);border-color:var(--vert);color:var(--vert);">✅ Traitées</button>
-      <input class="search-input" id="search-adh" placeholder="🔍 Nom, email, type…" oninput="renderTableAdh()">
-      <button class="btn-refresh" onclick="charger()">🔄 Actualiser</button>
-    </div>
-
-    <div id="table-adh-wrap">
-      <div class="loading-block"><span class="spinner"></span>Chargement…</div>
-    </div>
-  </div>
-
-  <!-- PANEL CALENDRIER -->
-  <div class="admin-panel" id="panel-calendrier">
-    <div class="cal-admin-header">
-      <button class="btn-refresh" style="margin-left:0" onclick="navCalAdmin(-1)">‹ Mois préc.</button>
-      <h3 id="cal-admin-titre"></h3>
-      <button class="btn-refresh" onclick="navCalAdmin(1)">Mois suiv. ›</button>
-    </div>
-    <div class="cal-admin-grid" id="cal-admin-dow"></div>
-    <div class="cal-admin-grid" id="cal-admin-grid"></div>
-  </div>
-
 </div>
 
 <!-- MODAL DÉTAIL -->
-<div class="modal-bg" id="modal-bg" onclick="if(event.target===this)fermerModal()">
-  <div class="modal" id="modal">
-    <h2 id="modal-titre"></h2>
-    <div id="modal-content"></div>
-    <div class="modal-actions" id="modal-actions"></div>
+<div class="overlay" id="mdetail">
+  <div class="modal">
+    <div class="mhd"><h3>Réservation <span id="det-ref" style="color:var(--brick)"></span></h3><button class="mclose" onclick="closeModal('mdetail')">×</button></div>
+    <div class="mbody" id="det-body"></div>
+    <div class="mfoot" id="det-foot"></div>
   </div>
 </div>
 
+<div class="loader" id="loader" style="display:none">
+  <div class="loader-box">
+    <div class="spinner"></div>
+    <div style="font-family:'Fraunces',serif;font-size:15px;font-weight:700" id="loader-txt">Chargement…</div>
+    <div style="font-size:12px;color:var(--muted);margin-top:5px" id="loader-sub"></div>
+  </div>
+</div>
+<div class="toasts" id="toasts"></div>
+
 <script>
-// ============================================================
-// CONFIG — Même URL que reservation.html
-// ============================================================
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw5f4eTOV6q9n7OCo0m29fmECgUoML4xrn0QsUG1k2OmSUGYQQrkiPIu_Cs7x_qROiA/exec';
-// Mode démo si pas encore configuré
-const DEMO_MODE = APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbw5f4eTOV6q9n7OCo0m29fmECgUoML4xrn0QsUG1k2OmSUGYQQrkiPIu_Cs7x_qROiA/exec';
-// ============================================================
+// ═══════════════════════════════════════════════════════
+let SCRIPT_URL = localStorage.getItem('genie_script_url') || '';
+const SHEET_URL = 'https://docs.google.com/spreadsheets/d/17dxvMah1AlINEN2InJzuTSJ4UtuC_QAg5bo3Snq2YYs/edit';
 
-let AUTH_TOKEN = null;
-let DATA = { reservations: [], adhesions: [] };
-let filtreResActif = 'tous';
-let filtreAdhActif = 'tous';
-let calAdminMois = null;
-
-// ===== DONNÉES DÉMO =====
-const DEMO_DATA = {
-  reservations: [
-    { id:'RES-001', statut:'EN_ATTENTE', dateCreation:'2026-03-18T09:00:00Z', espace:'Bourdelle', profil:'Tarif plein', date:'2026-03-20', heureDebut:'14:00', heureFin:'17:00', duree:3, participants:12, prenom:'Marie', nom:'Dupont', email:'marie.dupont@gmail.com', tel:'06 11 22 33 44', structure:'Association Action82', montant:90, message:'Formation ESS' },
-    { id:'RES-002', statut:'CONFIRME', dateCreation:'2026-03-17T11:00:00Z', espace:'Aristote', profil:'Adhérent Génie', date:'2026-03-19', heureDebut:'09:00', heureFin:'12:30', duree:3.5, participants:1, prenom:'Pierre', nom:'Martin', email:'pierre.martin@free.fr', tel:'06 55 44 33 22', structure:'Auto-entrepreneur', montant:35, message:'' },
-    { id:'RES-003', statut:'EN_ATTENTE', dateCreation:'2026-03-18T14:30:00Z', espace:'Freinet', profil:'Association / Syndicat', date:'2026-03-22', heureDebut:'10:00', heureFin:'12:00', duree:2, participants:8, prenom:'Sophie', nom:'Bernard', email:'sophie@syndicat82.fr', tel:'05 63 XX XX XX', structure:'Syndicat CFDT', montant:0, message:'Réunion mensuelle' },
-    { id:'RES-004', statut:'ANNULE', dateCreation:'2026-03-15T10:00:00Z', espace:'Gouges', profil:'Locataire Génie', date:'2026-03-18', heureDebut:'08:00', heureFin:'09:00', duree:1, participants:2, prenom:'Luc', nom:'Petit', email:'luc@startup.io', tel:'', structure:'StartupXYZ', montant:18, message:'' },
-  ],
-  adhesions: [
-    { id:'ADH-001', statut:'EN_ATTENTE', dateCreation:'2026-03-18T08:00:00Z', typeAdhesion:'Membre actif – Particulier (30–80€/an)', montant:45, modePaiement:'HelloAsso', prenom:'Claire', nom:'Fontaine', email:'claire.fontaine@hotmail.fr', tel:'06 77 88 99 00', adresse:'25 rue des Arts, 82000 Montauban', notes:'' },
-    { id:'ADH-002', statut:'CONFIRME', dateCreation:'2026-03-16T15:00:00Z', typeAdhesion:'Membre actif – Association (50€/an)', montant:50, modePaiement:'Virement bancaire', prenom:'Jean', nom:'Lenoir', email:'contact@assolenoir.fr', tel:'05 63 11 22 33', adresse:'7 allée des Mimosas, 82200 Moissac', notes:'Vérifié le 17/03' },
-  ]
+// ─── DONNÉES RÉFÉRENCE ──────────────────────────────────
+const PROFILS = {
+  ccfa:      { label:'CCFA',            color:'#5B21B6' },
+  adherent:  { label:'Adhérent',        color:'#0369A1' },
+  locataire: { label:'Locataire',       color:'var(--brick)' },
+  asso:      { label:'Asso/Syndicat',   color:'var(--sage)' }
 };
 
-// ===== LOGIN =====
-async function login() {
-  const pwd = document.getElementById('pwd').value;
-  if (!pwd) return;
+const ESPACES_DEF = {
+  bourdelle: { nom:'Antoine Bourdelle', ref:'0-02', type:'reunion', capacite:40, icon:'🏛️',
+    tarifs_reunion:{ ccfa:{heure:40,demi:110,journee:180}, adherent:{heure:30,demi:90,journee:150}, locataire:{heure:20,demi:70,journee:120}, asso:{heure:0,demi:0,journee:0} } },
+  freinet:   { nom:'Célestin Freinet',   ref:'1-11', type:'both',   capacite:20, icon:'📋',
+    tarifs_reunion:{ ccfa:{heure:30,demi:90,journee:150}, adherent:{heure:20,demi:60,journee:100}, locataire:{heure:15,demi:45,journee:80}, asso:{heure:0,demi:0,journee:0} } },
+  gouges:    { nom:'Olympe de Gouges',   ref:'1-12', type:'reunion', capacite:20, icon:'🤝',
+    tarifs_reunion:{ ccfa:{heure:30,demi:90,journee:150}, adherent:{heure:20,demi:60,journee:100}, locataire:{heure:15,demi:45,journee:80}, asso:{heure:0,demi:0,journee:0} } },
+  michel:    { nom:'Louise Michel',      ref:'0-01', type:'nomade',  capacite:4,  icon:'🚪', sous_type:'prive',
+    tarifs_nomade:{ demi:12, journee:22, semaine:90, mois:200 } },
+  rousseau:  { nom:'Jean-Jacques Rousseau', ref:'1-10', type:'nomade', capacite:20, icon:'💻', sous_type:'coworking',
+    tarifs_nomade:{ demi:10, journee:17, semaine:60, mois:180 } },
+  montessori:{ nom:'Maria Montessori',  ref:'-1-14', type:'both',   capacite:4,  icon:'♿',
+    tarifs_reunion:{ ccfa:{heure:20,demi:60,journee:100}, adherent:{heure:15,demi:45,journee:80}, locataire:{heure:10,demi:30,journee:70}, asso:{heure:0,demi:0,journee:0} },
+    tarifs_nomade:{ demi:15, journee:27, semaine:100, mois:216 } }
+};
 
-  if (DEMO_MODE) {
-    // Mode démo : accepte tout mot de passe
-    AUTH_TOKEN = 'demo-token';
-    ouvrirAdmin();
-    return;
-  }
+const DL = { heure:"Heure", demi:"½ journée", journee:"Journée", semaine:"Semaine", mois:"Mois" };
+const fMoney = n => n===0?'Gratuit':Number(n).toLocaleString('fr-FR',{minimumFractionDigits:2})+' €';
+const fDate  = d => d?new Date(d+'T12:00:00').toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'numeric'}):'';
+const genId  = () => 'RSV-'+Date.now().toString(36).toUpperCase();
+const gv     = id => (document.getElementById(id)?.value||'').trim();
+const gvb    = id => document.getElementById(id)?.checked||false;
 
+let DB = { reservations:[], config:{email:'genie.montauban@gmail.com', tel:'06 51 50 97 18'} };
+let editId = null, weekOffset = 0;
+
+// ─── API ─────────────────────────────────────────────────
+async function apiGet(params={}) {
+  if (!SCRIPT_URL) throw new Error('URL non configurée');
+  const url = new URL(SCRIPT_URL);
+  Object.entries(params).forEach(([k,v]) => url.searchParams.set(k,v));
+  const r = await fetch(url.toString(), {redirect:'follow'});
+  if (!r.ok) throw new Error('HTTP '+r.status);
+  const data = await r.json();
+  if (data.error) throw new Error(data.error);
+  return data;
+}
+async function apiPost(body) {
+  if (!SCRIPT_URL) throw new Error('URL non configurée');
+  const r = await fetch(SCRIPT_URL, {method:'POST', headers:{'Content-Type':'text/plain'}, body:JSON.stringify(body), redirect:'follow'});
+  if (!r.ok) throw new Error('HTTP '+r.status);
+  const data = await r.json();
+  if (data.error) throw new Error(data.error);
+  return data;
+}
+
+// ─── CHARGEMENT ──────────────────────────────────────────
+async function loadData(manual=false) {
+  if (!SCRIPT_URL) { showSetup(); return; }
+  if (manual) showLoader('Synchronisation…','');
+  setSyncState('loading','Chargement…');
   try {
-    const resp = await fetch(APPS_SCRIPT_URL, {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ action:'ADMIN_LOGIN', password:pwd })
-    });
-    const data = await resp.json();
-    if (data.success) {
-      AUTH_TOKEN = data.token;
-      ouvrirAdmin();
-    } else {
-      document.getElementById('login-err').style.display = 'block';
-    }
+    const data = await apiGet({action:'getAll'});
+    DB.reservations = (data.reservations||[]).map(r=>({...r, montant:parseFloat(r.montant)||0, nbHeures:parseInt(r.nbHeures)||1, participants:parseInt(r.participants)||1}));
+    if (data.config) Object.assign(DB.config, data.config);
+    setSyncState('ok','Sync. '+new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}));
+    if (manual) { hideLoader(); toast('Données actualisées'); }
+    refreshPage();
   } catch(e) {
-    document.getElementById('login-err').textContent = '⚠️ Impossible de contacter le serveur — mode démo activé';
-    document.getElementById('login-err').style.display = 'block';
-    AUTH_TOKEN = 'demo-token';
-    setTimeout(ouvrirAdmin, 1200);
+    setSyncState('error','Erreur'); if (manual) { hideLoader(); toast('Erreur : '+e.message,'err'); }
   }
 }
 
-function logout() {
-  AUTH_TOKEN = null; DATA = { reservations:[], adhesions:[] };
-  document.getElementById('admin-screen').style.display = 'none';
-  document.getElementById('login-screen').style.display = 'flex';
-  document.getElementById('pwd').value = '';
-}
-
-function ouvrirAdmin() {
-  document.getElementById('login-screen').style.display = 'none';
-  document.getElementById('admin-screen').style.display = 'flex';
-  document.getElementById('admin-screen').style.flexDirection = 'column';
-  const now = new Date();
-  calAdminMois = { y:now.getFullYear(), m:now.getMonth() };
-  charger();
-}
-
-// ===== CHARGER DONNÉES =====
-async function charger() {
-  if (DEMO_MODE) {
-    DATA = DEMO_DATA;
-    majStats();
-    renderTableRes();
-    renderTableAdh();
-    renderCalAdmin();
-    document.getElementById('last-update').textContent = 'Mode démo · ' + new Date().toLocaleTimeString('fr-FR');
-    return;
-  }
-
+// ─── CRUD ─────────────────────────────────────────────────
+async function saveResa(silent) {
+  const prenom=gv('r-prenom'), nom=gv('r-nom'), email=gv('r-email'), date=gv('r-date'), espace=gv('r-espace');
+  if (!prenom||!nom||!email||!date||!espace) { toast('Champs * obligatoires','err'); return; }
+  const usage=gv('r-usage'), profil=gv('r-profil'), duree=gv('r-duree'), nbH=parseInt(gv('r-nbh'))||1;
+  const hd=gv('r-hdebut'), hf=heureFin(hd,duree,nbH);
+  const badge=gvb('r-badge'), adhesion=gvb('r-adhesion');
+  const m = calcMontant(espace, usage, profil, duree, nbH);
+  const opts = [badge?'Badge 24h/7j':'',adhesion?'Adhésion Génie':''].filter(Boolean).join(', ');
+  const total = m + (badge?25:0) + (adhesion?50:0);
+  const now = new Date().toISOString();
+  const resa = {
+    id:editId||genId(), prenom, nom, email,
+    tel:gv('r-tel'), orga:gv('r-orga'),
+    espace, nomEspace:(ESPACES_DEF[espace]||{}).nom||espace,
+    usage, profil: usage==='reunion'?profil:'',
+    date, typeDuree:duree, nbHeures:String(nbH), heureDebut:hd, heureFin:hf,
+    montant:String(total), montantBase:String(m), options:opts,
+    statut:gv('r-statut'),
+    participants:String(parseInt(gv('r-part'))||1),
+    objet:gv('r-objet'),
+    createdAt:editId?(DB.reservations.find(r=>r.id===editId)||{}).createdAt||now:now,
+    updatedAt:now
+  };
+  showLoader(editId?'Modification…':'Création…','Sauvegarde Google Sheets');
   try {
-    const resp = await fetch(APPS_SCRIPT_URL, {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ action:'ADMIN_GET_ALL', token:AUTH_TOKEN })
+    await apiPost({action:editId?'updateResa':'addResa', resa});
+    const full = {...resa, montant:total, nbHeures:nbH, participants:parseInt(resa.participants)};
+    if (editId) { const i=DB.reservations.findIndex(r=>r.id===editId); if(i>=0) DB.reservations[i]=full; }
+    else DB.reservations.unshift(full);
+    hideLoader(); closeModal('mresa');
+    toast(editId?'Modifiée !':'Créée !');
+    if (!silent) sendEmail(resa);
+    renderDashboard(); renderTable();
+  } catch(e) { hideLoader(); toast('Erreur : '+e.message,'err'); }
+}
+
+async function updateStatut(id, statut) {
+  const r = DB.reservations.find(r=>r.id===id); if(!r) return;
+  showLoader('Mise à jour…','');
+  const u = {...r, statut, updatedAt:new Date().toISOString(), montant:String(r.montant), nbHeures:String(r.nbHeures), participants:String(r.participants)};
+  try {
+    await apiPost({action:'updateResa', resa:u});
+    r.statut=statut; hideLoader(); closeModal('mdetail');
+    toast('Statut mis à jour'); renderDashboard(); renderTable();
+  } catch(e) { hideLoader(); toast('Erreur : '+e.message,'err'); }
+}
+
+async function deleteResa(id) {
+  if(!confirm('Supprimer définitivement ?')) return;
+  showLoader('Suppression…','');
+  try {
+    await apiPost({action:'deleteResa', id});
+    DB.reservations = DB.reservations.filter(r=>r.id!==id);
+    hideLoader(); closeModal('mdetail'); toast('Supprimée','info');
+    renderDashboard(); renderTable();
+  } catch(e) { hideLoader(); toast('Erreur : '+e.message,'err'); }
+}
+
+async function clearAll() {
+  if(!confirm('SUPPRIMER TOUTES les réservations ? Irréversible.')) return;
+  showLoader('Suppression…','');
+  try {
+    for (const r of [...DB.reservations]) await apiPost({action:'deleteResa', id:r.id});
+    DB.reservations=[]; hideLoader(); toast('Tout supprimé','info'); renderDashboard();
+  } catch(e) { hideLoader(); toast('Erreur : '+e.message,'err'); }
+}
+
+async function saveCfg() {
+  DB.config.email=gv('cfg-email'); DB.config.tel=gv('cfg-tel');
+  try { await apiPost({action:'saveConfig', config:DB.config}); toast('Config enregistrée'); }
+  catch(e) { toast('Erreur : '+e.message,'err'); }
+}
+
+// ─── CALCUL ──────────────────────────────────────────────
+function calcMontant(espace, usage, profil, duree, nbH) {
+  const e = ESPACES_DEF[espace]; if (!e) return 0;
+  if (usage==='reunion' && e.tarifs_reunion) {
+    const t = e.tarifs_reunion[profil]||e.tarifs_reunion.locataire;
+    if (duree==='heure') return t.heure*(nbH||1);
+    return t[duree]||0;
+  }
+  if (usage==='nomade' && e.tarifs_nomade) return e.tarifs_nomade[duree]||0;
+  return 0;
+}
+
+function heureFin(hd, duree, nbH) {
+  if (!hd) return '';
+  const [h,m] = hd.split(':').map(Number);
+  let t = h*60+m;
+  if (duree==='heure') t+=(nbH||1)*60;
+  else if (duree==='demi') t+=240;
+  else if (duree==='journee') t+=480;
+  else t+=60;
+  return `${String(Math.floor(t/60)%24).padStart(2,'0')}:${String(t%60).padStart(2,'0')}`;
+}
+
+// ─── MODAL FORM ───────────────────────────────────────────
+function updateModalUsage() {
+  const espace = gv('r-espace'), e = ESPACES_DEF[espace];
+  if (!e) return;
+  const usageFg = document.getElementById('r-usage-fg');
+  const profilFg = document.getElementById('r-profil-fg');
+  // Usage
+  if (e.type==='reunion') { gvSet('r-usage','reunion'); usageFg.style.display='none'; }
+  else if (e.type==='nomade') { gvSet('r-usage','nomade'); usageFg.style.display='none'; }
+  else usageFg.style.display=''; // both
+  updateModalDurees();
+}
+
+function gvSet(id, val) { const el=document.getElementById(id); if(el) el.value=val; }
+
+function updateModalDurees() {
+  const usage = gv('r-usage');
+  const profilFg = document.getElementById('r-profil-fg');
+  const hdFg = document.getElementById('r-hdebut-fg');
+  const nbhFg = document.getElementById('r-nbh-fg');
+  const dureeSel = document.getElementById('r-duree');
+  profilFg.style.display = usage==='reunion' ? '' : 'none';
+  if (usage==='reunion') {
+    dureeSel.innerHTML = '<option value="heure">À l\'heure</option><option value="demi">½ journée</option><option value="journee">Journée</option>';
+    hdFg.style.display=''; nbhFg.style.display='';
+  } else {
+    dureeSel.innerHTML = '<option value="demi">½ journée</option><option value="journee">Journée</option><option value="semaine">Semaine</option><option value="mois">Mois</option>';
+    hdFg.style.display='none'; nbhFg.style.display='none';
+  }
+  calcModalPrix();
+}
+
+function calcModalPrix() {
+  const espace=gv('r-espace'), usage=gv('r-usage'), profil=gv('r-profil');
+  const duree=gv('r-duree'), nbH=parseInt(gv('r-nbh'))||1;
+  const badge=gvb('r-badge'), adhesion=gvb('r-adhesion');
+  if (!espace) return;
+  const base = calcMontant(espace, usage, profil, duree, nbH);
+  const total = base + (badge?25:0) + (adhesion?50:0);
+  const px = document.getElementById('modal-prix');
+  const hd=gv('r-hdebut'), hf=heureFin(hd,duree,nbH);
+  px.style.display='block';
+  px.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center">
+    <span style="font-size:12px;color:var(--muted)">${DL[duree]||duree}${duree==='heure'?' × '+nbH+'h':''} ${hf?'('+hd+'→'+hf+')':''}</span>
+    <span class="amount" style="font-size:18px;color:var(--brick)">${fMoney(total)}</span>
+  </div>${base===0&&profil==='asso'?'<div style="font-size:11px;color:var(--sage);margin-top:4px">Gratuit sous conditions</div>':''}`;
+}
+
+function openModal(id) {
+  if (id==='mresa') resetForm();
+  document.getElementById(id).classList.add('open');
+}
+function closeModal(id) { document.getElementById(id).classList.remove('open'); editId=null; }
+document.addEventListener('click', e => { if(e.target.classList.contains('overlay')) { e.target.classList.remove('open'); editId=null; } });
+
+function resetForm() {
+  editId=null;
+  document.getElementById('mresa-title').textContent='Nouvelle réservation';
+  ['r-prenom','r-nom','r-email','r-tel','r-orga','r-objet'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+  document.getElementById('r-espace').value=''; document.getElementById('r-usage').value='reunion';
+  document.getElementById('r-profil').value='locataire'; document.getElementById('r-duree').value='heure';
+  document.getElementById('r-hdebut').value='09:00'; document.getElementById('r-nbh').value='2';
+  document.getElementById('r-statut').value='confirmed'; document.getElementById('r-part').value='1';
+  document.getElementById('r-date').value=new Date().toISOString().split('T')[0];
+  document.getElementById('r-badge').checked=false; document.getElementById('r-adhesion').checked=false;
+  document.getElementById('modal-prix').style.display='none';
+  document.getElementById('r-usage-fg').style.display='none';
+  document.getElementById('r-profil-fg').style.display='';
+}
+
+function editResa(id) {
+  const r=DB.reservations.find(r=>r.id===id); if(!r) return;
+  editId=id;
+  document.getElementById('mresa-title').textContent='Modifier';
+  ['prenom','nom','email','tel','orga','objet'].forEach(f=>gvSet('r-'+f, r[f]||''));
+  gvSet('r-espace',r.espace); gvSet('r-usage',r.usage||'reunion');
+  gvSet('r-profil',r.profil||'locataire'); gvSet('r-duree',r.typeDuree||'heure');
+  gvSet('r-hdebut',r.heureDebut||'09:00'); gvSet('r-nbh',r.nbHeures||'2');
+  gvSet('r-statut',r.statut); gvSet('r-part',r.participants||'1');
+  gvSet('r-date',r.date);
+  const opts = r.options||'';
+  document.getElementById('r-badge').checked = opts.includes('Badge');
+  document.getElementById('r-adhesion').checked = opts.includes('Adhésion');
+  updateModalUsage();
+  closeModal('mdetail'); openModal('mresa');
+}
+
+// ─── BADGES ──────────────────────────────────────────────
+function statusBadge(s) {
+  return ({confirmed:'<span class="badge b-confirmed">✓ Confirmée</span>', pending:'<span class="badge b-pending">⏳ En attente</span>', completed:'<span class="badge b-completed">● Terminée</span>', cancelled:'<span class="badge b-cancelled">✗ Annulée</span>'})[s]||s;
+}
+function espaceBadge(k) {
+  const e=ESPACES_DEF[k]; if(!e) return k;
+  return `<span class="eb eb-${k}">${e.icon} ${e.nom.split(' ')[e.nom.startsWith('Jean')?2:e.nom.startsWith('Olympe')?0:e.nom.startsWith('Antoine')?1:e.nom.startsWith('Maria')?1:e.nom.startsWith('Louise')?1:e.nom.startsWith('Célestin')?1:0]||e.nom}</span>`;
+}
+function profilBadge(p) {
+  if (!p) return '—'; const pr=PROFILS[p]; if(!pr) return p;
+  return `<span style="color:${pr.color};font-weight:600;font-size:12px">${pr.label}</span>`;
+}
+
+// ─── EMAIL ───────────────────────────────────────────────
+function sendEmail(r) {
+  const e=ESPACES_DEF[r.espace], profilL=(PROFILS[r.profil]||{}).label||'';
+  const dl = r.typeDuree==='heure'?`${r.nbHeures}h (${r.heureDebut}→${r.heureFin})`:DL[r.typeDuree]||r.typeDuree;
+  const sub=encodeURIComponent(`Confirmation réservation Génie — ${r.id}`);
+  const body=encodeURIComponent(`Bonjour ${r.prenom},\n\nVotre réservation est confirmée.\n\nRéférence : ${r.id}\nEspace : ${e?.nom||r.espace} (${e?.ref||''})\nDate : ${fDate(r.date)}\nDurée : ${dl}\n${profilL?'Profil : '+profilL+'\n':''}Montant : ${fMoney(r.montant)}${r.options?'\nOptions : '+r.options:''}\n\nÉquipe Génie Montauban\n${DB.config.tel} · ${DB.config.email}`);
+  window.location.href=`mailto:${r.email}?subject=${sub}&body=${body}`;
+}
+
+function printResa(id) {
+  const r=DB.reservations.find(r=>r.id===id); if(!r) return;
+  const e=ESPACES_DEF[r.espace], profilL=(PROFILS[r.profil]||{}).label||'';
+  const dl=r.typeDuree==='heure'?`${r.nbHeures}h (${r.heureDebut}→${r.heureFin})`:DL[r.typeDuree]||r.typeDuree;
+  const w=window.open('','_blank');
+  w.document.write(`<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><title>${r.id}</title>
+  <style>body{font-family:Georgia,serif;max-width:680px;margin:40px auto;color:#1C1410;font-size:14px}h1{font-size:24px}
+  .hd{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #C4622D;padding-bottom:16px;margin-bottom:22px}
+  .ref{background:#C4622D;color:#fff;padding:6px 14px;border-radius:6px;font-size:13px;font-weight:700}
+  table{width:100%;border-collapse:collapse;margin-bottom:18px}td{padding:9px 12px;border-bottom:1px solid #E8DFD4}
+  td:first-child{font-weight:600;color:#8C7B6B;width:36%;font-size:12px;text-transform:uppercase}
+  .tot td{background:#FDF7EF;font-weight:700;font-size:16px;border-top:2px solid #C4622D;border-bottom:2px solid #C4622D}
+  .ft{margin-top:30px;padding-top:12px;border-top:1px solid #DDD5C8;font-size:11px;color:#8C7B6B;text-align:center}
+  @media print{body{margin:20px}}</style></head><body>
+  <div class="hd"><div><h1>Génie <span style="color:#C4622D">Montauban</span></h1><div style="color:#8C7B6B;font-size:11px;text-transform:uppercase;letter-spacing:1px">Bon de réservation</div></div><div class="ref">${r.id}</div></div>
+  <table>
+  <tr><td>Client</td><td><strong>${r.prenom} ${r.nom}</strong>${r.orga?' — <em>'+r.orga+'</em>':''}</td></tr>
+  <tr><td>Email</td><td>${r.email}</td></tr>
+  ${r.tel?`<tr><td>Téléphone</td><td>${r.tel}</td></tr>`:''}
+  <tr><td>Espace</td><td>${e?.nom||r.espace} (Bureau ${e?.ref||''})</td></tr>
+  ${profilL?`<tr><td>Profil</td><td>${profilL}</td></tr>`:''}
+  <tr><td>Date</td><td>${fDate(r.date)}</td></tr>
+  <tr><td>Durée</td><td>${dl}</td></tr>
+  <tr><td>Participants</td><td>${r.participants||1} pers.</td></tr>
+  ${r.objet?`<tr><td>Objet</td><td>${r.objet}</td></tr>`:''}
+  ${r.options?`<tr><td>Options</td><td>${r.options}</td></tr>`:''}
+  <tr class="tot"><td>Montant total</td><td>${fMoney(r.montant)}</td></tr>
+  </table>
+  <p style="font-size:12px;color:#8C7B6B;background:#FDF7EF;padding:12px;border-radius:8px">Annulation gratuite 48h avant la réservation. Ce document n'est pas une facture.</p>
+  <div class="ft">Génie Montauban · 12 rue du Génie 82000 Montauban · ${DB.config.email} · Généré le ${new Date().toLocaleDateString('fr-FR')}</div>
+  <script>window.onload=()=>window.print()<\/script></body></html>`);
+  w.document.close();
+}
+
+// ─── NAVIGATION ──────────────────────────────────────────
+const PAGE_T = { dashboard:'Tableau de bord', planning:'Planning semaine', reservations:'Réservations', clients:'Clients', espaces:'Espaces & Tarifs 2026', donnees:'Données & Configuration' };
+function toggleSidebar() {
+  const s=document.getElementById('sidebar'), o=document.getElementById('sidebar-overlay');
+  s.classList.toggle('open'); o.classList.toggle('open');
+}
+function closeSidebarMobile() { if(window.innerWidth<=768){ const s=document.getElementById('sidebar'),o=document.getElementById('sidebar-overlay'); s.classList.remove('open');o.classList.remove('open'); } }
+function go(name) { closeSidebarMobile();
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>{ if(n.getAttribute('onclick')?.includes("'"+name+"'")) n.classList.add('active'); });
+  document.getElementById('ptitle').textContent=PAGE_T[name];
+  document.getElementById('topbar-actions').innerHTML=`<button class="btn btn-ghost btn-sm" onclick="loadData(true)">🔄 Actualiser</button>`+
+    (!['espaces','donnees'].includes(name)?`<button class="btn btn-primary" onclick="openModal('mresa')">➕ Nouvelle réservation</button>`:'');
+  refreshPage(name);
+}
+function refreshPage(name) {
+  const n=name||document.querySelector('.page.active')?.id?.replace('page-','');
+  if(n==='dashboard') renderDashboard();
+  else if(n==='planning') renderPlanning();
+  else if(n==='reservations') renderTable();
+  else if(n==='clients') renderClients();
+  else if(n==='espaces') renderEspaces();
+  else if(n==='donnees') renderDonnees();
+}
+
+// ─── DASHBOARD ───────────────────────────────────────────
+function renderDashboard() {
+  const R=DB.reservations, now=new Date(), m=now.getMonth(), y=now.getFullYear();
+  const mR=R.filter(r=>{const d=new Date(r.date+'T12:00:00');return d.getMonth()===m&&d.getFullYear()===y&&r.statut!=='cancelled';});
+  const caM=mR.reduce((s,r)=>s+Number(r.montant),0);
+  const tod=now.toISOString().split('T')[0];
+  document.getElementById('stats').innerHTML=`
+    <div class="stat-card sc-brick"><div class="stat-label">CA du mois</div><div class="stat-value">${fMoney(caM)}</div><div class="stat-sub">${mR.length} réservation(s)</div></div>
+    <div class="stat-card sc-gold"><div class="stat-label">Total réservations</div><div class="stat-value">${R.filter(r=>r.statut!=='cancelled').length}</div><div class="stat-sub">${R.filter(r=>r.statut==='pending').length} en attente</div></div>
+    <div class="stat-card sc-sage"><div class="stat-label">Aujourd'hui</div><div class="stat-value">${R.filter(r=>r.date===tod&&r.statut!=='cancelled').length}</div><div class="stat-sub">réservation(s)</div></div>
+    <div class="stat-card sc-steel"><div class="stat-label">CA total</div><div class="stat-value">${fMoney(R.filter(r=>r.statut!=='cancelled').reduce((s,r)=>s+Number(r.montant),0))}</div><div class="stat-sub">depuis ouverture</div></div>`;
+  document.getElementById('recent-body').innerHTML=R.slice(0,8).map(r=>
+    `<tr style="cursor:pointer" onclick="showDetail('${r.id}')">
+    <td><strong>${r.prenom} ${r.nom}</strong></td><td>${espaceBadge(r.espace)}</td>
+    <td>${fDate(r.date)}</td><td>${profilBadge(r.profil)}</td>
+    <td class="amount">${fMoney(r.montant)}</td><td>${statusBadge(r.statut)}</td></tr>`
+  ).join('')||'<tr><td colspan="6" style="text-align:center;padding:28px;color:var(--muted)">Aucune réservation</td></tr>';
+
+  const last30=new Date(); last30.setDate(last30.getDate()-30);
+  const r30=R.filter(r=>new Date(r.date)>=last30&&r.statut!=='cancelled');
+  const colors={'bourdelle':'#7C3AED','freinet':'#0284C7','gouges':'#DB2777','michel':'#16A34A','rousseau':'#CA8A04','montessori':ESPACES_DEF.montessori?'var(--sage)':'#666'};
+  document.getElementById('occ-bars').innerHTML=Object.keys(ESPACES_DEF).map(k=>{
+    const cnt=r30.filter(r=>r.espace===k).length;
+    const pct=Math.min(100,cnt*8);
+    return `<div class="occ-row"><div class="occ-name">${ESPACES_DEF[k].icon} ${ESPACES_DEF[k].nom.split(' ')[0]}</div><div class="occ-bg"><div class="occ-fill" style="width:${pct}%;background:${colors[k]}"></div></div><div class="occ-pct" style="color:${colors[k]}">${pct}%</div></div>`;
+  }).join('');
+}
+
+// ─── PLANNING ────────────────────────────────────────────
+const HOURS=['08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00'];
+function shiftWeek(d) { weekOffset=d===0?0:weekOffset+d; renderPlanning(); }
+function renderPlanning() {
+  const today=new Date(), bm=new Date(today), dow=today.getDay();
+  bm.setDate(today.getDate()+(dow===0?-6:1-dow)+weekOffset*7);
+  const days=Array.from({length:6},(_,i)=>{const d=new Date(bm);d.setDate(bm.getDate()+i);return d;});
+  const ts=today.toISOString().split('T')[0];
+  const fmt=d=>d.toLocaleDateString('fr-FR',{day:'2-digit',month:'short'});
+  document.getElementById('week-lbl').textContent=`${fmt(days[0])} — ${fmt(days[5])} ${days[5].getFullYear()}`;
+  const dn=['Lun','Mar','Mer','Jeu','Ven','Sam'];
+  document.getElementById('plan-days').innerHTML='<div class="dh">H.</div>'+days.map((d,i)=>`<div class="dh${d.toISOString().split('T')[0]===ts?' today':''}">${dn[i]}<br>${d.getDate()}/${d.getMonth()+1}</div>`).join('');
+  const filterEspace=document.getElementById('plan-filter').value;
+  const resas=DB.reservations.filter(r=>r.statut!=='cancelled'&&(!filterEspace||r.espace===filterEspace));
+  let body='<div class="time-col">'+HOURS.map(h=>`<div class="ts">${h}</div>`).join('')+'</div>';
+  days.forEach(day=>{
+    const ds=day.toISOString().split('T')[0], dr=resas.filter(r=>r.date===ds);
+    body+='<div class="dcol">';
+    HOURS.forEach((hour,hi)=>{
+      const evts=dr.filter(r=>parseInt(r.heureDebut?.split(':')[0])===parseInt(hour));
+      const eh=evts.map(r=>{
+        const dh=r.typeDuree==='heure'?Number(r.nbHeures):(r.typeDuree==='demi'?4:8);
+        const ht=Math.min(dh*44,HOURS.length*44-hi*44);
+        return `<div class="ev ev-${r.espace}" style="height:${ht-3}px;top:1px" onclick="showDetail('${r.id}')">${r.prenom} ${r.nom.charAt(0)}.<br>${r.heureDebut}</div>`;
+      }).join('');
+      body+=`<div class="slot" onclick="openResaAt('${ds}','${hour}')">${eh}</div>`;
     });
-    const data = await resp.json();
-    if (data.success) {
-      DATA = data;
-      majStats();
-      renderTableRes();
-      renderTableAdh();
-      renderCalAdmin();
-      document.getElementById('last-update').textContent = 'Mis à jour : ' + new Date().toLocaleTimeString('fr-FR');
+    body+='</div>';
+  });
+  document.getElementById('plan-body').innerHTML=body;
+}
+function openResaAt(date,heure) { resetForm(); gvSet('r-date',date); gvSet('r-hdebut',heure); openModal('mresa'); }
+
+// ─── TABLE ────────────────────────────────────────────────
+function renderTable() {
+  const search=(document.getElementById('f-search')?.value||'').toLowerCase();
+  const statut=document.getElementById('f-statut')?.value||'';
+  const espace=document.getElementById('f-espace')?.value||'';
+  const usage=document.getElementById('f-usage')?.value||'';
+  let R=DB.reservations;
+  if(search) R=R.filter(r=>`${r.prenom} ${r.nom} ${r.email} ${r.orga} ${r.objet}`.toLowerCase().includes(search));
+  if(statut) R=R.filter(r=>r.statut===statut);
+  if(espace) R=R.filter(r=>r.espace===espace);
+  if(usage)  R=R.filter(r=>(r.usage||'reunion')===usage);
+  document.getElementById('resa-body').innerHTML=R.length?R.map(r=>`
+    <tr style="cursor:pointer" onclick="showDetail('${r.id}')">
+      <td style="font-size:11px;font-weight:700;color:var(--brick);font-family:'Fraunces',serif">${r.id}</td>
+      <td><strong>${r.prenom} ${r.nom}</strong>${r.orga?`<br><span style="font-size:11px;color:var(--muted)">${r.orga}</span>`:''}</td>
+      <td>${espaceBadge(r.espace)}</td>
+      <td>${profilBadge(r.profil)}${r.usage==='nomade'?'<br><span style="font-size:11px;color:var(--sage)">Nomade</span>':''}</td>
+      <td>${fDate(r.date)}</td>
+      <td style="font-size:12px">${r.heureDebut||'—'}${r.heureFin?' → '+r.heureFin:''}</td>
+      <td>${DL[r.typeDuree]||r.typeDuree||'—'}${r.typeDuree==='heure'?' × '+r.nbHeures+'h':''}</td>
+      <td><span class="amount">${fMoney(r.montant)}</span></td>
+      <td style="font-size:11px">${r.options||'—'}</td>
+      <td>${statusBadge(r.statut)}</td>
+      <td onclick="event.stopPropagation()">
+        <button class="btn btn-sm btn-secondary" onclick="editResa('${r.id}')">✏️</button>
+        <button class="btn btn-sm btn-ghost" onclick="printResa('${r.id}')">🖨️</button>
+      </td>
+    </tr>`).join(''):'<tr><td colspan="11" style="text-align:center;padding:28px;color:var(--muted)">Aucune réservation</td></tr>';
+}
+
+// ─── DÉTAIL ───────────────────────────────────────────────
+function showDetail(id) {
+  const r=DB.reservations.find(r=>r.id===id); if(!r) return;
+  const e=ESPACES_DEF[r.espace];
+  const dl=r.typeDuree==='heure'?`${r.nbHeures}h (${r.heureDebut}→${r.heureFin})`:DL[r.typeDuree]||r.typeDuree;
+  document.getElementById('det-ref').textContent=r.id;
+  document.getElementById('det-body').innerHTML=`
+    <div class="dgrid">
+      <div class="di"><label>Client</label><span>${r.prenom} ${r.nom}</span></div>
+      <div class="di"><label>Organisation</label><span>${r.orga||'—'}</span></div>
+      <div class="di"><label>Email</label><span>${r.email}</span></div>
+      <div class="di"><label>Téléphone</label><span>${r.tel||'—'}</span></div>
+      <div class="di"><label>Espace</label><span>${e?e.icon+' '+e.nom:r.espace} (Bureau ${e?.ref||''})</span></div>
+      <div class="di"><label>Usage / Profil</label><span>${r.usage==='nomade'?'Bureau nomade':'Salle réunion'}${r.profil?' · '+((PROFILS[r.profil]||{}).label||r.profil):''}</span></div>
+      <div class="di"><label>Date</label><span>${fDate(r.date)}</span></div>
+      <div class="di"><label>Durée</label><span>${dl}</span></div>
+      <div class="di"><label>Participants</label><span>${r.participants||1} pers.</span></div>
+      <div class="di"><label>Options</label><span>${r.options||'Aucune'}</span></div>
+      <div class="di full"><label>Objet</label><span>${r.objet||'—'}</span></div>
+      <div class="di"><label>Montant</label><span class="amount" style="font-size:20px;color:var(--brick)">${fMoney(r.montant)}</span></div>
+      <div class="di"><label>Statut</label><span>${statusBadge(r.statut)}</span></div>
+    </div>`;
+  document.getElementById('det-foot').innerHTML=`
+    <button class="btn btn-ghost" onclick="closeModal('mdetail')">Fermer</button>
+    <button class="btn btn-secondary" onclick="editResa('${r.id}')">✏️ Modifier</button>
+    <button class="btn btn-secondary" onclick="sendEmail(DB.reservations.find(x=>x.id==='${r.id}'))">📧 Email</button>
+    <button class="btn btn-ghost" onclick="printResa('${r.id}')">🖨️ PDF</button>
+    ${r.statut==='pending'?`<button class="btn btn-sage" onclick="updateStatut('${r.id}','confirmed')">✓ Confirmer</button>`:''}
+    ${r.statut!=='cancelled'?`<button class="btn btn-danger btn-sm" onclick="updateStatut('${r.id}','cancelled')">Annuler</button>`:''}
+    <button class="btn btn-danger btn-sm" onclick="deleteResa('${r.id}')">🗑️</button>`;
+  openModal('mdetail');
+}
+
+// ─── CLIENTS ─────────────────────────────────────────────
+function renderClients() {
+  const search=(document.getElementById('f-client')?.value||'').toLowerCase();
+  const map={};
+  DB.reservations.filter(r=>r.statut!=='cancelled').forEach(r=>{
+    const k=r.email.toLowerCase();
+    if(!map[k]) map[k]={prenom:r.prenom,nom:r.nom,email:r.email,tel:r.tel,orga:r.orga,count:0,ca:0};
+    map[k].count++; map[k].ca+=Number(r.montant);
+  });
+  let list=Object.values(map);
+  if(search) list=list.filter(c=>`${c.prenom} ${c.nom} ${c.email} ${c.orga}`.toLowerCase().includes(search));
+  list.sort((a,b)=>b.ca-a.ca);
+  document.getElementById('client-body').innerHTML=list.length
+    ?list.map(c=>`<tr><td><strong>${c.prenom} ${c.nom}</strong></td><td>${c.email}</td><td>${c.tel||'—'}</td><td>${c.orga||'—'}</td><td><strong>${c.count}</strong></td><td><span class="amount">${fMoney(c.ca)}</span></td></tr>`).join('')
+    :'<tr><td colspan="6" style="text-align:center;padding:28px;color:var(--muted)">Aucun client</td></tr>';
+}
+
+// ─── ESPACES ─────────────────────────────────────────────
+function renderEspaces() {
+  document.getElementById('espaces-grid').innerHTML = Object.entries(ESPACES_DEF).map(([k,e])=>{
+    let content = `<div class="card">
+      <div class="card-hd"><h3>${e.icon} ${e.nom}</h3><span style="font-size:12px;color:var(--muted)">${e.ref} · ${e.capacite} pers.</span></div>
+      <div class="card-body">`;
+    if (e.tarifs_reunion) {
+      content += `<div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px">Salle de réunion</div>
+        <table style="font-size:12px;border-collapse:collapse;width:100%"><thead>
+        <tr><th style="text-align:left;padding:5px 8px;background:var(--cream);font-size:11px">Profil</th><th style="text-align:right;padding:5px 8px;background:var(--cream);font-size:11px">/heure</th><th style="text-align:right;padding:5px 8px;background:var(--cream);font-size:11px">½j</th><th style="text-align:right;padding:5px 8px;background:var(--cream);font-size:11px">Journée</th></tr></thead><tbody>`;
+      Object.entries(e.tarifs_reunion).forEach(([p,t])=>{
+        const pr=PROFILS[p];
+        content+=`<tr><td style="padding:5px 8px;border-bottom:1px solid #F0EBE3;color:${pr.color};font-weight:600">${pr.label}</td>
+          <td style="text-align:right;padding:5px 8px;border-bottom:1px solid #F0EBE3">${t.heure===0?'Gratuit':t.heure+'€'}</td>
+          <td style="text-align:right;padding:5px 8px;border-bottom:1px solid #F0EBE3">${t.demi===0?'Gratuit':t.demi+'€'}</td>
+          <td style="text-align:right;padding:5px 8px;border-bottom:1px solid #F0EBE3">${t.journee===0?'Gratuit':t.journee+'€'}</td></tr>`;
+      });
+      content += '</tbody></table>';
     }
-  } catch(e) {
-    DATA = DEMO_DATA; // Fallback démo
-    majStats(); renderTableRes(); renderTableAdh(); renderCalAdmin();
-    document.getElementById('last-update').textContent = '⚠️ Mode démo (serveur inaccessible)';
-  }
+    if (e.tarifs_nomade) {
+      content += `${e.tarifs_reunion?'<div style="margin-top:14px;border-top:1px solid var(--border);padding-top:12px"></div>':''}<div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px">Bureau nomade ${e.sous_type==='coworking'?'(Coworking)':'(Privé)'}</div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+        ${Object.entries(e.tarifs_nomade).map(([d,p])=>`<div style="background:var(--cream);border-radius:8px;padding:8px;text-align:center"><div style="font-size:10px;color:var(--muted);text-transform:uppercase">${DL[d]||d}</div><div style="font-family:'Fraunces',serif;font-size:16px;font-weight:700;color:var(--brick)">${p}€</div></div>`).join('')}
+        </div>`;
+    }
+    content += '</div></div>';
+    return content;
+  }).join('');
 }
 
-// ===== STATS =====
-function majStats() {
-  const res = DATA.reservations;
-  const adh = DATA.adhesions;
-  document.getElementById('stat-total').textContent = res.length;
-  document.getElementById('stat-attente').textContent = res.filter(r=>r.statut==='EN_ATTENTE').length;
-  document.getElementById('stat-confirme').textContent = res.filter(r=>r.statut==='CONFIRME').length;
-  document.getElementById('stat-adh').textContent = adh.filter(a=>a.statut==='EN_ATTENTE').length;
+// ─── DONNÉES ─────────────────────────────────────────────
+function renderDonnees() {
+  document.getElementById('url-display').textContent=SCRIPT_URL||'(non configuré)';
+  document.getElementById('data-info').textContent=`${DB.reservations.length} réservation(s) · ${document.getElementById('sync-txt').textContent}`;
+  document.getElementById('cfg-email').value=DB.config.email||'';
+  document.getElementById('cfg-tel').value=DB.config.tel||'';
 }
 
-// ===== TABLE RÉSERVATIONS =====
-function renderTableRes() {
-  const search = document.getElementById('search-res').value.toLowerCase();
-  let items = DATA.reservations.filter(r => {
-    if (filtreResActif !== 'tous' && r.statut !== filtreResActif) return false;
-    if (search && !JSON.stringify(r).toLowerCase().includes(search)) return false;
-    return true;
+function exportCSV() {
+  const h=['ID','Prénom','Nom','Email','Tél','Organisation','Espace','Ref','Usage','Profil','Date','H.début','H.fin','Durée','NbH','Participants','Objet','Options','Montant','Statut'];
+  const rows=DB.reservations.map(r=>{
+    const e=ESPACES_DEF[r.espace];
+    return [r.id,r.prenom,r.nom,r.email,r.tel||'',r.orga||'',e?.nom||r.espace,e?.ref||'',r.usage||'reunion',r.profil||'',r.date,r.heureDebut,r.heureFin,DL[r.typeDuree]||r.typeDuree,r.nbHeures,r.participants||1,(r.objet||'').replace(/;/g,''),r.options||'',r.montant,r.statut].join(';');
   });
-
-  const html = `
-  <div class="table-wrap">
-    <table>
-      <thead><tr>
-        <th>Réf.</th><th>Statut</th><th>Espace</th><th>Date & Horaire</th>
-        <th>Client</th><th>Profil</th><th>Montant</th><th>Actions</th>
-      </tr></thead>
-      <tbody>
-        ${items.length === 0 ? '<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:24px">Aucune réservation trouvée</td></tr>' :
-          items.map(r => `
-          <tr>
-            <td><code style="font-size:11px;color:var(--muted)">${r.id}</code></td>
-            <td><span class="statut-badge s-${r.statut.toLowerCase().replace('_','-')}">${statutLabel(r.statut)}</span></td>
-            <td><strong>${r.espace}</strong></td>
-            <td style="white-space:nowrap">${r.date}<br><small style="color:var(--muted)">${r.heureDebut}→${r.heureFin}</small></td>
-            <td>${r.prenom} ${r.nom}<br><small style="color:var(--muted)">${r.email}</small></td>
-            <td style="font-size:12px">${r.profil}</td>
-            <td><strong>${r.montant || 0} €</strong></td>
-            <td>
-              <div style="display:flex;gap:4px;flex-wrap:wrap">
-                <button class="btn-action" onclick='detailRes(${JSON.stringify(r)})' style="background:var(--bleu-lt);color:var(--bleu);border-color:var(--bleu)">👁 Détail</button>
-                ${r.statut === 'EN_ATTENTE' ? `<button class="btn-action btn-confirmer" onclick="majStatut('${r.id}','CONFIRME','reservation')">✅</button>` : ''}
-                ${r.statut !== 'ANNULE' ? `<button class="btn-action btn-annuler" onclick="majStatut('${r.id}','ANNULE','reservation')">❌</button>` : ''}
-              </div>
-            </td>
-          </tr>`).join('')}
-      </tbody>
-    </table>
-  </div>`;
-  document.getElementById('table-res-wrap').innerHTML = html;
+  const blob=new Blob(['\ufeff'+[h.join(';'),...rows].join('\n')],{type:'text/csv;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a'); a.href=url; a.download=`genie-${new Date().toISOString().split('T')[0]}.csv`; a.click(); URL.revokeObjectURL(url);
+  toast('Export CSV téléchargé');
 }
 
-// ===== TABLE ADHÉSIONS =====
-function renderTableAdh() {
-  const search = document.getElementById('search-adh').value.toLowerCase();
-  let items = DATA.adhesions.filter(a => {
-    if (filtreAdhActif !== 'tous' && a.statut !== filtreAdhActif) return false;
-    if (search && !JSON.stringify(a).toLowerCase().includes(search)) return false;
-    return true;
-  });
-
-  const html = `
-  <div class="table-wrap">
-    <table>
-      <thead><tr>
-        <th>Réf.</th><th>Statut</th><th>Type d'adhésion</th>
-        <th>Membre</th><th>Montant</th><th>Paiement</th><th>Date</th><th>Actions</th>
-      </tr></thead>
-      <tbody>
-        ${items.length === 0 ? '<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:24px">Aucune adhésion trouvée</td></tr>' :
-          items.map(a => `
-          <tr>
-            <td><code style="font-size:11px;color:var(--muted)">${a.id}</code></td>
-            <td><span class="statut-badge s-${a.statut.toLowerCase().replace('_','-')}">${statutLabel(a.statut)}</span></td>
-            <td style="font-size:12px;max-width:180px">${a.typeAdhesion}</td>
-            <td>${a.prenom} ${a.nom}<br><small style="color:var(--muted)">${a.email}</small></td>
-            <td><strong>${a.montant} €</strong></td>
-            <td style="font-size:12px">${a.modePaiement || '—'}</td>
-            <td style="font-size:11px;color:var(--muted)">${new Date(a.dateCreation).toLocaleDateString('fr-FR')}</td>
-            <td>
-              <div style="display:flex;gap:4px">
-                ${a.statut === 'EN_ATTENTE' ? `<button class="btn-action btn-confirmer" onclick="majStatut('${a.id}','CONFIRME','adhesion')">✅ Valider</button>` : ''}
-                ${a.statut !== 'ANNULE' ? `<button class="btn-action btn-annuler" onclick="majStatut('${a.id}','ANNULE','adhesion')">❌</button>` : ''}
-              </div>
-            </td>
-          </tr>`).join('')}
-      </tbody>
-    </table>
-  </div>`;
-  document.getElementById('table-adh-wrap').innerHTML = html;
+// ─── SETUP URL ────────────────────────────────────────────
+function saveUrl() {
+  const url=document.getElementById('url-input').value.trim();
+  if(!url||!url.includes('script.google.com')) { toast("URL invalide",'err'); return; }
+  SCRIPT_URL=url; localStorage.setItem('genie_script_url',url);
+  document.getElementById('setup-banner').classList.remove('show');
+  document.getElementById('url-display').textContent=url;
+  toast('Connecté !'); loadData(true);
+}
+function showSetup() {
+  document.getElementById('setup-banner').classList.add('show');
+  document.getElementById('url-input').value=SCRIPT_URL;
+  document.getElementById('setup-banner').scrollIntoView({behavior:'smooth'});
 }
 
-// ===== CALENDRIER ADMIN =====
-function renderCalAdmin() {
-  if (!calAdminMois) return;
-  const { y, m } = calAdminMois;
-  const mNoms = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
-  document.getElementById('cal-admin-titre').textContent = mNoms[m] + ' ' + y;
-
-  const dowEl = document.getElementById('cal-admin-dow');
-  dowEl.innerHTML = '';
-  ['Lu','Ma','Me','Je','Ve','Sa','Di'].forEach(j => {
-    const el = document.createElement('div'); el.className = 'cal-admin-dow'; el.textContent = j; dowEl.appendChild(el);
-  });
-
-  const grid = document.getElementById('cal-admin-grid');
-  grid.innerHTML = '';
-  const offset = (new Date(y,m,1).getDay()+6)%7;
-  const nbJ = new Date(y,m+1,0).getDate();
-  const today = new Date(); today.setHours(0,0,0,0);
-
-  for (let i = 0; i < offset; i++) {
-    const el = document.createElement('div'); el.style.display = 'block'; grid.appendChild(el);
-  }
-
-  for (let d = 1; d <= nbJ; d++) {
-    const dateStr = y+'-'+pad(m+1)+'-'+pad(d);
-    const date = new Date(y,m,d);
-    const el = document.createElement('div');
-    el.className = 'cal-admin-day';
-    if (date.toDateString() === today.toDateString()) el.classList.add('today');
-
-    el.innerHTML = `<div class="cad-num">${d}</div>`;
-
-    // Ajouter les réservations du jour
-    DATA.reservations.filter(r => r.date === dateStr && r.statut !== 'ANNULE').forEach(r => {
-      const ev = document.createElement('div');
-      ev.className = 'cal-event ' + (r.statut === 'CONFIRME' ? 'confirme' : 'attente');
-      ev.textContent = r.heureDebut + ' ' + r.espace.substring(0,6);
-      ev.title = r.prenom + ' ' + r.nom + ' — ' + r.espace;
-      ev.style.cursor = 'pointer';
-      ev.onclick = () => detailRes(r);
-      el.appendChild(ev);
-    });
-
-    grid.appendChild(el);
-  }
+// ─── UI HELPERS ───────────────────────────────────────────
+function showLoader(t,s) { document.getElementById('loader-txt').textContent=t; document.getElementById('loader-sub').textContent=s; document.getElementById('loader').style.display='flex'; }
+function hideLoader() { document.getElementById('loader').style.display='none'; }
+function setSyncState(state,txt) {
+  const d=document.getElementById('dot');
+  d.className='dot'+(state==='loading'?' loading':state==='error'?' error':'');
+  document.getElementById('sync-txt').textContent=txt;
+}
+function toast(msg,type='ok') {
+  const c=document.getElementById('toasts');
+  const t=document.createElement('div'); t.className='toast '+type;
+  t.innerHTML=({ok:'✅',err:'❌',info:'ℹ️'})[type]+' '+msg;
+  c.appendChild(t); setTimeout(()=>t.classList.add('show'),10);
+  setTimeout(()=>{ t.classList.remove('show'); setTimeout(()=>t.remove(),300); },3500);
 }
 
-function navCalAdmin(d) {
-  calAdminMois.m += d;
-  if (calAdminMois.m > 11) { calAdminMois.m = 0; calAdminMois.y++; }
-  if (calAdminMois.m < 0) { calAdminMois.m = 11; calAdminMois.y--; }
-  renderCalAdmin();
-}
-
-// ===== DÉTAIL RÉSERVATION =====
-function detailRes(r) {
-  document.getElementById('modal-titre').textContent = '📅 ' + r.espace + ' — ' + r.date;
-  document.getElementById('modal-content').innerHTML = `
-    <div class="modal-row"><span class="ml">Référence</span><span class="mv">${r.id}</span></div>
-    <div class="modal-row"><span class="ml">Statut</span><span class="mv"><span class="statut-badge s-${r.statut.toLowerCase().replace('_','-')}">${statutLabel(r.statut)}</span></span></div>
-    <div class="modal-row"><span class="ml">Espace</span><span class="mv">${r.espace}</span></div>
-    <div class="modal-row"><span class="ml">Date</span><span class="mv">${r.date}</span></div>
-    <div class="modal-row"><span class="ml">Horaire</span><span class="mv">${r.heureDebut} → ${r.heureFin}</span></div>
-    <div class="modal-row"><span class="ml">Durée</span><span class="mv">${r.duree}h</span></div>
-    <div class="modal-row"><span class="ml">Participants</span><span class="mv">${r.participants || '—'}</span></div>
-    <div class="modal-row"><span class="ml">Profil</span><span class="mv">${r.profil}</span></div>
-    <div class="modal-row"><span class="ml">Montant</span><span class="mv">${r.montant} €</span></div>
-    <div class="modal-row"><span class="ml">Nom</span><span class="mv">${r.prenom} ${r.nom}</span></div>
-    <div class="modal-row"><span class="ml">Email</span><span class="mv"><a href="mailto:${r.email}">${r.email}</a></span></div>
-    <div class="modal-row"><span class="ml">Tél.</span><span class="mv">${r.tel || '—'}</span></div>
-    <div class="modal-row"><span class="ml">Structure</span><span class="mv">${r.structure || '—'}</span></div>
-    <div class="modal-row"><span class="ml">Message</span><span class="mv" style="max-width:65%;text-align:right;font-size:12px">${r.message || '—'}</span></div>
-    ${r.statut === 'EN_ATTENTE' ? `<div style="margin-top:12px"><label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px">Message de confirmation (optionnel)</label><textarea class="msg-admin-input" id="msg-conf" placeholder="Ex : Votre réservation est bien confirmée. La clé sera disponible à l'accueil…"></textarea></div>` : ''}
-  `;
-  const actions = document.getElementById('modal-actions');
-  actions.innerHTML = `<button class="btn-close" onclick="fermerModal()">Fermer</button>`;
-  if (r.statut === 'EN_ATTENTE') {
-    actions.innerHTML += `<button class="btn-action btn-confirmer" style="padding:9px 16px;font-size:13px" onclick="majStatutModal('${r.id}','CONFIRME','reservation')">✅ Confirmer & envoyer email</button>`;
-    actions.innerHTML += `<button class="btn-action btn-annuler" style="padding:9px 16px;font-size:13px" onclick="majStatutModal('${r.id}','ANNULE','reservation')">❌ Annuler</button>`;
-  }
-  document.getElementById('modal-bg').classList.add('open');
-}
-
-function fermerModal() {
-  document.getElementById('modal-bg').classList.remove('open');
-}
-
-// ===== MAJ STATUT =====
-async function majStatut(id, statut, type) {
-  const msgEl = document.getElementById('msg-conf');
-  const messageAdmin = msgEl ? msgEl.value : '';
-
-  if (DEMO_MODE) {
-    const arr = type === 'reservation' ? DATA.reservations : DATA.adhesions;
-    const item = arr.find(r => r.id === id);
-    if (item) { item.statut = statut; majStats(); renderTableRes(); renderTableAdh(); renderCalAdmin(); }
-    fermerModal();
-    return;
-  }
-
-  try {
-    await fetch(APPS_SCRIPT_URL, {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ action:'ADMIN_UPDATE_STATUS', id, statut, type, messageAdmin, token:AUTH_TOKEN })
-    });
-  } catch(e) { console.warn('Erreur update:', e); }
-
-  await charger();
-  fermerModal();
-}
-
-function majStatutModal(id, statut, type) { majStatut(id, statut, type); }
-
-// ===== TABS =====
-function showTab(id, btn) {
-  document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
-  btn.classList.add('active');
-  document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
-  document.getElementById('panel-'+id).classList.add('active');
-}
-
-// ===== FILTRES =====
-function filtreRes(val, btn) {
-  filtreResActif = val;
-  document.querySelectorAll('#panel-reservations .filter-chip').forEach(c => c.classList.remove('active'));
-  btn.classList.add('active');
-  renderTableRes();
-}
-function filtreAdh(val, btn) {
-  filtreAdhActif = val;
-  document.querySelectorAll('#panel-adhesions .filter-chip').forEach(c => c.classList.remove('active'));
-  btn.classList.add('active');
-  renderTableAdh();
-}
-
-// ===== UTILS =====
-function statutLabel(s) {
-  return { EN_ATTENTE:'⏳ En attente', CONFIRME:'✅ Confirmé', ANNULE:'❌ Annulé', TERMINE:'🏁 Terminé' }[s] || s;
-}
-function pad(n) { return String(n).padStart(2,'0'); }
+// ─── INIT ─────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded',()=>{
+  if(!SCRIPT_URL) { showSetup(); setSyncState('error','Non configuré'); }
+  else { loadData(false); setInterval(()=>loadData(false),30000); }
+  renderDashboard();
+  go('dashboard');
+});
 </script>
 </body>
 </html>
