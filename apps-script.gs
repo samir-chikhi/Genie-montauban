@@ -152,9 +152,9 @@ Votre demande de réservation a bien été reçue. Voici le récapitulatif :
 📋 Référence    : ${ref}
 📍 Espace       : ${d.espace}
 📅 Date         : ${formaterDate(d.date)}
-⏰ Horaire      : ${d.heureDebut}h → ${heuresFin(d.heureDebut, d.duree)}h (${d.duree}h)
+⏰ Horaire      : ${d.heureDebut} → ${heuresFin(d.heureDebut, d.duree)} (${d.duree}h)
 👥 Participants : ${d.participants || 1}
-💰 Tarif estimé : ${d.montantEstime}
+💰 Tarif estimé : ${d.montantEstime} €
 ━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 L'équipe Génie vous contactera sous 24h pour confirmer la disponibilité et le mode de paiement.
@@ -176,7 +176,7 @@ L'équipe Génie Montauban`;
 
 Référence : ${ref}
 Espace    : ${d.espace}
-Date      : ${formaterDate(d.date)} — ${d.heureDebut}h (${d.duree}h)
+Date      : ${formaterDate(d.date)} — ${d.heureDebut} → ${heuresFin(d.heureDebut, d.duree)} (${d.duree}h)
 Profil    : ${d.profil}
 Participants : ${d.participants || 1}
 
@@ -306,27 +306,44 @@ ${d.message}`;
 
 // ─── GET RÉSERVATIONS (pour affichage dispos) ──────────────────────
 function getReservations(e) {
-  const espace    = e.parameter.espace    || '';
-  const dateDebut = e.parameter.dateDebut || '';
-  const dateFin   = e.parameter.dateFin   || dateDebut;
+  const espaceFiltre = e.parameter.espace    || '';
+  const dateDebut    = e.parameter.dateDebut || '';
+  const dateFin      = e.parameter.dateFin   || dateDebut;
 
   const ss    = SpreadsheetApp.openById(SPREADSHEET_ID);
   const sheet = ss.getSheetByName('Réservations');
   if (!sheet) return { success: true, occupations: {} };
 
   const data  = sheet.getDataRange().getValues();
+  // Structure retournée : { "Bourdelle": { "2025-01-15": ["09:00","09:30","10:00"] } }
   const occup = {};
 
   for (let i = 1; i < data.length; i++) {
     const row = data[i];
     // Colonnes : [0]Ref [1]DateResa [2]Espace [3]Profil [4]Date [5]Heure [6]Durée ...
-    if (row[2] === espace && row[4] >= dateDebut && row[4] <= dateFin) {
-      const date  = row[4];
-      const heure = row[5];
-      const duree = parseFloat(row[6]) || 1;
-      if (!occup[date]) occup[date] = [];
-      for (let h = 0; h < duree; h++) {
-        occup[date].push(parseInt(heure) + h);
+    const rowEspace = String(row[2] || '');
+    const rowDate   = String(row[4] || '');
+    // Filtrer par espace (si précisé) et par plage de dates
+    if (espaceFiltre && rowEspace !== espaceFiltre) continue;
+    if (rowDate < dateDebut || rowDate > dateFin) continue;
+
+    const heureDebut = String(row[5] || '08:00'); // format "HH:MM"
+    const duree      = parseFloat(row[6]) || 1;
+
+    if (!occup[rowEspace]) occup[rowEspace] = {};
+    if (!occup[rowEspace][rowDate]) occup[rowEspace][rowDate] = [];
+
+    // Générer tous les créneaux de 30 min couverts par la réservation
+    const [hH, hM] = heureDebut.split(':').map(Number);
+    const debutMin = hH * 60 + (hM || 0);
+    const finMin   = debutMin + Math.round(duree * 60);
+
+    for (let m = debutMin; m < finMin; m += 30) {
+      const h    = Math.floor(m / 60) % 24;
+      const min  = m % 60;
+      const slot = String(h).padStart(2, '0') + ':' + String(min).padStart(2, '0');
+      if (!occup[rowEspace][rowDate].includes(slot)) {
+        occup[rowEspace][rowDate].push(slot);
       }
     }
   }
@@ -343,8 +360,14 @@ function formaterDate(dateStr) {
 }
 
 function heuresFin(debut, duree) {
-  const h = parseInt(debut) + parseFloat(duree);
-  return h < 10 ? '0' + h : String(h);
+  // debut est au format "HH:MM" (ex: "09:30")
+  const parts = String(debut || '08:00').split(':');
+  const hDebut = parseInt(parts[0]) || 0;
+  const mDebut = parseInt(parts[1]) || 0;
+  const totalMin = hDebut * 60 + mDebut + Math.round(parseFloat(duree) * 60);
+  const hFin = Math.floor(totalMin / 60) % 24;
+  const mFin = totalMin % 60;
+  return String(hFin).padStart(2, '0') + 'h' + (mFin > 0 ? String(mFin).padStart(2, '0') : '');
 }
 
 function repondre(obj) {
