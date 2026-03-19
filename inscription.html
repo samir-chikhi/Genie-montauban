@@ -56,6 +56,13 @@ body{font-family:'DM Sans',sans-serif;background:var(--fond);color:var(--texte);
 /* TYPE RADIO */
 .type-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
 @media(max-width:500px){.type-grid{grid-template-columns:1fr;}}
+@media(max-width:480px){
+  .wrapper{padding:16px 12px 48px;}
+  .card{padding:18px;}
+  .step{padding:10px 6px;font-size:11px;}
+  .step .snum{font-size:15px;}
+  .card h2{font-size:1.2rem;}
+}
 .type-btn{border:2px solid var(--bord);border-radius:10px;padding:14px 12px;cursor:pointer;background:var(--blanc);transition:all .2s;text-align:left;}
 .type-btn:hover{border-color:var(--bleu-md);background:var(--bleu-lt);}
 .type-btn.selected{border-color:var(--bleu);background:var(--bleu-lt);box-shadow:0 0 0 3px rgba(30,74,110,.1);}

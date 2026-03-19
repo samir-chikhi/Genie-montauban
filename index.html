@@ -453,18 +453,20 @@
       .footer-grid { grid-template-columns: 1fr 1fr; }
     }
     @media (max-width: 768px) {
-      section { padding: 64px 5%; }
+      section { padding: 48px 4%; }
       .nav-links { display: none; }
       .nav-links.open {
         display: flex; flex-direction: column;
         position: fixed; top: 72px; left: 0; right: 0; bottom: 0;
-        background: var(--white); padding: 32px 5%;
-        align-items: flex-start; gap: 20px;
+        background: var(--white); padding: 28px 5%;
+        align-items: flex-start; gap: 16px;
         border-top: 1px solid var(--border);
+        overflow-y: auto;
         animation: slideDown .3s ease;
+        z-index: 999;
       }
       @keyframes slideDown { from{opacity:0;transform:translateY(-10px)} to{opacity:1;transform:none} }
-      .nav-links.open a { font-size: 18px; color: var(--ink); }
+      .nav-links.open a { font-size: 18px; color: var(--ink); padding: 6px 0; }
       .nav-burger { display: flex; }
       .contact-grid { grid-template-columns: 1fr; }
       .valeurs-grid { grid-template-columns: 1fr; }
@@ -472,6 +474,27 @@
       .hero-actions { flex-direction: column; }
       .btn-primary, .btn-ghost { text-align: center; justify-content: center; }
       .profils-grid { grid-template-columns: 1fr; }
+      .espaces-grid { grid-template-columns: 1fr; gap: 14px; }
+      .adhesion-grid { grid-template-columns: 1fr; gap: 14px; }
+      .tarifs-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .tarifs-table { min-width: 420px; }
+      .form-grid-2 { grid-template-columns: 1fr !important; }
+      .section-header h2 { font-size: clamp(1.4rem, 5vw, 2rem); }
+      .hero-stat { min-width: 70px; }
+      .hero-stats { gap: 12px; }
+    }
+    @media (max-width: 480px) {
+      section { padding: 40px 4%; }
+      .espaces-tabs { gap: 6px; }
+      .espace-tab { padding: 7px 12px; font-size: 13px; }
+      .adh-card { padding: 20px 16px; }
+      .paiement-tags { gap: 6px; }
+      .paiement-tag { font-size: 12px; padding: 5px 10px; }
+      .btn-submit-adh, .btn-dl-adh { width: 100%; text-align: center; justify-content: center; }
+      .form-actions { flex-direction: column; gap: 10px; }
+      .contact-form-bloc { padding: 16px; }
+      footer { padding: 40px 16px 24px; }
+      .footer-grid { gap: 24px; }
     }
   </style>
 </head>
@@ -484,7 +507,7 @@
       <img src="logo.png" alt="Génie Montauban">
       <span>Génie</span>
     </a>
-    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')">☰</button>
+    <button class="nav-burger" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">☰</button>
     <div class="nav-links">
       <a href="#espaces">Espaces</a>
       <a href="#tarifs">Tarifs</a>
@@ -1038,6 +1061,11 @@
 </footer>
 
 <script>
+// ===== MOBILE NAV =====
+document.querySelectorAll('.nav-links a').forEach(a => {
+  a.addEventListener('click', () => document.querySelector('.nav-links').classList.remove('open'));
+});
+
 // ===== ESPACES FILTRE =====
 function filtrerEspaces(type, btn) {
   document.querySelectorAll('.espace-tab').forEach(t => t.classList.remove('active'));
