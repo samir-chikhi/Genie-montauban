@@ -14,6 +14,8 @@
 const EMAIL_ADMIN        = 'genie.montauban@gmail.com';
 const SPREADSHEET_ID     = '17dxvMah1AlINEN2InJzuTSJ4UtuC_QAg5bo3Snq2YYs';
 const CALENDAR_ID        = 'genie.montauban@gmail.com'; // Agenda Google principal
+// SÉCURITÉ : définir dans Script Properties (clé : API_SHARED_KEY)
+// Même valeur à renseigner dans APPS_TOKEN de index.html et reservation.html
 
 // ─── POINT D'ENTRÉE HTTP ─────────────────────────────────────────
 function doPost(e) {
