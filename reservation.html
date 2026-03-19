@@ -663,10 +663,11 @@ button, input, select, textarea { font-family:inherit; }
 <script>
 // ============================================================
 // CONFIGURATION — À METTRE À JOUR APRÈS DÉPLOIEMENT DU SCRIPT
-// Remplacez l'URL ci-dessous par l'URL de votre Apps Script déployé
 // ============================================================
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw5f4eTOV6q9n7OCo0m29fmECgUoML4xrn0QsUG1k2OmSUGYQQrkiPIu_Cs7x_qROiA/exec';
-// Exemple : 'https://script.google.com/macros/s/AKfycbx.../exec'
+// TOKEN API — doit correspondre à API_SHARED_KEY dans les Script Properties
+// Laisser vide si API_SHARED_KEY non configurée dans Apps Script
+const APPS_TOKEN = '';
 
 // ============================================================
 const TARIFS = {
@@ -806,7 +807,7 @@ async function chargerDispos(dateStr) {
   renderCreneauxLoading();
 
   try {
-    const url = `${APPS_SCRIPT_URL}?action=GET_RESERVATIONS&espace=${encodeURIComponent(S.espace)}&dateDebut=${dateStr}&dateFin=${dateStr}`;
+    const url = `${APPS_SCRIPT_URL}?action=GET_RESERVATIONS&espace=${encodeURIComponent(S.espace)}&dateDebut=${dateStr}&dateFin=${dateStr}&token=${encodeURIComponent(APPS_TOKEN)}`;
     const resp = await fetch(url);
     const data = await resp.json();
     if (data.success) {
@@ -995,6 +996,7 @@ async function soumettre() {
 
   const payload = {
     action: 'RESERVER',
+    token: APPS_TOKEN,
     espace: S.espace,
     profil: S.profil,
     profilCode: S.profilCode,
