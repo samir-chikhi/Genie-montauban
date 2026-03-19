@@ -244,7 +244,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--fond);color:var(--texte);
         <h4>Article 8 – Obligations du client</h4>
         <p>Respecter le règlement intérieur. Souscrire une RC professionnelle. Restituer les locaux en bon état.</p>
         <h4>Article 12 – RGPD</h4>
-        <p>Données conservées 3 ans après fin de relation. Droits : <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c7a0a2a9aea2e9aaa8a9b3a6b2a5a6a987a0aaa6aeabe9a4a8aa">[email&#160;protected]</a>. Pas de transfert hors UE.</p>
+        <p>Données conservées 3 ans après fin de relation. Droits : genie.montauban@gmail.com. Pas de transfert hors UE.</p>
         <h4>Article 13 – Litiges</h4>
         <p>Tribunal judiciaire de Montauban. Médiation disponible sur demande.</p>
       </div>
@@ -333,7 +333,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--fond);color:var(--texte);
 
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw5f4eTOV6q9n7OCo0m29fmECgUoML4xrn0QsUG1k2OmSUGYQQrkiPIu_Cs7x_qROiA/exec';
 
 let typeSelectionne = 'particulier';
@@ -464,4 +464,13 @@ function afficherSucces(prenom, email) {
 function showAlert(type, msg) {
   const el = document.getElementById('alert-' + type);
   el.textContent = msg;
-  el.style.display = 'blo
+  el.style.display = 'block';
+  setTimeout(() => el.style.display = 'none', 5000);
+}
+function hideAlert() {
+  document.getElementById('alert-err').style.display = 'none';
+  document.getElementById('alert-ok').style.display = 'none';
+}
+</script>
+</body>
+</html>
