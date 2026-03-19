@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Réserver — Génie Montauban</title>
+<meta name="description" content="Réservez un espace de coworking, salle de réunion ou bureau nomade à Génie Montauban. Confirmation sous 24h.">
+<link rel="canonical" href="https://www.genie-montauban.fr/reservation.html">
+<link rel="icon" type="image/png" href="favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet">
 <style>
@@ -663,10 +666,11 @@ button, input, select, textarea { font-family:inherit; }
 <script>
 // ============================================================
 // CONFIGURATION — À METTRE À JOUR APRÈS DÉPLOIEMENT DU SCRIPT
-// Remplacez l'URL ci-dessous par l'URL de votre Apps Script déployé
 // ============================================================
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw5f4eTOV6q9n7OCo0m29fmECgUoML4xrn0QsUG1k2OmSUGYQQrkiPIu_Cs7x_qROiA/exec';
-// Exemple : 'https://script.google.com/macros/s/AKfycbx.../exec'
+// TOKEN API — doit correspondre à API_SHARED_KEY dans les Script Properties
+// Laisser vide si API_SHARED_KEY non configurée dans Apps Script
+const APPS_TOKEN = '';
 
 // ============================================================
 const TARIFS = {
@@ -806,7 +810,7 @@ async function chargerDispos(dateStr) {
   renderCreneauxLoading();
 
   try {
-    const url = `${APPS_SCRIPT_URL}?action=GET_RESERVATIONS&espace=${encodeURIComponent(S.espace)}&dateDebut=${dateStr}&dateFin=${dateStr}`;
+    const url = `${APPS_SCRIPT_URL}?action=GET_RESERVATIONS&espace=${encodeURIComponent(S.espace)}&dateDebut=${dateStr}&dateFin=${dateStr}&token=${encodeURIComponent(APPS_TOKEN)}`;
     const resp = await fetch(url);
     const data = await resp.json();
     if (data.success) {
@@ -995,6 +999,7 @@ async function soumettre() {
 
   const payload = {
     action: 'RESERVER',
+    token: APPS_TOKEN,
     espace: S.espace,
     profil: S.profil,
     profilCode: S.profilCode,
@@ -1016,19 +1021,28 @@ async function soumettre() {
   document.getElementById('btn-submit').disabled = true;
 
   let resId = 'RES-' + Date.now();
+  let networkOk = true;
 
-  // Fire-and-forget : no-cors ne permet pas de lire la réponse
-  // On n'attend pas le fetch pour éviter que le spinner reste bloqué
-  if (APPS_SCRIPT_URL) {
-    fetch(APPS_SCRIPT_URL, {
+  // no-cors : réponse opaque, on ne peut pas la lire.
+  // fetch() ne rejette QUE si le réseau est indisponible (hors-ligne, DNS).
+  try {
+    await fetch(APPS_SCRIPT_URL, {
       method: 'POST',
       body: JSON.stringify(payload),
       mode: 'no-cors'
-    }).catch(() => {});
+    });
+  } catch (e) {
+    networkOk = false;
   }
 
-  // Délai court pour laisser la requête partir, puis afficher le succès
-  await new Promise(r => setTimeout(r, 800));
+  if (!networkOk) {
+    document.getElementById('btn-txt').style.display = '';
+    document.getElementById('btn-spin').style.display = 'none';
+    document.getElementById('btn-submit').disabled = false;
+    alert('❌ Impossible d\'envoyer la demande : vérifiez votre connexion internet et réessayez.');
+    return;
+  }
+
   afficherSucces(resId, prenom);
 }
 

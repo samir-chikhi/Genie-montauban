@@ -451,27 +451,19 @@ async function demanderLien() {
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span>Envoi en cours…';
 
+  // no-cors : réponse opaque, fetch() rejette uniquement si hors-ligne.
   try {
-    fetch(APPS_SCRIPT_URL, {
+    await fetch(APPS_SCRIPT_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ action: 'DEMANDER_LIEN', email: email }),
       mode: 'no-cors'
     });
-    // no-cors — on ne peut pas lire la réponse
-    // On affiche le succès après délai
-    setTimeout(() => {
-      document.getElementById('login-alert-ok').style.display = 'block';
-      btn.disabled = false;
-      btn.textContent = 'Recevoir mon lien de connexion →';
-    }, 1500);
+    document.getElementById('login-alert-ok').style.display = 'block';
   } catch(e) {
-    setTimeout(() => {
-      document.getElementById('login-alert-ok').style.display = 'block';
-      btn.disabled = false;
-      btn.textContent = 'Recevoir mon lien de connexion →';
-    }, 1500);
+    alert('❌ Impossible d\'envoyer le lien : vérifiez votre connexion internet et réessayez.');
   }
+  btn.disabled = false;
+  btn.textContent = 'Recevoir mon lien de connexion →';
 }
 
 // ===== VALIDER TOKEN =====
