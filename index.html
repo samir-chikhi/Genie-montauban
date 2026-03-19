@@ -476,8 +476,8 @@
       .profils-grid { grid-template-columns: 1fr; }
       .espaces-grid { grid-template-columns: 1fr; gap: 14px; }
       .adhesion-grid { grid-template-columns: 1fr; gap: 14px; }
-      .tarifs-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-      .tarifs-table { min-width: 420px; }
+      .tarifs-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 8px; }
+      .tarifs-table-wrap table { min-width: 360px; font-size: 13px; }
       .form-grid-2 { grid-template-columns: 1fr !important; }
       .section-header h2 { font-size: clamp(1.4rem, 5vw, 2rem); }
       .hero-stat { min-width: 70px; }
@@ -712,7 +712,7 @@
       <p>Tarifs dégressifs selon votre statut. Les associations de Villebourbon et syndicats bénéficient de la gratuité.</p>
     </div>
 
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px;">
+    <div class="tarifs-intro">
       <div>
         <h3 style="font-size:15px;font-weight:700;margin-bottom:12px;color:var(--bleu);">Salles de réunion</h3>
         <div class="tarifs-table-wrap">
@@ -748,9 +748,6 @@
       </div>
     </div>
 
-    @media(max-width:700px){
-      /* inline fix */
-    }
   </div>
 </section>
 
