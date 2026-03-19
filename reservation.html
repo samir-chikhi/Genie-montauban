@@ -1021,19 +1021,28 @@ async function soumettre() {
   document.getElementById('btn-submit').disabled = true;
 
   let resId = 'RES-' + Date.now();
+  let networkOk = true;
 
-  // Fire-and-forget : no-cors ne permet pas de lire la réponse
-  // On n'attend pas le fetch pour éviter que le spinner reste bloqué
-  if (APPS_SCRIPT_URL) {
-    fetch(APPS_SCRIPT_URL, {
+  // no-cors : réponse opaque, on ne peut pas la lire.
+  // fetch() ne rejette QUE si le réseau est indisponible (hors-ligne, DNS).
+  try {
+    await fetch(APPS_SCRIPT_URL, {
       method: 'POST',
       body: JSON.stringify(payload),
       mode: 'no-cors'
-    }).catch(() => {});
+    });
+  } catch (e) {
+    networkOk = false;
   }
 
-  // Délai court pour laisser la requête partir, puis afficher le succès
-  await new Promise(r => setTimeout(r, 800));
+  if (!networkOk) {
+    document.getElementById('btn-txt').style.display = '';
+    document.getElementById('btn-spin').style.display = 'none';
+    document.getElementById('btn-submit').disabled = false;
+    alert('❌ Impossible d\'envoyer la demande : vérifiez votre connexion internet et réessayez.');
+    return;
+  }
+
   afficherSucces(resId, prenom);
 }
 

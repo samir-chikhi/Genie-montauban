@@ -467,7 +467,7 @@
     .adh-card h3 { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; color: var(--navy); margin: 0; }
     .adh-prix { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700; color: var(--brick); }
     .adh-prix span { font-size: .9rem; font-weight: 400; color: var(--muted); font-family: 'DM Sans', sans-serif; }
-    .adh-card ul { list-style: none; display: flex; flex-direction: column; gap: 7px; flex: 1; }
+    .adh-card ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 7px; flex: 1; }
     .adh-card ul li { font-size: 13.5px; color: var(--ink); display: flex; gap: 8px; align-items: flex-start; }
     .adh-card ul li::before { content: '✓'; color: var(--sage); font-weight: 700; flex-shrink: 0; }
     .btn-adh {
@@ -1393,16 +1393,24 @@ async function envoyerAdhesion() {
   const orig = btn ? btn.textContent : '';
   if (btn) { btn.textContent = 'Envoi…'; btn.disabled = true; }
 
-  // Fire-and-forget (no-cors)
-  fetch(APPS_SCRIPT_URL, { method:'POST', body:JSON.stringify(payload), mode:'no-cors' }).catch(() => {});
+  // no-cors : réponse opaque, fetch() rejette uniquement si hors-ligne.
+  let networkOk = true;
+  try {
+    await fetch(APPS_SCRIPT_URL, { method:'POST', body:JSON.stringify(payload), mode:'no-cors' });
+  } catch(e) {
+    networkOk = false;
+  }
 
-  setTimeout(() => {
-    if (btn) { btn.textContent = orig; btn.disabled = false; }
-    // Afficher message de succès dans la page plutôt qu'une alerte
-    const zone = document.getElementById('adh-success');
-    if (zone) { zone.style.display = 'block'; zone.scrollIntoView({ behavior:'smooth', block:'center' }); }
-    else { alert('✅ Demande envoyée ! Nous vous contacterons sous 48h.'); }
-  }, 900);
+  if (btn) { btn.textContent = orig; btn.disabled = false; }
+
+  if (!networkOk) {
+    alert('❌ Impossible d\'envoyer la demande : vérifiez votre connexion internet et réessayez.');
+    return;
+  }
+
+  const zone = document.getElementById('adh-success');
+  if (zone) { zone.style.display = 'block'; zone.scrollIntoView({ behavior:'smooth', block:'center' }); }
+  else { alert('✅ Demande envoyée ! Nous vous contacterons sous 48h.'); }
 }
 
 // ===== CONTACT =====
