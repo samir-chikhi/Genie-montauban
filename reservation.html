@@ -798,7 +798,7 @@ async function selDate(dateStr, el, dateObj) {
 
 // ===== CHARGER DISPO DEPUIS BACKEND =====
 async function chargerDispos(dateStr) {
-  if (APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbw5f4eTOV6q9n7OCo0m29fmECgUoML4xrn0QsUG1k2OmSUGYQQrkiPIu_Cs7x_qROiA/exec') return; // Pas encore configuré
+  if (!APPS_SCRIPT_URL) return; // Pas encore configuré
   if (!S.espace) return;
 
   document.getElementById('loading-espaces').style.display = 'inline-flex';
@@ -1017,9 +1017,9 @@ async function soumettre() {
 
   let resId = 'RES-' + Date.now();
 
-  if (APPS_SCRIPT_URL !== 'https://script.google.com/macros/s/AKfycbw5f4eTOV6q9n7OCo0m29fmECgUoML4xrn0QsUG1k2OmSUGYQQrkiPIu_Cs7x_qROiA/exec') {
+  if (APPS_SCRIPT_URL) {
     try {
-      const resp = await fetch(APPS_SCRIPT_URL, {
+      await fetch(APPS_SCRIPT_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
