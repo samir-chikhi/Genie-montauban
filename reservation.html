@@ -1017,23 +1017,18 @@ async function soumettre() {
 
   let resId = 'RES-' + Date.now();
 
+  // Fire-and-forget : no-cors ne permet pas de lire la réponse
+  // On n'attend pas le fetch pour éviter que le spinner reste bloqué
   if (APPS_SCRIPT_URL) {
-    try {
-      await fetch(APPS_SCRIPT_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-        mode: 'no-cors' // Google Apps Script nécessite no-cors
-      });
-      // En mode no-cors on ne peut pas lire la réponse, mais la requête passe
-    } catch(e) {
-      console.warn('Erreur fetch:', e);
-    }
-  } else {
-    // Mode démo : juste afficher le succès
-    await new Promise(r => setTimeout(r, 1200));
+    fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      mode: 'no-cors'
+    }).catch(() => {});
   }
 
+  // Délai court pour laisser la requête partir, puis afficher le succès
+  await new Promise(r => setTimeout(r, 800));
   afficherSucces(resId, prenom);
 }
 
