@@ -421,6 +421,73 @@
     .adhesion-avantages li::before { content: '✓'; color: var(--sage); font-weight: 700; flex-shrink: 0; margin-top: 2px; }
 
     /* ═══════════════════════════════════════════════
+       ADHÉSION — CARTES
+    ═══════════════════════════════════════════════ */
+    .adh-card {
+      background: var(--white); border: 1.5px solid var(--border); border-radius: var(--r);
+      padding: 28px 24px; display: flex; flex-direction: column; gap: 12px;
+      transition: box-shadow .2s, transform .2s;
+    }
+    .adh-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+    .adh-card.featured { border-color: var(--gold); box-shadow: 0 0 0 2px rgba(201,153,62,.15); }
+    .adh-badge {
+      display: inline-block; font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .7px; padding: 3px 10px; border-radius: 20px;
+      background: var(--cream); color: var(--muted); align-self: flex-start;
+    }
+    .adh-badge.green { background: #E8F8F0; color: #1a7a4a; }
+    .adh-badge.blue  { background: var(--bleu-lt, #EBF4FF); color: var(--navy); }
+    .adh-ico { font-size: 2.2rem; line-height: 1; }
+    .adh-card h3 { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; color: var(--navy); margin: 0; }
+    .adh-prix { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700; color: var(--brick); }
+    .adh-prix span { font-size: .9rem; font-weight: 400; color: var(--muted); font-family: 'DM Sans', sans-serif; }
+    .adh-card ul { list-style: none; display: flex; flex-direction: column; gap: 7px; flex: 1; }
+    .adh-card ul li { font-size: 13.5px; color: var(--ink); display: flex; gap: 8px; align-items: flex-start; }
+    .adh-card ul li::before { content: '✓'; color: var(--sage); font-weight: 700; flex-shrink: 0; }
+    .btn-adh {
+      display: block; text-align: center; padding: 11px 20px; border-radius: 8px; margin-top: auto;
+      background: var(--navy); color: var(--white); font-weight: 700; font-size: 14px;
+      text-decoration: none; transition: background .2s, transform .15s;
+    }
+    .btn-adh:hover { background: #2a3f56; transform: translateY(-1px); color: var(--white); }
+    .btn-adh.green { background: var(--sage); }
+    .btn-adh.green:hover { background: #3a6158; }
+
+    /* ═══════════════════════════════════════════════
+       ADHÉSION — PAIEMENT & FORMULAIRE
+    ═══════════════════════════════════════════════ */
+    .paiement-bloc { background: var(--cream); border-radius: var(--r); padding: 24px; margin: 32px 0; }
+    .paiement-bloc h4 { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 12px; }
+    .paiement-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .paiement-tag { font-size: 13px; padding: 6px 14px; background: var(--white); border: 1px solid var(--border); border-radius: 20px; color: var(--ink); }
+    .formulaire-adh { background: var(--white); border: 1.5px solid var(--border); border-radius: var(--r); padding: 32px; margin-top: 8px; }
+    .formulaire-adh h3 { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+    .formulaire-adh > p { font-size: 14px; color: var(--muted); margin-bottom: 20px; }
+    .hint { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .form-actions { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-top: 8px; }
+    .btn-submit-adh {
+      background: var(--sage); color: var(--white); border: none; border-radius: 8px;
+      padding: 13px 24px; font-size: 15px; font-weight: 700; cursor: pointer;
+      transition: background .2s, transform .15s;
+    }
+    .btn-submit-adh:hover { background: #3a6158; transform: translateY(-1px); }
+    .btn-submit-adh:disabled { opacity: .55; cursor: not-allowed; transform: none; }
+    .btn-dl-adh {
+      display: inline-flex; align-items: center; gap: 6px; padding: 13px 20px;
+      border: 1.5px solid var(--border); border-radius: 8px; font-size: 14px; font-weight: 600;
+      color: var(--navy); text-decoration: none; transition: border-color .2s;
+    }
+    .btn-dl-adh:hover { border-color: var(--navy); }
+    .adh-success {
+      display: none; margin-top: 16px; padding: 16px 20px;
+      background: #E8F8F0; color: #1a6e3e; border-radius: 10px; font-size: 15px; font-weight: 600;
+    }
+    .adh-nomail {
+      display: none; margin-top: 12px; padding: 14px 18px;
+      background: var(--cream); border-radius: 8px; font-size: 13px; color: var(--ink);
+    }
+
+    /* ═══════════════════════════════════════════════
        ACCÈS / CONTACT
     ═══════════════════════════════════════════════ */
     #contact { background: var(--cream); }
@@ -1210,18 +1277,18 @@ async function envoyerAdhesion() {
 
   const btn = document.querySelector('.btn-submit-adh');
   const orig = btn ? btn.textContent : '';
-  if (btn) btn.textContent = 'Envoi…';
+  if (btn) { btn.textContent = 'Envoi…'; btn.disabled = true; }
 
-  try {
-    fetch(APPS_SCRIPT_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload), mode:'no-cors' });
-    setTimeout(() => {
-      alert('✅ Demande d\'adhésion envoyée ! Nous vous contacterons sous 48h.');
-      if (btn) btn.textContent = orig;
-    }, 800);
-  } catch(e) {
-    alert('Erreur lors de l\'envoi. Écrivez-nous à genie.montauban@gmail.com');
-    if (btn) btn.textContent = orig;
-  }
+  // Fire-and-forget (no-cors)
+  fetch(APPS_SCRIPT_URL, { method:'POST', body:JSON.stringify(payload), mode:'no-cors' }).catch(() => {});
+
+  setTimeout(() => {
+    if (btn) { btn.textContent = orig; btn.disabled = false; }
+    // Afficher message de succès dans la page plutôt qu'une alerte
+    const zone = document.getElementById('adh-success');
+    if (zone) { zone.style.display = 'block'; zone.scrollIntoView({ behavior:'smooth', block:'center' }); }
+    else { alert('✅ Demande envoyée ! Nous vous contacterons sous 48h.'); }
+  }, 900);
 }
 
 // ===== CONTACT =====
