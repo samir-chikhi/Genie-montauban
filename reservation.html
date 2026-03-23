@@ -714,6 +714,13 @@ function filtrer(type, btn) {
 }
 
 // ===== SÉLECTION ESPACE =====
+function scrollTo(id) {
+  setTimeout(() => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 150);
+}
+
 function selEspace(el) {
   document.querySelectorAll('.espace-btn').forEach(b => b.classList.remove('selected'));
   el.classList.add('selected');
@@ -726,6 +733,7 @@ function selEspace(el) {
   document.getElementById('creneaux-block').style.display = 'none';
   renderCal();
   majRecap();
+  scrollTo('card-profil');
 }
 
 // ===== SÉLECTION PROFIL =====
@@ -734,6 +742,7 @@ function selProfil(el, code, label) {
   el.classList.add('selected');
   S.profilCode = code; S.profil = label;
   majRecap();
+  scrollTo('card-date');
 }
 
 // ===== CALENDRIER =====
@@ -798,6 +807,7 @@ async function selDate(dateStr, el, dateObj) {
   renderCreneaux();
   afficherDispoJour(dateStr, dateObj);
   majRecap();
+  scrollTo('creneaux-block');
 }
 
 // ===== CHARGER DISPO DEPUIS BACKEND =====
@@ -882,6 +892,7 @@ function selHeure(h, el) {
   }
   renderDuree();
   majRecap();
+  scrollTo('card-options');
 }
 
 function renderDuree() {
