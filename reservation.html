@@ -702,7 +702,42 @@ window.onload = function() {
       this.closest('.equip-tag').classList.toggle('on', this.checked);
     });
   });
+  // Pré-remplissage si client connecté
+  preFillFromSession();
 };
+
+function preFillFromSession() {
+  try {
+    const raw = localStorage.getItem('genie_session');
+    if (!raw) return;
+    const client = JSON.parse(raw);
+    if (!client || !client.email) return;
+
+    const set = (id, val) => { const el = document.getElementById(id); if (el && val) el.value = val; };
+    set('f-prenom',  client.prenom);
+    set('f-nom',     client.nom);
+    set('f-email',   client.email);
+    set('f-tel',     client.tel);
+    set('f-struct',  client.structure);
+
+    // Pré-sélectionner le profil tarifaire si connu
+    if (client.profilTarifaire) {
+      const profMap = { adherent:'adherent', locataire:'locataire', asso:'asso', plein:'plein' };
+      const code = profMap[client.profilTarifaire] || null;
+      if (code) {
+        const btn = document.querySelector(`.profil-btn[onclick*="'${code}'"]`);
+        if (btn) {
+          // Simuler la sélection (sans déclencher le scroll)
+          document.querySelectorAll('.profil-btn').forEach(b => b.classList.remove('selected'));
+          btn.classList.add('selected');
+          S.profilCode = code;
+          S.profil = btn.querySelector('.pb-label')?.textContent || code;
+        }
+      }
+    }
+    majRecap();
+  } catch(e) {}
+}
 
 // ===== FILTRE ESPACES =====
 function filtrer(type, btn) {
