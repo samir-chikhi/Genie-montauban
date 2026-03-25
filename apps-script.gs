@@ -596,3 +596,36 @@ function setupComplet() {
   Logger.log('✅ Setup terminé');
   return 'OK';
 }
+
+// ===== RESET MOT DE PASSE ADMIN =====
+// Lancer cette fonction depuis l'éditeur Apps Script pour générer
+// un nouveau mot de passe admin et l'afficher dans les Logs
+function reinitMotDePasse() {
+  var charset = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%';
+  var pwd = '';
+  for (var i = 0; i < 16; i++) {
+    pwd += charset.charAt(Math.floor(Math.random() * charset.length));
+  }
+  var hash = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, pwd)
+    .map(function(b) { return ('0' + (b & 0xFF).toString(16)).slice(-2); }).join('');
+  // Sauvegarder dans Script Properties
+  PropertiesService.getScriptProperties().setProperty('ADMIN_PASSWORD_HASH', hash);
+  // Mettre à jour la feuille Config
+  var ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+  var sheet = ss.getSheetByName('Config');
+  if (sheet) {
+    var rows = sheet.getDataRange().getValues();
+    for (var i = 0; i < rows.length; i++) {
+      if (rows[i][0] === 'ADMIN_PASSWORD_HASH') {
+        sheet.getRange(i + 1, 2).setValue(hash);
+        Logger.log('🔑 NOUVEAU MOT DE PASSE ADMIN : ' + pwd);
+        Logger.log('✅ Hash mis à jour dans Config et Script Properties');
+        return pwd;
+      }
+    }
+    // Si la ligne n'existe pas encore
+    sheet.appendRow(['ADMIN_PASSWORD_HASH', hash]);
+  }
+  Logger.log('🔑 NOUVEAU MOT DE PASSE ADMIN : ' + pwd);
+  return pwd;
+}
