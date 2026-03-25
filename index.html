@@ -67,7 +67,7 @@
     .nav-logo {
       display: flex; align-items: center; gap: 10px;
     }
-    .nav-logo img { height: 44px; width: auto; }
+    .nav-logo img { height: 58px; width: auto; }
     .nav-logo-text {
       font-family: 'Playfair Display', serif;
       font-size: 22px; font-weight: 900;
@@ -132,6 +132,14 @@
       text-transform: uppercase; margin-bottom: 28px;
     }
     .hero-tag::before { content: ''; width: 6px; height: 6px; background: var(--gold); border-radius: 50%; animation: pulse 2s infinite; }
+    .hero-phone {
+      font-size: 14px; font-weight: 500;
+      color: rgba(255,255,255,.72);
+      margin-top: -18px; margin-bottom: 28px;
+      letter-spacing: .2px;
+    }
+    .hero-phone a { color: rgba(255,255,255,.72); text-decoration: none; transition: color .2s; }
+    .hero-phone a:hover { color: var(--gold-l); }
     @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.8)} }
     .hero h1 {
       font-family: 'Playfair Display', serif;
@@ -711,6 +719,7 @@
 <!-- HERO -->
 <div class="hero">
   <div class="hero-tag">📍 12 rue du Génie · 200m de la gare SNCF</div>
+  <div class="hero-phone"><a href="tel:+33651509718">📞 06 51 50 97 18</a></div>
   <h1>Le lieu où vos <em>projets</em> prennent vie</h1>
   <p>Tiers-lieu ancré dans l'économie sociale et solidaire. Bureaux privatifs, coworking, salles de réunion — une communauté d'entrepreneurs et d'associations.</p>
   <div class="hero-btns">
@@ -1433,7 +1442,7 @@ async function envoyerContact() {
   };
 
   try {
-    fetch(APPS_SCRIPT_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload), mode:'no-cors' });
+    await fetch(APPS_SCRIPT_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload), mode:'no-cors' });
     document.getElementById('contact-success').style.display = 'block';
     document.getElementById('contact-nomail').style.display = 'none';
   } catch(e) {
