@@ -1,385 +1,516 @@
-/**
- * Google Apps Script — Génie Montauban
- *
- * INSTALLATION :
- * 1. Ouvrir https://script.google.com
- * 2. Créer un nouveau projet, coller ce code
- * 3. Déployer → Nouvelle version → Application web
- *    - Exécuter en tant que : Moi (genie.montauban@gmail.com)
- *    - Accès : Tout le monde
- * 4. Copier l'URL de déploiement dans chaque fichier HTML (APPS_SCRIPT_URL)
- */
+// ============================================================
+// GÉNIE MONTAUBAN — Google Apps Script Unifié v4
+// Réservations + Adhésions + Comptes clients + Admin
+//
+// INSTALLATION :
+// 1. script.google.com → coller ce fichier dans Code.gs
+// 2. Exécuter setupComplet() une seule fois pour créer les feuilles
+// 3. Déployer → Nouvelle version → Application web
+//    - Exécuter en tant que : Moi (genie.montauban@gmail.com)
+//    - Accès : Tout le monde
+// 4. Copier l'URL de déploiement dans les HTML (APPS_SCRIPT_URL)
+// ============================================================
 
-// ─── CONFIGURATION ───────────────────────────────────────────────
-const EMAIL_ADMIN        = 'genie.montauban@gmail.com';
-const SPREADSHEET_ID     = '17dxvMah1AlINEN2InJzuTSJ4UtuC_QAg5bo3Snq2YYs';
-const CALENDAR_ID        = 'genie.montauban@gmail.com'; // Agenda Google principal
-// SÉCURITÉ : définir dans Script Properties (clé : API_SHARED_KEY)
-// Même valeur à renseigner dans APPS_TOKEN de index.html et reservation.html
+const CONFIG = {
+  SPREADSHEET_ID:     '1mf3D2YGnpWpzufGOaLLaomxAkuzp0AiJY7RzcbpIq2w',
+  EMAIL_ADMIN:        'genie.montauban@gmail.com',
+  NOM_LIEU:           'Génie Montauban',
+  ADRESSE:            '12 rue du Génie, 82000 Montauban',
+  TEL:                '06 51 50 97 18',
+  URL_SITE:           'https://genie-montauban.fr',
+  URL_MON_COMPTE:     'https://genie-montauban.fr/mon-compte.html',
+  CALENDAR_ID:        'genie.montauban@gmail.com',
+  TOKEN_EXPIRY_MIN:   60,
+};
 
-// ─── POINT D'ENTRÉE HTTP ─────────────────────────────────────────
+// ===== POINT D'ENTRÉE POST =====
 function doPost(e) {
-  let data;
   try {
-    data = JSON.parse(e.postData.contents);
-  } catch(_) {
-    data = {};
-  }
-
-  const action = data.action || '';
-
-  // Vérification du token partagé (API key simple)
-  const scriptProperties = PropertiesService.getScriptProperties();
-  const expectedToken = scriptProperties.getProperty('API_SHARED_KEY');
-  const providedToken =
-    (data && data.token) ||
-    (e && e.parameter && e.parameter.token) ||
-    '';
-
-  if (!expectedToken || providedToken !== expectedToken) {
-    return repondre({ ok: false, erreur: 'Accès non autorisé' });
-  }
-
-  try {
-    if (action === 'RESERVER') {
-      if (!validerReservationPayload(data)) {
-        return repondre({ ok: false, erreur: 'Données de réservation invalides ou incomplètes' });
-      }
-      return repondre(traiterReservation(data));
+    const data = JSON.parse(e.postData.contents);
+    switch (data.action) {
+      // Comptes clients
+      case 'INSCRIRE':                return ok(inscrireClient(data));
+      case 'DEMANDER_LIEN':           return ok(demanderLienMagique(data));
+      case 'GET_PROFIL':              return ok(getProfil(data));
+      // Réservations
+      case 'RESERVER':                return ok(creerReservation(data));
+      case 'GET_RESERVATIONS_CLIENT': return ok(getReservationsClient(data));
+      // Adhésions
+      case 'ADHERER':                 return ok(creerAdhesion(data));
+      // Contact
+      case 'CONTACT':                 return ok(traiterContact(data));
+      // Admin panel (admin.html)
+      case 'addResa':                 return ok(adminAddResa(data.resa));
+      case 'updateResa':              return ok(adminUpdateResa(data.resa));
+      case 'deleteResa':              return ok(adminDeleteResa(data.id));
+      case 'saveConfig':              return ok({ success: true });
+      // Admin v3
+      case 'ADMIN_LOGIN':             return ok(adminLogin(data));
+      case 'ADMIN_UPDATE_STATUS':     return ok(adminUpdateStatus(data));
+      default: return ok({ success: false, error: 'Action inconnue: ' + data.action });
     }
-    if (action === 'ADHERER')   return repondre(traiterAdhesion(data));
-    if (action === 'CONTACT')   return repondre(traiterContact(data));
-    return repondre({ ok: false, erreur: 'Action inconnue : ' + action });
-  } catch(err) {
-    return repondre({ ok: false, erreur: err.toString() });
+  } catch (err) {
+    return ok({ success: false, error: err.message });
   }
 }
 
+// ===== POINT D'ENTRÉE GET =====
 function doGet(e) {
-  const action = e.parameter.action || '';
-
-  // Vérification du token partagé (API key simple)
-  const scriptProperties = PropertiesService.getScriptProperties();
-  const expectedToken = scriptProperties.getProperty('API_SHARED_KEY');
-  const providedToken = (e && e.parameter && e.parameter.token) || '';
-
-  if (!expectedToken || providedToken !== expectedToken) {
-    return repondreJSON({ ok: false, erreur: 'Accès non autorisé' });
-  }
-
   try {
-    if (action === 'GET_RESERVATIONS') return repondreJSON(getReservations(e));
-    return repondreJSON({ ok: true, message: 'API Génie Montauban opérationnelle' });
-  } catch(err) {
-    return repondreJSON({ ok: false, erreur: err.toString() });
+    const a = e.parameter.action || '';
+    if (a === 'GET_DISPO')         return ok(getDisponibilites(e.parameter));
+    if (a === 'GET_RESERVATIONS')  return ok(getReservations(e.parameter));
+    if (a === 'VALIDER_TOKEN')     return ok(validerToken(e.parameter));
+    if (a === 'getAll' || a === 'ADMIN_GET_ALL') return ok(adminGetAll());
+    return ok({ success: true, message: 'API Génie Montauban v4' });
+  } catch (err) {
+    return ok({ success: false, error: err.message });
   }
 }
 
-// ─── RÉSERVATION ─────────────────────────────────────────────────
-/**
- * Valide les champs essentiels pour une réservation avant de lancer les effets de bord.
- */
-function validerReservationPayload(d) {
-  if (!d) return false;
+function ok(obj) {
+  return ContentService.createTextOutput(JSON.stringify(obj))
+    .setMimeType(ContentService.MimeType.JSON);
+}
 
-  // Champs obligatoires de base
-  const requiredStringFields = [
-    'espace',
-    'profil',
-    'date',
-    'heureDebut',
-    'prenom',
-    'nom',
-    'email'
-  ];
+// ===== INSCRIPTION CLIENT =====
+function inscrireClient(data) {
+  const ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+  const sheet = ss.getSheetByName('Clients');
+  const rows = sheet.getDataRange().getValues();
+  for (let i = 1; i < rows.length; i++) {
+    if (rows[i][4] && rows[i][4].toString().toLowerCase() === data.email.toLowerCase())
+      return { success: false, error: 'EMAIL_EXISTE', message: 'Un compte existe déjà avec cet email.' };
+  }
+  const id = 'CLI-' + Date.now();
+  const now = new Date().toISOString();
+  let profil = 'plein';
+  if (data.type === 'asso') profil = 'asso';
+  else if (data.type === 'locataire') profil = 'locataire';
+  sheet.appendRow([id, now, data.prenom, data.nom, data.email.toLowerCase(),
+    data.tel || '', data.type || 'particulier', data.structure || '',
+    profil, 'ACTIF', data.cgv ? now : '', data.ri ? now : '', data.statuts ? now : '',
+    data.ip || '', 0, now]);
+  MailApp.sendEmail(data.email,
+    '🎉 Bienvenue chez Génie Montauban !',
+    `Bonjour ${data.prenom},\n\nVotre compte est créé !\n\nRéférence : ${id}\nProfil : ${data.type}\n\nConnectez-vous : ${CONFIG.URL_MON_COMPTE}\n\n${CONFIG.NOM_LIEU} · ${CONFIG.ADRESSE} · ${CONFIG.TEL}`);
+  MailApp.sendEmail(CONFIG.EMAIL_ADMIN,
+    `🆕 Inscription — ${data.prenom} ${data.nom} (${data.type})`,
+    `ID : ${id}\nNom : ${data.prenom} ${data.nom}\nEmail : ${data.email}\nType : ${data.type}`);
+  return { success: true, id: id, message: 'Compte créé.' };
+}
 
-  for (var i = 0; i < requiredStringFields.length; i++) {
-    var field = requiredStringFields[i];
-    if (!d[field] || typeof d[field] !== 'string') {
-      return false;
+// ===== LIEN MAGIQUE =====
+function demanderLienMagique(data) {
+  const ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+  const rows = ss.getSheetByName('Clients').getDataRange().getValues();
+  let prenom = '';
+  let found = false;
+  for (let i = 1; i < rows.length; i++) {
+    if (rows[i][4] && rows[i][4].toString().toLowerCase() === data.email.toLowerCase()) {
+      found = true; prenom = rows[i][2]; break;
     }
   }
-
-  // Durée obligatoire et numérique positive
-  if (d.duree === undefined || d.duree === null || isNaN(Number(d.duree)) || Number(d.duree) <= 0) {
-    return false;
-  }
-
-  // Date au format simple AAAA-MM-JJ (validation basique)
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(d.date)) {
-    return false;
-  }
-
-  // Heure de début au format H ou HH ou HH:MM (validation basique)
-  if (!/^\d{1,2}(:\d{2})?$/.test(d.heureDebut)) {
-    return false;
-  }
-
-  // Email forme simple
-  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.email)) {
-    return false;
-  }
-
-  return true;
+  if (!found) return { success: false, error: 'EMAIL_INCONNU', message: 'Aucun compte trouvé.' };
+  const token = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,
+    data.email + Date.now() + Math.random())
+    .map(b => ('0' + (b & 0xFF).toString(16)).slice(-2)).join('');
+  const now = new Date();
+  const exp = new Date(now.getTime() + CONFIG.TOKEN_EXPIRY_MIN * 60000);
+  ss.getSheetByName('Tokens').appendRow([token, data.email.toLowerCase(), now.toISOString(), exp.toISOString(), false]);
+  const lien = `${CONFIG.URL_MON_COMPTE}?token=${token}`;
+  MailApp.sendEmail(data.email,
+    '🔑 Votre lien de connexion — Génie Montauban',
+    `Bonjour ${prenom},\n\nVoici votre lien (valable 1h) :\n${lien}\n\n${CONFIG.NOM_LIEU}`);
+  return { success: true, message: 'Lien envoyé.' };
 }
 
-function traiterReservation(d) {
-  const ref = 'RES-' + Date.now();
-
-  // 1. Enregistrer dans Google Sheets
-  const ss    = SpreadsheetApp.openById(SPREADSHEET_ID);
-  const sheet = ss.getSheetByName('Réservations') || ss.insertSheet('Réservations');
-  if (sheet.getLastRow() === 0) {
-    sheet.appendRow(['Référence','Date réservation','Espace','Profil','Date','Heure','Durée (h)',
-                     'Participants','Prénom','Nom','Email','Téléphone','Structure',
-                     'Message','Montant estimé','Badge 24h','Adhésion']);
+// ===== VALIDER TOKEN =====
+function validerToken(params) {
+  const ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+  const sheet = ss.getSheetByName('Tokens');
+  const rows = sheet.getDataRange().getValues();
+  const now = new Date();
+  for (let i = 1; i < rows.length; i++) {
+    if (rows[i][0] === params.token) {
+      if (rows[i][4] === true) return { success: false, error: 'TOKEN_UTILISE' };
+      if (new Date(rows[i][3]) < now)   return { success: false, error: 'TOKEN_EXPIRE' };
+      sheet.getRange(i + 1, 5).setValue(true);
+      const email = rows[i][1];
+      const profil = getProfilParEmail(email, ss);
+      if (!profil) return { success: false, error: 'CLIENT_INCONNU' };
+      majDerniereConnexion(email, ss);
+      return { success: true, email: email, profil: profil };
+    }
   }
-  sheet.appendRow([
-    ref,
-    new Date().toLocaleString('fr-FR'),
-    d.espace, d.profil, d.date, d.heureDebut, d.duree,
-    d.participants, d.prenom, d.nom, d.email, d.tel, d.structure,
-    d.message, d.montantEstime, d.optionBadge ? 'Oui' : 'Non', d.optionAdhesion ? 'Oui' : 'Non'
-  ]);
-
-  // 2. Ajouter à Google Agenda
-  ajouterEvenementCalendar(d, ref);
-
-  // 3. Email de confirmation au réserveur
-  const corps = `Bonjour ${d.prenom},
-
-Votre demande de réservation a bien été reçue. Voici le récapitulatif :
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━
-📋 Référence    : ${ref}
-📍 Espace       : ${d.espace}
-📅 Date         : ${formaterDate(d.date)}
-⏰ Horaire      : ${d.heureDebut} → ${heuresFin(d.heureDebut, d.duree)} (${d.duree}h)
-👥 Participants : ${d.participants || 1}
-💰 Tarif estimé : ${d.montantEstime} €
-━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-L'équipe Génie vous contactera sous 24h pour confirmer la disponibilité et le mode de paiement.
-
-📞 06 51 50 97 18
-✉️ ${EMAIL_ADMIN}
-📍 12 rue du Génie, 82000 Montauban
-
-À bientôt !
-L'équipe Génie Montauban`;
-
-  GmailApp.sendEmail(d.email, `✅ Réservation reçue — ${d.espace} le ${formaterDate(d.date)}`, corps, {
-    name: 'Génie Montauban',
-    replyTo: EMAIL_ADMIN
-  });
-
-  // 4. Notification admin
-  const corpAdmin = `Nouvelle réservation reçue !
-
-Référence : ${ref}
-Espace    : ${d.espace}
-Date      : ${formaterDate(d.date)} — ${d.heureDebut} → ${heuresFin(d.heureDebut, d.duree)} (${d.duree}h)
-Profil    : ${d.profil}
-Participants : ${d.participants || 1}
-
-Contact :
-- ${d.prenom} ${d.nom}
-- ${d.email}
-- ${d.tel || 'Non renseigné'}
-- ${d.structure || ''}
-
-Message : ${d.message || 'Aucun'}
-Montant estimé : ${d.montantEstime}
-Badge 24h : ${d.optionBadge ? 'Oui' : 'Non'}
-Adhésion : ${d.optionAdhesion ? 'Oui' : 'Non'}`;
-
-  GmailApp.sendEmail(EMAIL_ADMIN, `🔔 Réservation ${ref} — ${d.espace}`, corpAdmin);
-
-  return { ok: true, ref: ref };
+  return { success: false, error: 'TOKEN_INVALIDE' };
 }
 
-// ─── GOOGLE AGENDA ────────────────────────────────────────────────
-function ajouterEvenementCalendar(d, ref) {
-  try {
-    const calendar = CalendarApp.getCalendarById(CALENDAR_ID);
-    if (!calendar) return; // Calendrier non trouvé, on ignore
+// ===== PROFIL CLIENT =====
+function getProfil(data) {
+  const ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+  const profil = getProfilParEmail(data.email, ss);
+  if (!profil) return { success: false, error: 'CLIENT_INCONNU' };
+  return { success: true, profil: profil };
+}
 
-    // Construire la date/heure de début et de fin
-    const [annee, mois, jour] = (d.date || '').split('-').map(Number);
-    const heureDebut = parseInt(d.heureDebut) || 9;
-    const duree      = parseFloat(d.duree) || 1;
+function getProfilParEmail(email, ss) {
+  const rows = ss.getSheetByName('Clients').getDataRange().getValues();
+  for (let i = 1; i < rows.length; i++) {
+    if (rows[i][4] && rows[i][4].toString().toLowerCase() === email.toLowerCase()) {
+      return { id: rows[i][0], prenom: rows[i][2], nom: rows[i][3], email: rows[i][4],
+               tel: rows[i][5], type: rows[i][6], structure: rows[i][7],
+               profilTarifaire: rows[i][8], statut: rows[i][9], nbReservations: rows[i][14] };
+    }
+  }
+  return null;
+}
 
-    const debut = new Date(annee, mois - 1, jour, heureDebut, 0, 0);
-    const fin   = new Date(debut.getTime() + duree * 3600 * 1000);
-
-    const titre = `📍 ${d.espace} — ${d.prenom} ${d.nom}`;
-    const description = [
-      `Référence : ${ref}`,
-      `Profil : ${d.profil}`,
-      `Participants : ${d.participants || 1}`,
-      ``,
-      `Contact :`,
-      `  ${d.prenom} ${d.nom}`,
-      `  ${d.email}`,
-      `  ${d.tel || 'Non renseigné'}`,
-      d.structure ? `  ${d.structure}` : '',
-      ``,
-      d.message ? `Message : ${d.message}` : '',
-      ``,
-      `Montant estimé : ${d.montantEstime}`,
-      d.optionBadge ? '🔑 Option badge 24h demandée' : '',
-      d.optionAdhesion ? '🤝 Demande d\'adhésion jointe' : '',
-    ].filter(Boolean).join('\n');
-
-    calendar.createEvent(titre, debut, fin, {
-      description: description,
-      location: '12 rue du Génie, 82000 Montauban',
-      guests: d.email,
-      sendInvites: false // Mettre true pour envoyer l'invitation au réserveur
-    });
-
-  } catch(err) {
-    // On ne bloque pas si le calendrier échoue
-    console.error('Erreur Calendar :', err);
+function majDerniereConnexion(email, ss) {
+  const rows = ss.getSheetByName('Clients').getDataRange().getValues();
+  for (let i = 1; i < rows.length; i++) {
+    if (rows[i][4] && rows[i][4].toString().toLowerCase() === email.toLowerCase()) {
+      ss.getSheetByName('Clients').getRange(i + 1, 16).setValue(new Date().toISOString());
+      return;
+    }
   }
 }
 
-// ─── ADHÉSION ─────────────────────────────────────────────────────
-function traiterAdhesion(d) {
-  const ss    = SpreadsheetApp.openById(SPREADSHEET_ID);
-  const sheet = ss.getSheetByName('Adhésions') || ss.insertSheet('Adhésions');
-  if (sheet.getLastRow() === 0) {
-    sheet.appendRow(['Date','Type','Montant (€)','Mode paiement','Prénom','Nom','Email','Téléphone','Adresse']);
+// ===== RÉSERVATION (formulaire public) =====
+function creerReservation(data) {
+  const ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+  const sheet = ss.getSheetByName('Reservations');
+  const id = 'RES-' + Date.now();
+  const now = new Date();
+  const hFin = heuresFin(data.heureDebut, data.duree);
+  sheet.appendRow([id, 'EN_ATTENTE', now.toISOString(),
+    data.espace, data.typeEspace || '', data.profil,
+    data.date, data.heureDebut, hFin, data.duree,
+    data.participants || 1, data.prenom, data.nom, data.email,
+    data.tel || '', data.structure || '', data.montantEstime || 0, data.message || '']);
+  // Incrémenter nb réservations client
+  const cRows = ss.getSheetByName('Clients').getDataRange().getValues();
+  for (let i = 1; i < cRows.length; i++) {
+    if (cRows[i][4] && cRows[i][4].toString().toLowerCase() === data.email.toLowerCase()) {
+      ss.getSheetByName('Clients').getRange(i + 1, 15).setValue((parseInt(cRows[i][14]) || 0) + 1);
+      break;
+    }
   }
-  sheet.appendRow([
-    new Date().toLocaleString('fr-FR'),
-    d.typeAdhesion, d.montant, d.modePaiement,
-    d.prenom, d.nom, d.email, d.tel, d.adresse
-  ]);
-
-  // Email de confirmation
-  const corps = `Bonjour ${d.prenom},
-
-Votre demande d'adhésion à l'Association Génie Montauban a bien été reçue.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━
-Type d'adhésion : ${d.typeAdhesion}
-Cotisation      : ${d.montant} €
-Mode de paiement: ${d.modePaiement}
-━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Nous vous contacterons sous 48h pour finaliser votre inscription.
-
-📞 06 51 50 97 18
-✉️ ${EMAIL_ADMIN}
-
-Bienvenue dans la communauté Génie !`;
-
-  GmailApp.sendEmail(d.email, '🤝 Demande d\'adhésion reçue — Génie Montauban', corps, {
-    name: 'Génie Montauban',
-    replyTo: EMAIL_ADMIN
-  });
-
-  GmailApp.sendEmail(EMAIL_ADMIN,
-    `🔔 Nouvelle adhésion — ${d.prenom} ${d.nom} (${d.typeAdhesion})`,
-    `Prénom : ${d.prenom}\nNom : ${d.nom}\nEmail : ${d.email}\nTél : ${d.tel}\nType : ${d.typeAdhesion}\nMontant : ${d.montant} €\nPaiement : ${d.modePaiement}\nAdresse : ${d.adresse}`
-  );
-
-  return { ok: true };
+  // Emails
+  const corps = `Bonjour ${data.prenom},\n\nVotre demande de réservation est enregistrée.\n\n📋 Référence : ${id}\n📍 Espace : ${data.espace}\n📅 Date : ${formaterDate(data.date)}\n⏰ Horaire : ${data.heureDebut} → ${hFin} (${data.duree}h)\n👥 Participants : ${data.participants || 1}\n💰 Estimation : ${data.montantEstime || '?'} €\n\nL'équipe confirme sous 24h ouvrées.\n📞 ${CONFIG.TEL}\n\n${CONFIG.NOM_LIEU} · ${CONFIG.ADRESSE}`;
+  MailApp.sendEmail(data.email, `⏳ Demande reçue — ${data.espace} le ${formaterDate(data.date)}`, corps);
+  MailApp.sendEmail(CONFIG.EMAIL_ADMIN,
+    `🔔 Réservation ${id} — ${data.espace} — ${data.prenom} ${data.nom}`,
+    `ID : ${id}\nEspace : ${data.espace}\nDate : ${data.date} ${data.heureDebut}→${hFin}\nClient : ${data.prenom} ${data.nom}\nEmail : ${data.email}\nMontant : ${data.montantEstime || '?'} €`);
+  // Calendrier
+  ajouterAuCalendrier(data.espace, data.date, data.heureDebut, hFin, data.prenom + ' ' + data.nom, id, data.email, false);
+  return { success: true, id: id };
 }
 
-// ─── CONTACT ──────────────────────────────────────────────────────
-function traiterContact(d) {
-  const sujet = d.sujet || '(sans sujet)';
-  const corps = `Message reçu via le formulaire de contact du site.
-
-De : ${d.prenom || ''} ${d.nom || ''} <${d.email}>
-Sujet : ${sujet}
-
-${d.message}`;
-
-  GmailApp.sendEmail(EMAIL_ADMIN, `💬 Contact site — ${sujet}`, corps, {
-    replyTo: d.email,
-    name: `${d.prenom || ''} ${d.nom || ''}`.trim() || 'Formulaire site'
-  });
-
-  return { ok: true };
+// ===== RÉSERVATIONS CLIENT =====
+function getReservationsClient(data) {
+  const ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+  const rows = ss.getSheetByName('Reservations').getDataRange().getValues();
+  const list = [];
+  for (let i = 1; i < rows.length; i++) {
+    if (rows[i][13] && rows[i][13].toString().toLowerCase() === data.email.toLowerCase()) {
+      list.push({ id: rows[i][0], statut: rows[i][1], espace: rows[i][3],
+                  date: rows[i][6], heureDebut: rows[i][7], heureFin: rows[i][8],
+                  duree: rows[i][9], montant: rows[i][16] });
+    }
+  }
+  return { success: true, reservations: list.reverse() };
 }
 
-// ─── GET RÉSERVATIONS (pour affichage dispos) ──────────────────────
-function getReservations(e) {
-  const espaceFiltre = e.parameter.espace    || '';
-  const dateDebut    = e.parameter.dateDebut || '';
-  const dateFin      = e.parameter.dateFin   || dateDebut;
-
-  const ss    = SpreadsheetApp.openById(SPREADSHEET_ID);
-  const sheet = ss.getSheetByName('Réservations');
-  if (!sheet) return { success: true, occupations: {} };
-
-  const data  = sheet.getDataRange().getValues();
-  // Structure retournée : { "Bourdelle": { "2025-01-15": ["09:00","09:30","10:00"] } }
+// ===== DISPONIBILITÉS (GET) =====
+function getDisponibilites(params) {
+  const ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+  const rows = ss.getSheetByName('Reservations').getDataRange().getValues();
+  const espace = params.espace || '';
+  const dateDebut = params.dateDebut || '';
+  const dateFin = params.dateFin || dateDebut;
   const occup = {};
-
-  for (let i = 1; i < data.length; i++) {
-    const row = data[i];
-    // Colonnes : [0]Ref [1]DateResa [2]Espace [3]Profil [4]Date [5]Heure [6]Durée ...
-    const rowEspace = String(row[2] || '');
-    const rowDate   = String(row[4] || '');
-    // Filtrer par espace (si précisé) et par plage de dates
-    if (espaceFiltre && rowEspace !== espaceFiltre) continue;
-    if (rowDate < dateDebut || rowDate > dateFin) continue;
-
-    const heureDebut = String(row[5] || '08:00'); // format "HH:MM"
-    const duree      = parseFloat(row[6]) || 1;
-
-    if (!occup[rowEspace]) occup[rowEspace] = {};
-    if (!occup[rowEspace][rowDate]) occup[rowEspace][rowDate] = [];
-
-    // Générer tous les créneaux de 30 min couverts par la réservation
-    const [hH, hM] = heureDebut.split(':').map(Number);
-    const debutMin = hH * 60 + (hM || 0);
-    const finMin   = debutMin + Math.round(duree * 60);
-
-    for (let m = debutMin; m < finMin; m += 30) {
-      const h    = Math.floor(m / 60) % 24;
-      const min  = m % 60;
-      const slot = String(h).padStart(2, '0') + ':' + String(min).padStart(2, '0');
-      if (!occup[rowEspace][rowDate].includes(slot)) {
-        occup[rowEspace][rowDate].push(slot);
-      }
+  for (let i = 1; i < rows.length; i++) {
+    const row = rows[i];
+    if (row[1] === 'ANNULE') continue;
+    const esp = String(row[3] || '');
+    const dat = String(row[6] || '');
+    if (espace && esp !== espace) continue;
+    if (dat < dateDebut || dat > dateFin) continue;
+    const hD = String(row[7] || '08:00');
+    const hF = String(row[8] || '09:00');
+    if (!occup[esp]) occup[esp] = {};
+    if (!occup[esp][dat]) occup[esp][dat] = [];
+    const [hh, mm] = hD.split(':').map(Number);
+    const [hh2, mm2] = hF.split(':').map(Number);
+    let cur = hh * 60 + (mm || 0);
+    const end = hh2 * 60 + (mm2 || 0);
+    while (cur < end) {
+      occup[esp][dat].push(pad(Math.floor(cur / 60)) + ':' + pad(cur % 60));
+      cur += 30;
     }
   }
-
   return { success: true, occupations: occup };
 }
 
-// ─── UTILITAIRES ──────────────────────────────────────────────────
-function formaterDate(dateStr) {
-  if (!dateStr) return '';
-  const [y, m, d] = dateStr.split('-');
-  const mois = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
-  return `${parseInt(d)} ${mois[parseInt(m)-1]} ${y}`;
+// ===== GET RESERVATIONS (pour reservation.html chargerDispos) =====
+function getReservations(params) {
+  return getDisponibilites(params);
+}
+
+// ===== ADHÉSION =====
+function creerAdhesion(data) {
+  const ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+  const sheet = ss.getSheetByName('Adhesions');
+  const id = 'ADH-' + Date.now();
+  sheet.appendRow([id, 'EN_ATTENTE', new Date().toISOString(),
+    data.typeAdhesion, data.montant, data.modePaiement || '',
+    data.prenom, data.nom, data.email, data.tel || '', data.adresse || '', '']);
+  MailApp.sendEmail(data.email,
+    `✅ Demande d'adhésion reçue — ${CONFIG.NOM_LIEU}`,
+    `Bonjour ${data.prenom},\n\nNous avons bien reçu votre demande d'adhésion.\n\nType : ${data.typeAdhesion}\nMontant : ${data.montant} €\nMode : ${data.modePaiement || 'À préciser'}\nRéférence : ${id}\n\nL'équipe vous contacte sous 48h.\n\n${CONFIG.NOM_LIEU} · ${CONFIG.ADRESSE} · ${CONFIG.TEL}`);
+  MailApp.sendEmail(CONFIG.EMAIL_ADMIN,
+    `🆕 Adhésion — ${data.typeAdhesion} — ${data.prenom} ${data.nom}`,
+    `ID : ${id}\nType : ${data.typeAdhesion}\nMontant : ${data.montant} €\nNom : ${data.prenom} ${data.nom}\nEmail : ${data.email}`);
+  return { success: true, id: id };
+}
+
+// ===== CONTACT =====
+function traiterContact(data) {
+  MailApp.sendEmail(CONFIG.EMAIL_ADMIN,
+    `💬 Contact site — ${data.sujet || '(sans sujet)'}`,
+    `De : ${data.prenom || ''} ${data.nom || ''} <${data.email}>\nSujet : ${data.sujet || ''}\n\n${data.message}`,
+    { replyTo: data.email });
+  return { success: true };
+}
+
+// ===== ADMIN — GET ALL (pour admin.html) =====
+function adminGetAll() {
+  const ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+  const resRows = ss.getSheetByName('Reservations').getDataRange().getValues();
+  // Statut v3 → admin.html
+  const statutMap = { 'EN_ATTENTE': 'pending', 'CONFIRME': 'confirmed', 'ANNULE': 'cancelled', 'TERMINE': 'completed' };
+  const reservations = resRows.slice(1).map(r => {
+    const dureeH = parseFloat(r[9]) || 1;
+    let typeDuree = 'heure';
+    let nbHeures = dureeH;
+    if (dureeH >= 7)       { typeDuree = 'journee'; nbHeures = 8; }
+    else if (dureeH >= 3)  { typeDuree = 'demi';    nbHeures = 4; }
+    return {
+      id:         String(r[0]),
+      statut:     statutMap[r[1]] || 'pending',
+      createdAt:  String(r[2]),
+      espace:     String(r[3]).toLowerCase().replace(/[éèê]/g,'e').replace(/\s.*/,''),
+      nomEspace:  String(r[3]),
+      usage:      String(r[4]) || 'reunion',
+      profil:     String(r[5]) || 'locataire',
+      date:       String(r[6]),
+      heureDebut: String(r[7]),
+      heureFin:   String(r[8]),
+      nbHeures:   String(nbHeures),
+      typeDuree:  typeDuree,
+      participants: String(r[10] || 1),
+      prenom:     String(r[11]),
+      nom:        String(r[12]),
+      email:      String(r[13]),
+      tel:        String(r[14]),
+      orga:       String(r[15]),
+      montant:    String(r[16] || 0),
+      montantBase:String(r[16] || 0),
+      objet:      String(r[17]),
+      options:    ''
+    };
+  }).reverse();
+  return {
+    success:      true,
+    reservations: reservations,
+    config:       { email: CONFIG.EMAIL_ADMIN, tel: CONFIG.TEL }
+  };
+}
+
+// ===== ADMIN — ADD RESA =====
+function adminAddResa(resa) {
+  const ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+  const sheet = ss.getSheetByName('Reservations');
+  const statutMap = { 'pending': 'EN_ATTENTE', 'confirmed': 'CONFIRME', 'cancelled': 'ANNULE', 'completed': 'TERMINE' };
+  const dureeH = resa.typeDuree === 'demi' ? 4 : resa.typeDuree === 'journee' ? 8 : parseFloat(resa.nbHeures) || 1;
+  sheet.appendRow([
+    resa.id || ('RES-' + Date.now()),
+    statutMap[resa.statut] || 'EN_ATTENTE',
+    resa.createdAt || new Date().toISOString(),
+    resa.nomEspace || resa.espace,
+    resa.usage || 'reunion',
+    resa.profil || 'locataire',
+    resa.date, resa.heureDebut, resa.heureFin, dureeH,
+    resa.participants || 1, resa.prenom, resa.nom, resa.email,
+    resa.tel || '', resa.orga || '', resa.montant || 0, resa.objet || ''
+  ]);
+  return { success: true };
+}
+
+// ===== ADMIN — UPDATE RESA =====
+function adminUpdateResa(resa) {
+  const ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+  const sheet = ss.getSheetByName('Reservations');
+  const rows = sheet.getDataRange().getValues();
+  const statutMap = { 'pending': 'EN_ATTENTE', 'confirmed': 'CONFIRME', 'cancelled': 'ANNULE', 'completed': 'TERMINE' };
+  const dureeH = resa.typeDuree === 'demi' ? 4 : resa.typeDuree === 'journee' ? 8 : parseFloat(resa.nbHeures) || 1;
+  for (let i = 1; i < rows.length; i++) {
+    if (String(rows[i][0]) === String(resa.id)) {
+      const newStatut = statutMap[resa.statut] || 'EN_ATTENTE';
+      sheet.getRange(i + 1, 1, 1, 18).setValues([[
+        resa.id, newStatut, rows[i][2],
+        resa.nomEspace || resa.espace, resa.usage || 'reunion', resa.profil || 'locataire',
+        resa.date, resa.heureDebut, resa.heureFin, dureeH,
+        resa.participants || 1, resa.prenom, resa.nom, resa.email,
+        resa.tel || '', resa.orga || '', resa.montant || 0, resa.objet || ''
+      ]]);
+      // Email de confirmation si statut confirmé
+      if (newStatut === 'CONFIRME') {
+        MailApp.sendEmail(resa.email,
+          `✅ Réservation confirmée — ${resa.nomEspace || resa.espace} — ${resa.date}`,
+          `Bonjour ${resa.prenom},\n\nVotre réservation est confirmée !\n\n• Espace : ${resa.nomEspace || resa.espace}\n• Date : ${formaterDate(resa.date)}\n• Horaire : ${resa.heureDebut} → ${resa.heureFin}\n• Référence : ${resa.id}\n\nÀ bientôt !\n${CONFIG.NOM_LIEU}`);
+        ajouterAuCalendrier(resa.nomEspace || resa.espace, resa.date, resa.heureDebut, resa.heureFin,
+          resa.prenom + ' ' + resa.nom, resa.id, resa.email, true);
+      }
+      return { success: true };
+    }
+  }
+  return { success: false, error: 'ID non trouvé' };
+}
+
+// ===== ADMIN — DELETE RESA =====
+function adminDeleteResa(id) {
+  const ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+  const sheet = ss.getSheetByName('Reservations');
+  const rows = sheet.getDataRange().getValues();
+  for (let i = 1; i < rows.length; i++) {
+    if (String(rows[i][0]) === String(id)) {
+      sheet.getRange(i + 1, 2).setValue('ANNULE');
+      return { success: true };
+    }
+  }
+  return { success: false, error: 'ID non trouvé' };
+}
+
+// ===== ADMIN — LOGIN =====
+function adminLogin(data) {
+  const ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+  const config = ss.getSheetByName('Config');
+  if (!config) return { success: false };
+  const rows = config.getDataRange().getValues();
+  const hash = rows.find(r => r[0] === 'ADMIN_PASSWORD_HASH');
+  if (!hash) return { success: false };
+  const inputHash = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, data.password)
+    .map(b => ('0' + (b & 0xFF).toString(16)).slice(-2)).join('');
+  return inputHash === hash[1]
+    ? { success: true, token: inputHash.substring(0, 16) }
+    : { success: false };
+}
+
+// ===== ADMIN — UPDATE STATUS (v3) =====
+function adminUpdateStatus(data) {
+  const ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+  const sheetName = data.type === 'reservation' ? 'Reservations' : 'Adhesions';
+  const sheet = ss.getSheetByName(sheetName);
+  const rows = sheet.getDataRange().getValues();
+  const couleurs = {
+    'CONFIRME':   { bg: '#D4EDDA', fg: '#155724' },
+    'EN_ATTENTE': { bg: '#FFF3CD', fg: '#856404' },
+    'ANNULE':     { bg: '#F8D7DA', fg: '#721C24' },
+    'TERMINE':    { bg: '#E2E3E5', fg: '#383D41' }
+  };
+  for (let i = 1; i < rows.length; i++) {
+    if (String(rows[i][0]) === String(data.id)) {
+      sheet.getRange(i + 1, 2).setValue(data.statut);
+      const c = couleurs[data.statut] || { bg: '#fff', fg: '#000' };
+      sheet.getRange(i + 1, 2).setBackground(c.bg).setFontColor(c.fg);
+      if (data.statut === 'CONFIRME' && data.type === 'reservation') {
+        const row = rows[i];
+        MailApp.sendEmail(row[13],
+          `✅ Réservation confirmée — ${row[3]} — ${row[6]}`,
+          `Bonjour ${row[11]},\n\nVotre réservation est confirmée !\n\n• Espace : ${row[3]}\n• Date : ${row[6]}\n• Horaire : ${row[7]} → ${row[8]}\n• Référence : ${row[0]}\n\n${data.messageAdmin || ''}\n\nÀ bientôt !\n${CONFIG.NOM_LIEU}`);
+        ajouterAuCalendrier(row[3], row[6], row[7], row[8], row[11] + ' ' + row[12], row[0], row[13], true);
+      }
+      return { success: true };
+    }
+  }
+  return { success: false, error: 'ID non trouvé' };
+}
+
+// ===== GOOGLE AGENDA =====
+function ajouterAuCalendrier(espace, date, heureDebut, heureFin, client, ref, email, confirme) {
+  try {
+    const cal = CalendarApp.getCalendarById(CONFIG.CALENDAR_ID);
+    if (!cal) return;
+    const debut = new Date(date + 'T' + heureDebut + ':00');
+    const fin   = new Date(date + 'T' + heureFin   + ':00');
+    if (isNaN(debut.getTime()) || isNaN(fin.getTime())) return;
+    const titre = (confirme ? '✅ ' : '⏳ ') + espace + ' — ' + client;
+    cal.createEvent(titre, debut, fin, {
+      description: `Référence : ${ref}\nEmail : ${email}`,
+      location: CONFIG.ADRESSE
+    });
+  } catch (err) {
+    Logger.log('Calendrier erreur : ' + err.message);
+  }
+}
+
+// ===== HELPERS =====
+function pad(n) { return String(n).padStart(2, '0'); }
+
+function formaterDate(s) {
+  if (!s) return '';
+  const [y, m, d] = s.split('-');
+  const mois = ['janvier','février','mars','avril','mai','juin',
+                 'juillet','août','septembre','octobre','novembre','décembre'];
+  return `${parseInt(d)} ${mois[parseInt(m) - 1]} ${y}`;
 }
 
 function heuresFin(debut, duree) {
-  // debut est au format "HH:MM" (ex: "09:30")
-  const parts = String(debut || '08:00').split(':');
-  const hDebut = parseInt(parts[0]) || 0;
-  const mDebut = parseInt(parts[1]) || 0;
-  const totalMin = hDebut * 60 + mDebut + Math.round(parseFloat(duree) * 60);
-  const hFin = Math.floor(totalMin / 60) % 24;
-  const mFin = totalMin % 60;
-  return String(hFin).padStart(2, '0') + 'h' + (mFin > 0 ? String(mFin).padStart(2, '0') : '');
+  const p = String(debut || '08:00').split(':');
+  const total = (parseInt(p[0]) || 0) * 60 + (parseInt(p[1]) || 0) + Math.round(parseFloat(duree) * 60);
+  return pad(Math.floor(total / 60) % 24) + ':' + pad(total % 60);
 }
 
-function repondre(obj) {
-  return ContentService
-    .createTextOutput(JSON.stringify(obj))
-    .setMimeType(ContentService.MimeType.JSON);
-}
-
-function repondreJSON(obj) {
-  return ContentService
-    .createTextOutput(JSON.stringify(obj))
-    .setMimeType(ContentService.MimeType.JSON);
+// ===== SETUP (à exécuter une seule fois) =====
+function setupComplet() {
+  const ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+  function creerFeuille(nom, entetes, couleur) {
+    let s = ss.getSheetByName(nom);
+    if (!s) {
+      s = ss.insertSheet(nom);
+      s.getRange(1, 1, 1, entetes.length).setValues([entetes])
+       .setFontWeight('bold').setBackground(couleur).setFontColor('#FFFFFF');
+      s.setFrozenRows(1);
+    }
+    return s;
+  }
+  creerFeuille('Clients',
+    ['ID','Date inscription','Prénom','Nom','Email','Téléphone','Type','Structure',
+     'Profil tarifaire','Statut','CGV','RI','Statuts','IP','Nb réservations','Dernière connexion'],
+    '#1E4A6E');
+  creerFeuille('Tokens', ['Token','Email','Date création','Expiration','Utilisé'], '#2D3748');
+  creerFeuille('Reservations',
+    ['ID','Statut','Date création','Espace','Type espace','Profil tarifaire',
+     'Date réservation','Heure début','Heure fin','Durée (h)','Participants',
+     'Prénom','Nom','Email','Téléphone','Structure','Montant (€)','Message'],
+    '#1E4A6E');
+  creerFeuille('Adhesions',
+    ['ID','Statut','Date demande',"Type d'adhésion",'Montant (€)','Mode paiement',
+     'Prénom','Nom / Structure','Email','Téléphone','Adresse','Notes'],
+    '#27AE60');
+  // Feuille Config avec hash du mot de passe admin par défaut : genie2026admin
+  let cfg = ss.getSheetByName('Config');
+  if (!cfg) {
+    cfg = ss.insertSheet('Config');
+    const pwdHash = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, 'genie2026admin')
+      .map(b => ('0' + (b & 0xFF).toString(16)).slice(-2)).join('');
+    cfg.getRange(1, 1, 2, 2).setValues([
+      ['ADMIN_PASSWORD_HASH', pwdHash],
+      ['CALENDAR_ID', CONFIG.CALENDAR_ID]
+    ]);
+  }
+  Logger.log('✅ Setup terminé');
+  return 'OK';
 }

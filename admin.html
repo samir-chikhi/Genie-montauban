@@ -455,8 +455,9 @@ textarea{resize:vertical;min-height:65px}
 
 <script>
 // ═══════════════════════════════════════════════════════
-let SCRIPT_URL = localStorage.getItem('genie_script_url') || '';
-const SHEET_URL = 'https://docs.google.com/spreadsheets/d/17dxvMah1AlINEN2InJzuTSJ4UtuC_QAg5bo3Snq2YYs/edit';
+const APPS_SCRIPT_URL_DEFAULT = 'https://script.google.com/macros/s/AKfycbw5f4eTOV6q9n7OCo0m29fmECgUoML4xrn0QsUG1k2OmSUGYQQrkiPIu_Cs7x_qROiA/exec';
+let SCRIPT_URL = localStorage.getItem('genie_script_url') || APPS_SCRIPT_URL_DEFAULT;
+const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1mf3D2YGnpWpzufGOaLLaomxAkuzp0AiJY7RzcbpIq2w/edit';
 
 // ─── DONNÉES RÉFÉRENCE ──────────────────────────────────
 const PROFILS = {
