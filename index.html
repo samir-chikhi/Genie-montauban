@@ -11,7 +11,42 @@
   <meta property="og:description" content="Espace de coworking, bureaux et salles de réunion au cœur de Montauban. ESS, innovation sociale, communauté.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://www.genie-montauban.fr/">
+  <meta property="og:image" content="https://www.genie-montauban.fr/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Génie — Tiers-lieu coworking à Montauban">
   <link rel="canonical" href="https://www.genie-montauban.fr/">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Génie — Tiers-Lieu de Montauban",
+    "description": "Tiers-lieu ancré dans l'économie sociale et solidaire à Montauban. Coworking, bureaux privatifs, salles de réunion.",
+    "url": "https://www.genie-montauban.fr",
+    "telephone": "+33651509718",
+    "email": "genie.montauban@gmail.com",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "12 rue du Génie",
+      "addressLocality": "Montauban",
+      "postalCode": "82000",
+      "addressCountry": "FR"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 44.0181,
+      "longitude": 1.3559
+    },
+    "openingHours": "Mo-Fr 08:00-20:00",
+    "amenityFeature": [
+      {"@type": "LocationFeatureSpecification", "name": "Accessible PMR", "value": true},
+      {"@type": "LocationFeatureSpecification", "name": "Wi-Fi", "value": true},
+      {"@type": "LocationFeatureSpecification", "name": "Salle de réunion", "value": true},
+      {"@type": "LocationFeatureSpecification", "name": "Coworking", "value": true}
+    ],
+    "sameAs": []
+  }
+  </script>
   <!-- Google Fonts -->
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1343,13 +1378,42 @@
   </div>
 </footer>
 
+<!-- ═══ COOKIE BANNER ═══ -->
+<div id="cookie-banner">
+  <p>🍪 Ce site utilise des cookies fonctionnels pour améliorer votre expérience. En continuant, vous acceptez notre <a href="confidentialite.html" style="color:var(--gold)">politique de confidentialité</a>.</p>
+  <div class="cookie-btns">
+    <button class="cookie-accept" onclick="acceptCookies()">Accepter</button>
+    <button class="cookie-refuse" onclick="refuseCookies()">Refuser</button>
+  </div>
+</div>
+
 <script>
 // ============================================================
 // TOKEN API — doit correspondre à API_SHARED_KEY dans les
 // Script Properties de Google Apps Script
+// Pour activer : définir API_SHARED_KEY dans Apps Script, puis
+// renseigner la même valeur ici.
 // ============================================================
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxceijW8OQSbtjjs-rqrXjozu-oL-RUGARK1Odqkx3-IBjs0EvrEe0u9qyXHxgSewZ3Cg/exec';
 const APPS_TOKEN = ''; // Laisser vide si API_SHARED_KEY non configurée dans Apps Script
+
+// ===== COOKIE BANNER =====
+function acceptCookies() {
+  localStorage.setItem('cookie_consent', 'accepted');
+  document.getElementById('cookie-banner').classList.remove('show');
+}
+function refuseCookies() {
+  localStorage.setItem('cookie_consent', 'refused');
+  document.getElementById('cookie-banner').classList.remove('show');
+}
+if (!localStorage.getItem('cookie_consent')) {
+  setTimeout(() => document.getElementById('cookie-banner').classList.add('show'), 1500);
+}
+
+// ===== NAV SCROLL =====
+window.addEventListener('scroll', () => {
+  document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 10);
+});
 
 // ===== MOBILE NAV =====
 document.querySelectorAll('.nav-links a').forEach(a => {
