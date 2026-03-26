@@ -1567,12 +1567,11 @@ function envoyerContact() {
 }
 
 // ===== WIRING DES BOUTONS =====
-document.addEventListener('DOMContentLoaded', function() {
-  var btnAdh = document.getElementById('btn-adh-submit');
-  if (btnAdh) btnAdh.addEventListener('click', envoyerAdhesion);
-  var btnContact = document.getElementById('btn-contact-submit');
-  if (btnContact) btnContact.addEventListener('click', envoyerContact);
-});
+// Le script est en bas du body : le DOM est déjà disponible
+var btnAdh = document.getElementById('btn-adh-submit');
+if (btnAdh) btnAdh.addEventListener('click', envoyerAdhesion);
+var btnContact = document.getElementById('btn-contact-submit');
+if (btnContact) btnContact.addEventListener('click', envoyerContact);
 </script>
 </body>
 </html>
