@@ -1314,7 +1314,7 @@
       </div>
 
       <div class="form-actions">
-        <button class="btn-submit-adh" onclick="envoyerAdhesion()">✉️ Envoyer ma demande d'adhésion</button>
+        <button type="button" id="btn-adh-submit" class="btn-submit-adh">✉️ Envoyer ma demande d'adhésion</button>
         <a class="btn-dl-adh" href="Fiche_Adhesion_GENIE_2026.pdf" download>⬇️ Télécharger la fiche PDF</a>
       </div>
 
@@ -1378,7 +1378,7 @@
           <div class="fg form-full"><label>Sujet</label><input type="text" id="c-sujet" placeholder="Question sur les tarifs…"></div>
           <div class="fg form-full"><label>Message <span class="req">*</span></label><textarea id="c-message" placeholder="Votre message…" style="min-height:100px"></textarea></div>
         </div>
-        <button onclick="envoyerContact()" style="margin-top:12px;background:var(--navy);color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;">Envoyer →</button>
+        <button type="button" id="btn-contact-submit" style="margin-top:12px;background:var(--navy);color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;">Envoyer →</button>
         <div class="contact-success" id="contact-success">✅ Message envoyé ! Nous vous répondons sous 24h.</div>
         <div class="contact-nomail" id="contact-nomail">
           💡 Votre messagerie va s'ouvrir. Si rien ne se passe, écrivez directement à <strong><a href="mailto:genie.montauban@gmail.com">genie.montauban@gmail.com</a></strong>
@@ -1565,6 +1565,14 @@ function envoyerContact() {
   document.getElementById('contact-success').style.display = 'block';
   document.getElementById('contact-nomail').style.display = 'none';
 }
+
+// ===== WIRING DES BOUTONS =====
+document.addEventListener('DOMContentLoaded', function() {
+  var btnAdh = document.getElementById('btn-adh-submit');
+  if (btnAdh) btnAdh.addEventListener('click', envoyerAdhesion);
+  var btnContact = document.getElementById('btn-contact-submit');
+  if (btnContact) btnContact.addEventListener('click', envoyerContact);
+});
 </script>
 </body>
 </html>
