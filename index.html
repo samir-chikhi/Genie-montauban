@@ -131,12 +131,46 @@
     .nav-burger span { width: 24px; height: 2px; background: var(--navy); border-radius: 2px; transition: .3s; }
 
     /* ═══════════════════════════════════════════════
+       GALERIE PHOTOS
+    ═══════════════════════════════════════════════ */
+    .galerie { background: var(--white); }
+    .galerie-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      grid-template-rows: 260px;
+      gap: 4px;
+    }
+    .galerie-grid img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform .4s ease;
+    }
+    .galerie-grid img:hover { transform: scale(1.03); }
+    .galerie-wrap { overflow: hidden; }
+    .galerie-wrap:first-child { grid-row: span 2; }
+    .galerie-grid-inner {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      grid-template-rows: 260px 260px;
+      gap: 4px;
+    }
+    .galerie-grid-inner .g-main { grid-column: 1; grid-row: 1 / 3; overflow: hidden; }
+    .galerie-grid-inner .g-side { overflow: hidden; }
+    .galerie-grid-inner img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .4s; }
+    .galerie-grid-inner img:hover { transform: scale(1.04); }
+    @media (max-width: 768px) {
+      .galerie-grid-inner { grid-template-columns: 1fr 1fr; grid-template-rows: 180px 180px; }
+      .galerie-grid-inner .g-main { grid-column: span 2; grid-row: 1; }
+    }
+    /* Card image */
+    .espace-card-img { width: 100%; height: 160px; object-fit: cover; display: block; }
+
+    /* ═══════════════════════════════════════════════
        HERO
     ═══════════════════════════════════════════════ */
     .hero {
       min-height: 100vh;
       display: flex; flex-direction: column; align-items: flex-start; justify-content: center;
-      background: var(--navy);
+      background: linear-gradient(135deg, rgba(28,43,58,.90) 0%, rgba(28,43,58,.78) 100%), url('facade.png') center/cover no-repeat;
       position: relative; overflow: hidden;
       padding: 120px 5% 80px;
     }
@@ -774,6 +808,27 @@
   </div>
 </div>
 
+<!-- GALERIE PHOTOS -->
+<div class="galerie">
+  <div class="galerie-grid-inner">
+    <div class="g-main">
+      <img src="coworking3.jpg" alt="Espace de travail lumineux avec grandes fenêtres ouvertes, Génie Montauban" loading="lazy">
+    </div>
+    <div class="g-side">
+      <img src="bureau-cheminee.jpg" alt="Bureau nomade avec cheminée ancienne, Génie Montauban" loading="lazy">
+    </div>
+    <div class="g-side">
+      <img src="coworking4.jpg" alt="Bureau privatif lumineux, Génie Montauban" loading="lazy">
+    </div>
+    <div class="g-side">
+      <img src="bureau-laptop.jpg" alt="Poste de coworking avec lampe dorée et plante, Génie Montauban" loading="lazy">
+    </div>
+    <div class="g-side">
+      <img src="coworking1.png" alt="Ambiance de travail, Génie Montauban" loading="lazy">
+    </div>
+  </div>
+</div>
+
 <!-- ESPACES -->
 <section id="espaces">
   <div class="container">
@@ -842,6 +897,7 @@
 
       <!-- NOMADE -->
       <div class="espace-card" data-type="nomade">
+        <img class="espace-card-img" src="bureau-cheminee.jpg" alt="Bureau nomade Aristote avec cheminée — Génie Montauban" loading="lazy">
         <div class="espace-card-header">
           <div class="espace-ico nomade">🚪</div>
           <div><h3>Aristote</h3><div class="sous-titre">Bureau nomade privé · 7m² · 1er</div></div>
@@ -855,6 +911,7 @@
 
       <!-- COWORKING -->
       <div class="espace-card" data-type="coworking">
+        <img class="espace-card-img" src="coworking3.jpg" alt="Espace coworking Jean-Jacques Rousseau — Génie Montauban" loading="lazy">
         <div class="espace-card-header">
           <div class="espace-ico coworking">💻</div>
           <div><h3>Jean-Jacques Rousseau</h3><div class="sous-titre">Coworking · 28m² · 20 postes · 1er</div></div>
@@ -868,6 +925,7 @@
 
       <!-- BAIL -->
       <div class="espace-card espace-hidden" data-type="bail">
+        <img class="espace-card-img" src="coworking4.jpg" alt="Bureau privatif lumineux — Génie Montauban" loading="lazy">
         <div class="espace-card-header">
           <div class="espace-ico nomade">🏢</div>
           <div><h3>Bureau Louise Michel (0-01)</h3><div class="sous-titre">15 m² · Rez-de-chaussée</div></div>
