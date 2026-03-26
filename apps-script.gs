@@ -306,6 +306,26 @@ function creerAdhesion(data) {
   return { success: true, id: id };
 }
 
+// ===== DIAGNOSTIC TEST — exécuter manuellement dans l'éditeur GAS =====
+function testAdhesion() {
+  try {
+    const result = creerAdhesion({
+      action: 'ADHERER',
+      typeAdhesion: 'TEST – Sympathisant',
+      montant: '10',
+      modePaiement: 'Test',
+      prenom: 'Test',
+      nom: 'Diagnostic',
+      email: CONFIG.EMAIL_ADMIN,
+      tel: '',
+      adresse: ''
+    });
+    Logger.log('✅ testAdhesion réussi : ' + JSON.stringify(result));
+  } catch(e) {
+    Logger.log('❌ testAdhesion ERREUR : ' + e.message + '\n' + e.stack);
+  }
+}
+
 // ===== CONTACT =====
 function traiterContact(data) {
   MailApp.sendEmail(CONFIG.EMAIL_ADMIN,
