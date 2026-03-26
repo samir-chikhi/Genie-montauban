@@ -1314,7 +1314,7 @@
       </div>
 
       <div class="form-actions">
-        <button type="button" id="btn-adh-submit" class="btn-submit-adh">✉️ Envoyer ma demande d'adhésion</button>
+        <button type="button" id="btn-adh-submit" class="btn-submit-adh" onclick="envoyerAdhesion()">✉️ Envoyer ma demande d'adhésion</button>
         <a class="btn-dl-adh" href="Fiche_Adhesion_GENIE_2026.pdf" download>⬇️ Télécharger la fiche PDF</a>
       </div>
 
@@ -1378,7 +1378,8 @@
           <div class="fg form-full"><label>Sujet</label><input type="text" id="c-sujet" placeholder="Question sur les tarifs…"></div>
           <div class="fg form-full"><label>Message <span class="req">*</span></label><textarea id="c-message" placeholder="Votre message…" style="min-height:100px"></textarea></div>
         </div>
-        <button type="button" id="btn-contact-submit" style="margin-top:12px;background:var(--navy);color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;">Envoyer →</button>
+        <button type="button" id="btn-contact-submit" onclick="envoyerContact()" style="margin-top:12px;background:var(--navy);color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;">Envoyer →</button>
+        <div id="contact-error" style="display:none;margin-top:10px;padding:10px 14px;background:#FFF0F0;color:#c0392b;border-radius:8px;font-size:14px;font-weight:600;border:1px solid #fcc;"></div>
         <div class="contact-success" id="contact-success">✅ Message envoyé ! Nous vous répondons sous 24h.</div>
         <div class="contact-nomail" id="contact-nomail">
           💡 Votre messagerie va s'ouvrir. Si rien ne se passe, écrivez directement à <strong><a href="mailto:genie.montauban@gmail.com">genie.montauban@gmail.com</a></strong>
@@ -1505,36 +1506,41 @@ function prefillAdh(type) {
 }
 
 function envoyerAdhesion() {
-  const type    = document.getElementById('adh-type').value;
-  const montant = document.getElementById('adh-montant').value;
-  const prenom  = document.getElementById('adh-prenom').value.trim();
-  const nom     = document.getElementById('adh-nom').value.trim();
-  const email   = document.getElementById('adh-email').value.trim();
-  const rgpd    = document.getElementById('adh-rgpd').checked;
+  var errDiv = document.getElementById('adh-error');
+  errDiv.style.display = 'none';
+  document.getElementById('adh-success').style.display = 'none';
 
-  if (!type)    { alert('Merci de choisir un type d\'adhésion.'); return; }
-  if (!montant) { alert('Merci d\'indiquer le montant de votre cotisation.'); return; }
-  if (!prenom)  { alert('Merci d\'indiquer votre prénom.'); return; }
-  if (!nom)     { alert('Merci d\'indiquer votre nom.'); return; }
-  if (!email)   { alert('Merci d\'indiquer votre email.'); return; }
-  if (!rgpd)    { alert('Merci d\'accepter la politique de données personnelles.'); return; }
+  function showErr(msg) {
+    errDiv.textContent = msg;
+    errDiv.style.display = 'block';
+    errDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
 
-  // Envoi non-bloquant vers Apps Script
+  var type    = document.getElementById('adh-type').value;
+  var montant = document.getElementById('adh-montant').value;
+  var prenom  = document.getElementById('adh-prenom').value.trim();
+  var nom     = document.getElementById('adh-nom').value.trim();
+  var email   = document.getElementById('adh-email').value.trim();
+  var rgpd    = document.getElementById('adh-rgpd').checked;
+
+  if (!type)    { showErr('⚠️ Merci de choisir un type d\'adhésion.'); return; }
+  if (!montant) { showErr('⚠️ Merci d\'indiquer le montant de votre cotisation.'); return; }
+  if (!prenom)  { showErr('⚠️ Merci d\'indiquer votre prénom.'); return; }
+  if (!nom)     { showErr('⚠️ Merci d\'indiquer votre nom.'); return; }
+  if (!email)   { showErr('⚠️ Merci d\'indiquer votre email.'); return; }
+  if (!rgpd)    { showErr('⚠️ Merci d\'accepter la politique de données personnelles.'); return; }
+
   fetch(APPS_SCRIPT_URL, {
-    method: 'POST',
-    mode: 'no-cors',
+    method: 'POST', mode: 'no-cors',
     body: JSON.stringify({
-      action: 'ADHERER',
-      typeAdhesion: type,
-      montant: montant,
+      action: 'ADHERER', typeAdhesion: type, montant: montant,
       modePaiement: document.getElementById('adh-paiement').value,
       prenom: prenom, nom: nom, email: email,
       tel: document.getElementById('adh-tel').value.trim(),
-      adresse: document.getElementById('adh-adresse').value.trim(),
+      adresse: document.getElementById('adh-adresse').value.trim()
     })
   }).catch(function() {});
 
-  // Affichage immédiat du succès
   var zone = document.getElementById('adh-success');
   zone.innerHTML = '🎉 <strong>Demande envoyée !</strong> L\'équipe Génie vous contacte sous 48h pour finaliser votre adhésion à <em>' + type + '</em>.';
   zone.style.display = 'block';
@@ -1543,22 +1549,24 @@ function envoyerAdhesion() {
 
 // ===== CONTACT =====
 function envoyerContact() {
-  const email   = document.getElementById('c-email').value.trim();
-  const message = document.getElementById('c-message').value.trim();
+  var errDiv = document.getElementById('contact-error');
+  errDiv.style.display = 'none';
+
+  var email   = document.getElementById('c-email').value.trim();
+  var message = document.getElementById('c-message').value.trim();
 
   if (!email || !message) {
-    alert('Merci de remplir au moins votre email et votre message.');
+    errDiv.textContent = '⚠️ Merci de remplir au moins votre email et votre message.';
+    errDiv.style.display = 'block';
     return;
   }
 
-  const prenom = document.getElementById('c-prenom').value.trim();
-  const nom    = document.getElementById('c-nom').value.trim();
-  const sujet  = document.getElementById('c-sujet').value.trim();
+  var prenom = document.getElementById('c-prenom').value.trim();
+  var nom    = document.getElementById('c-nom').value.trim();
+  var sujet  = document.getElementById('c-sujet').value.trim();
 
-  // Envoi non-bloquant vers Apps Script
   fetch(APPS_SCRIPT_URL, {
-    method: 'POST',
-    mode: 'no-cors',
+    method: 'POST', mode: 'no-cors',
     body: JSON.stringify({ action: 'CONTACT', prenom: prenom, nom: nom, email: email, sujet: sujet, message: message })
   }).catch(function() {});
 
