@@ -456,7 +456,9 @@ textarea{resize:vertical;min-height:65px}
 <script>
 // ═══════════════════════════════════════════════════════
 const APPS_SCRIPT_URL_DEFAULT = 'https://script.google.com/macros/s/AKfycbxceijW8OQSbtjjs-rqrXjozu-oL-RUGARK1Odqkx3-IBjs0EvrEe0u9qyXHxgSewZ3Cg/exec';
-let SCRIPT_URL = localStorage.getItem('genie_script_url') || APPS_SCRIPT_URL_DEFAULT;
+// Toujours forcer la nouvelle URL et effacer toute ancienne URL en cache
+localStorage.setItem('genie_script_url', APPS_SCRIPT_URL_DEFAULT);
+let SCRIPT_URL = APPS_SCRIPT_URL_DEFAULT;
 const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1mf3D2YGnpWpzufGOaLLaomxAkuzp0AiJY7RzcbpIq2w/edit';
 
 // ─── DONNÉES RÉFÉRENCE ──────────────────────────────────
@@ -506,11 +508,13 @@ async function apiGet(params={}) {
 }
 async function apiPost(body) {
   if (!SCRIPT_URL) throw new Error('URL non configurée');
-  const r = await fetch(SCRIPT_URL, {method:'POST', headers:{'Content-Type':'text/plain'}, body:JSON.stringify(body), redirect:'follow'});
-  if (!r.ok) throw new Error('HTTP '+r.status);
-  const data = await r.json();
-  if (data.error) throw new Error(data.error);
-  return data;
+  // mode no-cors : évite le problème de redirect 302 qui transforme POST→GET
+  // doPost() est bien exécuté côté serveur même si la réponse est opaque
+  try {
+    await fetch(SCRIPT_URL, {method:'POST', body:JSON.stringify(body), mode:'no-cors'});
+  } catch(e) {
+    throw new Error('Erreur réseau : ' + e.message);
+  }
 }
 
 // ─── CHARGEMENT ──────────────────────────────────────────
@@ -564,6 +568,7 @@ async function saveResa(silent) {
     toast(editId?'Modifiée !':'Créée !');
     if (!silent) sendEmail(resa);
     renderDashboard(); renderTable();
+    setTimeout(()=>loadData(false), 2500); // sync serveur
   } catch(e) { hideLoader(); toast('Erreur : '+e.message,'err'); }
 }
 
@@ -575,6 +580,7 @@ async function updateStatut(id, statut) {
     await apiPost({action:'updateResa', resa:u});
     r.statut=statut; hideLoader(); closeModal('mdetail');
     toast('Statut mis à jour'); renderDashboard(); renderTable();
+    setTimeout(()=>loadData(false), 2500);
   } catch(e) { hideLoader(); toast('Erreur : '+e.message,'err'); }
 }
 
@@ -586,6 +592,7 @@ async function deleteResa(id) {
     DB.reservations = DB.reservations.filter(r=>r.id!==id);
     hideLoader(); closeModal('mdetail'); toast('Supprimée','info');
     renderDashboard(); renderTable();
+    setTimeout(()=>loadData(false), 2500);
   } catch(e) { hideLoader(); toast('Erreur : '+e.message,'err'); }
 }
 
