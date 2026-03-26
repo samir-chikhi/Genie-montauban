@@ -196,7 +196,11 @@ function creerReservation(data) {
     return { success: false, error: 'DUREE_INVALIDE' };
 
   const ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
-  const sheet = ss.getSheetByName('Reservations');
+  let sheet = ss.getSheetByName('Reservations');
+  if (!sheet) {
+    sheet = ss.insertSheet('Reservations');
+    sheet.appendRow(['ID','Statut','Date création','Espace','Usage','Profil','Date','H.début','H.fin','Durée','Participants','Prénom','Nom','Email','Tél','Organisation','Montant','Objet','Options']);
+  }
   const id = 'RES-' + Date.now();
   const now = new Date();
   const hFin = heuresFin(data.heureDebut, data.duree);
@@ -284,7 +288,11 @@ function getReservations(params) { return getDisponibilites(params); }
 // ===== ADHÉSION =====
 function creerAdhesion(data) {
   const ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
-  const sheet = ss.getSheetByName('Adhesions');
+  let sheet = ss.getSheetByName('Adhesions');
+  if (!sheet) {
+    sheet = ss.insertSheet('Adhesions');
+    sheet.appendRow(['ID','Statut','Date','Type','Montant','Paiement','Prénom','Nom','Email','Tél','Adresse','Notes']);
+  }
   const id = 'ADH-' + Date.now();
   sheet.appendRow([id, 'EN_ATTENTE', new Date().toISOString(),
     data.typeAdhesion, data.montant, data.modePaiement || '',
@@ -310,7 +318,12 @@ function traiterContact(data) {
 // ===== ADMIN — GET ALL =====
 function adminGetAll() {
   const ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
-  const resRows = ss.getSheetByName('Reservations').getDataRange().getValues();
+  let resSheet = ss.getSheetByName('Reservations');
+  if (!resSheet) {
+    resSheet = ss.insertSheet('Reservations');
+    resSheet.appendRow(['ID','Statut','Date création','Espace','Usage','Profil','Date','H.début','H.fin','Durée','Participants','Prénom','Nom','Email','Tél','Organisation','Montant','Objet','Options']);
+  }
+  const resRows = resSheet.getDataRange().getValues();
   const statutMap = { 'EN_ATTENTE': 'pending', 'CONFIRME': 'confirmed', 'ANNULE': 'cancelled', 'TERMINE': 'completed' };
 
   const reservations = resRows.slice(1).map(function(r) {
