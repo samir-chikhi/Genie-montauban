@@ -1436,13 +1436,6 @@ async function envoyerAdhesion() {
   else { alert('✅ Demande envoyée ! Nous vous contacterons sous 48h.'); }
 }
 
-// ===== FERMETURE MENU MOBILE AU CLIC =====
-document.querySelectorAll('.nav-links a').forEach(function(link) {
-  link.addEventListener('click', function() {
-    document.querySelector('.nav-links').classList.remove('open');
-  });
-});
-
 // ===== CONTACT =====
 async function envoyerContact() {
   const prenom = document.getElementById('c-prenom').value.trim();
