@@ -1504,7 +1504,7 @@ function prefillAdh(type) {
   }, 100);
 }
 
-function envoyerAdhesion() {
+async function envoyerAdhesion() {
   const errEl = document.getElementById('adh-error');
   function showErr(msg) {
     errEl.textContent = '⚠️ ' + msg;
@@ -1512,6 +1512,8 @@ function envoyerAdhesion() {
     errEl.scrollIntoView({ behavior:'smooth', block:'nearest' });
   }
   errEl.style.display = 'none';
+  document.getElementById('adh-success').style.display = 'none';
+  document.getElementById('adh-nomail').style.display = 'none';
 
   const type     = document.getElementById('adh-type').value;
   const montant  = document.getElementById('adh-montant').value;
@@ -1526,40 +1528,50 @@ function envoyerAdhesion() {
   if (!type || !prenom || !nom || !email || !montant) {
     showErr('Merci de remplir tous les champs obligatoires : type, prénom, nom, email et montant.'); return;
   }
-  if (!rgpd) { showErr("Merci d'accepter la politique de données personnelles (case à cocher)."); return; }
+  if (!rgpd) { showErr("Merci d'accepter la politique de données personnelles."); return; }
 
-  // Envoi en arrière-plan vers Apps Script (sans bloquer l'UX)
+  const btn = document.querySelector('.btn-submit-adh');
+  if (btn) { btn.textContent = 'Envoi…'; btn.disabled = true; }
+
   const payload = {
     action: 'ADHERER', token: APPS_TOKEN,
     typeAdhesion: type, montant: montant, modePaiement: paiement,
     prenom: prenom, nom: nom, email: email, tel: tel, adresse: adresse,
   };
-  fetch(APPS_SCRIPT_URL, { method:'POST', body: JSON.stringify(payload), mode:'no-cors' }).catch(() => {});
 
-  // Ouverture du client mail avec les données pré-remplies (mécanisme principal)
-  const sujet = '[Adhésion Génie] ' + type + ' — ' + prenom + ' ' + nom;
-  const corps = 'Bonjour,\n\nJe souhaite adhérer à l\'association Génie Montauban.\n\n'
-    + 'Type d\'adhésion : ' + type + '\n'
-    + 'Montant : ' + montant + ' €\n'
-    + 'Mode de paiement : ' + paiement + '\n'
-    + 'Prénom : ' + prenom + '\n'
-    + 'Nom / Structure : ' + nom + '\n'
-    + 'Email : ' + email + '\n'
-    + (tel ? 'Téléphone : ' + tel + '\n' : '')
-    + (adresse ? 'Adresse : ' + adresse + '\n' : '')
-    + '\nCordialement,\n' + prenom + ' ' + nom;
+  let envoye = false;
+  try {
+    // Envoi sans Content-Type explicite → text/plain → requête simple, pas de preflight CORS
+    const resp = await fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
+    const result = await resp.json();
+    envoye = result && result.success === true;
+  } catch(e) { envoye = false; }
 
-  window.location.href = 'mailto:genie.montauban@gmail.com'
-    + '?subject=' + encodeURIComponent(sujet)
-    + '&body='    + encodeURIComponent(corps);
+  if (btn) { btn.textContent = '✉️ Envoyer ma demande d\'adhésion'; btn.disabled = false; }
 
-  // Message de confirmation
-  const zone = document.getElementById('adh-success');
-  if (zone) { zone.style.display = 'block'; zone.scrollIntoView({ behavior:'smooth', block:'center' }); }
+  if (envoye) {
+    const zone = document.getElementById('adh-success');
+    zone.style.display = 'block';
+    zone.scrollIntoView({ behavior:'smooth', block:'center' });
+  } else {
+    // Fallback fiable : lien mailto visible + récapitulatif
+    const sujet = '[Adhésion Génie] ' + type + ' — ' + prenom + ' ' + nom;
+    const corps = 'Bonjour,\n\nType : ' + type + '\nMontant : ' + montant
+      + ' €\nMode : ' + paiement + '\nPrénom : ' + prenom + '\nNom : ' + nom
+      + '\nEmail : ' + email + (tel ? '\nTél : ' + tel : '') + (adresse ? '\nAdresse : ' + adresse : '');
+    const href = 'mailto:genie.montauban@gmail.com?subject=' + encodeURIComponent(sujet) + '&body=' + encodeURIComponent(corps);
+    const nomail = document.getElementById('adh-nomail');
+    nomail.innerHTML = '💡 <strong>Envoyez votre adhésion par email :</strong><br>'
+      + '<a href="' + href + '" style="display:inline-block;margin:10px 0;padding:10px 20px;background:var(--sage);color:#fff;border-radius:8px;font-weight:700;text-decoration:none;">📧 Ouvrir mon client mail →</a><br>'
+      + '<span style="font-size:13px">Ou copiez-collez à <strong>genie.montauban@gmail.com</strong> :<br><em>'
+      + type + ' · ' + montant + '€ · ' + prenom + ' ' + nom + ' · ' + email + '</em></span>';
+    nomail.style.display = 'block';
+    nomail.scrollIntoView({ behavior:'smooth', block:'center' });
+  }
 }
 
 // ===== CONTACT =====
-function envoyerContact() {
+async function envoyerContact() {
   const prenom  = document.getElementById('c-prenom').value.trim();
   const nom     = document.getElementById('c-nom').value.trim();
   const email   = document.getElementById('c-email').value.trim();
@@ -1570,22 +1582,29 @@ function envoyerContact() {
     alert('Merci de remplir au moins votre email et votre message.'); return;
   }
 
-  // Envoi en arrière-plan vers Apps Script
   const payload = { action: 'CONTACT', token: APPS_TOKEN, prenom, nom, email, sujet, message };
-  fetch(APPS_SCRIPT_URL, { method:'POST', body: JSON.stringify(payload), mode:'no-cors' }).catch(() => {});
 
-  // Ouverture du client mail (mécanisme principal)
-  const mailSujet = '[Génie Contact] ' + (sujet || 'Message depuis le site');
-  const mailCorps = 'De : ' + (prenom ? prenom + ' ' : '') + nom + ' <' + email + '>'
-    + '\nSujet : ' + (sujet || '(sans sujet)')
-    + '\n\n' + message;
+  let envoye = false;
+  try {
+    const resp = await fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
+    const result = await resp.json();
+    envoye = result && result.success === true;
+  } catch(e) { envoye = false; }
 
-  window.location.href = 'mailto:genie.montauban@gmail.com'
-    + '?subject=' + encodeURIComponent(mailSujet)
-    + '&body='    + encodeURIComponent(mailCorps);
-
-  document.getElementById('contact-success').style.display = 'block';
-  document.getElementById('contact-nomail').style.display = 'none';
+  if (envoye) {
+    document.getElementById('contact-success').style.display = 'block';
+    document.getElementById('contact-nomail').style.display = 'none';
+  } else {
+    // Fallback mailto
+    const mailHref = 'mailto:genie.montauban@gmail.com?subject='
+      + encodeURIComponent('[Génie Contact] ' + (sujet || 'Message depuis le site'))
+      + '&body=' + encodeURIComponent('De : ' + (prenom ? prenom + ' ' : '') + nom + ' <' + email + '>\n\n' + message);
+    document.getElementById('contact-nomail').innerHTML = '💡 <strong>Envoyez votre message directement :</strong> '
+      + '<a href="' + mailHref + '" style="color:var(--gold);font-weight:700;">Ouvrir mon client mail →</a>'
+      + ' ou écrivez à <strong>genie.montauban@gmail.com</strong>';
+    document.getElementById('contact-nomail').style.display = 'block';
+    document.getElementById('contact-success').style.display = 'none';
+  }
 }
 </script>
 </body>
