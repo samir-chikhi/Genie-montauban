@@ -813,6 +813,7 @@
       <a href="#services">Services</a>
       <a href="#rejoindre">Adhésion</a>
       <a href="#contact">Contact</a>
+      <a href="mon-compte.html" id="nav-mon-compte">👤 <span id="nav-compte-label">Mon espace</span></a>
       <a href="reservation.html" class="btn-reserver">Réserver →</a>
     </div>
   </div>
@@ -1608,6 +1609,15 @@ var btnAdh = document.getElementById("btn-mbr-submit");
 if (btnAdh) btnAdh.addEventListener('click', envoyerAdhesion);
 var btnContact = document.getElementById('btn-contact-submit');
 if (btnContact) btnContact.addEventListener('click', envoyerContact);
+
+// Afficher prénom si session active
+try {
+  var _s = JSON.parse(localStorage.getItem('genie_session') || 'null');
+  if (_s && _s.prenom) {
+    var _lbl = document.getElementById('nav-compte-label');
+    if (_lbl) _lbl.textContent = _s.prenom;
+  }
+} catch(e) {}
 </script>
 </body>
 </html>

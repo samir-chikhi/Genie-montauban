@@ -184,21 +184,16 @@ body{font-family:'DM Sans',sans-serif;background:var(--fond);color:var(--texte);
   <div class="login-box">
     <div class="logo">Génie</div>
     <h2>Mon espace personnel</h2>
-    <p>Entrez votre email pour recevoir un lien de connexion.</p>
+    <p>Entrez votre email pour accéder à votre espace.</p>
 
-    <input type="email" id="login-email" placeholder="votre@email.fr" onkeydown="if(event.key==='Enter')demanderLien()">
-    <button class="btn-login" id="btn-lien" onclick="demanderLien()">Recevoir mon lien de connexion →</button>
+    <input type="email" id="login-email" placeholder="votre@email.fr" onkeydown="if(event.key==='Enter')seConnecter()">
+    <button class="btn-login" id="btn-lien" onclick="seConnecter()">Accéder à mon espace →</button>
 
-    <div class="login-alert" id="login-alert-ok">
-      ✅ Lien envoyé ! Vérifiez votre boîte email (et vos spams). Il est valable 1 heure.
-    </div>
-    <div class="login-alert" id="login-alert-err"></div>
-    <div class="login-alert info" id="login-alert-info" style="display:none">
-      Vous n'avez pas encore de compte ?
-    </div>
+    <div class="login-alert err" id="login-alert-err" style="display:none"></div>
+    <div class="login-alert info" id="login-alert-ok" style="display:none"></div>
 
-    <div class="login-divider">ou</div>
-    <a href="inscription.html" class="btn-inscrire">✨ Créer mon compte gratuitement</a>
+    <div class="login-divider">pas encore de compte ?</div>
+    <a href="inscription.html" class="btn-inscrire">✨ Créer mon espace gratuitement</a>
   </div>
 </div>
 
@@ -418,78 +413,40 @@ let CLIENT = null;
 let S = { espace:null, date:null, heure:null, duree:1, cal:{y:0,m:0}, reservations:{} };
 
 // ===== INIT =====
-window.onload = async function() {
-  // Vérifier token dans URL
-  const params = new URLSearchParams(window.location.search);
-  const token = params.get('token');
-
-  if (token) {
-    await validerToken(token);
-    // Nettoyer l'URL
-    window.history.replaceState({}, '', window.location.pathname);
-    return;
-  }
-
+window.onload = function() {
   // Vérifier session locale
   const session = localStorage.getItem('genie_session');
   if (session) {
     try {
       CLIENT = JSON.parse(session);
       ouvrirEspaceClient();
+      return;
     } catch(e) { localStorage.removeItem('genie_session'); }
   }
 };
 
-// ===== DEMANDER LIEN MAGIQUE =====
-async function demanderLien() {
-  const email = document.getElementById('login-email').value.trim();
+// ===== CONNEXION PAR EMAIL (lookup localStorage) =====
+function seConnecter() {
+  const email = document.getElementById('login-email').value.trim().toLowerCase();
   if (!email || !email.includes('@')) {
     showLoginAlert('err', 'Merci de saisir un email valide.'); return;
   }
 
-  const btn = document.getElementById('btn-lien');
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span>Envoi en cours…';
-
-  // no-cors : réponse opaque, fetch() rejette uniquement si hors-ligne.
-  try {
-    await fetch(APPS_SCRIPT_URL, {
-      method: 'POST',
-      body: JSON.stringify({ action: 'DEMANDER_LIEN', email: email }),
-      mode: 'no-cors'
-    });
-    document.getElementById('login-alert-ok').style.display = 'block';
-  } catch(e) {
-    alert('❌ Impossible d\'envoyer le lien : vérifiez votre connexion internet et réessayez.');
+  const session = localStorage.getItem('genie_session');
+  if (session) {
+    try {
+      const s = JSON.parse(session);
+      if (s.email === email) {
+        CLIENT = s;
+        ouvrirEspaceClient();
+        return;
+      }
+    } catch(e) {}
   }
-  btn.disabled = false;
-  btn.textContent = 'Recevoir mon lien de connexion →';
-}
 
-// ===== VALIDER TOKEN =====
-async function validerToken(token) {
-  // En mode no-cors on ne peut pas lire la réponse du GET
-  // On utilise un iframe trick ou on stocke en session le fait qu'on vient d'un lien
-  // Solution pragmatique : on demande l'email après validation du token
-
-  // Pour contourner no-cors, on stocke le token et on demande confirmation email
-  const email = localStorage.getItem('genie_pending_email');
-  if (email) {
-    // On crée une session basique
-    CLIENT = { email: email, prenom: localStorage.getItem('genie_pending_prenom') || 'Client', profilTarifaire: 'plein', type: 'particulier' };
-    localStorage.setItem('genie_session', JSON.stringify(CLIENT));
-    localStorage.removeItem('genie_pending_email');
-    localStorage.removeItem('genie_pending_prenom');
-    ouvrirEspaceClient();
-  } else {
-    // Demander l'email pour confirmer
-    const emailSaisi = prompt('Confirmez votre email pour accéder à votre espace :');
-    if (emailSaisi) {
-      CLIENT = { email: emailSaisi.trim().toLowerCase(), prenom: 'Bienvenue', profilTarifaire: 'plein', type: 'particulier' };
-      localStorage.setItem('genie_session', JSON.stringify(CLIENT));
-      ouvrirEspaceClient();
-    }
-  }
+  // Email non trouvé dans le localStorage → rediriger vers inscription
+  showLoginAlert('info', 'Aucun compte trouvé pour cet email. Créez votre espace gratuitement →');
+  setTimeout(() => { window.location.href = 'inscription.html'; }, 2000);
 }
 
 // ===== OUVRIR ESPACE CLIENT =====
@@ -724,13 +681,19 @@ async function soumettre() {
   try {
     fetch(APPS_SCRIPT_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
       mode: 'no-cors'
     });
   } catch(e) {}
 
   const id = 'RES-' + Date.now();
+
+  // Sauvegarder dans l'historique local
+  try {
+    const resas = JSON.parse(localStorage.getItem('genie_reservations') || '[]');
+    resas.push({ id, email: CLIENT.email, espace: S.espace, date: S.date, heure: S.heure, duree: S.duree, statut: 'pending', createdAt: Date.now() });
+    localStorage.setItem('genie_reservations', JSON.stringify(resas));
+  } catch(e) {}
   document.getElementById('resa-id').textContent = id;
 
   // Masquer tous les blocs étapes
@@ -757,18 +720,54 @@ function nouvelleResa() {
 }
 
 // ===== HISTORIQUE =====
-async function chargerHistorique() {
+function chargerHistorique() {
   const el = document.getElementById('historique-content');
-  el.innerHTML = '<div class="loading"><span class="spinner" style="border-top-color:var(--bleu);border-color:var(--bord)"></span> Chargement…</div>';
-  // En no-cors on ne peut pas lire les données — on affiche un message
-  setTimeout(() => {
-    el.innerHTML = `
-      <div style="text-align:center;padding:24px;color:var(--muted);">
-        <div style="font-size:36px;margin-bottom:10px;">📋</div>
-        <p style="font-size:14px;">Vos réservations apparaîtront ici une fois confirmées par l'équipe Génie.</p>
-        <p style="font-size:12px;margin-top:8px;">Pour voir vos réservations en temps réel, contactez-nous au <strong>06 51 50 97 18</strong></p>
+  try {
+    const toutes = JSON.parse(localStorage.getItem('genie_reservations') || '[]');
+    const mesResas = toutes.filter(r => r.email === CLIENT.email).sort((a,b) => b.createdAt - a.createdAt);
+
+    if (!mesResas.length) {
+      el.innerHTML = `<div style="text-align:center;padding:32px;color:var(--muted);">
+        <div style="font-size:40px;margin-bottom:12px;">📅</div>
+        <p style="font-size:14px;font-weight:600;color:var(--texte)">Aucune réservation pour le moment</p>
+        <p style="font-size:13px;margin-top:6px;">Utilisez l'onglet <strong>Réserver</strong> pour réserver un espace.</p>
       </div>`;
-  }, 800);
+      return;
+    }
+
+    const ESPACE_NOM = { bourdelle:'Antoine Bourdelle', freinet:'Célestin Freinet', gouges:'Olympe de Gouges', michel:'Louise Michel', rousseau:'Jean-Jacques Rousseau', montessori:'Maria Montessori' };
+    const ESPACE_ICO = { bourdelle:'🏛️', freinet:'📋', gouges:'🤝', michel:'🚪', rousseau:'💻', montessori:'♿' };
+
+    el.innerHTML = mesResas.map(r => {
+      const dateF = r.date ? new Date(r.date + 'T12:00:00').toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}) : '—';
+      const badge = r.statut === 'confirmed' ? '<span style="background:#E8F8F0;color:#276749;border-radius:12px;padding:2px 10px;font-size:11px;font-weight:700;">✅ Confirmée</span>'
+                  : r.statut === 'cancelled'  ? '<span style="background:#FFF5F5;color:#c0392b;border-radius:12px;padding:2px 10px;font-size:11px;font-weight:700;">❌ Annulée</span>'
+                  : '<span style="background:#FFF7E6;color:#c9993e;border-radius:12px;padding:2px 10px;font-size:11px;font-weight:700;">⏳ En attente</span>';
+      return `<div style="background:var(--fond);border-radius:10px;padding:16px 18px;margin-bottom:12px;border:1px solid var(--bord);">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;">
+          <div>
+            <div style="font-weight:700;font-size:15px;margin-bottom:4px;">${ESPACE_ICO[r.espace]||'📍'} ${ESPACE_NOM[r.espace]||r.espace||'Espace'}</div>
+            <div style="font-size:13px;color:var(--muted);">${dateF}${r.heure ? ' · ' + r.heure : ''}${r.duree ? ' · ' + r.duree + 'h' : ''}</div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">${badge}
+            <button onclick="reserverDeNouveau('${r.espace}')" style="background:var(--bleu);color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;">🔄 Réserver à nouveau</button>
+          </div>
+        </div>
+        <div style="font-size:11px;color:var(--muted);margin-top:6px;">Réf. ${r.id || '—'}</div>
+      </div>`;
+    }).join('');
+  } catch(e) {
+    el.innerHTML = '<p style="color:var(--muted);padding:20px;text-align:center">Impossible de charger l\'historique.</p>';
+  }
+}
+
+function reserverDeNouveau(espace) {
+  // Pré-sélectionner l'espace et basculer sur l'onglet Réserver
+  showTab('reserver', document.querySelector('.tab'));
+  setTimeout(() => {
+    const btn = document.querySelector(`.espace-btn[data-espace="${espace}"]`);
+    if (btn) { btn.click(); btn.scrollIntoView({ behavior:'smooth', block:'center' }); }
+  }, 100);
 }
 
 // ===== PROFIL =====

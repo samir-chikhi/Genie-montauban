@@ -447,6 +447,12 @@ async function creerCompte() {
       mode: 'no-cors'
     });
     afficherSucces(payload.prenom, payload.email);
+    // Sauvegarder le profil localement pour connexion directe
+    localStorage.setItem('genie_session', JSON.stringify({
+      email: payload.email, prenom: payload.prenom, nom: payload.nom,
+      tel: payload.tel, type: payload.type, structure: payload.structure,
+      profilTarifaire: 'plein', inscritLe: new Date().toISOString()
+    }));
   } catch (e) {
     alert('❌ Impossible d\'envoyer la demande : vérifiez votre connexion internet et réessayez.');
   }
@@ -460,6 +466,8 @@ function afficherSucces(prenom, email) {
   document.getElementById('step-ind-2').classList.remove('active');
   document.getElementById('step-ind-2').classList.add('done');
   document.getElementById('step-ind-3').classList.add('active');
+  // Redirection automatique vers l'espace personnel après 3s
+  setTimeout(() => { window.location.href = 'mon-compte.html'; }, 3000);
 }
 
 // ===== ALERTES =====
