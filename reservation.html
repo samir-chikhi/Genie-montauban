@@ -851,7 +851,9 @@ function renderCreneaux() {
   block.style.display = 'block';
   grid.innerHTML = '';
 
-  const occup = S.espace && S.date && S.reservations[S.espace] && S.reservations[S.espace][S.date] || [];
+  const occupBackend = S.espace && S.date && S.reservations[S.espace] && S.reservations[S.espace][S.date] || [];
+  const occupLocal   = creneauxOccupesLocal(S.espace, S.date);
+  const occup = [...new Set([...occupBackend, ...occupLocal])];
 
   for (let h = 0; h < 24; h++) {
     for (let mn of [0, 30]) {
@@ -1050,7 +1052,34 @@ async function soumettre() {
     return;
   }
 
+  // Mémoriser le créneau réservé localement pour le bloquer immédiatement
+  sauvegarderCreneauLocal(payload);
+
   afficherSucces(resId, prenom);
+}
+
+function sauvegarderCreneauLocal(payload) {
+  try {
+    const cles = JSON.parse(localStorage.getItem('genie_reservations') || '[]');
+    cles.push({ espace: payload.espace, date: payload.date, heure: payload.heure, duree: payload.duree || 1 });
+    localStorage.setItem('genie_reservations', JSON.stringify(cles));
+  } catch(e) {}
+}
+
+function creneauxOccupesLocal(espace, date) {
+  try {
+    const cles = JSON.parse(localStorage.getItem('genie_reservations') || '[]');
+    const slots = [];
+    cles.filter(r => r.espace === espace && r.date === date).forEach(r => {
+      const [h, m] = (r.heure || '08:00').split(':').map(Number);
+      const dureeH = Number(r.duree) || 1;
+      for (let i = 0; i < dureeH * 2; i++) {
+        const tm = h * 60 + m + i * 30;
+        slots.push(String(Math.floor(tm/60)).padStart(2,'0') + ':' + String(tm%60).padStart(2,'0'));
+      }
+    });
+    return slots;
+  } catch(e) { return []; }
 }
 
 function afficherSucces(id, prenom) {
