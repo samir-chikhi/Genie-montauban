@@ -400,7 +400,7 @@ button, input, select, textarea { font-family:inherit; }
 <!-- ===== HEADER ===== -->
 <header class="header">
   <a href="https://genie-montauban.fr">← <span>Génie Montauban</span></a>
-  <span class="h-badge">🔐 Accès 24h/7j</span>
+  <a href="mon-compte.html" id="lien-compte" style="font-size:13px;opacity:.85;">👤 <span id="header-compte-label">Mon espace</span></a>
 </header>
 
 <!-- ===== HERO ===== -->
@@ -703,12 +703,25 @@ window.onload = function() {
   const now = new Date();
   S.cal = { y: now.getFullYear(), m: now.getMonth() };
   renderCal();
-  // Coche les équipements
   document.querySelectorAll('.equip-tag input').forEach(cb => {
     cb.addEventListener('change', function() {
       this.closest('.equip-tag').classList.toggle('on', this.checked);
     });
   });
+
+  // Pré-remplir depuis la session si connecté
+  try {
+    const session = JSON.parse(localStorage.getItem('genie_session') || 'null');
+    if (session) {
+      if (session.prenom) document.getElementById('f-prenom').value = session.prenom;
+      if (session.nom)    document.getElementById('f-nom').value    = session.nom;
+      if (session.email)  document.getElementById('f-email').value  = session.email;
+      if (session.tel)    document.getElementById('f-tel').value    = session.tel;
+      const lbl = document.getElementById('header-compte-label');
+      if (lbl && session.prenom) lbl.textContent = session.prenom;
+      majRecap();
+    }
+  } catch(e) {}
 };
 
 // ===== FILTRE ESPACES =====
