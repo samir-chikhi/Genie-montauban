@@ -179,10 +179,33 @@ textarea{resize:vertical;min-height:65px}
   .content{padding:10px}
 }
 </style>
+<style>
+/* ─── LOGIN ─── */
+#login-screen{position:fixed;inset:0;background:var(--cream);display:flex;align-items:center;justify-content:center;z-index:9999}
+#login-screen.hidden{display:none}
+.login-box{background:#fff;border:1px solid var(--border);border-radius:16px;padding:40px 36px;width:340px;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,.12)}
+.login-box h2{font-family:'Fraunces',serif;font-size:24px;color:var(--ink);margin-bottom:4px}
+.login-box p{font-size:13px;color:var(--muted);margin-bottom:24px}
+.login-box input{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:15px;font-family:inherit;outline:none;margin-bottom:12px;transition:.2s}
+.login-box input:focus{border-color:var(--brick)}
+.login-box button{width:100%;padding:11px;background:var(--brick);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;transition:.15s}
+.login-box button:hover{background:var(--brick-light)}
+.login-err{color:var(--red);font-size:13px;margin-top:8px;display:none}
+</style>
 </head>
 <body>
+<!-- ─── ÉCRAN DE CONNEXION ─── -->
+<div id="login-screen">
+  <div class="login-box">
+    <h2>🔐 Génie Admin</h2>
+    <p>Espace réservé à l'équipe Génie Montauban</p>
+    <input type="password" id="login-pwd" placeholder="Mot de passe" onkeydown="if(event.key==='Enter')checkLogin()">
+    <button onclick="checkLogin()">Se connecter</button>
+    <div class="login-err" id="login-err">Mot de passe incorrect.</div>
+  </div>
+</div>
 <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
-<div class="layout">
+<div class="layout" id="main-layout" style="display:none">
   <aside class="sidebar" id="sidebar">
     <div class="logo"><h1>Gé<span>nie</span></h1><p>Administration · Tiers-Lieu</p></div>
     <nav class="nav">
@@ -487,7 +510,7 @@ const ESPACES_DEF = {
 
 const DL = { heure:"Heure", demi:"½ journée", journee:"Journée", semaine:"Semaine", mois:"Mois" };
 const fMoney = n => n===0?'Gratuit':Number(n).toLocaleString('fr-FR',{minimumFractionDigits:2})+' €';
-const fDate  = d => d?new Date(d+'T12:00:00').toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'numeric'}):'';
+const fDate  = d => { if(!d) return ''; const dt=new Date(d.includes('T')?d:d+'T12:00:00'); return isNaN(dt)?d:dt.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'numeric'}); };
 const genId  = () => 'RSV-'+Date.now().toString(36).toUpperCase();
 const gv     = id => (document.getElementById(id)?.value||'').trim();
 const gvb    = id => document.getElementById(id)?.checked||false;
@@ -823,7 +846,7 @@ function renderDashboard() {
   ).join('')||'<tr><td colspan="6" style="text-align:center;padding:28px;color:var(--muted)">Aucune réservation</td></tr>';
 
   const last30=new Date(); last30.setDate(last30.getDate()-30);
-  const r30=R.filter(r=>new Date(r.date)>=last30&&r.statut!=='cancelled');
+  const r30=R.filter(r=>r.date&&new Date(r.date+'T12:00:00')>=last30&&r.statut!=='cancelled');
   const colors={'bourdelle':'#7C3AED','freinet':'#0284C7','gouges':'#DB2777','michel':'#16A34A','rousseau':'#CA8A04','montessori':ESPACES_DEF.montessori?'var(--sage)':'#666'};
   document.getElementById('occ-bars').innerHTML=Object.keys(ESPACES_DEF).map(k=>{
     const cnt=r30.filter(r=>r.espace===k).length;
@@ -1026,12 +1049,42 @@ function toast(msg,type='ok') {
   setTimeout(()=>{ t.classList.remove('show'); setTimeout(()=>t.remove(),300); },3500);
 }
 
-// ─── INIT ─────────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded',()=>{
+// ─── LOGIN ────────────────────────────────────────────────
+const ADMIN_HASH = '7c4a8d09ca3762af61e59520943dc26494f8941b'; // SHA1 de "Tlemcen5530!"
+async function sha1(str) {
+  const buf = await crypto.subtle.digest('SHA-1', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+async function checkLogin() {
+  const pwd = document.getElementById('login-pwd').value;
+  const h = await sha1(pwd);
+  if (h === ADMIN_HASH) {
+    sessionStorage.setItem('genie_admin_ok','1');
+    document.getElementById('login-screen').classList.add('hidden');
+    document.getElementById('main-layout').style.display='flex';
+    initApp();
+  } else {
+    document.getElementById('login-err').style.display='block';
+    document.getElementById('login-pwd').value='';
+    document.getElementById('login-pwd').focus();
+  }
+}
+function initApp() {
   if(!SCRIPT_URL) { showSetup(); setSyncState('error','Non configuré'); }
   else { loadData(false); setInterval(()=>loadData(false),30000); }
   renderDashboard();
   go('dashboard');
+}
+
+// ─── INIT ─────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded',()=>{
+  if (sessionStorage.getItem('genie_admin_ok')==='1') {
+    document.getElementById('login-screen').classList.add('hidden');
+    document.getElementById('main-layout').style.display='flex';
+    initApp();
+  } else {
+    document.getElementById('login-pwd').focus();
+  }
 });
 </script>
 </body>

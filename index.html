@@ -127,8 +127,8 @@
       transition: background .2s, transform .15s;
     }
     .nav-cta:hover { background: #b8882e; transform: translateY(-1px); color: var(--white); }
-    .nav-burger { display: none; flex-direction: column; gap: 5px; padding: 4px; }
-    .nav-burger span { width: 24px; height: 2px; background: var(--navy); border-radius: 2px; transition: .3s; }
+    .nav-burger { display: none; flex-direction: column; gap: 6px; padding: 8px 10px; background: none; border: none; cursor: pointer; }
+    .nav-burger span { width: 28px; height: 3px; background: var(--navy); border-radius: 3px; transition: .3s; display: block; }
 
     /* ═══════════════════════════════════════════════
        GALERIE PHOTOS
@@ -739,15 +739,28 @@
       .nav-links.open {
         display: flex; flex-direction: column;
         position: fixed; top: 72px; left: 0; right: 0; bottom: 0;
-        background: var(--white); padding: 28px 5%;
-        align-items: flex-start; gap: 16px;
-        border-top: 1px solid var(--border);
+        background: var(--navy); padding: 24px 6%;
+        align-items: flex-start; gap: 0;
+        border-top: 2px solid var(--gold);
         overflow-y: auto;
-        animation: slideDown .3s ease;
+        animation: slideDown .25s ease;
         z-index: 999;
       }
       @keyframes slideDown { from{opacity:0;transform:translateY(-10px)} to{opacity:1;transform:none} }
-      .nav-links.open a { font-size: 18px; color: var(--ink); padding: 6px 0; }
+      .nav-links.open a {
+        font-size: 20px; font-weight: 600;
+        color: #fff;
+        padding: 16px 0;
+        border-bottom: 1px solid rgba(255,255,255,.12);
+        width: 100%;
+        display: block;
+        letter-spacing: .3px;
+      }
+      .nav-links.open a:last-child { border-bottom: none; }
+      .nav-links.open .nav-cta {
+        margin-top: 20px; width: 100%; text-align: center;
+        font-size: 18px; padding: 14px;
+      }
       .nav-burger { display: flex; }
       .contact-grid { grid-template-columns: 1fr; }
       .valeurs-grid { grid-template-columns: 1fr; }
@@ -793,7 +806,7 @@
       <img src="logo.png" alt="Génie Montauban">
       <span>Génie</span>
     </a>
-    <button class="nav-burger" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">☰</button>
+    <button class="nav-burger" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu"><span></span><span></span><span></span></button>
     <div class="nav-links">
       <a href="#espaces">Espaces</a>
       <a href="#tarifs">Tarifs</a>
@@ -1268,7 +1281,6 @@
         <span class="paiement-tag">🏦 Chèque à l'ordre de « Association Génie »</span>
         <span class="paiement-tag">💶 Espèces (au siège)</span>
         <span class="paiement-tag">🔁 Virement bancaire</span>
-        <span class="paiement-tag">🌐 HelloAsso (en ligne)</span>
         <span class="paiement-tag">📅 Échéancier 3/6/10 mois (sans frais)</span>
       </div>
     </div>
@@ -1319,7 +1331,6 @@
         <div class="fg form-full">
           <label>Mode de paiement souhaité</label>
           <select id="mbr-paiement">
-            <option value="HelloAsso (en ligne)">🌐 HelloAsso (en ligne)</option>
             <option value="Virement bancaire">🔁 Virement bancaire</option>
             <option value="Chèque">🏦 Chèque</option>
             <option value="Espèces (au siège)">💶 Espèces (au siège)</option>
