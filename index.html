@@ -502,59 +502,59 @@
     /* ═══════════════════════════════════════════════
        ADHÉSION
     ═══════════════════════════════════════════════ */
-    #adhesion { background: var(--white); }
-    .adhesion-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
-    .adhesion-card {
+    #rejoindre { background: var(--white); }
+    .cotis-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
+    .cotis-card {
       border-radius: var(--r); border: 2px solid var(--border);
       padding: 32px; transition: border-color .25s, transform .25s;
     }
-    .adhesion-card:hover { border-color: var(--gold); transform: translateY(-4px); }
-    .adhesion-card.featured {
+    .cotis-card:hover { border-color: var(--gold); transform: translateY(-4px); }
+    .cotis-card.featured {
       border-color: var(--gold); background: linear-gradient(135deg, #fffbf3, #fef6e4);
     }
-    .adhesion-tag {
+    .cotis-tag {
       font-size: 11px; font-weight: 700; text-transform: uppercase;
       letter-spacing: .8px; color: var(--gold); margin-bottom: 8px;
     }
-    .adhesion-nom { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
-    .adhesion-prix { font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 900; color: var(--brick); line-height: 1; margin-bottom: 16px; }
-    .adhesion-prix span { font-size: 1rem; font-weight: 400; color: var(--muted); }
-    .adhesion-avantages { list-style: none; display: flex; flex-direction: column; gap: 8px; }
-    .adhesion-avantages li { font-size: 13.5px; color: var(--ink); display: flex; gap: 8px; align-items: flex-start; }
-    .adhesion-avantages li::before { content: '✓'; color: var(--sage); font-weight: 700; flex-shrink: 0; margin-top: 2px; }
+    .cotis-nom { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+    .cotis-prix { font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 900; color: var(--brick); line-height: 1; margin-bottom: 16px; }
+    .cotis-prix span { font-size: 1rem; font-weight: 400; color: var(--muted); }
+    .cotis-avantages { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .cotis-avantages li { font-size: 13.5px; color: var(--ink); display: flex; gap: 8px; align-items: flex-start; }
+    .cotis-avantages li::before { content: '✓'; color: var(--sage); font-weight: 700; flex-shrink: 0; margin-top: 2px; }
 
     /* ═══════════════════════════════════════════════
        ADHÉSION — CARTES
     ═══════════════════════════════════════════════ */
-    .adh-card {
+    .mbr-card {
       background: var(--white); border: 1.5px solid var(--border); border-radius: var(--r);
       padding: 28px 24px; display: flex; flex-direction: column; gap: 12px;
       transition: box-shadow .2s, transform .2s;
     }
-    .adh-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
-    .adh-card.featured { border-color: var(--gold); box-shadow: 0 0 0 2px rgba(201,153,62,.15); }
-    .adh-badge {
+    .mbr-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+    .mbr-card.featured { border-color: var(--gold); box-shadow: 0 0 0 2px rgba(201,153,62,.15); }
+    .mbr-badge {
       display: inline-block; font-size: 10px; font-weight: 700; text-transform: uppercase;
       letter-spacing: .7px; padding: 3px 10px; border-radius: 20px;
       background: var(--cream); color: var(--muted); align-self: flex-start;
     }
-    .adh-badge.green { background: #E8F8F0; color: #1a7a4a; }
-    .adh-badge.blue  { background: var(--bleu-lt, #EBF4FF); color: var(--navy); }
-    .adh-ico { font-size: 2.2rem; line-height: 1; }
-    .adh-card h3 { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; color: var(--navy); margin: 0; }
-    .adh-prix { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700; color: var(--brick); }
-    .adh-prix span { font-size: .9rem; font-weight: 400; color: var(--muted); font-family: 'DM Sans', sans-serif; }
-    .adh-card ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 7px; flex: 1; }
-    .adh-card ul li { font-size: 13.5px; color: var(--ink); display: flex; gap: 8px; align-items: flex-start; }
-    .adh-card ul li::before { content: '✓'; color: var(--sage); font-weight: 700; flex-shrink: 0; }
-    .btn-adh {
+    .mbr-badge.green { background: #E8F8F0; color: #1a7a4a; }
+    .mbr-badge.blue  { background: var(--bleu-lt, #EBF4FF); color: var(--navy); }
+    .mbr-ico { font-size: 2.2rem; line-height: 1; }
+    .mbr-card h3 { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; color: var(--navy); margin: 0; }
+    .mbr-prix { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700; color: var(--brick); }
+    .mbr-prix span { font-size: .9rem; font-weight: 400; color: var(--muted); font-family: 'DM Sans', sans-serif; }
+    .mbr-card ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 7px; flex: 1; }
+    .mbr-card ul li { font-size: 13.5px; color: var(--ink); display: flex; gap: 8px; align-items: flex-start; }
+    .mbr-card ul li::before { content: '✓'; color: var(--sage); font-weight: 700; flex-shrink: 0; }
+    .btn-mbr {
       display: block; text-align: center; padding: 11px 20px; border-radius: 8px; margin-top: auto;
       background: var(--navy); color: var(--white); font-weight: 700; font-size: 14px;
       text-decoration: none; transition: background .2s, transform .15s;
     }
-    .btn-adh:hover { background: #2a3f56; transform: translateY(-1px); color: var(--white); }
-    .btn-adh.green { background: var(--sage); }
-    .btn-adh.green:hover { background: #3a6158; }
+    .btn-mbr:hover { background: #2a3f56; transform: translateY(-1px); color: var(--white); }
+    .btn-mbr.green { background: var(--sage); }
+    .btn-mbr.green:hover { background: #3a6158; }
 
     /* ═══════════════════════════════════════════════
        ADHÉSION — PAIEMENT & FORMULAIRE
@@ -563,33 +563,33 @@
     .paiement-bloc h4 { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 12px; }
     .paiement-tags { display: flex; flex-wrap: wrap; gap: 8px; }
     .paiement-tag { font-size: 13px; padding: 6px 14px; background: var(--white); border: 1px solid var(--border); border-radius: 20px; color: var(--ink); }
-    .formulaire-adh { background: var(--white); border: 1.5px solid var(--border); border-radius: var(--r); padding: 32px; margin-top: 8px; }
-    .formulaire-adh h3 { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
-    .formulaire-adh > p { font-size: 14px; color: var(--muted); margin-bottom: 20px; }
+    .formulaire-mbr { background: var(--white); border: 1.5px solid var(--border); border-radius: var(--r); padding: 32px; margin-top: 8px; }
+    .formulaire-mbr h3 { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+    .formulaire-mbr > p { font-size: 14px; color: var(--muted); margin-bottom: 20px; }
     .hint { font-size: 11px; color: var(--muted); margin-top: 2px; }
     .form-actions { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-top: 8px; }
-    .btn-submit-adh {
+    .btn-submit-mbr {
       background: var(--sage); color: var(--white); border: none; border-radius: 8px;
       padding: 13px 24px; font-size: 15px; font-weight: 700; cursor: pointer;
       transition: background .2s, transform .15s;
     }
-    .btn-submit-adh:hover { background: #3a6158; transform: translateY(-1px); }
-    .btn-submit-adh:disabled { opacity: .55; cursor: not-allowed; transform: none; }
-    .btn-dl-adh {
+    .btn-submit-mbr:hover { background: #3a6158; transform: translateY(-1px); }
+    .btn-submit-mbr:disabled { opacity: .55; cursor: not-allowed; transform: none; }
+    .btn-dl-mbr {
       display: inline-flex; align-items: center; gap: 6px; padding: 13px 20px;
       border: 1.5px solid var(--border); border-radius: 8px; font-size: 14px; font-weight: 600;
       color: var(--navy); text-decoration: none; transition: border-color .2s;
     }
-    .btn-dl-adh:hover { border-color: var(--navy); }
-    .adh-success {
+    .btn-dl-mbr:hover { border-color: var(--navy); }
+    .mbr-success {
       display: none; margin-top: 16px; padding: 16px 20px;
       background: #E8F8F0; color: #1a6e3e; border-radius: 10px; font-size: 15px; font-weight: 600;
     }
-    .adh-nomail {
+    .mbr-nomail {
       display: none; margin-top: 12px; padding: 14px 18px;
       background: var(--cream); border-radius: 8px; font-size: 13px; color: var(--ink);
     }
-    .adh-error {
+    .mbr-error {
       display: none; margin-top: 12px; padding: 12px 16px;
       background: #FFF0F0; color: #c0392b; border-radius: 8px;
       font-size: 14px; font-weight: 600; border: 1px solid #fcc;
@@ -761,7 +761,7 @@
       .hero-stat-n, .hero-stat .num { font-size: 1.8rem; }
       .profils-grid { grid-template-columns: 1fr; }
       .espaces-grid { grid-template-columns: 1fr; gap: 14px; }
-      .adhesion-grid { grid-template-columns: 1fr; gap: 14px; }
+      .cotis-grid { grid-template-columns: 1fr; gap: 14px; }
       .tarifs-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 8px; }
       .tarifs-table-wrap table { min-width: 360px; font-size: 13px; }
       .form-grid-2 { grid-template-columns: 1fr !important; }
@@ -773,10 +773,10 @@
       section { padding: 40px 4%; }
       .espaces-tabs { gap: 6px; flex-wrap: wrap; }
       .espace-tab { padding: 7px 12px; font-size: 12px; flex-shrink: 0; }
-      .adh-card { padding: 20px 16px; }
+      .mbr-card { padding: 20px 16px; }
       .paiement-tags { gap: 6px; }
       .paiement-tag { font-size: 12px; padding: 5px 10px; }
-      .btn-submit-adh, .btn-dl-adh { width: 100%; text-align: center; justify-content: center; }
+      .btn-submit-mbr, .btn-dl-mbr { width: 100%; text-align: center; justify-content: center; }
       .form-actions { flex-direction: column; gap: 10px; }
       .contact-form-bloc { padding: 16px; }
       footer { padding: 40px 16px 24px; }
@@ -798,7 +798,7 @@
       <a href="#espaces">Espaces</a>
       <a href="#tarifs">Tarifs</a>
       <a href="#services">Services</a>
-      <a href="#adhesion">Adhésion</a>
+      <a href="#rejoindre">Adhésion</a>
       <a href="#contact">Contact</a>
       <a href="reservation.html" class="btn-reserver">Réserver →</a>
     </div>
@@ -1164,33 +1164,33 @@
 </section>
 
 <!-- ADHÉSION -->
-<section id="adhesion">
+<section id="rejoindre">
   <div class="container">
     <div class="section-header">
       <h2>Adhérez à la <em>communauté</em></h2>
       <p>L'adhésion vous intègre dans notre réseau ESS et vous ouvre des tarifs préférentiels sur tous nos espaces.</p>
     </div>
 
-    <div class="adhesion-grid">
-      <div class="adh-card">
-        <div class="adh-badge">Particulier</div>
-        <div class="adh-ico">🤲</div>
+    <div class="cotis-grid">
+      <div class="mbr-card">
+        <div class="mbr-badge">Particulier</div>
+        <div class="mbr-ico">🤲</div>
         <h3>Sympathisant</h3>
-        <div class="adh-prix">min. 10 € <span>/an</span></div>
+        <div class="mbr-prix">min. 10 € <span>/an</span></div>
         <ul>
           <li>Soutien à l'association</li>
           <li>Newsletter & actualités Génie</li>
           <li>Cotisation libre à partir de 10 €</li>
           <li>Admission immédiate</li>
         </ul>
-        <a class="btn-adh" href="#formulaire-adhesion" onclick="prefillAdh('Sympathisant – Particulier (min. 10€/an)')">Adhérer →</a>
+        <a class="btn-mbr" href="#formulaire-rejoindre" onclick="prefillAdh('Sympathisant – Particulier (min. 10€/an)')">Adhérer →</a>
       </div>
 
-      <div class="adh-card featured">
-        <div class="adh-badge green">16–30 ans</div>
-        <div class="adh-ico">🌱</div>
+      <div class="mbr-card featured">
+        <div class="mbr-badge green">16–30 ans</div>
+        <div class="mbr-ico">🌱</div>
         <h3>Membre jeune</h3>
-        <div class="adh-prix">15–40 € <span>/an</span></div>
+        <div class="mbr-prix">15–40 € <span>/an</span></div>
         <ul>
           <li>Voix délibérative en AG</li>
           <li>Éligible au Conseil d'Administration</li>
@@ -1198,14 +1198,14 @@
           <li>Tarifs adhérent sur tous les espaces</li>
           <li>Newsletter & offres prioritaires</li>
         </ul>
-        <a class="btn-adh green" href="#formulaire-adhesion" onclick="prefillAdh('Membre jeune – 16-30 ans (15–40€/an)')">Adhérer →</a>
+        <a class="btn-mbr green" href="#formulaire-rejoindre" onclick="prefillAdh('Membre jeune – 16-30 ans (15–40€/an)')">Adhérer →</a>
       </div>
 
-      <div class="adh-card featured">
-        <div class="adh-badge blue">Particulier</div>
-        <div class="adh-ico">💚</div>
+      <div class="mbr-card featured">
+        <div class="mbr-badge blue">Particulier</div>
+        <div class="mbr-ico">💚</div>
         <h3>Membre actif</h3>
-        <div class="adh-prix">30–80 € <span>/an</span></div>
+        <div class="mbr-prix">30–80 € <span>/an</span></div>
         <ul>
           <li>Voix délibérative en AG</li>
           <li>Éligible au Conseil d'Administration</li>
@@ -1214,14 +1214,14 @@
           <li>Tarif progressif selon revenus</li>
         </ul>
         <p style="font-size:11px;color:var(--muted);text-align:center;">30€ · 45€ · 60€ · 80€ (soutien)</p>
-        <a class="btn-adh" href="#formulaire-adhesion" onclick="prefillAdh('Membre actif – Particulier (30–80€/an)')">Adhérer →</a>
+        <a class="btn-mbr" href="#formulaire-rejoindre" onclick="prefillAdh('Membre actif – Particulier (30–80€/an)')">Adhérer →</a>
       </div>
 
-      <div class="adh-card">
-        <div class="adh-badge">Personne morale</div>
-        <div class="adh-ico">🏛️</div>
+      <div class="mbr-card">
+        <div class="mbr-badge">Personne morale</div>
+        <div class="mbr-ico">🏛️</div>
         <h3>Association</h3>
-        <div class="adh-prix">50 € <span>/an</span></div>
+        <div class="mbr-prix">50 € <span>/an</span></div>
         <ul>
           <li>Voix délibérative en AG</li>
           <li>Éligible au CA</li>
@@ -1229,14 +1229,14 @@
           <li>Domiciliation possible</li>
           <li>Réseaux ESS locaux</li>
         </ul>
-        <a class="btn-adh" href="#formulaire-adhesion" onclick="prefillAdh('Membre actif – Association (50€/an)')">Adhérer →</a>
+        <a class="btn-mbr" href="#formulaire-rejoindre" onclick="prefillAdh('Membre actif – Association (50€/an)')">Adhérer →</a>
       </div>
 
-      <div class="adh-card">
-        <div class="adh-badge">Personne morale</div>
-        <div class="adh-ico">🏢</div>
+      <div class="mbr-card">
+        <div class="mbr-badge">Personne morale</div>
+        <div class="mbr-ico">🏢</div>
         <h3>Entreprise / ESS</h3>
-        <div class="adh-prix">150 € <span>/an</span></div>
+        <div class="mbr-prix">150 € <span>/an</span></div>
         <ul>
           <li>Voix délibérative en AG</li>
           <li>Éligible au CA</li>
@@ -1244,20 +1244,20 @@
           <li>Présentation dans les supports Génie</li>
           <li>Commissions thématiques ESS</li>
         </ul>
-        <a class="btn-adh" href="#formulaire-adhesion" onclick="prefillAdh('Membre actif – Entreprise/ESS (150€/an)')">Adhérer →</a>
+        <a class="btn-mbr" href="#formulaire-rejoindre" onclick="prefillAdh('Membre actif – Entreprise/ESS (150€/an)')">Adhérer →</a>
       </div>
 
-      <div class="adh-card">
-        <div class="adh-badge">Personne morale</div>
-        <div class="adh-ico">🏗️</div>
+      <div class="mbr-card">
+        <div class="mbr-badge">Personne morale</div>
+        <div class="mbr-ico">🏗️</div>
         <h3>Collectivité</h3>
-        <div class="adh-prix">Sur convention</div>
+        <div class="mbr-prix">Sur convention</div>
         <ul>
           <li>Voix consultative</li>
           <li>Convention de partenariat dédiée</li>
           <li>Modalités sur mesure</li>
         </ul>
-        <a class="btn-adh" href="mailto:genie.montauban@gmail.com?subject=Adhésion Collectivité">Nous contacter →</a>
+        <a class="btn-mbr" href="mailto:genie.montauban@gmail.com?subject=Adhésion Collectivité">Nous contacter →</a>
       </div>
     </div>
 
@@ -1274,14 +1274,14 @@
     </div>
 
     <!-- FORMULAIRE ADHÉSION -->
-    <div class="formulaire-adh" id="formulaire-adhesion">
+    <div class="formulaire-mbr" id="formulaire-rejoindre">
       <h3>📝 Adhérer en ligne</h3>
       <p>Remplissez ce formulaire ou téléchargez la fiche PDF à retourner par email ou en main propre.</p>
 
       <div class="form-grid-2">
         <div class="fg">
           <label>Type d'adhésion <span class="req">*</span></label>
-          <select id="adh-type">
+          <select id="mbr-type">
             <option value="">— Choisir mon profil —</option>
             <option value="Sympathisant – Particulier (min. 10€/an)">🤲 Sympathisant – Particulier (min. 10€/an)</option>
             <option value="Membre jeune – 16-30 ans (15–40€/an)">🌱 Membre jeune 16–30 ans (15–40€/an)</option>
@@ -1293,32 +1293,32 @@
         </div>
         <div class="fg">
           <label>Montant de cotisation <span class="req">*</span></label>
-          <input type="number" id="adh-montant" placeholder="ex. 45" min="10" step="5">
+          <input type="number" id="mbr-montant" placeholder="ex. 45" min="10" step="5">
           <span class="hint">Selon votre profil et vos revenus</span>
         </div>
         <div class="fg">
           <label>Prénom <span class="req">*</span></label>
-          <input type="text" id="adh-prenom" placeholder="Marie">
+          <input type="text" id="mbr-prenom" placeholder="Marie">
         </div>
         <div class="fg">
           <label>Nom / Structure <span class="req">*</span></label>
-          <input type="text" id="adh-nom" placeholder="Dupont ou Association XYZ">
+          <input type="text" id="mbr-nom" placeholder="Dupont ou Association XYZ">
         </div>
         <div class="fg">
           <label>Email <span class="req">*</span></label>
-          <input type="email" id="adh-email" placeholder="marie@structure.fr">
+          <input type="email" id="mbr-email" placeholder="marie@structure.fr">
         </div>
         <div class="fg">
           <label>Téléphone</label>
-          <input type="tel" id="adh-tel" placeholder="06 XX XX XX XX">
+          <input type="tel" id="mbr-tel" placeholder="06 XX XX XX XX">
         </div>
         <div class="fg form-full">
           <label>Adresse postale</label>
-          <input type="text" id="adh-adresse" placeholder="12 rue de la Paix, 82000 Montauban">
+          <input type="text" id="mbr-adresse" placeholder="12 rue de la Paix, 82000 Montauban">
         </div>
         <div class="fg form-full">
           <label>Mode de paiement souhaité</label>
-          <select id="adh-paiement">
+          <select id="mbr-paiement">
             <option value="HelloAsso (en ligne)">🌐 HelloAsso (en ligne)</option>
             <option value="Virement bancaire">🔁 Virement bancaire</option>
             <option value="Chèque">🏦 Chèque</option>
@@ -1328,24 +1328,24 @@
         </div>
         <div class="fg form-full">
           <label class="rgpd-label">
-            <input type="checkbox" id="adh-rgpd">
+            <input type="checkbox" id="mbr-rgpd">
             J'accepte que mes données personnelles soient utilisées pour la gestion de mon adhésion (conservation 3 ans, droits : genie.montauban@gmail.com) <span class="req">*</span>
           </label>
         </div>
       </div>
 
       <div class="form-actions">
-        <button type="button" id="btn-adh-submit" class="btn-submit-adh" onclick="envoyerAdhesion()">✉️ Envoyer ma demande d'adhésion</button>
-        <a class="btn-dl-adh" href="Fiche_Adhesion_GENIE_2026.pdf" download>⬇️ Télécharger la fiche PDF</a>
+        <button type="button" id="btn-mbr-submit" class="btn-submit-mbr" onclick="envoyerAdhesion()">✉️ Envoyer ma demande d'adhésion</button>
+        <a class="btn-dl-mbr" href="Fiche_Adhesion_GENIE_2026.pdf" download>⬇️ Télécharger la fiche PDF</a>
       </div>
 
-      <div class="adh-error" id="adh-error"></div>
-      <div class="adh-success" id="adh-success">
+      <div class="mbr-error" id="mbr-error"></div>
+      <div class="mbr-success" id="mbr-success">
         🎉 <strong>Votre client mail vient de s'ouvrir</strong> avec votre demande pré-remplie.<br>
         <span style="font-weight:400;font-size:14px;">Envoyez l'email pour finaliser votre adhésion. L'équipe vous répond sous 48h.<br>
         Si aucune fenêtre ne s'est ouverte, écrivez directement à <a href="mailto:genie.montauban@gmail.com" style="color:var(--sage)">genie.montauban@gmail.com</a>.</span>
       </div>
-      <div class="adh-nomail" id="adh-nomail">
+      <div class="mbr-nomail" id="mbr-nomail">
         💡 <strong>Votre messagerie va s'ouvrir.</strong> Si aucune fenêtre n'apparaît, écrivez directement à <strong><a href="mailto:genie.montauban@gmail.com">genie.montauban@gmail.com</a></strong> avec votre type d'adhésion et vos coordonnées.
       </div>
 
@@ -1435,7 +1435,7 @@
       <ul class="footer-links">
         <li><a href="#tarifs">Tarifs 2026</a></li>
         <li><a href="#services">Services</a></li>
-        <li><a href="#adhesion">Adhésion</a></li>
+        <li><a href="#rejoindre">Adhésion</a></li>
         <li><a href="reservation.html">Réservation</a></li>
         <li><a href="#contact">Contact</a></li>
         <li><a href="admin.html">Admin ↗</a></li>
@@ -1520,9 +1520,9 @@ function filtrerEspaces(type, btn) {
 // ===== ADHÉSION =====
 function prefillAdh(type) {
   setTimeout(() => {
-    const sel = document.getElementById('adh-type');
+    const sel = document.getElementById("mbr-type");
     if (sel) sel.value = type;
-    document.getElementById('formulaire-adhesion').scrollIntoView({ behavior:'smooth', block:'start' });
+    document.getElementById("formulaire-rejoindre").scrollIntoView({ behavior:'smooth', block:'start' });
   }, 100);
 }
 
@@ -1536,16 +1536,16 @@ function showNotif(msg, type) {
 }
 
 function envoyerAdhesion() {
-  var btn = document.getElementById('btn-adh-submit');
+  var btn = document.getElementById("btn-mbr-submit");
   btn.disabled = true;
   btn.textContent = '⏳ Envoi en cours…';
 
-  var type    = document.getElementById('adh-type').value;
-  var montant = document.getElementById('adh-montant').value;
-  var prenom  = document.getElementById('adh-prenom').value.trim();
-  var nom     = document.getElementById('adh-nom').value.trim();
-  var email   = document.getElementById('adh-email').value.trim();
-  var rgpd    = document.getElementById('adh-rgpd').checked;
+  var type    = document.getElementById("mbr-type").value;
+  var montant = document.getElementById("mbr-montant").value;
+  var prenom  = document.getElementById("mbr-prenom").value.trim();
+  var nom     = document.getElementById("mbr-nom").value.trim();
+  var email   = document.getElementById("mbr-email").value.trim();
+  var rgpd    = document.getElementById("mbr-rgpd").checked;
 
   if (!type)    { showNotif('⚠️ Merci de choisir un type d\'adhésion.', 'error');              btn.disabled=false; btn.textContent='✉️ Envoyer ma demande d\'adhésion'; return; }
   if (!montant) { showNotif('⚠️ Merci d\'indiquer le montant de votre cotisation.', 'error');  btn.disabled=false; btn.textContent='✉️ Envoyer ma demande d\'adhésion'; return; }
@@ -1558,10 +1558,10 @@ function envoyerAdhesion() {
     method: 'POST', mode: 'no-cors',
     body: JSON.stringify({
       action: 'ADHERER', typeAdhesion: type, montant: montant,
-      modePaiement: document.getElementById('adh-paiement').value,
+      modePaiement: document.getElementById("mbr-paiement").value,
       prenom: prenom, nom: nom, email: email,
-      tel: document.getElementById('adh-tel').value.trim(),
-      adresse: document.getElementById('adh-adresse').value.trim()
+      tel: document.getElementById("mbr-tel").value.trim(),
+      adresse: document.getElementById("mbr-adresse").value.trim()
     })
   }).catch(function() {});
 
@@ -1593,7 +1593,7 @@ function envoyerContact() {
 
 // ===== WIRING DES BOUTONS =====
 // Le script est en bas du body : le DOM est déjà disponible
-var btnAdh = document.getElementById('btn-adh-submit');
+var btnAdh = document.getElementById("btn-mbr-submit");
 if (btnAdh) btnAdh.addEventListener('click', envoyerAdhesion);
 var btnContact = document.getElementById('btn-contact-submit');
 if (btnContact) btnContact.addEventListener('click', envoyerContact);
