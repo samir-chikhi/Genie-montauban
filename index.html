@@ -708,6 +708,21 @@
       border: 1px solid rgba(255,255,255,.2);
     }
 
+    /* ── NOTIFICATION BANDEAU ── */
+    #notif-bandeau {
+      display: none;
+      position: fixed; top: 72px; left: 0; right: 0; z-index: 9999;
+      padding: 14px 24px; font-size: 15px; font-weight: 600;
+      text-align: center; box-shadow: 0 4px 16px rgba(0,0,0,.15);
+    }
+    #notif-bandeau.success { background: #1a7a4a; color: #fff; }
+    #notif-bandeau.error   { background: #c0392b; color: #fff; }
+    #notif-bandeau button  {
+      background: rgba(255,255,255,.2); border: none; color: #fff;
+      padding: 2px 10px; border-radius: 4px; cursor: pointer;
+      font-size: 14px; margin-left: 16px; vertical-align: middle;
+    }
+
     /* ═══════════════════════════════════════════════
        RESPONSIVE
     ═══════════════════════════════════════════════ */
@@ -789,6 +804,12 @@
     </div>
   </div>
 </nav>
+
+<!-- BANDEAU NOTIFICATION (formulaires) -->
+<div id="notif-bandeau">
+  <span id="notif-msg"></span>
+  <button onclick="document.getElementById('notif-bandeau').style.display='none'">✕</button>
+</div>
 
 <!-- HERO -->
 <div class="hero">
@@ -1505,16 +1526,19 @@ function prefillAdh(type) {
   }, 100);
 }
 
-function envoyerAdhesion() {
-  var errDiv = document.getElementById('adh-error');
-  errDiv.style.display = 'none';
-  document.getElementById('adh-success').style.display = 'none';
+function showNotif(msg, type) {
+  var b = document.getElementById('notif-bandeau');
+  document.getElementById('notif-msg').textContent = msg;
+  b.className = type; // 'success' ou 'error'
+  b.style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  setTimeout(function() { b.style.display = 'none'; }, 8000);
+}
 
-  function showErr(msg) {
-    errDiv.textContent = msg;
-    errDiv.style.display = 'block';
-    errDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  }
+function envoyerAdhesion() {
+  var btn = document.getElementById('btn-adh-submit');
+  btn.disabled = true;
+  btn.textContent = '⏳ Envoi en cours…';
 
   var type    = document.getElementById('adh-type').value;
   var montant = document.getElementById('adh-montant').value;
@@ -1523,12 +1547,12 @@ function envoyerAdhesion() {
   var email   = document.getElementById('adh-email').value.trim();
   var rgpd    = document.getElementById('adh-rgpd').checked;
 
-  if (!type)    { showErr('⚠️ Merci de choisir un type d\'adhésion.'); return; }
-  if (!montant) { showErr('⚠️ Merci d\'indiquer le montant de votre cotisation.'); return; }
-  if (!prenom)  { showErr('⚠️ Merci d\'indiquer votre prénom.'); return; }
-  if (!nom)     { showErr('⚠️ Merci d\'indiquer votre nom.'); return; }
-  if (!email)   { showErr('⚠️ Merci d\'indiquer votre email.'); return; }
-  if (!rgpd)    { showErr('⚠️ Merci d\'accepter la politique de données personnelles.'); return; }
+  if (!type)    { showNotif('⚠️ Merci de choisir un type d\'adhésion.', 'error');              btn.disabled=false; btn.textContent='✉️ Envoyer ma demande d\'adhésion'; return; }
+  if (!montant) { showNotif('⚠️ Merci d\'indiquer le montant de votre cotisation.', 'error');  btn.disabled=false; btn.textContent='✉️ Envoyer ma demande d\'adhésion'; return; }
+  if (!prenom)  { showNotif('⚠️ Merci d\'indiquer votre prénom.', 'error');                    btn.disabled=false; btn.textContent='✉️ Envoyer ma demande d\'adhésion'; return; }
+  if (!nom)     { showNotif('⚠️ Merci d\'indiquer votre nom.', 'error');                       btn.disabled=false; btn.textContent='✉️ Envoyer ma demande d\'adhésion'; return; }
+  if (!email)   { showNotif('⚠️ Merci d\'indiquer votre email.', 'error');                     btn.disabled=false; btn.textContent='✉️ Envoyer ma demande d\'adhésion'; return; }
+  if (!rgpd)    { showNotif('⚠️ Merci d\'accepter la politique de données personnelles.', 'error'); btn.disabled=false; btn.textContent='✉️ Envoyer ma demande d\'adhésion'; return; }
 
   fetch(APPS_SCRIPT_URL, {
     method: 'POST', mode: 'no-cors',
@@ -1541,23 +1565,17 @@ function envoyerAdhesion() {
     })
   }).catch(function() {});
 
-  var zone = document.getElementById('adh-success');
-  zone.innerHTML = '🎉 <strong>Demande envoyée !</strong> L\'équipe Génie vous contacte sous 48h pour finaliser votre adhésion à <em>' + type + '</em>.';
-  zone.style.display = 'block';
-  zone.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  showNotif('🎉 Demande envoyée ! L\'équipe Génie vous contacte sous 48h.', 'success');
+  btn.textContent = '✅ Demande envoyée';
 }
 
 // ===== CONTACT =====
 function envoyerContact() {
-  var errDiv = document.getElementById('contact-error');
-  errDiv.style.display = 'none';
-
   var email   = document.getElementById('c-email').value.trim();
   var message = document.getElementById('c-message').value.trim();
 
   if (!email || !message) {
-    errDiv.textContent = '⚠️ Merci de remplir au moins votre email et votre message.';
-    errDiv.style.display = 'block';
+    showNotif('⚠️ Merci de remplir au moins votre email et votre message.', 'error');
     return;
   }
 
@@ -1570,8 +1588,7 @@ function envoyerContact() {
     body: JSON.stringify({ action: 'CONTACT', prenom: prenom, nom: nom, email: email, sujet: sujet, message: message })
   }).catch(function() {});
 
-  document.getElementById('contact-success').style.display = 'block';
-  document.getElementById('contact-nomail').style.display = 'none';
+  showNotif('✅ Message envoyé ! Nous vous répondons sous 24h.', 'success');
 }
 
 // ===== WIRING DES BOUTONS =====
