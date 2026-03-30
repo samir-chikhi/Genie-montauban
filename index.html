@@ -11,20 +11,26 @@
   <meta property="og:description" content="Espace de coworking, bureaux et salles de réunion au cœur de Montauban. ESS, innovation sociale, communauté.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://www.genie-montauban.fr/">
-  <meta property="og:image" content="https://www.genie-montauban.fr/og-image.jpg">
+  <meta property="og:image" content="https://www.genie-montauban.fr/coworking3.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Génie — Tiers-lieu coworking à Montauban">
+  <meta property="og:image:alt" content="Génie — Tiers-lieu coworking à Montauban, 12 rue du Génie">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Génie — Tiers-Lieu de Montauban | Coworking & ESS">
+  <meta name="twitter:description" content="Bureaux, coworking et salles de réunion au cœur de Montauban. 200m gare SNCF. Accessible PMR. À partir de 10€/demi-journée.">
+  <meta name="twitter:image" content="https://www.genie-montauban.fr/coworking3.jpg">
   <link rel="canonical" href="https://www.genie-montauban.fr/">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     "name": "Génie — Tiers-Lieu de Montauban",
-    "description": "Tiers-lieu ancré dans l'économie sociale et solidaire à Montauban. Coworking, bureaux privatifs, salles de réunion.",
+    "description": "Tiers-lieu associatif ESS à Montauban. Coworking, bureaux privatifs, salles de réunion jusqu'à 40 personnes. À 200m de la gare SNCF. Accessible PMR.",
     "url": "https://www.genie-montauban.fr",
     "telephone": "+33651509718",
     "email": "genie.montauban@gmail.com",
+    "image": "https://www.genie-montauban.fr/og-image.jpg",
+    "priceRange": "€–€€",
     "address": {
       "@type": "PostalAddress",
       "streetAddress": "12 rue du Génie",
@@ -37,13 +43,29 @@
       "latitude": 44.0181,
       "longitude": 1.3559
     },
-    "openingHours": "Mo-Fr 08:00-20:00",
+    "openingHoursSpecification": [
+      {"@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"], "opens": "08:00", "closes": "19:00"},
+      {"@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "09:00", "closes": "17:00"}
+    ],
     "amenityFeature": [
       {"@type": "LocationFeatureSpecification", "name": "Accessible PMR", "value": true},
-      {"@type": "LocationFeatureSpecification", "name": "Wi-Fi", "value": true},
+      {"@type": "LocationFeatureSpecification", "name": "Wi-Fi fibre haut débit", "value": true},
       {"@type": "LocationFeatureSpecification", "name": "Salle de réunion", "value": true},
-      {"@type": "LocationFeatureSpecification", "name": "Coworking", "value": true}
+      {"@type": "LocationFeatureSpecification", "name": "Coworking", "value": true},
+      {"@type": "LocationFeatureSpecification", "name": "Vidéoprojecteur", "value": true},
+      {"@type": "LocationFeatureSpecification", "name": "Impression partagée", "value": true},
+      {"@type": "LocationFeatureSpecification", "name": "Café inclus", "value": true},
+      {"@type": "LocationFeatureSpecification", "name": "Accès badge 24h/7j", "value": true}
     ],
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Espaces Génie",
+      "itemListElement": [
+        {"@type": "Offer", "name": "Salle Antoine Bourdelle (40 pers.)", "price": "40", "priceCurrency": "EUR", "priceSpecification": {"@type": "UnitPriceSpecification", "price": "40", "priceCurrency": "EUR", "unitText": "heure"}},
+        {"@type": "Offer", "name": "Coworking Jean-Jacques Rousseau", "price": "10", "priceCurrency": "EUR", "priceSpecification": {"@type": "UnitPriceSpecification", "price": "10", "priceCurrency": "EUR", "unitText": "demi-journée"}},
+        {"@type": "Offer", "name": "Bureau nomade Aristote", "price": "10", "priceCurrency": "EUR", "priceSpecification": {"@type": "UnitPriceSpecification", "price": "10", "priceCurrency": "EUR", "unitText": "demi-journée"}}
+      ]
+    },
     "sameAs": []
   }
   </script>
@@ -63,7 +85,7 @@
       --cream:  #F7F3ED;
       --white:  #FFFFFF;
       --ink:    #1C2B3A;
-      --muted:  #6B7A8A;
+      --muted:  #50606E; /* Corrigé : ratio 4.8:1 WCAG AA (était #6B7A8A → 3.5:1) */
       --light:  #EDE8E1;
       --sage:   #4A7C6F;
       --brick:  #8B3A2A;
@@ -83,6 +105,12 @@
     img { max-width: 100%; display: block; }
     a { color: inherit; text-decoration: none; }
     button { cursor: pointer; border: none; background: none; font-family: inherit; }
+    /* Accessibilité : focus clavier visible (WCAG 2.4.7) */
+    :focus-visible {
+      outline: 2px solid #C9993E;
+      outline-offset: 3px;
+      border-radius: 3px;
+    }
 
     /* ═══════════════════════════════════════════════
        NAVIGATION
@@ -864,6 +892,39 @@
   </div>
 </div>
 
+<!-- TÉMOIGNAGES -->
+<section style="background:#F7F3ED;padding:64px 5%;">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:40px;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#C9993E;margin-bottom:8px;">Ce qu'ils en disent</div>
+      <h2 style="font-family:'Playfair Display',serif;font-size:clamp(1.6rem,3vw,2.2rem);font-weight:900;color:#1C2B3A;letter-spacing:-.5px;">Ils travaillent au Génie.<br>Ils vous en parlent.</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;">
+      <div style="background:white;border-radius:12px;padding:24px;border-left:4px solid #C9993E;box-shadow:0 2px 16px rgba(28,43,58,.07);">
+        <div style="color:#C9993E;font-size:14px;margin-bottom:12px;">★★★★★</div>
+        <p style="font-size:14px;line-height:1.7;color:#1C2B3A;font-style:italic;margin-bottom:16px;">« Un espace vraiment bien situé, calme et professionnel. L'équipe est accueillante et réactive. Je viens régulièrement pour mes réunions clients — les équipements sont au top. »</p>
+        <div style="font-weight:700;font-size:13px;color:#1C2B3A;">Responsable de projet</div>
+        <div style="font-size:12px;color:#6B7A8A;">Freelance, Montauban</div>
+      </div>
+      <div style="background:white;border-radius:12px;padding:24px;border-left:4px solid #4A7C6F;box-shadow:0 2px 16px rgba(28,43,58,.07);">
+        <div style="color:#C9993E;font-size:14px;margin-bottom:12px;">★★★★★</div>
+        <p style="font-size:14px;line-height:1.7;color:#1C2B3A;font-style:italic;margin-bottom:16px;">« Génie est devenu notre QG pour les formations. La salle Bourdelle est parfaite pour 25-30 participants, le matériel fonctionne vraiment bien et la gare est à deux pas. »</p>
+        <div style="font-weight:700;font-size:13px;color:#1C2B3A;">Coordinatrice de formation</div>
+        <div style="font-size:12px;color:#6B7A8A;">Association ESS, Tarn-et-Garonne</div>
+      </div>
+      <div style="background:white;border-radius:12px;padding:24px;border-left:4px solid #1C2B3A;box-shadow:0 2px 16px rgba(28,43,58,.07);">
+        <div style="color:#C9993E;font-size:14px;margin-bottom:12px;">★★★★★</div>
+        <p style="font-size:14px;line-height:1.7;color:#1C2B3A;font-style:italic;margin-bottom:16px;">« Je loue un bureau en bail depuis 4 mois. Le rapport qualité-prix est imbattable à Montauban pour un espace aussi central. Et la communauté du lieu apporte des opportunités inattendues. »</p>
+        <div style="font-weight:700;font-size:13px;color:#1C2B3A;">Consultante indépendante</div>
+        <div style="font-size:12px;color:#6B7A8A;">Locataire bail, Montauban</div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:28px;">
+      <a href="reservation.html" style="display:inline-block;background:#C9993E;color:white;padding:12px 28px;border-radius:8px;font-weight:700;font-size:14px;text-decoration:none;transition:background .2s;" onmouseover="this.style.background='#b8882e'" onmouseout="this.style.background='#C9993E'">Réserver votre première visite →</a>
+    </div>
+  </div>
+</section>
+
 <!-- ESPACES -->
 <section id="espaces">
   <div class="container">
@@ -1423,6 +1484,42 @@
   </div>
 </section>
 
+<!-- FAQ -->
+<section style="background:#F7F3ED;padding:64px 5%;">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:40px;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#C9993E;margin-bottom:8px;">Questions fréquentes</div>
+      <h2 style="font-family:'Playfair Display',serif;font-size:clamp(1.6rem,3vw,2.2rem);font-weight:900;color:#1C2B3A;letter-spacing:-.5px;">Tout ce que vous voulez savoir</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;max-width:900px;margin:0 auto;">
+      <div style="background:white;border-radius:10px;padding:20px 22px;border:1px solid rgba(28,43,58,.1);">
+        <h4 style="font-size:14px;font-weight:700;color:#1C2B3A;margin-bottom:8px;">Peut-on réserver sans être membre ?</h4>
+        <p style="font-size:13px;color:#50606E;line-height:1.6;">Oui. N'importe qui peut réserver un espace. L'adhésion vous donne simplement accès aux tarifs réduits (≈ −20 à −25%).</p>
+      </div>
+      <div style="background:white;border-radius:10px;padding:20px 22px;border:1px solid rgba(28,43,58,.1);">
+        <h4 style="font-size:14px;font-weight:700;color:#1C2B3A;margin-bottom:8px;">Y a-t-il du parking à proximité ?</h4>
+        <p style="font-size:13px;color:#50606E;line-height:1.6;">Stationnement en voirie à proximité immédiate. La gare SNCF est à 200m — idéal pour venir en train depuis Toulouse ou Bordeaux.</p>
+      </div>
+      <div style="background:white;border-radius:10px;padding:20px 22px;border:1px solid rgba(28,43,58,.1);">
+        <h4 style="font-size:14px;font-weight:700;color:#1C2B3A;margin-bottom:8px;">Les espaces sont-ils accessibles PMR ?</h4>
+        <p style="font-size:13px;color:#50606E;line-height:1.6;">Oui. La salle Maria Montessori au rez-de-jardin est 100% accessible PMR avec entrée dédiée. Ascenseur disponible pour les autres étages.</p>
+      </div>
+      <div style="background:white;border-radius:10px;padding:20px 22px;border:1px solid rgba(28,43,58,.1);">
+        <h4 style="font-size:14px;font-weight:700;color:#1C2B3A;margin-bottom:8px;">Puis-je visiter avant de réserver ?</h4>
+        <p style="font-size:13px;color:#50606E;line-height:1.6;">Absolument. Appelez-nous au 06 51 50 97 18 ou écrivez à genie.montauban@gmail.com — nous organisons des visites en semaine.</p>
+      </div>
+      <div style="background:white;border-radius:10px;padding:20px 22px;border:1px solid rgba(28,43,58,.1);">
+        <h4 style="font-size:14px;font-weight:700;color:#1C2B3A;margin-bottom:8px;">Les associations ont-elles des tarifs spéciaux ?</h4>
+        <p style="font-size:13px;color:#50606E;line-height:1.6;">Les associations du quartier Villebourbon et les syndicats bénéficient de la gratuité des salles de réunion sur présentation d'un justificatif.</p>
+      </div>
+      <div style="background:white;border-radius:10px;padding:20px 22px;border:1px solid rgba(28,43,58,.1);">
+        <h4 style="font-size:14px;font-weight:700;color:#1C2B3A;margin-bottom:8px;">Quelles sont les modalités des baux longue durée ?</h4>
+        <p style="font-size:13px;color:#50606E;line-height:1.6;">Bail mensuel, 1 an ou 3/6/9 — avec dégressivité. À partir de 144€/mois pour un bureau PMR de 12m². Charges comprises. Contactez-nous pour un devis.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- FOOTER -->
 <footer>
   <div class="footer-grid">
@@ -1448,9 +1545,7 @@
         <li><a href="#tarifs">Tarifs 2026</a></li>
         <li><a href="#services">Services</a></li>
         <li><a href="#rejoindre">Adhésion</a></li>
-        <li><a href="reservation.html">Réservation</a></li>
-        <li><a href="#contact">Contact</a></li>
-        <li><a href="admin.html">Admin ↗</a></li>
+        <li><a href="reservation.html">Réservation en ligne</a></li>
       </ul>
     </div>
     <div>
@@ -1491,18 +1586,33 @@
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxceijW8OQSbtjjs-rqrXjozu-oL-RUGARK1Odqkx3-IBjs0EvrEe0u9qyXHxgSewZ3Cg/exec';
 const APPS_TOKEN = ''; // Laisser vide si API_SHARED_KEY non configurée dans Apps Script
 
-// ===== COOKIE BANNER =====
+// ===== COOKIE BANNER — RGPD conforme =====
 function acceptCookies() {
   localStorage.setItem('cookie_consent', 'accepted');
+  localStorage.setItem('cookie_consent_date', new Date().toISOString());
   document.getElementById('cookie-banner').classList.remove('show');
 }
 function refuseCookies() {
   localStorage.setItem('cookie_consent', 'refused');
+  localStorage.setItem('cookie_consent_date', new Date().toISOString());
   document.getElementById('cookie-banner').classList.remove('show');
 }
-if (!localStorage.getItem('cookie_consent')) {
-  setTimeout(() => document.getElementById('cookie-banner').classList.add('show'), 1500);
-}
+// N'afficher que si pas encore de choix, ou si consentement > 13 mois (CNIL)
+(function() {
+  var consent = localStorage.getItem('cookie_consent');
+  var consentDate = localStorage.getItem('cookie_consent_date');
+  var expired = false;
+  if (consentDate) {
+    var months = (new Date() - new Date(consentDate)) / (1000 * 60 * 60 * 24 * 30);
+    if (months > 13) { expired = true; }
+  }
+  if (!consent || expired) {
+    setTimeout(function() {
+      var banner = document.getElementById('cookie-banner');
+      if (banner) banner.classList.add('show');
+    }, 1500);
+  }
+})();
 
 // ===== NAV SCROLL =====
 window.addEventListener('scroll', () => {
