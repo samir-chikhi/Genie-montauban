@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Génie Montauban — Tiers-Lieu ESS | Coworking & Espaces Collaboratifs</title>
+  <meta name="description" content="Génie Montauban : tiers-lieu ESS, coworking, salles de réunion et bureaux privatifs au cœur de Montauban. À 1 min de la gare. Adhésion dès 50€/an.">
+  <meta name="keywords" content="coworking montauban, tiers lieu, ESS, bureaux partagés, salle réunion, 82000">
+  <meta property="og:title" content="Génie Montauban — Tiers-Lieu ESS">
+  <meta property="og:description" content="Tiers-lieu coworking à Montauban. Espaces collaboratifs, salles de réunion, bureaux privatifs.">
+  <meta property="og:url" content="https://genie-montauban.fr">
+  <meta property="og:type" content="website">
+  <link rel="canonical" href="https://genie-montauban.fr">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ═══════════════════════════════════════════
+       VARIABLES & RESET
+    ═══════════════════════════════════════════ */
+    :root {
+      --navy:    #0D2B45;
+      --gold:    #C9A84C;
+      --gold-lt: #E8C96E;
+      --teal:    #1A6B72;
+      --teal-lt: #2A9EA8;
+      --cream:   #F8F5EF;
+      --white:   #FFFFFF;
+      --gray:    #6B7280;
+      --dark:    #1C1C1C;
+      --success: #2D7D46;
+      --warn:    #B45309;
+      --red:     #C0392B;
+      --shadow:  0 4px 24px rgba(13,43,69,0.10);
+      --radius:  12px;
+      --font-head: 'Syne', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-body); color: var(--dark); background: var(--white); line-height: 1.6; }
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; display: block; }
+
+    /* ═══════════════════════════════════════════
+       NAV
+    ═══════════════════════════════════════════ */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(13,43,69,0.97); backdrop-filter: blur(12px);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 32px; height: 64px;
+    }
+    .nav-logo {
+      font-family: var(--font-head); font-weight: 800; font-size: 1.5rem;
+      color: var(--gold); letter-spacing: -0.02em;
+    }
+    .nav-logo span { color: var(--white); font-weight: 400; font-size: 0.85rem; display: block; letter-spacing: 0.08em; text-transform: uppercase; }
+    .nav-links { display: flex; gap: 28px; align-items: center; }
+    .nav-links a { color: rgba(255,255,255,0.8); font-size: 0.9rem; transition: color .2s; }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-cta {
+      background: var(--gold); color: var(--navy) !important; font-weight: 700;
+      padding: 8px 20px; border-radius: 6px; font-size: 0.85rem !important;
+      transition: background .2s, transform .1s;
+    }
+    .nav-cta:hover { background: var(--gold-lt); transform: translateY(-1px); }
+    .nav-burger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .nav-burger span { width: 24px; height: 2px; background: var(--white); border-radius: 2px; transition: .3s; }
+
+    /* ═══════════════════════════════════════════
+       HERO
+    ═══════════════════════════════════════════ */
+    .hero {
+      min-height: 100vh; padding-top: 64px;
+      background: linear-gradient(135deg, var(--navy) 0%, #1A3B5C 50%, var(--teal) 100%);
+      display: flex; align-items: center; position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 70% 50%, rgba(201,168,76,0.12) 0%, transparent 60%);
+    }
+    .hero-inner { max-width: 1100px; margin: 0 auto; padding: 80px 32px; position: relative; z-index: 1; }
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(201,168,76,0.15); border: 1px solid rgba(201,168,76,0.3);
+      color: var(--gold); font-size: 0.8rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.1em; padding: 6px 14px; border-radius: 20px; margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-family: var(--font-head); font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 800; color: var(--white); line-height: 1.15; margin-bottom: 20px;
+      letter-spacing: -0.02em;
+    }
+    .hero h1 em { color: var(--gold); font-style: normal; }
+    .hero-sub { font-size: 1.15rem; color: rgba(255,255,255,0.75); max-width: 560px; margin-bottom: 40px; }
+
+    /* ── BADGE ADHÉRENT CORRIGÉ : 20% ── */
+    .hero-badges { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 40px; }
+    .badge {
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+      color: var(--white); font-size: 0.85rem; padding: 10px 16px; border-radius: 8px;
+    }
+    .badge-icon { font-size: 1.1rem; }
+    .badge.highlight {
+      background: rgba(201,168,76,0.15); border-color: rgba(201,168,76,0.4);
+      color: var(--gold-lt);
+    }
+    .badge.long-bail {
+      background: rgba(26,107,114,0.25); border-color: rgba(42,158,168,0.4);
+      color: #7CE8F0; font-weight: 600;
+    }
+
+    .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--gold); color: var(--navy); font-family: var(--font-head);
+      font-weight: 700; font-size: 0.95rem; padding: 14px 28px; border-radius: 8px;
+      border: none; cursor: pointer; transition: background .2s, transform .1s;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-primary:hover { background: var(--gold-lt); transform: translateY(-2px); }
+    .btn-outline {
+      background: transparent; color: var(--white); border: 1.5px solid rgba(255,255,255,0.35);
+      font-family: var(--font-head); font-weight: 600; font-size: 0.95rem;
+      padding: 14px 28px; border-radius: 8px; cursor: pointer;
+      transition: border-color .2s, color .2s, transform .1s;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
+
+    /* ═══════════════════════════════════════════
+       BANDEAU TARIF RAPIDE — bails mis en avant
+    ═══════════════════════════════════════════ */
+    .tarif-strip {
+      background: var(--cream); border-bottom: 2px solid rgba(201,168,76,0.2);
+      padding: 20px 32px;
+    }
+    .tarif-strip-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; align-items: center; gap: 0; flex-wrap: wrap;
+    }
+    .strip-label {
+      font-family: var(--font-head); font-weight: 700; font-size: 0.75rem;
+      text-transform: uppercase; letter-spacing: 0.1em; color: var(--gray);
+      margin-right: 20px; white-space: nowrap;
+    }
+    .strip-items { display: flex; flex-wrap: wrap; gap: 0; flex: 1; }
+    .strip-item {
+      padding: 8px 20px; border-right: 1px solid rgba(0,0,0,0.1);
+      display: flex; flex-direction: column;
+    }
+    .strip-item:last-child { border-right: none; }
+    .strip-name { font-size: 0.75rem; color: var(--gray); text-transform: uppercase; letter-spacing: 0.06em; }
+    /* Tarif plein cliquable → redirige vers profils */
+    .strip-price {
+      font-family: var(--font-head); font-weight: 700; font-size: 1.05rem;
+      color: var(--navy); cursor: pointer; transition: color .2s;
+      text-decoration: underline dotted rgba(13,43,69,0.3);
+    }
+    .strip-price:hover { color: var(--teal-lt); }
+    .strip-price .tip { font-size: 0.65rem; font-weight: 400; color: var(--gray); text-decoration: none; display: block; }
+
+    /* ═══════════════════════════════════════════
+       SECTION GÉNÉRIQUE
+    ═══════════════════════════════════════════ */
+    section { padding: 80px 32px; }
+    .section-inner { max-width: 1100px; margin: 0 auto; }
+    .section-tag {
+      font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em;
+      color: var(--teal); margin-bottom: 12px; display: block;
+    }
+    .section-title {
+      font-family: var(--font-head); font-weight: 800; font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      color: var(--navy); line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 16px;
+    }
+    .section-sub { font-size: 1.05rem; color: var(--gray); max-width: 580px; }
+
+    /* ═══════════════════════════════════════════
+       ESPACES — CARDS
+    ═══════════════════════════════════════════ */
+    #espaces { background: var(--white); }
+    .espaces-grid {
+      margin-top: 48px;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;
+    }
+    .espace-card {
+      border: 1.5px solid rgba(13,43,69,0.1); border-radius: var(--radius);
+      padding: 28px; transition: box-shadow .2s, border-color .2s, transform .2s;
+      position: relative; overflow: hidden;
+    }
+    .espace-card:hover {
+      box-shadow: var(--shadow); border-color: var(--gold);
+      transform: translateY(-4px);
+    }
+    .espace-icon { font-size: 2rem; margin-bottom: 16px; }
+    .espace-name { font-family: var(--font-head); font-weight: 700; font-size: 1.15rem; color: var(--navy); margin-bottom: 6px; }
+    .espace-desc { font-size: 0.9rem; color: var(--gray); margin-bottom: 20px; }
+    .espace-price {
+      display: flex; align-items: baseline; gap: 6px;
+      font-family: var(--font-head); font-weight: 800; font-size: 1.5rem; color: var(--navy);
+    }
+    .espace-price span { font-size: 0.8rem; font-weight: 400; color: var(--gray); }
+    /* Tarif plein cliquable */
+    .espace-price-full {
+      cursor: pointer; text-decoration: underline dotted rgba(13,43,69,0.3);
+      transition: color .2s;
+    }
+    .espace-price-full:hover { color: var(--teal); }
+    .espace-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
+    .espace-tag {
+      font-size: 0.72rem; padding: 3px 10px; border-radius: 12px;
+      background: var(--cream); color: var(--navy); font-weight: 500;
+    }
+    .espace-tag.gold { background: rgba(201,168,76,0.12); color: var(--warn); }
+    .espace-tag.teal { background: rgba(26,107,114,0.1); color: var(--teal); }
+
+    /* ── Bloc mise en avant bails longue durée ── */
+    .bail-highlight {
+      margin-top: 48px;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--teal) 100%);
+      border-radius: var(--radius); padding: 40px; color: var(--white);
+      display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center;
+    }
+    .bail-highlight h3 {
+      font-family: var(--font-head); font-weight: 800; font-size: 1.6rem;
+      color: var(--gold); margin-bottom: 12px; line-height: 1.2;
+    }
+    .bail-highlight p { color: rgba(255,255,255,0.8); font-size: 0.95rem; line-height: 1.7; }
+    .bail-avantages { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .bail-avantages li {
+      display: flex; align-items: flex-start; gap: 12px;
+      background: rgba(255,255,255,0.07); border-radius: 8px; padding: 14px 16px;
+    }
+    .bail-avantages li .ico { font-size: 1.2rem; flex-shrink: 0; }
+    .bail-avantages li .txt { font-size: 0.88rem; color: rgba(255,255,255,0.9); }
+    .bail-avantages li .txt strong { color: var(--gold-lt); font-weight: 700; display: block; font-size: 1rem; }
+    .bail-cta { margin-top: 24px; display: inline-flex; }
+
+    /* ═══════════════════════════════════════════
+       ADHÉSION
+    ═══════════════════════════════════════════ */
+    #adhesion { background: var(--cream); }
+    .adhesion-grid {
+      margin-top: 48px;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px;
+    }
+    .adhesion-card {
+      background: var(--white); border-radius: var(--radius); padding: 32px;
+      border: 1.5px solid rgba(13,43,69,0.1); position: relative;
+    }
+    .adhesion-card.featured {
+      border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,0.12);
+    }
+    .adhesion-badge-top {
+      position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+      background: var(--gold); color: var(--navy); font-weight: 700; font-size: 0.72rem;
+      text-transform: uppercase; letter-spacing: 0.08em; padding: 4px 14px; border-radius: 12px;
+    }
+    .adhesion-type { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--teal); margin-bottom: 8px; }
+    .adhesion-nom { font-family: var(--font-head); font-weight: 700; font-size: 1.1rem; color: var(--navy); margin-bottom: 12px; }
+    .adhesion-prix { font-family: var(--font-head); font-weight: 800; font-size: 2rem; color: var(--navy); margin-bottom: 20px; }
+    .adhesion-prix span { font-size: 0.85rem; font-weight: 400; color: var(--gray); }
+    .adhesion-avantages { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .adhesion-avantages li { display: flex; align-items: flex-start; gap: 10px; font-size: 0.88rem; color: var(--dark); }
+    .adhesion-avantages li::before { content: '✓'; color: var(--success); font-weight: 700; flex-shrink: 0; }
+    /* ── NOTE CORRIGÉE : 20% pas 25% ── */
+    .adhesion-note {
+      margin-top: 32px; padding: 16px 20px;
+      background: rgba(201,168,76,0.08); border-left: 3px solid var(--gold);
+      border-radius: 0 8px 8px 0; font-size: 0.85rem; color: var(--dark);
+    }
+    .adhesion-note strong { color: var(--warn); }
+
+    /* ═══════════════════════════════════════════
+       TARIFS RAPIDE (lien page tarifs)
+    ═══════════════════════════════════════════ */
+    .tarifs-cta-block {
+      text-align: center; margin-top: 48px;
+      display: flex; flex-direction: column; align-items: center; gap: 16px;
+    }
+    .tarifs-download-row { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+    .btn-tarifs {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--navy); color: var(--white); font-family: var(--font-head);
+      font-weight: 700; font-size: 0.9rem; padding: 12px 24px; border-radius: 8px;
+      transition: background .2s, transform .1s;
+    }
+    .btn-tarifs:hover { background: var(--teal); transform: translateY(-2px); }
+    .btn-tarifs-dl {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: transparent; color: var(--navy); border: 1.5px solid var(--navy);
+      font-family: var(--font-head); font-weight: 600; font-size: 0.9rem;
+      padding: 12px 24px; border-radius: 8px; transition: .2s;
+    }
+    .btn-tarifs-dl:hover { background: var(--navy); color: var(--white); }
+
+    /* ═══════════════════════════════════════════
+       LOCALISATION
+    ═══════════════════════════════════════════ */
+    #localisation { background: var(--white); }
+    .loc-grid { margin-top: 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+    .loc-items { display: flex; flex-direction: column; gap: 16px; }
+    .loc-item { display: flex; gap: 16px; align-items: flex-start; }
+    .loc-ico { font-size: 1.4rem; flex-shrink: 0; width: 40px; }
+    .loc-txt strong { font-weight: 600; color: var(--navy); display: block; font-size: 0.9rem; }
+    .loc-txt span { font-size: 0.85rem; color: var(--gray); }
+    .map-placeholder {
+      background: var(--cream); border-radius: var(--radius); height: 300px;
+      display: flex; align-items: center; justify-content: center;
+      border: 1.5px dashed rgba(13,43,69,0.2); flex-direction: column; gap: 12px; color: var(--gray);
+    }
+    .map-placeholder a { color: var(--teal); font-weight: 600; font-size: 0.9rem; }
+
+    /* ═══════════════════════════════════════════
+       CONTACT
+    ═══════════════════════════════════════════ */
+    #contact { background: var(--navy); }
+    #contact .section-title { color: var(--white); }
+    #contact .section-sub { color: rgba(255,255,255,0.65); }
+    .contact-grid { margin-top: 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+    .contact-card {
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius); padding: 28px;
+    }
+    .contact-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold); font-weight: 700; margin-bottom: 8px; }
+    .contact-value { font-family: var(--font-head); font-weight: 600; font-size: 1rem; color: var(--white); }
+    .contact-value a { color: var(--gold-lt); text-decoration: underline dotted rgba(201,168,76,0.4); }
+    .contact-value a:hover { color: var(--white); }
+
+    /* ═══════════════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════════════ */
+    footer {
+      background: #080F16; color: rgba(255,255,255,0.5);
+      padding: 32px; text-align: center; font-size: 0.82rem;
+    }
+    footer a { color: rgba(255,255,255,0.6); margin: 0 8px; transition: color .2s; }
+    footer a:hover { color: var(--gold); }
+    .footer-logo { font-family: var(--font-head); font-weight: 800; font-size: 1.2rem; color: var(--gold); margin-bottom: 12px; }
+
+    /* ═══════════════════════════════════════════
+       MODAL PROFILS (pour les clics sur tarifs pleins)
+    ═══════════════════════════════════════════ */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 200;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity .2s;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal-box {
+      background: var(--white); border-radius: var(--radius); padding: 40px;
+      max-width: 580px; width: 92%; max-height: 85vh; overflow-y: auto;
+      transform: translateY(16px); transition: transform .2s;
+    }
+    .modal-overlay.open .modal-box { transform: translateY(0); }
+    .modal-box h2 { font-family: var(--font-head); font-weight: 800; font-size: 1.4rem; color: var(--navy); margin-bottom: 8px; }
+    .modal-box .modal-sub { font-size: 0.88rem; color: var(--gray); margin-bottom: 24px; }
+    .profils-grid { display: flex; flex-direction: column; gap: 12px; }
+    .profil-row {
+      display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 16px;
+      padding: 14px 16px; border-radius: 8px; background: var(--cream);
+    }
+    .profil-name { font-weight: 600; font-size: 0.9rem; color: var(--navy); }
+    .profil-name span { font-weight: 400; font-size: 0.8rem; color: var(--gray); display: block; }
+    .profil-price { font-family: var(--font-head); font-weight: 700; font-size: 1rem; color: var(--navy); }
+    .profil-reduction { font-size: 0.75rem; font-weight: 700; padding: 3px 10px; border-radius: 12px; }
+    .pr-plein { background: rgba(13,43,69,0.08); color: var(--navy); }
+    .pr-adherent { background: rgba(201,168,76,0.15); color: var(--warn); }
+    .pr-locataire { background: rgba(26,107,114,0.12); color: var(--teal); }
+    .pr-asso { background: rgba(45,125,70,0.12); color: var(--success); }
+    .modal-adhesion-link {
+      margin-top: 20px; padding: 14px 16px; background: rgba(201,168,76,0.08);
+      border: 1px solid rgba(201,168,76,0.25); border-radius: 8px;
+      font-size: 0.85rem; color: var(--dark); text-align: center;
+    }
+    .modal-adhesion-link a { color: var(--teal); font-weight: 600; }
+    .modal-close-btn {
+      margin-top: 20px; width: 100%; padding: 12px; background: var(--navy);
+      color: var(--white); border: none; border-radius: 8px; font-family: var(--font-head);
+      font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: background .2s;
+    }
+    .modal-close-btn:hover { background: var(--teal); }
+
+    /* ═══════════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════════ */
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .nav-burger { display: flex; }
+      .nav-links.open {
+        display: flex; flex-direction: column; position: fixed;
+        top: 64px; left: 0; right: 0; background: var(--navy);
+        padding: 20px 24px; gap: 16px; z-index: 99;
+      }
+      .hero-inner, section { padding-left: 20px; padding-right: 20px; }
+      .bail-highlight { grid-template-columns: 1fr; gap: 24px; }
+      .loc-grid { grid-template-columns: 1fr; }
+      .contact-grid { grid-template-columns: 1fr; }
+      .tarif-strip-inner { flex-direction: column; gap: 8px; }
+      .strip-items { width: 100%; flex-direction: column; }
+      .strip-item { border-right: none; border-bottom: 1px solid rgba(0,0,0,0.08); padding: 10px 0; }
+      .profil-row { grid-template-columns: 1fr auto; }
+      .profil-reduction { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ MODAL PROFILS ═══ -->
+<div class="modal-overlay" id="profilsModal" role="dialog" aria-modal="true" aria-label="Tarifs selon votre profil">
+  <div class="modal-box" id="profilsModalContent">
+    <h2 id="profilsModalTitle">Tarifs selon votre profil</h2>
+    <p class="modal-sub" id="profilsModalSub">Ce tarif plein s'adresse aux non-adhérents. Découvrez les réductions disponibles.</p>
+    <div class="profils-grid" id="profilsGrid">
+      <!-- rempli par JS -->
+    </div>
+    <div class="modal-adhesion-link">
+      💡 L'adhésion à Génie (dès 50€/an) vous donne accès aux <strong>tarifs réduits à vie</strong>.
+      <a href="#adhesion" onclick="closeProfilsModal()">En savoir plus →</a>
+    </div>
+    <button class="modal-close-btn" onclick="closeProfilsModal()">Fermer</button>
+  </div>
+</div>
+
+<!-- ═══ NAV ═══ -->
+<nav role="navigation">
+  <div class="nav-logo">
+    Génie
+    <span>Tiers-Lieu Montauban</span>
+  </div>
+  <div class="nav-links" id="navLinks">
+    <a href="#espaces">Espaces</a>
+    <a href="#adhesion">Adhésion</a>
+    <a href="tarifs.html">Tarifs</a>
+    <a href="#localisation">Accès</a>
+    <a href="#contact">Contact</a>
+    <a href="reservation.html" class="nav-cta">Réserver →</a>
+  </div>
+  <div class="nav-burger" id="burger" aria-label="Menu" role="button" tabindex="0">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<header class="hero" id="accueil" role="banner">
+  <div class="hero-inner">
+    <div class="hero-tag">📍 12 rue du Génie, Montauban · À 1 min de la gare</div>
+    <h1>Le tiers-lieu de l'<em>économie sociale</em> et solidaire à Montauban</h1>
+    <p class="hero-sub">Coworking, salles de réunion, bureaux privatifs, domiciliation. Un espace conçu pour les acteurs du changement territorial.</p>
+
+    <div class="hero-badges">
+      <!-- CORRIGÉ : 20% pas 25% -->
+      <div class="badge highlight">
+        <span class="badge-icon">🏷️</span>
+        <span><strong>−20% adhérents</strong> sur toutes les salles</span>
+      </div>
+      <!-- BAIL LONGUE DURÉE MIS EN AVANT -->
+      <div class="badge long-bail">
+        <span class="badge-icon">🔑</span>
+        <span><strong>Jusqu'à −20% en bail longue durée</strong> (3/6/9 vs mensuel)</span>
+      </div>
+      <div class="badge">
+        <span class="badge-icon">♿</span>
+        <span>Accès PMR · Wifi fibre</span>
+      </div>
+      <div class="badge">
+        <span class="badge-icon">🤝</span>
+        <span>Associations locales 82 : salles gratuites*</span>
+      </div>
+    </div>
+
+    <div class="hero-actions">
+      <a href="reservation.html" class="btn-primary">Réserver un espace →</a>
+      <a href="tarifs.html" class="btn-outline">📄 Voir les tarifs</a>
+    </div>
+  </div>
+</header>
+
+<!-- ═══ BANDEAU TARIF RAPIDE ═══ -->
+<div class="tarif-strip" role="complementary" aria-label="Tarifs rapides">
+  <div class="tarif-strip-inner">
+    <span class="strip-label">Tarifs indicatifs ↓</span>
+    <div class="strip-items">
+      <div class="strip-item">
+        <span class="strip-name">Coworking</span>
+        <span class="strip-price espace-price-full" onclick="openProfilsModal('Poste nomade (Open space)', [{label:'Tarif plein',prix:'25 €/j',cls:'pr-plein',note:'Non-adhérent'},{label:'Adhérent −20%',prix:'20 €/j',cls:'pr-adherent',note:'Adhésion 50€/an'},{label:'Locataire −50%',prix:'12,50 €/j',cls:'pr-locataire',note:'Bureaux privatifs'},{label:'Association 82',prix:'Gratuit*',cls:'pr-asso',note:'Sous conditions'}])">
+          25 €/j
+          <span class="tip">cliquer → profils</span>
+        </span>
+      </div>
+      <div class="strip-item">
+        <span class="strip-name">Bureau partagé</span>
+        <span class="strip-price espace-price-full" onclick="openProfilsModal('Bureau partagé (15 m²)', [{label:'Tarif plein',prix:'35 €/j',cls:'pr-plein',note:'Non-adhérent'},{label:'Adhérent −20%',prix:'28 €/j',cls:'pr-adherent',note:'Adhésion 50€/an'},{label:'Locataire −50%',prix:'17,50 €/j',cls:'pr-locataire',note:'Bureaux privatifs'}])">
+          35 €/j
+          <span class="tip">cliquer → profils</span>
+        </span>
+      </div>
+      <div class="strip-item">
+        <span class="strip-name">Salle réunion</span>
+        <span class="strip-price espace-price-full" onclick="openProfilsModal('Salle de réunion (petite, 4-6 pers.)', [{label:'Tarif plein',prix:'15 €/h',cls:'pr-plein',note:'Non-adhérent'},{label:'Adhérent −20%',prix:'12 €/h',cls:'pr-adherent',note:'Adhésion 50€/an'},{label:'Locataire −50%',prix:'8 €/h',cls:'pr-locataire',note:'Bureaux privatifs'},{label:'Association 82',prix:'Gratuit*',cls:'pr-asso',note:'Adhésion Génie + 72h préavis'}])">
+          15 €/h
+          <span class="tip">cliquer → profils</span>
+        </span>
+      </div>
+      <div class="strip-item">
+        <span class="strip-name">Bureau privatif</span>
+        <span class="strip-price espace-price-full" onclick="openProfilsModal('Bureau privatif (bail)', [{label:'Bail 3/6/9 — meilleur tarif',prix:'12 €/m²/mois',cls:'pr-locataire',note:'Durée minimale engagement 3 mois'},{label:'Bail 1 an',prix:'13 €/m²/mois',cls:'pr-plein',note:''},{label:'Mensuel',prix:'15 €/m²/mois',cls:'pr-plein',note:'Sans engagement'}])">
+          dès 12 €/m²
+          <span class="tip">cliquer → options bail</span>
+        </span>
+      </div>
+      <div class="strip-item">
+        <span class="strip-name">Domiciliation</span>
+        <span class="strip-price espace-price-full" onclick="openProfilsModal('Domiciliation', [{label:'Entreprise',prix:'80 €/mois',cls:'pr-plein',note:''},{label:'Association',prix:'40 €/mois',cls:'pr-adherent',note:''}])">
+          dès 40 €/mois
+          <span class="tip">cliquer → profils</span>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ ESPACES ═══ -->
+<section id="espaces">
+  <div class="section-inner">
+    <span class="section-tag">Nos espaces</span>
+    <h2 class="section-title">Un espace pour chaque besoin</h2>
+    <p class="section-sub">6 salles nommées, toutes équipées. Du poste nomade à la grande salle événementielle.</p>
+
+    <div class="espaces-grid">
+
+      <div class="espace-card">
+        <div class="espace-icon">🏛️</div>
+        <div class="espace-name">Antoine Bourdelle (0-02)</div>
+        <div class="espace-desc">Grande salle modulable, jusqu'à 40 personnes. Vidéoprojecteur, sono, accès PMR.</div>
+        <div class="espace-price">
+          <span class="espace-price-full" onclick="openProfilsModal('Bourdelle — Grande salle (40 pers.)', [{label:'Tarif plein',prix:'45 €/h',cls:'pr-plein',note:'Non-adhérent'},{label:'Adhérent −20%',prix:'35 €/h',cls:'pr-adherent',note:'Adhésion 50€/an'},{label:'Locataire −50%',prix:'25 €/h',cls:'pr-locataire',note:'Bureaux privatifs'},{label:'Association 82',prix:'Gratuit*',cls:'pr-asso',note:'Adhésion Génie + 72h préavis'}])">45 €</span>
+          <span>/h · tarif plein ↗</span>
+        </div>
+        <div class="espace-tags">
+          <span class="espace-tag">40 pers.</span>
+          <span class="espace-tag teal">PMR ♿</span>
+          <span class="espace-tag gold">Événements</span>
+        </div>
+      </div>
+
+      <div class="espace-card">
+        <div class="espace-icon">📋</div>
+        <div class="espace-name">Célestin Freinet (1-11)</div>
+        <div class="espace-desc">Salle de réunion 20 personnes. Écran TV, paperboard. Aussi disponible en bail privatif.</div>
+        <div class="espace-price">
+          <span class="espace-price-full" onclick="openProfilsModal('Freinet — Salle réunion (20 pers.)', [{label:'Tarif plein',prix:'30 €/h',cls:'pr-plein',note:'Non-adhérent'},{label:'Adhérent −20%',prix:'22 €/h',cls:'pr-adherent',note:'Adhésion 50€/an'},{label:'Locataire −50%',prix:'15 €/h',cls:'pr-locataire',note:'Bureaux privatifs'},{label:'Association 82',prix:'Gratuit*',cls:'pr-asso',note:'Adhésion Génie + 72h préavis'}])">30 €</span>
+          <span>/h · tarif plein ↗</span>
+        </div>
+        <div class="espace-tags">
+          <span class="espace-tag">20 pers.</span>
+          <span class="espace-tag gold">Réunion</span>
+        </div>
+      </div>
+
+      <div class="espace-card">
+        <div class="espace-icon">🤝</div>
+        <div class="espace-name">Olympe de Gouges (1-12)</div>
+        <div class="espace-desc">Salle de réunion 20 personnes. Lumière naturelle, ambiance collaborative.</div>
+        <div class="espace-price">
+          <span class="espace-price-full" onclick="openProfilsModal('Gouges — Salle réunion (20 pers.)', [{label:'Tarif plein',prix:'30 €/h',cls:'pr-plein',note:'Non-adhérent'},{label:'Adhérent −20%',prix:'22 €/h',cls:'pr-adherent',note:'Adhésion 50€/an'},{label:'Locataire −50%',prix:'15 €/h',cls:'pr-locataire',note:'Bureaux privatifs'},{label:'Association 82',prix:'Gratuit*',cls:'pr-asso',note:'Adhésion Génie + 72h préavis'}])">30 €</span>
+          <span>/h · tarif plein ↗</span>
+        </div>
+        <div class="espace-tags">
+          <span class="espace-tag">20 pers.</span>
+          <span class="espace-tag gold">Réunion</span>
+        </div>
+      </div>
+
+      <div class="espace-card">
+        <div class="espace-icon">🚪</div>
+        <div class="espace-name">Louise Michel (0-01)</div>
+        <div class="espace-desc">Bureau nomade privatif 14 m². Fermeture à clé, idéal pour une journée en solo ou en binôme.</div>
+        <div class="espace-price">
+          <span class="espace-price-full" onclick="openProfilsModal('Louise Michel — Bureau dédié (14 m²)', [{label:'Tarif plein',prix:'40 €/j',cls:'pr-plein',note:'Non-adhérent'},{label:'Adhérent −20%',prix:'32 €/j',cls:'pr-adherent',note:'Adhésion 50€/an'},{label:'Locataire −50%',prix:'20 €/j',cls:'pr-locataire',note:'Bureaux privatifs'}])">40 €</span>
+          <span>/j · tarif plein ↗</span>
+        </div>
+        <div class="espace-tags">
+          <span class="espace-tag">14 m²</span>
+          <span class="espace-tag">Privatif</span>
+        </div>
+      </div>
+
+      <div class="espace-card">
+        <div class="espace-icon">💻</div>
+        <div class="espace-name">Jean-Jacques Rousseau (1-10)</div>
+        <div class="espace-desc">Open space coworking. Postes nomades, imprimante partagée, café inclus. L'énergie du collectif.</div>
+        <div class="espace-price">
+          <span class="espace-price-full" onclick="openProfilsModal('Rousseau — Coworking open space', [{label:'Tarif plein',prix:'25 €/j',cls:'pr-plein',note:'Non-adhérent'},{label:'Adhérent −20%',prix:'20 €/j',cls:'pr-adherent',note:'Adhésion 50€/an'},{label:'Locataire −50%',prix:'12,50 €/j',cls:'pr-locataire',note:'Bureaux privatifs'},{label:'Association 82',prix:'Gratuit*',cls:'pr-asso',note:'Sous conditions'}])">25 €</span>
+          <span>/j · tarif plein ↗</span>
+        </div>
+        <div class="espace-tags">
+          <span class="espace-tag">Nomade</span>
+          <span class="espace-tag teal">Communauté</span>
+        </div>
+      </div>
+
+      <div class="espace-card">
+        <div class="espace-icon">♿</div>
+        <div class="espace-name">Maria Montessori (−1-14)</div>
+        <div class="espace-desc">Espace PMR polyvalent : réunion 4 pers. ou bureau nomade. Accessible de plain-pied.</div>
+        <div class="espace-price">
+          <span class="espace-price-full" onclick="openProfilsModal('Montessori — Espace PMR (4 pers.)', [{label:'Tarif plein',prix:'15 €/h',cls:'pr-plein',note:'Non-adhérent'},{label:'Adhérent −20%',prix:'12 €/h',cls:'pr-adherent',note:'Adhésion 50€/an'},{label:'Locataire −50%',prix:'8 €/h',cls:'pr-locataire',note:'Bureaux privatifs'},{label:'Association 82',prix:'Gratuit*',cls:'pr-asso',note:'Sous conditions'}])">15 €</span>
+          <span>/h · tarif plein ↗</span>
+        </div>
+        <div class="espace-tags">
+          <span class="espace-tag teal">PMR ♿</span>
+          <span class="espace-tag">4 pers.</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── BAILS LONGUE DURÉE MIS EN AVANT ── -->
+    <div class="bail-highlight" id="bails">
+      <div>
+        <h3>🔑 Bail longue durée — jusqu'à 20% d'économie</h3>
+        <p>Vous avez un projet d'installation durable ? Le bail 3/6/9 ou annuel vous offre la meilleure rentabilité. 7 bureaux privatifs disponibles, de 18 à 50 m², charges comprises.</p>
+        <a href="reservation.html?type=bail" class="btn-primary bail-cta" style="margin-top:24px">Demander une visite →</a>
+      </div>
+      <ul class="bail-avantages">
+        <li>
+          <span class="ico">📉</span>
+          <div class="txt">
+            <strong>Bail 3/6/9 : 12 €/m²/mois</strong>
+            Le tarif le plus bas. Idéal pour une installation pérenne.
+          </div>
+        </li>
+        <li>
+          <span class="ico">📋</span>
+          <div class="txt">
+            <strong>Bail 1 an : 13 €/m²/mois</strong>
+            Stabilité et tarif privilégié. Engagement modéré.
+          </div>
+        </li>
+        <li>
+          <span class="ico">🗓️</span>
+          <div class="txt">
+            <strong>Mensuel sans engagement : 15 €/m²/mois</strong>
+            Flexibilité maximale. Idéal pour tester votre projet.
+          </div>
+        </li>
+        <li>
+          <span class="ico">✅</span>
+          <div class="txt">
+            <strong>Charges comprises · Internet fibre inclus</strong>
+            Pas de surprise sur la facture.
+          </div>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ ADHÉSION ═══ -->
+<section id="adhesion">
+  <div class="section-inner">
+    <span class="section-tag">Rejoindre Génie</span>
+    <h2 class="section-title">Adhérez et profitez des tarifs préférentiels</h2>
+    <p class="section-sub">L'adhésion vous intègre dans notre réseau ESS et vous donne accès à des réductions sur toutes les réservations.</p>
+
+    <div class="adhesion-grid">
+
+      <div class="adhesion-card">
+        <div class="adhesion-type">Individuel</div>
+        <div class="adhesion-nom">Membre Individuel</div>
+        <div class="adhesion-prix">50 € <span>/ an</span></div>
+        <ul class="adhesion-avantages">
+          <!-- CORRIGÉ : ~20% pas 25% -->
+          <li>Tarifs adhérents sur toutes les salles (~20% de réduction)</li>
+          <li>Accès aux événements membres</li>
+          <li>Participation à la gouvernance</li>
+          <li>Annuaire Génie</li>
+          <li>Newsletter & offres prioritaires</li>
+        </ul>
+      </div>
+
+      <div class="adhesion-card featured">
+        <div class="adhesion-badge-top">Le plus populaire</div>
+        <div class="adhesion-type">Professionnel</div>
+        <div class="adhesion-nom">Membre Professionnel</div>
+        <div class="adhesion-prix">150 € <span>/ an</span></div>
+        <ul class="adhesion-avantages">
+          <li>Tous les avantages individuel</li>
+          <li>Tarifs adhérents pour toute l'équipe (jusqu'à 3 personnes)</li>
+          <li>Présentation dans les supports Génie</li>
+          <li>Accès prioritaire aux événements</li>
+          <li>Visibilité partenaire sur le site</li>
+        </ul>
+      </div>
+
+      <div class="adhesion-card">
+        <div class="adhesion-type">Association / Structure ESS</div>
+        <div class="adhesion-nom">Membre Associatif</div>
+        <div class="adhesion-prix">50 € <span>/ an</span></div>
+        <ul class="adhesion-avantages">
+          <li>Accès aux tarifs adhérents</li>
+          <li>Salles gratuites si association locale 82 (sous conditions)</li>
+          <li>Soutien à la gouvernance ESS</li>
+          <li>Mise en réseau territorial</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- NOTE CORRIGÉE -->
+    <div class="adhesion-note">
+      💡 <strong>Réduction adhérent : environ 20%</strong> sur les tarifs des salles de réunion et espaces coworking.
+      Les associations locales du Tarn-et-Garonne (82) bénéficient de l'accès gratuit aux salles sous conditions (adhésion active + réservation 72h à l'avance + disponibilité).
+    </div>
+
+    <div class="tarifs-cta-block">
+      <p style="font-size:0.9rem; color:var(--gray)">Besoin de toute la grille tarifaire ?</p>
+      <div class="tarifs-download-row">
+        <a href="tarifs.html" class="btn-tarifs">📋 Consulter la page tarifs</a>
+        <a href="tarifs.html?dl=1" class="btn-tarifs-dl" id="dlTarifs">⬇️ Télécharger en PDF</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ LOCALISATION ═══ -->
+<section id="localisation">
+  <div class="section-inner">
+    <span class="section-tag">Nous trouver</span>
+    <h2 class="section-title">Au cœur de Montauban, à 1 min de la gare</h2>
+    <p class="section-sub">Un accès idéal pour vos collaborateurs et partenaires, sans contrainte de stationnement.</p>
+
+    <div class="loc-grid">
+      <div class="loc-items">
+        <div class="loc-item">
+          <div class="loc-ico">📍</div>
+          <div class="loc-txt">
+            <strong>Adresse</strong>
+            <span>12 rue du Génie, 82000 Montauban</span>
+          </div>
+        </div>
+        <div class="loc-item">
+          <div class="loc-ico">🚉</div>
+          <div class="loc-txt">
+            <strong>À pied depuis la gare SNCF</strong>
+            <span>1 minute · Connexion TER Toulouse / Agen / Cahors</span>
+          </div>
+        </div>
+        <div class="loc-item">
+          <div class="loc-ico">🚗</div>
+          <div class="loc-txt">
+            <strong>Stationnement</strong>
+            <span>En voirie à proximité immédiate · Parking réservé en option (+50€/mois)</span>
+          </div>
+        </div>
+        <div class="loc-item">
+          <div class="loc-ico">♿</div>
+          <div class="loc-txt">
+            <strong>Accessibilité PMR</strong>
+            <span>Espace Montessori de plain-pied · Accueil adapté</span>
+          </div>
+        </div>
+        <div class="loc-item">
+          <div class="loc-ico">🕐</div>
+          <div class="loc-txt">
+            <strong>Horaires d'accueil</strong>
+            <span>Lun–Ven 9h–18h · Accès 24h/7j en option (+25€/mois)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="map-placeholder">
+        <span style="font-size:2rem">🗺️</span>
+        <span style="font-size:0.9rem; text-align:center; padding: 0 20px">12 rue du Génie, 82000 Montauban</span>
+        <a href="https://maps.google.com/?q=12+rue+du+Génie+82000+Montauban" target="_blank" rel="noopener">
+          Ouvrir dans Google Maps →
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CONTACT ═══ -->
+<section id="contact">
+  <div class="section-inner">
+    <span class="section-tag" style="color:var(--gold)">Nous contacter</span>
+    <h2 class="section-title">Une question ? Venez visiter.</h2>
+    <p class="section-sub">L'équipe Génie vous reçoit sur rendez-vous ou répond sous 24h.</p>
+
+    <div class="contact-grid">
+      <div class="contact-card">
+        <div class="contact-label">Email</div>
+        <div class="contact-value"><a href="mailto:contact@genie-montauban.fr">contact@genie-montauban.fr</a></div>
+      </div>
+      <div class="contact-card">
+        <div class="contact-label">Adresse</div>
+        <div class="contact-value">12 rue du Génie · 82000 Montauban</div>
+      </div>
+      <div class="contact-card">
+        <div class="contact-label">Réservation en ligne</div>
+        <div class="contact-value"><a href="reservation.html" style="color:var(--gold-lt)">reservation.html →</a></div>
+      </div>
+      <div class="contact-card">
+        <div class="contact-label">Mentions légales & CGV</div>
+        <div class="contact-value">
+          <a href="mentions-legales.html" style="color:rgba(255,255,255,0.6); margin-right:16px">Mentions légales</a>
+          <a href="cgv.html" style="color:rgba(255,255,255,0.6)">CGV</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="footer-logo">Génie</div>
+  <p style="margin-bottom:12px">Association Génie — Tiers-Lieu ESS Montauban · 12 rue du Génie, 82000 Montauban</p>
+  <p>
+    <a href="mentions-legales.html">Mentions légales</a>
+    <a href="cgv.html">CGV</a>
+    <a href="politique-confidentialite.html">Confidentialité</a>
+    <a href="tarifs.html">Tarifs</a>
+    <a href="reservation.html">Réserver</a>
+  </p>
+  <p style="margin-top:12px; font-size:0.75rem">
+    *Associations locales 82 : accès gratuit sous conditions — adhésion Génie active + réservation 72h à l'avance + disponibilité.
+    Tarifs adhérents : réduction d'environ 20% sur les salles et espaces.
+  </p>
+</footer>
+
+<script>
+/* ── NAV BURGER ── */
+document.getElementById('burger').addEventListener('click', () => {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+
+/* ── MODAL PROFILS ── */
+function openProfilsModal(titre, profils) {
+  document.getElementById('profilsModalTitle').textContent = titre;
+  document.getElementById('profilsModalSub').textContent =
+    'Sélectionnez votre profil pour connaître votre tarif exact.';
+
+  const grid = document.getElementById('profilsGrid');
+  grid.innerHTML = profils.map(p => `
+    <div class="profil-row">
+      <div class="profil-name">${p.label}<span>${p.note || ''}</span></div>
+      <div class="profil-price">${p.prix}</div>
+      <div class="profil-reduction ${p.cls}">${
+        p.cls === 'pr-plein' ? 'Plein tarif'
+        : p.cls === 'pr-adherent' ? '−20%'
+        : p.cls === 'pr-locataire' ? '−50%'
+        : p.cls === 'pr-asso' ? 'Gratuit*'
+        : ''
+      }</div>
+    </div>
+  `).join('');
+
+  document.getElementById('profilsModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeProfilsModal() {
+  document.getElementById('profilsModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('profilsModal').addEventListener('click', e => {
+  if (e.target === document.getElementById('profilsModal')) closeProfilsModal();
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeProfilsModal();
+});
+
+/* ── TÉLÉCHARGEMENT PDF TARIFS ── */
+document.getElementById('dlTarifs').addEventListener('click', e => {
+  e.preventDefault();
+  // Redirection vers la page tarifs avec déclenchement auto du print
+  window.open('tarifs.html?print=1', '_blank');
+});
+
+/* ── ANIMATION AU SCROLL ── */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.style.opacity = '1';
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.espace-card, .adhesion-card, .loc-item').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transition = 'opacity 0.5s ease';
+  observer.observe(el);
+});
+</script>
+</body>
+</html>
