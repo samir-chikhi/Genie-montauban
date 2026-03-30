@@ -1050,7 +1050,7 @@ function toast(msg,type='ok') {
 }
 
 // ─── LOGIN ────────────────────────────────────────────────
-const ADMIN_HASH = '7c4a8d09ca3762af61e59520943dc26494f8941b'; // SHA1 de "Tlemcen5530!"
+const ADMIN_HASH = '9945326306061e5b56bc79f4675bebb4b3822d99'; // SHA1 de "Tlemcen5530!"
 async function sha1(str) {
   const buf = await crypto.subtle.digest('SHA-1', new TextEncoder().encode(str));
   return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
