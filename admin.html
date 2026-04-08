@@ -338,7 +338,7 @@ textarea{resize:vertical;min-height:65px}
           <div class="card">
             <div class="card-hd"><h3>📧 Contact</h3></div>
             <div class="card-body">
-              <div class="fg"><label>Email</label><input type="email" id="cfg-email" value="genie.montauban@gmail.com"></div>
+              <div class="fg"><label>Email</label><input type="email" id="cfg-email" value="contact@genie-montauban.fr"></div>
               <div class="fg" style="margin-top:10px"><label>Téléphone</label><input type="tel" id="cfg-tel" value="06 51 50 97 18"></div>
               <button class="btn btn-primary btn-sm" style="margin-top:12px" onclick="saveCfg()">Enregistrer</button>
             </div>
@@ -515,7 +515,7 @@ const genId  = () => 'RSV-'+Date.now().toString(36).toUpperCase();
 const gv     = id => (document.getElementById(id)?.value||'').trim();
 const gvb    = id => document.getElementById(id)?.checked||false;
 
-let DB = { reservations:[], config:{email:'genie.montauban@gmail.com', tel:'06 51 50 97 18'} };
+let DB = { reservations:[], config:{email:'contact@genie-montauban.fr', tel:'06 51 50 97 18'} };
 let editId = null, weekOffset = 0;
 
 // ─── API ─────────────────────────────────────────────────
