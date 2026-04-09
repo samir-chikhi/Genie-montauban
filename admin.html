@@ -600,7 +600,7 @@ textarea{resize:vertical;min-height:65px}
 // ─────────────────────────────────────────────────────────
 // CONFIGURATION
 // ─────────────────────────────────────────────────────────
-const APPS_SCRIPT_URL_DEFAULT = 'https://script.google.com/macros/s/AKfycbxceijW8OQSbtjjs-rqrXjozu-oL-RUGARK1Odqkx3-IBjs0EvrEe0u9qyXHxgSewZ3Cg/exec';
+const APPS_SCRIPT_URL_DEFAULT = 'https://script.google.com/macros/s/AKfycbyJ-Dk-yZZNdfxFigchP953rNyjSLJv4oOVUbxzuAbX4kuBfwTFBJvnnLuJMLWRnd9c4w/exec';
 // Forcer l'URL et effacer tout cache d'ancienne URL
 localStorage.setItem('genie_script_url', APPS_SCRIPT_URL_DEFAULT);
 let SCRIPT_URL = APPS_SCRIPT_URL_DEFAULT;
@@ -705,20 +705,16 @@ async function apiGet(params={}) {
 
 async function apiPost(body) {
   if (!SCRIPT_URL) throw new Error('URL non configurée');
-  // no-cors : réponse opaque attendue, pas une erreur.
-  // Content-Type text/plain évite le preflight OPTIONS bloqué par Apps Script.
-  try {
-    await fetch(SCRIPT_URL, {
-      method : 'POST',
-      body   : JSON.stringify(body),
-      mode   : 'no-cors',
-      headers: { 'Content-Type': 'text/plain' },
-    });
-  } catch(e) {
-    throw new Error('Erreur réseau (hors ligne ?) : ' + e.message);
-  }
-  // Pause 800ms pour laisser Apps Script finir l'écriture avant le prochain GET
-  await new Promise(r => setTimeout(r, 800));
+  // On passe par un GET avec le payload encodé dans l'URL.
+  // C'est plus fiable qu'un POST no-cors avec Apps Script (qui redirige en 302).
+  // Apps Script lit le paramètre "payload" dans doGet() et l'exécute.
+  const url = new URL(SCRIPT_URL);
+  url.searchParams.set('payload', JSON.stringify(body));
+  const r = await fetch(url.toString(), { redirect: 'follow' });
+  if (!r.ok) throw new Error('HTTP ' + r.status);
+  const data = await r.json();
+  if (data.error) throw new Error(data.error);
+  return data;
 }
 
 // ─────────────────────────────────────────────────────────
