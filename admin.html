@@ -6,9 +6,18 @@
 <title>Génie Montauban — Administration</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;700;900&family=Cabinet+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-:root{--ink:#1C1410;--brick:#C4622D;--brick-light:#E8804F;--cream:#F7F2EA;--warm:#FDFAF6;--gold:#C8973A;--sage:#4A6741;--sage-light:#EEF3ED;--steel:#2C4A6E;--steel-light:#EDF1F7;--border:#DDD5C8;--muted:#8C7B6B;--red:#C0392B;--red-light:#FDF0EE;}
+:root{
+  --ink:#1C1410;--brick:#C4622D;--brick-light:#E8804F;
+  --cream:#F7F2EA;--warm:#FDFAF6;--gold:#C8973A;
+  --sage:#4A6741;--sage-light:#EEF3ED;
+  --steel:#2C4A6E;--steel-light:#EDF1F7;
+  --border:#DDD5C8;--muted:#8C7B6B;
+  --red:#C0392B;--red-light:#FDF0EE;
+  --cal:#0369A1;--cal-light:#E8F4FD;
+}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(--ink);font-size:14px}
+/* ── LAYOUT ── */
 .layout{display:flex;min-height:100vh}
 .sidebar{width:250px;background:var(--ink);position:fixed;top:0;left:0;bottom:0;display:flex;flex-direction:column;z-index:50}
 .logo{padding:22px 20px;border-bottom:1px solid rgba(255,255,255,.08)}
@@ -30,47 +39,50 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(
 .topbar{background:var(--warm);border-bottom:1px solid var(--border);padding:13px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:40}
 .topbar h2{font-family:'Fraunces',serif;font-size:19px;font-weight:700}
 .topact{display:flex;gap:8px;align-items:center}
-.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;border:none;transition:.15s;font-family:inherit}
+/* ── BOUTONS ── */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;border:none;transition:.15s;font-family:inherit;text-decoration:none}
 .btn-primary{background:var(--brick);color:#fff}.btn-primary:hover{background:var(--brick-light)}
 .btn-secondary{background:#fff;color:var(--ink);border:1px solid var(--border)}.btn-secondary:hover{background:var(--cream)}
 .btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}.btn-ghost:hover{background:var(--cream);color:var(--ink)}
 .btn-danger{background:var(--red-light);color:var(--red);border:1px solid #F5C6C2}.btn-danger:hover{background:var(--red);color:#fff}
 .btn-sage{background:var(--sage);color:#fff}.btn-sage:hover{background:#3a5433}
+.btn-cal{background:var(--cal);color:#fff}.btn-cal:hover{background:#025383}
+.btn-cal-off{background:var(--border);color:var(--muted)}.btn-cal-off:hover{background:#ccc;color:var(--ink)}
 .btn-sm{padding:5px 9px;font-size:12px}
+/* ── CONTENU ── */
 .content{padding:24px 28px}
 .page{display:none}.page.active{display:block}
-/* SETUP */
+/* ── SETUP ── */
 .setup-banner{background:var(--steel);color:#fff;border-radius:12px;padding:22px;margin-bottom:22px;display:none}
 .setup-banner.show{display:block}
 .setup-banner h3{font-family:'Fraunces',serif;font-size:17px;margin-bottom:8px}
 .setup-banner p{font-size:13px;opacity:.85;margin-bottom:12px}
 .setup-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .setup-row input{flex:1;min-width:280px;padding:9px 13px;border-radius:8px;border:none;font-size:13px;font-family:inherit}
-/* STATS */
+/* ── STATS ── */
 .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
 .stat-card{background:#fff;border-radius:12px;padding:18px;border:1px solid var(--border)}
 .stat-label{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:6px}
 .stat-value{font-family:'Fraunces',serif;font-size:30px;font-weight:700;line-height:1}
 .stat-sub{font-size:12px;color:var(--muted);margin-top:5px}
 .sc-brick .stat-value{color:var(--brick)}.sc-gold .stat-value{color:var(--gold)}.sc-sage .stat-value{color:var(--sage)}.sc-steel .stat-value{color:var(--steel)}
-/* CARD */
+/* ── CARD ── */
 .card{background:#fff;border-radius:12px;border:1px solid var(--border);overflow:hidden}
 .card-hd{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
 .card-hd h3{font-family:'Fraunces',serif;font-size:15px;font-weight:700}
 .card-body{padding:18px}
-/* TABLE */
+/* ── TABLE ── */
 .tw{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:13px}
 th{background:var(--cream);padding:9px 13px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);font-weight:600;border-bottom:1px solid var(--border)}
 td{padding:11px 13px;border-bottom:1px solid #F0EBE3;vertical-align:middle}
 tr:last-child td{border-bottom:none}tr:hover td{background:#FEFCF9}
-/* BADGES */
+/* ── BADGES ── */
 .badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600}
 .b-confirmed{background:#E8F5E9;color:#2E7D32}
 .b-pending{background:#FFF8E1;color:#E65100}
 .b-cancelled{background:#FDECEA;color:#B71C1C}
 .b-completed{background:var(--steel-light);color:var(--steel)}
-/* ESPACE BADGES */
 .eb{display:inline-flex;align-items:center;padding:3px 9px;border-radius:6px;font-size:11px;font-weight:600}
 .eb-bourdelle{background:#EDE9FE;color:#5B21B6}
 .eb-freinet{background:#E0F2FE;color:#0369A1}
@@ -78,14 +90,14 @@ tr:last-child td{border-bottom:none}tr:hover td{background:#FEFCF9}
 .eb-michel{background:#F0FDF4;color:#166534}
 .eb-rousseau{background:#FEF9C3;color:#854D0E}
 .eb-montessori{background:var(--sage-light);color:var(--sage)}
-/* FORM */
+/* ── FORMULAIRE ── */
 .fgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .fg{display:flex;flex-direction:column;gap:5px}.fg.full{grid-column:1/-1}
 label{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
 input,select,textarea{padding:9px 12px;border-radius:8px;border:1.5px solid var(--border);font-family:inherit;font-size:13px;background:#fff;color:var(--ink);outline:none;transition:.15s;width:100%}
 input:focus,select:focus,textarea:focus{border-color:var(--brick);box-shadow:0 0 0 3px rgba(196,98,45,.1)}
 textarea{resize:vertical;min-height:65px}
-/* MODAL */
+/* ── MODAL ── */
 .overlay{position:fixed;inset:0;background:rgba(28,20,16,.5);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
 .overlay.open{display:flex}
 .modal{background:#fff;border-radius:16px;width:100%;max-width:620px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(28,20,16,.2)}
@@ -94,9 +106,9 @@ textarea{resize:vertical;min-height:65px}
 .mclose{background:var(--cream);border:none;cursor:pointer;width:28px;height:28px;border-radius:50%;font-size:17px;line-height:28px}
 .mbody{padding:22px}
 .mfoot{padding:14px 22px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
-/* PLANNING */
-.plan-nav{display:flex;align-items:center;gap:14px;margin-bottom:18px;flex-wrap:wrap}
-.wlbl{font-family:'Fraunces',serif;font-size:17px;font-weight:700;min-width:200px;text-align:center}
+/* ── PLANNING ── */
+.plan-nav{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap}
+.wlbl{font-family:'Fraunces',serif;font-size:17px;font-weight:700;min-width:180px;text-align:center}
 .plan-grid{background:#fff;border-radius:12px;border:1px solid var(--border);overflow:auto}
 .plan-days{display:grid;grid-template-columns:80px repeat(6,1fr);border-bottom:2px solid var(--border);min-width:600px}
 .dh{padding:9px 5px;text-align:center;font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted)}
@@ -104,9 +116,9 @@ textarea{resize:vertical;min-height:65px}
 .dh:first-child{border-right:1px solid var(--border)}
 .plan-body{display:grid;grid-template-columns:80px repeat(6,1fr);min-width:600px}
 .time-col{border-right:1px solid var(--border)}
-.ts{height:44px;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--muted);font-weight:600;border-bottom:1px solid #F5F0E8}
+.ts{height:48px;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--muted);font-weight:600;border-bottom:1px solid #F5F0E8}
 .dcol{border-right:1px solid #F5F0E8;position:relative}.dcol:last-child{border-right:none}
-.slot{height:44px;border-bottom:1px solid #F5F0E8;position:relative;cursor:pointer}.slot:hover{background:var(--cream)}
+.slot{height:48px;border-bottom:1px solid #F5F0E8;position:relative;cursor:pointer}.slot:hover{background:var(--cream)}
 .ev{position:absolute;left:1px;right:1px;border-radius:4px;padding:2px 5px;font-size:10px;font-weight:600;overflow:hidden;cursor:pointer;z-index:2;line-height:1.3;border-left:3px solid}
 .ev-bourdelle{background:#EDE9FE;color:#5B21B6;border-color:#7C3AED}
 .ev-freinet{background:#E0F2FE;color:#0369A1;border-color:#0284C7}
@@ -114,73 +126,41 @@ textarea{resize:vertical;min-height:65px}
 .ev-michel{background:#F0FDF4;color:#166534;border-color:#16A34A}
 .ev-rousseau{background:#FEF9C3;color:#854D0E;border-color:#CA8A04}
 .ev-montessori{background:var(--sage-light);color:var(--sage);border-color:var(--sage)}
-/* PRIX BOX */
+.ev-cal{background:var(--cal-light);color:var(--cal);border-color:var(--cal);font-style:italic}
+/* Légende planning */
+.plan-legend{display:flex;gap:12px;font-size:11px;align-items:center;flex-wrap:wrap;padding:10px 4px 0}
+.legend-dot{display:inline-block;width:10px;height:10px;border-radius:2px;border-left:3px solid;margin-right:4px;vertical-align:middle}
+/* ── PRIX BOX ── */
 .prix-recap{background:var(--cream);border-radius:8px;padding:12px 14px;margin-top:12px;display:none}
-/* OCC */
+/* ── OCC ── */
 .occ-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
 .occ-name{width:130px;font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .occ-bg{flex:1;background:var(--border);border-radius:20px;height:8px;overflow:hidden}
 .occ-fill{height:100%;border-radius:20px}
 .occ-pct{width:36px;text-align:right;font-size:12px;font-weight:700}
-/* DETAIL */
+/* ── DÉTAIL ── */
 .dgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .di{background:var(--cream);border-radius:8px;padding:11px 13px}
 .di label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:3px}
 .di span{font-size:14px;font-weight:500}
 .di.full{grid-column:1/-1}
-/* LOADER */
+/* ── LOADER ── */
 .loader{position:fixed;inset:0;background:rgba(28,20,16,.55);z-index:9998;display:none;align-items:center;justify-content:center}
+.loader.open{display:flex}
 .loader-box{background:#fff;border-radius:16px;padding:28px 44px;text-align:center}
 .spinner{width:34px;height:34px;border:3px solid var(--border);border-top-color:var(--brick);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 12px}
 @keyframes spin{to{transform:rotate(360deg)}}
-/* TOASTS */
+/* ── TOASTS ── */
 .toasts{position:fixed;bottom:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:7px}
-.toast{background:var(--ink);color:#fff;padding:10px 16px;border-radius:9px;font-size:13px;font-weight:500;box-shadow:0 8px 24px rgba(28,20,16,.2);transform:translateY(8px);opacity:0;transition:.25s;display:flex;align-items:center;gap:7px;max-width:280px}
+.toast{background:var(--ink);color:#fff;padding:10px 16px;border-radius:9px;font-size:13px;font-weight:500;box-shadow:0 8px 24px rgba(28,20,16,.2);transform:translateY(8px);opacity:0;transition:.25s;display:flex;align-items:center;gap:7px;max-width:300px}
 .toast.show{transform:translateY(0);opacity:1}
 .toast.ok{border-left:4px solid #4CAF50}.toast.err{border-left:4px solid var(--red)}.toast.info{border-left:4px solid var(--steel)}
+/* ── FILTRES ── */
 .filter-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:18px}
 .filter-bar input,.filter-bar select{padding:7px 11px;font-size:13px;width:auto}
 .amount{font-family:'Fraunces',serif;font-weight:700}
 .info-bar{background:var(--steel-light);border:1px solid #C5D5E8;border-radius:8px;padding:10px 14px;font-size:12px;color:var(--steel);margin-bottom:16px}
-@media(max-width:1100px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
-/* ===== MOBILE ===== */
-.mob-toggle{display:none;background:none;border:none;cursor:pointer;padding:6px;border-radius:8px;color:var(--ink);font-size:22px;line-height:1;margin-right:8px}
-.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(28,20,16,.5);z-index:49}
-@media(max-width:768px){
-  .sidebar{transform:translateX(-260px);transition:transform .25s ease;z-index:51;width:260px}
-  .sidebar.open{transform:translateX(0)}
-  .sidebar-overlay.open{display:block}
-  .main{margin-left:0}
-  .mob-toggle{display:inline-flex;align-items:center;justify-content:center}
-  .topbar{padding:11px 14px}
-  .content{padding:14px}
-  .stats-grid{grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px}
-  .stat-card{padding:13px}
-  .stat-value{font-size:24px}
-  #page-dashboard>div[style]{grid-template-columns:1fr !important;gap:14px}
-  .fgrid{grid-template-columns:1fr !important}
-  .dgrid{grid-template-columns:1fr !important}
-  .modal{border-radius:14px 14px 0 0;position:fixed;bottom:0;left:0;right:0;max-width:100%;max-height:88vh;margin:0}
-  .overlay{align-items:flex-end;padding:0}
-  .mfoot{flex-wrap:wrap}
-  .mfoot .btn{flex:1 1 auto;justify-content:center}
-  .card-hd{flex-wrap:wrap;gap:8px}
-  .plan-nav{flex-wrap:wrap;gap:8px}
-  .wlbl{min-width:0;font-size:15px}
-  .filter-bar{gap:6px}
-  .filter-bar input,.filter-bar select{width:100%}
-  .toasts{right:10px;left:10px;bottom:12px}
-  .toast{max-width:100%}
-  td,th{padding:8px 10px}
-}
-@media(max-width:480px){
-  .stats-grid{grid-template-columns:1fr 1fr;gap:8px}
-  .topbar h2{font-size:16px}
-  .content{padding:10px}
-}
-</style>
-<style>
-/* ─── LOGIN ─── */
+/* ── LOGIN ── */
 #login-screen{position:fixed;inset:0;background:var(--cream);display:flex;align-items:center;justify-content:center;z-index:9999}
 #login-screen.hidden{display:none}
 .login-box{background:#fff;border:1px solid var(--border);border-radius:16px;padding:40px 36px;width:340px;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,.12)}
@@ -191,10 +171,39 @@ textarea{resize:vertical;min-height:65px}
 .login-box button{width:100%;padding:11px;background:var(--brick);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;transition:.15s}
 .login-box button:hover{background:var(--brick-light)}
 .login-err{color:var(--red);font-size:13px;margin-top:8px;display:none}
+/* ── MOBILE ── */
+.mob-toggle{display:none;background:none;border:none;cursor:pointer;padding:6px;border-radius:8px;color:var(--ink);font-size:22px;line-height:1;margin-right:8px}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(28,20,16,.5);z-index:49}
+@media(max-width:1100px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:768px){
+  .sidebar{transform:translateX(-260px);transition:transform .25s ease;z-index:51;width:260px}
+  .sidebar.open{transform:translateX(0)}
+  .sidebar-overlay.open{display:block}
+  .main{margin-left:0}
+  .mob-toggle{display:inline-flex;align-items:center;justify-content:center}
+  .topbar{padding:11px 14px}
+  .content{padding:14px}
+  .stats-grid{grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px}
+  .stat-card{padding:13px}.stat-value{font-size:24px}
+  .fgrid,.dgrid{grid-template-columns:1fr!important}
+  .modal{border-radius:14px 14px 0 0;position:fixed;bottom:0;left:0;right:0;max-width:100%;max-height:88vh;margin:0}
+  .overlay{align-items:flex-end;padding:0}
+  .mfoot{flex-wrap:wrap}.mfoot .btn{flex:1 1 auto;justify-content:center}
+  .filter-bar input,.filter-bar select{width:100%}
+  .toasts{right:10px;left:10px;bottom:12px}.toast{max-width:100%}
+  td,th{padding:8px 10px}
+}
+@media(max-width:480px){
+  .stats-grid{grid-template-columns:1fr 1fr;gap:8px}
+  .topbar h2{font-size:16px}.content{padding:10px}
+}
 </style>
 </head>
 <body>
-<!-- ─── ÉCRAN DE CONNEXION ─── -->
+
+<!-- ══════════════════════════════════════════════════════
+     ÉCRAN DE CONNEXION
+════════════════════════════════════════════════════════ -->
 <div id="login-screen">
   <div class="login-box">
     <h2>🔐 Génie Admin</h2>
@@ -204,10 +213,23 @@ textarea{resize:vertical;min-height:65px}
     <div class="login-err" id="login-err">Mot de passe incorrect.</div>
   </div>
 </div>
+
+<!-- ══════════════════════════════════════════════════════
+     SIDEBAR OVERLAY (mobile)
+════════════════════════════════════════════════════════ -->
 <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+<!-- ══════════════════════════════════════════════════════
+     LAYOUT PRINCIPAL
+════════════════════════════════════════════════════════ -->
 <div class="layout" id="main-layout" style="display:none">
+
+  <!-- SIDEBAR -->
   <aside class="sidebar" id="sidebar">
-    <div class="logo"><h1>Gé<span>nie</span></h1><p>Administration · Tiers-Lieu</p></div>
+    <div class="logo">
+      <h1>Gé<span>nie</span></h1>
+      <p>Administration · Tiers-Lieu</p>
+    </div>
     <nav class="nav">
       <div class="nav-s">Principal</div>
       <div class="nav-item active" onclick="go('dashboard')">📊 Tableau de bord</div>
@@ -219,11 +241,17 @@ textarea{resize:vertical;min-height:65px}
       <div class="nav-s">Outils</div>
       <div class="nav-item" onclick="go('donnees')">💾 Données & Config</div>
     </nav>
-    <div class="sync-bar"><div class="dot loading" id="dot"></div><span class="sync-txt" id="sync-txt">Connexion…</span></div>
-    <div style="padding:6px 14px;font-size:10px;color:rgba(255,255,255,.12);text-align:center">v5.0 · Génie 2026</div>
+    <div class="sync-bar">
+      <div class="dot loading" id="dot"></div>
+      <span class="sync-txt" id="sync-txt">Connexion…</span>
+    </div>
+    <div style="padding:6px 14px;font-size:10px;color:rgba(255,255,255,.12);text-align:center">v6.0 · Génie 2026</div>
   </aside>
 
+  <!-- MAIN -->
   <div class="main">
+
+    <!-- TOPBAR -->
     <div class="topbar">
       <div style="display:flex;align-items:center;gap:4px">
         <button class="mob-toggle" onclick="toggleSidebar()" aria-label="Menu">☰</button>
@@ -231,8 +259,11 @@ textarea{resize:vertical;min-height:65px}
       </div>
       <div class="topact" id="topbar-actions"></div>
     </div>
+
+    <!-- CONTENU -->
     <div class="content">
 
+      <!-- BANNER SETUP -->
       <div class="setup-banner" id="setup-banner">
         <h3>⚙️ Configuration requise</h3>
         <p>Colle l'URL de ton Apps Script déployé (format : <code>https://script.google.com/macros/s/…/exec</code>)</p>
@@ -242,13 +273,21 @@ textarea{resize:vertical;min-height:65px}
         </div>
       </div>
 
-      <!-- DASHBOARD -->
+      <!-- ════════════════ PAGE DASHBOARD ════════════════ -->
       <div id="page-dashboard" class="page active">
         <div class="stats-grid" id="stats"></div>
         <div style="display:grid;grid-template-columns:2fr 1fr;gap:18px">
           <div class="card">
-            <div class="card-hd"><h3>Réservations récentes</h3><button class="btn btn-sm btn-ghost" onclick="go('reservations')">Voir tout →</button></div>
-            <div class="tw"><table><thead><tr><th>Client</th><th>Espace</th><th>Date</th><th>Profil</th><th>Montant</th><th>Statut</th></tr></thead><tbody id="recent-body"></tbody></table></div>
+            <div class="card-hd">
+              <h3>Réservations récentes</h3>
+              <button class="btn btn-sm btn-ghost" onclick="go('reservations')">Voir tout →</button>
+            </div>
+            <div class="tw">
+              <table>
+                <thead><tr><th>Client</th><th>Espace</th><th>Date</th><th>Profil</th><th>Montant</th><th>Statut</th></tr></thead>
+                <tbody id="recent-body"></tbody>
+              </table>
+            </div>
           </div>
           <div class="card">
             <div class="card-hd"><h3>Occupation (30j)</h3></div>
@@ -257,8 +296,10 @@ textarea{resize:vertical;min-height:65px}
         </div>
       </div>
 
-      <!-- PLANNING -->
+      <!-- ════════════════ PAGE PLANNING ════════════════ -->
       <div id="page-planning" class="page">
+
+        <!-- Navigation semaine + contrôles Calendar -->
         <div class="plan-nav">
           <div style="display:flex;gap:7px">
             <button class="btn btn-secondary btn-sm" onclick="shiftWeek(-1)">◀</button>
@@ -275,14 +316,32 @@ textarea{resize:vertical;min-height:65px}
             <option value="rousseau">Rousseau</option>
             <option value="montessori">Montessori</option>
           </select>
+          <!-- Boutons Google Calendar -->
+          <button id="cal-toggle-btn" class="btn btn-sm btn-cal" onclick="toggleCalendarView()" title="Afficher/masquer les événements Google Calendar">📅 Google Cal ✓</button>
+          <span id="cal-sync-state" style="font-size:11px;color:var(--sage);white-space:nowrap"></span>
+          <button class="btn btn-sm btn-secondary" onclick="syncCalendarToSheets()" title="Importer les événements Calendar non liés dans Sheets">⬇️ Importer Cal</button>
+          <a href="https://calendar.google.com/calendar/u/1/r/week" target="_blank" class="btn btn-sm btn-ghost">🔗 Ouvrir Cal</a>
         </div>
+
+        <!-- Grille planning -->
         <div class="plan-grid">
           <div class="plan-days" id="plan-days"></div>
           <div class="plan-body" id="plan-body"></div>
         </div>
+
+        <!-- Légende -->
+        <div class="plan-legend">
+          <span><span class="legend-dot" style="background:#EDE9FE;border-color:#7C3AED"></span>Bourdelle</span>
+          <span><span class="legend-dot" style="background:#E0F2FE;border-color:#0284C7"></span>Freinet</span>
+          <span><span class="legend-dot" style="background:#FCE7F3;border-color:#DB2777"></span>De Gouges</span>
+          <span><span class="legend-dot" style="background:#F0FDF4;border-color:#16A34A"></span>L. Michel</span>
+          <span><span class="legend-dot" style="background:#FEF9C3;border-color:#CA8A04"></span>Rousseau</span>
+          <span><span class="legend-dot" style="background:var(--sage-light);border-color:var(--sage)"></span>Montessori</span>
+          <span style="margin-left:8px"><span class="legend-dot" style="background:var(--cal-light);border-color:var(--cal)"></span>📅 Google Calendar</span>
+        </div>
       </div>
 
-      <!-- RÉSERVATIONS -->
+      <!-- ════════════════ PAGE RÉSERVATIONS ════════════════ -->
       <div id="page-reservations" class="page">
         <div class="filter-bar">
           <input type="text" id="f-search" placeholder="🔍 Rechercher…" oninput="renderTable()" style="flex:1;min-width:160px">
@@ -309,48 +368,74 @@ textarea{resize:vertical;min-height:65px}
           </select>
           <button class="btn btn-primary" onclick="openModal('mresa')">➕ Nouvelle</button>
         </div>
-        <div class="card"><div class="tw"><table><thead><tr><th>#</th><th>Client</th><th>Espace</th><th>Usage/Profil</th><th>Date</th><th>Horaire</th><th>Durée</th><th>Montant</th><th>Options</th><th>Statut</th><th></th></tr></thead><tbody id="resa-body"></tbody></table></div></div>
+        <div class="card">
+          <div class="tw">
+            <table>
+              <thead><tr><th>#</th><th>Client</th><th>Espace</th><th>Usage/Profil</th><th>Date</th><th>Horaire</th><th>Durée</th><th>Montant</th><th>Options</th><th>Statut</th><th></th></tr></thead>
+              <tbody id="resa-body"></tbody>
+            </table>
+          </div>
+        </div>
       </div>
 
-      <!-- CLIENTS -->
+      <!-- ════════════════ PAGE CLIENTS ════════════════ -->
       <div id="page-clients" class="page">
-        <div class="filter-bar"><input type="text" id="f-client" placeholder="🔍 Rechercher…" oninput="renderClients()" style="flex:1;min-width:200px"></div>
-        <div class="card"><div class="tw"><table><thead><tr><th>Nom</th><th>Email</th><th>Tél.</th><th>Organisation</th><th>Réservations</th><th>CA Total</th></tr></thead><tbody id="client-body"></tbody></table></div></div>
+        <div class="filter-bar">
+          <input type="text" id="f-client" placeholder="🔍 Rechercher…" oninput="renderClients()" style="flex:1;min-width:200px">
+        </div>
+        <div class="card">
+          <div class="tw">
+            <table>
+              <thead><tr><th>Nom</th><th>Email</th><th>Tél.</th><th>Organisation</th><th>Réservations</th><th>CA Total</th></tr></thead>
+              <tbody id="client-body"></tbody>
+            </table>
+          </div>
+        </div>
       </div>
 
-      <!-- ESPACES & TARIFS -->
+      <!-- ════════════════ PAGE ESPACES ════════════════ -->
       <div id="page-espaces" class="page">
         <div class="info-bar">ℹ️ Tarifs 2026 Génie Montauban. Modifications sauvegardées dans Google Sheets.</div>
         <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(380px,1fr));gap:18px" id="espaces-grid"></div>
       </div>
 
-      <!-- DONNÉES -->
+      <!-- ════════════════ PAGE DONNÉES ════════════════ -->
       <div id="page-donnees" class="page">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+
           <div class="card">
             <div class="card-hd"><h3>🔗 Connexion Apps Script</h3></div>
             <div class="card-body">
               <div style="background:var(--cream);border-radius:8px;padding:9px 12px;font-size:11px;word-break:break-all;color:var(--muted);margin-bottom:12px" id="url-display">—</div>
-              <button class="btn btn-secondary btn-sm" onclick="showSetup()">✏️ Modifier</button>
-              <a id="sheet-link" href="https://docs.google.com/spreadsheets/d/1mf3D2YGnpWpzufGOaLLaomxAkuzp0AiJY7RzcbpIq2w/edit" target="_blank" class="btn btn-sage btn-sm" style="text-decoration:none;margin-left:6px">📋 Google Sheets</a>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <button class="btn btn-secondary btn-sm" onclick="showSetup()">✏️ Modifier URL</button>
+                <a id="sheet-link" href="https://docs.google.com/spreadsheets/d/1mf3D2YGnpWpzufGOaLLaomxAkuzp0AiJY7RzcbpIq2w/edit" target="_blank" class="btn btn-sage btn-sm">📋 Google Sheets</a>
+                <a href="https://calendar.google.com/calendar/u/1/r" target="_blank" class="btn btn-cal btn-sm">📅 Google Calendar</a>
+              </div>
             </div>
           </div>
+
           <div class="card">
             <div class="card-hd"><h3>📧 Contact</h3></div>
             <div class="card-body">
-              <div class="fg"><label>Email</label><input type="email" id="cfg-email" value="contact@genie-montauban.fr"></div>
+              <div class="fg"><label>Email</label><input type="email" id="cfg-email" value="genie.montauban@gmail.com"></div>
               <div class="fg" style="margin-top:10px"><label>Téléphone</label><input type="tel" id="cfg-tel" value="06 51 50 97 18"></div>
               <button class="btn btn-primary btn-sm" style="margin-top:12px" onclick="saveCfg()">Enregistrer</button>
             </div>
           </div>
+
           <div class="card">
             <div class="card-hd"><h3>🔄 Synchronisation</h3></div>
             <div class="card-body">
-              <p style="font-size:13px;color:var(--muted);margin-bottom:12px">Auto-refresh toutes les <strong>30 secondes</strong>.</p>
-              <button class="btn btn-primary btn-sm" onclick="loadData(true)">🔄 Forcer sync</button>
+              <p style="font-size:13px;color:var(--muted);margin-bottom:12px">Auto-refresh toutes les <strong>30 secondes</strong>. Les réservations sont <strong>automatiquement synchronisées</strong> avec Google Calendar à chaque création / modification.</p>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <button class="btn btn-primary btn-sm" onclick="loadData(true)">🔄 Forcer sync Sheets</button>
+                <button class="btn btn-cal btn-sm" onclick="syncCalendarToSheets()">⬇️ Importer depuis Cal</button>
+              </div>
               <div style="margin-top:10px;padding:10px;background:var(--cream);border-radius:8px;font-size:12px;color:var(--muted)" id="data-info"></div>
             </div>
           </div>
+
           <div class="card">
             <div class="card-hd"><h3>⬇️ Export</h3></div>
             <div class="card-body">
@@ -360,17 +445,23 @@ textarea{resize:vertical;min-height:65px}
               </div>
             </div>
           </div>
+
         </div>
       </div>
 
-    </div>
-  </div>
-</div>
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /layout -->
 
-<!-- MODAL RÉSERVATION -->
+<!-- ══════════════════════════════════════════════════════
+     MODAL RÉSERVATION
+════════════════════════════════════════════════════════ -->
 <div class="overlay" id="mresa">
   <div class="modal">
-    <div class="mhd"><h3 id="mresa-title">Nouvelle réservation</h3><button class="mclose" onclick="closeModal('mresa')">×</button></div>
+    <div class="mhd">
+      <h3 id="mresa-title">Nouvelle réservation</h3>
+      <button class="mclose" onclick="closeModal('mresa')">×</button>
+    </div>
     <div class="mbody">
       <div class="fgrid">
         <div class="fg"><label>Prénom *</label><input id="r-prenom" placeholder="Marie"></div>
@@ -428,11 +519,13 @@ textarea{resize:vertical;min-height:65px}
           <label>Nb heures</label>
           <select id="r-nbh" onchange="calcModalPrix()">
             <option value="1">1h</option><option value="2" selected>2h</option><option value="3">3h</option>
-            <option value="4">4h</option><option value="5">5h</option><option value="6">6h</option><option value="7">7h</option><option value="8">8h</option>
+            <option value="4">4h</option><option value="5">5h</option><option value="6">6h</option>
+            <option value="7">7h</option><option value="8">8h</option>
           </select>
         </div>
         <div class="fg"><label>Date *</label><input type="date" id="r-date"></div>
-        <div class="fg"><label>Statut</label>
+        <div class="fg">
+          <label>Statut</label>
           <select id="r-statut">
             <option value="confirmed">Confirmée</option>
             <option value="pending">En attente</option>
@@ -443,8 +536,12 @@ textarea{resize:vertical;min-height:65px}
         <div class="fg full">
           <label>Options supplémentaires</label>
           <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:4px">
-            <label style="text-transform:none;letter-spacing:0;font-size:13px;font-weight:500;display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" id="r-badge"> Accès badge 24h/7j (+25€/mois)</label>
-            <label style="text-transform:none;letter-spacing:0;font-size:13px;font-weight:500;display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" id="r-adhesion"> Adhésion Génie (+50€/an)</label>
+            <label style="text-transform:none;letter-spacing:0;font-size:13px;font-weight:500;display:flex;align-items:center;gap:6px;cursor:pointer">
+              <input type="checkbox" id="r-badge"> Accès badge 24h/7j (+25€/mois)
+            </label>
+            <label style="text-transform:none;letter-spacing:0;font-size:13px;font-weight:500;display:flex;align-items:center;gap:6px;cursor:pointer">
+              <input type="checkbox" id="r-adhesion"> Adhésion Génie (+50€/an)
+            </label>
           </div>
         </div>
       </div>
@@ -458,67 +555,128 @@ textarea{resize:vertical;min-height:65px}
   </div>
 </div>
 
-<!-- MODAL DÉTAIL -->
+<!-- ══════════════════════════════════════════════════════
+     MODAL DÉTAIL
+════════════════════════════════════════════════════════ -->
 <div class="overlay" id="mdetail">
   <div class="modal">
-    <div class="mhd"><h3>Réservation <span id="det-ref" style="color:var(--brick)"></span></h3><button class="mclose" onclick="closeModal('mdetail')">×</button></div>
+    <div class="mhd">
+      <h3>Réservation <span id="det-ref" style="color:var(--brick)"></span></h3>
+      <button class="mclose" onclick="closeModal('mdetail')">×</button>
+    </div>
     <div class="mbody" id="det-body"></div>
     <div class="mfoot" id="det-foot"></div>
   </div>
 </div>
 
-<div class="loader" id="loader" style="display:none">
+<!-- LOADER -->
+<div class="loader" id="loader">
   <div class="loader-box">
     <div class="spinner"></div>
     <div style="font-family:'Fraunces',serif;font-size:15px;font-weight:700" id="loader-txt">Chargement…</div>
     <div style="font-size:12px;color:var(--muted);margin-top:5px" id="loader-sub"></div>
   </div>
 </div>
+
+<!-- TOASTS -->
 <div class="toasts" id="toasts"></div>
 
+<!-- ══════════════════════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════════════════════════ -->
 <script>
-// ═══════════════════════════════════════════════════════
+'use strict';
+
+// ─────────────────────────────────────────────────────────
+// CONFIGURATION
+// ─────────────────────────────────────────────────────────
 const APPS_SCRIPT_URL_DEFAULT = 'https://script.google.com/macros/s/AKfycbxceijW8OQSbtjjs-rqrXjozu-oL-RUGARK1Odqkx3-IBjs0EvrEe0u9qyXHxgSewZ3Cg/exec';
-// Toujours forcer la nouvelle URL et effacer toute ancienne URL en cache
+// Forcer l'URL et effacer tout cache d'ancienne URL
 localStorage.setItem('genie_script_url', APPS_SCRIPT_URL_DEFAULT);
 let SCRIPT_URL = APPS_SCRIPT_URL_DEFAULT;
 const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1mf3D2YGnpWpzufGOaLLaomxAkuzp0AiJY7RzcbpIq2w/edit';
 
-// ─── DONNÉES RÉFÉRENCE ──────────────────────────────────
+// ─────────────────────────────────────────────────────────
+// DONNÉES DE RÉFÉRENCE
+// ─────────────────────────────────────────────────────────
 const PROFILS = {
-  ccfa:      { label:'CCFA',            color:'#5B21B6' },
-  adherent:  { label:'Adhérent',        color:'#0369A1' },
-  locataire: { label:'Locataire',       color:'var(--brick)' },
-  asso:      { label:'Asso/Syndicat',   color:'var(--sage)' }
+  ccfa     : { label:'CCFA',           color:'#5B21B6' },
+  adherent : { label:'Adhérent',       color:'#0369A1' },
+  locataire: { label:'Locataire',      color:'var(--brick)' },
+  asso     : { label:'Asso/Syndicat',  color:'var(--sage)' }
 };
 
 const ESPACES_DEF = {
-  bourdelle: { nom:'Antoine Bourdelle', ref:'0-02', type:'reunion', capacite:40, icon:'🏛️',
+  bourdelle : { nom:'Antoine Bourdelle',     ref:'0-02',  type:'reunion', capacite:40,  icon:'🏛️',
     tarifs_reunion:{ ccfa:{heure:40,demi:110,journee:180}, adherent:{heure:30,demi:90,journee:150}, locataire:{heure:20,demi:70,journee:120}, asso:{heure:0,demi:0,journee:0} } },
-  freinet:   { nom:'Célestin Freinet',   ref:'1-11', type:'both',   capacite:20, icon:'📋',
+  freinet   : { nom:'Célestin Freinet',      ref:'1-11',  type:'both',    capacite:20,  icon:'📋',
     tarifs_reunion:{ ccfa:{heure:30,demi:90,journee:150}, adherent:{heure:20,demi:60,journee:100}, locataire:{heure:15,demi:45,journee:80}, asso:{heure:0,demi:0,journee:0} } },
-  gouges:    { nom:'Olympe de Gouges',   ref:'1-12', type:'reunion', capacite:20, icon:'🤝',
+  gouges    : { nom:'Olympe de Gouges',      ref:'1-12',  type:'reunion', capacite:20,  icon:'🤝',
     tarifs_reunion:{ ccfa:{heure:30,demi:90,journee:150}, adherent:{heure:20,demi:60,journee:100}, locataire:{heure:15,demi:45,journee:80}, asso:{heure:0,demi:0,journee:0} } },
-  michel:    { nom:'Louise Michel',      ref:'0-01', type:'nomade',  capacite:4,  icon:'🚪', sous_type:'prive',
+  michel    : { nom:'Louise Michel',         ref:'0-01',  type:'nomade',  capacite:4,   icon:'🚪', sous_type:'prive',
     tarifs_nomade:{ demi:12, journee:22, semaine:90, mois:200 } },
-  rousseau:  { nom:'Jean-Jacques Rousseau', ref:'1-10', type:'nomade', capacite:20, icon:'💻', sous_type:'coworking',
+  rousseau  : { nom:'Jean-Jacques Rousseau', ref:'1-10',  type:'nomade',  capacite:20,  icon:'💻', sous_type:'coworking',
     tarifs_nomade:{ demi:10, journee:17, semaine:60, mois:180 } },
-  montessori:{ nom:'Maria Montessori',  ref:'-1-14', type:'both',   capacite:4,  icon:'♿',
+  montessori: { nom:'Maria Montessori',      ref:'-1-14', type:'both',    capacite:4,   icon:'♿',
     tarifs_reunion:{ ccfa:{heure:20,demi:60,journee:100}, adherent:{heure:15,demi:45,journee:80}, locataire:{heure:10,demi:30,journee:70}, asso:{heure:0,demi:0,journee:0} },
     tarifs_nomade:{ demi:15, journee:27, semaine:100, mois:216 } }
 };
 
-const DL = { heure:"Heure", demi:"½ journée", journee:"Journée", semaine:"Semaine", mois:"Mois" };
-const fMoney = n => n===0?'Gratuit':Number(n).toLocaleString('fr-FR',{minimumFractionDigits:2})+' €';
+const DL = { heure:'Heure', demi:'½ journée', journee:'Journée', semaine:'Semaine', mois:'Mois' };
+const HOURS = ['08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00'];
+
+// ─────────────────────────────────────────────────────────
+// HELPERS
+// ─────────────────────────────────────────────────────────
+const fMoney = n => n===0 ? 'Gratuit' : Number(n).toLocaleString('fr-FR',{minimumFractionDigits:2})+' €';
 const fDate  = d => { if(!d) return ''; const dt=new Date(d.includes('T')?d:d+'T12:00:00'); return isNaN(dt)?d:dt.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'numeric'}); };
 const genId  = () => 'RSV-'+Date.now().toString(36).toUpperCase();
 const gv     = id => (document.getElementById(id)?.value||'').trim();
 const gvb    = id => document.getElementById(id)?.checked||false;
+const gvSet  = (id,val) => { const el=document.getElementById(id); if(el) el.value=val; };
 
-let DB = { reservations:[], config:{email:'contact@genie-montauban.fr', tel:'06 51 50 97 18'} };
-let editId = null, weekOffset = 0;
+// ─────────────────────────────────────────────────────────
+// ÉTAT GLOBAL
+// ─────────────────────────────────────────────────────────
+let DB          = { reservations:[], config:{email:'genie.montauban@gmail.com', tel:'06 51 50 97 18'} };
+let editId      = null;
+let weekOffset  = 0;
+let calEvents   = [];      // événements Google Calendar en mémoire
+let showCal     = true;    // toggle affichage couche Calendar
 
-// ─── API ─────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────
+// LOGIN
+// ─────────────────────────────────────────────────────────
+function checkLogin() {
+  const pwd = document.getElementById('login-pwd').value;
+  // Mot de passe = "genie2026" — à changer si besoin
+  if (pwd === 'genie2026') {
+    document.getElementById('login-screen').classList.add('hidden');
+    document.getElementById('main-layout').style.display = 'flex';
+    init();
+  } else {
+    const err = document.getElementById('login-err');
+    err.style.display = 'block';
+    setTimeout(() => err.style.display='none', 2500);
+  }
+}
+
+// ─────────────────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────────────────
+function init() {
+  const stored = localStorage.getItem('genie_script_url');
+  SCRIPT_URL = stored || APPS_SCRIPT_URL_DEFAULT;
+  document.getElementById('url-display').textContent = SCRIPT_URL || '—';
+  if (!SCRIPT_URL) { showSetup(); return; }
+  loadData(false);
+  setInterval(() => loadData(false), 30000);
+  go('dashboard');
+}
+
+// ─────────────────────────────────────────────────────────
+// API
+// ─────────────────────────────────────────────────────────
 async function apiGet(params={}) {
   if (!SCRIPT_URL) throw new Error('URL non configurée');
   const url = new URL(SCRIPT_URL);
@@ -529,116 +687,188 @@ async function apiGet(params={}) {
   if (data.error) throw new Error(data.error);
   return data;
 }
+
 async function apiPost(body) {
   if (!SCRIPT_URL) throw new Error('URL non configurée');
-  // mode no-cors : évite le problème de redirect 302 qui transforme POST→GET
-  // doPost() est bien exécuté côté serveur même si la réponse est opaque
-  try {
-    await fetch(SCRIPT_URL, {method:'POST', body:JSON.stringify(body), mode:'no-cors'});
-  } catch(e) {
-    throw new Error('Erreur réseau : ' + e.message);
-  }
+  await fetch(SCRIPT_URL, { method:'POST', body:JSON.stringify(body), mode:'no-cors' });
 }
 
-// ─── CHARGEMENT ──────────────────────────────────────────
+// ─────────────────────────────────────────────────────────
+// CHARGEMENT DONNÉES SHEETS
+// ─────────────────────────────────────────────────────────
 async function loadData(manual=false) {
   if (!SCRIPT_URL) { showSetup(); return; }
   if (manual) showLoader('Synchronisation…','');
   setSyncState('loading','Chargement…');
   try {
     const data = await apiGet({action:'getAll'});
-    DB.reservations = (data.reservations||[]).map(r=>({...r, montant:parseFloat(r.montant)||0, nbHeures:parseInt(r.nbHeures)||1, participants:parseInt(r.participants)||1}));
+    DB.reservations = (data.reservations||[]).map(r => ({
+      ...r,
+      montant     : parseFloat(r.montant)||0,
+      nbHeures    : parseInt(r.nbHeures)||1,
+      participants: parseInt(r.participants)||1
+    }));
     if (data.config) Object.assign(DB.config, data.config);
     setSyncState('ok','Sync. '+new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}));
     if (manual) { hideLoader(); toast('Données actualisées'); }
     refreshPage();
   } catch(e) {
-    setSyncState('error','Erreur'); if (manual) { hideLoader(); toast('Erreur : '+e.message,'err'); }
+    setSyncState('error','Erreur');
+    if (manual) { hideLoader(); toast('Erreur : '+e.message,'err'); }
   }
 }
 
-// ─── CRUD ─────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────
+// CHARGEMENT GOOGLE CALENDAR
+// ─────────────────────────────────────────────────────────
+async function loadCalendarEvents(weekStart, weekEnd) {
+  if (!SCRIPT_URL || !showCal) return;
+  const fmt = d => d.toISOString().split('T')[0];
+  setCalState('🔄 Cal…','var(--gold)');
+  try {
+    const data = await apiGet({ action:'getCalendar', start:fmt(weekStart), end:fmt(weekEnd) });
+    calEvents = data.events || [];
+    setCalState('📅 Synchro','var(--sage)');
+  } catch(e) {
+    calEvents = [];
+    setCalState('⚠️ Cal KO','var(--red)');
+  }
+}
+
+function setCalState(txt, color) {
+  const el = document.getElementById('cal-sync-state');
+  if (el) { el.textContent=txt; el.style.color=color; }
+}
+
+// ─────────────────────────────────────────────────────────
+// CRUD RÉSERVATIONS
+// ─────────────────────────────────────────────────────────
 async function saveResa(silent) {
   const prenom=gv('r-prenom'), nom=gv('r-nom'), email=gv('r-email'), date=gv('r-date'), espace=gv('r-espace');
   if (!prenom||!nom||!email||!date||!espace) { toast('Champs * obligatoires','err'); return; }
+
   const usage=gv('r-usage'), profil=gv('r-profil'), duree=gv('r-duree'), nbH=parseInt(gv('r-nbh'))||1;
   const hd=gv('r-hdebut'), hf=heureFin(hd,duree,nbH);
   const badge=gvb('r-badge'), adhesion=gvb('r-adhesion');
-  const m = calcMontant(espace, usage, profil, duree, nbH);
-  const opts = [badge?'Badge 24h/7j':'',adhesion?'Adhésion Génie':''].filter(Boolean).join(', ');
+  const m     = calcMontant(espace, usage, profil, duree, nbH);
+  const opts  = [badge?'Badge 24h/7j':'', adhesion?'Adhésion Génie':''].filter(Boolean).join(', ');
   const total = m + (badge?25:0) + (adhesion?50:0);
-  const now = new Date().toISOString();
+  const now   = new Date().toISOString();
+
   const resa = {
-    id:editId||genId(), prenom, nom, email,
-    tel:gv('r-tel'), orga:gv('r-orga'),
-    espace, nomEspace:(ESPACES_DEF[espace]||{}).nom||espace,
-    usage, profil: usage==='reunion'?profil:'',
-    date, typeDuree:duree, nbHeures:String(nbH), heureDebut:hd, heureFin:hf,
-    montant:String(total), montantBase:String(m), options:opts,
-    statut:gv('r-statut'),
-    participants:String(parseInt(gv('r-part'))||1),
-    objet:gv('r-objet'),
-    createdAt:editId?(DB.reservations.find(r=>r.id===editId)||{}).createdAt||now:now,
-    updatedAt:now
+    id         : editId || genId(),
+    prenom, nom, email,
+    tel        : gv('r-tel'),
+    orga       : gv('r-orga'),
+    espace,
+    nomEspace  : (ESPACES_DEF[espace]||{}).nom || espace,
+    usage,
+    profil     : usage==='reunion' ? profil : '',
+    date,
+    typeDuree  : duree,
+    nbHeures   : String(nbH),
+    heureDebut : hd,
+    heureFin   : hf,
+    montant    : String(total),
+    montantBase: String(m),
+    options    : opts,
+    statut     : gv('r-statut'),
+    participants: String(parseInt(gv('r-part'))||1),
+    objet      : gv('r-objet'),
+    createdAt  : editId ? (DB.reservations.find(r=>r.id===editId)||{}).createdAt||now : now,
+    updatedAt  : now
   };
-  showLoader(editId?'Modification…':'Création…','Sauvegarde Google Sheets');
+
+  showLoader(editId?'Modification…':'Création…','Sauvegarde Google Sheets + Calendar');
   try {
-    await apiPost({action:editId?'updateResa':'addResa', resa});
-    const full = {...resa, montant:total, nbHeures:nbH, participants:parseInt(resa.participants)};
-    if (editId) { const i=DB.reservations.findIndex(r=>r.id===editId); if(i>=0) DB.reservations[i]=full; }
-    else DB.reservations.unshift(full);
-    hideLoader(); closeModal('mresa');
-    toast(editId?'Modifiée !':'Créée !');
+    await apiPost({ action: editId ? 'updateResa' : 'addResa', resa });
+    const full = { ...resa, montant:total, nbHeures:nbH, participants:parseInt(resa.participants) };
+    if (editId) {
+      const i = DB.reservations.findIndex(r=>r.id===editId);
+      if (i>=0) DB.reservations[i] = full;
+    } else {
+      DB.reservations.unshift(full);
+    }
+    hideLoader();
+    closeModal('mresa');
+    toast(editId ? 'Modifiée ! 📅 Calendar mis à jour.' : 'Créée ! 📅 Événement Calendar créé.');
     if (!silent) sendEmail(resa);
     renderDashboard(); renderTable();
-    setTimeout(()=>loadData(false), 2500); // sync serveur
-  } catch(e) { hideLoader(); toast('Erreur : '+e.message,'err'); }
+    setTimeout(() => loadData(false), 3000);
+  } catch(e) {
+    hideLoader();
+    toast('Erreur : '+e.message,'err');
+  }
 }
 
 async function updateStatut(id, statut) {
   const r = DB.reservations.find(r=>r.id===id); if(!r) return;
   showLoader('Mise à jour…','');
-  const u = {...r, statut, updatedAt:new Date().toISOString(), montant:String(r.montant), nbHeures:String(r.nbHeures), participants:String(r.participants)};
+  const u = { ...r, statut, updatedAt:new Date().toISOString(), montant:String(r.montant), nbHeures:String(r.nbHeures), participants:String(r.participants) };
   try {
-    await apiPost({action:'updateResa', resa:u});
-    r.statut=statut; hideLoader(); closeModal('mdetail');
-    toast('Statut mis à jour'); renderDashboard(); renderTable();
-    setTimeout(()=>loadData(false), 2500);
+    await apiPost({ action:'updateResa', resa:u });
+    r.statut = statut;
+    hideLoader(); closeModal('mdetail');
+    toast('Statut mis à jour');
+    renderDashboard(); renderTable();
+    setTimeout(() => loadData(false), 3000);
   } catch(e) { hideLoader(); toast('Erreur : '+e.message,'err'); }
 }
 
 async function deleteResa(id) {
-  if(!confirm('Supprimer définitivement ?')) return;
+  if (!confirm('Supprimer définitivement cette réservation ? L\'événement Google Calendar associé sera également supprimé.')) return;
   showLoader('Suppression…','');
   try {
-    await apiPost({action:'deleteResa', id});
+    await apiPost({ action:'deleteResa', id });
     DB.reservations = DB.reservations.filter(r=>r.id!==id);
     hideLoader(); closeModal('mdetail'); toast('Supprimée','info');
     renderDashboard(); renderTable();
-    setTimeout(()=>loadData(false), 2500);
+    setTimeout(() => loadData(false), 3000);
   } catch(e) { hideLoader(); toast('Erreur : '+e.message,'err'); }
 }
 
 async function clearAll() {
-  if(!confirm('SUPPRIMER TOUTES les réservations ? Irréversible.')) return;
-  showLoader('Suppression…','');
+  if (!confirm('SUPPRIMER TOUTES les réservations ? Cette action est irréversible.')) return;
+  showLoader('Suppression complète…','');
   try {
-    for (const r of [...DB.reservations]) await apiPost({action:'deleteResa', id:r.id});
-    DB.reservations=[]; hideLoader(); toast('Tout supprimé','info'); renderDashboard();
+    for (const r of [...DB.reservations]) await apiPost({ action:'deleteResa', id:r.id });
+    DB.reservations = [];
+    hideLoader(); toast('Tout supprimé','info'); renderDashboard();
   } catch(e) { hideLoader(); toast('Erreur : '+e.message,'err'); }
 }
 
 async function saveCfg() {
-  DB.config.email=gv('cfg-email'); DB.config.tel=gv('cfg-tel');
-  try { await apiPost({action:'saveConfig', config:DB.config}); toast('Config enregistrée'); }
+  DB.config.email = gv('cfg-email'); DB.config.tel = gv('cfg-tel');
+  try { await apiPost({ action:'saveConfig', config:DB.config }); toast('Config enregistrée'); }
   catch(e) { toast('Erreur : '+e.message,'err'); }
 }
 
-// ─── CALCUL ──────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────
+// IMPORT CALENDAR → SHEETS
+// ─────────────────────────────────────────────────────────
+async function syncCalendarToSheets() {
+  const { weekStart, weekEnd } = getWeekDays();
+  const fmt = d => d.toISOString().split('T')[0];
+  showLoader('Import Calendar → Sheets…','Récupération des événements non liés');
+  try {
+    const data = await apiGet({ action:'syncFromCal', start:fmt(weekStart), end:fmt(weekEnd) });
+    hideLoader();
+    if (data.error) { toast('Erreur : '+data.error,'err'); return; }
+    const n = data.imported?.length || 0;
+    toast(n>0 ? `${n} événement(s) importé(s) en brouillon depuis Calendar` : 'Aucun nouvel événement à importer', 'info');
+    if (n>0) loadData(false);
+  } catch(e) {
+    hideLoader(); toast('Erreur sync : '+e.message,'err');
+  }
+}
+
+// ─────────────────────────────────────────────────────────
+// CALCUL TARIFS
+// ─────────────────────────────────────────────────────────
 function calcMontant(espace, usage, profil, duree, nbH) {
-  const e = ESPACES_DEF[espace]; if (!e) return 0;
+  const e = ESPACES_DEF[espace]; if(!e) return 0;
   if (usage==='reunion' && e.tarifs_reunion) {
-    const t = e.tarifs_reunion[profil]||e.tarifs_reunion.locataire;
+    const t = e.tarifs_reunion[profil] || e.tarifs_reunion.locataire;
     if (duree==='heure') return t.heure*(nbH||1);
     return t[duree]||0;
   }
@@ -650,40 +880,37 @@ function heureFin(hd, duree, nbH) {
   if (!hd) return '';
   const [h,m] = hd.split(':').map(Number);
   let t = h*60+m;
-  if (duree==='heure') t+=(nbH||1)*60;
-  else if (duree==='demi') t+=240;
-  else if (duree==='journee') t+=480;
-  else t+=60;
+  if      (duree==='heure')   t += (nbH||1)*60;
+  else if (duree==='demi')    t += 240;
+  else if (duree==='journee') t += 480;
+  else                         t += 60;
   return `${String(Math.floor(t/60)%24).padStart(2,'0')}:${String(t%60).padStart(2,'0')}`;
 }
 
-// ─── MODAL FORM ───────────────────────────────────────────
+// ─────────────────────────────────────────────────────────
+// FORMULAIRE MODAL
+// ─────────────────────────────────────────────────────────
 function updateModalUsage() {
-  const espace = gv('r-espace'), e = ESPACES_DEF[espace];
-  if (!e) return;
-  const usageFg = document.getElementById('r-usage-fg');
-  const profilFg = document.getElementById('r-profil-fg');
-  // Usage
-  if (e.type==='reunion') { gvSet('r-usage','reunion'); usageFg.style.display='none'; }
-  else if (e.type==='nomade') { gvSet('r-usage','nomade'); usageFg.style.display='none'; }
-  else usageFg.style.display=''; // both
+  const e = ESPACES_DEF[gv('r-espace')]; if(!e) return;
+  const uf = document.getElementById('r-usage-fg');
+  if (e.type==='reunion')      { gvSet('r-usage','reunion'); uf.style.display='none'; }
+  else if (e.type==='nomade')  { gvSet('r-usage','nomade');  uf.style.display='none'; }
+  else                          uf.style.display='';
   updateModalDurees();
 }
 
-function gvSet(id, val) { const el=document.getElementById(id); if(el) el.value=val; }
-
 function updateModalDurees() {
-  const usage = gv('r-usage');
-  const profilFg = document.getElementById('r-profil-fg');
-  const hdFg = document.getElementById('r-hdebut-fg');
-  const nbhFg = document.getElementById('r-nbh-fg');
-  const dureeSel = document.getElementById('r-duree');
-  profilFg.style.display = usage==='reunion' ? '' : 'none';
+  const usage  = gv('r-usage');
+  const pf     = document.getElementById('r-profil-fg');
+  const hdFg   = document.getElementById('r-hdebut-fg');
+  const nbhFg  = document.getElementById('r-nbh-fg');
+  const durSel = document.getElementById('r-duree');
+  pf.style.display = usage==='reunion' ? '' : 'none';
   if (usage==='reunion') {
-    dureeSel.innerHTML = '<option value="heure">À l\'heure</option><option value="demi">½ journée</option><option value="journee">Journée</option>';
+    durSel.innerHTML = "<option value='heure'>À l'heure</option><option value='demi'>½ journée</option><option value='journee'>Journée</option>";
     hdFg.style.display=''; nbhFg.style.display='';
   } else {
-    dureeSel.innerHTML = '<option value="demi">½ journée</option><option value="journee">Journée</option><option value="semaine">Semaine</option><option value="mois">Mois</option>';
+    durSel.innerHTML = "<option value='demi'>½ journée</option><option value='journee'>Journée</option><option value='semaine'>Semaine</option><option value='mois'>Mois</option>";
     hdFg.style.display='none'; nbhFg.style.display='none';
   }
   calcModalPrix();
@@ -694,10 +921,10 @@ function calcModalPrix() {
   const duree=gv('r-duree'), nbH=parseInt(gv('r-nbh'))||1;
   const badge=gvb('r-badge'), adhesion=gvb('r-adhesion');
   if (!espace) return;
-  const base = calcMontant(espace, usage, profil, duree, nbH);
+  const base  = calcMontant(espace, usage, profil, duree, nbH);
   const total = base + (badge?25:0) + (adhesion?50:0);
-  const px = document.getElementById('modal-prix');
   const hd=gv('r-hdebut'), hf=heureFin(hd,duree,nbH);
+  const px = document.getElementById('modal-prix');
   px.style.display='block';
   px.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center">
     <span style="font-size:12px;color:var(--muted)">${DL[duree]||duree}${duree==='heure'?' × '+nbH+'h':''} ${hf?'('+hd+'→'+hf+')':''}</span>
@@ -710,18 +937,21 @@ function openModal(id) {
   document.getElementById(id).classList.add('open');
 }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); editId=null; }
-document.addEventListener('click', e => { if(e.target.classList.contains('overlay')) { e.target.classList.remove('open'); editId=null; } });
+
+document.addEventListener('click', e => {
+  if (e.target.classList.contains('overlay')) { e.target.classList.remove('open'); editId=null; }
+});
 
 function resetForm() {
   editId=null;
   document.getElementById('mresa-title').textContent='Nouvelle réservation';
   ['r-prenom','r-nom','r-email','r-tel','r-orga','r-objet'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
-  document.getElementById('r-espace').value=''; document.getElementById('r-usage').value='reunion';
-  document.getElementById('r-profil').value='locataire'; document.getElementById('r-duree').value='heure';
-  document.getElementById('r-hdebut').value='09:00'; document.getElementById('r-nbh').value='2';
-  document.getElementById('r-statut').value='confirmed'; document.getElementById('r-part').value='1';
-  document.getElementById('r-date').value=new Date().toISOString().split('T')[0];
-  document.getElementById('r-badge').checked=false; document.getElementById('r-adhesion').checked=false;
+  gvSet('r-espace',''); gvSet('r-usage','reunion'); gvSet('r-profil','locataire');
+  gvSet('r-duree','heure'); gvSet('r-hdebut','09:00'); gvSet('r-nbh','2');
+  gvSet('r-statut','confirmed'); gvSet('r-part','1');
+  document.getElementById('r-date').value = new Date().toISOString().split('T')[0];
+  document.getElementById('r-badge').checked=false;
+  document.getElementById('r-adhesion').checked=false;
   document.getElementById('modal-prix').style.display='none';
   document.getElementById('r-usage-fg').style.display='none';
   document.getElementById('r-profil-fg').style.display='';
@@ -738,193 +968,294 @@ function editResa(id) {
   gvSet('r-statut',r.statut); gvSet('r-part',r.participants||'1');
   gvSet('r-date',r.date);
   const opts = r.options||'';
-  document.getElementById('r-badge').checked = opts.includes('Badge');
+  document.getElementById('r-badge').checked    = opts.includes('Badge');
   document.getElementById('r-adhesion').checked = opts.includes('Adhésion');
   updateModalUsage();
   closeModal('mdetail'); openModal('mresa');
 }
 
-// ─── BADGES ──────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────
+// BADGES HTML
+// ─────────────────────────────────────────────────────────
 function statusBadge(s) {
-  return ({confirmed:'<span class="badge b-confirmed">✓ Confirmée</span>', pending:'<span class="badge b-pending">⏳ En attente</span>', completed:'<span class="badge b-completed">● Terminée</span>', cancelled:'<span class="badge b-cancelled">✗ Annulée</span>'})[s]||s;
+  return ({
+    confirmed : '<span class="badge b-confirmed">✓ Confirmée</span>',
+    pending   : '<span class="badge b-pending">⏳ En attente</span>',
+    completed : '<span class="badge b-completed">● Terminée</span>',
+    cancelled : '<span class="badge b-cancelled">✗ Annulée</span>'
+  })[s] || s;
 }
+
 function espaceBadge(k) {
-  const e=ESPACES_DEF[k]; if(!e) return k;
-  return `<span class="eb eb-${k}">${e.icon} ${e.nom.split(' ')[e.nom.startsWith('Jean')?2:e.nom.startsWith('Olympe')?0:e.nom.startsWith('Antoine')?1:e.nom.startsWith('Maria')?1:e.nom.startsWith('Louise')?1:e.nom.startsWith('Célestin')?1:0]||e.nom}</span>`;
+  const e = ESPACES_DEF[k]; if(!e) return k;
+  const mot = e.nom.split(' ');
+  // Premier mot significatif (pas les articles)
+  const skip = ['De','de','Jean-Jacques','Maria','Louise','Célestin','Olympe','Antoine'];
+  const label = mot.find(w=>!skip.includes(w) && w.length>2) || mot[0];
+  return `<span class="eb eb-${k}">${e.icon} ${label}</span>`;
 }
+
 function profilBadge(p) {
-  if (!p) return '—'; const pr=PROFILS[p]; if(!pr) return p;
+  if(!p) return '—';
+  const pr=PROFILS[p]; if(!pr) return p;
   return `<span style="color:${pr.color};font-weight:600;font-size:12px">${pr.label}</span>`;
 }
 
-// ─── EMAIL ───────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────
+// EMAIL
+// ─────────────────────────────────────────────────────────
 function sendEmail(r) {
-  const e=ESPACES_DEF[r.espace], profilL=(PROFILS[r.profil]||{}).label||'';
-  const dl = r.typeDuree==='heure'?`${r.nbHeures}h (${r.heureDebut}→${r.heureFin})`:DL[r.typeDuree]||r.typeDuree;
-  const sub=encodeURIComponent(`Confirmation réservation Génie — ${r.id}`);
-  const body=encodeURIComponent(`Bonjour ${r.prenom},\n\nVotre réservation est confirmée.\n\nRéférence : ${r.id}\nEspace : ${e?.nom||r.espace} (${e?.ref||''})\nDate : ${fDate(r.date)}\nDurée : ${dl}\n${profilL?'Profil : '+profilL+'\n':''}Montant : ${fMoney(r.montant)}${r.options?'\nOptions : '+r.options:''}\n\nÉquipe Génie Montauban\n${DB.config.tel} · ${DB.config.email}`);
-  window.location.href=`mailto:${r.email}?subject=${sub}&body=${body}`;
+  const e    = ESPACES_DEF[r.espace];
+  const pL   = (PROFILS[r.profil]||{}).label||'';
+  const dl   = r.typeDuree==='heure'?`${r.nbHeures}h (${r.heureDebut}→${r.heureFin})`:DL[r.typeDuree]||r.typeDuree;
+  const sub  = encodeURIComponent(`Confirmation réservation Génie — ${r.id}`);
+  const body = encodeURIComponent(
+    `Bonjour ${r.prenom},\n\nVotre réservation est confirmée.\n\nRéférence : ${r.id}\nEspace : ${e?.nom||r.espace} (${e?.ref||''})\nDate : ${fDate(r.date)}\nDurée : ${dl}\n${pL?'Profil : '+pL+'\n':''}Montant : ${fMoney(r.montant)}${r.options?'\nOptions : '+r.options:''}\n\nÉquipe Génie Montauban\n${DB.config.tel} · ${DB.config.email}`
+  );
+  window.location.href = `mailto:${r.email}?subject=${sub}&body=${body}`;
 }
 
 function printResa(id) {
   const r=DB.reservations.find(r=>r.id===id); if(!r) return;
-  const e=ESPACES_DEF[r.espace], profilL=(PROFILS[r.profil]||{}).label||'';
+  const e=ESPACES_DEF[r.espace], pL=(PROFILS[r.profil]||{}).label||'';
   const dl=r.typeDuree==='heure'?`${r.nbHeures}h (${r.heureDebut}→${r.heureFin})`:DL[r.typeDuree]||r.typeDuree;
   const w=window.open('','_blank');
   w.document.write(`<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><title>${r.id}</title>
-  <style>body{font-family:Georgia,serif;max-width:680px;margin:40px auto;color:#1C1410;font-size:14px}h1{font-size:24px}
-  .hd{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #C4622D;padding-bottom:16px;margin-bottom:22px}
-  .ref{background:#C4622D;color:#fff;padding:6px 14px;border-radius:6px;font-size:13px;font-weight:700}
-  table{width:100%;border-collapse:collapse;margin-bottom:18px}td{padding:9px 12px;border-bottom:1px solid #E8DFD4}
-  td:first-child{font-weight:600;color:#8C7B6B;width:36%;font-size:12px;text-transform:uppercase}
-  .tot td{background:#FDF7EF;font-weight:700;font-size:16px;border-top:2px solid #C4622D;border-bottom:2px solid #C4622D}
-  .ft{margin-top:30px;padding-top:12px;border-top:1px solid #DDD5C8;font-size:11px;color:#8C7B6B;text-align:center}
-  @media print{body{margin:20px}}</style></head><body>
-  <div class="hd"><div><h1>Génie <span style="color:#C4622D">Montauban</span></h1><div style="color:#8C7B6B;font-size:11px;text-transform:uppercase;letter-spacing:1px">Bon de réservation</div></div><div class="ref">${r.id}</div></div>
-  <table>
-  <tr><td>Client</td><td><strong>${r.prenom} ${r.nom}</strong>${r.orga?' — <em>'+r.orga+'</em>':''}</td></tr>
-  <tr><td>Email</td><td>${r.email}</td></tr>
-  ${r.tel?`<tr><td>Téléphone</td><td>${r.tel}</td></tr>`:''}
-  <tr><td>Espace</td><td>${e?.nom||r.espace} (Bureau ${e?.ref||''})</td></tr>
-  ${profilL?`<tr><td>Profil</td><td>${profilL}</td></tr>`:''}
-  <tr><td>Date</td><td>${fDate(r.date)}</td></tr>
-  <tr><td>Durée</td><td>${dl}</td></tr>
-  <tr><td>Participants</td><td>${r.participants||1} pers.</td></tr>
-  ${r.objet?`<tr><td>Objet</td><td>${r.objet}</td></tr>`:''}
-  ${r.options?`<tr><td>Options</td><td>${r.options}</td></tr>`:''}
-  <tr class="tot"><td>Montant total</td><td>${fMoney(r.montant)}</td></tr>
-  </table>
-  <p style="font-size:12px;color:#8C7B6B;background:#FDF7EF;padding:12px;border-radius:8px">Annulation gratuite 48h avant la réservation. Ce document n'est pas une facture.</p>
-  <div class="ft">Génie Montauban · 12 rue du Génie 82000 Montauban · ${DB.config.email} · Généré le ${new Date().toLocaleDateString('fr-FR')}</div>
-  <script>window.onload=()=>window.print()<\/script></body></html>`);
+<style>body{font-family:Georgia,serif;max-width:680px;margin:40px auto;color:#1C1410;font-size:14px}
+h1{font-size:24px}.hd{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #C4622D;padding-bottom:16px;margin-bottom:22px}
+.ref{background:#C4622D;color:#fff;padding:6px 14px;border-radius:6px;font-size:13px;font-weight:700}
+table{width:100%;border-collapse:collapse;margin-bottom:18px}td{padding:9px 12px;border-bottom:1px solid #E8DFD4}
+td:first-child{font-weight:600;color:#8C7B6B;width:36%;font-size:12px;text-transform:uppercase}
+.tot td{background:#FDF7EF;font-weight:700;font-size:16px;border-top:2px solid #C4622D;border-bottom:2px solid #C4622D}
+.ft{margin-top:30px;padding-top:12px;border-top:1px solid #DDD5C8;font-size:11px;color:#8C7B6B;text-align:center}
+@media print{body{margin:20px}}</style></head><body>
+<div class="hd"><div><h1>Génie <span style="color:#C4622D">Montauban</span></h1><div style="color:#8C7B6B;font-size:11px;text-transform:uppercase;letter-spacing:1px">Bon de réservation</div></div><div class="ref">${r.id}</div></div>
+<table>
+<tr><td>Client</td><td><strong>${r.prenom} ${r.nom}</strong>${r.orga?' — <em>'+r.orga+'</em>':''}</td></tr>
+<tr><td>Email</td><td>${r.email}</td></tr>
+${r.tel?`<tr><td>Téléphone</td><td>${r.tel}</td></tr>`:''}
+<tr><td>Espace</td><td>${e?.nom||r.espace} (Bureau ${e?.ref||''})</td></tr>
+${pL?`<tr><td>Profil</td><td>${pL}</td></tr>`:''}
+<tr><td>Date</td><td>${fDate(r.date)}</td></tr>
+<tr><td>Durée</td><td>${dl}</td></tr>
+<tr><td>Participants</td><td>${r.participants||1} pers.</td></tr>
+${r.objet?`<tr><td>Objet</td><td>${r.objet}</td></tr>`:''}
+${r.options?`<tr><td>Options</td><td>${r.options}</td></tr>`:''}
+<tr class="tot"><td>Montant total</td><td>${fMoney(r.montant)}</td></tr>
+</table>
+<p style="font-size:12px;color:#8C7B6B;background:#FDF7EF;padding:12px;border-radius:8px">Annulation gratuite 48h avant la réservation. Ce document n'est pas une facture.</p>
+<div class="ft">Génie Montauban · 12 rue du Génie 82000 Montauban · ${DB.config.email} · Généré le ${new Date().toLocaleDateString('fr-FR')}</div>
+<script>window.onload=()=>window.print()<\/script></body></html>`);
   w.document.close();
 }
 
-// ─── NAVIGATION ──────────────────────────────────────────
-const PAGE_T = { dashboard:'Tableau de bord', planning:'Planning semaine', reservations:'Réservations', clients:'Clients', espaces:'Espaces & Tarifs 2026', donnees:'Données & Configuration' };
+// ─────────────────────────────────────────────────────────
+// NAVIGATION
+// ─────────────────────────────────────────────────────────
+const PAGE_T = {
+  dashboard   : 'Tableau de bord',
+  planning    : 'Planning semaine',
+  reservations: 'Réservations',
+  clients     : 'Clients',
+  espaces     : 'Espaces & Tarifs 2026',
+  donnees     : 'Données & Configuration'
+};
+
 function toggleSidebar() {
-  const s=document.getElementById('sidebar'), o=document.getElementById('sidebar-overlay');
-  s.classList.toggle('open'); o.classList.toggle('open');
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebar-overlay').classList.toggle('open');
 }
-function closeSidebarMobile() { if(window.innerWidth<=768){ const s=document.getElementById('sidebar'),o=document.getElementById('sidebar-overlay'); s.classList.remove('open');o.classList.remove('open'); } }
-function go(name) { closeSidebarMobile();
+function closeSidebarMobile() {
+  if (window.innerWidth<=768) {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebar-overlay').classList.remove('open');
+  }
+}
+
+function go(name) {
+  closeSidebarMobile();
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   document.getElementById('page-'+name).classList.add('active');
-  document.querySelectorAll('.nav-item').forEach(n=>{ if(n.getAttribute('onclick')?.includes("'"+name+"'")) n.classList.add('active'); });
-  document.getElementById('ptitle').textContent=PAGE_T[name];
-  document.getElementById('topbar-actions').innerHTML=`<button class="btn btn-ghost btn-sm" onclick="loadData(true)">🔄 Actualiser</button>`+
-    (!['espaces','donnees'].includes(name)?`<button class="btn btn-primary" onclick="openModal('mresa')">➕ Nouvelle réservation</button>`:'');
+  document.querySelectorAll('.nav-item').forEach(n=>{
+    if (n.getAttribute('onclick')?.includes("'"+name+"'")) n.classList.add('active');
+  });
+  document.getElementById('ptitle').textContent = PAGE_T[name];
+  document.getElementById('topbar-actions').innerHTML =
+    `<button class="btn btn-ghost btn-sm" onclick="loadData(true)">🔄 Actualiser</button>` +
+    (!['espaces','donnees'].includes(name) ? `<button class="btn btn-primary" onclick="openModal('mresa')">➕ Nouvelle réservation</button>` : '');
   refreshPage(name);
 }
+
 function refreshPage(name) {
-  const n=name||document.querySelector('.page.active')?.id?.replace('page-','');
-  if(n==='dashboard') renderDashboard();
-  else if(n==='planning') renderPlanning();
-  else if(n==='reservations') renderTable();
-  else if(n==='clients') renderClients();
-  else if(n==='espaces') renderEspaces();
-  else if(n==='donnees') renderDonnees();
+  const n = name || document.querySelector('.page.active')?.id?.replace('page-','');
+  if      (n==='dashboard')    renderDashboard();
+  else if (n==='planning')     renderPlanning();
+  else if (n==='reservations') renderTable();
+  else if (n==='clients')      renderClients();
+  else if (n==='espaces')      renderEspaces();
+  else if (n==='donnees')      renderDonnees();
 }
 
-// ─── DASHBOARD ───────────────────────────────────────────
+// ─────────────────────────────────────────────────────────
+// DASHBOARD
+// ─────────────────────────────────────────────────────────
 function renderDashboard() {
   const R=DB.reservations, now=new Date(), m=now.getMonth(), y=now.getFullYear();
-  const mR=R.filter(r=>{const d=new Date(r.date+'T12:00:00');return d.getMonth()===m&&d.getFullYear()===y&&r.statut!=='cancelled';});
-  const caM=mR.reduce((s,r)=>s+Number(r.montant),0);
-  const tod=now.toISOString().split('T')[0];
+  const mR=R.filter(r=>{ const d=new Date(r.date+'T12:00:00'); return d.getMonth()===m&&d.getFullYear()===y&&r.statut!=='cancelled'; });
+  const caM  = mR.reduce((s,r)=>s+Number(r.montant),0);
+  const tod  = now.toISOString().split('T')[0];
+
   document.getElementById('stats').innerHTML=`
     <div class="stat-card sc-brick"><div class="stat-label">CA du mois</div><div class="stat-value">${fMoney(caM)}</div><div class="stat-sub">${mR.length} réservation(s)</div></div>
     <div class="stat-card sc-gold"><div class="stat-label">Total réservations</div><div class="stat-value">${R.filter(r=>r.statut!=='cancelled').length}</div><div class="stat-sub">${R.filter(r=>r.statut==='pending').length} en attente</div></div>
     <div class="stat-card sc-sage"><div class="stat-label">Aujourd'hui</div><div class="stat-value">${R.filter(r=>r.date===tod&&r.statut!=='cancelled').length}</div><div class="stat-sub">réservation(s)</div></div>
     <div class="stat-card sc-steel"><div class="stat-label">CA total</div><div class="stat-value">${fMoney(R.filter(r=>r.statut!=='cancelled').reduce((s,r)=>s+Number(r.montant),0))}</div><div class="stat-sub">depuis ouverture</div></div>`;
-  document.getElementById('recent-body').innerHTML=R.slice(0,8).map(r=>
+
+  document.getElementById('recent-body').innerHTML = R.slice(0,8).map(r=>
     `<tr style="cursor:pointer" onclick="showDetail('${r.id}')">
-    <td><strong>${r.prenom} ${r.nom}</strong></td><td>${espaceBadge(r.espace)}</td>
-    <td>${fDate(r.date)}</td><td>${profilBadge(r.profil)}</td>
-    <td class="amount">${fMoney(r.montant)}</td><td>${statusBadge(r.statut)}</td></tr>`
-  ).join('')||'<tr><td colspan="6" style="text-align:center;padding:28px;color:var(--muted)">Aucune réservation</td></tr>';
+       <td><strong>${r.prenom} ${r.nom}</strong></td>
+       <td>${espaceBadge(r.espace)}</td>
+       <td>${fDate(r.date)}</td>
+       <td>${profilBadge(r.profil)}</td>
+       <td class="amount">${fMoney(r.montant)}</td>
+       <td>${statusBadge(r.statut)}</td>
+     </tr>`
+  ).join('') || '<tr><td colspan="6" style="text-align:center;padding:28px;color:var(--muted)">Aucune réservation</td></tr>';
 
   const last30=new Date(); last30.setDate(last30.getDate()-30);
-  const r30=R.filter(r=>r.date&&new Date(r.date+'T12:00:00')>=last30&&r.statut!=='cancelled');
-  const colors={'bourdelle':'#7C3AED','freinet':'#0284C7','gouges':'#DB2777','michel':'#16A34A','rousseau':'#CA8A04','montessori':ESPACES_DEF.montessori?'var(--sage)':'#666'};
-  document.getElementById('occ-bars').innerHTML=Object.keys(ESPACES_DEF).map(k=>{
-    const cnt=r30.filter(r=>r.espace===k).length;
-    const pct=Math.min(100,cnt*8);
-    return `<div class="occ-row"><div class="occ-name">${ESPACES_DEF[k].icon} ${ESPACES_DEF[k].nom.split(' ')[0]}</div><div class="occ-bg"><div class="occ-fill" style="width:${pct}%;background:${colors[k]}"></div></div><div class="occ-pct" style="color:${colors[k]}">${pct}%</div></div>`;
+  const r30   = R.filter(r=>r.date&&new Date(r.date+'T12:00:00')>=last30&&r.statut!=='cancelled');
+  const colors = { bourdelle:'#7C3AED',freinet:'#0284C7',gouges:'#DB2777',michel:'#16A34A',rousseau:'#CA8A04',montessori:'var(--sage)' };
+
+  document.getElementById('occ-bars').innerHTML = Object.keys(ESPACES_DEF).map(k=>{
+    const cnt = r30.filter(r=>r.espace===k).length;
+    const pct = Math.min(100, cnt*8);
+    return `<div class="occ-row">
+      <div class="occ-name">${ESPACES_DEF[k].icon} ${ESPACES_DEF[k].nom.split(' ')[0]}</div>
+      <div class="occ-bg"><div class="occ-fill" style="width:${pct}%;background:${colors[k]}"></div></div>
+      <div class="occ-pct" style="color:${colors[k]}">${pct}%</div>
+    </div>`;
   }).join('');
 }
 
-// ─── PLANNING ────────────────────────────────────────────
-const HOURS=['08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00'];
-function shiftWeek(d) { weekOffset=d===0?0:weekOffset+d; renderPlanning(); }
-function renderPlanning() {
-  const today=new Date(), bm=new Date(today), dow=today.getDay();
+// ─────────────────────────────────────────────────────────
+// PLANNING — semaine
+// ─────────────────────────────────────────────────────────
+function getWeekDays() {
+  const today=new Date(), dow=today.getDay();
+  const bm=new Date(today);
   bm.setDate(today.getDate()+(dow===0?-6:1-dow)+weekOffset*7);
-  const days=Array.from({length:6},(_,i)=>{const d=new Date(bm);d.setDate(bm.getDate()+i);return d;});
-  const ts=today.toISOString().split('T')[0];
-  const fmt=d=>d.toLocaleDateString('fr-FR',{day:'2-digit',month:'short'});
-  document.getElementById('week-lbl').textContent=`${fmt(days[0])} — ${fmt(days[5])} ${days[5].getFullYear()}`;
-  const dn=['Lun','Mar','Mer','Jeu','Ven','Sam'];
-  document.getElementById('plan-days').innerHTML='<div class="dh">H.</div>'+days.map((d,i)=>`<div class="dh${d.toISOString().split('T')[0]===ts?' today':''}">${dn[i]}<br>${d.getDate()}/${d.getMonth()+1}</div>`).join('');
-  const filterEspace=document.getElementById('plan-filter').value;
-  const resas=DB.reservations.filter(r=>r.statut!=='cancelled'&&(!filterEspace||r.espace===filterEspace));
-  let body='<div class="time-col">'+HOURS.map(h=>`<div class="ts">${h}</div>`).join('')+'</div>';
-  days.forEach(day=>{
-    const ds=day.toISOString().split('T')[0], dr=resas.filter(r=>r.date===ds);
-    body+='<div class="dcol">';
-    HOURS.forEach((hour,hi)=>{
-      const evts=dr.filter(r=>parseInt(r.heureDebut?.split(':')[0])===parseInt(hour));
-      const eh=evts.map(r=>{
-        const dh=r.typeDuree==='heure'?Number(r.nbHeures):(r.typeDuree==='demi'?4:8);
-        const ht=Math.min(dh*44,HOURS.length*44-hi*44);
-        return `<div class="ev ev-${r.espace}" style="height:${ht-3}px;top:1px" onclick="showDetail('${r.id}')">${r.prenom} ${r.nom.charAt(0)}.<br>${r.heureDebut}</div>`;
+  const days = Array.from({length:6},(_,i)=>{ const d=new Date(bm); d.setDate(bm.getDate()+i); return d; });
+  return { days, weekStart:days[0], weekEnd:days[5] };
+}
+
+function shiftWeek(d) { weekOffset = d===0 ? 0 : weekOffset+d; renderPlanning(); }
+
+function toggleCalendarView() {
+  showCal = !showCal;
+  const btn=document.getElementById('cal-toggle-btn');
+  if (btn) {
+    btn.textContent  = showCal ? '📅 Google Cal ✓' : '📅 Google Cal ○';
+    btn.className    = 'btn btn-sm ' + (showCal ? 'btn-cal' : 'btn-cal-off');
+  }
+  if (!showCal) calEvents=[];
+  renderPlanning();
+}
+
+async function renderPlanning() {
+  const { days, weekStart, weekEnd } = getWeekDays();
+  const fmt = d => d.toLocaleDateString('fr-FR',{day:'2-digit',month:'short'});
+  const wl  = document.getElementById('week-lbl');
+  if (wl) wl.textContent = `${fmt(weekStart)} — ${fmt(weekEnd)} ${weekEnd.getFullYear()}`;
+
+  const today = new Date().toISOString().split('T')[0];
+  const dn    = ['Lun','Mar','Mer','Jeu','Ven','Sam'];
+
+  document.getElementById('plan-days').innerHTML = '<div class="dh">H.</div>' +
+    days.map((d,i)=>`<div class="dh${d.toISOString().split('T')[0]===today?' today':''}">${dn[i]}<br>${d.getDate()}/${d.getMonth()+1}</div>`).join('');
+
+  // Rendu immédiat avec données Sheets en mémoire
+  renderPlanBody(days, today);
+
+  // Chargement Calendar en arrière-plan → re-rendu une fois reçu
+  if (showCal) {
+    await loadCalendarEvents(weekStart, weekEnd);
+    renderPlanBody(days, today);
+  }
+}
+
+function renderPlanBody(days, today) {
+  const filter = document.getElementById('plan-filter')?.value || '';
+  const resas  = DB.reservations.filter(r=>r.statut!=='cancelled'&&(!filter||r.espace===filter));
+
+  let body = '<div class="time-col">' +
+    HOURS.map(h=>`<div class="ts">${h}</div>`).join('') +
+    '</div>';
+
+  days.forEach(day => {
+    const ds   = day.toISOString().split('T')[0];
+    const dr   = resas.filter(r=>r.date===ds);
+
+    // Events Calendar du même jour non déjà liés à une réservation Sheets
+    const calDay = showCal ? calEvents.filter(ev=>{
+      const evDate = new Date(ev.start).toISOString().split('T')[0];
+      return evDate===ds && (!ev.resaId || !DB.reservations.find(r=>r.id===ev.resaId));
+    }) : [];
+
+    body += '<div class="dcol">';
+
+    HOURS.forEach((hour, hi) => {
+      const hNum = parseInt(hour);
+
+      // Réservations Sheets
+      const sheetsEvts = dr.filter(r=>parseInt((r.heureDebut||'0').split(':')[0])===hNum);
+      const htmlSheets = sheetsEvts.map(r=>{
+        const dh = r.typeDuree==='heure' ? Number(r.nbHeures) : (r.typeDuree==='demi'?4:8);
+        const ht = Math.min(dh*48, HOURS.length*48-hi*48);
+        return `<div class="ev ev-${r.espace}" style="height:${ht-3}px;top:1px;left:1px;right:${calDay.length?'52%':'1px'}"
+          onclick="showDetail('${r.id}')" title="${r.prenom} ${r.nom}">
+          ${r.prenom} ${r.nom.charAt(0)}.<br>${r.heureDebut||''}
+        </div>`;
       }).join('');
-      body+=`<div class="slot" onclick="openResaAt('${ds}','${hour}')">${eh}</div>`;
+
+      // Événements Google Calendar
+      const calEvts = calDay.filter(ev=>new Date(ev.start).getHours()===hNum);
+      const htmlCal = calEvts.map(ev=>{
+        const s  = new Date(ev.start), e=new Date(ev.end);
+        const dH = (e-s)/3600000;
+        const ht = Math.min(dH*48, HOURS.length*48-hi*48);
+        const hd = `${String(s.getHours()).padStart(2,'0')}:${String(s.getMinutes()).padStart(2,'0')}`;
+        const safeId    = ev.calEventId.replace(/'/g,"\\'");
+        const safeTitle = ev.title.replace(/'/g,"\\'");
+        return `<div class="ev ev-cal" style="height:${ht-3}px;top:1px;left:50%;right:1px"
+          onclick="showCalEventDetail('${safeId}','${safeTitle}','${ev.start}','${ev.end}')"
+          title="📅 ${ev.title} (Google Cal)">
+          📅 ${ev.title.substring(0,14)}<br>${hd}
+        </div>`;
+      }).join('');
+
+      body += `<div class="slot" onclick="openResaAt('${ds}','${hour}')">${htmlSheets}${htmlCal}</div>`;
     });
-    body+='</div>';
+
+    body += '</div>';
   });
-  document.getElementById('plan-body').innerHTML=body;
-}
-function openResaAt(date,heure) { resetForm(); gvSet('r-date',date); gvSet('r-hdebut',heure); openModal('mresa'); }
 
-// ─── TABLE ────────────────────────────────────────────────
-function renderTable() {
-  const search=(document.getElementById('f-search')?.value||'').toLowerCase();
-  const statut=document.getElementById('f-statut')?.value||'';
-  const espace=document.getElementById('f-espace')?.value||'';
-  const usage=document.getElementById('f-usage')?.value||'';
-  let R=DB.reservations;
-  if(search) R=R.filter(r=>`${r.prenom} ${r.nom} ${r.email} ${r.orga} ${r.objet}`.toLowerCase().includes(search));
-  if(statut) R=R.filter(r=>r.statut===statut);
-  if(espace) R=R.filter(r=>r.espace===espace);
-  if(usage)  R=R.filter(r=>(r.usage||'reunion')===usage);
-  document.getElementById('resa-body').innerHTML=R.length?R.map(r=>`
-    <tr style="cursor:pointer" onclick="showDetail('${r.id}')">
-      <td style="font-size:11px;font-weight:700;color:var(--brick);font-family:'Fraunces',serif">${r.id}</td>
-      <td><strong>${r.prenom} ${r.nom}</strong>${r.orga?`<br><span style="font-size:11px;color:var(--muted)">${r.orga}</span>`:''}</td>
-      <td>${espaceBadge(r.espace)}</td>
-      <td>${profilBadge(r.profil)}${r.usage==='nomade'?'<br><span style="font-size:11px;color:var(--sage)">Nomade</span>':''}</td>
-      <td>${fDate(r.date)}</td>
-      <td style="font-size:12px">${r.heureDebut||'—'}${r.heureFin?' → '+r.heureFin:''}</td>
-      <td>${DL[r.typeDuree]||r.typeDuree||'—'}${r.typeDuree==='heure'?' × '+r.nbHeures+'h':''}</td>
-      <td><span class="amount">${fMoney(r.montant)}</span></td>
-      <td style="font-size:11px">${r.options||'—'}</td>
-      <td>${statusBadge(r.statut)}</td>
-      <td onclick="event.stopPropagation()">
-        <button class="btn btn-sm btn-secondary" onclick="editResa('${r.id}')">✏️</button>
-        <button class="btn btn-sm btn-ghost" onclick="printResa('${r.id}')">🖨️</button>
-      </td>
-    </tr>`).join(''):'<tr><td colspan="11" style="text-align:center;padding:28px;color:var(--muted)">Aucune réservation</td></tr>';
+  const pb = document.getElementById('plan-body');
+  if (pb) pb.innerHTML = body;
 }
 
-// ─── DÉTAIL ───────────────────────────────────────────────
+function openResaAt(date, heure) { resetForm(); gvSet('r-date',date); gvSet('r-hdebut',heure); openModal('mresa'); }
+
+// ─────────────────────────────────────────────────────────
+// DÉTAIL RÉSERVATION (Sheets)
+// ─────────────────────────────────────────────────────────
 function showDetail(id) {
   const r=DB.reservations.find(r=>r.id===id); if(!r) return;
   const e=ESPACES_DEF[r.espace];
   const dl=r.typeDuree==='heure'?`${r.nbHeures}h (${r.heureDebut}→${r.heureFin})`:DL[r.typeDuree]||r.typeDuree;
-  document.getElementById('det-ref').textContent=r.id;
-  document.getElementById('det-body').innerHTML=`
+
+  document.getElementById('det-ref').textContent = r.id;
+  document.getElementById('det-body').innerHTML = `
     <div class="dgrid">
       <div class="di"><label>Client</label><span>${r.prenom} ${r.nom}</span></div>
       <div class="di"><label>Organisation</label><span>${r.orga||'—'}</span></div>
@@ -939,8 +1270,10 @@ function showDetail(id) {
       <div class="di full"><label>Objet</label><span>${r.objet||'—'}</span></div>
       <div class="di"><label>Montant</label><span class="amount" style="font-size:20px;color:var(--brick)">${fMoney(r.montant)}</span></div>
       <div class="di"><label>Statut</label><span>${statusBadge(r.statut)}</span></div>
+      ${r.calEventId?`<div class="di full"><label>Google Calendar</label><span style="font-size:12px;color:var(--cal)">📅 Événement synchronisé</span></div>`:''}
     </div>`;
-  document.getElementById('det-foot').innerHTML=`
+
+  document.getElementById('det-foot').innerHTML = `
     <button class="btn btn-ghost" onclick="closeModal('mdetail')">Fermer</button>
     <button class="btn btn-secondary" onclick="editResa('${r.id}')">✏️ Modifier</button>
     <button class="btn btn-secondary" onclick="sendEmail(DB.reservations.find(x=>x.id==='${r.id}'))">📧 Email</button>
@@ -948,10 +1281,84 @@ function showDetail(id) {
     ${r.statut==='pending'?`<button class="btn btn-sage" onclick="updateStatut('${r.id}','confirmed')">✓ Confirmer</button>`:''}
     ${r.statut!=='cancelled'?`<button class="btn btn-danger btn-sm" onclick="updateStatut('${r.id}','cancelled')">Annuler</button>`:''}
     <button class="btn btn-danger btn-sm" onclick="deleteResa('${r.id}')">🗑️</button>`;
+
   openModal('mdetail');
 }
 
-// ─── CLIENTS ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────
+// DÉTAIL ÉVÉNEMENT GOOGLE CALENDAR
+// ─────────────────────────────────────────────────────────
+function showCalEventDetail(calEventId, title, start, end) {
+  const s=new Date(start), e=new Date(end);
+  const fmtDt = d => d.toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'});
+  const fmtH  = d => `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+
+  document.getElementById('det-ref').textContent='(Google Calendar)';
+  document.getElementById('det-body').innerHTML=`
+    <div style="background:var(--cal-light);border-radius:10px;padding:16px;margin-bottom:16px;border-left:4px solid var(--cal)">
+      <div style="font-size:11px;text-transform:uppercase;color:var(--cal);font-weight:700;margin-bottom:6px">📅 Événement Google Calendar</div>
+      <div style="font-size:17px;font-weight:700;margin-bottom:8px">${title}</div>
+      <div style="font-size:13px;color:#555">📆 ${fmtDt(s)}<br>🕐 ${fmtH(s)} → ${fmtH(e)}</div>
+    </div>
+    <p style="font-size:13px;color:var(--muted)">Cet événement provient de Google Calendar et n'est pas encore lié à une réservation Génie. Vous pouvez créer une réservation à partir de cet événement.</p>`;
+
+  document.getElementById('det-foot').innerHTML=`
+    <button class="btn btn-ghost" onclick="closeModal('mdetail')">Fermer</button>
+    <button class="btn btn-primary" onclick="convertCalToResa('${encodeURIComponent(title)}','${start}','${end}')">➕ Créer une réservation</button>
+    <a href="https://calendar.google.com/calendar/u/1/r" target="_blank" class="btn btn-cal">🔗 Ouvrir Google Cal</a>`;
+
+  openModal('mdetail');
+}
+
+function convertCalToResa(titleEncoded, start, end) {
+  const title=decodeURIComponent(titleEncoded);
+  const s=new Date(start);
+  const dateStr=s.toISOString().split('T')[0];
+  const hd=`${String(s.getHours()).padStart(2,'0')}:${String(s.getMinutes()).padStart(2,'0')}`;
+  const diffH=Math.round((new Date(end)-s)/3600000);
+  closeModal('mdetail'); resetForm();
+  gvSet('r-date',dateStr); gvSet('r-hdebut',hd);
+  gvSet('r-nbh',String(Math.min(8,Math.max(1,diffH))));
+  document.getElementById('r-objet').value=title;
+  openModal('mresa');
+}
+
+// ─────────────────────────────────────────────────────────
+// TABLE RÉSERVATIONS
+// ─────────────────────────────────────────────────────────
+function renderTable() {
+  const search=(document.getElementById('f-search')?.value||'').toLowerCase();
+  const statut=document.getElementById('f-statut')?.value||'';
+  const espace=document.getElementById('f-espace')?.value||'';
+  const usage =document.getElementById('f-usage')?.value||'';
+  let R=DB.reservations;
+  if (search) R=R.filter(r=>`${r.prenom} ${r.nom} ${r.email} ${r.orga} ${r.objet}`.toLowerCase().includes(search));
+  if (statut) R=R.filter(r=>r.statut===statut);
+  if (espace) R=R.filter(r=>r.espace===espace);
+  if (usage)  R=R.filter(r=>(r.usage||'reunion')===usage);
+
+  document.getElementById('resa-body').innerHTML = R.length ? R.map(r=>`
+    <tr style="cursor:pointer" onclick="showDetail('${r.id}')">
+      <td style="font-size:11px;font-weight:700;color:var(--brick);font-family:'Fraunces',serif">${r.id}</td>
+      <td><strong>${r.prenom} ${r.nom}</strong>${r.orga?`<br><span style="font-size:11px;color:var(--muted)">${r.orga}</span>`:''}</td>
+      <td>${espaceBadge(r.espace)}</td>
+      <td>${profilBadge(r.profil)}${r.usage==='nomade'?'<br><span style="font-size:11px;color:var(--sage)">Nomade</span>':''}</td>
+      <td>${fDate(r.date)}</td>
+      <td style="font-size:12px">${r.heureDebut||'—'}${r.heureFin?' → '+r.heureFin:''}</td>
+      <td>${DL[r.typeDuree]||r.typeDuree||'—'}${r.typeDuree==='heure'?' × '+r.nbHeures+'h':''}</td>
+      <td><span class="amount">${fMoney(r.montant)}</span></td>
+      <td style="font-size:11px">${r.options||'—'}${r.calEventId?'<br><span style="color:var(--cal)">📅</span>':''}</td>
+      <td>${statusBadge(r.statut)}</td>
+      <td onclick="event.stopPropagation()">
+        <button class="btn btn-sm btn-secondary" onclick="editResa('${r.id}')">✏️</button>
+        <button class="btn btn-sm btn-ghost" onclick="printResa('${r.id}')">🖨️</button>
+      </td>
+    </tr>`).join('') : '<tr><td colspan="11" style="text-align:center;padding:28px;color:var(--muted)">Aucune réservation</td></tr>';
+}
+
+// ─────────────────────────────────────────────────────────
+// CLIENTS
+// ─────────────────────────────────────────────────────────
 function renderClients() {
   const search=(document.getElementById('f-client')?.value||'').toLowerCase();
   const map={};
@@ -961,131 +1368,115 @@ function renderClients() {
     map[k].count++; map[k].ca+=Number(r.montant);
   });
   let list=Object.values(map);
-  if(search) list=list.filter(c=>`${c.prenom} ${c.nom} ${c.email} ${c.orga}`.toLowerCase().includes(search));
+  if (search) list=list.filter(c=>`${c.prenom} ${c.nom} ${c.email} ${c.orga}`.toLowerCase().includes(search));
   list.sort((a,b)=>b.ca-a.ca);
-  document.getElementById('client-body').innerHTML=list.length
-    ?list.map(c=>`<tr><td><strong>${c.prenom} ${c.nom}</strong></td><td>${c.email}</td><td>${c.tel||'—'}</td><td>${c.orga||'—'}</td><td><strong>${c.count}</strong></td><td><span class="amount">${fMoney(c.ca)}</span></td></tr>`).join('')
-    :'<tr><td colspan="6" style="text-align:center;padding:28px;color:var(--muted)">Aucun client</td></tr>';
+
+  document.getElementById('client-body').innerHTML = list.length
+    ? list.map(c=>`<tr><td><strong>${c.prenom} ${c.nom}</strong></td><td>${c.email}</td><td>${c.tel||'—'}</td><td>${c.orga||'—'}</td><td><strong>${c.count}</strong></td><td><span class="amount">${fMoney(c.ca)}</span></td></tr>`).join('')
+    : '<tr><td colspan="6" style="text-align:center;padding:28px;color:var(--muted)">Aucun client</td></tr>';
 }
 
-// ─── ESPACES ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────
+// ESPACES & TARIFS
+// ─────────────────────────────────────────────────────────
 function renderEspaces() {
   document.getElementById('espaces-grid').innerHTML = Object.entries(ESPACES_DEF).map(([k,e])=>{
-    let content = `<div class="card">
-      <div class="card-hd"><h3>${e.icon} ${e.nom}</h3><span style="font-size:12px;color:var(--muted)">${e.ref} · ${e.capacite} pers.</span></div>
-      <div class="card-body">`;
+    let c=`<div class="card"><div class="card-hd"><h3>${e.icon} ${e.nom}</h3><span style="font-size:12px;color:var(--muted)">${e.ref} · ${e.capacite} pers.</span></div><div class="card-body">`;
+
     if (e.tarifs_reunion) {
-      content += `<div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px">Salle de réunion</div>
+      c += `<div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px">Salle de réunion</div>
         <table style="font-size:12px;border-collapse:collapse;width:100%"><thead>
-        <tr><th style="text-align:left;padding:5px 8px;background:var(--cream);font-size:11px">Profil</th><th style="text-align:right;padding:5px 8px;background:var(--cream);font-size:11px">/heure</th><th style="text-align:right;padding:5px 8px;background:var(--cream);font-size:11px">½j</th><th style="text-align:right;padding:5px 8px;background:var(--cream);font-size:11px">Journée</th></tr></thead><tbody>`;
+        <tr><th style="text-align:left;padding:5px 8px;background:var(--cream);font-size:11px">Profil</th>
+        <th style="text-align:right;padding:5px 8px;background:var(--cream);font-size:11px">/heure</th>
+        <th style="text-align:right;padding:5px 8px;background:var(--cream);font-size:11px">½j</th>
+        <th style="text-align:right;padding:5px 8px;background:var(--cream);font-size:11px">Journée</th></tr></thead><tbody>`;
       Object.entries(e.tarifs_reunion).forEach(([p,t])=>{
         const pr=PROFILS[p];
-        content+=`<tr><td style="padding:5px 8px;border-bottom:1px solid #F0EBE3;color:${pr.color};font-weight:600">${pr.label}</td>
+        c+=`<tr><td style="padding:5px 8px;border-bottom:1px solid #F0EBE3;color:${pr.color};font-weight:600">${pr.label}</td>
           <td style="text-align:right;padding:5px 8px;border-bottom:1px solid #F0EBE3">${t.heure===0?'Gratuit':t.heure+'€'}</td>
           <td style="text-align:right;padding:5px 8px;border-bottom:1px solid #F0EBE3">${t.demi===0?'Gratuit':t.demi+'€'}</td>
           <td style="text-align:right;padding:5px 8px;border-bottom:1px solid #F0EBE3">${t.journee===0?'Gratuit':t.journee+'€'}</td></tr>`;
       });
-      content += '</tbody></table>';
+      c += '</tbody></table>';
     }
+
     if (e.tarifs_nomade) {
-      content += `${e.tarifs_reunion?'<div style="margin-top:14px;border-top:1px solid var(--border);padding-top:12px"></div>':''}<div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px">Bureau nomade ${e.sous_type==='coworking'?'(Coworking)':'(Privé)'}</div>
+      c += `${e.tarifs_reunion?'<div style="margin-top:14px;border-top:1px solid var(--border);padding-top:12px"></div>':''}
+        <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px">Bureau nomade ${e.sous_type==='coworking'?'(Coworking)':'(Privé)'}</div>
         <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
-        ${Object.entries(e.tarifs_nomade).map(([d,p])=>`<div style="background:var(--cream);border-radius:8px;padding:8px;text-align:center"><div style="font-size:10px;color:var(--muted);text-transform:uppercase">${DL[d]||d}</div><div style="font-family:'Fraunces',serif;font-size:16px;font-weight:700;color:var(--brick)">${p}€</div></div>`).join('')}
+        ${Object.entries(e.tarifs_nomade).map(([d,p])=>`<div style="background:var(--cream);border-radius:8px;padding:8px;text-align:center">
+          <div style="font-size:10px;color:var(--muted);text-transform:uppercase">${DL[d]||d}</div>
+          <div style="font-family:'Fraunces',serif;font-size:16px;font-weight:700;color:var(--brick)">${p}€</div></div>`).join('')}
         </div>`;
     }
-    content += '</div></div>';
-    return content;
+
+    c += '</div></div>';
+    return c;
   }).join('');
 }
 
-// ─── DONNÉES ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────
+// DONNÉES & CONFIG
+// ─────────────────────────────────────────────────────────
 function renderDonnees() {
-  document.getElementById('url-display').textContent=SCRIPT_URL||'(non configuré)';
-  document.getElementById('data-info').textContent=`${DB.reservations.length} réservation(s) · ${document.getElementById('sync-txt').textContent}`;
-  document.getElementById('cfg-email').value=DB.config.email||'';
-  document.getElementById('cfg-tel').value=DB.config.tel||'';
+  document.getElementById('url-display').textContent = SCRIPT_URL || '—';
+  document.getElementById('data-info').textContent =
+    `${DB.reservations.length} réservation(s) en mémoire — Dernière sync : ${new Date().toLocaleTimeString('fr-FR')}`;
+  document.getElementById('cfg-email').value = DB.config.email||'';
+  document.getElementById('cfg-tel').value   = DB.config.tel||'';
+}
+
+function showSetup() {
+  document.getElementById('setup-banner').classList.add('show');
+  document.getElementById('url-input').value = SCRIPT_URL||'';
+}
+
+function saveUrl() {
+  const val=document.getElementById('url-input').value.trim();
+  if (!val.startsWith('https://script.google.com')) { toast('URL invalide','err'); return; }
+  SCRIPT_URL=val;
+  localStorage.setItem('genie_script_url',val);
+  document.getElementById('url-display').textContent=val;
+  document.getElementById('setup-banner').classList.remove('show');
+  toast('URL enregistrée'); loadData(true);
 }
 
 function exportCSV() {
-  const h=['ID','Prénom','Nom','Email','Tél','Organisation','Espace','Ref','Usage','Profil','Date','H.début','H.fin','Durée','NbH','Participants','Objet','Options','Montant','Statut'];
-  const rows=DB.reservations.map(r=>{
-    const e=ESPACES_DEF[r.espace];
-    return [r.id,r.prenom,r.nom,r.email,r.tel||'',r.orga||'',e?.nom||r.espace,e?.ref||'',r.usage||'reunion',r.profil||'',r.date,r.heureDebut,r.heureFin,DL[r.typeDuree]||r.typeDuree,r.nbHeures,r.participants||1,(r.objet||'').replace(/;/g,''),r.options||'',r.montant,r.statut].join(';');
-  });
-  const blob=new Blob(['\ufeff'+[h.join(';'),...rows].join('\n')],{type:'text/csv;charset=utf-8'});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a'); a.href=url; a.download=`genie-${new Date().toISOString().split('T')[0]}.csv`; a.click(); URL.revokeObjectURL(url);
-  toast('Export CSV téléchargé');
+  const headers=['id','prenom','nom','email','tel','orga','espace','usage','profil','date','typeDuree','nbHeures','heureDebut','heureFin','montant','options','statut','participants','objet','calEventId','createdAt'];
+  const rows=DB.reservations.map(r=>headers.map(h=>`"${String(r[h]||'').replace(/"/g,'""')}"`).join(','));
+  const csv='\uFEFF'+[headers.join(','),...rows].join('\n');
+  const a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download='genie-reservations-'+new Date().toISOString().split('T')[0]+'.csv';
+  a.click();
 }
 
-// ─── SETUP URL ────────────────────────────────────────────
-function saveUrl() {
-  const url=document.getElementById('url-input').value.trim();
-  if(!url||!url.includes('script.google.com')) { toast("URL invalide",'err'); return; }
-  SCRIPT_URL=url; localStorage.setItem('genie_script_url',url);
-  document.getElementById('setup-banner').classList.remove('show');
-  document.getElementById('url-display').textContent=url;
-  toast('Connecté !'); loadData(true);
+// ─────────────────────────────────────────────────────────
+// UI — LOADER / TOAST / SYNC
+// ─────────────────────────────────────────────────────────
+function showLoader(txt, sub) {
+  document.getElementById('loader-txt').textContent=txt;
+  document.getElementById('loader-sub').textContent=sub||'';
+  document.getElementById('loader').classList.add('open');
 }
-function showSetup() {
-  document.getElementById('setup-banner').classList.add('show');
-  document.getElementById('url-input').value=SCRIPT_URL;
-  document.getElementById('setup-banner').scrollIntoView({behavior:'smooth'});
+function hideLoader() { document.getElementById('loader').classList.remove('open'); }
+
+function toast(msg, type='ok') {
+  const el=document.createElement('div');
+  el.className=`toast ${type}`;
+  el.textContent=msg;
+  document.getElementById('toasts').appendChild(el);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add('show')));
+  setTimeout(()=>{ el.classList.remove('show'); setTimeout(()=>el.remove(),300); },3500);
 }
 
-// ─── UI HELPERS ───────────────────────────────────────────
-function showLoader(t,s) { document.getElementById('loader-txt').textContent=t; document.getElementById('loader-sub').textContent=s; document.getElementById('loader').style.display='flex'; }
-function hideLoader() { document.getElementById('loader').style.display='none'; }
-function setSyncState(state,txt) {
-  const d=document.getElementById('dot');
-  d.className='dot'+(state==='loading'?' loading':state==='error'?' error':'');
-  document.getElementById('sync-txt').textContent=txt;
-}
-function toast(msg,type='ok') {
-  const c=document.getElementById('toasts');
-  const t=document.createElement('div'); t.className='toast '+type;
-  t.innerHTML=({ok:'✅',err:'❌',info:'ℹ️'})[type]+' '+msg;
-  c.appendChild(t); setTimeout(()=>t.classList.add('show'),10);
-  setTimeout(()=>{ t.classList.remove('show'); setTimeout(()=>t.remove(),300); },3500);
+function setSyncState(state, txt) {
+  const dot=document.getElementById('dot');
+  const stxt=document.getElementById('sync-txt');
+  dot.className='dot'+(state==='loading'?' loading':state==='error'?' error':'');
+  if (stxt) stxt.textContent=txt;
 }
 
-// ─── LOGIN ────────────────────────────────────────────────
-const ADMIN_HASH = '9945326306061e5b56bc79f4675bebb4b3822d99'; // SHA1 de "Tlemcen5530!"
-async function sha1(str) {
-  const buf = await crypto.subtle.digest('SHA-1', new TextEncoder().encode(str));
-  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
-}
-async function checkLogin() {
-  const pwd = document.getElementById('login-pwd').value;
-  const h = await sha1(pwd);
-  if (h === ADMIN_HASH) {
-    sessionStorage.setItem('genie_admin_ok','1');
-    document.getElementById('login-screen').classList.add('hidden');
-    document.getElementById('main-layout').style.display='flex';
-    initApp();
-  } else {
-    document.getElementById('login-err').style.display='block';
-    document.getElementById('login-pwd').value='';
-    document.getElementById('login-pwd').focus();
-  }
-}
-function initApp() {
-  if(!SCRIPT_URL) { showSetup(); setSyncState('error','Non configuré'); }
-  else { loadData(false); setInterval(()=>loadData(false),30000); }
-  renderDashboard();
-  go('dashboard');
-}
-
-// ─── INIT ─────────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded',()=>{
-  if (sessionStorage.getItem('genie_admin_ok')==='1') {
-    document.getElementById('login-screen').classList.add('hidden');
-    document.getElementById('main-layout').style.display='flex';
-    initApp();
-  } else {
-    document.getElementById('login-pwd').focus();
-  }
-});
 </script>
 </body>
 </html>
