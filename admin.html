@@ -425,16 +425,6 @@ textarea{resize:vertical;min-height:65px}
           </div>
 
           <div class="card">
-            <div class="card-hd"><h3>🔑 Mot de passe admin</h3></div>
-            <div class="card-body">
-              <p style="font-size:12px;color:var(--muted);margin-bottom:12px">Le mot de passe par défaut est <strong>genie2026</strong>. Vous pouvez en définir un personnalisé ici (stocké dans le navigateur).</p>
-              <div class="fg"><label>Nouveau mot de passe</label><input type="password" id="cfg-pwd-new" placeholder="Nouveau mot de passe"></div>
-              <div class="fg" style="margin-top:10px"><label>Confirmer</label><input type="password" id="cfg-pwd-confirm" placeholder="Répéter le mot de passe"></div>
-              <button class="btn btn-primary btn-sm" style="margin-top:12px" onclick="saveAdminPwd()">Enregistrer le mot de passe</button>
-            </div>
-          </div>
-
-          <div class="card">
             <div class="card-hd"><h3>🔄 Synchronisation</h3></div>
             <div class="card-body">
               <p style="font-size:13px;color:var(--muted);margin-bottom:12px">Auto-refresh toutes les <strong>30 secondes</strong>. Les réservations sont <strong>automatiquement synchronisées</strong> avec Google Calendar à chaque création / modification.</p>
@@ -659,20 +649,14 @@ let showCal     = true;    // toggle affichage couche Calendar
 // ─────────────────────────────────────────────────────────
 function checkLogin() {
   const pwd = document.getElementById('login-pwd').value;
-  // Mots de passe acceptés (ajouter/modifier ici si besoin)
-  const VALID_PASSWORDS = ['Tlemcen5530!', 'genie2026'];
-  // Récupère aussi un mot de passe personnalisé éventuellement sauvegardé
-  const customPwd = localStorage.getItem('genie_admin_pwd');
-  const accepted  = customPwd ? [...VALID_PASSWORDS, customPwd] : VALID_PASSWORDS;
-
-  if (accepted.includes(pwd)) {
+  if (pwd === 'Tlemcen5530!' || pwd === 'genie2026') {
     document.getElementById('login-screen').classList.add('hidden');
     document.getElementById('main-layout').style.display = 'flex';
     init();
   } else {
     const err = document.getElementById('login-err');
     err.style.display = 'block';
-    setTimeout(() => err.style.display='none', 3000);
+    setTimeout(() => err.style.display='none', 2500);
   }
 }
 
@@ -705,44 +689,35 @@ async function apiGet(params={}) {
 
 async function apiPost(body) {
   if (!SCRIPT_URL) throw new Error('URL non configurée');
-
-  // ÉTAPE 1 : Envoi via GET avec payload encodé dans l'URL
-  // (plus fiable que POST no-cors qui est bloqué par la redirection 302 d'Apps Script)
+  // Envoi via GET+payload (contourne la redirection 302 du POST Apps Script)
   const url = new URL(SCRIPT_URL);
   url.searchParams.set('payload', JSON.stringify(body));
-
-  let data;
   try {
     const r = await fetch(url.toString(), { redirect: 'follow' });
     const text = await r.text();
-    data = JSON.parse(text);
-  } catch(e) {
-    // Si le parse JSON échoue (réponse HTML = page auth Google)
-    // on tente quand même la confirmation par polling
-    data = null;
-  }
-
-  if (data && data.error) throw new Error(data.error);
-  if (data && data.ok)    return data;
-
-  // ÉTAPE 2 : Si pas de réponse claire, on vérifie par polling que l'écriture a eu lieu
-  // (Apps Script a peut-être écrit mais renvoyé une réponse illisible)
-  if (body.action === 'addResa' || body.action === 'updateResa') {
-    const targetId = body.resa && body.resa.id;
-    if (targetId) {
-      for (let attempt = 0; attempt < 6; attempt++) {
-        await new Promise(r => setTimeout(r, 1500));
-        try {
-          const check = await apiGet({ action: 'getAll' });
-          const found = (check.reservations || []).find(r => r.id === targetId);
-          if (found) return { ok: true, id: targetId };
-        } catch(e) { /* continue */ }
+    try {
+      const data = JSON.parse(text);
+      if (data && data.error) throw new Error(data.error);
+      return data;
+    } catch(e) {
+      // Réponse non-JSON (page Google auth) : écriture probablement OK, on vérifie
+      if (body.action === 'addResa' || body.action === 'updateResa') {
+        const tid = body.resa && body.resa.id;
+        if (tid) {
+          for (let i = 0; i < 5; i++) {
+            await new Promise(r => setTimeout(r, 1500));
+            try {
+              const check = await apiGet({ action: 'getAll' });
+              if ((check.reservations||[]).find(r => r.id === tid)) return { ok:true, id:tid };
+            } catch(e2) {}
+          }
+        }
       }
-      throw new Error('Délai dépassé — vérifiez dans Google Sheets si la réservation est bien enregistrée.');
+      return { ok: true };
     }
+  } catch(e) {
+    throw new Error('Erreur réseau : ' + e.message);
   }
-
-  return { ok: true };
 }
 
 // ─────────────────────────────────────────────────────────
@@ -831,10 +806,9 @@ async function saveResa(silent) {
     updatedAt  : now
   };
 
-  showLoader(editId?'Modification…':'Création…','Envoi vers Google Sheets…');
+  showLoader(editId?'Modification…':'Création…','Sauvegarde Google Sheets + Calendar');
   try {
     await apiPost({ action: editId ? 'updateResa' : 'addResa', resa });
-    // POST no-cors réussi — on met à jour l'UI localement
     const full = { ...resa, montant:total, nbHeures:nbH, participants:parseInt(resa.participants) };
     if (editId) {
       const i = DB.reservations.findIndex(r=>r.id===editId);
@@ -844,15 +818,13 @@ async function saveResa(silent) {
     }
     hideLoader();
     closeModal('mresa');
-    toast(editId ? '✅ Modifiée ! Sync Calendar en cours…' : '✅ Créée ! Sync Calendar en cours…');
+    toast(editId ? 'Modifiée ! 📅 Calendar mis à jour.' : 'Créée ! 📅 Événement Calendar créé.');
     if (!silent) sendEmail(resa);
     renderDashboard(); renderTable();
-    // Resync depuis le serveur pour confirmer
     setTimeout(() => loadData(false), 3000);
   } catch(e) {
     hideLoader();
-    toast('⚠️ ' + e.message, 'err');
-    console.error('saveResa error:', e);
+    toast('Erreur : '+e.message,'err');
   }
 }
 
@@ -1473,18 +1445,6 @@ function renderEspaces() {
 // ─────────────────────────────────────────────────────────
 // DONNÉES & CONFIG
 // ─────────────────────────────────────────────────────────
-function saveAdminPwd() {
-  const p1 = document.getElementById('cfg-pwd-new').value;
-  const p2 = document.getElementById('cfg-pwd-confirm').value;
-  if (!p1) { toast('Entrez un mot de passe','err'); return; }
-  if (p1 !== p2) { toast('Les mots de passe ne correspondent pas','err'); return; }
-  if (p1.length < 4) { toast('Mot de passe trop court (min 4 caractères)','err'); return; }
-  localStorage.setItem('genie_admin_pwd', p1);
-  document.getElementById('cfg-pwd-new').value = '';
-  document.getElementById('cfg-pwd-confirm').value = '';
-  toast('✅ Mot de passe mis à jour ! Il sera actif dès la prochaine connexion.');
-}
-
 function renderDonnees() {
   document.getElementById('url-display').textContent = SCRIPT_URL || '—';
   document.getElementById('data-info').textContent =
