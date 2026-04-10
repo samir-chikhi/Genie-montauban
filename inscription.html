@@ -341,7 +341,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--fond);color:var(--texte);
 </div>
 
 <script>
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxceijW8OQSbtjjs-rqrXjozu-oL-RUGARK1Odqkx3-IBjs0EvrEe0u9qyXHxgSewZ3Cg/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyJ-Dk-yZZNdfxFigchP953rNyjSLJv4oOVUbxzuAbX4kuBfwTFBJvnnLuJMLWRnd9c4w/exec';
 
 let typeSelectionne = 'particulier';
 let docsSignes = { cgv: false, ri: false, statuts: false };
@@ -439,13 +439,30 @@ async function creerCompte() {
     ip: ''
   };
 
-  // no-cors : réponse opaque, fetch() rejette uniquement si hors-ligne.
+  // Content-Type text/plain : évite le preflight CORS et permet de lire la réponse
   try {
-    await fetch(APPS_SCRIPT_URL, {
+    const r = await fetch(APPS_SCRIPT_URL, {
       method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
       body: JSON.stringify(payload),
-      mode: 'no-cors'
+      redirect: 'follow'
     });
+    try {
+      const text = await r.text();
+      const data = JSON.parse(text);
+      if (data && data.error === 'EMAIL_EXISTE') {
+        showAlert('warn', 'Un compte existe déjà avec cet email. <a href="mon-compte.html">Connectez-vous →</a>');
+        btn.disabled = false;
+        btn.innerHTML = 'Créer mon compte';
+        return;
+      }
+      if (data && !data.success && data.message) {
+        throw new Error(data.message);
+      }
+    } catch (parseErr) {
+      // Réponse non-JSON (rare avec Apps Script) — on considère OK
+      if (parseErr.message && parseErr.message !== 'Unexpected token') throw parseErr;
+    }
     afficherSucces(payload.prenom, payload.email);
     // Sauvegarder le profil localement pour connexion directe
     localStorage.setItem('genie_session', JSON.stringify({
