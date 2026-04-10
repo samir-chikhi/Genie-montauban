@@ -639,7 +639,7 @@ const HOURS = ['08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','
 // HELPERS
 // ─────────────────────────────────────────────────────────
 const fMoney = n => n===0 ? 'Gratuit' : Number(n).toLocaleString('fr-FR',{minimumFractionDigits:2})+' €';
-const fDate  = d => { if(!d) return ''; const dt=new Date(d.includes('T')?d:d+'T12:00:00'); return isNaN(dt)?d:dt.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'numeric'}); };
+const fDate  = d => { if(!d) return ''; try { const s=String(d); const dt=new Date(s.includes('T')?s:s+'T12:00:00'); return isNaN(dt.getTime())?s:dt.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'numeric'}); } catch(e){ return String(d); } };
 const genId  = () => 'RSV-'+Date.now().toString(36).toUpperCase();
 const gv     = id => (document.getElementById(id)?.value||'').trim();
 const gvb    = id => document.getElementById(id)?.checked||false;
