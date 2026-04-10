@@ -239,7 +239,7 @@
 
 <div class="page">
   <h1 class="page-title">Réserver un espace</h1>
-  <p class="page-sub">Tiers-Lieu Génie · 12 rue du Génie, 82000 Montauban · <a href="tel:+33XXXXXXXXX" style="color:var(--teal)">contact@genie-montauban.fr</a></p>
+  <p class="page-sub">Tiers-Lieu Génie · 12 rue du Génie, 82000 Montauban · <a href="tel:+33XXXXXXXXX" style="color:var(--teal)"><span class="__cf_email__" data-cfemail="f99a96978d989a8db99e9c97909cd49496978d988c9b9897d79f8b">[email&#160;protected]</span></a></p>
 
   <!-- ÉTAPES -->
   <div class="steps" id="stepsBar">
@@ -314,7 +314,7 @@
     <!-- ALERTE MODIFICATION post-envoi -->
     <div class="alert-modify" id="alertModify" style="display:none">
       <span class="ico">ℹ️</span>
-      <span>Vous souhaitez modifier une réservation existante ? Indiquez votre référence dans le champ "Message" ou contactez-nous directement à <strong>contact@genie-montauban.fr</strong>.</span>
+      <span>Vous souhaitez modifier une réservation existante ? Indiquez votre référence dans le champ "Message" ou contactez-nous directement à <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="cfaca0a1bbaeacbb8fa8aaa1a6aae2a2a0a1bbaebaadaea1e1a9bd">[email&#160;protected]</a></strong>.</span>
     </div>
 
     <div class="form-grid">
@@ -398,7 +398,7 @@
 
 <div class="toasts" id="toasts"></div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ══════════════════════════════════════════════════════════
 // ⚠️ COLLE ICI L'URL DE TON APPS SCRIPT DÉPLOYÉ
 // Format : https://script.google.com/macros/s/XXXX/exec
@@ -500,13 +500,17 @@ let state = {
 
 // ── INIT ──
 document.addEventListener('DOMContentLoaded', () => {
-  // Date min = demain
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  document.getElementById('fDate').min = tomorrow.toISOString().split('T')[0];
+  // Délai minimal pour laisser Cloudflare finir le décodage des emails
+  setTimeout(() => {
+    // Date min = demain
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const fDate = document.getElementById('fDate');
+    if (fDate) fDate.min = tomorrow.toISOString().split('T')[0];
 
-  renderEspaces();
-  updateSteps(1);
+    renderEspaces();
+    updateSteps(1);
+  }, 50);
 });
 
 // ── PROFIL ──
@@ -785,10 +789,4 @@ async function soumettre() {
 // ── MODIFIER APRÈS ENVOI ──
 function modifierReservation() {
   const ref = document.getElementById('successRef').textContent;
-  const subject = encodeURIComponent(`Modification réservation ${ref}`);
-  const body = encodeURIComponent(`Bonjour,\n\nJe souhaite modifier ma réservation (réf : ${ref}).\n\nMerci de me contacter.\n\nCordialement,`);
-  window.location.href = `mailto:contact@genie-montauban.fr?subject=${subject}&body=${body}`;
-}
-
-// ── TOAST ──
-function toast(msg, type = 'info'
+  const subject = encodeURIComponent(`
