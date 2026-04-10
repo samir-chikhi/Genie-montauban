@@ -786,4 +786,28 @@ async function soumettre() {
 // ── MODIFIER APRÈS ENVOI ──
 function modifierReservation() {
   const ref = document.getElementById('successRef').textContent;
-  const subject = encodeURIComponent(`
+  const subject = encodeURIComponent('Modification réservation ' + ref + ' — Génie Montauban');
+  const body    = encodeURIComponent(
+    'Bonjour,\n\nJe souhaite modifier ou annuler la réservation suivante :\n\nRéférence : ' + ref +
+    '\n\nMerci de me contacter pour convenir des modalités.\n\nCordialement'
+  );
+  window.location.href = 'mailto:contact@genie-montauban.fr?subject=' + subject + '&body=' + body;
+}
+
+// ── TOAST (notifications non-bloquantes) ──
+function toast(msg, type, duration) {
+  const container = document.getElementById('toasts');
+  if (!container) return;
+  const t = document.createElement('div');
+  t.className = 'toast' + (type ? ' ' + type : '');
+  t.textContent = msg;
+  container.appendChild(t);
+  setTimeout(() => {
+    t.style.opacity = '0';
+    t.style.transition = 'opacity .3s';
+    setTimeout(() => t.remove(), 350);
+  }, duration || 4000);
+}
+</script>
+</body>
+</html>
