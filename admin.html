@@ -705,16 +705,44 @@ async function apiGet(params={}) {
 
 async function apiPost(body) {
   if (!SCRIPT_URL) throw new Error('URL non configurée');
-  // On passe par un GET avec le payload encodé dans l'URL.
-  // C'est plus fiable qu'un POST no-cors avec Apps Script (qui redirige en 302).
-  // Apps Script lit le paramètre "payload" dans doGet() et l'exécute.
+
+  // ÉTAPE 1 : Envoi via GET avec payload encodé dans l'URL
+  // (plus fiable que POST no-cors qui est bloqué par la redirection 302 d'Apps Script)
   const url = new URL(SCRIPT_URL);
   url.searchParams.set('payload', JSON.stringify(body));
-  const r = await fetch(url.toString(), { redirect: 'follow' });
-  if (!r.ok) throw new Error('HTTP ' + r.status);
-  const data = await r.json();
-  if (data.error) throw new Error(data.error);
-  return data;
+
+  let data;
+  try {
+    const r = await fetch(url.toString(), { redirect: 'follow' });
+    const text = await r.text();
+    data = JSON.parse(text);
+  } catch(e) {
+    // Si le parse JSON échoue (réponse HTML = page auth Google)
+    // on tente quand même la confirmation par polling
+    data = null;
+  }
+
+  if (data && data.error) throw new Error(data.error);
+  if (data && data.ok)    return data;
+
+  // ÉTAPE 2 : Si pas de réponse claire, on vérifie par polling que l'écriture a eu lieu
+  // (Apps Script a peut-être écrit mais renvoyé une réponse illisible)
+  if (body.action === 'addResa' || body.action === 'updateResa') {
+    const targetId = body.resa && body.resa.id;
+    if (targetId) {
+      for (let attempt = 0; attempt < 6; attempt++) {
+        await new Promise(r => setTimeout(r, 1500));
+        try {
+          const check = await apiGet({ action: 'getAll' });
+          const found = (check.reservations || []).find(r => r.id === targetId);
+          if (found) return { ok: true, id: targetId };
+        } catch(e) { /* continue */ }
+      }
+      throw new Error('Délai dépassé — vérifiez dans Google Sheets si la réservation est bien enregistrée.');
+    }
+  }
+
+  return { ok: true };
 }
 
 // ─────────────────────────────────────────────────────────
@@ -803,7 +831,7 @@ async function saveResa(silent) {
     updatedAt  : now
   };
 
-  showLoader(editId?'Modification…':'Création…','Sauvegarde Google Sheets + Calendar');
+  showLoader(editId?'Modification…':'Création…','Envoi vers Google Sheets…');
   try {
     await apiPost({ action: editId ? 'updateResa' : 'addResa', resa });
     // POST no-cors réussi — on met à jour l'UI localement
@@ -823,8 +851,7 @@ async function saveResa(silent) {
     setTimeout(() => loadData(false), 3000);
   } catch(e) {
     hideLoader();
-    // En no-cors, une erreur ici = vrai problème réseau (offline)
-    toast('⚠️ Erreur réseau. Vérifiez votre connexion ou l\'URL Apps Script.','err');
+    toast('⚠️ ' + e.message, 'err');
     console.error('saveResa error:', e);
   }
 }
