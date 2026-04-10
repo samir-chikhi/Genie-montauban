@@ -239,7 +239,7 @@
 
 <div class="page">
   <h1 class="page-title">Réserver un espace</h1>
-  <p class="page-sub">Tiers-Lieu Génie · 12 rue du Génie, 82000 Montauban · <a href="tel:+33XXXXXXXXX" style="color:var(--teal)">contact@genie-montauban.fr</a></p>
+  <p class="page-sub">Tiers-Lieu Génie · 12 rue du Génie, 82000 Montauban · <a href="tel:+33XXXXXXXXX" style="color:var(--teal)"><span class="__cf_email__" data-cfemail="9dfef2f3e9fcfee9ddfaf8f3f4f8b0f0f2f3e9fce8fffcf3b3fbef">[email&#160;protected]</span></a></p>
 
   <!-- ÉTAPES -->
   <div class="steps" id="stepsBar">
@@ -314,7 +314,7 @@
     <!-- ALERTE MODIFICATION post-envoi -->
     <div class="alert-modify" id="alertModify" style="display:none">
       <span class="ico">ℹ️</span>
-      <span>Vous souhaitez modifier une réservation existante ? Indiquez votre référence dans le champ "Message" ou contactez-nous directement à <strong>contact@genie-montauban.fr</strong>.</span>
+      <span>Vous souhaitez modifier une réservation existante ? Indiquez votre référence dans le champ "Message" ou contactez-nous directement à <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5f3c30312b3e3c2b1f383a31363a723230312b3e2a3d3e3171392d">[email&#160;protected]</a></strong>.</span>
     </div>
 
     <div class="form-grid">
@@ -398,12 +398,12 @@
 
 <div class="toasts" id="toasts"></div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ══════════════════════════════════════════════════════════
 // ⚠️ COLLE ICI L'URL DE TON APPS SCRIPT DÉPLOYÉ
 // Format : https://script.google.com/macros/s/XXXX/exec
 // ══════════════════════════════════════════════════════════
-const SCRIPT_URL = localStorage.getItem('genie_script_url') || '';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyJ-Dk-yZZNdfxFigchP953rNyjSLJv4oOVUbxzuAbX4kuBfwTFBJvnnLuJMLWRnd9c4w/exec';
 
 // ══════════════════════════════════════════════════════════
 // DONNÉES TARIFS (CORRIGÉES : adhérent ~20%)
@@ -709,30 +709,48 @@ async function soumettre() {
   try {
     let ok = false;
 
-    if (SCRIPT_URL && SCRIPT_URL !== 'VOTRE_URL_ICI') {
-      const url = SCRIPT_URL + '?callback=cb_' + Date.now();
-      // JSONP pour éviter CORS
-      await new Promise((resolve, reject) => {
-        const cbName = 'gcb_' + Date.now();
-        const tag = document.createElement('script');
-        const tout = setTimeout(() => { reject(new Error('timeout')); }, 12000);
-        window[cbName] = (data) => {
-          clearTimeout(tout);
-          document.head.removeChild(tag);
-          resolve(data);
-        };
-        tag.onerror = () => { clearTimeout(tout); reject(new Error('network')); };
-        const q = encodeURIComponent(JSON.stringify(payload));
-        tag.src = `${SCRIPT_URL}?callback=${cbName}&data=${q}`;
-        document.head.appendChild(tag);
-      });
-      ok = true;
-    } else {
-      // Mode démo : simule un envoi
-      await new Promise(r => setTimeout(r, 1200));
-      ok = true;
-      console.log('[Génie Réservation] Mode démo — payload:', payload);
+    // Envoi via GET avec payload encodé (même méthode que admin.html)
+    const sendUrl = new URL(SCRIPT_URL);
+    sendUrl.searchParams.set('payload', JSON.stringify({ action: 'addResa', resa: {
+      id         : payload.ref,
+      prenom     : payload.nom.split(' ')[0] || payload.nom,
+      nom        : payload.nom.split(' ').slice(1).join(' ') || payload.nom,
+      email      : payload.email,
+      tel        : payload.tel || '',
+      orga       : payload.orga || '',
+      espace     : payload.espace,
+      nomEspace  : payload.espaceNom || payload.espace,
+      usage      : payload.cat || 'reunion',
+      profil     : payload.profil,
+      date       : payload.date,
+      typeDuree  : payload.duree,
+      nbHeures   : String(payload.nbHeures || 1),
+      heureDebut : payload.heure || '',
+      heureFin   : '',
+      montant    : String(payload.montant || 0),
+      montantBase: String(payload.montant || 0),
+      options    : [payload.badge24h ? 'Badge 24h/7j' : '', payload.adhesion ? 'Adhésion Génie' : ''].filter(Boolean).join(', '),
+      statut     : 'pending',
+      participants: String(payload.participants || 1),
+      objet      : payload.message || '',
+      createdAt  : new Date().toISOString(),
+      updatedAt  : new Date().toISOString()
+    }}));
+
+    let data = null;
+    try {
+      const r = await fetch(sendUrl.toString(), { redirect: 'follow' });
+      const text = await r.text();
+      data = JSON.parse(text);
+    } catch(e) {
+      data = null; // réponse illisible mais l'écriture a peut-être réussi
     }
+
+    // Si réponse claire avec erreur → on remonte l'erreur
+    if (data && data.error) throw new Error(data.error);
+
+    // Sinon on considère OK (polling non nécessaire côté public)
+    ok = true;
 
     clearTimeout(timeout);
 
@@ -771,16 +789,4 @@ function modifierReservation() {
 }
 
 // ── TOAST ──
-function toast(msg, type = 'info', duration = 4000) {
-  const t = document.createElement('div');
-  t.className = `toast ${type}`;
-  t.textContent = msg;
-  document.getElementById('toasts').appendChild(t);
-  setTimeout(() => t.remove(), duration);
-}
-
-// Cacher phaseRecap au départ
-document.getElementById('phaseRecap').style.display = 'none';
-</script>
-</body>
-</html>
+function toast(msg, type = 'info'
