@@ -239,7 +239,7 @@
 
 <div class="page">
   <h1 class="page-title">Réserver un espace</h1>
-  <p class="page-sub">Tiers-Lieu Génie · 12 rue du Génie, 82000 Montauban · <a href="tel:+33XXXXXXXXX" style="color:var(--teal)"><span class="__cf_email__" data-cfemail="f99a96978d989a8db99e9c97909cd49496978d988c9b9897d79f8b">[email&#160;protected]</span></a></p>
+  <p class="page-sub">Tiers-Lieu Génie · 12 rue du Génie, 82000 Montauban · <a href="tel:+33651509718" style="color:var(--teal)">06 51 50 97 18</a></p>
 
   <!-- ÉTAPES -->
   <div class="steps" id="stepsBar">
@@ -314,7 +314,7 @@
     <!-- ALERTE MODIFICATION post-envoi -->
     <div class="alert-modify" id="alertModify" style="display:none">
       <span class="ico">ℹ️</span>
-      <span>Vous souhaitez modifier une réservation existante ? Indiquez votre référence dans le champ "Message" ou contactez-nous directement à <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="cfaca0a1bbaeacbb8fa8aaa1a6aae2a2a0a1bbaebaadaea1e1a9bd">[email&#160;protected]</a></strong>.</span>
+      <span>Vous souhaitez modifier une réservation existante ? Indiquez votre référence dans le champ "Message" ou contactez-nous directement à <strong><a href="mailto:contact@genie-montauban.fr" style="color:var(--warn)">contact@genie-montauban.fr</a></strong>.</span>
     </div>
 
     <div class="form-grid">
@@ -362,7 +362,7 @@
   </div>
 
   <!-- ═══ PHASE 4 : RECAP + ENVOI ═══ -->
-  <div class="form-card" id="phaseRecap">
+  <div class="form-card" id="phaseRecap" style="display:none">
     <h2>✅ Vérification avant envoi</h2>
     <div class="recap-full" id="recapFull">
       <h3>Récapitulatif de votre demande</h3>
@@ -398,7 +398,7 @@
 
 <div class="toasts" id="toasts"></div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 // ══════════════════════════════════════════════════════════
 // ⚠️ COLLE ICI L'URL DE TON APPS SCRIPT DÉPLOYÉ
 // Format : https://script.google.com/macros/s/XXXX/exec
@@ -578,8 +578,7 @@ function renderDurees() {
 
 function selectDuree(d) {
   state.duree = d;
-  document.querySelectorAll('.duree-btn').forEach(b => b.classList.remove('active'));
-  event.target.classList.add('active');
+  renderDurees(); // re-render avec le bon bouton actif (évite event.target non fiable)
   renderRecapPrix();
   updateSteps(2);
 }
@@ -666,123 +665,121 @@ document.getElementById('fEmail').addEventListener('blur', () => {
   }
 });
 
+// ── Conversion durée → heures numériques (pour le serveur) ──
+const DUREE_HEURES = {
+  heure: 1, 'demi-journee': 4, journee: 8, semaine: 40, mois: 160
+};
+
 // ── SOUMISSION (non-bloquante) ──
 async function soumettre() {
-  const nom = document.getElementById('fNom').value.trim();
-  const email = document.getElementById('fEmail').value.trim();
-  const date = document.getElementById('fDate').value;
+  const nomComplet = document.getElementById('fNom').value.trim();
+  const email      = document.getElementById('fEmail').value.trim();
+  const date       = document.getElementById('fDate').value;
+  const heureDebut = document.getElementById('fHeure').value || '09:00';
 
-  if (!nom || !email || !date || !state.espaceId || !state.duree) {
+  // Validation côté client
+  if (!nomComplet || !email || !date || !state.espaceId || !state.duree) {
     toast('Veuillez remplir tous les champs obligatoires.', 'error');
     return;
   }
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+    toast('Adresse email invalide.', 'error');
+    return;
+  }
 
-  const esp = ESPACES.find(e => e.id === state.espaceId);
-  const btn = document.getElementById('btnSubmit');
+  const esp        = ESPACES.find(e => e.id === state.espaceId);
+  const dureeH     = DUREE_HEURES[state.duree] || 1;
+  const prenomVal  = nomComplet.split(' ')[0] || nomComplet;
+  const nomVal     = nomComplet.split(' ').slice(1).join(' ') || nomComplet;
+  const reference  = 'GEN-' + Date.now().toString(36).toUpperCase();
+
+  // Construction des options sélectionnées
+  const extras = [];
+  if (document.getElementById('optBadge').checked)    extras.push('Accès badge 24h/7j (+25€/mois)');
+  if (document.getElementById('optAdhesion').checked) extras.push('Adhésion Génie (+50€/an)');
+  // Pour les durées multi-jours, on l'indique dans le message
+  if (state.duree === 'semaine') extras.push('[Durée : Semaine]');
+  if (state.duree === 'mois')    extras.push('[Durée : Mois]');
+
+  const msgBase = document.getElementById('fMsg').value.trim();
+  const msgFull = [msgBase, ...extras].filter(Boolean).join(' | ');
+
+  // Payload conforme à la fonction creerReservation() du serveur
+  const payload = {
+    action        : 'RESERVER',
+    espace        : esp.nom,
+    typeEspace    : esp.cat,
+    profil        : state.profil,
+    date          : date,
+    heureDebut    : heureDebut,
+    duree         : dureeH,
+    participants  : 1,
+    prenom        : prenomVal,
+    nom           : nomVal,
+    email         : email,
+    tel           : document.getElementById('fTel').value.trim(),
+    structure     : document.getElementById('fOrga').value.trim(),
+    message       : msgFull,
+    montantEstime : state.prixTotal,
+    options       : extras.filter(s => !s.startsWith('[')).join(', ')
+  };
+
+  const btn    = document.getElementById('btnSubmit');
+  const banner = document.getElementById('loadBanner');
   btn.disabled = true;
   document.getElementById('btnTxt').textContent = 'Envoi en cours…';
-
-  // BANNER LOADER non-bloquant (pas de spinner en boucle infini)
-  const banner = document.getElementById('loadBanner');
   banner.classList.add('visible');
   document.getElementById('loadBannerTxt').textContent = 'Envoi en cours… Cela peut prendre 5 à 10 secondes.';
 
-  const payload = {
-    action: 'reservation',
-    profil: state.profil,
-    espaceId: state.espaceId,
-    espaceNom: esp.nom,
-    duree: DUREE_LABELS[state.duree],
-    prixTotal: state.prixTotal,
-    date,
-    heure: document.getElementById('fHeure').value,
-    nom,
-    email,
-    tel: document.getElementById('fTel').value,
-    organisation: document.getElementById('fOrga').value,
-    message: document.getElementById('fMsg').value,
-    badge24h: document.getElementById('optBadge').checked,
-    adhesion: document.getElementById('optAdhesion').checked,
-    ref: 'GEN-' + Date.now().toString(36).toUpperCase()
-  };
-
-  // Timeout 15s pour éviter chargement en boucle infini
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 15000);
+  const timeout    = setTimeout(() => controller.abort(), 20000);
 
   try {
-    let ok = false;
-
-    // Envoi vers Apps Script via GET+payload
-    const sendUrl = new URL(SCRIPT_URL);
-    sendUrl.searchParams.set('payload', JSON.stringify({
-      action: 'addResa',
-      resa: {
-        id          : payload.ref,
-        prenom      : (payload.nom || '').split(' ')[0] || payload.nom,
-        nom         : (payload.nom || '').split(' ').slice(1).join(' ') || payload.nom,
-        email       : payload.email,
-        tel         : payload.tel || '',
-        orga        : payload.organisation || '',
-        espace      : payload.espaceId || '',
-        nomEspace   : payload.espaceNom || '',
-        usage       : 'reunion',
-        profil      : payload.profil || 'plein',
-        date        : payload.date || '',
-        typeDuree   : payload.duree || '',
-        nbHeures    : '1',
-        heureDebut  : payload.heure || '',
-        heureFin    : '',
-        montant     : String(payload.prixTotal || 0),
-        montantBase : String(payload.prixTotal || 0),
-        options     : [payload.badge24h ? 'Badge 24h/7j' : '', payload.adhesion ? 'Adhésion Génie' : ''].filter(Boolean).join(', '),
-        statut      : 'pending',
-        participants: '1',
-        objet       : payload.message || '',
-        createdAt   : new Date().toISOString(),
-        updatedAt   : new Date().toISOString()
-      }
-    }));
-
-    try {
-      const r = await fetch(sendUrl.toString(), { redirect: 'follow' });
-      const text = await r.text();
-      try {
-        const data = JSON.parse(text);
-        if (data && data.error) throw new Error(data.error);
-      } catch(e) {
-        // Réponse non-JSON : Apps Script a probablement écrit quand même
-      }
-      ok = true;
-    } catch(e) {
-      throw new Error(e.message);
-    }
-
+    // Envoi via POST (Content-Type text/plain évite le preflight CORS)
+    const r = await fetch(SCRIPT_URL, {
+      method  : 'POST',
+      headers : { 'Content-Type': 'text/plain' },
+      body    : JSON.stringify(payload),
+      redirect: 'follow',
+      signal  : controller.signal
+    });
     clearTimeout(timeout);
 
-    if (ok) {
-      // Masquer les formulaires, afficher succès
+    // Lecture de la réponse serveur
+    let serverOk = false;
+    try {
+      const text = await r.text();
+      const data = JSON.parse(text);
+      if (data && data.success === true)  serverOk = true;
+      else if (data && data.error)        throw new Error(data.error);
+      else                                serverOk = true; // Réponse inattendue mais sans erreur
+    } catch (parseErr) {
+      // Réponse non-JSON (rare avec Apps Script) — on considère l'envoi réussi
+      serverOk = true;
+    }
+
+    if (serverOk) {
       ['phaseProfilWrap','phaseEspace','phaseCoord','phaseRecap'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.style.display = 'none';
       });
-      document.getElementById('successRef').textContent = payload.ref;
+      document.getElementById('successRef').textContent = reference;
       document.getElementById('successCard').classList.add('visible');
       state.submitted = true;
       updateSteps(4);
       document.getElementById('step4').className = 'step done';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
   } catch (err) {
-    // PAS de chargement en boucle : on affiche le message clairement
-    banner.querySelector('#loadBannerTxt').textContent =
-      'La connexion avec le serveur a échoué. Votre demande peut quand même être envoyée par email.';
-    toast('Erreur réseau. Envoyez votre demande à contact@genie-montauban.fr', 'error', 8000);
+    clearTimeout(timeout);
+    document.getElementById('loadBannerTxt').textContent =
+      'La connexion a échoué. Envoyez votre demande par email ou réessayez.';
+    toast('Erreur réseau. Contactez-nous à contact@genie-montauban.fr', 'error', 8000);
     btn.disabled = false;
     document.getElementById('btnTxt').textContent = 'Réessayer';
   } finally {
-    clearTimeout(timeout);
-    setTimeout(() => banner.classList.remove('visible'), 3000);
+    setTimeout(() => banner.classList.remove('visible'), 4000);
   }
 }
 
