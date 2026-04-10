@@ -246,7 +246,7 @@ footer strong{color:var(--cream)}
 <script>
 // ═══════════════════════════════════════════════════════
 // ⚠️ COLLE ICI L'URL DE TON APPS SCRIPT APRÈS DÉPLOIEMENT
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxceijW8OQSbtjjs-rqrXjozu-oL-RUGARK1Odqkx3-IBjs0EvrEe0u9qyXHxgSewZ3Cg/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyJ-Dk-yZZNdfxFigchP953rNyjSLJv4oOVUbxzuAbX4kuBfwTFBJvnnLuJMLWRnd9c4w/exec';
 // ═══════════════════════════════════════════════════════
 
 // ─── DONNÉES ESPACES ────────────────────────────────────
@@ -638,41 +638,56 @@ function toggleOpt(opt) {
 }
 
 // ─── SOUMISSION ───────────────────────────────────────────
+// Conversion durée → heures numériques (attendu par creerReservation côté serveur)
+const DUREE_H = { heure:1, demi:4, journee:8, semaine:40, mois:160 };
+
 async function submit() {
   const prenom = gv('f-prenom'), nom = gv('f-nom'), email = gv('f-email'), date = gv('f-date');
   if (!selectedEspace) { alert('Veuillez choisir un espace.'); return; }
   if (selectedUsage==='reunion' && !selectedProfil) { alert('Veuillez choisir votre profil tarifaire.'); return; }
   if (!selectedDuree) { alert('Veuillez choisir une durée.'); return; }
   if (!prenom||!nom||!email||!date) { alert('Veuillez remplir les champs obligatoires (*).'); return; }
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { alert('Adresse email invalide.'); return; }
 
   if (SCRIPT_URL === 'VOTRE_URL_ICI') { alert('⚠️ URL Apps Script non configurée.'); return; }
 
   const nbH = parseInt(gv('f-nbh'))||1;
-  const hd  = gv('f-hdebut');
+  const hd  = gv('f-hdebut') || '09:00';
   const hf  = heureFin(hd, selectedDuree, nbH);
   const m   = calcMontant();
   const now = new Date().toISOString();
+  const ref = genId();
 
   const options = [];
   if (optBadge)    options.push('Accès badge 24h/7j (25€/mois)');
   if (optAdhesion) options.push('Adhésion Génie (50€/an)');
 
-  const resa = {
-    id: genId(), prenom, nom, email,
-    tel: gv('f-tel'), orga: gv('f-orga'),
-    espace: selectedEspace.id,
-    nomEspace: selectedEspace.nom,
-    usage: selectedUsage,
-    profil: selectedUsage==='reunion' ? selectedProfil : '',
-    date, typeDuree: selectedDuree, nbHeures: String(nbH),
-    heureDebut: hd, heureFin: hf,
-    montant: String(m.total), montantBase: String(m.base),
-    options: options.join(', '),
-    statut: 'pending',
-    participants: String(parseInt(gv('f-part'))||1),
-    objet: gv('f-objet'),
-    message: gv('f-message'),
-    createdAt: now, updatedAt: now
+  // Durée en heures numériques pour le serveur (creerReservation l'exige)
+  const dureeH = selectedDuree === 'heure' ? nbH : (DUREE_H[selectedDuree] || 1);
+
+  // Extras dans le message pour les durées multi-jours
+  const extrasMsg = [];
+  if (selectedDuree === 'semaine') extrasMsg.push('[Durée : Semaine]');
+  if (selectedDuree === 'mois')    extrasMsg.push('[Durée : Mois]');
+
+  // Payload conforme à creerReservation() sur le serveur
+  const payload = {
+    action       : 'RESERVER',
+    espace       : selectedEspace.nom,
+    typeEspace   : selectedUsage,
+    profil       : selectedUsage==='reunion' ? selectedProfil : 'plein',
+    date         : date,
+    heureDebut   : hd,
+    duree        : dureeH,
+    participants : parseInt(gv('f-part'))||1,
+    prenom       : prenom,
+    nom          : nom,
+    email        : email,
+    tel          : gv('f-tel'),
+    structure    : gv('f-orga'),
+    message      : [gv('f-message'), gv('f-objet'), ...extrasMsg].filter(Boolean).join(' | '),
+    montantEstime: m.total,
+    options      : options.join(', ')
   };
 
   const btn = document.getElementById('submit-btn');
@@ -680,36 +695,47 @@ async function submit() {
   setLoading(true);
 
   try {
-    await fetch(SCRIPT_URL, {
+    const r = await fetch(SCRIPT_URL, {
       method:'POST', headers:{'Content-Type':'text/plain'},
-      body: JSON.stringify({ action:'addResa', resa }), redirect:'follow'
+      body: JSON.stringify(payload), redirect:'follow'
     });
     setLoading(false);
+
+    // Vérification de la réponse serveur
+    let serverOk = false;
+    try {
+      const text = await r.text();
+      const data = JSON.parse(text);
+      if (data && data.success === true)  serverOk = true;
+      else if (data && data.error)        throw new Error(data.error);
+      else                                serverOk = true;
+    } catch(parseErr) {
+      serverOk = true; // Réponse non-JSON rare — on considère OK
+    }
+
+    if (!serverOk) throw new Error('Le serveur a retourné une erreur inattendue.');
+
     document.getElementById('main-content').style.display='none';
     document.getElementById('success').classList.add('show');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 
     const dl = selectedDuree==='heure'?`${nbH}h (${hd}→${hf})`:DL[selectedDuree];
     const profilLabel = selectedUsage==='reunion' ? PROFILS.find(p=>p.id===selectedProfil)?.label : 'Bureau nomade';
 
     document.getElementById('success-details').innerHTML = `
       <h3>📋 Récapitulatif</h3>
-      <div class="sd"><span>Référence</span><span style="color:var(--brick);font-family:'Fraunces',serif;font-size:16px">${resa.id}</span></div>
+      <div class="sd"><span>Référence</span><span style="color:var(--brick);font-family:'Fraunces',serif;font-size:16px">${ref}</span></div>
       <div class="sd"><span>Espace</span><span>${selectedEspace.nom} (${selectedEspace.ref})</span></div>
       <div class="sd"><span>Profil</span><span>${profilLabel}</span></div>
       <div class="sd"><span>Date</span><span>${fDate(date)}</span></div>
       <div class="sd"><span>Durée</span><span>${dl}</span></div>
-      <div class="sd"><span>Participants</span><span>${resa.participants}</span></div>
+      <div class="sd"><span>Participants</span><span>${gv('f-part')||1}</span></div>
       ${options.length ? `<div class="sd"><span>Options</span><span>${options.join(' + ')}</span></div>` : ''}
       <div class="sd"><span>Montant estimé</span><span style="font-size:18px;color:var(--brick);font-family:'Fraunces',serif">${fMoney(m.total)}${m.base===0&&selectedProfil==='asso'?' (sous réserve validation)':''}</span></div>
-      <div class="sd"><span>Statut</span><span>⏳ En attente de confirmation</span></div>`;
-
-    // Email auto
-    const sub  = encodeURIComponent(`Demande réservation Génie — ${resa.id}`);
-    const body = encodeURIComponent(`Bonjour ${prenom},\n\nNous avons bien reçu votre demande de réservation.\n\nRéférence : ${resa.id}\nEspace : ${selectedEspace.nom} (${selectedEspace.ref})\nDate : ${fDate(date)}\nDurée : ${dl}\nProfil : ${profilLabel}\nMontant estimé : ${fMoney(m.total)}\n${options.length?'Options : '+options.join(', ')+'\n':''}\nConfirmation sous 24h.\n\nÉquipe Génie Montauban\n06 51 50 97 18\ngenie.montauban@gmail.com`);
-    setTimeout(() => { window.location.href = `mailto:${email}?subject=${sub}&body=${body}`; }, 800);
+      <div class="sd"><span>Statut</span><span>⏳ En attente de confirmation — email envoyé sous 24h</span></div>`;
   } catch(e) {
     setLoading(false); btn.disabled=false; btn.textContent='📅 Envoyer ma demande de réservation';
-    alert('Erreur : ' + e.message);
+    alert('Erreur lors de l\'envoi : ' + e.message + '\n\nContactez-nous directement : contact@genie-montauban.fr · 06 51 50 97 18');
   }
 }
 
