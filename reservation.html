@@ -239,7 +239,7 @@
 
 <div class="page">
   <h1 class="page-title">Réserver un espace</h1>
-  <p class="page-sub">Tiers-Lieu Génie · 12 rue du Génie, 82000 Montauban · <a href="tel:+33XXXXXXXXX" style="color:var(--teal)"><span class="__cf_email__" data-cfemail="9dfef2f3e9fcfee9ddfaf8f3f4f8b0f0f2f3e9fce8fffcf3b3fbef">[email&#160;protected]</span></a></p>
+  <p class="page-sub">Tiers-Lieu Génie · 12 rue du Génie, 82000 Montauban · <a href="tel:+33XXXXXXXXX" style="color:var(--teal)">contact@genie-montauban.fr</a></p>
 
   <!-- ÉTAPES -->
   <div class="steps" id="stepsBar">
@@ -709,48 +709,50 @@ async function soumettre() {
   try {
     let ok = false;
 
-    // Envoi via GET avec payload encodé (même méthode que admin.html)
+    // Envoi vers Apps Script via GET+payload
     const sendUrl = new URL(SCRIPT_URL);
-    sendUrl.searchParams.set('payload', JSON.stringify({ action: 'addResa', resa: {
-      id         : payload.ref,
-      prenom     : payload.nom.split(' ')[0] || payload.nom,
-      nom        : payload.nom.split(' ').slice(1).join(' ') || payload.nom,
-      email      : payload.email,
-      tel        : payload.tel || '',
-      orga       : payload.orga || '',
-      espace     : payload.espace,
-      nomEspace  : payload.espaceNom || payload.espace,
-      usage      : payload.cat || 'reunion',
-      profil     : payload.profil,
-      date       : payload.date,
-      typeDuree  : payload.duree,
-      nbHeures   : String(payload.nbHeures || 1),
-      heureDebut : payload.heure || '',
-      heureFin   : '',
-      montant    : String(payload.montant || 0),
-      montantBase: String(payload.montant || 0),
-      options    : [payload.badge24h ? 'Badge 24h/7j' : '', payload.adhesion ? 'Adhésion Génie' : ''].filter(Boolean).join(', '),
-      statut     : 'pending',
-      participants: String(payload.participants || 1),
-      objet      : payload.message || '',
-      createdAt  : new Date().toISOString(),
-      updatedAt  : new Date().toISOString()
-    }}));
+    sendUrl.searchParams.set('payload', JSON.stringify({
+      action: 'addResa',
+      resa: {
+        id          : payload.ref,
+        prenom      : (payload.nom || '').split(' ')[0] || payload.nom,
+        nom         : (payload.nom || '').split(' ').slice(1).join(' ') || payload.nom,
+        email       : payload.email,
+        tel         : payload.tel || '',
+        orga        : payload.organisation || '',
+        espace      : payload.espaceId || '',
+        nomEspace   : payload.espaceNom || '',
+        usage       : 'reunion',
+        profil      : payload.profil || 'plein',
+        date        : payload.date || '',
+        typeDuree   : payload.duree || '',
+        nbHeures    : '1',
+        heureDebut  : payload.heure || '',
+        heureFin    : '',
+        montant     : String(payload.prixTotal || 0),
+        montantBase : String(payload.prixTotal || 0),
+        options     : [payload.badge24h ? 'Badge 24h/7j' : '', payload.adhesion ? 'Adhésion Génie' : ''].filter(Boolean).join(', '),
+        statut      : 'pending',
+        participants: '1',
+        objet       : payload.message || '',
+        createdAt   : new Date().toISOString(),
+        updatedAt   : new Date().toISOString()
+      }
+    }));
 
-    let data = null;
     try {
       const r = await fetch(sendUrl.toString(), { redirect: 'follow' });
       const text = await r.text();
-      data = JSON.parse(text);
+      try {
+        const data = JSON.parse(text);
+        if (data && data.error) throw new Error(data.error);
+      } catch(e) {
+        // Réponse non-JSON : Apps Script a probablement écrit quand même
+      }
+      ok = true;
     } catch(e) {
-      data = null; // réponse illisible mais l'écriture a peut-être réussi
+      throw new Error(e.message);
     }
-
-    // Si réponse claire avec erreur → on remonte l'erreur
-    if (data && data.error) throw new Error(data.error);
-
-    // Sinon on considère OK (polling non nécessaire côté public)
-    ok = true;
 
     clearTimeout(timeout);
 
