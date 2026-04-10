@@ -63,6 +63,27 @@ function doGet(e) {
     if (a === 'GET_RESERVATIONS')  return ok(getReservations(e.parameter));
     if (a === 'VALIDER_TOKEN')     return ok(validerToken(e.parameter));
     if (a === 'getAll' || a === 'ADMIN_GET_ALL') return ok(adminGetAll());
+
+    // Traitement du payload JSON envoyé par les formulaires HTML via GET
+    if (e.parameter.payload) {
+      var data = JSON.parse(e.parameter.payload);
+      switch (data.action) {
+        case 'RESERVER':            return ok(creerReservation(data));
+        case 'INSCRIRE':            return ok(inscrireClient(data));
+        case 'ADHERER':             return ok(creerAdhesion(data));
+        case 'CONTACT':             return ok(traiterContact(data));
+        case 'addResa':             return ok(adminAddResa(data.resa));
+        case 'updateResa':          return ok(adminUpdateResa(data.resa));
+        case 'deleteResa':          return ok(adminDeleteResa(data.id));
+        case 'ADMIN_LOGIN':         return ok(adminLogin(data));
+        case 'ADMIN_UPDATE_STATUS': return ok(adminUpdateStatus(data));
+        case 'saveConfig':          return ok(adminSaveConfig(data.config));
+        case 'GET_RESERVATIONS_CLIENT': return ok(getReservationsClient(data));
+        case 'GET_PROFIL':          return ok(getProfil(data));
+        default: return ok({ success: false, error: 'Action inconnue: ' + data.action });
+      }
+    }
+
     return ok({ success: true, message: 'API Génie Montauban v4.1' });
   } catch (err) {
     return ok({ success: false, error: err.message });
