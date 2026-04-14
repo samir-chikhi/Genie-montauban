@@ -1,234 +1,117 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Réserver un espace — Génie Montauban</title>
-  <meta name="description" content="Réservez un espace au tiers-lieu Génie Montauban : coworking, salles de réunion, bureaux. Réservation en ligne simple et rapide.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --navy:    #0D2B45;
-      --gold:    #C9A84C;
-      --gold-lt: #E8C96E;
-      --teal:    #1A6B72;
-      --teal-lt: #2A9EA8;
-      --cream:   #F8F5EF;
-      --white:   #FFFFFF;
-      --gray:    #6B7280;
-      --dark:    #1C1C1C;
-      --success: #2D7D46;
-      --warn:    #B45309;
-      --error:   #C0392B;
-      --radius:  10px;
-      --font-head: 'Syne', sans-serif;
-      --font-body: 'DM Sans', sans-serif;
-    }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body { font-family: var(--font-body); color: var(--dark); background: var(--cream); }
-
-    /* ── NAV ── */
-    nav {
-      background: var(--navy); display: flex; align-items: center;
-      justify-content: space-between; padding: 0 32px; height: 60px; position: sticky; top: 0; z-index: 40;
-    }
-    .nav-logo { font-family: var(--font-head); font-weight: 800; font-size: 1.3rem; color: var(--gold); }
-    .nav-back { color: rgba(255,255,255,0.8); font-size: 0.88rem; display: flex; align-items: center; gap: 6px; transition: color .2s; }
-    .nav-back:hover { color: var(--gold); }
-    .nav-tarifs { color: rgba(255,255,255,0.7); font-size: 0.82rem; transition: color .2s; }
-    .nav-tarifs:hover { color: var(--gold); }
-
-    /* ── BANNER LOADER (non-bloquant) ── */
-    .load-banner {
-      display: none; position: fixed; top: 60px; left: 0; right: 0; z-index: 30;
-      background: var(--navy); color: var(--white); padding: 10px 24px;
-      font-size: 0.85rem; display: none; align-items: center; gap: 12px;
-    }
-    .load-banner.visible { display: flex; }
-    .spin-sm {
-      width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3);
-      border-top-color: var(--gold); border-radius: 50%;
-      animation: spin .7s linear infinite; flex-shrink: 0;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* ── LAYOUT ── */
-    .page { max-width: 860px; margin: 0 auto; padding: 40px 24px 80px; }
-    .page-title {
-      font-family: var(--font-head); font-weight: 800; font-size: clamp(1.6rem, 4vw, 2.2rem);
-      color: var(--navy); letter-spacing: -0.02em; margin-bottom: 6px;
-    }
-    .page-sub { font-size: 0.92rem; color: var(--gray); margin-bottom: 32px; }
-
-    /* ── ÉTAPES ── */
-    .steps { display: flex; gap: 0; margin-bottom: 32px; }
-    .step {
-      flex: 1; padding: 10px 16px; background: rgba(13,43,69,0.05);
-      font-size: 0.78rem; font-weight: 600; color: var(--gray); position: relative;
-      text-align: center;
-    }
-    .step.active { background: var(--navy); color: var(--white); }
-    .step.done { background: var(--success); color: var(--white); }
-    .step:first-child { border-radius: 6px 0 0 6px; }
-    .step:last-child { border-radius: 0 6px 6px 0; }
-
-    /* ── FORM CARD ── */
-    .form-card {
-      background: var(--white); border-radius: var(--radius); padding: 32px;
-      box-shadow: 0 2px 16px rgba(13,43,69,0.07); margin-bottom: 20px;
-    }
-    .form-card h2 {
-      font-family: var(--font-head); font-weight: 700; font-size: 1.05rem;
-      color: var(--navy); margin-bottom: 20px; display: flex; align-items: center; gap: 8px;
-    }
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .form-group { display: flex; flex-direction: column; gap: 6px; }
-    .form-group.full { grid-column: 1 / -1; }
-    label { font-size: 0.82rem; font-weight: 600; color: var(--navy); }
-    label .req { color: var(--error); }
-    input, select, textarea {
-      border: 1.5px solid rgba(13,43,69,0.15); border-radius: 7px; padding: 10px 12px;
-      font-family: var(--font-body); font-size: 0.9rem; color: var(--dark); background: var(--white);
-      transition: border-color .15s;
-    }
-    input:focus, select:focus, textarea:focus {
-      outline: none; border-color: var(--teal); box-shadow: 0 0 0 3px rgba(26,107,114,0.1);
-    }
-    textarea { resize: vertical; min-height: 80px; }
-
-    /* ── PROFIL SELECTOR ── */
-    .profil-selector { display: flex; gap: 8px; flex-wrap: wrap; }
-    .profil-card {
-      flex: 1; min-width: 140px; padding: 12px 14px; border: 2px solid rgba(13,43,69,0.12);
-      border-radius: 8px; cursor: pointer; transition: .15s; user-select: none;
-    }
-    .profil-card:hover { border-color: var(--teal); }
-    .profil-card.selected { border-color: var(--navy); background: rgba(13,43,69,0.04); }
-    .profil-card input[type=radio] { display: none; }
-    .profil-card-name { font-weight: 700; font-size: 0.85rem; color: var(--navy); }
-    .profil-card-note { font-size: 0.75rem; color: var(--gray); margin-top: 2px; }
-    /* CORRIGÉ : 20% adhérent */
-    .profil-card .profil-badge {
-      display: inline-block; font-size: 0.68rem; font-weight: 700; padding: 2px 8px;
-      border-radius: 10px; margin-top: 4px;
-    }
-    .pb-adherent { background: rgba(180,83,9,0.1); color: var(--warn); }
-    .pb-locataire { background: rgba(26,107,114,0.1); color: var(--teal); }
-    .pb-asso { background: rgba(45,125,70,0.1); color: var(--success); }
-
-    /* ── ESPACES ── */
-    .espaces-list { display: flex; flex-direction: column; gap: 10px; }
-    .espace-option {
-      display: flex; align-items: center; gap: 14px; padding: 14px 16px;
-      border: 1.5px solid rgba(13,43,69,0.1); border-radius: 8px; cursor: pointer;
-      transition: border-color .15s, background .15s; user-select: none;
-    }
-    .espace-option:hover { border-color: var(--teal); }
-    .espace-option.selected { border-color: var(--navy); background: rgba(13,43,69,0.03); }
-    .espace-option input[type=radio] { accent-color: var(--navy); flex-shrink: 0; }
-    .espace-opt-icon { font-size: 1.2rem; flex-shrink: 0; }
-    .espace-opt-info { flex: 1; }
-    .espace-opt-name { font-weight: 600; font-size: 0.9rem; color: var(--navy); }
-    .espace-opt-cap { font-size: 0.78rem; color: var(--gray); }
-    .espace-opt-price { font-family: var(--font-head); font-weight: 700; font-size: 0.95rem; color: var(--teal); text-align: right; }
-    .espace-opt-price small { font-weight: 400; font-size: 0.72rem; color: var(--gray); display: block; }
-
-    /* ── DURÉE ── */
-    .duree-btns { display: flex; gap: 8px; flex-wrap: wrap; }
-    .duree-btn {
-      padding: 9px 18px; border: 1.5px solid rgba(13,43,69,0.15); border-radius: 6px;
-      background: var(--white); font-family: var(--font-body); font-size: 0.85rem;
-      font-weight: 600; color: var(--navy); cursor: pointer; transition: .15s;
-    }
-    .duree-btn:hover, .duree-btn.active { background: var(--navy); color: var(--white); border-color: var(--navy); }
-
-    /* ── RÉCAP PRIX ── */
-    .recap-card {
-      background: rgba(13,43,69,0.03); border: 1.5px solid rgba(13,43,69,0.1);
-      border-radius: 8px; padding: 16px 18px; display: flex; align-items: center;
-      justify-content: space-between; gap: 12px;
-    }
-    .recap-total { font-family: var(--font-head); font-weight: 800; font-size: 1.4rem; color: var(--navy); }
-    .recap-detail { font-size: 0.82rem; color: var(--gray); }
-    .recap-reduction { font-size: 0.78rem; font-weight: 700; padding: 3px 10px; border-radius: 10px; }
-    .rr-adherent { background: rgba(180,83,9,0.1); color: var(--warn); }
-    .rr-locataire { background: rgba(26,107,114,0.1); color: var(--teal); }
-    .rr-asso { background: rgba(45,125,70,0.1); color: var(--success); }
-
-    /* ── RECAP RÉSERVATION ── */
-    .recap-full {
-      background: var(--cream); border: 1.5px solid rgba(13,43,69,0.1);
-      border-radius: 8px; padding: 20px; margin-bottom: 16px;
-    }
-    .recap-full h3 { font-family: var(--font-head); font-weight: 700; font-size: 0.95rem; color: var(--navy); margin-bottom: 12px; }
-    .recap-rows { display: flex; flex-direction: column; gap: 8px; }
-    .recap-row { display: flex; justify-content: space-between; font-size: 0.88rem; }
-    .recap-row .rk { color: var(--gray); }
-    .recap-row .rv { font-weight: 600; color: var(--navy); }
-
-    /* ── BOUTONS ── */
-    .btn-submit {
-      width: 100%; padding: 14px; background: var(--navy); color: var(--white);
-      border: none; border-radius: 8px; font-family: var(--font-head); font-weight: 700;
-      font-size: 0.95rem; cursor: pointer; transition: background .2s;
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-    }
-    .btn-submit:hover:not(:disabled) { background: var(--teal); }
-    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
-    .btn-modify {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: transparent; border: 1.5px solid var(--navy); color: var(--navy);
-      font-family: var(--font-head); font-weight: 600; font-size: 0.85rem;
-      padding: 9px 18px; border-radius: 7px; cursor: pointer; transition: .15s;
-    }
-    .btn-modify:hover { background: var(--navy); color: var(--white); }
-
-    /* ── SUCCESS ── */
-    .success-card {
-      display: none; background: var(--white); border-radius: var(--radius);
-      padding: 40px 32px; text-align: center; box-shadow: 0 2px 16px rgba(13,43,69,0.07);
-    }
-    .success-card.visible { display: block; }
-    .success-icon { font-size: 3rem; margin-bottom: 16px; }
-    .success-card h2 { font-family: var(--font-head); font-weight: 800; font-size: 1.4rem; color: var(--success); margin-bottom: 8px; }
-    .success-card p { font-size: 0.92rem; color: var(--gray); margin-bottom: 24px; }
-    .success-ref { font-family: var(--font-head); font-weight: 700; background: var(--cream); display: inline-block; padding: 6px 18px; border-radius: 20px; font-size: 0.85rem; color: var(--navy); margin-bottom: 20px; }
-
-    /* ── ALERTE MODIFICATION ── */
-    .alert-modify {
-      background: rgba(180,83,9,0.06); border: 1px solid rgba(180,83,9,0.2);
-      border-radius: 8px; padding: 14px 16px; font-size: 0.85rem; color: var(--dark);
-      margin-bottom: 20px; display: flex; align-items: flex-start; gap: 10px;
-    }
-    .alert-modify .ico { flex-shrink: 0; font-size: 1rem; }
-
-    /* ── TOAST ── */
-    .toasts { position: fixed; bottom: 24px; right: 24px; z-index: 100; display: flex; flex-direction: column; gap: 10px; }
-    .toast {
-      background: var(--dark); color: var(--white); font-size: 0.85rem;
-      padding: 12px 18px; border-radius: 8px; max-width: 320px;
-      animation: slideIn .25s ease;
-    }
-    .toast.error { background: var(--error); }
-    .toast.success { background: var(--success); }
-    @keyframes slideIn { from { transform: translateX(30px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-
-    @media (max-width: 640px) {
-      .form-grid { grid-template-columns: 1fr; }
-      .profil-selector { flex-direction: column; }
-      .steps { display: none; }
-      nav { padding: 0 16px; }
-      .page { padding: 24px 16px 60px; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Réserver un espace — Génie Montauban</title>
+<meta name="description" content="Réservez un espace au tiers-lieu Génie Montauban : coworking, salles de réunion, bureaux. Réservation en ligne simple et rapide.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0D2B45; --gold: #C9A84C; --gold-lt: #E8C96E;
+  --teal: #1A6B72; --teal-lt: #2A9EA8; --cream: #F8F5EF;
+  --white: #FFFFFF; --gray: #6B7280; --dark: #1C1C1C;
+  --success: #2D7D46; --warn: #B45309; --error: #C0392B;
+  --radius: 10px; --font-head: 'Syne', sans-serif; --font-body: 'DM Sans', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); color: var(--dark); background: var(--cream); }
+nav { background: var(--navy); display: flex; align-items: center; justify-content: space-between; padding: 0 32px; height: 60px; position: sticky; top: 0; z-index: 40; }
+.nav-logo { font-family: var(--font-head); font-weight: 800; font-size: 1.3rem; color: var(--gold); }
+.nav-back { color: rgba(255,255,255,0.8); font-size: 0.88rem; display: flex; align-items: center; gap: 6px; transition: color .2s; text-decoration: none; }
+.nav-back:hover { color: var(--gold); }
+.nav-tarifs { color: rgba(255,255,255,0.7); font-size: 0.82rem; transition: color .2s; text-decoration: none; }
+.nav-tarifs:hover { color: var(--gold); }
+.load-banner { display: none; position: fixed; top: 60px; left: 0; right: 0; z-index: 30; background: var(--navy); color: var(--white); padding: 10px 24px; font-size: 0.85rem; align-items: center; gap: 12px; }
+.load-banner.visible { display: flex; }
+.spin-sm { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: var(--gold); border-radius: 50%; animation: spin .7s linear infinite; flex-shrink: 0; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.page { max-width: 860px; margin: 0 auto; padding: 40px 24px 80px; }
+.page-title { font-family: var(--font-head); font-weight: 800; font-size: clamp(1.6rem, 4vw, 2.2rem); color: var(--navy); letter-spacing: -0.02em; margin-bottom: 6px; }
+.page-sub { font-size: 0.92rem; color: var(--gray); margin-bottom: 32px; }
+.steps { display: flex; gap: 0; margin-bottom: 32px; }
+.step { flex: 1; padding: 10px 16px; background: rgba(13,43,69,0.05); font-size: 0.78rem; font-weight: 600; color: var(--gray); text-align: center; }
+.step.active { background: var(--navy); color: var(--white); }
+.step.done { background: var(--success); color: var(--white); }
+.step:first-child { border-radius: 6px 0 0 6px; }
+.step:last-child { border-radius: 0 6px 6px 0; }
+.form-card { background: var(--white); border-radius: var(--radius); padding: 32px; box-shadow: 0 2px 16px rgba(13,43,69,0.07); margin-bottom: 20px; }
+.form-card h2 { font-family: var(--font-head); font-weight: 700; font-size: 1.05rem; color: var(--navy); margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group.full { grid-column: 1 / -1; }
+label { font-size: 0.82rem; font-weight: 600; color: var(--navy); }
+label .req { color: var(--error); }
+input, select, textarea { border: 1.5px solid rgba(13,43,69,0.15); border-radius: 7px; padding: 10px 12px; font-family: var(--font-body); font-size: 0.9rem; color: var(--dark); background: var(--white); transition: border-color .15s; width: 100%; }
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--teal); box-shadow: 0 0 0 3px rgba(26,107,114,0.1); }
+textarea { resize: vertical; min-height: 80px; }
+.profil-selector { display: flex; gap: 8px; flex-wrap: wrap; }
+.profil-card { flex: 1; min-width: 140px; padding: 12px 14px; border: 2px solid rgba(13,43,69,0.12); border-radius: 8px; cursor: pointer; transition: .15s; user-select: none; }
+.profil-card:hover { border-color: var(--teal); }
+.profil-card.selected { border-color: var(--navy); background: rgba(13,43,69,0.04); }
+.profil-card input[type=radio] { display: none; }
+.profil-card-name { font-weight: 700; font-size: 0.85rem; color: var(--navy); }
+.profil-card-note { font-size: 0.75rem; color: var(--gray); margin-top: 2px; }
+.profil-badge { display: inline-block; font-size: 0.68rem; font-weight: 700; padding: 2px 8px; border-radius: 10px; margin-top: 4px; }
+.pb-adherent { background: rgba(180,83,9,0.1); color: var(--warn); }
+.pb-locataire { background: rgba(26,107,114,0.1); color: var(--teal); }
+.pb-asso { background: rgba(45,125,70,0.1); color: var(--success); }
+.espaces-list { display: flex; flex-direction: column; gap: 10px; }
+.espace-option { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border: 1.5px solid rgba(13,43,69,0.1); border-radius: 8px; cursor: pointer; transition: border-color .15s, background .15s; user-select: none; }
+.espace-option:hover { border-color: var(--teal); }
+.espace-option.selected { border-color: var(--navy); background: rgba(13,43,69,0.03); }
+.espace-option input[type=radio] { accent-color: var(--navy); flex-shrink: 0; }
+.espace-opt-icon { font-size: 1.2rem; flex-shrink: 0; }
+.espace-opt-info { flex: 1; }
+.espace-opt-name { font-weight: 600; font-size: 0.9rem; color: var(--navy); }
+.espace-opt-cap { font-size: 0.78rem; color: var(--gray); }
+.espace-opt-price { font-family: var(--font-head); font-weight: 700; font-size: 0.95rem; color: var(--teal); text-align: right; }
+.espace-opt-price small { font-weight: 400; font-size: 0.72rem; color: var(--gray); display: block; }
+.duree-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+.duree-btn { padding: 9px 18px; border: 1.5px solid rgba(13,43,69,0.15); border-radius: 6px; background: var(--white); font-family: var(--font-body); font-size: 0.85rem; font-weight: 600; color: var(--navy); cursor: pointer; transition: .15s; }
+.duree-btn:hover, .duree-btn.active { background: var(--navy); color: var(--white); border-color: var(--navy); }
+.recap-card { background: rgba(13,43,69,0.03); border: 1.5px solid rgba(13,43,69,0.1); border-radius: 8px; padding: 16px 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.recap-total { font-family: var(--font-head); font-weight: 800; font-size: 1.4rem; color: var(--navy); }
+.recap-detail { font-size: 0.82rem; color: var(--gray); }
+.recap-full { background: var(--cream); border: 1.5px solid rgba(13,43,69,0.1); border-radius: 8px; padding: 20px; margin-bottom: 16px; }
+.recap-full h3 { font-family: var(--font-head); font-weight: 700; font-size: 0.95rem; color: var(--navy); margin-bottom: 12px; }
+.recap-rows { display: flex; flex-direction: column; gap: 8px; }
+.recap-row { display: flex; justify-content: space-between; font-size: 0.88rem; }
+.recap-row .rk { color: var(--gray); }
+.recap-row .rv { font-weight: 600; color: var(--navy); }
+.btn-submit { width: 100%; padding: 14px; background: var(--navy); color: var(--white); border: none; border-radius: 8px; font-family: var(--font-head); font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: background .2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.btn-submit:hover:not(:disabled) { background: var(--teal); }
+.btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-modify { display: inline-flex; align-items: center; gap: 6px; background: transparent; border: 1.5px solid var(--navy); color: var(--navy); font-family: var(--font-head); font-weight: 600; font-size: 0.85rem; padding: 9px 18px; border-radius: 7px; cursor: pointer; transition: .15s; }
+.btn-modify:hover { background: var(--navy); color: var(--white); }
+.success-card { display: none; background: var(--white); border-radius: var(--radius); padding: 40px 32px; text-align: center; box-shadow: 0 2px 16px rgba(13,43,69,0.07); }
+.success-card.visible { display: block; }
+.success-icon { font-size: 3rem; margin-bottom: 16px; }
+.success-card h2 { font-family: var(--font-head); font-weight: 800; font-size: 1.4rem; color: var(--success); margin-bottom: 8px; }
+.success-card p { font-size: 0.92rem; color: var(--gray); margin-bottom: 24px; }
+.success-ref { font-family: var(--font-head); font-weight: 700; background: var(--cream); display: inline-block; padding: 6px 18px; border-radius: 20px; font-size: 0.85rem; color: var(--navy); margin-bottom: 20px; }
+.alert-info { background: rgba(13,43,69,0.04); border: 1px solid rgba(13,43,69,0.12); border-radius: 8px; padding: 14px 16px; font-size: 0.85rem; color: var(--dark); margin-bottom: 20px; }
+.toasts { position: fixed; bottom: 24px; right: 24px; z-index: 100; display: flex; flex-direction: column; gap: 10px; }
+.toast { background: var(--dark); color: var(--white); font-size: 0.85rem; padding: 12px 18px; border-radius: 8px; max-width: 320px; animation: slideIn .25s ease; }
+.toast.error { background: var(--error); }
+.toast.success-t { background: var(--success); }
+@keyframes slideIn { from { transform: translateX(30px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+@media (max-width: 640px) {
+  .form-grid { grid-template-columns: 1fr; }
+  .profil-selector { flex-direction: column; }
+  .steps { display: none; }
+  nav { padding: 0 16px; }
+  .page { padding: 24px 16px 60px; }
+}
+</style>
 </head>
 <body>
 
 <div class="load-banner" id="loadBanner">
   <div class="spin-sm"></div>
-  <span id="loadBannerTxt">Envoi en cours… Cela peut prendre quelques secondes.</span>
+  <span>Envoi en cours… Cela peut prendre quelques secondes.</span>
 </div>
 
 <nav>
@@ -241,7 +124,6 @@
   <h1 class="page-title">Réserver un espace</h1>
   <p class="page-sub">Tiers-Lieu Génie · 12 rue du Génie, 82000 Montauban · <a href="tel:+33651509718" style="color:var(--teal)">06 51 50 97 18</a></p>
 
-  <!-- ÉTAPES -->
   <div class="steps" id="stepsBar">
     <div class="step active" id="step1">① Votre profil</div>
     <div class="step" id="step2">② Espace & durée</div>
@@ -249,74 +131,56 @@
     <div class="step" id="step4">④ Confirmation</div>
   </div>
 
-  <!-- ═══ PHASE 1 : PROFIL ═══ -->
-  <div id="phaseProfilWrap">
-    <div class="form-card" id="phaseProfil">
-      <h2>🏷️ Votre profil tarifaire</h2>
-      <div class="profil-selector" role="radiogroup" aria-label="Choisir un profil">
-
-        <label class="profil-card selected" id="pc-plein">
-          <input type="radio" name="profil" value="plein" checked onchange="onProfilChange('plein')">
-          <div class="profil-card-name">Tarif plein</div>
-          <div class="profil-card-note">Non-adhérent</div>
-        </label>
-
-        <label class="profil-card" id="pc-adherent">
-          <input type="radio" name="profil" value="adherent" onchange="onProfilChange('adherent')">
-          <div class="profil-card-name">Adhérent Génie</div>
-          <!-- CORRIGÉ : ~20% -->
-          <div class="profil-card-note">~20% de réduction</div>
-          <span class="profil-badge pb-adherent">−20%</span>
-        </label>
-
-        <label class="profil-card" id="pc-locataire">
-          <input type="radio" name="profil" value="locataire" onchange="onProfilChange('locataire')">
-          <div class="profil-card-name">Locataire Génie</div>
-          <div class="profil-card-note">Bureau privatif − 50%</div>
-          <span class="profil-badge pb-locataire">−50%</span>
-        </label>
-
-        <label class="profil-card" id="pc-asso">
-          <input type="radio" name="profil" value="asso" onchange="onProfilChange('asso')">
-          <div class="profil-card-name">Association 82</div>
-          <div class="profil-card-note">Gratuit* (sous conditions)</div>
-          <span class="profil-badge pb-asso">Gratuit*</span>
-        </label>
-
-      </div>
-      <p id="profilInfo" style="font-size:0.82rem; color:var(--gray); margin-top:14px; padding:10px 14px; background:var(--cream); border-radius:6px">
-        Tarif standard pour les non-adhérents. <a href="tarifs.html#sec-adhesion" style="color:var(--teal)">Devenir adhérent →</a>
-      </p>
+  <!-- PROFIL -->
+  <div class="form-card">
+    <h2>🏷️ Votre profil tarifaire</h2>
+    <div class="profil-selector">
+      <label class="profil-card selected" id="pc-plein">
+        <input type="radio" name="profil" value="plein" checked onchange="onProfilChange('plein')">
+        <div class="profil-card-name">Tarif plein</div>
+        <div class="profil-card-note">Non-adhérent</div>
+      </label>
+      <label class="profil-card" id="pc-adherent">
+        <input type="radio" name="profil" value="adherent" onchange="onProfilChange('adherent')">
+        <div class="profil-card-name">Adhérent Génie</div>
+        <div class="profil-card-note">~20% de réduction</div>
+        <span class="profil-badge pb-adherent">−20%</span>
+      </label>
+      <label class="profil-card" id="pc-locataire">
+        <input type="radio" name="profil" value="locataire" onchange="onProfilChange('locataire')">
+        <div class="profil-card-name">Locataire Génie</div>
+        <div class="profil-card-note">Bureau privatif − 50%</div>
+        <span class="profil-badge pb-locataire">−50%</span>
+      </label>
+      <label class="profil-card" id="pc-asso">
+        <input type="radio" name="profil" value="asso" onchange="onProfilChange('asso')">
+        <div class="profil-card-name">Association 82</div>
+        <div class="profil-card-note">Gratuit* (sous conditions)</div>
+        <span class="profil-badge pb-asso">Gratuit*</span>
+      </label>
     </div>
+    <p id="profilInfo" style="font-size:0.82rem;color:var(--gray);margin-top:14px;padding:10px 14px;background:var(--cream);border-radius:6px">
+      Tarif standard pour les non-adhérents. <a href="tarifs.html#sec-adhesion" style="color:var(--teal)">Devenir adhérent →</a>
+    </p>
   </div>
 
-  <!-- ═══ PHASE 2 : ESPACE & DURÉE ═══ -->
-  <div class="form-card" id="phaseEspace">
+  <!-- ESPACE & DURÉE -->
+  <div class="form-card">
     <h2>🏛️ Choisir un espace</h2>
-    <div class="espaces-list" role="radiogroup" aria-label="Choisir un espace" id="espacesContainer">
-      <!-- rempli par JS selon profil -->
-    </div>
-
+    <div class="espaces-list" id="espacesContainer"></div>
     <div style="margin-top:20px">
-      <label style="font-size:0.82rem; font-weight:600; color:var(--navy); display:block; margin-bottom:10px">Durée</label>
-      <div class="duree-btns" id="dureeBtns">
-        <!-- rempli par JS selon espace sélectionné -->
-      </div>
+      <label style="font-size:0.82rem;font-weight:600;color:var(--navy);display:block;margin-bottom:10px">Durée</label>
+      <div class="duree-btns" id="dureeBtns"></div>
     </div>
-
     <div style="margin-top:20px" id="recapPrixWrap"></div>
   </div>
 
-  <!-- ═══ PHASE 3 : COORDONNÉES ═══ -->
-  <div class="form-card" id="phaseCoord">
+  <!-- COORDONNÉES -->
+  <div class="form-card">
     <h2>📅 Date, heure & coordonnées</h2>
-
-    <!-- ALERTE MODIFICATION post-envoi -->
-    <div class="alert-modify" id="alertModify" style="display:none">
-      <span class="ico">ℹ️</span>
-      <span>Vous souhaitez modifier une réservation existante ? Indiquez votre référence dans le champ "Message" ou contactez-nous directement à <strong><a href="mailto:genie.montauban@gmail.com" style="color:var(--warn)">genie.montauban@gmail.com</a></strong>.</span>
+    <div class="alert-info">
+      ℹ️ Vous souhaitez modifier une réservation ? Indiquez votre référence dans le champ "Message" ou contactez-nous à <strong>genie.montauban@gmail.com</strong>.
     </div>
-
     <div class="form-grid">
       <div class="form-group">
         <label for="fDate">Date souhaitée <span class="req">*</span></label>
@@ -324,490 +188,350 @@
       </div>
       <div class="form-group">
         <label for="fHeure">Heure de début <span class="req">*</span></label>
-        <input type="time" id="fHeure" value="09:00" required>
+        <input type="time" id="fHeure" required min="08:00" max="20:00" step="1800">
       </div>
-      <div class="form-group">
+      <div class="form-group full">
         <label for="fNom">Nom complet <span class="req">*</span></label>
         <input type="text" id="fNom" placeholder="Prénom Nom" required>
       </div>
       <div class="form-group">
         <label for="fEmail">Email <span class="req">*</span></label>
-        <input type="email" id="fEmail" placeholder="vous@email.fr" required>
+        <input type="email" id="fEmail" required>
       </div>
       <div class="form-group">
         <label for="fTel">Téléphone</label>
-        <input type="tel" id="fTel" placeholder="06 XX XX XX XX">
-      </div>
-      <div class="form-group">
-        <label for="fOrga">Organisation / Structure</label>
-        <input type="text" id="fOrga" placeholder="Nom de votre entreprise ou association">
+        <input type="tel" id="fTel" placeholder="06 …">
       </div>
       <div class="form-group full">
-        <label for="fMsg">Précisions / Besoins spéciaux — ou réf. de modification</label>
-        <textarea id="fMsg" placeholder="Nombre de participants, matériel souhaité, ou référence de réservation à modifier…"></textarea>
+        <label for="fOrga">Organisation / Structure</label>
+        <input type="text" id="fOrga" placeholder="Entreprise, association…">
       </div>
-    </div>
-
-    <!-- OPTIONS -->
-    <div style="margin-top:20px; display:flex; flex-direction:column; gap:10px">
-      <label style="display:flex; align-items:center; gap:10px; font-size:0.88rem; cursor:pointer">
-        <input type="checkbox" id="optBadge" style="width:auto; accent-color:var(--navy)">
-        Ajouter l'accès badge 24h/7j (+25€/mois)
-      </label>
-      <label style="display:flex; align-items:center; gap:10px; font-size:0.88rem; cursor:pointer">
-        <input type="checkbox" id="optAdhesion" style="width:auto; accent-color:var(--navy)">
-        Inclure l'adhésion Génie (+50€/an — accès aux tarifs réduits ~20%)
-      </label>
+      <div class="form-group full">
+        <label for="fMsg">Précisions / Besoins spéciaux</label>
+        <textarea id="fMsg" placeholder="Matériel souhaité, accessibilité, réf. de modification…"></textarea>
+      </div>
+      <div class="form-group full">
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:400">
+          <input type="checkbox" id="fBadge"> Ajouter l'accès badge 24h/7j (+25€/mois)
+        </label>
+      </div>
+      <div class="form-group full">
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:400">
+          <input type="checkbox" id="fAdhesion"> Inclure l'adhésion Génie (+50€/an — accès aux tarifs réduits ~20%)
+        </label>
+      </div>
     </div>
   </div>
 
-  <!-- ═══ PHASE 4 : RECAP + ENVOI ═══ -->
-  <div class="form-card" id="phaseRecap" style="display:none">
+  <!-- CONFIRMATION -->
+  <div class="form-card" id="phaseConfirm">
     <h2>✅ Vérification avant envoi</h2>
-    <div class="recap-full" id="recapFull">
+    <div class="recap-full">
       <h3>Récapitulatif de votre demande</h3>
       <div class="recap-rows" id="recapRows"></div>
     </div>
-    <p style="font-size:0.82rem; color:var(--gray); margin-bottom:16px">
+    <p style="font-size:0.82rem;color:var(--gray);margin-bottom:16px">
       ⚠️ La réservation sera <strong>confirmée par email</strong> sous 24h par l'équipe Génie.
-      Toute modification après envoi peut se faire en répondant à cet email ou en nous contactant directement.
     </p>
-    <button class="btn-submit" id="btnSubmit" onclick="soumettre()">
-      <span id="btnTxt">Envoyer ma demande de réservation →</span>
+    <button class="btn-submit" id="btnEnvoyer" onclick="envoyerReservation()">
+      Envoyer ma demande de réservation →
     </button>
-    <div style="margin-top:12px; text-align:center">
-      <button class="btn-modify" onclick="modifierAvantEnvoi()">✏️ Modifier avant envoi</button>
+    <div style="margin-top:12px;text-align:center">
+      <button class="btn-modify" onclick="window.scrollTo(0,0)">✏️ Modifier avant envoi</button>
     </div>
   </div>
 
-  <!-- ═══ SUCCÈS ═══ -->
+  <!-- SUCCÈS -->
   <div class="success-card" id="successCard">
     <div class="success-icon">🎉</div>
     <h2>Demande envoyée !</h2>
     <p>Votre demande a été reçue. L'équipe Génie vous confirmera par email sous 24h.</p>
     <div class="success-ref" id="successRef">REF-XXXXXX</div>
-    <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:8px">
-      <a href="index.html" class="btn-modify">← Retour au site</a>
-      <button class="btn-modify" onclick="modifierReservation()" style="border-color:var(--warn); color:var(--warn)">
-        ✏️ Modifier / annuler cette réservation
-      </button>
-    </div>
+    <br>
+    <a href="index.html" class="btn-modify">← Retour au site</a>
   </div>
-
 </div>
 
 <div class="toasts" id="toasts"></div>
 
 <script>
-// ══════════════════════════════════════════════════════════
-// ⚠️ COLLE ICI L'URL DE TON APPS SCRIPT DÉPLOYÉ
-// Format : https://script.google.com/macros/s/XXXX/exec
-// ══════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
+// CONFIG — URL Apps Script (architecture GET ?payload=)
+// ═══════════════════════════════════════════════════════════════
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyJ-Dk-yZZNdfxFigchP953rNyjSLJv4oOVUbxzuAbX4kuBfwTFBJvnnLuJMLWRnd9c4w/exec';
 
-// ══════════════════════════════════════════════════════════
-// DONNÉES TARIFS (CORRIGÉES : adhérent ~20%)
-// ══════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
+// DONNÉES ESPACES & TARIFS
+// ═══════════════════════════════════════════════════════════════
 const ESPACES = [
-  {
-    id: 'bourdelle', icon: '🏛️', nom: 'Antoine Bourdelle (0-02)', cap: '40 personnes',
-    cat: 'reunion',
-    tarifs: {
-      plein:     { heure: 45, 'demi-journee': 150, journee: 280 },
-      adherent:  { heure: 35, 'demi-journee': 110, journee: 200 },
-      locataire: { heure: 25, 'demi-journee': 80,  journee: 140 },
-      asso:      { heure: 0,  'demi-journee': 0,   journee: 0   }
-    },
-    durees: ['heure', 'demi-journee', 'journee']
-  },
-  {
-    id: 'freinet', icon: '📋', nom: 'Célestin Freinet (1-11)', cap: '20 personnes',
-    cat: 'reunion',
-    tarifs: {
-      plein:     { heure: 30, 'demi-journee': 100, journee: 180 },
-      adherent:  { heure: 22, 'demi-journee': 75,  journee: 135 },
-      locataire: { heure: 15, 'demi-journee': 50,  journee: 90  },
-      asso:      { heure: 0,  'demi-journee': 0,   journee: 0   }
-    },
-    durees: ['heure', 'demi-journee', 'journee']
-  },
-  {
-    id: 'gouges', icon: '🤝', nom: 'Olympe de Gouges (1-12)', cap: '20 personnes',
-    cat: 'reunion',
-    tarifs: {
-      plein:     { heure: 30, 'demi-journee': 100, journee: 180 },
-      adherent:  { heure: 22, 'demi-journee': 75,  journee: 135 },
-      locataire: { heure: 15, 'demi-journee': 50,  journee: 90  },
-      asso:      { heure: 0,  'demi-journee': 0,   journee: 0   }
-    },
-    durees: ['heure', 'demi-journee', 'journee']
-  },
-  {
-    id: 'michel', icon: '🚪', nom: 'Louise Michel (0-01)', cap: 'Bureau privatif 14 m²',
-    cat: 'nomade',
-    tarifs: {
-      plein:     { 'demi-journee': 25, journee: 40, semaine: 160, mois: 320 },
-      adherent:  { 'demi-journee': 20, journee: 32, semaine: 128, mois: 256 },
-      locataire: { 'demi-journee': 12, journee: 20, semaine: 80,  mois: 160 },
-      asso:      { 'demi-journee': 12, journee: 20, semaine: 80,  mois: 160 }
-    },
-    durees: ['demi-journee', 'journee', 'semaine', 'mois']
-  },
-  {
-    id: 'rousseau', icon: '💻', nom: 'Jean-Jacques Rousseau (1-10)', cap: 'Open space coworking',
-    cat: 'nomade',
-    tarifs: {
-      plein:     { 'demi-journee': 15, journee: 25, semaine: 90,  mois: 180 },
-      adherent:  { 'demi-journee': 12, journee: 20, semaine: 72,  mois: 144 },
-      locataire: { 'demi-journee': 7,  journee: 13, semaine: 45,  mois: 90  },
-      asso:      { 'demi-journee': 0,  journee: 0,  semaine: 0,   mois: 0   }
-    },
-    durees: ['demi-journee', 'journee', 'semaine', 'mois']
-  },
-  {
-    id: 'montessori', icon: '♿', nom: 'Maria Montessori (−1-14)', cap: 'PMR · 4 personnes',
-    cat: 'reunion',
-    tarifs: {
-      plein:     { heure: 15, 'demi-journee': 50, journee: 80 },
-      adherent:  { heure: 12, 'demi-journee': 40, journee: 65 },
-      locataire: { heure: 8,  'demi-journee': 25, journee: 40 },
-      asso:      { heure: 0,  'demi-journee': 0,  journee: 0  }
-    },
-    durees: ['heure', 'demi-journee', 'journee']
-  }
+  { id:'bourdelle', icon:'🏛️', nom:'Antoine Bourdelle', cap:'40 pers. · RDC', type:'salle',
+    tarifs:{ plein:{heure:45,demi:150,journee:280}, adherent:{heure:35,demi:110,journee:200}, locataire:{heure:25,demi:80,journee:140}, asso:{heure:0,demi:0,journee:0} } },
+  { id:'freinet', icon:'🤝', nom:'Célestin Freinet', cap:'20 pers. · 1er', type:'salle',
+    tarifs:{ plein:{heure:30,demi:100,journee:180}, adherent:{heure:22,demi:75,journee:135}, locataire:{heure:15,demi:50,journee:90}, asso:{heure:0,demi:0,journee:0} } },
+  { id:'gouges', icon:'📋', nom:'Olympe de Gouges', cap:'20 pers. · 1er', type:'salle',
+    tarifs:{ plein:{heure:30,demi:100,journee:180}, adherent:{heure:22,demi:75,journee:135}, locataire:{heure:15,demi:50,journee:90}, asso:{heure:0,demi:0,journee:0} } },
+  { id:'montessori', icon:'♿', nom:'Maria Montessori', cap:'PMR · 4 pers.', type:'salle',
+    tarifs:{ plein:{heure:15,demi:50,journee:80}, adherent:{heure:12,demi:40,journee:65}, locataire:{heure:8,demi:25,journee:40}, asso:{heure:0,demi:0,journee:0} } },
+  { id:'aristote', icon:'🚪', nom:'Aristote', cap:'Bureau nomade · 7m²', type:'nomade',
+    tarifs:{ plein:{demi:12,journee:22,semaine:90,mois:200}, adherent:{demi:10,journee:18,semaine:72,mois:160}, locataire:{demi:6,journee:11,semaine:45,mois:100}, asso:{demi:0,journee:0,semaine:0,mois:0} } },
+  { id:'rousseau', icon:'💻', nom:'Jean-Jacques Rousseau', cap:'Coworking · 20 postes', type:'cowork',
+    tarifs:{ plein:{demi:10,journee:17,semaine:60,mois:180}, adherent:{demi:8,journee:14,semaine:48,mois:144}, locataire:{demi:5,journee:9,semaine:30,mois:90}, asso:{demi:0,journee:0,semaine:0,mois:0} } },
 ];
 
-const DUREE_LABELS = {
-  heure: "À l'heure", 'demi-journee': 'Demi-journée (4h)',
-  journee: 'Journée (8h)', semaine: 'Semaine', mois: 'Mois'
+const DUREES_SALLE  = ['heure','demi','journee'];
+const DUREES_NOMADE = ['demi','journee','semaine','mois'];
+const DUREE_LABELS  = { heure:'À l\'heure', demi:'Demi-journée', journee:'Journée', semaine:'Semaine', mois:'Mois' };
+const PROFIL_INFOS  = {
+  plein    : 'Tarif standard pour les non-adhérents. <a href="tarifs.html#sec-adhesion" style="color:var(--teal)">Devenir adhérent →</a>',
+  adherent : '~20% de réduction sur tous les espaces. Adhésion annuelle requise.',
+  locataire: '~50% de réduction réservée aux locataires d\'un bureau privatif.',
+  asso     : 'Gratuit* pour les associations locales 82 adhérentes. Réservation 72h à l\'avance.'
 };
 
-const PROFIL_INFOS = {
-  plein:     { txt: 'Tarif standard pour les non-adhérents. <a href="tarifs.html#sec-adhesion" style="color:var(--teal)">Devenir adhérent →</a>', badge: '' },
-  adherent:  { txt: 'Réduction d\'environ 20% sur salles de réunion et coworking. Adhésion active requise (50€/an).', badge: 'rr-adherent' },
-  locataire: { txt: 'Réduction de 50% réservée aux occupants d\'un bureau privatif en bail à Génie.', badge: 'rr-locataire' },
-  asso:      { txt: 'Accès gratuit* aux salles pour les associations du Tarn-et-Garonne (82) avec adhésion Génie + réservation 72h à l\'avance.', badge: 'rr-asso' }
-};
+let profil  = 'plein';
+let espaceId = '';
+let duree   = '';
 
-// ── ÉTAT ──
-let state = {
-  profil: 'plein',
-  espaceId: null,
-  duree: null,
-  prixTotal: 0,
-  submitted: false
-};
-
-// ── INIT ──
+// ═══════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', () => {
-  // Délai minimal pour laisser Cloudflare finir le décodage des emails
-  setTimeout(() => {
-    // Date min = demain
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    const fDate = document.getElementById('fDate');
-    if (fDate) fDate.min = tomorrow.toISOString().split('T')[0];
-
-    renderEspaces();
-    updateSteps(1);
-  }, 50);
+  renderEspaces();
+  updateSteps(1);
+  // Date min = demain
+  const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate()+1);
+  document.getElementById('fDate').min = tomorrow.toISOString().split('T')[0];
+  // Mise à jour recap en temps réel
+  ['fDate','fHeure','fNom','fEmail','fTel','fOrga','fMsg'].forEach(id => {
+    document.getElementById(id).addEventListener('input', updateRecap);
+  });
 });
 
-// ── PROFIL ──
-function onProfilChange(val) {
-  state.profil = val;
-  document.querySelectorAll('.profil-card').forEach(c => c.classList.remove('selected'));
-  document.getElementById(`pc-${val}`).classList.add('selected');
-  document.getElementById('profilInfo').innerHTML = PROFIL_INFOS[val].txt;
+// ═══════════════════════════════════════════════════════════════
+// PROFIL
+// ═══════════════════════════════════════════════════════════════
+function onProfilChange(p) {
+  profil = p;
+  ['plein','adherent','locataire','asso'].forEach(x =>
+    document.getElementById('pc-'+x).classList.toggle('selected', x===p)
+  );
+  document.getElementById('profilInfo').innerHTML = PROFIL_INFOS[p];
   renderEspaces();
-  renderRecapPrix();
-  updateSteps(1);
+  updateRecap();
+  updateSteps(2);
 }
 
-// ── ESPACES ──
+// ═══════════════════════════════════════════════════════════════
+// ESPACES
+// ═══════════════════════════════════════════════════════════════
 function renderEspaces() {
   const c = document.getElementById('espacesContainer');
-  c.innerHTML = ESPACES.map(e => `
-    <label class="espace-option ${state.espaceId === e.id ? 'selected' : ''}" id="eo-${e.id}" onclick="selectEspace('${e.id}')">
-      <input type="radio" name="espace" value="${e.id}" ${state.espaceId === e.id ? 'checked' : ''}>
+  c.innerHTML = ESPACES.map(e => {
+    const t = e.tarifs[profil];
+    const prixMin = Object.values(t).find(v=>v>0) || 0;
+    const prixLabel = profil==='asso' ? 'Gratuit*' : (prixMin>0 ? 'dès '+prixMin+' €' : 'Gratuit*');
+    return `<label class="espace-option${espaceId===e.id?' selected':''}" onclick="selectEspace('${e.id}')">
+      <input type="radio" name="espace" value="${e.id}" ${espaceId===e.id?'checked':''}>
       <span class="espace-opt-icon">${e.icon}</span>
       <div class="espace-opt-info">
         <div class="espace-opt-name">${e.nom}</div>
         <div class="espace-opt-cap">${e.cap}</div>
       </div>
-      <div class="espace-opt-price">
-        ${getPrixAffiche(e)}
-        <small>${getPrixSuffix(e)}</small>
-      </div>
-    </label>
-  `).join('');
-}
-
-function getPrixAffiche(e) {
-  const t = e.tarifs[state.profil];
-  const premierDuree = e.durees[0];
-  const p = t[premierDuree];
-  if (state.profil === 'asso' && p === 0) return '<span style="color:var(--success)">Gratuit*</span>';
-  return `dès ${p} €`;
-}
-
-function getPrixSuffix(e) {
-  const duree = e.durees[0];
-  return duree === 'heure' ? '/ heure' : duree === 'demi-journee' ? '/ demi-j.' : `/ ${duree}`;
+      <div class="espace-opt-price">${prixLabel}</div>
+    </label>`;
+  }).join('');
 }
 
 function selectEspace(id) {
-  state.espaceId = id;
-  state.duree = null;
-  document.querySelectorAll('.espace-option').forEach(o => o.classList.remove('selected'));
-  document.getElementById(`eo-${id}`).classList.add('selected');
+  espaceId = id;
+  duree = '';
+  renderEspaces();
   renderDurees();
-  renderRecapPrix();
+  updateRecap();
   updateSteps(2);
 }
 
-// ── DURÉES ──
+// ═══════════════════════════════════════════════════════════════
+// DURÉES
+// ═══════════════════════════════════════════════════════════════
 function renderDurees() {
-  if (!state.espaceId) return;
-  const esp = ESPACES.find(e => e.id === state.espaceId);
   const c = document.getElementById('dureeBtns');
-  c.innerHTML = esp.durees.map(d => `
-    <button class="duree-btn ${state.duree === d ? 'active' : ''}" onclick="selectDuree('${d}')">${DUREE_LABELS[d]}</button>
-  `).join('');
+  if (!espaceId) { c.innerHTML = ''; return; }
+  const esp = ESPACES.find(e=>e.id===espaceId);
+  const liste = (esp.type==='salle') ? DUREES_SALLE : DUREES_NOMADE;
+  c.innerHTML = liste.map(d =>
+    `<button class="duree-btn${duree===d?' active':''}" onclick="selectDuree('${d}')">${DUREE_LABELS[d]}</button>`
+  ).join('');
 }
 
 function selectDuree(d) {
-  state.duree = d;
-  renderDurees(); // re-render avec le bon bouton actif (évite event.target non fiable)
-  renderRecapPrix();
-  updateSteps(2);
+  duree = d;
+  renderDurees();
+  updateRecapPrix();
+  updateRecap();
+  updateSteps(3);
 }
 
-// ── PRIX ──
-function renderRecapPrix() {
+// ═══════════════════════════════════════════════════════════════
+// PRIX
+// ═══════════════════════════════════════════════════════════════
+function getPrix() {
+  if (!espaceId || !duree) return 0;
+  const esp = ESPACES.find(e=>e.id===espaceId);
+  return (esp.tarifs[profil][duree] || 0);
+}
+
+function updateRecapPrix() {
   const w = document.getElementById('recapPrixWrap');
-  if (!state.espaceId || !state.duree) { w.innerHTML = ''; return; }
-
-  const esp = ESPACES.find(e => e.id === state.espaceId);
-  const tarif = esp.tarifs[state.profil];
-  const prix = tarif[state.duree];
-  const isGratuit = state.profil === 'asso' && prix === 0;
-
-  state.prixTotal = prix;
-
-  const badgeCls = state.profil !== 'plein' ? ` recap-reduction rr-${state.profil}` : '';
-  const badgeTxt = {
-    plein: '', adherent: '~−20% adhérent', locataire: '−50% locataire', asso: 'Gratuit*'
-  };
-
-  w.innerHTML = `
-    <div class="recap-card">
-      <div>
-        <div class="recap-detail">${esp.nom} · ${DUREE_LABELS[state.duree]}</div>
-        <div class="recap-total">${isGratuit ? '<span style="color:var(--success)">Gratuit*</span>' : prix + ' €'}</div>
-      </div>
-      ${badgeCls ? `<span class="${badgeCls}">${badgeTxt[state.profil]}</span>` : ''}
+  if (!espaceId || !duree) { w.innerHTML=''; return; }
+  const prix = getPrix();
+  const badge = document.getElementById('fBadge')?.checked ? 25 : 0;
+  const adhesion = document.getElementById('fAdhesion')?.checked ? 50 : 0;
+  const total = prix + badge + adhesion;
+  w.innerHTML = `<div class="recap-card">
+    <div>
+      <div class="recap-total">${profil==='asso'?'Gratuit*':total+' €'}</div>
+      <div class="recap-detail">${DUREE_LABELS[duree]}${badge?' + badge':''}${adhesion?' + adhésion':''}</div>
     </div>
-  `;
+  </div>`;
 }
 
-// ── ÉTAPES ──
-function updateSteps(active) {
-  for (let i = 1; i <= 4; i++) {
-    const s = document.getElementById(`step${i}`);
-    s.className = 'step' + (i < active ? ' done' : i === active ? ' active' : '');
-  }
-}
-
-// ── RECAP AVANT ENVOI ──
-function buildRecap() {
-  const esp = state.espaceId ? ESPACES.find(e => e.id === state.espaceId) : null;
-  const rows = [
+// ═══════════════════════════════════════════════════════════════
+// RÉCAP FINAL
+// ═══════════════════════════════════════════════════════════════
+function updateRecap() {
+  updateRecapPrix();
+  const esp = espaceId ? ESPACES.find(e=>e.id===espaceId) : null;
+  const rows = document.getElementById('recapRows');
+  if (!rows) return;
+  const prix = getPrix();
+  const badge = document.getElementById('fBadge')?.checked ? 25 : 0;
+  const adhesion = document.getElementById('fAdhesion')?.checked ? 50 : 0;
+  rows.innerHTML = [
     ['Espace', esp ? esp.nom : '—'],
-    ['Durée', state.duree ? DUREE_LABELS[state.duree] : '—'],
-    ['Profil', { plein: 'Tarif plein', adherent: 'Adhérent (~−20%)', locataire: 'Locataire (−50%)', asso: 'Association 82 (Gratuit*)' }[state.profil]],
-    ['Prix estimé', state.profil === 'asso' ? 'Gratuit*' : (state.prixTotal + ' €')],
-    ['Date', document.getElementById('fDate').value || '—'],
-    ['Heure', document.getElementById('fHeure').value || '—'],
-    ['Nom', document.getElementById('fNom').value || '—'],
-    ['Email', document.getElementById('fEmail').value || '—'],
-  ];
-  document.getElementById('recapRows').innerHTML = rows.map(r => `
-    <div class="recap-row"><span class="rk">${r[0]}</span><span class="rv">${r[1]}</span></div>
-  `).join('');
-  updateSteps(4);
+    ['Profil', {plein:'Tarif plein',adherent:'Adhérent',locataire:'Locataire',asso:'Association 82'}[profil]],
+    ['Durée', duree ? DUREE_LABELS[duree] : '—'],
+    ['Date', document.getElementById('fDate')?.value || '—'],
+    ['Heure', document.getElementById('fHeure')?.value || '—'],
+    ['Nom', document.getElementById('fNom')?.value || '—'],
+    ['Email', document.getElementById('fEmail')?.value || '—'],
+    ['Montant', profil==='asso' ? 'Gratuit*' : (prix+badge+adhesion)+' €'],
+  ].map(([k,v])=>`<div class="recap-row"><span class="rk">${k}</span><span class="rv">${v}</span></div>`).join('');
 }
 
-// Déclencher le recap quand les champs changent
-['fDate','fHeure','fNom','fEmail'].forEach(id => {
-  const el = document.getElementById(id);
-  if (el) el.addEventListener('change', buildRecap);
-});
-
-// ── MODIFIER AVANT ENVOI ──
-function modifierAvantEnvoi() {
-  document.getElementById('phaseRecap').style.display = 'none';
-  // afficher tous les cards
-  ['phaseProfilWrap','phaseEspace','phaseCoord'].forEach(id => {
-    document.getElementById(id).style.display = 'block';
+// ═══════════════════════════════════════════════════════════════
+// ÉTAPES
+// ═══════════════════════════════════════════════════════════════
+function updateSteps(active) {
+  [1,2,3,4].forEach(i => {
+    const el = document.getElementById('step'+i);
+    el.classList.remove('active','done');
+    if (i < active) el.classList.add('done');
+    else if (i === active) el.classList.add('active');
   });
-  document.getElementById('phaseRecap').style.display = 'none';
-  updateSteps(1);
-  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// Afficher le récap quand on clique en dehors des champs obligatoires
-document.getElementById('fEmail').addEventListener('blur', () => {
-  if (document.getElementById('fNom').value && document.getElementById('fDate').value && state.espaceId) {
-    buildRecap();
-    document.getElementById('phaseRecap').style.display = 'block';
-    document.getElementById('alertModify').style.display = 'flex';
-  }
-});
+// ═══════════════════════════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════════════════════════
+function toast(msg, type='') {
+  const t = document.createElement('div');
+  t.className = 'toast' + (type ? ' '+type : '');
+  t.textContent = msg;
+  document.getElementById('toasts').appendChild(t);
+  setTimeout(() => t.remove(), 4000);
+}
 
-// ── Conversion durée → heures numériques (pour le serveur) ──
-const DUREE_HEURES = {
-  heure: 1, 'demi-journee': 4, journee: 8, semaine: 40, mois: 160
-};
+// ═══════════════════════════════════════════════════════════════
+// ENVOI — architecture GET ?payload= (identique à admin.html)
+// ═══════════════════════════════════════════════════════════════
+async function envoyerReservation() {
+  // Validation
+  if (!espaceId)  { toast('Choisissez un espace.', 'error'); return; }
+  if (!duree)     { toast('Choisissez une durée.', 'error'); return; }
+  const date  = document.getElementById('fDate').value;
+  const heure = document.getElementById('fHeure').value;
+  const nom   = document.getElementById('fNom').value.trim();
+  const email = document.getElementById('fEmail').value.trim();
+  if (!date)  { toast('Indiquez une date.', 'error'); return; }
+  if (!heure) { toast('Indiquez une heure.', 'error'); return; }
+  if (!nom)   { toast('Indiquez votre nom.', 'error'); return; }
+  if (!email) { toast('Indiquez votre email.', 'error'); return; }
 
-// ── SOUMISSION (non-bloquante) ──
-async function soumettre() {
-  const nomComplet = document.getElementById('fNom').value.trim();
-  const email      = document.getElementById('fEmail').value.trim();
-  const date       = document.getElementById('fDate').value;
-  const heureDebut = document.getElementById('fHeure').value || '09:00';
+  const esp   = ESPACES.find(e=>e.id===espaceId);
+  const prix  = getPrix();
+  const badge = document.getElementById('fBadge').checked;
+  const adhesion = document.getElementById('fAdhesion').checked;
+  const total = prix + (badge?25:0) + (adhesion?50:0);
+  const ref   = 'GEN-' + Date.now().toString(36).toUpperCase();
 
-  // Validation côté client
-  if (!nomComplet || !email || !date || !state.espaceId || !state.duree) {
-    toast('Veuillez remplir tous les champs obligatoires.', 'error');
-    return;
-  }
-  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
-    toast('Adresse email invalide.', 'error');
-    return;
-  }
+  // Construire la payload — action 'addResa' avec format resa complet
+  const now = new Date().toISOString();
+  const parts = nom.split(' ');
+  const prenom = parts[0];
+  const nomFamille = parts.slice(1).join(' ') || nom;
 
-  const esp        = ESPACES.find(e => e.id === state.espaceId);
-  const dureeH     = DUREE_HEURES[state.duree] || 1;
-  const prenomVal  = nomComplet.split(' ')[0] || nomComplet;
-  const nomVal     = nomComplet.split(' ').slice(1).join(' ') || nomComplet;
-  const reference  = 'GEN-' + Date.now().toString(36).toUpperCase();
-
-  // Construction des options sélectionnées
-  const extras = [];
-  if (document.getElementById('optBadge').checked)    extras.push('Accès badge 24h/7j (+25€/mois)');
-  if (document.getElementById('optAdhesion').checked) extras.push('Adhésion Génie (+50€/an)');
-  // Pour les durées multi-jours, on l'indique dans le message
-  if (state.duree === 'semaine') extras.push('[Durée : Semaine]');
-  if (state.duree === 'mois')    extras.push('[Durée : Mois]');
-
-  const msgBase = document.getElementById('fMsg').value.trim();
-  const msgFull = [msgBase, ...extras].filter(Boolean).join(' | ');
-
-  // Payload conforme à la fonction creerReservation() du serveur
   const payload = {
-    action        : 'RESERVER',
-    espace        : esp.nom,
-    typeEspace    : esp.cat,
-    profil        : state.profil,
-    date          : date,
-    heureDebut    : heureDebut,
-    duree         : dureeH,
-    participants  : 1,
-    prenom        : prenomVal,
-    nom           : nomVal,
-    email         : email,
-    tel           : document.getElementById('fTel').value.trim(),
-    structure     : document.getElementById('fOrga').value.trim(),
-    message       : msgFull,
-    montantEstime : state.prixTotal,
-    options       : extras.filter(s => !s.startsWith('[')).join(', ')
+    action: 'addResa',
+    resa: {
+      id          : ref,
+      prenom      : prenom,
+      nom         : nomFamille,
+      email       : email,
+      tel         : document.getElementById('fTel').value.trim(),
+      orga        : document.getElementById('fOrga').value.trim(),
+      espace      : espaceId,
+      nomEspace   : esp.nom,
+      usage       : 'reservation-publique',
+      profil      : profil,
+      date        : date,
+      typeDuree   : duree,
+      nbHeures    : duree==='heure' ? '1' : duree==='demi' ? '4' : duree==='journee' ? '8' : '1',
+      heureDebut  : heure,
+      heureFin    : '',
+      montant     : String(total),
+      montantBase : String(prix),
+      options     : [badge?'Badge 24h/7j':'', adhesion?'Adhésion Génie':''].filter(Boolean).join(', '),
+      statut      : 'pending',
+      participants: '1',
+      objet       : document.getElementById('fMsg').value.trim(),
+      createdAt   : now,
+      updatedAt   : now
+    }
   };
 
-  const btn    = document.getElementById('btnSubmit');
-  const banner = document.getElementById('loadBanner');
-  btn.disabled = true;
-  document.getElementById('btnTxt').textContent = 'Envoi en cours…';
-  banner.classList.add('visible');
-  document.getElementById('loadBannerTxt').textContent = 'Envoi en cours… Cela peut prendre 5 à 10 secondes.';
-
-  const controller = new AbortController();
-  const timeout    = setTimeout(() => controller.abort(), 20000);
+  // Afficher le loader
+  document.getElementById('loadBanner').classList.add('visible');
+  document.getElementById('btnEnvoyer').disabled = true;
 
   try {
-    // Envoi via POST (Content-Type text/plain évite le preflight CORS)
-    const r = await fetch(SCRIPT_URL, {
-      method  : 'POST',
-      headers : { 'Content-Type': 'text/plain' },
-      body    : JSON.stringify(payload),
-      redirect: 'follow',
-      signal  : controller.signal
-    });
-    clearTimeout(timeout);
+    // GET avec ?payload= — même architecture que admin.html
+    const url = SCRIPT_URL + '?payload=' + encodeURIComponent(JSON.stringify(payload));
+    const resp = await fetch(url, { method: 'GET' });
+    const data = await resp.json();
 
-    // Lecture de la réponse serveur
-    let serverOk = false;
-    try {
-      const text = await r.text();
-      const data = JSON.parse(text);
-      if (data && data.success === true)  serverOk = true;
-      else if (data && data.error)        throw new Error(data.error);
-      else                                serverOk = true; // Réponse inattendue mais sans erreur
-    } catch (parseErr) {
-      // Réponse non-JSON (rare avec Apps Script) — on considère l'envoi réussi
-      serverOk = true;
-    }
-
-    if (serverOk) {
-      ['phaseProfilWrap','phaseEspace','phaseCoord','phaseRecap'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.style.display = 'none';
-      });
-      document.getElementById('successRef').textContent = reference;
+    if (data.ok) {
+      // Succès
+      document.getElementById('loadBanner').classList.remove('visible');
+      document.querySelector('.page').style.display = 'none';
       document.getElementById('successCard').classList.add('visible');
-      state.submitted = true;
+      document.getElementById('successRef').textContent = ref;
       updateSteps(4);
-      document.getElementById('step4').className = 'step done';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      throw new Error(data.error || 'Erreur inconnue');
     }
-
-  } catch (err) {
-    clearTimeout(timeout);
-    document.getElementById('loadBannerTxt').textContent =
-      'La connexion a échoué. Envoyez votre demande par email ou réessayez.';
-    toast('Erreur réseau. Contactez-nous à contact@genie-montauban.fr', 'error', 8000);
-    btn.disabled = false;
-    document.getElementById('btnTxt').textContent = 'Réessayer';
-  } finally {
-    setTimeout(() => banner.classList.remove('visible'), 4000);
+  } catch(err) {
+    document.getElementById('loadBanner').classList.remove('visible');
+    document.getElementById('btnEnvoyer').disabled = false;
+    toast('Erreur d\'envoi : ' + err.message + '. Contactez-nous au 06 51 50 97 18.', 'error');
   }
 }
 
-// ── MODIFIER APRÈS ENVOI ──
-function modifierReservation() {
-  const ref = document.getElementById('successRef').textContent;
-  const subject = encodeURIComponent('Modification réservation ' + ref + ' — Génie Montauban');
-  const body    = encodeURIComponent(
-    'Bonjour,\n\nJe souhaite modifier ou annuler la réservation suivante :\n\nRéférence : ' + ref +
-    '\n\nMerci de me contacter pour convenir des modalités.\n\nCordialement'
-  );
-  window.location.href = 'mailto:contact@genie-montauban.fr?subject=' + subject + '&body=' + body;
-}
-
-// ── TOAST (notifications non-bloquantes) ──
-function toast(msg, type, duration) {
-  const container = document.getElementById('toasts');
-  if (!container) return;
-  const t = document.createElement('div');
-  t.className = 'toast' + (type ? ' ' + type : '');
-  t.textContent = msg;
-  container.appendChild(t);
-  setTimeout(() => {
-    t.style.opacity = '0';
-    t.style.transition = 'opacity .3s';
-    setTimeout(() => t.remove(), 350);
-  }, duration || 4000);
-}
+// Init au chargement
+document.addEventListener('DOMContentLoaded', () => {
+  renderDurees();
+  updateRecap();
+});
 </script>
 </body>
 </html>
