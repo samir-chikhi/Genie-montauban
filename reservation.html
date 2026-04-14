@@ -59,12 +59,12 @@ textarea { resize: vertical; min-height: 80px; }
 .pb-locataire { background: rgba(26,107,114,0.1); color: var(--teal); }
 .pb-asso { background: rgba(45,125,70,0.1); color: var(--success); }
 .espaces-list { display: flex; flex-direction: column; gap: 10px; }
-.espace-option { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border: 1.5px solid rgba(13,43,69,0.1); border-radius: 8px; cursor: pointer; transition: border-color .15s, background .15s; user-select: none; }
+.espace-option { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border: 1.5px solid rgba(13,43,69,0.1); border-radius: 8px; cursor: pointer; transition: border-color .15s, background .15s; user-select: none; width: 100%; overflow: hidden; }
 .espace-option:hover { border-color: var(--teal); }
 .espace-option.selected { border-color: var(--navy); background: rgba(13,43,69,0.03); }
 .espace-option input[type=radio] { accent-color: var(--navy); flex-shrink: 0; }
 .espace-opt-icon { font-size: 1.2rem; flex-shrink: 0; }
-.espace-opt-info { flex: 1; }
+.espace-opt-info { flex: 1; min-width: 0; }
 .espace-opt-name { font-weight: 600; font-size: 0.9rem; color: var(--navy); }
 .espace-opt-cap { font-size: 0.78rem; color: var(--gray); }
 .espace-opt-price { font-family: var(--font-head); font-weight: 700; font-size: 0.95rem; color: var(--teal); text-align: right; }
@@ -330,15 +330,15 @@ function renderEspaces() {
     const t = e.tarifs[profil];
     const prixMin = Object.values(t).find(v=>v>0) || 0;
     const prixLabel = profil==='asso' ? 'Gratuit*' : (prixMin>0 ? 'dès '+prixMin+' €' : 'Gratuit*');
-    return `<label class="espace-option${espaceId===e.id?' selected':''}" onclick="selectEspace('${e.id}')">
+    return `<div class="espace-option${espaceId===e.id?' selected':''}" onclick="selectEspace('${e.id}')">
       <input type="radio" name="espace" value="${e.id}" ${espaceId===e.id?'checked':''}>
-      <span class="espace-opt-icon">${e.icon}</span>
-      <div class="espace-opt-info">
+      <span class="espace-opt-icon" style="flex-shrink:0">${e.icon}</span>
+      <div class="espace-opt-info" style="flex:1;min-width:0">
         <div class="espace-opt-name">${e.nom}</div>
         <div class="espace-opt-cap">${e.cap}</div>
       </div>
-      <div class="espace-opt-price">${prixLabel}</div>
-    </label>`;
+      <div class="espace-opt-price" style="flex-shrink:0;white-space:nowrap">${prixLabel}</div>
+    </div>`;
   }).join('');
 }
 
