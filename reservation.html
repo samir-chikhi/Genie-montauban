@@ -9,101 +9,116 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --navy: #0D2B45; --gold: #C9A84C; --gold-lt: #E8C96E;
-  --teal: #1A6B72; --teal-lt: #2A9EA8; --cream: #F8F5EF;
-  --white: #FFFFFF; --gray: #6B7280; --dark: #1C1C1C;
-  --success: #2D7D46; --warn: #B45309; --error: #C0392B;
-  --radius: 10px; --font-head: 'Syne', sans-serif; --font-body: 'DM Sans', sans-serif;
+  --navy:#0D2B45;--gold:#C9A84C;--teal:#1A6B72;--cream:#F8F5EF;
+  --white:#FFFFFF;--gray:#6B7280;--dark:#1C1C1C;
+  --success:#2D7D46;--warn:#B45309;--error:#C0392B;
+  --radius:10px;--font-head:'Syne',sans-serif;--font-body:'DM Sans',sans-serif;
 }
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body { font-family: var(--font-body); color: var(--dark); background: var(--cream); }
-nav { background: var(--navy); display: flex; align-items: center; justify-content: space-between; padding: 0 32px; height: 60px; position: sticky; top: 0; z-index: 40; }
-.nav-logo { font-family: var(--font-head); font-weight: 800; font-size: 1.3rem; color: var(--gold); }
-.nav-back { color: rgba(255,255,255,0.8); font-size: 0.88rem; display: flex; align-items: center; gap: 6px; transition: color .2s; text-decoration: none; }
-.nav-back:hover { color: var(--gold); }
-.nav-tarifs { color: rgba(255,255,255,0.7); font-size: 0.82rem; transition: color .2s; text-decoration: none; }
-.nav-tarifs:hover { color: var(--gold); }
-.load-banner { display: none; position: fixed; top: 60px; left: 0; right: 0; z-index: 30; background: var(--navy); color: var(--white); padding: 10px 24px; font-size: 0.85rem; align-items: center; gap: 12px; }
-.load-banner.visible { display: flex; }
-.spin-sm { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: var(--gold); border-radius: 50%; animation: spin .7s linear infinite; flex-shrink: 0; }
-@keyframes spin { to { transform: rotate(360deg); } }
-.page { max-width: 860px; margin: 0 auto; padding: 40px 24px 80px; }
-.page-title { font-family: var(--font-head); font-weight: 800; font-size: clamp(1.6rem, 4vw, 2.2rem); color: var(--navy); letter-spacing: -0.02em; margin-bottom: 6px; }
-.page-sub { font-size: 0.92rem; color: var(--gray); margin-bottom: 32px; }
-.steps { display: flex; gap: 0; margin-bottom: 32px; }
-.step { flex: 1; padding: 10px 16px; background: rgba(13,43,69,0.05); font-size: 0.78rem; font-weight: 600; color: var(--gray); text-align: center; }
-.step.active { background: var(--navy); color: var(--white); }
-.step.done { background: var(--success); color: var(--white); }
-.step:first-child { border-radius: 6px 0 0 6px; }
-.step:last-child { border-radius: 0 6px 6px 0; }
-.form-card { background: var(--white); border-radius: var(--radius); padding: 32px; box-shadow: 0 2px 16px rgba(13,43,69,0.07); margin-bottom: 20px; }
-.form-card h2 { font-family: var(--font-head); font-weight: 700; font-size: 1.05rem; color: var(--navy); margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
-.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.form-group { display: flex; flex-direction: column; gap: 6px; }
-.form-group.full { grid-column: 1 / -1; }
-label { font-size: 0.82rem; font-weight: 600; color: var(--navy); }
-label .req { color: var(--error); }
-input, select, textarea { border: 1.5px solid rgba(13,43,69,0.15); border-radius: 7px; padding: 10px 12px; font-family: var(--font-body); font-size: 0.9rem; color: var(--dark); background: var(--white); transition: border-color .15s; width: 100%; }
-input:focus, select:focus, textarea:focus { outline: none; border-color: var(--teal); box-shadow: 0 0 0 3px rgba(26,107,114,0.1); }
-textarea { resize: vertical; min-height: 80px; }
-.profil-selector { display: flex; gap: 8px; flex-wrap: wrap; }
-.profil-card { flex: 1; min-width: 140px; padding: 12px 14px; border: 2px solid rgba(13,43,69,0.12); border-radius: 8px; cursor: pointer; transition: .15s; user-select: none; }
-.profil-card:hover { border-color: var(--teal); }
-.profil-card.selected { border-color: var(--navy); background: rgba(13,43,69,0.04); }
-.profil-card input[type=radio] { display: none; }
-.profil-card-name { font-weight: 700; font-size: 0.85rem; color: var(--navy); }
-.profil-card-note { font-size: 0.75rem; color: var(--gray); margin-top: 2px; }
-.profil-badge { display: inline-block; font-size: 0.68rem; font-weight: 700; padding: 2px 8px; border-radius: 10px; margin-top: 4px; }
-.pb-adherent { background: rgba(180,83,9,0.1); color: var(--warn); }
-.pb-locataire { background: rgba(26,107,114,0.1); color: var(--teal); }
-.pb-asso { background: rgba(45,125,70,0.1); color: var(--success); }
-.espaces-list { display: flex; flex-direction: column; gap: 10px; }
-.espace-option { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border: 1.5px solid rgba(13,43,69,0.1); border-radius: 8px; cursor: pointer; transition: border-color .15s, background .15s; user-select: none; width: 100%; }
-.espace-option:hover { border-color: var(--teal); }
-.espace-option.selected { border-color: var(--navy); background: rgba(13,43,69,0.03); }
-.espace-option input[type=radio] { accent-color: var(--navy); flex-shrink: 0; width: auto; }
-.espace-opt-icon { font-size: 1.2rem; flex-shrink: 0; }
-.espace-opt-info { flex: 1; min-width: 0; }
-.espace-opt-name { font-weight: 600; font-size: 0.9rem; color: var(--navy); }
-.espace-opt-cap { font-size: 0.78rem; color: var(--gray); }
-.espace-opt-price { font-family: var(--font-head); font-weight: 700; font-size: 0.95rem; color: var(--teal); text-align: right; }
-.espace-opt-price small { font-weight: 400; font-size: 0.72rem; color: var(--gray); display: block; }
-.duree-btns { display: flex; gap: 8px; flex-wrap: wrap; }
-.duree-btn { padding: 9px 18px; border: 1.5px solid rgba(13,43,69,0.15); border-radius: 6px; background: var(--white); font-family: var(--font-body); font-size: 0.85rem; font-weight: 600; color: var(--navy); cursor: pointer; transition: .15s; }
-.duree-btn:hover, .duree-btn.active { background: var(--navy); color: var(--white); border-color: var(--navy); }
-.recap-card { background: rgba(13,43,69,0.03); border: 1.5px solid rgba(13,43,69,0.1); border-radius: 8px; padding: 16px 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.recap-total { font-family: var(--font-head); font-weight: 800; font-size: 1.4rem; color: var(--navy); }
-.recap-detail { font-size: 0.82rem; color: var(--gray); }
-.recap-full { background: var(--cream); border: 1.5px solid rgba(13,43,69,0.1); border-radius: 8px; padding: 20px; margin-bottom: 16px; }
-.recap-full h3 { font-family: var(--font-head); font-weight: 700; font-size: 0.95rem; color: var(--navy); margin-bottom: 12px; }
-.recap-rows { display: flex; flex-direction: column; gap: 8px; }
-.recap-row { display: flex; justify-content: space-between; font-size: 0.88rem; }
-.recap-row .rk { color: var(--gray); }
-.recap-row .rv { font-weight: 600; color: var(--navy); }
-.btn-submit { width: 100%; padding: 14px; background: var(--navy); color: var(--white); border: none; border-radius: 8px; font-family: var(--font-head); font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: background .2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
-.btn-submit:hover:not(:disabled) { background: var(--teal); }
-.btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
-.btn-modify { display: inline-flex; align-items: center; gap: 6px; background: transparent; border: 1.5px solid var(--navy); color: var(--navy); font-family: var(--font-head); font-weight: 600; font-size: 0.85rem; padding: 9px 18px; border-radius: 7px; cursor: pointer; transition: .15s; }
-.btn-modify:hover { background: var(--navy); color: var(--white); }
-.success-card { display: none; background: var(--white); border-radius: var(--radius); padding: 40px 32px; text-align: center; box-shadow: 0 2px 16px rgba(13,43,69,0.07); }
-.success-card.visible { display: block; }
-.success-icon { font-size: 3rem; margin-bottom: 16px; }
-.success-card h2 { font-family: var(--font-head); font-weight: 800; font-size: 1.4rem; color: var(--success); margin-bottom: 8px; }
-.success-card p { font-size: 0.92rem; color: var(--gray); margin-bottom: 24px; }
-.success-ref { font-family: var(--font-head); font-weight: 700; background: var(--cream); display: inline-block; padding: 6px 18px; border-radius: 20px; font-size: 0.85rem; color: var(--navy); margin-bottom: 20px; }
-.alert-info { background: rgba(13,43,69,0.04); border: 1px solid rgba(13,43,69,0.12); border-radius: 8px; padding: 14px 16px; font-size: 0.85rem; color: var(--dark); margin-bottom: 20px; }
-.toasts { position: fixed; bottom: 24px; right: 24px; z-index: 100; display: flex; flex-direction: column; gap: 10px; }
-.toast { background: var(--dark); color: var(--white); font-size: 0.85rem; padding: 12px 18px; border-radius: 8px; max-width: 320px; animation: slideIn .25s ease; }
-.toast.error { background: var(--error); }
-.toast.success-t { background: var(--success); }
-@keyframes slideIn { from { transform: translateX(30px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-@media (max-width: 640px) {
-  .form-grid { grid-template-columns: 1fr; }
-  .profil-selector { flex-direction: column; }
-  .steps { display: none; }
-  nav { padding: 0 16px; }
-  .page { padding: 24px 16px 60px; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body);color:var(--dark);background:var(--cream)}
+/* NAV */
+nav{background:var(--navy);display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:60px;position:sticky;top:0;z-index:40}
+.nav-logo{font-family:var(--font-head);font-weight:800;font-size:1.3rem;color:var(--gold)}
+.nav-back{color:rgba(255,255,255,0.8);font-size:.88rem;display:flex;align-items:center;gap:6px;transition:color .2s;text-decoration:none}
+.nav-back:hover{color:var(--gold)}
+.nav-tarifs{color:rgba(255,255,255,0.7);font-size:.82rem;transition:color .2s;text-decoration:none}
+.nav-tarifs:hover{color:var(--gold)}
+/* LOADER */
+.load-banner{display:none;position:fixed;top:60px;left:0;right:0;z-index:30;background:var(--navy);color:var(--white);padding:10px 24px;font-size:.85rem;align-items:center;gap:12px}
+.load-banner.visible{display:flex}
+.spin-sm{width:16px;height:16px;border:2px solid rgba(255,255,255,0.3);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+/* LAYOUT */
+.page{max-width:860px;margin:0 auto;padding:40px 24px 80px}
+.page-title{font-family:var(--font-head);font-weight:800;font-size:clamp(1.6rem,4vw,2.2rem);color:var(--navy);letter-spacing:-.02em;margin-bottom:6px}
+.page-sub{font-size:.92rem;color:var(--gray);margin-bottom:32px}
+/* ÉTAPES */
+.steps{display:flex;margin-bottom:32px}
+.step{flex:1;padding:10px 16px;background:rgba(13,43,69,0.05);font-size:.78rem;font-weight:600;color:var(--gray);text-align:center}
+.step.active{background:var(--navy);color:var(--white)}
+.step.done{background:var(--success);color:var(--white)}
+.step:first-child{border-radius:6px 0 0 6px}
+.step:last-child{border-radius:0 6px 6px 0}
+/* CARDS */
+.form-card{background:var(--white);border-radius:var(--radius);padding:32px;box-shadow:0 2px 16px rgba(13,43,69,0.07);margin-bottom:20px}
+.form-card h2{font-family:var(--font-head);font-weight:700;font-size:1.05rem;color:var(--navy);margin-bottom:20px;display:flex;align-items:center;gap:8px}
+/* FORM */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group.full{grid-column:1/-1}
+label{font-size:.82rem;font-weight:600;color:var(--navy)}
+label .req{color:var(--error)}
+input,select,textarea{border:1.5px solid rgba(13,43,69,0.15);border-radius:7px;padding:10px 12px;font-family:var(--font-body);font-size:.9rem;color:var(--dark);background:var(--white);transition:border-color .15s;width:100%}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(26,107,114,0.1)}
+textarea{resize:vertical;min-height:80px}
+/* CHECKBOX & RADIO — pas de width:100% */
+input[type=radio],input[type=checkbox]{width:auto;height:auto;padding:0;border:none;background:none;box-shadow:none;flex-shrink:0}
+.check-label{display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:.88rem;font-weight:400;color:var(--dark);padding:10px 0}
+/* PROFIL */
+.profil-selector{display:flex;gap:8px;flex-wrap:wrap}
+.profil-card{flex:1;min-width:140px;padding:12px 14px;border:2px solid rgba(13,43,69,0.12);border-radius:8px;cursor:pointer;transition:.15s;user-select:none}
+.profil-card:hover{border-color:var(--teal)}
+.profil-card.selected{border-color:var(--navy);background:rgba(13,43,69,0.04)}
+.profil-card input[type=radio]{display:none}
+.profil-card-name{font-weight:700;font-size:.85rem;color:var(--navy)}
+.profil-card-note{font-size:.75rem;color:var(--gray);margin-top:2px}
+.profil-badge{display:inline-block;font-size:.68rem;font-weight:700;padding:2px 8px;border-radius:10px;margin-top:4px}
+.pb-adherent{background:rgba(180,83,9,0.1);color:var(--warn)}
+.pb-locataire{background:rgba(26,107,114,0.1);color:var(--teal)}
+.pb-asso{background:rgba(45,125,70,0.1);color:var(--success)}
+/* ESPACES */
+.espaces-list{display:flex;flex-direction:column;gap:10px}
+.espace-option{display:flex;align-items:center;gap:12px;padding:14px 16px;border:1.5px solid rgba(13,43,69,0.1);border-radius:8px;cursor:pointer;transition:border-color .15s,background .15s;user-select:none;width:100%}
+.espace-option:hover{border-color:var(--teal)}
+.espace-option.selected{border-color:var(--navy);background:rgba(13,43,69,0.03)}
+.espace-opt-icon{font-size:1.2rem;flex-shrink:0}
+.espace-opt-info{flex:1;min-width:0}
+.espace-opt-name{font-weight:600;font-size:.9rem;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.espace-opt-cap{font-size:.78rem;color:var(--gray)}
+.espace-opt-price{font-family:var(--font-head);font-weight:700;font-size:.95rem;color:var(--teal);text-align:right;flex-shrink:0;white-space:nowrap}
+/* DURÉE */
+.duree-btns{display:flex;gap:8px;flex-wrap:wrap}
+.duree-btn{padding:9px 18px;border:1.5px solid rgba(13,43,69,0.15);border-radius:6px;background:var(--white);font-family:var(--font-body);font-size:.85rem;font-weight:600;color:var(--navy);cursor:pointer;transition:.15s}
+.duree-btn:hover,.duree-btn.active{background:var(--navy);color:var(--white);border-color:var(--navy)}
+/* RECAP PRIX */
+.recap-card{background:rgba(13,43,69,0.03);border:1.5px solid rgba(13,43,69,0.1);border-radius:8px;padding:16px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:16px}
+.recap-total{font-family:var(--font-head);font-weight:800;font-size:1.4rem;color:var(--navy)}
+.recap-detail{font-size:.82rem;color:var(--gray)}
+/* RECAP FINAL */
+.recap-full{background:var(--cream);border:1.5px solid rgba(13,43,69,0.1);border-radius:8px;padding:20px;margin-bottom:16px}
+.recap-full h3{font-family:var(--font-head);font-weight:700;font-size:.95rem;color:var(--navy);margin-bottom:12px}
+.recap-rows{display:flex;flex-direction:column;gap:8px}
+.recap-row{display:flex;justify-content:space-between;font-size:.88rem}
+.recap-row .rk{color:var(--gray)}
+.recap-row .rv{font-weight:600;color:var(--navy)}
+/* BOUTONS */
+.btn-submit{width:100%;padding:14px;background:var(--navy);color:var(--white);border:none;border-radius:8px;font-family:var(--font-head);font-weight:700;font-size:.95rem;cursor:pointer;transition:background .2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-submit:hover:not(:disabled){background:var(--teal)}
+.btn-submit:disabled{opacity:.5;cursor:not-allowed}
+.btn-modify{display:inline-flex;align-items:center;gap:6px;background:transparent;border:1.5px solid var(--navy);color:var(--navy);font-family:var(--font-head);font-weight:600;font-size:.85rem;padding:9px 18px;border-radius:7px;cursor:pointer;transition:.15s;text-decoration:none}
+.btn-modify:hover{background:var(--navy);color:var(--white)}
+/* SUCCÈS */
+.success-card{display:none;background:var(--white);border-radius:var(--radius);padding:40px 32px;text-align:center;box-shadow:0 2px 16px rgba(13,43,69,0.07)}
+.success-card.visible{display:block}
+.success-icon{font-size:3rem;margin-bottom:16px}
+.success-card h2{font-family:var(--font-head);font-weight:800;font-size:1.4rem;color:var(--success);margin-bottom:8px}
+.success-card p{font-size:.92rem;color:var(--gray);margin-bottom:24px}
+.success-ref{font-family:var(--font-head);font-weight:700;background:var(--cream);display:inline-block;padding:6px 18px;border-radius:20px;font-size:.85rem;color:var(--navy);margin-bottom:20px}
+/* ALERT */
+.alert-info{background:rgba(13,43,69,0.04);border:1px solid rgba(13,43,69,0.12);border-radius:8px;padding:14px 16px;font-size:.85rem;color:var(--dark);margin-bottom:20px}
+/* TOASTS */
+.toasts{position:fixed;bottom:24px;right:24px;z-index:100;display:flex;flex-direction:column;gap:10px}
+.toast{background:var(--dark);color:var(--white);font-size:.85rem;padding:12px 18px;border-radius:8px;max-width:320px;animation:slideIn .25s ease}
+.toast.err{background:var(--error)}
+.toast.ok{background:var(--success)}
+@keyframes slideIn{from{transform:translateX(30px);opacity:0}to{transform:translateX(0);opacity:1}}
+@media(max-width:640px){
+  .form-grid{grid-template-columns:1fr}
+  .profil-selector{flex-direction:column}
+  .steps{display:none}
+  nav{padding:0 16px}
+  .page{padding:24px 16px 60px}
 }
 </style>
 </head>
@@ -120,7 +135,7 @@ textarea { resize: vertical; min-height: 80px; }
   <a href="tarifs.html" class="nav-tarifs">📋 Tarifs</a>
 </nav>
 
-<div class="page">
+<div class="page" id="mainPage">
   <h1 class="page-title">Réserver un espace</h1>
   <p class="page-sub">Tiers-Lieu Génie · 12 rue du Génie, 82000 Montauban · <a href="tel:+33651509718" style="color:var(--teal)">06 51 50 97 18</a></p>
 
@@ -143,13 +158,13 @@ textarea { resize: vertical; min-height: 80px; }
       <label class="profil-card" id="pc-adherent">
         <input type="radio" name="profil" value="adherent" onchange="onProfilChange('adherent')">
         <div class="profil-card-name">Adhérent Génie</div>
-        <div class="profil-card-note">~20% de réduction</div>
+        <div class="profil-card-note">≈ −20% de réduction</div>
         <span class="profil-badge pb-adherent">−20%</span>
       </label>
       <label class="profil-card" id="pc-locataire">
         <input type="radio" name="profil" value="locataire" onchange="onProfilChange('locataire')">
         <div class="profil-card-name">Locataire Génie</div>
-        <div class="profil-card-note">Bureau privatif − 50%</div>
+        <div class="profil-card-note">Bureau privatif ≈ −50%</div>
         <span class="profil-badge pb-locataire">−50%</span>
       </label>
       <label class="profil-card" id="pc-asso">
@@ -159,7 +174,7 @@ textarea { resize: vertical; min-height: 80px; }
         <span class="profil-badge pb-asso">Gratuit*</span>
       </label>
     </div>
-    <p id="profilInfo" style="font-size:0.82rem;color:var(--gray);margin-top:14px;padding:10px 14px;background:var(--cream);border-radius:6px">
+    <p id="profilInfo" style="font-size:.82rem;color:var(--gray);margin-top:14px;padding:10px 14px;background:var(--cream);border-radius:6px">
       Tarif standard pour les non-adhérents. <a href="tarifs.html#sec-adhesion" style="color:var(--teal)">Devenir adhérent →</a>
     </p>
   </div>
@@ -169,17 +184,17 @@ textarea { resize: vertical; min-height: 80px; }
     <h2>🏛️ Choisir un espace</h2>
     <div class="espaces-list" id="espacesContainer"></div>
     <div style="margin-top:20px">
-      <label style="font-size:0.82rem;font-weight:600;color:var(--navy);display:block;margin-bottom:10px">Durée</label>
+      <label style="font-size:.82rem;font-weight:600;color:var(--navy);display:block;margin-bottom:10px">Durée</label>
       <div class="duree-btns" id="dureeBtns"></div>
     </div>
-    <div style="margin-top:20px" id="recapPrixWrap"></div>
+    <div id="recapPrixWrap"></div>
   </div>
 
   <!-- COORDONNÉES -->
   <div class="form-card">
     <h2>📅 Date, heure & coordonnées</h2>
     <div class="alert-info">
-      ℹ️ Vous souhaitez modifier une réservation ? Indiquez votre référence dans le champ "Message" ou contactez-nous à <strong>genie.montauban@gmail.com</strong>.
+      ℹ️ Pour modifier une réservation existante, indiquez votre référence dans "Précisions" ou contactez-nous à <strong>genie.montauban@gmail.com</strong>.
     </div>
     <div class="form-grid">
       <div class="form-group">
@@ -211,133 +226,138 @@ textarea { resize: vertical; min-height: 80px; }
         <textarea id="fMsg" placeholder="Matériel souhaité, accessibilité, réf. de modification…"></textarea>
       </div>
       <div class="form-group full">
-        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:400">
+        <label class="check-label">
           <input type="checkbox" id="fBadge"> Ajouter l'accès badge 24h/7j (+25€/mois)
         </label>
       </div>
       <div class="form-group full">
-        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:400">
-          <input type="checkbox" id="fAdhesion"> Inclure l'adhésion Génie (+50€/an — accès aux tarifs réduits ~20%)
+        <label class="check-label">
+          <input type="checkbox" id="fAdhesion"> Inclure l'adhésion Génie (+50€/an — accès aux tarifs réduits ≈ −20%)
         </label>
       </div>
     </div>
   </div>
 
   <!-- CONFIRMATION -->
-  <div class="form-card" id="phaseConfirm">
+  <div class="form-card">
     <h2>✅ Vérification avant envoi</h2>
     <div class="recap-full">
       <h3>Récapitulatif de votre demande</h3>
       <div class="recap-rows" id="recapRows"></div>
     </div>
-    <p style="font-size:0.82rem;color:var(--gray);margin-bottom:16px">
+    <p style="font-size:.82rem;color:var(--gray);margin-bottom:16px">
       ⚠️ La réservation sera <strong>confirmée par email</strong> sous 24h par l'équipe Génie.
     </p>
     <button class="btn-submit" id="btnEnvoyer" onclick="envoyerReservation()">
       Envoyer ma demande de réservation →
     </button>
     <div style="margin-top:12px;text-align:center">
-      <button class="btn-modify" onclick="window.scrollTo(0,0)">✏️ Modifier avant envoi</button>
+      <button class="btn-modify" onclick="revenirEnEdition()">✏️ Modifier avant envoi</button>
     </div>
   </div>
+</div>
 
-  <!-- SUCCÈS -->
-  <div class="success-card" id="successCard">
-    <div class="success-icon">🎉</div>
-    <h2>Demande envoyée !</h2>
-    <p>Votre demande a été reçue. L'équipe Génie vous confirmera par email sous 24h.</p>
-    <div class="success-ref" id="successRef">REF-XXXXXX</div>
-    <br>
-    <a href="index.html" class="btn-modify">← Retour au site</a>
-  </div>
+<!-- SUCCÈS -->
+<div class="success-card" id="successCard">
+  <div class="success-icon">🎉</div>
+  <h2>Demande envoyée !</h2>
+  <p>Votre demande a été reçue. L'équipe Génie vous confirmera par email sous 24h.</p>
+  <div class="success-ref" id="successRef">REF-XXXXXX</div>
+  <br><br>
+  <button class="btn-modify" onclick="nouvelleReservation()">📅 Nouvelle réservation</button>
+  &nbsp;
+  <a href="index.html" class="btn-modify">← Retour au site</a>
 </div>
 
 <div class="toasts" id="toasts"></div>
 
 <script>
-// ═══════════════════════════════════════════════════════════════
-// CONFIG — URL Apps Script (architecture GET ?payload=)
-// ═══════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
+// CONFIG
+// ══════════════════════════════════════════════════
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyJ-Dk-yZZNdfxFigchP953rNyjSLJv4oOVUbxzuAbX4kuBfwTFBJvnnLuJMLWRnd9c4w/exec';
 
-// ═══════════════════════════════════════════════════════════════
-// DONNÉES ESPACES & TARIFS
-// ═══════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
+// DONNÉES — tarifs alignés sur tarifs.html (référence officielle)
+// ══════════════════════════════════════════════════
 const ESPACES = [
-  { id:'bourdelle', icon:'🏛️', nom:'Antoine Bourdelle', cap:'40 pers. · RDC', type:'salle',
-    tarifs:{ plein:{heure:45,demi:150,journee:280}, adherent:{heure:35,demi:110,journee:200}, locataire:{heure:25,demi:80,journee:140}, asso:{heure:0,demi:0,journee:0} } },
-  { id:'freinet', icon:'🤝', nom:'Célestin Freinet', cap:'20 pers. · 1er', type:'salle',
-    tarifs:{ plein:{heure:30,demi:100,journee:180}, adherent:{heure:22,demi:75,journee:135}, locataire:{heure:15,demi:50,journee:90}, asso:{heure:0,demi:0,journee:0} } },
-  { id:'gouges', icon:'📋', nom:'Olympe de Gouges', cap:'20 pers. · 1er', type:'salle',
-    tarifs:{ plein:{heure:30,demi:100,journee:180}, adherent:{heure:22,demi:75,journee:135}, locataire:{heure:15,demi:50,journee:90}, asso:{heure:0,demi:0,journee:0} } },
-  { id:'montessori', icon:'♿', nom:'Maria Montessori', cap:'PMR · 4 pers.', type:'salle',
-    tarifs:{ plein:{heure:15,demi:50,journee:80}, adherent:{heure:12,demi:40,journee:65}, locataire:{heure:8,demi:25,journee:40}, asso:{heure:0,demi:0,journee:0} } },
-  { id:'aristote', icon:'🚪', nom:'Aristote', cap:'Bureau nomade · 7m²', type:'nomade',
-    tarifs:{ plein:{demi:12,journee:22,semaine:90,mois:200}, adherent:{demi:10,journee:18,semaine:72,mois:160}, locataire:{demi:6,journee:11,semaine:45,mois:100}, asso:{demi:0,journee:0,semaine:0,mois:0} } },
-  { id:'rousseau', icon:'💻', nom:'Jean-Jacques Rousseau', cap:'Coworking · 20 postes', type:'cowork',
-    tarifs:{ plein:{demi:10,journee:17,semaine:60,mois:180}, adherent:{demi:8,journee:14,semaine:48,mois:144}, locataire:{demi:5,journee:9,semaine:30,mois:90}, asso:{demi:0,journee:0,semaine:0,mois:0} } },
+  { id:'bourdelle',   icon:'🏛️', nom:'Antoine Bourdelle',      cap:'40 pers. · RDC',        type:'salle',
+    tarifs:{ plein:{heure:45,demi:150,journee:280}, adherent:{heure:35,demi:110,journee:200}, locataire:{heure:25,demi:80,journee:140},  asso:{heure:0,demi:0,journee:0} }},
+  { id:'freinet',     icon:'🤝', nom:'Célestin Freinet',         cap:'20 pers. · 1er',        type:'salle',
+    tarifs:{ plein:{heure:30,demi:100,journee:180}, adherent:{heure:22,demi:75,journee:135},  locataire:{heure:15,demi:50,journee:90},   asso:{heure:0,demi:0,journee:0} }},
+  { id:'gouges',      icon:'📋', nom:'Olympe de Gouges',         cap:'20 pers. · 1er',        type:'salle',
+    tarifs:{ plein:{heure:30,demi:100,journee:180}, adherent:{heure:22,demi:75,journee:135},  locataire:{heure:15,demi:50,journee:90},   asso:{heure:0,demi:0,journee:0} }},
+  { id:'montessori',  icon:'♿', nom:'Maria Montessori',         cap:'PMR · 4 pers.',         type:'salle',
+    tarifs:{ plein:{heure:15,demi:50,journee:80},   adherent:{heure:12,demi:40,journee:65},   locataire:{heure:8,demi:25,journee:40},    asso:{heure:0,demi:0,journee:0} }},
+  { id:'aristote',    icon:'🚪', nom:'Aristote',                 cap:'Bureau nomade · 7m²',   type:'nomade',
+    tarifs:{ plein:{demi:12,journee:22,semaine:90,mois:200},   adherent:{demi:10,journee:18,semaine:72,mois:160},  locataire:{demi:6,journee:11,semaine:45,mois:100},  asso:{demi:0,journee:0,semaine:0,mois:0} }},
+  { id:'rousseau',    icon:'💻', nom:'Jean-Jacques Rousseau',    cap:'Coworking · 20 postes', type:'cowork',
+    tarifs:{ plein:{demi:10,journee:17,semaine:60,mois:180},   adherent:{demi:8,journee:14,semaine:48,mois:144},   locataire:{demi:5,journee:9,semaine:30,mois:90},    asso:{demi:0,journee:0,semaine:0,mois:0} }},
 ];
-
 const DUREES_SALLE  = ['heure','demi','journee'];
 const DUREES_NOMADE = ['demi','journee','semaine','mois'];
-const DUREE_LABELS  = { heure:'À l\'heure', demi:'Demi-journée', journee:'Journée', semaine:'Semaine', mois:'Mois' };
+const DUREE_LABELS  = {heure:"À l'heure",demi:'Demi-journée (4h)',journee:'Journée (8h)',semaine:'Semaine',mois:'Mois'};
+const DUREE_HEURES  = {heure:1,demi:4,journee:8,semaine:40,mois:160};
 const PROFIL_INFOS  = {
-  plein    : 'Tarif standard pour les non-adhérents. <a href="tarifs.html#sec-adhesion" style="color:var(--teal)">Devenir adhérent →</a>',
-  adherent : '~20% de réduction sur tous les espaces. Adhésion annuelle requise.',
-  locataire: '~50% de réduction réservée aux locataires d\'un bureau privatif.',
-  asso     : 'Gratuit* pour les associations locales 82 adhérentes. Réservation 72h à l\'avance.'
+  plein    : 'Tarif standard pour les non-adhérents. <a href="tarifs.html" style="color:var(--teal)">Devenir adhérent →</a>',
+  adherent : '≈ −20% de réduction sur tous les espaces. Adhésion annuelle requise.',
+  locataire: '≈ −50% de réduction réservée aux locataires d\'un bureau privatif.',
+  asso     : 'Gratuit* pour les associations locales 82 adhérentes. Réservation 72h à l\'avance obligatoire.'
 };
 
-let profil  = 'plein';
+let profil   = 'plein';
 let espaceId = '';
-let duree   = '';
+let duree    = '';
 
-// ═══════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
 // INIT
-// ═══════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', () => {
   renderEspaces();
+  renderDurees();
+  updateRecap();
   updateSteps(1);
-  // Date min = demain
-  const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate()+1);
-  document.getElementById('fDate').min = tomorrow.toISOString().split('T')[0];
-  // Mise à jour recap en temps réel
-  ['fDate','fHeure','fNom','fEmail','fTel','fOrga','fMsg'].forEach(id => {
-    document.getElementById(id).addEventListener('input', updateRecap);
+  const tom = new Date(); tom.setDate(tom.getDate()+1);
+  document.getElementById('fDate').min = tom.toISOString().split('T')[0];
+  ['fDate','fHeure','fNom','fEmail','fTel','fOrga','fMsg','fBadge','fAdhesion'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('change', updateRecap);
+    if (el && el.type !== 'checkbox') el.addEventListener('input', updateRecap);
   });
 });
 
-// ═══════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
 // PROFIL
-// ═══════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
 function onProfilChange(p) {
   profil = p;
   ['plein','adherent','locataire','asso'].forEach(x =>
-    document.getElementById('pc-'+x).classList.toggle('selected', x===p)
-  );
+    document.getElementById('pc-'+x).classList.toggle('selected', x===p));
   document.getElementById('profilInfo').innerHTML = PROFIL_INFOS[p];
   renderEspaces();
   updateRecap();
   updateSteps(2);
 }
 
-// ═══════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
 // ESPACES
-// ═══════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
 function renderEspaces() {
   const c = document.getElementById('espacesContainer');
   c.innerHTML = ESPACES.map(e => {
     const t = e.tarifs[profil];
-    const prixMin = Object.values(t).find(v=>v>0) || 0;
-    const prixLabel = profil==='asso' ? 'Gratuit*' : (prixMin>0 ? 'dès '+prixMin+' €' : 'Gratuit*');
-    return `<div class="espace-option${espaceId===e.id?' selected':''}" onclick="selectEspace('${e.id}')">
-      <input type="radio" name="espace" value="${e.id}" ${espaceId===e.id?'checked':''}>
-      <span class="espace-opt-icon" style="flex-shrink:0">${e.icon}</span>
-      <div class="espace-opt-info" style="flex:1;min-width:0">
+    const vals = Object.values(t).filter(v => v > 0);
+    const prixMin = vals.length ? Math.min(...vals) : 0;
+    const prixLabel = (profil === 'asso' || prixMin === 0) ? 'Gratuit*' : 'dès ' + prixMin + ' €';
+    const sel = espaceId === e.id;
+    return `<div class="espace-option${sel?' selected':''}" onclick="selectEspace('${e.id}')">
+      <input type="radio" name="espace" value="${e.id}"${sel?' checked':''}>
+      <span class="espace-opt-icon">${e.icon}</span>
+      <div class="espace-opt-info">
         <div class="espace-opt-name">${e.nom}</div>
         <div class="espace-opt-cap">${e.cap}</div>
       </div>
-      <div class="espace-opt-price" style="flex-shrink:0;white-space:nowrap">${prixLabel}</div>
+      <div class="espace-opt-price">${prixLabel}</div>
     </div>`;
   }).join('');
 }
@@ -351,14 +371,14 @@ function selectEspace(id) {
   updateSteps(2);
 }
 
-// ═══════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
 // DURÉES
-// ═══════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
 function renderDurees() {
   const c = document.getElementById('dureeBtns');
-  if (!espaceId) { c.innerHTML = ''; return; }
-  const esp = ESPACES.find(e=>e.id===espaceId);
-  const liste = (esp.type==='salle') ? DUREES_SALLE : DUREES_NOMADE;
+  if (!espaceId) { c.innerHTML = '<span style="font-size:.82rem;color:var(--gray)">Choisissez d\'abord un espace</span>'; return; }
+  const esp = ESPACES.find(e => e.id === espaceId);
+  const liste = (esp.type === 'salle') ? DUREES_SALLE : DUREES_NOMADE;
   c.innerHTML = liste.map(d =>
     `<button class="duree-btn${duree===d?' active':''}" onclick="selectDuree('${d}')">${DUREE_LABELS[d]}</button>`
   ).join('');
@@ -367,61 +387,59 @@ function renderDurees() {
 function selectDuree(d) {
   duree = d;
   renderDurees();
-  updateRecapPrix();
   updateRecap();
   updateSteps(3);
 }
 
-// ═══════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
 // PRIX
-// ═══════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
 function getPrix() {
   if (!espaceId || !duree) return 0;
-  const esp = ESPACES.find(e=>e.id===espaceId);
-  return (esp.tarifs[profil][duree] || 0);
+  const esp = ESPACES.find(e => e.id === espaceId);
+  return esp.tarifs[profil][duree] || 0;
 }
 
-function updateRecapPrix() {
-  const w = document.getElementById('recapPrixWrap');
-  if (!espaceId || !duree) { w.innerHTML=''; return; }
-  const prix = getPrix();
-  const badge = document.getElementById('fBadge')?.checked ? 25 : 0;
-  const adhesion = document.getElementById('fAdhesion')?.checked ? 50 : 0;
-  const total = prix + badge + adhesion;
-  w.innerHTML = `<div class="recap-card">
-    <div>
-      <div class="recap-total">${profil==='asso'?'Gratuit*':total+' €'}</div>
-      <div class="recap-detail">${DUREE_LABELS[duree]}${badge?' + badge':''}${adhesion?' + adhésion':''}</div>
-    </div>
-  </div>`;
-}
-
-// ═══════════════════════════════════════════════════════════════
-// RÉCAP FINAL
-// ═══════════════════════════════════════════════════════════════
 function updateRecap() {
-  updateRecapPrix();
-  const esp = espaceId ? ESPACES.find(e=>e.id===espaceId) : null;
+  const esp   = espaceId ? ESPACES.find(e => e.id === espaceId) : null;
+  const prix  = getPrix();
+  const badge = document.getElementById('fBadge')?.checked ? 25 : 0;
+  const adhes = document.getElementById('fAdhesion')?.checked ? 50 : 0;
+  const total = prix + badge + adhes;
+  const isAsso = profil === 'asso';
+
+  // Recap prix inline
+  const w = document.getElementById('recapPrixWrap');
+  if (esp && duree) {
+    w.innerHTML = `<div class="recap-card">
+      <div>
+        <div class="recap-total">${isAsso ? 'Gratuit*' : total + ' €'}</div>
+        <div class="recap-detail">${DUREE_LABELS[duree]}${badge?' + badge 24h/7j':''}${adhes?' + adhésion':''}</div>
+      </div>
+    </div>`;
+  } else {
+    w.innerHTML = '';
+  }
+
+  // Recap final
   const rows = document.getElementById('recapRows');
   if (!rows) return;
-  const prix = getPrix();
-  const badge = document.getElementById('fBadge')?.checked ? 25 : 0;
-  const adhesion = document.getElementById('fAdhesion')?.checked ? 50 : 0;
   rows.innerHTML = [
-    ['Espace', esp ? esp.nom : '—'],
-    ['Profil', {plein:'Tarif plein',adherent:'Adhérent',locataire:'Locataire',asso:'Association 82'}[profil]],
-    ['Durée', duree ? DUREE_LABELS[duree] : '—'],
-    ['Date', document.getElementById('fDate')?.value || '—'],
-    ['Heure', document.getElementById('fHeure')?.value || '—'],
-    ['Nom', document.getElementById('fNom')?.value || '—'],
-    ['Email', document.getElementById('fEmail')?.value || '—'],
-    ['Montant', profil==='asso' ? 'Gratuit*' : (prix+badge+adhesion)+' €'],
-  ].map(([k,v])=>`<div class="recap-row"><span class="rk">${k}</span><span class="rv">${v}</span></div>`).join('');
+    ['Espace',       esp ? esp.nom : '—'],
+    ['Profil',       {plein:'Tarif plein',adherent:'Adhérent (−20%)',locataire:'Locataire (−50%)',asso:'Association 82 (Gratuit*)'}[profil]],
+    ['Durée',        duree ? DUREE_LABELS[duree] : '—'],
+    ['Date',         document.getElementById('fDate')?.value || '—'],
+    ['Heure',        document.getElementById('fHeure')?.value || '—'],
+    ['Nom',          document.getElementById('fNom')?.value || '—'],
+    ['Email',        document.getElementById('fEmail')?.value || '—'],
+    ['Téléphone',    document.getElementById('fTel')?.value || '—'],
+    ['Montant total',isAsso ? 'Gratuit*' : total + ' €'],
+  ].map(([k,v]) => `<div class="recap-row"><span class="rk">${k}</span><span class="rv">${v}</span></div>`).join('');
 }
 
-// ═══════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
 // ÉTAPES
-// ═══════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
 function updateSteps(active) {
   [1,2,3,4].forEach(i => {
     const el = document.getElementById('step'+i);
@@ -431,10 +449,63 @@ function updateSteps(active) {
   });
 }
 
-// ═══════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
+// MODIFIER AVANT ENVOI — remonte au premier champ vide
+// ══════════════════════════════════════════════════
+function revenirEnEdition() {
+  // Trouve le premier problème et y amène l'utilisateur
+  if (!espaceId) {
+    document.getElementById('espacesContainer').scrollIntoView({behavior:'smooth', block:'center'});
+    toast('Choisissez un espace', '');
+    return;
+  }
+  if (!duree) {
+    document.getElementById('dureeBtns').scrollIntoView({behavior:'smooth', block:'center'});
+    toast('Choisissez une durée', '');
+    return;
+  }
+  if (!document.getElementById('fDate').value) {
+    document.getElementById('fDate').scrollIntoView({behavior:'smooth', block:'center'});
+    document.getElementById('fDate').focus();
+    return;
+  }
+  if (!document.getElementById('fNom').value) {
+    document.getElementById('fNom').scrollIntoView({behavior:'smooth', block:'center'});
+    document.getElementById('fNom').focus();
+    return;
+  }
+  // Sinon remonte simplement en haut de page
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+// ══════════════════════════════════════════════════
+// NOUVELLE RÉSERVATION (après succès)
+// ══════════════════════════════════════════════════
+function nouvelleReservation() {
+  // Remet tout à zéro
+  profil   = 'plein';
+  espaceId = '';
+  duree    = '';
+  ['plein','adherent','locataire','asso'].forEach(x =>
+    document.getElementById('pc-'+x).classList.toggle('selected', x==='plein'));
+  document.getElementById('profilInfo').innerHTML = PROFIL_INFOS['plein'];
+  document.querySelectorAll('input[type=text],input[type=email],input[type=tel],input[type=date],input[type=time],textarea')
+    .forEach(el => el.value = '');
+  document.getElementById('fBadge').checked = false;
+  document.getElementById('fAdhesion').checked = false;
+  renderEspaces();
+  renderDurees();
+  updateRecap();
+  updateSteps(1);
+  document.getElementById('successCard').classList.remove('visible');
+  document.getElementById('mainPage').style.display = '';
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// ══════════════════════════════════════════════════
 // TOAST
-// ═══════════════════════════════════════════════════════════════
-function toast(msg, type='') {
+// ══════════════════════════════════════════════════
+function toast(msg, type) {
   const t = document.createElement('div');
   t.className = 'toast' + (type ? ' '+type : '');
   t.textContent = msg;
@@ -442,96 +513,92 @@ function toast(msg, type='') {
   setTimeout(() => t.remove(), 4000);
 }
 
-// ═══════════════════════════════════════════════════════════════
-// ENVOI — architecture GET ?payload= (identique à admin.html)
-// ═══════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
+// ENVOI — GET ?payload= (même architecture que admin.html)
+// ══════════════════════════════════════════════════
 async function envoyerReservation() {
   // Validation
-  if (!espaceId)  { toast('Choisissez un espace.', 'error'); return; }
-  if (!duree)     { toast('Choisissez une durée.', 'error'); return; }
+  if (!espaceId)  { toast('Choisissez un espace.', 'err'); revenirEnEdition(); return; }
+  if (!duree)     { toast('Choisissez une durée.', 'err'); revenirEnEdition(); return; }
   const date  = document.getElementById('fDate').value;
   const heure = document.getElementById('fHeure').value;
   const nom   = document.getElementById('fNom').value.trim();
   const email = document.getElementById('fEmail').value.trim();
-  if (!date)  { toast('Indiquez une date.', 'error'); return; }
-  if (!heure) { toast('Indiquez une heure.', 'error'); return; }
-  if (!nom)   { toast('Indiquez votre nom.', 'error'); return; }
-  if (!email) { toast('Indiquez votre email.', 'error'); return; }
+  if (!date)  { toast('Indiquez une date.', 'err'); document.getElementById('fDate').focus(); return; }
+  if (!heure) { toast('Indiquez une heure.', 'err'); document.getElementById('fHeure').focus(); return; }
+  if (!nom)   { toast('Indiquez votre nom.', 'err'); document.getElementById('fNom').focus(); return; }
+  if (!email) { toast('Indiquez votre email.', 'err'); document.getElementById('fEmail').focus(); return; }
 
-  const esp   = ESPACES.find(e=>e.id===espaceId);
-  const prix  = getPrix();
-  const badge = document.getElementById('fBadge').checked;
-  const adhesion = document.getElementById('fAdhesion').checked;
-  const total = prix + (badge?25:0) + (adhesion?50:0);
-  const ref   = 'GEN-' + Date.now().toString(36).toUpperCase();
-
-  // Construire la payload — action 'addResa' avec format resa complet
-  const now = new Date().toISOString();
-  const parts = nom.split(' ');
+  const esp    = ESPACES.find(e => e.id === espaceId);
+  const prix   = getPrix();
+  const badge  = document.getElementById('fBadge').checked;
+  const adhes  = document.getElementById('fAdhesion').checked;
+  const total  = prix + (badge?25:0) + (adhes?50:0);
+  const ref    = 'GEN-' + Date.now().toString(36).toUpperCase();
+  const now    = new Date().toISOString();
+  const parts  = nom.split(' ');
   const prenom = parts[0];
-  const nomFamille = parts.slice(1).join(' ') || nom;
+  const nomFam = parts.slice(1).join(' ') || nom;
+
+  // Calcul heureFin
+  const nbH = DUREE_HEURES[duree] || 1;
+  const [hh, mm] = heure.split(':').map(Number);
+  const finMin = hh * 60 + mm + nbH * 60;
+  const heureFin = String(Math.floor(finMin/60)).padStart(2,'0') + ':' + String(finMin%60).padStart(2,'0');
 
   const payload = {
     action: 'addResa',
     resa: {
-      id          : ref,
-      prenom      : prenom,
-      nom         : nomFamille,
-      email       : email,
-      tel         : document.getElementById('fTel').value.trim(),
-      orga        : document.getElementById('fOrga').value.trim(),
-      espace      : espaceId,
-      nomEspace   : esp.nom,
-      usage       : 'reservation-publique',
-      profil      : profil,
-      date        : date,
-      typeDuree   : duree,
-      nbHeures    : duree==='heure' ? '1' : duree==='demi' ? '4' : duree==='journee' ? '8' : '1',
-      heureDebut  : heure,
-      heureFin    : '',
-      montant     : String(total),
-      montantBase : String(prix),
-      options     : [badge?'Badge 24h/7j':'', adhesion?'Adhésion Génie':''].filter(Boolean).join(', '),
-      statut      : 'pending',
+      id         : ref,
+      prenom     : prenom,
+      nom        : nomFam,
+      email      : email,
+      tel        : document.getElementById('fTel').value.trim(),
+      orga       : document.getElementById('fOrga').value.trim(),
+      espace     : espaceId,
+      nomEspace  : esp.nom,
+      usage      : 'reservation-publique',
+      profil     : profil,
+      date       : date,
+      typeDuree  : duree,
+      nbHeures   : String(nbH),
+      heureDebut : heure,
+      heureFin   : heureFin,
+      montant    : String(total),
+      montantBase: String(prix),
+      options    : [badge?'Badge 24h/7j':'', adhes?'Adhésion Génie':''].filter(Boolean).join(', '),
+      statut     : 'pending',
       participants: '1',
-      objet       : document.getElementById('fMsg').value.trim(),
-      createdAt   : now,
-      updatedAt   : now
+      objet      : document.getElementById('fMsg').value.trim(),
+      createdAt  : now,
+      updatedAt  : now
     }
   };
 
-  // Afficher le loader
   document.getElementById('loadBanner').classList.add('visible');
   document.getElementById('btnEnvoyer').disabled = true;
 
   try {
-    // GET avec ?payload= — même architecture que admin.html
-    const url = SCRIPT_URL + '?payload=' + encodeURIComponent(JSON.stringify(payload));
-    const resp = await fetch(url, { method: 'GET' });
+    const url  = SCRIPT_URL + '?payload=' + encodeURIComponent(JSON.stringify(payload));
+    const resp = await fetch(url);
     const data = await resp.json();
+    document.getElementById('loadBanner').classList.remove('visible');
 
     if (data.ok) {
-      // Succès
-      document.getElementById('loadBanner').classList.remove('visible');
-      document.querySelector('.page').style.display = 'none';
+      document.getElementById('mainPage').style.display = 'none';
       document.getElementById('successCard').classList.add('visible');
       document.getElementById('successRef').textContent = ref;
       updateSteps(4);
+      window.scrollTo({top:0, behavior:'smooth'});
     } else {
-      throw new Error(data.error || 'Erreur inconnue');
+      throw new Error(data.error || 'Erreur serveur');
     }
   } catch(err) {
     document.getElementById('loadBanner').classList.remove('visible');
     document.getElementById('btnEnvoyer').disabled = false;
-    toast('Erreur d\'envoi : ' + err.message + '. Contactez-nous au 06 51 50 97 18.', 'error');
+    toast('Erreur : ' + err.message + ' — Appelez le 06 51 50 97 18', 'err');
   }
 }
-
-// Init au chargement
-document.addEventListener('DOMContentLoaded', () => {
-  renderDurees();
-  updateRecap();
-});
 </script>
 </body>
 </html>
