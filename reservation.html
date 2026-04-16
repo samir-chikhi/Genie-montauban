@@ -203,7 +203,11 @@ input[type=radio],input[type=checkbox]{width:auto;height:auto;padding:0;border:n
       </div>
       <div class="form-group">
         <label for="fHeure">Heure de début <span class="req">*</span></label>
-        <input type="time" id="fHeure" required min="08:00" max="20:00" step="1800">
+        <input type="time" id="fHeure" required min="08:00" max="20:00" step="1800" onchange="onHeureDebutChange()">
+      </div>
+      <div class="form-group">
+        <label for="fHeureFin">Heure de fin <span class="req">*</span></label>
+        <input type="time" id="fHeureFin" required min="08:00" max="22:00" step="1800">
       </div>
       <div class="form-group full">
         <label for="fNom">Nom complet <span class="req">*</span></label>
@@ -312,6 +316,15 @@ let duree    = '';
 // ══════════════════════════════════════════════════
 // INIT
 // ══════════════════════════════════════════════════
+function onHeureDebutChange() {
+  const debut = document.getElementById('fHeure').value;
+  const fin   = document.getElementById('fHeureFin');
+  if (!debut || fin.value) return; // ne pas écraser si déjà rempli
+  const [hh, mm] = debut.split(':').map(Number);
+  const finMin = hh * 60 + mm + 60; // +1h par défaut
+  fin.value = String(Math.floor(finMin/60)).padStart(2,'0') + ':' + String(finMin%60).padStart(2,'0');
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   renderEspaces();
   renderDurees();
@@ -319,7 +332,7 @@ document.addEventListener('DOMContentLoaded', () => {
   updateSteps(1);
   const tom = new Date(); tom.setDate(tom.getDate()+1);
   document.getElementById('fDate').min = tom.toISOString().split('T')[0];
-  ['fDate','fHeure','fNom','fEmail','fTel','fOrga','fMsg','fBadge','fAdhesion'].forEach(id => {
+  ['fDate','fHeure','fHeureFin','fNom','fEmail','fTel','fOrga','fMsg','fBadge','fAdhesion'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.addEventListener('change', updateRecap);
     if (el && el.type !== 'checkbox') el.addEventListener('input', updateRecap);
@@ -429,7 +442,8 @@ function updateRecap() {
     ['Profil',       {plein:'Tarif plein',adherent:'Adhérent (−20%)',locataire:'Locataire (−50%)',asso:'Association 82 (Gratuit*)'}[profil]],
     ['Durée',        duree ? DUREE_LABELS[duree] : '—'],
     ['Date',         document.getElementById('fDate')?.value || '—'],
-    ['Heure',        document.getElementById('fHeure')?.value || '—'],
+    ['Heure de début', document.getElementById('fHeure')?.value || '—'],
+    ['Heure de fin',   document.getElementById('fHeureFin')?.value || '—'],
     ['Nom',          document.getElementById('fNom')?.value || '—'],
     ['Email',        document.getElementById('fEmail')?.value || '—'],
     ['Téléphone',    document.getElementById('fTel')?.value || '—'],
@@ -489,6 +503,7 @@ function nouvelleReservation() {
   ['plein','adherent','locataire','asso'].forEach(x =>
     document.getElementById('pc-'+x).classList.toggle('selected', x==='plein'));
   document.getElementById('profilInfo').innerHTML = PROFIL_INFOS['plein'];
+  document.getElementById('fHeureFin').value = '';
   document.querySelectorAll('input[type=text],input[type=email],input[type=tel],input[type=date],input[type=time],textarea')
     .forEach(el => el.value = '');
   document.getElementById('fBadge').checked = false;
@@ -526,6 +541,9 @@ async function envoyerReservation() {
   const email = document.getElementById('fEmail').value.trim();
   if (!date)  { toast('Indiquez une date.', 'err'); document.getElementById('fDate').focus(); return; }
   if (!heure) { toast('Indiquez une heure.', 'err'); document.getElementById('fHeure').focus(); return; }
+  const heureFin_input = document.getElementById('fHeureFin').value;
+  if (!heureFin_input) { toast("Indiquez une heure de fin.", 'err'); document.getElementById('fHeureFin').focus(); return; }
+  if (heureFin_input <= heure) { toast("L'heure de fin doit être après l'heure de début.", 'err'); document.getElementById('fHeureFin').focus(); return; }
   if (!nom)   { toast('Indiquez votre nom.', 'err'); document.getElementById('fNom').focus(); return; }
   if (!email) { toast('Indiquez votre email.', 'err'); document.getElementById('fEmail').focus(); return; }
 
@@ -540,11 +558,12 @@ async function envoyerReservation() {
   const prenom = parts[0];
   const nomFam = parts.slice(1).join(' ') || nom;
 
-  // Calcul heureFin
-  const nbH = DUREE_HEURES[duree] || 1;
+  // Heure de fin saisie par l'utilisateur
+  // nbH calculé depuis la différence début/fin (pour le Calendar et les stats)
   const [hh, mm] = heure.split(':').map(Number);
-  const finMin = hh * 60 + mm + nbH * 60;
-  const heureFin = String(Math.floor(finMin/60)).padStart(2,'0') + ':' + String(finMin%60).padStart(2,'0');
+  const [hf, mf] = heureFin_input.split(':').map(Number);
+  const nbH = Math.round(((hf * 60 + mf) - (hh * 60 + mm)) / 60 * 10) / 10;
+  const heureFin = heureFin_input;
 
   const payload = {
     action: 'addResa',
