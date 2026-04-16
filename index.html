@@ -920,7 +920,7 @@
       </div>
     </div>
     <div style="text-align:center;margin-top:28px;">
-      <a href="reservation.html" style="display:inline-block;background:#C9993E;color:white;padding:12px 28px;border-radius:8px;font-weight:700;font-size:14px;text-decoration:none;transition:background .2s;" onmouseover="this.style.background='#b8882e'" onmouseout="this.style.background='#C9993E'">Réserver votre première visite →</a>
+      <button onclick="ouvrirModaleVisite()" style="display:inline-block;background:#C9993E;color:white;padding:12px 28px;border-radius:8px;font-weight:700;font-size:14px;cursor:pointer;border:none;transition:background .2s;" onmouseover="this.style.background='#b8882e'" onmouseout="this.style.background='#C9993E'">🏛️ Demander une visite →</button>
     </div>
   </div>
 </section>
@@ -1130,30 +1130,30 @@
             <tr>
               <td><strong>Antoine Bourdelle</strong><span class="tarif-legende">Terrasse · Vidéoprojecteur · Sono</span></td>
               <td>40 pers.</td>
-              <td><span style="color:var(--brick);font-weight:700;">45 €</span> / <span title="Adhérent">30 €</span> / <span title="Locataire" style="color:var(--muted);">20 €</span></td>
-              <td>110 / 90 / 70 €</td>
-              <td>180 / 150 / 120 €</td>
+              <td><span style="color:var(--brick);font-weight:700;">45 €</span> / <span title="Adhérent">35 €</span> / <span title="Locataire" style="color:var(--muted);">25 €</span></td>
+              <td>150 / 110 / 80 €</td>
+              <td>280 / 200 / 140 €</td>
             </tr>
             <tr>
               <td><strong>Célestin Freinet</strong><span class="tarif-legende">Modulable · Paperboard</span></td>
               <td>20 pers.</td>
-              <td><span style="color:var(--brick);font-weight:700;">30 €</span> / <span>20 €</span> / <span style="color:var(--muted);">15 €</span></td>
-              <td>90 / 60 / 45 €</td>
-              <td>150 / 100 / 80 €</td>
+              <td><span style="color:var(--brick);font-weight:700;">30 €</span> / <span>22 €</span> / <span style="color:var(--muted);">15 €</span></td>
+              <td>100 / 75 / 50 €</td>
+              <td>180 / 135 / 90 €</td>
             </tr>
             <tr>
               <td><strong>Olympe de Gouges</strong><span class="tarif-legende">Lumineuse · Écran TV</span></td>
               <td>20 pers.</td>
-              <td><span style="color:var(--brick);font-weight:700;">30 €</span> / <span>20 €</span> / <span style="color:var(--muted);">15 €</span></td>
-              <td>90 / 60 / 45 €</td>
-              <td>150 / 100 / 80 €</td>
+              <td><span style="color:var(--brick);font-weight:700;">30 €</span> / <span>22 €</span> / <span style="color:var(--muted);">15 €</span></td>
+              <td>100 / 75 / 50 €</td>
+              <td>180 / 135 / 90 €</td>
             </tr>
             <tr>
               <td><strong>Maria Montessori</strong><span class="tarif-legende">♿ PMR · Accès rez-de-jardin</span></td>
               <td>4 pers.</td>
-              <td><span style="color:var(--brick);font-weight:700;">20 €</span> / <span>15 €</span> / <span style="color:var(--muted);">12 €</span></td>
-              <td>60 / 45 / 30 €</td>
-              <td>100 / 80 / 70 €</td>
+              <td><span style="color:var(--brick);font-weight:700;">15 €</span> / <span>12 €</span> / <span style="color:var(--muted);">8 €</span></td>
+              <td>50 / 40 / 25 €</td>
+              <td>80 / 65 / 40 €</td>
             </tr>
             <tr style="background:rgba(74,124,111,.05);">
               <td colspan="2" style="font-weight:600;color:var(--sage);">🌿 Associations Villebourbon &amp; syndicats</td>
@@ -1458,7 +1458,7 @@
           <div><div class="ci-label">Accès</div><div class="ci-val">200m de la gare SNCF<br>Bus ligne 1 — arrêt Gare</div></div>
         </div>
         <div style="margin-top:8px">
-          <a href="reservation.html" style="display:inline-block;background:var(--navy);color:#fff;padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:700;font-size:13px;">📅 Demander une visite →</a>
+          <button onclick="ouvrirModaleVisite()" style="display:inline-block;background:var(--navy);color:#fff;padding:10px 20px;border-radius:8px;font-weight:700;font-size:13px;cursor:pointer;border:none;">📅 Demander une visite →</button>
         </div>
       </div>
 
@@ -1728,6 +1728,118 @@ try {
     if (_lbl) _lbl.textContent = _s.prenom;
   }
 } catch(e) {}
+</script>
+
+<!-- ═══ MODALE DEMANDE DE VISITE ═══ -->
+<div id="modale-visite" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:999;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:#fff;border-radius:14px;padding:32px;max-width:480px;width:100%;box-shadow:0 8px 40px rgba(0,0,0,0.18);position:relative;max-height:90vh;overflow-y:auto;">
+    <button onclick="fermerModaleVisite()" style="position:absolute;top:14px;right:18px;background:none;border:none;font-size:22px;cursor:pointer;color:#888;line-height:1;">✕</button>
+    <div style="font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#C9993E;margin-bottom:8px;">Génie Montauban</div>
+    <h2 style="font-family:'Playfair Display',serif;font-size:1.4rem;color:#1C2B3A;margin-bottom:6px;">Demander une visite</h2>
+    <p style="font-size:13px;color:#6B7A8A;margin-bottom:22px;">Nous vous répondrons sous 48h pour organiser votre visite du tiers-lieu.</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+      <div>
+        <label style="display:block;font-size:12px;font-weight:700;color:#1C2B3A;margin-bottom:5px;">Prénom & Nom <span style="color:#c0392b">*</span></label>
+        <input id="v-nom" type="text" placeholder="Jean Dupont" style="width:100%;padding:9px 12px;border:1.5px solid #dde3eb;border-radius:7px;font-size:13px;font-family:inherit;box-sizing:border-box;">
+      </div>
+      <div>
+        <label style="display:block;font-size:12px;font-weight:700;color:#1C2B3A;margin-bottom:5px;">Téléphone</label>
+        <input id="v-tel" type="tel" placeholder="06 XX XX XX XX" style="width:100%;padding:9px 12px;border:1.5px solid #dde3eb;border-radius:7px;font-size:13px;font-family:inherit;box-sizing:border-box;">
+      </div>
+    </div>
+    <div style="margin-bottom:14px;">
+      <label style="display:block;font-size:12px;font-weight:700;color:#1C2B3A;margin-bottom:5px;">Email <span style="color:#c0392b">*</span></label>
+      <input id="v-email" type="email" placeholder="jean@exemple.com" style="width:100%;padding:9px 12px;border:1.5px solid #dde3eb;border-radius:7px;font-size:13px;font-family:inherit;box-sizing:border-box;">
+    </div>
+    <div style="margin-bottom:14px;">
+      <label style="display:block;font-size:12px;font-weight:700;color:#1C2B3A;margin-bottom:5px;">Organisation / Entreprise</label>
+      <input id="v-orga" type="text" placeholder="Nom de votre structure" style="width:100%;padding:9px 12px;border:1.5px solid #dde3eb;border-radius:7px;font-size:13px;font-family:inherit;box-sizing:border-box;">
+    </div>
+    <div style="margin-bottom:14px;">
+      <label style="display:block;font-size:12px;font-weight:700;color:#1C2B3A;margin-bottom:5px;">Date souhaitée (optionnel)</label>
+      <input id="v-date" type="date" style="width:100%;padding:9px 12px;border:1.5px solid #dde3eb;border-radius:7px;font-size:13px;font-family:inherit;box-sizing:border-box;">
+    </div>
+    <div style="margin-bottom:20px;">
+      <label style="display:block;font-size:12px;font-weight:700;color:#1C2B3A;margin-bottom:5px;">Message</label>
+      <textarea id="v-msg" rows="3" placeholder="Votre projet, vos besoins..." style="width:100%;padding:9px 12px;border:1.5px solid #dde3eb;border-radius:7px;font-size:13px;font-family:inherit;resize:vertical;box-sizing:border-box;"></textarea>
+    </div>
+
+    <div id="v-retour" style="margin-bottom:12px;"></div>
+
+    <button id="v-btn" onclick="envoyerDemandeVisite()" style="width:100%;background:#1C2B3A;color:#fff;border:none;border-radius:8px;padding:13px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s;" onmouseover="this.style.background='#1A6B72'" onmouseout="this.style.background='#1C2B3A'">
+      📨 Envoyer ma demande
+    </button>
+  </div>
+</div>
+
+<script>
+// ═══ MODALE VISITE ═══
+function ouvrirModaleVisite() {
+  var m = document.getElementById('modale-visite');
+  m.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  // Pré-remplir date min = demain
+  var tom = new Date(); tom.setDate(tom.getDate()+1);
+  document.getElementById('v-date').min = tom.toISOString().split('T')[0];
+}
+function fermerModaleVisite() {
+  document.getElementById('modale-visite').style.display = 'none';
+  document.body.style.overflow = '';
+}
+document.getElementById('modale-visite').addEventListener('click', function(e) {
+  if (e.target === this) fermerModaleVisite();
+});
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') fermerModaleVisite();
+});
+
+function envoyerDemandeVisite() {
+  var nom   = document.getElementById('v-nom').value.trim();
+  var email = document.getElementById('v-email').value.trim();
+  var retour = document.getElementById('v-retour');
+
+  if (!nom || !email) {
+    retour.innerHTML = '<div style="background:#FFF0F0;color:#c0392b;padding:10px 14px;border-radius:7px;font-size:13px;font-weight:600;border:1px solid #fcc;">⚠️ Merci de renseigner votre nom et votre email.</div>';
+    return;
+  }
+
+  var btn = document.getElementById('v-btn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Envoi en cours…';
+  retour.innerHTML = '';
+
+  var data = {
+    action       : 'VISITE',
+    nom          : nom,
+    email        : email,
+    tel          : document.getElementById('v-tel').value.trim(),
+    organisation : document.getElementById('v-orga').value.trim(),
+    dateSouhaitee: document.getElementById('v-date').value,
+    message      : document.getElementById('v-msg').value.trim()
+  };
+
+  // Envoi via POST no-cors (même architecture que envoyerContact et envoyerAdhesion)
+  fetch(APPS_SCRIPT_URL, {
+    method: 'POST', mode: 'no-cors',
+    body: JSON.stringify(data)
+  }).catch(function() {});
+
+  // Confirmation immédiate (no-cors = réponse opaque, on ne peut pas lire le retour)
+  retour.innerHTML = '<div style="background:#f0faf4;color:#2D7D46;padding:10px 14px;border-radius:7px;font-size:13px;font-weight:600;border:1px solid #a5d6a7;">✅ Demande envoyée ! Nous vous répondrons sous 48h.</div>';
+  btn.textContent = '✅ Envoyé';
+
+  // Vider les champs et fermer après 2,5s
+  setTimeout(function() {
+    ['v-nom','v-tel','v-email','v-orga','v-date','v-msg'].forEach(function(id) {
+      document.getElementById(id).value = '';
+    });
+    fermerModaleVisite();
+    btn.disabled = false;
+    btn.textContent = '📨 Envoyer ma demande';
+    retour.innerHTML = '';
+  }, 2500);
+}
 </script>
 </body>
 </html>
