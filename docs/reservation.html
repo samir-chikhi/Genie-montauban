@@ -197,7 +197,7 @@ footer strong{color:var(--cream)}
         <div>
           <div class="opt-name">🔑 Accès badge 24h/7j</div>
           <div class="opt-desc">Accès hors horaires et jours d'ouverture</div>
-          <div class="opt-prix">25 € / mois</div>
+          <div class="opt-prix">5 € / mois</div>
         </div>
       </div>
       <div class="opt-card" id="opt-adhesion" onclick="toggleOpt('adhesion')">
@@ -275,9 +275,9 @@ const ESPACES = [
     desc: 'Grande salle lumineuse avec terrasse, vidéoprojecteur, sono — idéale formations et assemblées',
     icon: '🏛️',
     tarifs_reunion: {
-      ccfa:      { heure:30, demi:100, journee:160 },
-      adherent:  { heure:24, demi:80,  journee:130 },
-      locataire: { heure:15, demi:50,  journee:80  },
+      ccfa:      { heure:40, demi:110, journee:180 },
+      adherent:  { heure:30, demi:90,  journee:150 },
+      locataire: { heure:20, demi:70,  journee:120 },
       asso:      { heure:0,  demi:0,   journee:0   }
     }
   },
@@ -292,12 +292,12 @@ const ESPACES = [
     desc: 'Salle modulable, paperboard, disponible à la journée ou en bail mensuel',
     icon: '📋',
     tarifs_reunion: {
-      ccfa:      { heure:22, demi:70,  journee:120 },
-      adherent:  { heure:18, demi:60,  journee:90  },
-      locataire: { heure:12, demi:35,  journee:60  },
+      ccfa:      { heure:30, demi:90,  journee:150 },
+      adherent:  { heure:20, demi:60,  journee:100 },
+      locataire: { heure:15, demi:45,  journee:80  },
       asso:      { heure:0,  demi:0,   journee:0   }
     },
-    tarifs_bail: { mensuel:375, an:325, bail369:300 }
+    tarifs_bail: { mensuel:432, an:408, bail369:360 }
   },
   {
     id: 'gouges',
@@ -309,23 +309,23 @@ const ESPACES = [
     desc: 'Salle de réunion lumineuse, écran TV, paperboard, accès 1er étage',
     icon: '🤝',
     tarifs_reunion: {
-      ccfa:      { heure:22, demi:70,  journee:120 },
-      adherent:  { heure:18, demi:60,  journee:90  },
-      locataire: { heure:12, demi:35,  journee:60  },
+      ccfa:      { heure:30, demi:90,  journee:150 },
+      adherent:  { heure:20, demi:60,  journee:100 },
+      locataire: { heure:15, demi:45,  journee:80  },
       asso:      { heure:0,  demi:0,   journee:0   }
     }
   },
   {
-    id: 'michel',
-    nom: 'Louise Michel',
-    ref: 'Bureau 0-01',
+    id: 'aristote',
+    nom: 'Aristote',
+    ref: 'Bureau 1-13',
     type: 'nomade',
     sous_type: 'prive',
-    capacite: 4,
-    etage: 'Rez-de-chaussée',
-    desc: 'Bureau privé nomade, connexion fibre, calme garanti — idéal télétravail et visioconférence',
+    capacite: 2,
+    etage: '1er étage',
+    desc: 'Bureau privé nomade 7m², connexion fibre, calme garanti — idéal télétravail et visioconférence',
     icon: '🚪',
-    tarifs_nomade: { demi:10, journee:20, semaine:70, mois:150 }
+    tarifs_nomade: { demi:12, journee:22, semaine:90, mois:200 }
   },
   {
     id: 'rousseau',
@@ -335,9 +335,9 @@ const ESPACES = [
     sous_type: 'coworking',
     capacite: 20,
     etage: '1er étage',
-    desc: 'Grand espace coworking ouvert, imprimante, café, ambiance collaborative',
+    desc: 'Grand espace coworking ouvert 28m², imprimante, café, ambiance collaborative',
     icon: '💻',
-    tarifs_nomade: { demi:10, journee:15, semaine:50, mois:120 }
+    tarifs_nomade: { demi:10, journee:17, semaine:60, mois:180 }
   },
   {
     id: 'montessori',
@@ -350,12 +350,12 @@ const ESPACES = [
     desc: 'Salle accessible PMR, usage flexible : réunion ou bureau nomade privé — rez-de-jardin',
     icon: '♿',
     tarifs_reunion: {
-      ccfa:      { heure:15, demi:50, journee:80 },
-      adherent:  { heure:12, demi:40, journee:65 },
-      locataire: { heure:8,  demi:25, journee:40 },
-      asso:      { heure:0,  demi:0,  journee:0  }
+      ccfa:      { heure:20, demi:60, journee:100 },
+      adherent:  { heure:15, demi:45, journee:80  },
+      locataire: { heure:10, demi:30, journee:70  },
+      asso:      { heure:0,  demi:0,  journee:0   }
     },
-    tarifs_nomade: { demi:10, journee:15, semaine:60, mois:140 }
+    tarifs_nomade: { demi:15, journee:27, semaine:100, mois:216 }
   }
 ];
 
@@ -560,7 +560,7 @@ function calcMontant() {
     else if (selectedDuree === 'mois')    base = t.mois;
   }
 
-  const badge    = optBadge    ? 25 : 0;
+  const badge    = optBadge    ? 5 : 0;
   const adhesion = optAdhesion ? 50 : 0;
   return { base, badge, adhesion, total: base + badge + adhesion };
 }
@@ -594,7 +594,7 @@ function updatePrix() {
   if (selectedUsage==='reunion' && selectedDuree==='heure') dureeLabel += ` × ${nbH}h`;
   if (hf) dureeLabel += ` · ${hd} → ${hf}`;
   lines.push([`${selectedEspace.nom} — ${dureeLabel}`, fMoney(m.base)]);
-  if (m.badge)    lines.push(['Accès badge 24h/7j', '+25 €/mois']);
+  if (m.badge)    lines.push(['Accès badge 24h/7j', '+5 €/mois']);
   if (m.adhesion) lines.push(['Adhésion Génie', '+50 €/an']);
 
   document.getElementById('prix-lines').innerHTML = lines.map(([l,v])=>
@@ -659,7 +659,7 @@ async function submit() {
   const ref = genId();
 
   const options = [];
-  if (optBadge)    options.push('Accès badge 24h/7j (25€/mois)');
+  if (optBadge)    options.push('Accès badge 24h/7j (5€/mois)');
   if (optAdhesion) options.push('Adhésion Génie (50€/an)');
 
   // Durée en heures numériques pour le serveur (creerReservation l'exige)
