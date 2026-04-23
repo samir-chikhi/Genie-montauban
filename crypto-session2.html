@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crypto Génie — Session 2 : Ma première vraie transaction</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0D0F1A;--navy:#111827;--card:#1A2035;--gold:#F0B90B;--orange:#E07B39;--white:#FFFFFF;--offwhite:#E8EDF5;--grey:#8899AA;--greylt:#C8D4E0;--green:#10B981;--red:#EF4444;--blue:#3B82F6;--purple:#8B5CF6;--border:rgba(240,185,11,0.18);}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--offwhite);line-height:1.6;overflow-x:hidden;}
+nav{position:fixed;top:0;width:100%;z-index:100;background:rgba(13,15,26,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:.75rem 2rem;display:flex;align-items:center;gap:1rem;}
+nav .logo{display:flex;align-items:center;gap:.6rem;font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:var(--white);text-decoration:none;}
+nav .logo img{height:32px;border-radius:4px;}
+nav .badge{margin-left:auto;background:var(--orange);color:var(--white);font-size:.75rem;font-weight:700;padding:.25rem .75rem;border-radius:20px;font-family:'Syne',sans-serif;}
+nav a.back{color:var(--grey);font-size:.85rem;text-decoration:none;}
+nav a.back:hover{color:var(--gold);}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:7rem 2rem 4rem;position:relative;overflow:hidden;}
+.hero::before{content:'🔮';position:absolute;right:2rem;top:50%;transform:translateY(-50%);font-size:clamp(10rem,20vw,18rem);opacity:.06;line-height:1;pointer-events:none;}
+.hero-inner{max-width:860px;margin:0 auto;width:100%;}
+.s1-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(240,185,11,.1);border:1px solid var(--border);color:var(--gold);font-size:.8rem;padding:.3rem .8rem;border-radius:20px;margin-bottom:.6rem;font-family:'Syne',sans-serif;}
+.hero-tag{display:inline-flex;align-items:center;gap:.5rem;background:rgba(224,123,57,.15);border:1px solid var(--orange);color:var(--orange);font-size:.8rem;font-weight:600;padding:.35rem .85rem;border-radius:20px;margin-bottom:1.5rem;font-family:'Syne',sans-serif;letter-spacing:.04em;}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(2.2rem,5.5vw,4rem);font-weight:800;line-height:1.08;color:var(--white);margin-bottom:.6rem;}
+.hero h1 em{color:var(--gold);font-style:normal;}
+.hero-sub{font-size:1.1rem;color:var(--grey);max-width:560px;margin-bottom:2.5rem;}
+.hero-cta-row{display:flex;flex-wrap:wrap;gap:1rem;margin-bottom:3rem;}
+.btn-primary{background:var(--gold);color:var(--bg);font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;padding:.85rem 1.8rem;border-radius:8px;text-decoration:none;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 20px rgba(240,185,11,.25);display:inline-flex;align-items:center;gap:.5rem;}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(240,185,11,.35);}
+.btn-orange{background:var(--orange);color:var(--white);font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;padding:.85rem 1.8rem;border-radius:8px;text-decoration:none;transition:transform .2s;display:inline-flex;align-items:center;gap:.5rem;}
+.btn-orange:hover{transform:translateY(-2px);}
+.btn-outline{border:1.5px solid var(--border);color:var(--offwhite);font-size:.95rem;padding:.85rem 1.8rem;border-radius:8px;text-decoration:none;transition:border-color .2s,color .2s;display:inline-flex;align-items:center;gap:.5rem;}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold);}
+.countdown-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.5rem;display:inline-flex;align-items:center;gap:1.5rem;margin-bottom:2rem;}
+.cd-item{text-align:center;}
+.cd-num{font-family:'Syne',sans-serif;font-size:2.2rem;font-weight:800;color:var(--gold);line-height:1;}
+.cd-lbl{font-size:.7rem;color:var(--grey);text-transform:uppercase;letter-spacing:.08em;}
+.cd-sep{font-size:2rem;color:var(--border);font-weight:300;margin-top:-.5rem;}
+
+/* SECTIONS */
+section{padding:5rem 2rem;}
+.inner{max-width:860px;margin:0 auto;}
+.section-tag{font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);font-family:'Syne',sans-serif;margin-bottom:.7rem;display:flex;align-items:center;gap:.5rem;}
+.section-tag::before{content:'';width:28px;height:2px;background:var(--gold);}
+h2{font-family:'Syne',sans-serif;font-size:clamp(1.6rem,3.5vw,2.4rem);font-weight:800;color:var(--white);line-height:1.15;margin-bottom:1rem;}
+h2 em{color:var(--gold);font-style:normal;}
+.lead{color:var(--grey);font-size:1.05rem;max-width:600px;margin-bottom:2.5rem;}
+
+/* PROGRAMME */
+.prog-grid{display:flex;flex-direction:column;gap:.75rem;}
+.prog-bloc{background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:12px;overflow:hidden;display:flex;}
+.prog-time{flex-shrink:0;width:80px;background:var(--navy);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1rem .5rem;text-align:center;}
+.prog-time .t{font-family:'Syne',sans-serif;font-size:.85rem;font-weight:700;color:var(--gold);}
+.prog-time .dur{font-size:.7rem;color:var(--grey);margin-top:.2rem;}
+.prog-content{padding:1.1rem 1.3rem;flex:1;}
+.prog-phase{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);margin-bottom:.3rem;font-family:'Syne',sans-serif;}
+.prog-title{font-size:1rem;font-weight:700;color:var(--white);margin-bottom:.3rem;}
+.prog-desc{font-size:.83rem;color:var(--grey);line-height:1.5;}
+.prog-bloc.gold-border{border-color:var(--gold);}
+.prog-bloc.gold-border .prog-time{background:rgba(240,185,11,.1);}
+.prog-bloc.gold-border .prog-time .t{color:var(--gold);}
+
+/* PORTFOLIO CHALLENGE */
+.challenge-section{background:linear-gradient(135deg,rgba(240,185,11,.06),rgba(139,92,246,.04));border:1px solid var(--border);border-radius:16px;padding:2.5rem;}
+.challenge-header{display:flex;align-items:flex-start;gap:1.5rem;margin-bottom:2rem;}
+.challenge-icon{font-size:3.5rem;flex-shrink:0;}
+.challenge-header h3{font-family:'Syne',sans-serif;font-weight:800;font-size:1.5rem;color:var(--white);margin-bottom:.4rem;}
+.challenge-header p{color:var(--grey);font-size:.9rem;}
+.rules-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.75rem;margin-bottom:2rem;}
+.rule-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:1rem;}
+.rule-n{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:var(--gold);line-height:1;margin-bottom:.4rem;}
+.rule-title{font-size:.9rem;font-weight:600;color:var(--white);margin-bottom:.2rem;}
+.rule-desc{font-size:.8rem;color:var(--grey);}
+
+/* PODIUM */
+.podium-section{text-align:center;}
+.podium{display:flex;align-items:flex-end;justify-content:center;gap:1rem;margin:2rem auto;max-width:500px;}
+.podium-place{display:flex;flex-direction:column;align-items:center;gap:.5rem;}
+.podium-bar{border-radius:8px 8px 0 0;width:110px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:.75rem;}
+.podium-bar .rank{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;}
+.p1 .podium-bar{height:130px;background:linear-gradient(180deg,rgba(240,185,11,.3),rgba(240,185,11,.1));border:1px solid var(--gold);}
+.p1 .podium-bar .rank{color:var(--gold);}
+.p2 .podium-bar{height:95px;background:linear-gradient(180deg,rgba(200,212,224,.2),rgba(200,212,224,.05));border:1px solid rgba(200,212,224,.3);}
+.p2 .podium-bar .rank{color:var(--greylt);}
+.p3 .podium-bar{height:70px;background:linear-gradient(180deg,rgba(224,123,57,.2),rgba(224,123,57,.05));border:1px solid rgba(224,123,57,.3);}
+.p3 .podium-bar .rank{color:var(--orange);}
+.podium-label{font-size:.8rem;color:var(--grey);text-align:center;}
+.podium-prize{font-size:.75rem;font-weight:600;padding:.25rem .6rem;border-radius:12px;margin-top:.2rem;}
+.p1 .podium-prize{background:rgba(240,185,11,.15);color:var(--gold);}
+.p2 .podium-prize{background:rgba(200,212,224,.1);color:var(--greylt);}
+.p3 .podium-prize{background:rgba(224,123,57,.1);color:var(--orange);}
+
+/* OBJECTIFS SESSION 2 */
+.obj-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;}
+.obj-card{background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:1.4rem;transition:border-color .2s,transform .2s;}
+.obj-card:hover{border-color:var(--border);transform:translateY(-2px);}
+.obj-icon{font-size:2rem;margin-bottom:.75rem;}
+.obj-title{font-family:'Syne',sans-serif;font-weight:700;color:var(--white);font-size:.95rem;margin-bottom:.35rem;}
+.obj-desc{font-size:.82rem;color:var(--grey);line-height:1.5;}
+.obj-tag{display:inline-block;font-size:.7rem;font-weight:700;padding:.2rem .55rem;border-radius:10px;margin-top:.6rem;font-family:'Syne',sans-serif;}
+.tag-gold{background:rgba(240,185,11,.15);color:var(--gold);}
+.tag-green{background:rgba(16,185,129,.15);color:var(--green);}
+.tag-blue{background:rgba(59,130,246,.15);color:var(--blue);}
+.tag-orange{background:rgba(224,123,57,.15);color:var(--orange);}
+
+/* INSCRIPTION */
+.inscription-block{background:var(--card);border:1px solid var(--gold);border-radius:16px;padding:2.5rem;margin-top:3rem;}
+.inscription-block h3{font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;color:var(--white);margin-bottom:.5rem;}
+.inscription-block p{color:var(--grey);margin-bottom:1.5rem;font-size:.95rem;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:.75rem;}
+@media(max-width:560px){.form-row{grid-template-columns:1fr;}}
+.form-group{display:flex;flex-direction:column;gap:.35rem;}
+.form-group label{font-size:.8rem;color:var(--grey);font-weight:500;}
+.form-group input,.form-group select{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--white);padding:.7rem .9rem;border-radius:8px;font-size:.9rem;font-family:'DM Sans',sans-serif;transition:border-color .2s;}
+.form-group input:focus,.form-group select:focus{outline:none;border-color:var(--gold);}
+.form-group select option{background:var(--card);color:var(--white);}
+.form-group input::placeholder{color:var(--grey);}
+.portfolio-input{margin-bottom:1.2rem;}
+.portfolio-input label{font-size:.85rem;color:var(--offwhite);font-weight:600;margin-bottom:.5rem;display:block;}
+.portfolio-row{display:grid;grid-template-columns:1fr 80px 80px;gap:.5rem;align-items:center;margin-bottom:.4rem;}
+.portfolio-row .crypto-name{font-size:.88rem;color:var(--white);display:flex;align-items:center;gap:.4rem;}
+.portfolio-row input[type=range]{accent-color:var(--gold);width:100%;}
+.portfolio-row .pct{font-family:'Syne',sans-serif;font-weight:700;color:var(--gold);font-size:.9rem;text-align:right;}
+.pct-total{text-align:right;font-size:.8rem;color:var(--grey);margin-bottom:1.2rem;}
+.pct-total span{color:var(--gold);font-weight:700;}
+.form-submit{width:100%;background:var(--gold);color:var(--bg);font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;padding:.9rem;border:none;border-radius:8px;cursor:pointer;transition:transform .2s,box-shadow .2s;}
+.form-submit:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(240,185,11,.3);}
+.form-note{font-size:.78rem;color:var(--grey);margin-top:.8rem;text-align:center;}
+.success-msg{display:none;background:rgba(16,185,129,.1);border:1px solid var(--green);border-radius:10px;padding:1.2rem;text-align:center;color:var(--green);font-weight:600;margin-top:1rem;}
+
+/* DIVIDER */
+.divider{height:1px;background:var(--border);margin:0 auto;max-width:860px;}
+
+/* FOOTER */
+footer{background:var(--navy);border-top:1px solid var(--border);padding:2.5rem 2rem;text-align:center;}
+footer .logo-text{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:var(--white);margin-bottom:.5rem;}
+footer .addr{font-size:.82rem;color:var(--grey);}
+footer .addr a{color:var(--gold);text-decoration:none;}
+
+/* REVEAL */
+[data-reveal]{opacity:0;transform:translateY(24px);transition:opacity .55s ease,transform .55s ease;}
+[data-reveal].visible{opacity:1;transform:none;}
+</style>
+</head>
+<body>
+<nav>
+  <a class="logo" href="https://genie-montauban.fr">
+    <img src="https://genie-montauban.fr/logo.png" alt="Génie" onerror="this.style.display='none'">Génie
+  </a>
+  <a class="back" href="crypto-session1.html">← Session 1</a>
+  <span class="badge">🔮 Session 2</span>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="s1-badge">✅ Suite de la Session 1 — Crypto Génie</div>
+    <div class="hero-tag">🏆 J+30 · Portfolio Challenge + Première vraie transaction</div>
+    <h1>Ma première vraie<br><em>transaction</em></h1>
+    <p class="hero-sub">Vous avez attendu 30 jours, suivi votre plan. Aujourd'hui on compare les portfolios, on analyse les marchés — et on achète pour de vrai, ensemble, en live.</p>
+    <div id="countdown" class="countdown-box">
+      <div class="cd-item"><div class="cd-num" id="cd-days">30</div><div class="cd-lbl">jours</div></div>
+      <div class="cd-sep">:</div>
+      <div class="cd-item"><div class="cd-num" id="cd-hours">00</div><div class="cd-lbl">heures</div></div>
+      <div class="cd-sep">:</div>
+      <div class="cd-item"><div class="cd-num" id="cd-min">00</div><div class="cd-lbl">minutes</div></div>
+    </div>
+    <div class="hero-cta-row">
+      <a href="#inscription" class="btn-primary">📝 M'inscrire à la Session 2</a>
+      <a href="#programme" class="btn-outline">📋 Voir le programme</a>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- OBJECTIFS -->
+<section>
+  <div class="inner">
+    <div class="section-tag" data-reveal>Ce que vous allez faire</div>
+    <h2 data-reveal>Les <em>4 objectifs</em> de la Session 2</h2>
+    <p class="lead" data-reveal>En 2h, vous passerez de "j'ai un compte" à "je suis investisseur actif".</p>
+    <div class="obj-grid" data-reveal>
+      <div class="obj-card">
+        <div class="obj-icon">🏆</div>
+        <div class="obj-title">Portfolio Challenge — Résultats</div>
+        <div class="obj-desc">On ouvre CoinMarketCap et on compare les 30 derniers jours. Les meilleurs stratèges expliquent leurs choix à voix haute.</div>
+        <span class="obj-tag tag-gold">Gamification</span>
+      </div>
+      <div class="obj-card">
+        <div class="obj-icon">📊</div>
+        <div class="obj-title">Lire un graphique en 5 minutes</div>
+        <div class="obj-desc">Résistance, support, RSI, volume. Les 4 indicateurs que 80% des investisseurs ignorent mais qui changent tout.</div>
+        <span class="obj-tag tag-blue">Analyse technique</span>
+      </div>
+      <div class="obj-card">
+        <div class="obj-icon">💸</div>
+        <div class="obj-title">Première vraie transaction en live</div>
+        <div class="obj-desc">Chacun fait son premier achat réel sur Binance. L'expert projette chaque étape. Vous repartez investisseur — pour de vrai.</div>
+        <span class="obj-tag tag-green">Passage à l'action</span>
+      </div>
+      <div class="obj-card">
+        <div class="obj-icon">🛡️</div>
+        <div class="obj-title">Configurer ses alertes prix</div>
+        <div class="obj-desc">Ne plus être esclave des prix — paramétrer des alertes intelligentes pour ne surveiller que ce qui compte vraiment.</div>
+        <span class="obj-tag tag-orange">Autonomie</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PORTFOLIO CHALLENGE DÉBRIEF -->
+<section>
+  <div class="inner">
+    <div class="section-tag" data-reveal>J+30 — Le moment de vérité</div>
+    <h2 data-reveal>Le <em>Portfolio Challenge</em></h2>
+    <div class="challenge-section" data-reveal>
+      <div class="challenge-header">
+        <div class="challenge-icon">💼</div>
+        <div>
+          <h3>Qui a eu le meilleur flair ?</h3>
+          <p>Il y a 30 jours, chaque équipe a réparti 1 000€ fictifs entre les cryptos de son choix. Aujourd'hui on calcule les résultats réels sur CoinMarketCap — en direct, devant tout le monde.</p>
+        </div>
+      </div>
+      <div class="rules-grid">
+        <div class="rule-card">
+          <div class="rule-n">01</div>
+          <div class="rule-title">L'animateur affiche les résultats</div>
+          <div class="rule-desc">Prix d'entrée vs prix du jour pour chaque crypto choisie. Calcul en direct projeté sur grand écran.</div>
+        </div>
+        <div class="rule-card">
+          <div class="rule-n">02</div>
+          <div class="rule-title">Chaque équipe explique sa stratégie</div>
+          <div class="rule-desc">2 minutes par équipe : pourquoi ces cryptos ? Qu'est-ce que vous avez vu que les autres n'ont pas vu ?</div>
+        </div>
+        <div class="rule-card">
+          <div class="rule-n">03</div>
+          <div class="rule-title">L'expert commente et enseigne</div>
+          <div class="rule-desc">Il analyse chaque choix : ce qui était pertinent, ce qu'on peut en apprendre, les erreurs classiques évitées ou commises.</div>
+        </div>
+        <div class="rule-card">
+          <div class="rule-n">04</div>
+          <div class="rule-title">Le gagnant reçoit son prix</div>
+          <div class="rule-desc">1 mois d'adhésion Génie offert + badge "Crypto Génie Niveau 2" + mention dans le groupe Telegram.</div>
+        </div>
+      </div>
+
+      <!-- Podium visuel -->
+      <div class="podium-section">
+        <p style="color:var(--grey);font-size:.85rem;margin-bottom:1rem;">Podium symbolique — calculé sur les vrais prix CoinMarketCap le jour J</p>
+        <div class="podium">
+          <div class="podium-place p2">
+            <div class="podium-bar"><span class="rank">2</span></div>
+            <div class="podium-label">2ème<br><span style="font-size:.7rem">Votre pseudo</span></div>
+            <div class="podium-prize">Badge N2</div>
+          </div>
+          <div class="podium-place p1">
+            <div class="podium-bar"><span class="rank">1</span></div>
+            <div class="podium-label">🏆 Champion<br><span style="font-size:.7rem">Votre pseudo</span></div>
+            <div class="podium-prize">1 mois Génie offert</div>
+          </div>
+          <div class="podium-place p3">
+            <div class="podium-bar"><span class="rank">3</span></div>
+            <div class="podium-label">3ème<br><span style="font-size:.7rem">Votre pseudo</span></div>
+            <div class="podium-prize">Applaudissements</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PROGRAMME -->
+<section id="programme">
+  <div class="inner">
+    <div class="section-tag" data-reveal>Déroulé détaillé</div>
+    <h2 data-reveal>Le <em>programme</em> de la Session 2</h2>
+    <p class="lead" data-reveal>2h intensives. Moins de théorie, beaucoup plus d'action.</p>
+    <div class="prog-grid" data-reveal>
+
+      <div class="prog-bloc">
+        <div class="prog-time"><div class="t">T+0</div><div class="dur">15 min</div></div>
+        <div class="prog-content">
+          <div class="prog-phase">Ouverture</div>
+          <div class="prog-title">🎯 Bilan des 30 jours — Tour de table</div>
+          <div class="prog-desc">Chacun partage en 1 phrase : "J'ai fait / J'ai pas fait / J'ai appris que…". Aucun jugement. L'expert commente 3 situations typiques rencontrées.</div>
+        </div>
+      </div>
+
+      <div class="prog-bloc gold-border">
+        <div class="prog-time"><div class="t">T+15</div><div class="dur">25 min</div></div>
+        <div class="prog-content">
+          <div class="prog-phase">🏆 Portfolio Challenge</div>
+          <div class="prog-title">Résultats en direct + débrief stratégique</div>
+          <div class="prog-desc">Ouverture CoinMarketCap en live. Calcul des performances par équipe. Explications croisées. Attribution des prix. C'est le moment le plus attendu.</div>
+        </div>
+      </div>
+
+      <div class="prog-bloc">
+        <div class="prog-time"><div class="t">T+40</div><div class="dur">20 min</div></div>
+        <div class="prog-content">
+          <div class="prog-phase">Analyse technique</div>
+          <div class="prog-title">📊 Lire un graphique en 5 minutes</div>
+          <div class="prog-desc">4 indicateurs : résistance/support, RSI, volume, moyennes mobiles. L'expert montre sur un vrai graphique Binance en direct. Exercice : chacun analyse 1 crypto sur son téléphone.</div>
+        </div>
+      </div>
+
+      <div class="prog-bloc">
+        <div class="prog-time"><div class="t">T+60</div><div class="dur">10 min</div></div>
+        <div class="prog-content">
+          <div class="prog-phase">Pause</div>
+          <div class="prog-title">☕ Bar à questions — Round 2</div>
+          <div class="prog-desc">Post-its anonymes. Questions depuis le groupe Telegram des 30 derniers jours. L'expert répond aux 3 plus populaires.</div>
+        </div>
+      </div>
+
+      <div class="prog-bloc gold-border">
+        <div class="prog-time"><div class="t">T+70</div><div class="dur">30 min</div></div>
+        <div class="prog-content">
+          <div class="prog-phase">🚀 LA TRANSACTION</div>
+          <div class="prog-title">Premier achat réel sur Binance — en live</div>
+          <div class="prog-desc">Chacun achète pour de vrai. L'expert projette son écran Binance et guide chaque étape : choix de la crypto, du montant, du type d'ordre. Vous repartez avec une vraie position ouverte.</div>
+        </div>
+      </div>
+
+      <div class="prog-bloc">
+        <div class="prog-time"><div class="t">T+100</div><div class="dur">20 min</div></div>
+        <div class="prog-content">
+          <div class="prog-phase">Autonomie</div>
+          <div class="prog-title">🔔 Configurer ses alertes + plan DCA réel</div>
+          <div class="prog-desc">Chacun paramètre ses alertes prix Binance. Mise en place du DCA automatique si souhaité. Distribution de la fiche récapitulative "Investisseur autonome".</div>
+        </div>
+      </div>
+
+      <div class="prog-bloc">
+        <div class="prog-time"><div class="t">T+120</div><div class="dur">10 min</div></div>
+        <div class="prog-content">
+          <div class="prog-phase">Clôture</div>
+          <div class="prog-title">🏅 Badges Niveau 2 + annonce Session 3</div>
+          <div class="prog-desc">Distribution des badges. Mot de chaque participant. Selfie de groupe. Annonce de la Session 3 : DeFi & NFT — le Web3 dans la vraie vie.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- INSCRIPTION -->
+<section id="inscription">
+  <div class="inner">
+    <div class="section-tag" data-reveal>Réservez votre place</div>
+    <h2 data-reveal><em>Inscription</em> Session 2</h2>
+    <p class="lead" data-reveal>Maximum 8 participants — places limitées pour garantir la qualité de l'accompagnement.</p>
+
+    <div class="inscription-block" data-reveal>
+      <h3>📝 Je m'inscris à la Session 2</h3>
+      <p>Remplissez ce formulaire. L'équipe Génie vous confirme votre place sous 24h avec la date et l'heure définitives.</p>
+
+      <form id="inscriptionForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Prénom *</label>
+            <input type="text" id="prenom" placeholder="Votre prénom" required>
+          </div>
+          <div class="form-group">
+            <label>Nom *</label>
+            <input type="text" id="nom" placeholder="Votre nom" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Email *</label>
+            <input type="email" id="email" placeholder="votre@email.fr" required>
+          </div>
+          <div class="form-group">
+            <label>Téléphone</label>
+            <input type="tel" id="tel" placeholder="06 XX XX XX XX">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Statut *</label>
+            <select id="statut" required>
+              <option value="">— Choisir —</option>
+              <option value="membre">Membre Génie (tarif réduit)</option>
+              <option value="externe">Participant externe (plein tarif)</option>
+              <option value="s1">Participant Session 1</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Pseudo Crypto Génie</label>
+            <input type="text" id="pseudo" placeholder="Votre pseudo de la Session 1">
+          </div>
+        </div>
+
+        <!-- Portfolio Challenge -->
+        <div class="portfolio-input">
+          <label>🏆 Soumettez votre Portfolio Challenge — Répartissez 1 000€ fictifs</label>
+          <div class="portfolio-row">
+            <div class="crypto-name">₿ Bitcoin (BTC)</div>
+            <input type="range" id="btc" min="0" max="100" value="60" oninput="updatePct()">
+            <div class="pct" id="btc-pct">60%</div>
+          </div>
+          <div class="portfolio-row">
+            <div class="crypto-name">Ξ Ethereum (ETH)</div>
+            <input type="range" id="eth" min="0" max="100" value="30" oninput="updatePct()">
+            <div class="pct" id="eth-pct">30%</div>
+          </div>
+          <div class="portfolio-row">
+            <div class="crypto-name">◎ Solana (SOL)</div>
+            <input type="range" id="sol" min="0" max="100" value="10" oninput="updatePct()">
+            <div class="pct" id="sol-pct">10%</div>
+          </div>
+          <div class="portfolio-row">
+            <div class="crypto-name">🔵 Autre crypto</div>
+            <input type="range" id="other" min="0" max="100" value="0" oninput="updatePct()">
+            <div class="pct" id="other-pct">0%</div>
+          </div>
+          <div class="pct-total">Total : <span id="total-pct">100</span>% — Idéalement = 100%</div>
+        </div>
+
+        <div class="form-group" style="margin-bottom:1rem;">
+          <label>Justification de votre stratégie (optionnel)</label>
+          <input type="text" id="strategie" placeholder="Ex : je mise sur BTC pour sa stabilité et ETH pour la DeFi...">
+        </div>
+
+        <button type="submit" class="form-submit">🚀 Confirmer mon inscription</button>
+        <p class="form-note">Tarif : Membres Génie — tarif préférentiel · Externes — 30€ · Participants Session 1 — 25€<br>Paiement sur place le jour J (CB, espèces, virement)</p>
+      </form>
+      <div class="success-msg" id="successMsg">
+        ✅ Inscription reçue ! On vous confirme votre place sous 24h par email. À très bientôt au Génie !
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="logo-text">🏠 Génie Montauban</div>
+  <div class="addr">12 rue du Génie · 82000 Montauban · <a href="tel:+33651509718">06 51 50 97 18</a> · <a href="mailto:genie.montauban@gmail.com">genie.montauban@gmail.com</a><br>
+  <a href="crypto-session1.html">← Session 1</a> &nbsp;·&nbsp; <a href="https://genie-montauban.fr">Site principal →</a></div>
+</footer>
+
+<script>
+// Countdown — set your session date here (YYYY, MM-1, DD, HH, MM)
+const sessionDate = new Date();
+sessionDate.setDate(sessionDate.getDate() + 30);
+function updateCountdown(){
+  const now = new Date();
+  const diff = sessionDate - now;
+  if(diff <= 0){ document.getElementById('countdown').innerHTML = '<span style="color:var(--gold);font-family:Syne,sans-serif;font-weight:800;font-size:1.3rem;">🎉 C\'est aujourd\'hui !</span>'; return; }
+  const d = Math.floor(diff/86400000);
+  const h = Math.floor((diff%86400000)/3600000);
+  const m = Math.floor((diff%3600000)/60000);
+  document.getElementById('cd-days').textContent = String(d).padStart(2,'0');
+  document.getElementById('cd-hours').textContent = String(h).padStart(2,'0');
+  document.getElementById('cd-min').textContent = String(m).padStart(2,'0');
+}
+updateCountdown();
+setInterval(updateCountdown, 60000);
+
+// Portfolio sliders
+function updatePct(){
+  const ids = ['btc','eth','sol','other'];
+  ids.forEach(id => {
+    document.getElementById(id+'-pct').textContent = document.getElementById(id).value + '%';
+  });
+  const total = ids.reduce((s,id) => s + parseInt(document.getElementById(id).value), 0);
+  const t = document.getElementById('total-pct');
+  t.textContent = total;
+  t.style.color = total === 100 ? 'var(--green)' : total > 100 ? 'var(--red)' : 'var(--gold)';
+}
+
+// Form submit
+document.getElementById('inscriptionForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  const prenom = document.getElementById('prenom').value;
+  const nom = document.getElementById('nom').value;
+  const email = document.getElementById('email').value;
+  const tel = document.getElementById('tel').value;
+  const statut = document.getElementById('statut').value;
+  const pseudo = document.getElementById('pseudo').value;
+  const btc = document.getElementById('btc').value;
+  const eth = document.getElementById('eth').value;
+  const sol = document.getElementById('sol').value;
+  const other = document.getElementById('other').value;
+  const strat = document.getElementById('strategie').value;
+
+  const body = encodeURIComponent(
+    `Nouvelle inscription Session 2 — Crypto Génie\n\n`+
+    `Prénom : ${prenom}\nNom : ${nom}\nEmail : ${email}\nTél : ${tel}\nStatut : ${statut}\nPseudo : ${pseudo}\n\n`+
+    `Portfolio Challenge :\n- BTC : ${btc}%\n- ETH : ${eth}%\n- SOL : ${sol}%\n- Autre : ${other}%\n`+
+    `Stratégie : ${strat}`
+  );
+  window.location.href = `mailto:genie.montauban@gmail.com?subject=${encodeURIComponent('Inscription Session 2 Crypto Génie — '+prenom+' '+nom)}&body=${body}`;
+  document.getElementById('inscriptionForm').style.display = 'none';
+  document.getElementById('successMsg').style.display = 'block';
+});
+
+// Scroll reveal
+const obs = new IntersectionObserver(
+  e => e.forEach(n => { if(n.isIntersecting) n.target.classList.add('visible'); }),
+  {threshold:.1, rootMargin:'0px 0px -40px 0px'}
+);
+document.querySelectorAll('[data-reveal]').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

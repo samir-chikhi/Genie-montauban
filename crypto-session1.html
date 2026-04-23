@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crypto Génie — Kit de démarrage Session 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0D0F1A;--navy:#111827;--card:#1A2035;--gold:#F0B90B;--orange:#E07B39;--white:#FFFFFF;--offwhite:#E8EDF5;--grey:#8899AA;--greylt:#C8D4E0;--green:#10B981;--red:#EF4444;--blue:#3B82F6;--border:rgba(240,185,11,0.18);}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--offwhite);line-height:1.6;overflow-x:hidden;}
+nav{position:fixed;top:0;width:100%;z-index:100;background:rgba(13,15,26,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:.75rem 2rem;display:flex;align-items:center;gap:1rem;}
+nav .logo{display:flex;align-items:center;gap:.6rem;font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:var(--white);text-decoration:none;}
+nav .logo img{height:32px;border-radius:4px;}
+nav .badge{margin-left:auto;background:var(--gold);color:var(--bg);font-size:.75rem;font-weight:700;padding:.25rem .75rem;border-radius:20px;font-family:'Syne',sans-serif;}
+nav a.back{color:var(--grey);font-size:.85rem;text-decoration:none;}
+nav a.back:hover{color:var(--gold);}
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:7rem 2rem 4rem;position:relative;overflow:hidden;}
+.hero::before{content:'₿';position:absolute;right:-2rem;top:50%;transform:translateY(-50%);font-size:clamp(14rem,30vw,26rem);color:rgba(240,185,11,.04);line-height:1;pointer-events:none;font-family:'Syne',sans-serif;}
+.hero-inner{max-width:860px;margin:0 auto;width:100%;}
+.hero-tag{display:inline-flex;align-items:center;gap:.5rem;background:rgba(224,123,57,.15);border:1px solid var(--orange);color:var(--orange);font-size:.8rem;font-weight:600;padding:.35rem .85rem;border-radius:20px;margin-bottom:1.5rem;font-family:'Syne',sans-serif;letter-spacing:.04em;}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(2.4rem,6vw,4.2rem);font-weight:800;line-height:1.08;color:var(--white);margin-bottom:.6rem;}
+.hero h1 em{color:var(--gold);font-style:normal;}
+.hero-sub{font-size:1.15rem;color:var(--grey);max-width:560px;margin-bottom:2.5rem;}
+.hero-cta-row{display:flex;flex-wrap:wrap;gap:1rem;margin-bottom:3rem;}
+.btn-primary{background:var(--gold);color:var(--bg);font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;padding:.85rem 1.8rem;border-radius:8px;text-decoration:none;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 20px rgba(240,185,11,.25);display:inline-flex;align-items:center;gap:.5rem;}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(240,185,11,.35);}
+.btn-outline{border:1.5px solid var(--border);color:var(--offwhite);font-size:.95rem;padding:.85rem 1.8rem;border-radius:8px;text-decoration:none;transition:border-color .2s,color .2s;display:inline-flex;align-items:center;gap:.5rem;}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold);}
+.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem;margin-top:1rem;}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.2rem;text-align:center;}
+.stat-card .val{font-family:'Syne',sans-serif;font-size:1.9rem;font-weight:800;color:var(--gold);line-height:1;}
+.stat-card .lbl{font-size:.78rem;color:var(--grey);margin-top:.3rem;}
+section{padding:5rem 2rem;}
+.inner{max-width:860px;margin:0 auto;}
+.section-tag{font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);font-family:'Syne',sans-serif;margin-bottom:.7rem;display:flex;align-items:center;gap:.5rem;}
+.section-tag::before{content:'';width:28px;height:2px;background:var(--gold);}
+h2{font-family:'Syne',sans-serif;font-size:clamp(1.6rem,3.5vw,2.4rem);font-weight:800;color:var(--white);line-height:1.15;margin-bottom:1rem;}
+h2 em{color:var(--gold);font-style:normal;}
+.lead{color:var(--grey);font-size:1.05rem;max-width:600px;margin-bottom:2.5rem;}
+.days-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;}
+@media(max-width:600px){.days-grid{grid-template-columns:1fr;}}
+.day-card{background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:1.1rem 1.2rem;display:flex;gap:1rem;align-items:flex-start;transition:border-color .2s;}
+.day-card:hover{border-color:var(--border);}
+.day-card.highlight{border-color:var(--gold);background:rgba(240,185,11,.05);}
+.day-badge{flex-shrink:0;background:var(--navy);border:1px solid var(--border);border-radius:8px;width:48px;height:48px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Syne',sans-serif;}
+.day-badge .j{font-size:.65rem;color:var(--grey);line-height:1;}
+.day-badge .n{font-size:1.3rem;font-weight:800;color:var(--gold);line-height:1;}
+.day-card.highlight .day-badge{background:var(--gold);border-color:var(--gold);}
+.day-card.highlight .day-badge .j,.day-card.highlight .day-badge .n{color:var(--bg);}
+.day-info .title{font-size:.95rem;font-weight:600;color:var(--white);margin-bottom:.2rem;}
+.day-info .desc{font-size:.82rem;color:var(--grey);}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;}
+.res-card{background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:1.4rem;text-decoration:none;transition:border-color .2s,transform .2s;display:block;}
+.res-card:hover{border-color:var(--gold);transform:translateY(-3px);}
+.res-icon{font-size:2rem;margin-bottom:.75rem;}
+.res-title{font-family:'Syne',sans-serif;font-weight:700;color:var(--white);font-size:1rem;margin-bottom:.35rem;}
+.res-desc{font-size:.82rem;color:var(--grey);line-height:1.5;margin-bottom:.75rem;}
+.res-link{font-size:.8rem;color:var(--gold);font-weight:600;}
+.red-section{background:rgba(239,68,68,.04);border:1px solid rgba(239,68,68,.15);border-radius:16px;padding:2rem;margin-top:2rem;}
+.red-section h3{font-family:'Syne',sans-serif;font-weight:800;color:var(--red);margin-bottom:1.2rem;font-size:1.2rem;}
+.alert-list{list-style:none;display:flex;flex-direction:column;gap:.6rem;}
+.alert-list li{display:flex;gap:.85rem;align-items:flex-start;background:rgba(239,68,68,.06);border-radius:8px;padding:.7rem 1rem;font-size:.88rem;}
+.alert-list li .num{flex-shrink:0;background:var(--red);color:var(--white);border-radius:5px;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;margin-top:.05rem;}
+.alert-list li .signal{color:var(--white);font-weight:600;display:block;margin-bottom:.1rem;}
+.alert-list li .verdict{color:var(--red);font-style:italic;font-size:.8rem;}
+.terms-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.75rem;}
+.term-card{background:var(--card);border-radius:10px;padding:1rem 1.2rem;border:1px solid var(--border);}
+.term-word{font-family:'Syne',sans-serif;font-weight:800;color:var(--gold);font-size:1.1rem;margin-bottom:.3rem;}
+.term-def{font-size:.82rem;color:var(--grey);line-height:1.5;}
+.teaser{background:linear-gradient(135deg,rgba(240,185,11,.08),rgba(224,123,57,.06));border:1px solid var(--gold);border-radius:16px;padding:2.5rem;text-align:center;margin-top:3rem;}
+.teaser .emoji{font-size:3rem;margin-bottom:1rem;}
+.teaser h3{font-family:'Syne',sans-serif;font-weight:800;font-size:1.6rem;color:var(--gold);margin-bottom:.75rem;}
+.teaser p{color:var(--grey);max-width:480px;margin:0 auto 1.5rem;font-size:.95rem;}
+footer{background:var(--navy);border-top:1px solid var(--border);padding:2.5rem 2rem;text-align:center;}
+footer .logo-text{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:var(--white);margin-bottom:.5rem;}
+footer .addr{font-size:.82rem;color:var(--grey);}
+footer .addr a{color:var(--gold);text-decoration:none;}
+.divider{height:1px;background:var(--border);margin:0 auto;max-width:860px;}
+[data-reveal]{opacity:0;transform:translateY(24px);transition:opacity .55s ease,transform .55s ease;}
+[data-reveal].visible{opacity:1;transform:none;}
+</style>
+</head>
+<body>
+<nav>
+  <a class="logo" href="https://genie-montauban.fr">
+    <img src="https://genie-montauban.fr/logo.png" alt="Génie" onerror="this.style.display='none'">Génie
+  </a>
+  <a class="back" href="https://genie-montauban.fr">← Retour au site</a>
+  <span class="badge">🎮 Crypto Génie</span>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">📦 Contenu de votre enveloppe · Session 1</div>
+    <h1>Votre kit de<br><em>démarrage crypto</em></h1>
+    <p class="hero-sub">Tout ce qu'il vous faut pour passer à l'action cette semaine — sans commettre les erreurs classiques des débutants.</p>
+    <div class="hero-cta-row">
+      <a href="#plan7j" class="btn-primary">📋 Mon plan des 7 jours</a>
+      <a href="#ressources" class="btn-outline">📚 Ressources recommandées</a>
+    </div>
+    <div class="stat-row" data-reveal>
+      <div class="stat-card"><div class="val">2h</div><div class="lbl">vous venez de compléter</div></div>
+      <div class="stat-card"><div class="val">3</div><div class="lbl">plateformes sécurisées connues</div></div>
+      <div class="stat-card"><div class="val">5</div><div class="lbl">signaux d'arnaque mémorisés</div></div>
+      <div class="stat-card"><div class="val">30j</div><div class="lbl">avant la Session 2</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<section id="plan7j">
+  <div class="inner">
+    <div class="section-tag" data-reveal>Votre feuille de route</div>
+    <h2 data-reveal>Le plan des <em>7 jours</em></h2>
+    <p class="lead" data-reveal>Une action par jour. Rien de compliqué — juste la progression qui vous rendra autonome.</p>
+    <div class="days-grid" data-reveal>
+      <div class="day-card">
+        <div class="day-badge"><div class="j">J</div><div class="n">1</div></div>
+        <div class="day-info"><div class="title">Finaliser la vérification KYC sur Binance</div><div class="desc">Photo de pièce d'identité + selfie. Prend 5-15 min. Obligatoire légalement en France.</div></div>
+      </div>
+      <div class="day-card">
+        <div class="day-badge"><div class="j">J</div><div class="n">2</div></div>
+        <div class="day-info"><div class="title">Explorer l'interface 10 minutes</div><div class="desc">Sans rien acheter. Repérez : Marchés / Portefeuille / Historique. Familiarisez-vous.</div></div>
+      </div>
+      <div class="day-card">
+        <div class="day-badge"><div class="j">J</div><div class="n">3</div></div>
+        <div class="day-info"><div class="title">Lire 1 article sur coinacademy.fr</div><div class="desc">Commencez par "C'est quoi le Bitcoin ?". Le meilleur site de formation gratuit en français.</div></div>
+      </div>
+      <div class="day-card">
+        <div class="day-badge"><div class="j">J</div><div class="n">4</div></div>
+        <div class="day-info"><div class="title">Décider de votre montant DCA mensuel</div><div class="desc">Même 10€/mois c'est un début. Règle : de l'argent que vous pouvez perdre en totalité sans stress.</div></div>
+      </div>
+      <div class="day-card highlight">
+        <div class="day-badge"><div class="j">J</div><div class="n">5</div></div>
+        <div class="day-info"><div class="title">🚀 Votre premier achat</div><div class="desc">Bitcoin ou Ethereum. Montant = ce que vous dormiriez bien si ça tombait à zéro. Premier vrai pas.</div></div>
+      </div>
+      <div class="day-card">
+        <div class="day-badge"><div class="j">J</div><div class="n">7</div></div>
+        <div class="day-info"><div class="title">Rejoindre le groupe Telegram Crypto Génie</div><div class="desc">Pour poser vos questions, suivre l'actu et préparer la Session 2 dans 30 jours.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="ressources">
+  <div class="inner">
+    <div class="section-tag" data-reveal>Ce qu'on recommande vraiment</div>
+    <h2 data-reveal>Vos <em>ressources</em> de référence</h2>
+    <p class="lead" data-reveal>Sélectionnées par votre expert pour les débutants francophones. Tout est gratuit.</p>
+    <div class="res-grid" data-reveal>
+      <a href="https://coinacademy.fr" target="_blank" class="res-card">
+        <div class="res-icon">📖</div><div class="res-title">Coin Academy</div>
+        <div class="res-desc">400+ articles en français sur les bases, la sécurité, le trading. Le Wikipedia crypto francophone.</div>
+        <div class="res-link">→ coinacademy.fr</div>
+      </a>
+      <a href="https://www.binance.com/fr/academy" target="_blank" class="res-card">
+        <div class="res-icon">🎓</div><div class="res-title">Binance Academy</div>
+        <div class="res-desc">La plateforme que vous utilisez a sa propre école. Guides pas-à-pas pour chaque fonctionnalité.</div>
+        <div class="res-link">→ binance.com/fr/academy</div>
+      </a>
+      <a href="https://coinmarketcap.com" target="_blank" class="res-card">
+        <div class="res-icon">📊</div><div class="res-title">CoinMarketCap</div>
+        <div class="res-desc">Référence mondiale pour suivre les prix en temps réel et explorer toutes les cryptos existantes.</div>
+        <div class="res-link">→ coinmarketcap.com</div>
+      </a>
+      <a href="https://waltio.com" target="_blank" class="res-card">
+        <div class="res-icon">🧾</div><div class="res-title">Waltio</div>
+        <div class="res-desc">Logiciel français de calcul fiscal crypto. Indispensable pour la déclaration annuelle. Simple et légal.</div>
+        <div class="res-link">→ waltio.com</div>
+      </a>
+      <a href="https://www.amf-france.org/fr/espace-epargnants/proteger-son-epargne/listes-noires-et-mises-en-garde" target="_blank" class="res-card">
+        <div class="res-icon">🛡️</div><div class="res-title">Registre AMF</div>
+        <div class="res-desc">Vérifiez toujours si une plateforme est enregistrée en France avant d'y mettre de l'argent.</div>
+        <div class="res-link">→ amf-france.org</div>
+      </a>
+      <a href="https://fr.cryptoast.fr" target="_blank" class="res-card">
+        <div class="res-icon">📰</div><div class="res-title">Cryptoast</div>
+        <div class="res-desc">Le média crypto francophone de référence pour suivre l'actualité du marché sans jargon excessif.</div>
+        <div class="res-link">→ cryptoast.fr</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section>
+  <div class="inner">
+    <div class="section-tag" data-reveal>À garder en mémoire</div>
+    <h2 data-reveal>Le <em>carton rouge</em> — 5 signaux d'arnaque</h2>
+    <p class="lead" data-reveal>Partagez cette liste avec vos proches. Ces 5 signaux vous protègent de 95% des arnaques crypto.</p>
+    <div class="red-section" data-reveal>
+      <h3>🚨 Si vous voyez l'un de ces signaux → STOP immédiatement</h3>
+      <ul class="alert-list">
+        <li><div class="num">01</div><div><span class="signal">« Rendement garanti de 20-30%/mois »</span><span class="verdict">ARNAQUE — aucun placement légal ne garantit ce rendement</span></div></li>
+        <li><div class="num">02</div><div><span class="signal">« Offre valable 24h seulement / places limitées »</span><span class="verdict">PRESSION D'URGENCE — technique de manipulation classique</span></div></li>
+        <li><div class="num">03</div><div><span class="signal">Quelqu'un d'inconnu vous envoie des cryptos et demande de l'aide</span><span class="verdict">SCAM — ne répondez jamais, bloquez immédiatement</span></div></li>
+        <li><div class="num">04</div><div><span class="signal">Aucun siège social réel, aucune régulation visible</span><span class="verdict">DANGER — vérifiez sur le registre AMF avant tout versement</span></div></li>
+        <li><div class="num">05</div><div><span class="signal">Non enregistré sur le registre AMF (amf-france.org)</span><span class="verdict">ILLÉGAL en France — signalez sur signalconso.gouv.fr</span></div></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section>
+  <div class="inner">
+    <div class="section-tag" data-reveal>Vocabulaire essentiel</div>
+    <h2 data-reveal>Les <em>termes clés</em> à retenir</h2>
+    <div class="terms-grid" data-reveal>
+      <div class="term-card"><div class="term-word">Blockchain</div><div class="term-def">Registre distribué, public et infalsifiable. Le cahier dont tout le monde possède une copie.</div></div>
+      <div class="term-card"><div class="term-word">Wallet</div><div class="term-def">Votre coffre-fort numérique. Custodial = la plateforme le garde. Non-custodial = vous le gardez.</div></div>
+      <div class="term-card"><div class="term-word">CEX</div><div class="term-def">Exchange Centralisé (Binance, Kraken…). Vous confiez vos cryptos à la plateforme, comme une banque.</div></div>
+      <div class="term-card"><div class="term-word">KYC</div><div class="term-def">Know Your Customer. Vérification d'identité obligatoire en France. Normal et légal.</div></div>
+      <div class="term-card"><div class="term-word">DCA</div><div class="term-def">Dollar Cost Averaging. Investir une somme fixe chaque mois, quel que soit le prix du marché.</div></div>
+      <div class="term-card"><div class="term-word">HODL</div><div class="term-def">Tenir ses cryptos sur le long terme sans paniquer aux baisses. "Hold On for Dear Life."</div></div>
+      <div class="term-card"><div class="term-word">Stablecoin</div><div class="term-def">Crypto dont la valeur est stable (≈ 1€ ou 1$). USDT, USDC. Refuge contre la volatilité.</div></div>
+      <div class="term-card"><div class="term-word">Flat tax 30%</div><div class="term-def">Impôt français sur les plus-values crypto — déclenché uniquement à la conversion en euros.</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section>
+  <div class="inner">
+    <div class="teaser" data-reveal>
+      <div class="emoji">🔮</div>
+      <h3>Session 2 — Dans 30 jours</h3>
+      <p>On compare vos portfolios Challenge. Les meilleurs stratèges expliquent leurs choix. Et on fait ensemble la <strong style="color:var(--white)">vraie première transaction</strong> sur Binance — en live.</p>
+      <a href="crypto-session2.html" class="btn-primary">Découvrir la Session 2 →</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="logo-text">🏠 Génie Montauban</div>
+  <div class="addr">12 rue du Génie · 82000 Montauban · <a href="tel:+33651509718">06 51 50 97 18</a> · <a href="mailto:genie.montauban@gmail.com">genie.montauban@gmail.com</a><br><a href="https://genie-montauban.fr">← Retour au site principal</a></div>
+</footer>
+<script>
+const obs=new IntersectionObserver(e=>e.forEach(n=>{if(n.isIntersecting)n.target.classList.add('visible');}),{threshold:.1,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('[data-reveal]').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
