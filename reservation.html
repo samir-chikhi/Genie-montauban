@@ -169,8 +169,8 @@ input[type=radio],input[type=checkbox]{width:auto;height:auto;padding:0;border:n
       </label>
       <label class="profil-card" id="pc-asso">
         <input type="radio" name="profil" value="asso" onchange="onProfilChange('asso')">
-        <div class="profil-card-name">Association 82</div>
-        <div class="profil-card-note">Gratuit* (sous conditions)</div>
+        <div class="profil-card-name">Asso Villebourbon &amp; syndicats</div>
+        <div class="profil-card-note">Gratuit** (sous conditions)</div>
         <span class="profil-badge pb-asso">Gratuit*</span>
       </label>
     </div>
@@ -231,12 +231,12 @@ input[type=radio],input[type=checkbox]{width:auto;height:auto;padding:0;border:n
       </div>
       <div class="form-group full">
         <label class="check-label">
-          <input type="checkbox" id="fBadge"> Ajouter l'accès badge 24h/7j (+25€/mois)
+          <input type="checkbox" id="fBadge"> Ajouter l'accès badge 24h/7j (+5€/mois)
         </label>
       </div>
       <div class="form-group full">
         <label class="check-label">
-          <input type="checkbox" id="fAdhesion"> Inclure l'adhésion Génie (+50€/an — accès aux tarifs réduits ≈ −20%)
+          <input type="checkbox" id="fAdhesion"> Inclure l'adhésion Génie (à partir de 15€/an — accès aux tarifs adhérent)
         </label>
       </div>
     </div>
@@ -439,7 +439,7 @@ function updateRecap() {
   if (!rows) return;
   rows.innerHTML = [
     ['Espace',       esp ? esp.nom : '—'],
-    ['Profil',       {plein:'Tarif plein',adherent:'Adhérent (−20%)',locataire:'Locataire (−50%)',asso:'Association 82 (Gratuit*)'}[profil]],
+    ['Profil',       {plein:'Tarif plein',adherent:'Adhérent (−20%)',locataire:'Locataire (−50%)',asso:'Asso Villebourbon &amp; syndicats (Gratuit*)'}[profil]],
     ['Durée',        duree ? DUREE_LABELS[duree] : '—'],
     ['Date',         document.getElementById('fDate')?.value || '—'],
     ['Heure de début', document.getElementById('fHeure')?.value || '—'],
