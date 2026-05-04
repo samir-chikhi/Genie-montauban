@@ -1,109 +1,641 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Management de Transition - CCFA Montauban</title>
-<meta name="description" content="Management de transition avec CCFA : direction générale ou RH en intérim pour associations et collectivités d'Occitanie. Disponibilité immédiate.">
-<meta name="author" content="Samir Chikhi — CCFA">
-<link rel="canonical" href="https://www.c2fa.fr/service-management.html">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://www.c2fa.fr/service-management.html">
-<meta property="og:title" content="Management de Transition | CCFA Montauban">
-<meta property="og:description" content="Management de transition avec CCFA : direction générale ou RH en intérim pour associations et collectivités d'Occitanie. Disponibilité immédiate.">
-<meta property="og:site_name" content="CCFA — Chikhi Conseil Formation Audit">
-<meta property="og:locale" content="fr_FR">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="geo.region" content="FR-OCC">
-<meta name="geo.placename" content="Montauban, Tarn-et-Garonne">
-<meta name="geo.position" content="44.0157;1.3553">
-<meta name="ICBM" content="44.0157, 1.3553">
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="shortcut icon" href="favicon.svg">
-<link rel="stylesheet" href="styles.css">
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="service-styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tarifs — Génie Montauban | Tiers-Lieu ESS</title>
+  <meta name="description" content="Grille tarifaire complète du tiers-lieu Génie Montauban : coworking, salles de réunion, bureaux privatifs, domiciliation. Tarifs adhérents, locataires, associations.">
+  <link rel="canonical" href="https://genie-montauban.fr/tarifs.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy:    #0D2B45;
+      --gold:    #C9A84C;
+      --gold-lt: #E8C96E;
+      --teal:    #1A6B72;
+      --teal-lt: #2A9EA8;
+      --cream:   #F8F5EF;
+      --white:   #FFFFFF;
+      --gray:    #6B7280;
+      --dark:    #1C1C1C;
+      --success: #2D7D46;
+      --warn:    #B45309;
+      --radius:  10px;
+      --font-head: 'Syne', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-body); color: var(--dark); background: var(--white); }
+    a { text-decoration: none; color: inherit; }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(13,43,69,0.97); display: flex; align-items: center;
+      justify-content: space-between; padding: 0 32px; height: 60px;
+    }
+    .nav-logo { font-family: var(--font-head); font-weight: 800; font-size: 1.4rem; color: var(--gold); }
+    .nav-back { color: rgba(255,255,255,0.8); font-size: 0.88rem; display: flex; align-items: center; gap: 6px; transition: color .2s; }
+    .nav-back:hover { color: var(--gold); }
+    .nav-res {
+      background: var(--gold); color: var(--navy); font-weight: 700; font-size: 0.82rem;
+      padding: 7px 18px; border-radius: 6px; transition: background .2s;
+    }
+    .nav-res:hover { background: var(--gold-lt); }
+
+    /* ── HERO ── */
+    .tarifs-hero {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--teal) 100%);
+      padding: 60px 32px; text-align: center;
+    }
+    .tarifs-hero h1 {
+      font-family: var(--font-head); font-weight: 800; font-size: clamp(1.8rem, 4vw, 2.8rem);
+      color: var(--white); letter-spacing: -0.02em; margin-bottom: 12px;
+    }
+    .tarifs-hero p { color: rgba(255,255,255,0.7); font-size: 1rem; margin-bottom: 28px; }
+    .hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .btn-dl {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--gold); color: var(--navy); font-family: var(--font-head);
+      font-weight: 700; font-size: 0.9rem; padding: 12px 24px; border-radius: 8px;
+      cursor: pointer; border: none; transition: background .2s; text-decoration: none;
+    }
+    .btn-dl:hover { background: var(--gold-lt); }
+    .btn-print {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: transparent; color: var(--white); border: 1.5px solid rgba(255,255,255,0.35);
+      font-family: var(--font-head); font-weight: 600; font-size: 0.9rem;
+      padding: 12px 24px; border-radius: 8px; cursor: pointer; border: none; transition: .2s;
+    }
+    .btn-print:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* ── WRAPPER ── */
+    .tarifs-wrapper { max-width: 1000px; margin: 0 auto; padding: 48px 24px 80px; }
+
+    /* ── FILTRES PROFIL ── */
+    .profil-filter {
+      background: var(--cream); border-radius: var(--radius); padding: 20px 24px;
+      margin-bottom: 40px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+    }
+    .profil-filter label { font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gray); }
+    .profil-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+    .profil-btn {
+      padding: 8px 16px; border-radius: 20px; border: 1.5px solid rgba(13,43,69,0.15);
+      background: var(--white); font-family: var(--font-body); font-size: 0.82rem;
+      font-weight: 600; color: var(--navy); cursor: pointer; transition: .15s;
+    }
+    .profil-btn.active, .profil-btn:hover { background: var(--navy); color: var(--white); border-color: var(--navy); }
+    .profil-btn.active-adherent { background: var(--warn); border-color: var(--warn); color: var(--white); }
+    .profil-btn.active-locataire { background: var(--teal); border-color: var(--teal); color: var(--white); }
+    .profil-btn.active-asso { background: var(--success); border-color: var(--success); color: var(--white); }
+
+    /* ── SECTION TITRE ── */
+    .tarif-section { margin-bottom: 48px; }
+    .tarif-section-title {
+      font-family: var(--font-head); font-weight: 800; font-size: 1.2rem; color: var(--navy);
+      display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
+      padding-bottom: 12px; border-bottom: 2px solid rgba(201,168,76,0.25);
+    }
+
+    /* ── TABLE TARIFS ── */
+    .tarif-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .tarif-table thead tr { background: var(--navy); color: var(--white); }
+    .tarif-table thead th {
+      padding: 12px 14px; text-align: left; font-family: var(--font-head); font-size: 0.78rem;
+      font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+    }
+    .tarif-table tbody tr { border-bottom: 1px solid rgba(0,0,0,0.06); transition: background .15s; }
+    .tarif-table tbody tr:hover { background: var(--cream); }
+    .tarif-table tbody td { padding: 12px 14px; vertical-align: top; }
+    .col-espace { font-weight: 600; color: var(--navy); }
+    .col-espace small { font-weight: 400; color: var(--gray); display: block; font-size: 0.8rem; }
+    .price-plein { font-weight: 700; color: var(--navy); }
+    .price-adherent { font-weight: 700; color: var(--warn); }
+    .price-locataire { font-weight: 700; color: var(--teal); }
+    .price-asso { font-weight: 700; color: var(--success); }
+    .price-highlight { background: rgba(201,168,76,0.08); border-radius: 4px; padding: 2px 6px; }
+
+    /* Colonne mise en évidence selon profil actif */
+    .tarif-table td.col-active { background: rgba(201,168,76,0.06); }
+
+    /* ── CARD BAIL ── */
+    .bail-table-wrap {
+      background: linear-gradient(135deg, rgba(13,43,69,0.04), rgba(26,107,114,0.04));
+      border: 1.5px solid rgba(26,107,114,0.2); border-radius: var(--radius); overflow: hidden;
+      margin-bottom: 16px;
+    }
+    .bail-table-head {
+      background: linear-gradient(135deg, var(--navy), var(--teal));
+      color: var(--white); padding: 14px 20px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .bail-table-head h4 { font-family: var(--font-head); font-weight: 700; font-size: 0.95rem; }
+    .bail-table-head span { font-size: 0.78rem; color: rgba(255,255,255,0.7); }
+    .bail-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
+    .bail-col { padding: 16px 20px; border-right: 1px solid rgba(0,0,0,0.06); }
+    .bail-col:last-child { border-right: none; }
+    .bail-col.best { background: rgba(201,168,76,0.06); }
+    .bail-col-name { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gray); margin-bottom: 6px; }
+    .bail-col-price { font-family: var(--font-head); font-weight: 800; font-size: 1.2rem; color: var(--navy); }
+    .bail-col-note { font-size: 0.75rem; color: var(--gray); margin-top: 4px; }
+    .bail-col-badge { font-size: 0.68rem; font-weight: 700; background: var(--gold); color: var(--navy); padding: 2px 8px; border-radius: 10px; display: inline-block; margin-top: 4px; }
+
+    /* ── SERVICES ── */
+    .services-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+    .service-item {
+      background: var(--cream); border-radius: 8px; padding: 16px;
+      border: 1px solid rgba(13,43,69,0.08);
+    }
+    .service-name { font-weight: 600; font-size: 0.85rem; color: var(--navy); margin-bottom: 4px; }
+    .service-price { font-family: var(--font-head); font-weight: 700; font-size: 1rem; color: var(--teal); }
+
+    /* ── LÉGENDE ── */
+    .legende {
+      background: var(--cream); border-radius: var(--radius); padding: 20px 24px; margin-top: 48px;
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px;
+    }
+    .legende-item { display: flex; align-items: center; gap: 10px; font-size: 0.82rem; }
+    .legende-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+
+    /* ── PRINT ── */
+    @media print {
+      nav, .profil-filter, .hero-actions, .btn-dl, .btn-print { display: none !important; }
+      .tarifs-hero { padding: 24px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .tarifs-hero h1 { font-size: 1.6rem; }
+      body { font-size: 11px; }
+      .tarif-table { font-size: 10px; }
+      .tarifs-wrapper { padding: 16px; }
+      .tarif-section { page-break-inside: avoid; }
+    }
+
+    @media (max-width: 680px) {
+      .tarif-table thead th:nth-child(3),
+      .tarif-table tbody td:nth-child(3) { display: none; }
+      .bail-grid { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
-<body class="page-management">
-<header class="main-header">
-<nav class="navbar"><div class="container"><div class="nav-wrapper">
-<div class="logo"><a href="index.html"><span class="logo-text">CCFA</span><span class="logo-subtitle">Chikhi Conseil Formation Audit</span></a></div>
-<button class="mobile-menu-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
-<ul class="nav-menu">
-<li><a href="a-propos.html">À PROPOS</a></li>
-<li class="dropdown"><a href="#services">NOS SERVICES</a>
-<ul class="dropdown-menu">
-<li><a href="service-ingenierie.html">Ingénierie de Formation</a></li>
-<li><a href="service-audit.html">Audit Qualiopi</a></li>
-<li><a href="service-essms.html">Évaluation ESSMS</a></li>
-<li><a href="service-bilan.html">Bilan de Compétences</a></li>
-<li><a href="service-management.html">Management de Transition</a></li>
-<li><a href="service-territorial.html">Développement Territorial</a></li>
-</ul></li>
-<li><a href="tarifs.html">TARIFS</a></li>
-<li><a href="contact.html" class="btn-contact">NOUS CONTACTER</a></li>
-</ul>
-</div></div></nav>
-</header>
-<section class="service-hero">
-<div class="container"><div class="service-hero-content">
-<h1>Management de Transition</h1>
-<p class="service-hero-subtitle">Direction opérationnelle temporaire pour piloter vos transformations et gérer vos situations critiques</p>
-</div></div>
-</section>
-<section class="service-intro"><div class="container"><div class="intro-grid">
-<div class="intro-visual">👔</div>
-<div class="intro-text">
-<h2>Expert Opérationnel à Votre Service</h2>
-<p>Fort de <strong>27 ans d'expérience en direction</strong> (DGS de collectivité avec budget 4,2M€ et 55 agents, directeur de structures ESS jusqu'à 1,1M€), j'interviens comme <strong>manager de transition</strong> pour assurer la continuité opérationnelle.</p>
-<p>Mon expertise couvre la <strong>direction générale</strong> de collectivités et structures de l'ESS, le <strong>pilotage de projets complexes</strong>, la <strong>conduite du changement</strong> et les <strong>situations de crise</strong>.</p>
-<div class="highlight-box"><strong>Mon approche :</strong> Pragmatisme et efficacité. Je ne conseille pas depuis un bureau, j'agis au cœur de votre organisation pour transformer, restructurer et pérenniser.</div>
+<body>
+
+<nav>
+  <div class="nav-logo">Génie</div>
+  <a href="index.html" class="nav-back">← Retour au site</a>
+  <a href="reservation.html" class="nav-res">Réserver →</a>
+</nav>
+
+<div class="tarifs-hero">
+  <h1>📋 Grille tarifaire 2026</h1>
+  <p>Tiers-Lieu Génie Montauban · 12 rue du Génie, 82000 Montauban · contact@genie-montauban.fr</p>
+  <div class="hero-actions">
+    <button class="btn-dl" onclick="window.print()">⬇️ Télécharger / Imprimer</button>
+    <a href="reservation.html" class="btn-dl" style="background:rgba(255,255,255,0.12); color:var(--white)">Réserver un espace →</a>
+  </div>
 </div>
-</div></div></section>
-<section class="features-section"><div class="container">
-<div class="section-header"><h2 class="section-title">Mes Prestations</h2></div>
-<div class="features-grid">
-<div class="feature-card"><div class="feature-icon">📋</div><h3>Diagnostic Flash & Cadrage</h3><p>Diagnostic 3-5 jours, feuille de route opérationnelle, quick wins, analyse des ressources.</p></div>
-<div class="feature-card"><div class="feature-icon">🎯</div><h3>Pilotage Opérationnel</h3><p>Prise en main équipes, tableaux de bord, reportings COMEX/CA, gestion urgences.</p></div>
-<div class="feature-card"><div class="feature-icon">🔄</div><h3>Conduite du Changement</h3><p>Mobilisation équipes, gestion résistances, accompagnement managérial, formation interne.</p></div>
-<div class="feature-card"><div class="feature-icon">⚡</div><h3>Restructuration & Retournement</h3><p>Redressement opérationnel, réorganisation services, négociations sociales, restauration rentabilité.</p></div>
-<div class="feature-card"><div class="feature-icon">🔗</div><h3>Management Relais</h3><p>Continuité opérationnelle, pilotage activité courante, préparation recrutement, transfert compétences.</p></div>
-<div class="feature-card"><div class="feature-icon">🚀</div><h3>Projets Stratégiques</h3><p>Projets complexes, multi-sites, transformation digitale, fusions/acquisitions, nouveaux services.</p></div>
+
+<div class="tarifs-wrapper">
+
+  <!-- FILTRE PROFIL -->
+  <div class="profil-filter">
+    <label>Votre profil :</label>
+    <div class="profil-btns" id="profilBtns">
+      <button class="profil-btn active" data-profil="plein" onclick="setProfilActif('plein',this)">Tarif plein</button>
+      <button class="profil-btn" data-profil="adherent" onclick="setProfilActif('adherent',this)">Adhérent (~−20%)</button>
+      <button class="profil-btn" data-profil="locataire" onclick="setProfilActif('locataire',this)">Locataire (−50%)</button>
+      <button class="profil-btn" data-profil="asso" onclick="setProfilActif('asso',this)">Asso Villebourbon &amp; syndicats</button>
+    </div>
+    <span id="profilNote" style="font-size:0.8rem; color:var(--gray); font-style:italic; margin-left:auto">Non-adhérent · tarif standard</span>
+  </div>
+
+  <!-- 1. SALLES DE RÉUNION -->
+  <div class="tarif-section" id="sec-salles">
+    <div class="tarif-section-title">🏛️ Salles de réunion</div>
+    <table class="tarif-table">
+      <thead>
+        <tr>
+          <th>Salle / Capacité</th>
+          <th>Durée</th>
+          <th class="col-plein">Tarif plein</th>
+          <th class="col-adherent">Adhérent<br><small style="font-weight:400;text-transform:none">~−20%</small></th>
+          <th class="col-locataire">Locataire<br><small style="font-weight:400;text-transform:none">−50%</small></th>
+          <th class="col-asso">Asso Villebourbon
+          &amp; syndicats</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- BOURDELLE — tarifs grille officielle 2026 -->
+        <tr>
+          <td rowspan="3" class="col-espace">Antoine Bourdelle (0-02)<small>Grande salle · 40 pers.</small></td>
+          <td>À l'heure</td>
+          <td class="price-plein col-plein">40 €</td>
+          <td class="price-adherent col-adherent">30 €</td>
+          <td class="price-locataire col-locataire">20 €</td>
+          <td class="price-asso col-asso">Gratuit**</td>
+        </tr>
+        <tr>
+          <td>½ journée (4h)</td>
+          <td class="price-plein col-plein">110 €</td>
+          <td class="price-adherent col-adherent">90 €</td>
+          <td class="price-locataire col-locataire">70 €</td>
+          <td class="price-asso col-asso">Gratuit**</td>
+        </tr>
+        <tr>
+          <td>Journée (8h)</td>
+          <td class="price-plein col-plein">180 €</td>
+          <td class="price-adherent col-adherent">150 €</td>
+          <td class="price-locataire col-locataire">120 €</td>
+          <td class="price-asso col-asso">Gratuit**</td>
+        </tr>
+        <!-- FREINET -->
+        <tr style="background:rgba(248,245,239,0.5)">
+          <td rowspan="3" class="col-espace">Célestin Freinet (1-11)<small>Salle de réunion · 20 pers.</small></td>
+          <td>À l'heure</td>
+          <td class="price-plein col-plein">30 €</td>
+          <td class="price-adherent col-adherent">20 €</td>
+          <td class="price-locataire col-locataire">15 €</td>
+          <td class="price-asso col-asso">Gratuit**</td>
+        </tr>
+        <tr style="background:rgba(248,245,239,0.5)">
+          <td>½ journée (4h)</td>
+          <td class="price-plein col-plein">90 €</td>
+          <td class="price-adherent col-adherent">60 €</td>
+          <td class="price-locataire col-locataire">45 €</td>
+          <td class="price-asso col-asso">Gratuit**</td>
+        </tr>
+        <tr style="background:rgba(248,245,239,0.5)">
+          <td>Journée (8h)</td>
+          <td class="price-plein col-plein">150 €</td>
+          <td class="price-adherent col-adherent">100 €</td>
+          <td class="price-locataire col-locataire">80 €</td>
+          <td class="price-asso col-asso">Gratuit**</td>
+        </tr>
+        <!-- GOUGES -->
+        <tr>
+          <td rowspan="3" class="col-espace">Olympe de Gouges (1-12)<small>Salle de réunion · 20 pers.</small></td>
+          <td>À l'heure</td>
+          <td class="price-plein col-plein">30 €</td>
+          <td class="price-adherent col-adherent">20 €</td>
+          <td class="price-locataire col-locataire">15 €</td>
+          <td class="price-asso col-asso">Gratuit**</td>
+        </tr>
+        <tr>
+          <td>½ journée (4h)</td>
+          <td class="price-plein col-plein">90 €</td>
+          <td class="price-adherent col-adherent">60 €</td>
+          <td class="price-locataire col-locataire">45 €</td>
+          <td class="price-asso col-asso">Gratuit**</td>
+        </tr>
+        <tr>
+          <td>Journée (8h)</td>
+          <td class="price-plein col-plein">150 €</td>
+          <td class="price-adherent col-adherent">100 €</td>
+          <td class="price-locataire col-locataire">80 €</td>
+          <td class="price-asso col-asso">Gratuit**</td>
+        </tr>
+        <!-- MONTESSORI -->
+        <tr style="background:rgba(248,245,239,0.5)">
+          <td rowspan="3" class="col-espace">Maria Montessori (−1-14)<small>PMR ♿ · 4 pers.</small></td>
+          <td>À l'heure</td>
+          <td class="price-plein col-plein">20 €</td>
+          <td class="price-adherent col-adherent">15 €</td>
+          <td class="price-locataire col-locataire">10 €</td>
+          <td class="price-asso col-asso">Gratuit**</td>
+        </tr>
+        <tr style="background:rgba(248,245,239,0.5)">
+          <td>½ journée (4h)</td>
+          <td class="price-plein col-plein">60 €</td>
+          <td class="price-adherent col-adherent">45 €</td>
+          <td class="price-locataire col-locataire">30 €</td>
+          <td class="price-asso col-asso">Gratuit**</td>
+        </tr>
+        <tr style="background:rgba(248,245,239,0.5)">
+          <td>Journée (8h)</td>
+          <td class="price-plein col-plein">100 €</td>
+          <td class="price-adherent col-adherent">80 €</td>
+          <td class="price-locataire col-locataire">70 €</td>
+          <td class="price-asso col-asso">Gratuit**</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 2. COWORKING NOMADE -->
+  <div class="tarif-section" id="sec-cowork">
+    <div class="tarif-section-title">💻 Espaces coworking & bureaux nomades</div>
+    <table class="tarif-table">
+      <thead>
+        <tr>
+          <th>Espace</th>
+          <th>Type</th>
+          <th>Durée</th>
+          <th class="col-adherent">Adhérent</th>
+          <th class="col-plein">Non-adhérent</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- ARISTOTE -->
+        <tr>
+          <td rowspan="4" class="col-espace">Aristote (1-13)<small>Bureau privé · 7 m²</small></td>
+          <td rowspan="4">Privé</td>
+          <td>½ journée</td>
+          <td class="price-adherent col-adherent">12 €</td>
+          <td class="price-plein col-plein">18 €</td>
+        </tr>
+        <tr>
+          <td>Journée</td>
+          <td class="price-adherent col-adherent">22 €</td>
+          <td class="price-plein col-plein">33 €</td>
+        </tr>
+        <tr>
+          <td>Semaine HC</td>
+          <td class="price-adherent col-adherent">*90 €</td>
+          <td class="price-plein col-plein">*130 €</td>
+        </tr>
+        <tr>
+          <td>Mois HC</td>
+          <td class="price-adherent col-adherent">*200 €</td>
+          <td class="price-plein col-plein">*280 €</td>
+        </tr>
+        <!-- ROUSSEAU -->
+        <tr style="background:rgba(248,245,239,0.5)">
+          <td rowspan="4" class="col-espace">Jean-Jacques Rousseau (1-10)<small>Coworking ouvert · 28 m²</small></td>
+          <td rowspan="4">Coworking</td>
+          <td>½ journée</td>
+          <td class="price-adherent col-adherent">10 €</td>
+          <td class="price-plein col-plein">15 €</td>
+        </tr>
+        <tr style="background:rgba(248,245,239,0.5)">
+          <td>Journée</td>
+          <td class="price-adherent col-adherent">17 €</td>
+          <td class="price-plein col-plein">26 €</td>
+        </tr>
+        <tr style="background:rgba(248,245,239,0.5)">
+          <td>Semaine HC</td>
+          <td class="price-adherent col-adherent">*60 €</td>
+          <td class="price-plein col-plein">*90 €</td>
+        </tr>
+        <tr style="background:rgba(248,245,239,0.5)">
+          <td>Mois HC</td>
+          <td class="price-adherent col-adherent">*180 €</td>
+          <td class="price-plein col-plein">*250 €</td>
+        </tr>
+        <!-- MONTESSORI -->
+        <tr>
+          <td rowspan="4" class="col-espace">Maria Montessori (−1-14)<small>Bureau privé PMR ♿ · 12 m²</small></td>
+          <td rowspan="4">Privé</td>
+          <td>½ journée</td>
+          <td class="price-adherent col-adherent">15 €</td>
+          <td class="price-plein col-plein">22 €</td>
+        </tr>
+        <tr>
+          <td>Journée</td>
+          <td class="price-adherent col-adherent">27 €</td>
+          <td class="price-plein col-plein">40 €</td>
+        </tr>
+        <tr>
+          <td>Semaine HC</td>
+          <td class="price-adherent col-adherent">*100 €</td>
+          <td class="price-plein col-plein">*145 €</td>
+        </tr>
+        <tr>
+          <td>Mois HC</td>
+          <td class="price-adherent col-adherent">*216 €</td>
+          <td class="price-plein col-plein">*300 €</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size:0.8rem; color:var(--gray); margin-top:8px">* Prix hors charges. Le tarif adhérent est réservé aux membres à jour de cotisation (à partir de 15 €/an). Le tarif non-adhérent s'applique à toute personne ou structure non membre.</p>
+  </div>
+
+  <!-- 3. BAILS PRIVATIFS -->
+  <div class="tarif-section" id="sec-bails">
+    <div class="tarif-section-title">🔑 Bureaux privatifs en bail — jusqu'à 20% d'économie</div>
+
+    <p style="font-size:0.88rem; color:var(--gray); margin-bottom:20px">
+      Charges comprises (eau, électricité, internet fibre). TVA applicable selon statut. 7 bureaux disponibles de 18 à 50 m².
+    </p>
+
+    <div class="bail-table-wrap">
+      <div class="bail-table-head">
+        <h4>Tarifs au m² · toutes surfaces · charges incluses</h4>
+        <span>TVA en sus selon statut</span>
+      </div>
+      <div class="bail-grid">
+        <div class="bail-col best">
+          <div class="bail-col-name">Bail 3/6/9 — Meilleur tarif</div>
+          <div class="bail-col-price">15 €/m²/mois HC</div>
+          <div class="bail-col-note">Engagement minimal 3 mois · plus économique</div>
+          <div class="bail-col-badge">Meilleur tarif</div>
+        </div>
+        <div class="bail-col">
+          <div class="bail-col-name">Bail 1 an</div>
+          <div class="bail-col-price">17 €/m²/mois HC</div>
+          <div class="bail-col-note">Stabilité · engagement annuel</div>
+          <div class="bail-col-badge">−6% vs mensuel</div>
+        </div>
+        <div class="bail-col">
+          <div class="bail-col-name">Mensuel sans engagement</div>
+          <div class="bail-col-price">18 €/m²/mois HC</div>
+          <div class="bail-col-note">Flexibilité maximale</div>
+        </div>
+      </div>
+    </div>
+
+    <table class="tarif-table" style="margin-top:16px">
+      <thead>
+        <tr>
+          <th>Bureau</th>
+          <th>Surface</th>
+          <th>Bail 3/6/9</th>
+          <th>Bail 1 an</th>
+          <th>Mensuel</th>
+          <th>Capacité</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-espace">Louise Michel (0-01)</td>
+          <td>15 m²</td>
+          <td class="price-locataire" style="font-weight:700">*225 €/mois</td>
+          <td class="price-plein">*255 €/mois</td>
+          <td class="price-plein">*270 €/mois</td>
+          <td>1–2 pers.</td>
+        </tr>
+        <tr style="background:rgba(248,245,239,0.5)">
+          <td class="col-espace">Philippe Meirieu (0-03)</td>
+          <td>24 m²</td>
+          <td class="price-locataire" style="font-weight:700">*360 €/mois</td>
+          <td class="price-plein">*408 €/mois</td>
+          <td class="price-plein">*432 €/mois</td>
+          <td>2–3 pers.</td>
+        </tr>
+        <tr>
+          <td class="col-espace">Antoine Lavoisier (0-04)</td>
+          <td>19 m²</td>
+          <td class="price-locataire" style="font-weight:700">*285 €/mois</td>
+          <td class="price-plein">*323 €/mois</td>
+          <td class="price-plein">*342 €/mois</td>
+          <td>1–2 pers.</td>
+        </tr>
+        <tr style="background:rgba(248,245,239,0.5)">
+          <td class="col-espace">Aimée Césaire (1-07)</td>
+          <td>17 m²</td>
+          <td class="price-locataire" style="font-weight:700">*255 €/mois</td>
+          <td class="price-plein">*289 €/mois</td>
+          <td class="price-plein">*306 €/mois</td>
+          <td>1–2 pers.</td>
+        </tr>
+        <tr>
+          <td class="col-espace">Condorcet (1-08)</td>
+          <td>17 m²</td>
+          <td class="price-locataire" style="font-weight:700">*255 €/mois</td>
+          <td class="price-plein">*289 €/mois</td>
+          <td class="price-plein">*306 €/mois</td>
+          <td>1–2 pers.</td>
+        </tr>
+        <tr style="background:rgba(248,245,239,0.5)">
+          <td class="col-espace">Baden Powell (1-09)</td>
+          <td>16 m²</td>
+          <td class="price-locataire" style="font-weight:700">*240 €/mois</td>
+          <td class="price-plein">*272 €/mois</td>
+          <td class="price-plein">*288 €/mois</td>
+          <td>1–2 pers.</td>
+        </tr>
+        <tr>
+          <td class="col-espace">Célestin Freinet (1-11)</td>
+          <td>24 m²</td>
+          <td class="price-locataire" style="font-weight:700">*360 €/mois</td>
+          <td class="price-plein">*408 €/mois</td>
+          <td class="price-plein">*432 €/mois</td>
+          <td>2–3 pers.</td>
+        </tr>
+        <tr style="background:rgba(248,245,239,0.5)">
+          <td class="col-espace">Maria Montessori (−1-14) ♿ PMR</td>
+          <td>12 m²</td>
+          <td class="price-locataire" style="font-weight:700">*180 €/mois</td>
+          <td class="price-plein">*204 €/mois</td>
+          <td class="price-plein">*216 €/mois</td>
+          <td>1 pers.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 4. ADHÉSION -->
+  <div class="tarif-section" id="sec-adhesion">
+    <div class="tarif-section-title">🤝 Adhésion à l'association Génie</div>
+    <table class="tarif-table">
+      <thead>
+        <tr>
+          <th>Formule</th>
+          <th>Tarif annuel</th>
+          <th>Avantages principaux</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-espace">Individuel</td>
+          <td class="price-adherent" style="font-weight:700">30 à 80 € / an</td>
+          <td>Tarif progressif selon ressources · voix délibérative en AG · tarifs préférentiels sur tous les espaces</td>
+        </tr>
+        <tr style="background:rgba(248,245,239,0.5)">
+          <td class="col-espace">Entreprise / Structure ESS</td>
+          <td class="price-adherent" style="font-weight:700">150 € / an</td>
+          <td>Voix délibérative en AG · tarifs adhérent pour toute l'équipe · visibilité partenaire</td>
+        </tr>
+        <tr>
+          <td class="col-espace">Association / Structure ESS</td>
+          <td class="price-adherent" style="font-weight:700">50 € / an</td>
+          <td>Accès tarifs adhérents · salles gratuites si asso Villebourbon ou syndicat de travailleurs</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 5. SERVICES COMPLÉMENTAIRES -->
+  <div class="tarif-section" id="sec-services">
+    <div class="tarif-section-title">⚙️ Services complémentaires</div>
+    <div class="services-grid">
+      <div class="service-item">
+        <div class="service-name">Domiciliation entreprise</div>
+        <div class="service-price">80 €/mois</div>
+      </div>
+      <div class="service-item">
+        <div class="service-name">Domiciliation association</div>
+        <div class="service-price">40 €/mois</div>
+      </div>
+      <div class="service-item">
+        <div class="service-name">Accès 24h/7j (badge)</div>
+        <div class="service-price">5 €/mois</div>
+      </div>
+      <div class="service-item">
+        <div class="service-name">Casier personnel</div>
+        <div class="service-price">15 €/mois</div>
+      </div>
+      <div class="service-item">
+        <div class="service-name">Impression (par page)</div>
+        <div class="service-price">0,10 € N&B · 0,25 € couleur</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LÉGENDE -->
+  <div class="legende">
+    <div style="grid-column:1/-1; font-family:var(--font-head); font-weight:700; font-size:0.85rem; color:var(--navy); margin-bottom:4px">Légende des profils</div>
+    <div class="legende-item"><div class="legende-dot" style="background:var(--navy)"></div><span><strong>Tarif plein</strong> : non-adhérent</span></div>
+    <div class="legende-item"><div class="legende-dot" style="background:var(--warn)"></div><span><strong>Adhérent (~−20%)</strong> : adhésion 50€/an active</span></div>
+    <div class="legende-item"><div class="legende-dot" style="background:var(--teal)"></div><span><strong>Locataire (−50%)</strong> : bureaux privatifs en bail</span></div>
+    <div class="legende-item"><div class="legende-dot" style="background:var(--success)"></div><span><strong>Asso Villebourbon &amp; syndicats* Gratuit</strong> : associations loi 1901 de Villebourbon et syndicats de travailleurs de Montauban + adhésion Génie (50€/an) + réservation 72h à l'avance</span></div>
+    <div style="grid-column:1/-1; font-size:0.78rem; color:var(--gray); margin-top:4px">
+      ** Gratuit pour associations loi 1901 de Villebourbon et syndicats de travailleurs de Montauban : adhésion Génie (50 €/an) + réservation 72h avant + sous réserve de disponibilité. — * Prix hors charges. TCC = HC + 23 % (électricité, fibre, eau, ménage parties communes). — Tarifs HT. Mis à jour le 4 mai 2026 — modifiables par décision du Conseil d'Administration de l'Association Génie.
+    </div>
+  </div>
+
 </div>
-</div></section>
-<section class="process-section"><div class="container">
-<div class="section-header"><h2 class="section-title">Comment j'Interviens</h2><p style="max-width:700px;margin:20px auto 0;text-align:center;color:var(--text-light);">Une prise en main rapide et structurée dès les premières 48h</p></div>
-<div class="process-steps">
-<div class="process-step"><div class="step-number">J+1</div><h4>Immersion</h4><p>Entretiens direction, prise de connaissance des enjeux et identification des urgences</p></div>
-<div class="process-step"><div class="step-number">J+5</div><h4>Diagnostic</h4><p>Cartographie des forces, faiblesses et plan d'action prioritaire partagé avec les élus/CA</p></div>
-<div class="process-step"><div class="step-number">J+30</div><h4>Stabilisation</h4><p>Équipes mobilisées, processus critiques sécurisés, premiers résultats visibles</p></div>
-<div class="process-step"><div class="step-number">J+90</div><h4>Transition</h4><p>Bilan de mission, recommandations pour la suite et transfert vers le nouveau management</p></div>
-</div>
-</div></section>
-<section class="benefits-section"><div class="container">
-<div class="section-header"><h2 class="section-title">Pourquoi Choisir CCFA ?</h2></div>
-<div class="benefits-list">
-<div class="benefit-item"><div class="benefit-icon">🏛️</div><div><h4>Double Culture Publique/ESS</h4><p>Ex-DGS de collectivité et directeur de structures ESS : je comprends les codes, contraintes et cultures de vos organisations mieux qu'un consultant généraliste.</p></div></div>
-<div class="benefit-item"><div class="benefit-icon">⚡</div><div><h4>Disponibilité Immédiate</h4><p>Pas de délai de recrutement, pas de période d'essai. Je peux être opérationnel sous 72h pour les situations d'urgence.</p></div></div>
-<div class="benefit-item"><div class="benefit-icon">🎯</div><div><h4>Résultats Mesurables</h4><p>Chaque mission se conclut par un bilan de résultats concrets : indicateurs atteints, projets livrés, organisation stabilisée.</p></div></div>
-</div>
-</div></section>
-<section class="cta-section"><div class="container"><div class="cta-content">
-<h2>Besoin d'un Manager de Transition ?</h2>
-<p>Contactez-moi pour échanger sur votre situation. Premier entretien de cadrage gratuit.</p>
-<a href="contact.html" class="btn-primary-large">Nous Contacter</a>
-</div></div></section>
-<footer class="main-footer"><div class="container"><div class="footer-content">
-<div class="footer-col"><div class="footer-logo"><span class="logo-text">CCFA</span><span class="logo-subtitle">Chikhi Conseil Formation Audit</span></div><p class="footer-contact"><strong>Téléphone:</strong> 06 51 50 97 18<br><strong>Email:</strong> <a href="mailto:contact@c2fa.fr">contact@c2fa.fr</a><br><strong>Adresse:</strong> 12 rue du Génie<br>82000 Montauban</p></div>
-<div class="footer-col"><h4>Nos Services</h4><ul class="footer-links"><li><a href="service-ingenierie.html">Ingénierie de Formation</a></li><li><a href="service-audit.html">Audit Qualiopi</a></li><li><a href="service-essms.html">Évaluation ESSMS</a></li><li><a href="service-bilan.html">Bilan de Compétences</a></li></ul></div>
-<div class="footer-col"><h4>L'Entreprise</h4><ul class="footer-links"><li><a href="a-propos.html">À propos</a></li><li><a href="tarifs.html">Nos Tarifs</a></li><li><a href="service-management.html">Management de Transition</a></li><li><a href="service-territorial.html">Développement Territorial</a></li></ul></div>
-<div class="footer-col"><h4>Horaires</h4><p><strong>Du lundi au vendredi</strong><br>9h - 12h30 et 14h - 18h</p><div class="social-links"><a href="https://www.linkedin.com/in/samirchikhi/" target="_blank">in</a></div></div>
-</div><div class="footer-bottom"><p>&copy; <span class="current-year">2026</span> CCFA - Tous droits réservés | <a href="mentions-legales.html">Mentions Légales</a></p></div>
-</div></footer>
-<div class="floating-cta">
-<a href="tel:0651509718" class="floating-btn floating-btn-phone"><span>&#128222;</span><span>06 51 50 97 18</span></a>
-<a href="contact.html" class="floating-btn floating-btn-rdv"><span>&#128197;</span><span>Prendre rendez-vous</span></a>
-</div>
-<script src="script.js"></script>
+
+<footer style="background:#080F16; color:rgba(255,255,255,0.5); text-align:center; padding:24px; font-size:0.8rem">
+  <div style="font-family:var(--font-head); font-weight:800; font-size:1.1rem; color:#C9A84C; margin-bottom:8px">Génie</div>
+  Association Génie — 12 rue du Génie, 82000 Montauban · contact@genie-montauban.fr
+  <div style="margin-top:10px">
+    <a href="index.html" style="color:rgba(255,255,255,0.6); margin:0 8px">Accueil</a>
+    <a href="reservation.html" style="color:rgba(255,255,255,0.6); margin:0 8px">Réserver</a>
+    <a href="mentions-legales.html" style="color:rgba(255,255,255,0.6); margin:0 8px">Mentions légales</a>
+  </div>
+</footer>
+
+<script>
+/* ── FILTRE PROFIL ── */
+const profilNotes = {
+  plein: 'Non-adhérent · tarif standard',
+  adherent: 'Adhérent actif (50€/an) · environ −20% sur salles et coworking',
+  locataire: 'Locataire bureau privatif · −50% sur salles et coworking',
+  asso: 'Asso loi 1901 de Villebourbon ou syndicat de travailleurs de Montauban · adhésion Génie (50€/an) · salles gratuites sous conditions'
+};
+const profilCols = { plein: '.col-plein', adherent: '.col-adherent', locataire: '.col-locataire', asso: '.col-asso' };
+
+let currentProfil = 'plein';
+
+function setProfilActif(profil, btn) {
+  currentProfil = profil;
+  document.querySelectorAll('.profil-btn').forEach(b => {
+    b.className = 'profil-btn';
+  });
+  btn.className = `profil-btn active-${profil === 'plein' ? '' : profil}`.trim() + ' active';
+
+  document.getElementById('profilNote').textContent = profilNotes[profil];
+
+  // Surbrillance de la colonne active
+  document.querySelectorAll('.tarif-table td').forEach(td => td.classList.remove('col-active'));
+  if (profil !== 'plein') {
+    document.querySelectorAll(profilCols[profil]).forEach(td => td.classList.add('col-active'));
+  }
+}
+
+/* ── PRINT AUTO si ?print=1 ── */
+if (new URLSearchParams(window.location.search).get('print') === '1') {
+  window.addEventListener('load', () => setTimeout(() => window.print(), 600));
+}
+</script>
 </body>
 </html>
