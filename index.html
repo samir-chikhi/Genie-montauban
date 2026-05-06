@@ -504,37 +504,183 @@
 </div>
 
 <!-- ═══ TÉMOIGNAGES ═══ -->
-<section class="temoignages">
+<section class="temoignages" id="avis">
   <div class="container">
     <div style="text-align:center;margin-bottom:40px;">
       <div style="font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#C9993E;margin-bottom:8px;">Ce qu'ils en disent</div>
       <h2 style="font-family:'Playfair Display',serif;font-size:clamp(1.6rem,3vw,2.2rem);font-weight:900;color:#1C2B3A;letter-spacing:-.5px;">Ils travaillent au Génie.<br>Ils vous en parlent.</h2>
     </div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;">
-      <div style="background:white;border-radius:12px;padding:24px;border-left:4px solid #C9993E;box-shadow:0 2px 16px rgba(28,43,58,.07);">
-        <div style="color:#C9993E;font-size:14px;margin-bottom:12px;">★★★★★</div>
-        <p style="font-size:14px;line-height:1.7;color:#1C2B3A;font-style:italic;margin-bottom:16px;">« Un espace vraiment bien situé, calme et professionnel. L'équipe est accueillante et réactive. Je viens régulièrement pour mes réunions clients — les équipements sont au top. »</p>
-        <div style="font-weight:700;font-size:13px;color:#1C2B3A;">Responsable de projet</div>
-        <div style="font-size:12px;color:#6B7A8A;">Freelance, Montauban</div>
-      </div>
-      <div style="background:white;border-radius:12px;padding:24px;border-left:4px solid #4A7C6F;box-shadow:0 2px 16px rgba(28,43,58,.07);">
-        <div style="color:#C9993E;font-size:14px;margin-bottom:12px;">★★★★★</div>
-        <p style="font-size:14px;line-height:1.7;color:#1C2B3A;font-style:italic;margin-bottom:16px;">« Génie est devenu notre QG pour les formations. La salle Bourdelle est parfaite pour 25-30 participants, le matériel fonctionne vraiment bien et la gare est à deux pas. »</p>
-        <div style="font-weight:700;font-size:13px;color:#1C2B3A;">Coordinatrice de formation</div>
-        <div style="font-size:12px;color:#6B7A8A;">Association ESS, Tarn-et-Garonne</div>
-      </div>
-      <div style="background:white;border-radius:12px;padding:24px;border-left:4px solid #1C2B3A;box-shadow:0 2px 16px rgba(28,43,58,.07);">
-        <div style="color:#C9993E;font-size:14px;margin-bottom:12px;">★★★★★</div>
-        <p style="font-size:14px;line-height:1.7;color:#1C2B3A;font-style:italic;margin-bottom:16px;">« Je loue un bureau en bail depuis 4 mois. Le rapport qualité-prix est imbattable à Montauban pour un espace aussi central. Et la communauté du lieu apporte des opportunités inattendues. »</p>
-        <div style="font-weight:700;font-size:13px;color:#1C2B3A;">Consultante indépendante</div>
-        <div style="font-size:12px;color:#6B7A8A;">Locataire bail, Montauban</div>
-      </div>
-    </div>
+
+    <!-- STATS GLOBALES -->
+    <div id="gav-stats-row" style="display:none;justify-content:center;gap:16px;margin-bottom:32px;flex-wrap:wrap;"></div>
+
+    <!-- FILTRES PAR SERVICE -->
+    <div id="gav-filters" style="display:none;justify-content:center;flex-wrap:wrap;gap:8px;margin-bottom:28px;"></div>
+
+    <!-- GRILLE DES AVIS DYNAMIQUES -->
+    <div id="gav-loading" style="text-align:center;padding:2rem;color:#6B7A8A;font-size:14px;">Chargement des avis…</div>
+    <div id="gav-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;"></div>
+
+    <!-- BOUTON DONNER SON AVIS -->
     <div style="text-align:center;margin-top:28px;">
-      <a href="reservation.html" style="display:inline-block;background:#C9993E;color:white;padding:12px 28px;border-radius:8px;font-weight:700;font-size:14px;text-decoration:none;">Réserver votre première visite →</a>
+      <a href="https://forms.gle/9qtVCMTJbaiJSQVw7" target="_blank" rel="noopener"
+         style="display:inline-block;background:#C9993E;color:white;padding:12px 28px;border-radius:8px;font-weight:700;font-size:14px;text-decoration:none;margin-right:12px;">
+        ✍ Laisser mon avis
+      </a>
+      <a href="reservation.html"
+         style="display:inline-block;background:transparent;color:#1C2B3A;padding:12px 28px;border-radius:8px;font-weight:700;font-size:14px;text-decoration:none;border:2px solid #1C2B3A;">
+        Réserver une visite →
+      </a>
     </div>
   </div>
 </section>
+
+<script>
+(function() {
+  var SHEET_ID  = "1mf3D2YGnpWpzufGOaLLaomxAkuzp0AiJY7RzcbpIq2w";
+  var SHEET_TAB = "Avis_Qualite";
+  var NOTE_MIN  = 4;
+  // Indices colonnes (0-based) — ajuste si tes colonnes Forms diffèrent
+  // A=0 Horodatage, B=1 Note, C=2 Services, D=3 Ce qui a plu,
+  // E=4 À améliorer, F=5 Recommande, G=6 Prénom, H=7 Consentement, I=8 Approuvé
+  var COL = { NOTE:1, SERVICES:2, PLU:3, RECOMMANDE:5, PRENOM:6, APPROUVE:8 };
+
+  var url = "https://docs.google.com/spreadsheets/d/" + SHEET_ID
+          + "/gviz/tq?tqx=out:csv&sheet=" + encodeURIComponent(SHEET_TAB);
+
+  function parseCSV(text) {
+    var rows = [], lines = text.split(/\r?\n/);
+    for (var i = 1; i < lines.length; i++) {
+      var line = lines[i].trim();
+      if (!line) continue;
+      var cols = [], cur = '', inQ = false;
+      for (var j = 0; j < line.length; j++) {
+        var c = line[j];
+        if (c === '"') { inQ = !inQ; }
+        else if (c === ',' && !inQ) { cols.push(cur.trim()); cur = ''; }
+        else { cur += c; }
+      }
+      cols.push(cur.trim());
+      rows.push(cols);
+    }
+    return rows;
+  }
+
+  function stars(n) {
+    var s = '';
+    for (var i = 1; i <= 5; i++) s += (i <= n ? '★' : '☆');
+    return s;
+  }
+
+  function initials(p) {
+    p = (p||'').trim();
+    if (!p) return '?';
+    return p.split(' ').map(function(w){ return w[0]||''; }).join('').toUpperCase().slice(0,2);
+  }
+
+  function render(rows) {
+    var valid = rows.filter(function(r) {
+      return (r[COL.APPROUVE]||'').toLowerCase().trim() === 'oui'
+          && (parseInt(r[COL.NOTE])||0) >= NOTE_MIN;
+    });
+
+    document.getElementById('gav-loading').style.display = 'none';
+
+    if (!valid.length) {
+      document.getElementById('gav-grid').innerHTML =
+        '<p style="text-align:center;color:#6B7A8A;font-style:italic;grid-column:1/-1;">Les premiers avis arrivent bientôt…</p>';
+      return;
+    }
+
+    // Stats
+    var notes   = valid.map(function(r){ return parseInt(r[COL.NOTE])||0; });
+    var avg     = (notes.reduce(function(a,b){return a+b;},0)/notes.length).toFixed(1);
+    var pctReco = Math.round(valid.filter(function(r){
+      var v = (r[COL.RECOMMANDE]||'').toLowerCase();
+      return v.indexOf('oui')!==-1||v.indexOf('sans')!==-1||v.indexOf('probablement')!==-1;
+    }).length / valid.length * 100);
+
+    var statsRow = document.getElementById('gav-stats-row');
+    statsRow.innerHTML = [
+      ['<span style="font-size:1.5rem;font-weight:700;color:#1C2B3A">'+valid.length+'</span>', 'avis publiés'],
+      ['<span style="font-size:1.5rem;font-weight:700;color:#C9993E">'+avg+' / 5</span>', '<span style="color:#C9993E">'+stars(Math.round(avg))+'</span>'],
+      ['<span style="font-size:1.5rem;font-weight:700;color:#4A7C6F">'+pctReco+'%</span>', 'recommandent']
+    ].map(function(s){
+      return '<div style="background:white;border-radius:10px;padding:14px 24px;text-align:center;box-shadow:0 2px 12px rgba(28,43,58,.06);min-width:120px;">'
+        + s[0] + '<br><span style="font-size:11px;color:#6B7A8A;text-transform:uppercase;letter-spacing:.8px;">'+s[1]+'</span></div>';
+    }).join('');
+    statsRow.style.display = 'flex';
+
+    // Filtres
+    var cats = ['Tous'];
+    valid.forEach(function(r){
+      (r[COL.SERVICES]||'').split(/[,;\/]+/).forEach(function(s){
+        s = s.trim(); if (s && cats.indexOf(s) === -1) cats.push(s);
+      });
+    });
+    var filtersEl = document.getElementById('gav-filters');
+    filtersEl.innerHTML = cats.map(function(c, i){
+      return '<button onclick="gavFilter(this,\''+c.replace(/'/g,"\\'")+'\')" '
+        +'style="padding:5px 16px;border-radius:20px;border:1px solid '+(i===0?'#C9993E':'#ddd')+';'
+        +'background:'+(i===0?'#C9993E':'white')+';color:'+(i===0?'white':'#555')+';'
+        +'font-size:13px;cursor:pointer;font-weight:'+(i===0?'700':'400')+';">'
+        + c + '</button>';
+    }).join('');
+    filtersEl.style.display = 'flex';
+
+    window._gavAll = valid;
+    window.gavFilter = function(btn, cat) {
+      document.querySelectorAll('#gav-filters button').forEach(function(b){
+        b.style.background='white'; b.style.color='#555';
+        b.style.borderColor='#ddd'; b.style.fontWeight='400';
+      });
+      btn.style.background='#C9993E'; btn.style.color='white';
+      btn.style.borderColor='#C9993E'; btn.style.fontWeight='700';
+      renderCards(cat);
+    };
+
+    renderCards('Tous');
+  }
+
+  function renderCards(cat) {
+    var data = cat === 'Tous' ? window._gavAll : window._gavAll.filter(function(r){
+      return (r[COL.SERVICES]||'').indexOf(cat) !== -1;
+    });
+    var accents = ['#C9993E','#4A7C6F','#1C2B3A'];
+    var grid = document.getElementById('gav-grid');
+    if (!data.length) {
+      grid.innerHTML = '<p style="text-align:center;color:#6B7A8A;font-style:italic;grid-column:1/-1;">Aucun avis pour cette catégorie.</p>';
+      return;
+    }
+    grid.innerHTML = data.map(function(r, i){
+      var prenom  = (r[COL.PRENOM]||'').trim() || 'Anonyme';
+      var note    = parseInt(r[COL.NOTE])||0;
+      var quote   = (r[COL.PLU]||'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      var svc     = (r[COL.SERVICES]||'').split(/[,;\/]/)[0].trim();
+      var accent  = accents[i % accents.length];
+      var ini     = initials(prenom);
+      return '<div style="background:white;border-radius:12px;padding:24px;border-left:4px solid '+accent+';box-shadow:0 2px 16px rgba(28,43,58,.07);">'
+        +'<div style="color:#C9993E;font-size:14px;margin-bottom:8px;">'+stars(note)+'</div>'
+        +'<p style="font-size:14px;line-height:1.7;color:#1C2B3A;font-style:italic;margin-bottom:16px;">« '+quote+' »</p>'
+        +'<div style="display:flex;align-items:center;gap:10px;">'
+          +'<div style="width:32px;height:32px;border-radius:50%;background:'+accent+'22;color:'+accent+';font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">'+ini+'</div>'
+          +'<div><div style="font-weight:700;font-size:13px;color:#1C2B3A;">'+prenom.replace(/</g,'&lt;')+'</div>'
+          +(svc?'<div style="font-size:11px;color:#6B7A8A;">'+svc.replace(/</g,'&lt;')+'</div>':'')
+          +'</div>'
+        +'</div>'
+      +'</div>';
+    }).join('');
+  }
+
+  fetch(url)
+    .then(function(r){ return r.text(); })
+    .then(function(t){ render(parseCSV(t)); })
+    .catch(function(){
+      document.getElementById('gav-loading').innerHTML =
+        '<span style="color:#6B7A8A;font-style:italic;font-size:14px;">Les avis ne sont pas disponibles pour le moment.</span>';
+    });
+})();
+</script>
 
 <!-- ═══ ESPACES ═══ -->
 <section id="espaces">
