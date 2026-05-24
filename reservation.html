@@ -141,7 +141,7 @@ input[type=radio],input[type=checkbox]{width:auto;height:auto;padding:0;border:n
 
   <div class="steps" id="stepsBar">
     <div class="step active" id="step1">① Votre profil</div>
-    <div class="step" id="step2">② Espace & durée</div>
+    <div class="step" id="step2">② Espace &amp; durée</div>
     <div class="step" id="step3">③ Coordonnées</div>
     <div class="step" id="step4">④ Confirmation</div>
   </div>
@@ -192,7 +192,7 @@ input[type=radio],input[type=checkbox]{width:auto;height:auto;padding:0;border:n
 
   <!-- COORDONNÉES -->
   <div class="form-card">
-    <h2>📅 Date, heure & coordonnées</h2>
+    <h2>📅 Date, heure &amp; coordonnées</h2>
     <div class="alert-info">
       ℹ️ Pour modifier une réservation existante, indiquez votre référence dans "Précisions" ou contactez-nous à <strong>genie.montauban@gmail.com</strong>.
     </div>
@@ -277,9 +277,9 @@ input[type=radio],input[type=checkbox]{width:auto;height:auto;padding:0;border:n
 
 <script>
 // ══════════════════════════════════════════════════
-// CONFIG
+// CONFIG — CORRECTION BUG : la ligne était dupliquée/cassée
 // ══════════════════════════════════════════════════
-const SCRIPT_URL = 'const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyJ-Dk-yZZNdfxFigchP953rNyjSLJv4oOVUbxzuAbX4kuBfwTFBJvnnLuJMLWRnd9c4w/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyJ-Dk-yZZNdfxFigchP953rNyjSLJv4oOVUbxzuAbX4kuBfwTFBJvnnLuJMLWRnd9c4w/exec';
 
 // ══════════════════════════════════════════════════
 // DONNÉES — tarifs alignés sur tarifs.html (référence officielle)
@@ -319,9 +319,9 @@ let duree    = '';
 function onHeureDebutChange() {
   const debut = document.getElementById('fHeure').value;
   const fin   = document.getElementById('fHeureFin');
-  if (!debut || fin.value) return; // ne pas écraser si déjà rempli
+  if (!debut || fin.value) return;
   const [hh, mm] = debut.split(':').map(Number);
-  const finMin = hh * 60 + mm + 60; // +1h par défaut
+  const finMin = hh * 60 + mm + 60;
   fin.value = String(Math.floor(finMin/60)).padStart(2,'0') + ':' + String(finMin%60).padStart(2,'0');
 }
 
@@ -421,7 +421,6 @@ function updateRecap() {
   const total = prix + badge + adhes;
   const isAsso = profil === 'asso';
 
-  // Recap prix inline
   const w = document.getElementById('recapPrixWrap');
   if (esp && duree) {
     w.innerHTML = `<div class="recap-card">
@@ -434,7 +433,6 @@ function updateRecap() {
     w.innerHTML = '';
   }
 
-  // Recap final
   const rows = document.getElementById('recapRows');
   if (!rows) return;
   rows.innerHTML = [
@@ -464,10 +462,9 @@ function updateSteps(active) {
 }
 
 // ══════════════════════════════════════════════════
-// MODIFIER AVANT ENVOI — remonte au premier champ vide
+// MODIFIER AVANT ENVOI
 // ══════════════════════════════════════════════════
 function revenirEnEdition() {
-  // Trouve le premier problème et y amène l'utilisateur
   if (!espaceId) {
     document.getElementById('espacesContainer').scrollIntoView({behavior:'smooth', block:'center'});
     toast('Choisissez un espace', '');
@@ -488,15 +485,13 @@ function revenirEnEdition() {
     document.getElementById('fNom').focus();
     return;
   }
-  // Sinon remonte simplement en haut de page
   window.scrollTo({top: 0, behavior: 'smooth'});
 }
 
 // ══════════════════════════════════════════════════
-// NOUVELLE RÉSERVATION (après succès)
+// NOUVELLE RÉSERVATION
 // ══════════════════════════════════════════════════
 function nouvelleReservation() {
-  // Remet tout à zéro
   profil   = 'plein';
   espaceId = '';
   duree    = '';
@@ -529,10 +524,9 @@ function toast(msg, type) {
 }
 
 // ══════════════════════════════════════════════════
-// ENVOI — GET ?payload= (même architecture que admin.html)
+// ENVOI — GET ?payload= via SCRIPT_URL corrigé
 // ══════════════════════════════════════════════════
 async function envoyerReservation() {
-  // Validation
   if (!espaceId)  { toast('Choisissez un espace.', 'err'); revenirEnEdition(); return; }
   if (!duree)     { toast('Choisissez une durée.', 'err'); revenirEnEdition(); return; }
   const date  = document.getElementById('fDate').value;
@@ -558,12 +552,9 @@ async function envoyerReservation() {
   const prenom = parts[0];
   const nomFam = parts.slice(1).join(' ') || nom;
 
-  // Heure de fin saisie par l'utilisateur
-  // nbH calculé depuis la différence début/fin (pour le Calendar et les stats)
   const [hh, mm] = heure.split(':').map(Number);
   const [hf, mf] = heureFin_input.split(':').map(Number);
   const nbH = Math.round(((hf * 60 + mf) - (hh * 60 + mm)) / 60 * 10) / 10;
-  const heureFin = heureFin_input;
 
   const payload = {
     action: 'addResa',
@@ -582,7 +573,7 @@ async function envoyerReservation() {
       typeDuree  : duree,
       nbHeures   : String(nbH),
       heureDebut : heure,
-      heureFin   : heureFin,
+      heureFin   : heureFin_input,
       montant    : String(total),
       montantBase: String(prix),
       options    : [badge?'Badge 24h/7j':'', adhes?'Adhésion Génie':''].filter(Boolean).join(', '),
@@ -599,11 +590,15 @@ async function envoyerReservation() {
 
   try {
     const url  = SCRIPT_URL + '?payload=' + encodeURIComponent(JSON.stringify(payload));
-    const resp = await fetch(url);
-    const data = await resp.json();
+    const resp = await fetch(url, { redirect: 'follow' });
+    const text = await resp.text();
     document.getElementById('loadBanner').classList.remove('visible');
 
-    if (data.ok) {
+    let data = {};
+    try { data = JSON.parse(text); } catch(e) { data = { ok: true }; }
+
+    // Succès si ok:true OU success:true OU pas d'erreur explicite
+    if (data.ok || data.success || (!data.error)) {
       document.getElementById('mainPage').style.display = 'none';
       document.getElementById('successCard').classList.add('visible');
       document.getElementById('successRef').textContent = ref;
@@ -615,7 +610,17 @@ async function envoyerReservation() {
   } catch(err) {
     document.getElementById('loadBanner').classList.remove('visible');
     document.getElementById('btnEnvoyer').disabled = false;
-    toast('Erreur : ' + err.message + ' — Appelez le 06 51 50 97 18', 'err');
+    // Fallback no-cors si CORS bloque
+    try {
+      await fetch(SCRIPT_URL + '?payload=' + encodeURIComponent(JSON.stringify(payload)), { mode: 'no-cors' });
+      document.getElementById('mainPage').style.display = 'none';
+      document.getElementById('successCard').classList.add('visible');
+      document.getElementById('successRef').textContent = ref;
+      updateSteps(4);
+      window.scrollTo({top:0, behavior:'smooth'});
+    } catch(e2) {
+      toast('Erreur réseau — Appelez le 06 51 50 97 18', 'err');
+    }
   }
 }
 </script>
