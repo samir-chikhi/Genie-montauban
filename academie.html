@@ -1,0 +1,1733 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Académie des Compétences — Génie Montauban</title>
+  <meta name="description" content="L'Académie des Compétences du Génie : micro-formations de 3h animées par des experts locaux. Empowerment, Tech & Numérique, Gestion & Impact. À partir de 45 € — financement OPCO possible." />
+  <meta name="keywords" content="formation montauban, académie compétences, micro-formation, empowerment, leadership, IA, numérique, gestion, ESS, tiers-lieu" />
+  <meta property="og:title" content="Académie des Compétences — Le Génie Montauban" />
+  <meta property="og:description" content="18 modules de 3h, animés par des experts locaux. Leadership, Tech, Gestion. À partir de 45 €, financement OPCO possible." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.genie-montauban.fr/academie.html" />
+  <link rel="icon" type="image/png" href="favicon.png" />
+
+  <!-- Google Fonts : cohérence avec le site principal -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── Variables — cohérentes avec activites.html ─── */
+    :root {
+      --primary:    #2D6A4F;
+      --primary-d:  #1B4332;
+      --secondary:  #52B788;
+      --accent:     #B7E4C7;
+      --soft:       #D8F3DC;
+      --bg:         #F8FAF9;
+      --surface:    #FFFFFF;
+      --text:       #1B1B1B;
+      --muted:      #5A7A6E;
+      --radius:     12px;
+      --shadow:     0 4px 24px rgba(45,106,79,.10);
+
+      /* Couleurs filières */
+      --filiereA:   #7C3AED; /* violet — Empowerment */
+      --filiereA-bg:#F5F3FF;
+      --filiereB:   #1D4ED8; /* bleu   — Tech */
+      --filiereB-bg:#EFF6FF;
+      --filiereC:   #15803D; /* vert   — Gestion */
+      --filiereC-bg:#F0FDF4;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--surface);
+      border-bottom: 1px solid var(--accent);
+      padding: 0 clamp(1rem, 4vw, 3rem);
+      display: flex; align-items: center; justify-content: space-between;
+      height: 64px;
+      box-shadow: 0 2px 12px rgba(45,106,79,.08);
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .nav-links {
+      display: flex; gap: 2rem; list-style: none;
+      align-items: center;
+    }
+    .nav-links a {
+      text-decoration: none;
+      font-size: .9rem; font-weight: 500;
+      color: var(--muted);
+      transition: color .2s;
+      letter-spacing: .02em;
+    }
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--primary); }
+    .nav-links a.active {
+      border-bottom: 2px solid var(--secondary);
+      padding-bottom: 2px;
+    }
+    .nav-cta {
+      background: var(--primary);
+      color: #fff !important;
+      padding: .45rem 1.2rem;
+      border-radius: 50px;
+      transition: background .2s !important;
+    }
+    .nav-cta:hover { background: var(--primary-d) !important; color: #fff !important; }
+    .nav-toggle { display: none; background: none; border: none; cursor: pointer; }
+    .nav-toggle span {
+      display: block; width: 22px; height: 2px;
+      background: var(--primary); margin: 5px 0;
+      transition: transform .3s;
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      background: linear-gradient(135deg, var(--primary-d) 0%, var(--primary) 55%, #1d7a5f 100%);
+      padding: clamp(3rem,8vw,6rem) clamp(1rem,6vw,4rem);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .hero-label {
+      display: inline-block;
+      background: rgba(255,255,255,.15);
+      color: var(--accent);
+      font-size: .75rem; font-weight: 500;
+      letter-spacing: .12em; text-transform: uppercase;
+      padding: .35rem 1rem;
+      border-radius: 50px;
+      border: 1px solid rgba(255,255,255,.2);
+      margin-bottom: 1.2rem;
+      position: relative;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.6rem);
+      color: #fff;
+      line-height: 1.12;
+      position: relative;
+      margin-bottom: .8rem;
+    }
+    .hero h1 em { font-style: italic; color: var(--accent); }
+    .hero p {
+      color: rgba(255,255,255,.82);
+      font-size: 1.08rem;
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      position: relative;
+    }
+    .hero-stats {
+      display: flex; flex-wrap: wrap; gap: 1rem;
+      justify-content: center;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+    .hero-stat {
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.25);
+      color: #fff;
+      padding: .8rem 1.4rem;
+      border-radius: 12px;
+      text-align: center;
+      backdrop-filter: blur(4px);
+      min-width: 110px;
+    }
+    .hero-stat strong {
+      display: block;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.7rem;
+      line-height: 1.1;
+      color: var(--accent);
+    }
+    .hero-stat span { font-size: .78rem; opacity: .8; }
+    .hero-badges {
+      display: flex; flex-wrap: wrap; gap: .7rem;
+      justify-content: center;
+      position: relative;
+    }
+    .badge {
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.25);
+      color: #fff;
+      font-size: .82rem;
+      padding: .4rem .95rem;
+      border-radius: 50px;
+      backdrop-filter: blur(4px);
+    }
+
+    /* ─── BANDE PRINCIPES ─── */
+    .principes-bar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--accent);
+      padding: 1.2rem clamp(1rem,6vw,4rem);
+      display: flex; flex-wrap: wrap; gap: 1.5rem;
+      align-items: center; justify-content: center;
+    }
+    .principe-item {
+      display: flex; align-items: center; gap: .5rem;
+      font-size: .83rem; font-weight: 500;
+      color: var(--muted);
+    }
+    .principe-item .ico {
+      width: 32px; height: 32px;
+      background: var(--soft);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+    }
+
+    /* ─── FILTRES FILIÈRES ─── */
+    .filters-bar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--accent);
+      padding: 1rem clamp(1rem,6vw,4rem);
+      display: flex; flex-wrap: wrap; gap: .6rem;
+      align-items: center;
+      position: sticky; top: 64px; z-index: 90;
+    }
+    .filter-label {
+      font-size: .8rem; font-weight: 500;
+      color: var(--muted);
+      text-transform: uppercase; letter-spacing: .08em;
+      margin-right: .5rem;
+    }
+    .filter-btn {
+      border: 1.5px solid var(--accent);
+      background: transparent;
+      color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: .82rem; font-weight: 500;
+      padding: .4rem 1rem;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .filter-btn:hover { border-color: var(--primary); color: var(--primary); }
+    .filter-btn.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+    .filter-btn.filA.active { background: var(--filiereA); border-color: var(--filiereA); }
+    .filter-btn.filB.active { background: var(--filiereB); border-color: var(--filiereB); }
+    .filter-btn.filC.active { background: var(--filiereC); border-color: var(--filiereC); }
+
+    /* ─── MAIN ─── */
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem clamp(1rem,4vw,2rem) 5rem;
+    }
+
+    /* ─── SECTION HEADER ─── */
+    .section-header {
+      display: flex; align-items: center; gap: 1rem;
+      margin: 3rem 0 1.8rem;
+    }
+    .section-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      white-space: nowrap;
+    }
+    .section-header .line { flex: 1; height: 1px; background: var(--accent); }
+
+    /* ─── FILIÈRE INTRO CARD ─── */
+    .filiere-intro {
+      border-radius: var(--radius);
+      padding: 1.5rem 2rem;
+      margin-bottom: 1.8rem;
+      border: 1px solid;
+      display: flex; align-items: flex-start; gap: 1.2rem;
+    }
+    .filiere-intro.A { background: var(--filiereA-bg); border-color: rgba(124,58,237,.2); }
+    .filiere-intro.B { background: var(--filiereB-bg); border-color: rgba(29,78,216,.2); }
+    .filiere-intro.C { background: var(--filiereC-bg); border-color: rgba(21,128,61,.2); }
+    .filiere-intro-dot {
+      width: 14px; height: 14px; border-radius: 50%;
+      flex-shrink: 0; margin-top: 5px;
+    }
+    .A .filiere-intro-dot { background: var(--filiereA); }
+    .B .filiere-intro-dot { background: var(--filiereB); }
+    .C .filiere-intro-dot { background: var(--filiereC); }
+    .filiere-intro h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem; margin-bottom: .3rem;
+    }
+    .A .filiere-intro h3 { color: var(--filiereA); }
+    .B .filiere-intro h3 { color: var(--filiereB); }
+    .C .filiere-intro h3 { color: var(--filiereC); }
+    .filiere-intro p { font-size: .88rem; color: var(--muted); }
+
+    /* ─── GRILLE MODULES ─── */
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    /* ─── MODULE CARD ─── */
+    .module-card {
+      background: var(--surface);
+      border: 1px solid var(--accent);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      display: flex; flex-direction: column;
+      cursor: pointer;
+      transition: transform .25s, box-shadow .25s;
+    }
+    .module-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 36px rgba(45,106,79,.14);
+    }
+
+    .module-card-header {
+      padding: 1.2rem 1.4rem;
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 1rem;
+    }
+    .module-card.A .module-card-header { background: linear-gradient(135deg, var(--filiereA-bg), #ede9fe); border-bottom: 1px solid rgba(124,58,237,.12); }
+    .module-card.B .module-card-header { background: linear-gradient(135deg, var(--filiereB-bg), #dbeafe); border-bottom: 1px solid rgba(29,78,216,.12); }
+    .module-card.C .module-card-header { background: linear-gradient(135deg, var(--filiereC-bg), #dcfce7); border-bottom: 1px solid rgba(21,128,61,.12); }
+
+    .module-code {
+      font-family: 'DM Sans', monospace;
+      font-size: .72rem; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      padding: .25rem .65rem;
+      border-radius: 50px;
+    }
+    .A .module-code { background: rgba(124,58,237,.12); color: var(--filiereA); }
+    .B .module-code { background: rgba(29,78,216,.12); color: var(--filiereB); }
+    .C .module-code { background: rgba(21,128,61,.12); color: var(--filiereC); }
+
+    .module-price-badge {
+      font-size: .82rem; font-weight: 700;
+      padding: .25rem .7rem;
+      border-radius: 50px;
+    }
+    .module-price-badge.free { background: var(--soft); color: var(--primary-d); }
+    .module-price-badge.paid { background: #FEF3C7; color: #92400E; }
+
+    .module-card-body { padding: 1.2rem 1.4rem; flex: 1; display: flex; flex-direction: column; gap: .6rem; }
+
+    .module-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem; color: var(--text);
+      line-height: 1.25;
+    }
+    .module-tagline {
+      font-size: .83rem; color: var(--muted);
+      font-style: italic;
+      flex: 1;
+    }
+    .module-meta {
+      display: flex; flex-wrap: wrap; gap: .5rem;
+      margin-top: .4rem;
+    }
+    .module-meta-tag {
+      font-size: .75rem; font-weight: 500;
+      padding: .2rem .6rem;
+      border-radius: 50px;
+      background: var(--bg);
+      color: var(--muted);
+      border: 1px solid var(--accent);
+    }
+
+    .module-card-footer {
+      padding: .9rem 1.4rem;
+      border-top: 1px solid var(--accent);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .btn-detail {
+      font-size: .78rem; font-weight: 600;
+      color: var(--primary);
+      text-decoration: none;
+      border: 1.5px solid var(--primary);
+      padding: .3rem .8rem;
+      border-radius: 50px;
+      background: none;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: all .2s;
+    }
+    .btn-detail:hover { background: var(--primary); color: #fff; }
+    .module-format { font-size: .77rem; color: var(--muted); }
+
+    /* ─── MODAL FICHE ─── */
+    .modal-overlay {
+      display: none;
+      position: fixed; inset: 0; z-index: 999;
+      background: rgba(0,0,0,.5);
+      backdrop-filter: blur(4px);
+      align-items: center; justify-content: center;
+      padding: 1rem;
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: var(--surface);
+      border-radius: var(--radius);
+      max-width: 680px; width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 24px 80px rgba(0,0,0,.25);
+      animation: modalIn .25s ease;
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: translateY(20px) scale(.98); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    .modal-header {
+      padding: 1.5rem 1.8rem 1.2rem;
+      border-bottom: 1px solid var(--accent);
+      position: relative;
+    }
+    .modal-header.A { background: linear-gradient(135deg, var(--filiereA-bg), #ede9fe); }
+    .modal-header.B { background: linear-gradient(135deg, var(--filiereB-bg), #dbeafe); }
+    .modal-header.C { background: linear-gradient(135deg, var(--filiereC-bg), #dcfce7); }
+
+    .modal-close {
+      position: absolute; top: 1rem; right: 1rem;
+      background: rgba(0,0,0,.08); border: none;
+      width: 32px; height: 32px; border-radius: 50%;
+      cursor: pointer; font-size: 1rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s;
+    }
+    .modal-close:hover { background: rgba(0,0,0,.18); }
+
+    .modal-code {
+      font-size: .7rem; font-weight: 700; letter-spacing: .1em;
+      text-transform: uppercase; margin-bottom: .5rem;
+      display: inline-block;
+      padding: .2rem .6rem; border-radius: 50px;
+    }
+    .modal-header.A .modal-code { background: rgba(124,58,237,.15); color: var(--filiereA); }
+    .modal-header.B .modal-code { background: rgba(29,78,216,.15); color: var(--filiereB); }
+    .modal-header.C .modal-code { background: rgba(21,128,61,.15); color: var(--filiereC); }
+
+    .modal-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem; margin-bottom: .3rem;
+    }
+    .modal-tagline { font-size: .9rem; color: var(--muted); font-style: italic; margin-bottom: 1rem; }
+
+    .modal-infos {
+      display: flex; flex-wrap: wrap; gap: .6rem;
+    }
+    .modal-info-tag {
+      font-size: .78rem; font-weight: 500;
+      padding: .3rem .75rem;
+      border-radius: 50px;
+      background: rgba(255,255,255,.7);
+      border: 1px solid rgba(0,0,0,.1);
+      color: var(--text);
+    }
+
+    .modal-body { padding: 1.5rem 1.8rem; }
+
+    .modal-section { margin-bottom: 1.4rem; }
+    .modal-section h4 {
+      font-size: .78rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .1em;
+      color: var(--muted);
+      margin-bottom: .7rem;
+    }
+    .modal-section ul {
+      list-style: none;
+      display: flex; flex-direction: column; gap: .45rem;
+    }
+    .modal-section ul li {
+      font-size: .88rem;
+      padding-left: 1.3rem;
+      position: relative;
+    }
+    .modal-section ul li::before {
+      content: '✓';
+      position: absolute; left: 0;
+      font-weight: 700;
+    }
+    .modal-header.A ~ .modal-body .modal-section ul li::before { color: var(--filiereA); }
+    .modal-header.B ~ .modal-body .modal-section ul li::before { color: var(--filiereB); }
+
+    .programme-temps {
+      background: var(--bg);
+      border-radius: 8px;
+      padding: .9rem 1rem;
+      margin-bottom: .6rem;
+      border-left: 3px solid var(--accent);
+    }
+    .A-border .programme-temps { border-left-color: var(--filiereA); }
+    .B-border .programme-temps { border-left-color: var(--filiereB); }
+    .C-border .programme-temps { border-left-color: var(--filiereC); }
+
+    .programme-temps strong {
+      font-size: .82rem; font-weight: 700;
+      display: block; margin-bottom: .3rem;
+    }
+    .programme-temps ul {
+      list-style: none; margin: 0;
+    }
+    .programme-temps ul li {
+      font-size: .83rem; color: var(--muted);
+      padding-left: 1.2rem; position: relative;
+      margin-bottom: .2rem;
+    }
+    .programme-temps ul li::before { content: '→'; position: absolute; left: 0; }
+
+    .modal-gift {
+      background: linear-gradient(135deg, var(--soft), var(--accent));
+      border-radius: 10px;
+      padding: 1rem 1.2rem;
+      font-size: .88rem;
+      border: 1px solid rgba(82,183,136,.3);
+    }
+    .modal-gift strong { display: block; margin-bottom: .3rem; font-size: .78rem; text-transform: uppercase; letter-spacing: .08em; color: var(--primary-d); }
+
+    .modal-footer {
+      padding: 1.2rem 1.8rem;
+      border-top: 1px solid var(--accent);
+      display: flex; gap: 1rem; align-items: center;
+      flex-wrap: wrap;
+    }
+    .btn-inscrire {
+      background: var(--primary);
+      color: #fff;
+      text-decoration: none;
+      font-weight: 600; font-size: .9rem;
+      padding: .7rem 1.5rem;
+      border-radius: 50px;
+      transition: background .2s, transform .15s;
+      border: none; cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .btn-inscrire:hover { background: var(--primary-d); transform: translateY(-1px); }
+    .modal-footer-note { font-size: .8rem; color: var(--muted); }
+
+    /* ─── SECTION FINANCEMENT ─── */
+    .financement-section {
+      background: var(--surface);
+      border: 1px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-top: 3rem;
+      box-shadow: var(--shadow);
+    }
+    .financement-section h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem; margin-bottom: 1rem;
+      color: var(--primary-d);
+    }
+    .financement-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+    .financement-card {
+      background: var(--bg);
+      border-radius: 10px;
+      padding: 1rem 1.1rem;
+      border: 1px solid var(--accent);
+    }
+    .financement-card strong {
+      display: block; font-size: .9rem;
+      color: var(--primary-d); margin-bottom: .3rem;
+    }
+    .financement-card span { font-size: .82rem; color: var(--muted); }
+
+    /* ─── SECTION PASS ─── */
+    .pass-section {
+      background: linear-gradient(135deg, var(--primary-d), var(--primary));
+      border-radius: var(--radius);
+      padding: 2.5rem;
+      text-align: center;
+      margin-top: 2rem;
+      position: relative; overflow: hidden;
+    }
+    .pass-section::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .pass-section h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem; color: #fff;
+      margin-bottom: .5rem; position: relative;
+    }
+    .pass-section p {
+      color: rgba(255,255,255,.78); font-size: .9rem;
+      max-width: 500px; margin: 0 auto 1.5rem;
+      position: relative;
+    }
+    .btn-white {
+      display: inline-block;
+      background: #fff; color: var(--primary);
+      font-weight: 700; font-size: .9rem;
+      padding: .75rem 2rem;
+      border-radius: 50px;
+      text-decoration: none;
+      position: relative;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.15); }
+
+    /* ─── CTA FORMATEUR ─── */
+    .formateur-banner {
+      background: var(--bg);
+      border: 1.5px dashed var(--secondary);
+      border-radius: var(--radius);
+      padding: 1.8rem 2rem;
+      text-align: center;
+      margin-top: 2rem;
+    }
+    .formateur-banner h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem; margin-bottom: .5rem;
+      color: var(--primary-d);
+    }
+    .formateur-banner p { font-size: .88rem; color: var(--muted); margin-bottom: 1rem; }
+
+    /* ─── SOCIAL ─── */
+    .social-banner {
+      background: linear-gradient(135deg, var(--soft) 0%, var(--accent) 100%);
+      border-radius: var(--radius);
+      padding: 2.5rem;
+      text-align: center;
+      margin-top: 2rem;
+      border: 1px solid rgba(82,183,136,.3);
+    }
+    .social-banner h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem; color: var(--primary-d);
+      margin-bottom: .6rem;
+    }
+    .social-banner p { color: var(--muted); font-size: .9rem; max-width: 480px; margin: 0 auto 1.5rem; }
+    .social-links { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn-social {
+      display: inline-flex; align-items: center; gap: .6rem;
+      padding: .7rem 1.6rem; border-radius: 50px;
+      font-size: .88rem; font-weight: 600; text-decoration: none;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .btn-social:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.12); }
+    .btn-linkedin { background: #0A66C2; color: #fff; }
+    .btn-facebook { background: #1877F2; color: #fff; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--primary-d);
+      color: rgba(255,255,255,.7);
+      text-align: center;
+      padding: 2rem;
+      font-size: .82rem;
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-links.open {
+        display: flex; flex-direction: column;
+        position: absolute; top: 64px; left: 0; right: 0;
+        background: var(--surface);
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid var(--accent);
+        gap: 1rem; z-index: 99;
+      }
+      .nav-toggle { display: block; }
+      .modules-grid { grid-template-columns: 1fr; }
+      .filters-bar { top: 64px; }
+      .modal-body, .modal-header, .modal-footer { padding-left: 1.2rem; padding-right: 1.2rem; }
+      .hero-stats { gap: .6rem; }
+      .hero-stat { min-width: 80px; padding: .6rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════ NAVIGATION ══════════ -->
+<nav>
+  <a href="index.html" class="nav-logo">Génie</a>
+  <button class="nav-toggle" id="menuToggle" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html">Accueil</a></li>
+    <li><a href="index.html#espaces">Espaces</a></li>
+    <li><a href="index.html#tarifs">Tarifs</a></li>
+    <li><a href="activites.html">Activités</a></li>
+    <li><a href="academie.html" class="active">Académie</a></li>
+    <li><a href="reservation.html" class="nav-cta">Réserver</a></li>
+  </ul>
+</nav>
+
+<!-- ══════════ HERO ══════════ -->
+<section class="hero">
+  <div class="hero-label">Tiers-lieu Génie · Montauban · T3 2026</div>
+  <h1>L'<em>Académie</em><br>des Compétences</h1>
+  <p>Montez en compétences en 3 heures, animé par quelqu'un que vous pouvez croiser au marché le samedi matin — sur un sujet qui change vraiment votre quotidien.</p>
+
+  <div class="hero-stats">
+    <div class="hero-stat"><strong>18</strong><span>modules</span></div>
+    <div class="hero-stat"><strong>3h</strong><span>par session</span></div>
+    <div class="hero-stat"><strong>45€</strong><span>à partir de</span></div>
+    <div class="hero-stat"><strong>OPCO</strong><span>finançable</span></div>
+    <div class="hero-stat"><strong>100%</strong><span>local</span></div>
+  </div>
+
+  <div class="hero-badges">
+    <span class="badge">🟣 Empowerment & Leadership</span>
+    <span class="badge">🔵 Tech & Numérique</span>
+    <span class="badge">🟢 Gestion & Impact</span>
+    <span class="badge">📍 12 rue du Génie, Montauban</span>
+  </div>
+</section>
+
+<!-- ══════════ PRINCIPES ══════════ -->
+<div class="principes-bar">
+  <div class="principe-item"><div class="ico">📍</div> <span><strong>Local</strong> — formateurs du bassin 82</span></div>
+  <div class="principe-item"><div class="ico">🛠️</div> <span><strong>Pratique</strong> — livrable concret en sortie</span></div>
+  <div class="principe-item"><div class="ico">💶</div> <span><strong>Accessible</strong> — &lt; 60 € · OPCO possible</span></div>
+  <div class="principe-item"><div class="ico">📈</div> <span><strong>Progressif</strong> — parcours modulable</span></div>
+  <div class="principe-item"><div class="ico">🤝</div> <span><strong>Communautaire</strong> — réseau Génie inclus</span></div>
+</div>
+
+<!-- ══════════ FILTRES ══════════ -->
+<div class="filters-bar">
+  <span class="filter-label">Filière :</span>
+  <button class="filter-btn active" data-filter="all">Toutes les filières</button>
+  <button class="filter-btn filA" data-filter="A">🟣 Empowerment & Leadership</button>
+  <button class="filter-btn filB" data-filter="B">🔵 Tech & Numérique</button>
+  <button class="filter-btn filC" data-filter="C">🟢 Gestion & Impact</button>
+</div>
+
+<!-- ══════════ CONTENU PRINCIPAL ══════════ -->
+<main>
+
+  <!-- ══ FILIÈRE A ══ -->
+  <div class="section-header" data-filiere="A">
+    <h2 style="color:var(--filiereA)">🟣 Filière A · Empowerment &amp; Leadership</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="filiere-intro A" data-filiere="A">
+    <div class="filiere-intro-dot"></div>
+    <div>
+      <h3>Empowerment &amp; Leadership</h3>
+      <p>Capitalise sur le succès de la Soirée Empowerment. Public prioritaire : femmes actives, managers intermédiaires, porteurs de projet en quête de légitimité. Prenez la parole, négociez, pitchez, dirigez.</p>
+    </div>
+  </div>
+
+  <div class="modules-grid">
+
+    <!-- A1 -->
+    <div class="module-card A" data-filiere="A" onclick="openModal('A1')">
+      <div class="module-card-header">
+        <div>
+          <span class="module-code">A1</span>
+          <div class="module-title" style="margin-top:.5rem">Prise de parole en public</div>
+        </div>
+        <span class="module-price-badge paid">50 €</span>
+      </div>
+      <div class="module-card-body">
+        <div class="module-tagline">Prendre la parole sans stress, avec impact — en 3h de pratique intensive</div>
+        <div class="module-meta">
+          <span class="module-meta-tag">⏱ 3h</span>
+          <span class="module-meta-tag">🌙 Soirée</span>
+          <span class="module-meta-tag">💶 OPCO / Autofinancement</span>
+        </div>
+      </div>
+      <div class="module-card-footer">
+        <span class="module-format">📹 Mise en situation filmée</span>
+        <button class="btn-detail" onclick="openModal('A1');event.stopPropagation()">Voir la fiche →</button>
+      </div>
+    </div>
+
+    <!-- A2 -->
+    <div class="module-card A" data-filiere="A" onclick="openModal('A2')">
+      <div class="module-card-header">
+        <div>
+          <span class="module-code">A2</span>
+          <div class="module-title" style="margin-top:.5rem">Négocier autrement</div>
+        </div>
+        <span class="module-price-badge paid">50 €</span>
+      </div>
+      <div class="module-card-body">
+        <div class="module-tagline">Méthodes non-conflictuelles pour obtenir ce que vous voulez sans brûler les ponts</div>
+        <div class="module-meta">
+          <span class="module-meta-tag">⏱ 3h</span>
+          <span class="module-meta-tag">☀️ Samedi matin</span>
+          <span class="module-meta-tag">CNV · BATNA</span>
+        </div>
+      </div>
+      <div class="module-card-footer">
+        <span class="module-format">🎭 Jeux de rôle inclus</span>
+        <button class="btn-detail" onclick="openModal('A2');event.stopPropagation()">Voir la fiche →</button>
+      </div>
+    </div>
+
+    <!-- A3 -->
+    <div class="module-card A" data-filiere="A" onclick="openModal('A3')">
+      <div class="module-card-header">
+        <div>
+          <span class="module-code">A3</span>
+          <div class="module-title" style="margin-top:.5rem">Créer son activité ESS</div>
+        </div>
+        <span class="module-price-badge free">GRATUIT*</span>
+      </div>
+      <div class="module-card-body">
+        <div class="module-tagline">Du projet à la structure juridique : association, SCOP, micro-entreprise — sans se perdre</div>
+        <div class="module-meta">
+          <span class="module-meta-tag">⏱ 3h</span>
+          <span class="module-meta-tag">☀️ Samedi matin</span>
+          <span class="module-meta-tag">🏛️ Département 82</span>
+        </div>
+      </div>
+      <div class="module-card-footer">
+        <span class="module-format">📋 Feuille de route remise</span>
+        <button class="btn-detail" onclick="openModal('A3');event.stopPropagation()">Voir la fiche →</button>
+      </div>
+    </div>
+
+    <!-- A4 -->
+    <div class="module-card A" data-filiere="A" onclick="openModal('A4')">
+      <div class="module-card-header">
+        <div>
+          <span class="module-code">A4</span>
+          <div class="module-title" style="margin-top:.5rem">Leadership au féminin</div>
+        </div>
+        <span class="module-price-badge paid">45 €</span>
+      </div>
+      <div class="module-card-body">
+        <div class="module-tagline">Affirmer son leadership, briser les biais, construire son réseau stratégique</div>
+        <div class="module-meta">
+          <span class="module-meta-tag">⏱ 3h</span>
+          <span class="module-meta-tag">🌙 Soirée</span>
+          <span class="module-meta-tag">💬 Cercle de parole</span>
+        </div>
+      </div>
+      <div class="module-card-footer">
+        <span class="module-format">🗺️ Carte de réseau offerte</span>
+        <button class="btn-detail" onclick="openModal('A4');event.stopPropagation()">Voir la fiche →</button>
+      </div>
+    </div>
+
+    <!-- A5 -->
+    <div class="module-card A" data-filiere="A" onclick="openModal('A5')">
+      <div class="module-card-header">
+        <div>
+          <span class="module-code">A5</span>
+          <div class="module-title" style="margin-top:.5rem">Énergie &amp; priorités</div>
+        </div>
+        <span class="module-price-badge paid">50 €</span>
+      </div>
+      <div class="module-card-body">
+        <div class="module-tagline">Retrouver du temps, de l'énergie et de la clarté quand on gère plusieurs casquettes</div>
+        <div class="module-meta">
+          <span class="module-meta-tag">⏱ 3h</span>
+          <span class="module-meta-tag">☀️ Samedi matin</span>
+          <span class="module-meta-tag">⚡ Eisenhower · GTD</span>
+        </div>
+      </div>
+      <div class="module-card-footer">
+        <span class="module-format">📅 Agenda restructuré remis</span>
+        <button class="btn-detail" onclick="openModal('A5');event.stopPropagation()">Voir la fiche →</button>
+      </div>
+    </div>
+
+    <!-- A6 -->
+    <div class="module-card A" data-filiere="A" onclick="openModal('A6')">
+      <div class="module-card-header">
+        <div>
+          <span class="module-code">A6</span>
+          <div class="module-title" style="margin-top:.5rem">Pitch ton projet</div>
+        </div>
+        <span class="module-price-badge paid">50 €</span>
+      </div>
+      <div class="module-card-body">
+        <div class="module-tagline">Convaincre en 3 minutes : financeurs, partenaires, clients — en scène ouverte</div>
+        <div class="module-meta">
+          <span class="module-meta-tag">⏱ 3h</span>
+          <span class="module-meta-tag">🎤 Scène ouverte</span>
+          <span class="module-meta-tag">👥 Panel externe</span>
+        </div>
+      </div>
+      <div class="module-card-footer">
+        <span class="module-format">📝 Pitch écrit finalisé</span>
+        <button class="btn-detail" onclick="openModal('A6');event.stopPropagation()">Voir la fiche →</button>
+      </div>
+    </div>
+
+  </div><!-- /modules-grid A -->
+
+  <!-- ══ FILIÈRE B ══ -->
+  <div class="section-header" data-filiere="B">
+    <h2 style="color:var(--filiereB)">🔵 Filière B · Tech &amp; Numérique</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="filiere-intro B" data-filiere="B">
+    <div class="filiere-intro-dot"></div>
+    <div>
+      <h3>Tech &amp; Numérique</h3>
+      <p>Capitalise sur Crypto Génie en l'ouvrant à un public plus large. L'entrée se fait par des sujets grand public (IA, outils) avant de monter en technicité. Chaque session produit un livrable concret utilisable dès le lendemain.</p>
+    </div>
+  </div>
+
+  <div class="modules-grid">
+
+    <!-- B1 -->
+    <div class="module-card B" data-filiere="B" onclick="openModal('B1')">
+      <div class="module-card-header">
+        <div>
+          <span class="module-code">B1</span>
+          <div class="module-title" style="margin-top:.5rem">IA au quotidien</div>
+        </div>
+        <span class="module-price-badge paid">55 €</span>
+      </div>
+      <div class="module-card-body">
+        <div class="module-tagline">ChatGPT, Claude, Gemini : 5 prompts personnalisés à votre métier, en repartant ce soir</div>
+        <div class="module-meta">
+          <span class="module-meta-tag">⏱ 3h</span>
+          <span class="module-meta-tag">🌙 Soirée</span>
+          <span class="module-meta-tag">🤖 Méthode RACI</span>
+        </div>
+      </div>
+      <div class="module-card-footer">
+        <span class="module-format">📚 5 prompts perso remis</span>
+        <button class="btn-detail" onclick="openModal('B1');event.stopPropagation()">Voir la fiche →</button>
+      </div>
+    </div>
+
+    <!-- B2 -->
+    <div class="module-card B" data-filiere="B" onclick="openModal('B2')">
+      <div class="module-card-header">
+        <div>
+          <span class="module-code">B2</span>
+          <div class="module-title" style="margin-top:.5rem">Canva Pro</div>
+        </div>
+        <span class="module-price-badge paid">50 €</span>
+      </div>
+      <div class="module-card-body">
+        <div class="module-tagline">De zéro à un kit graphique pro : 3 visuels finalisés et prêts à publier ce matin</div>
+        <div class="module-meta">
+          <span class="module-meta-tag">⏱ 3h</span>
+          <span class="module-meta-tag">☀️ Samedi matin</span>
+          <span class="module-meta-tag">🎨 Kit de marque</span>
+        </div>
+      </div>
+      <div class="module-card-footer">
+        <span class="module-format">🖼️ 3 visuels prêts à publier</span>
+        <button class="btn-detail" onclick="openModal('B2');event.stopPropagation()">Voir la fiche →</button>
+      </div>
+    </div>
+
+    <!-- B3 -->
+    <div class="module-card B" data-filiere="B" onclick="openModal('B3')">
+      <div class="module-card-header">
+        <div>
+          <span class="module-code">B3</span>
+          <div class="module-title" style="margin-top:.5rem">Instagram &amp; LinkedIn Pro</div>
+        </div>
+        <span class="module-price-badge paid">55 €</span>
+      </div>
+      <div class="module-card-body">
+        <div class="module-tagline">Stratégie, algorithmes, calendrier éditorial : créer sa première série de posts ce soir</div>
+        <div class="module-meta">
+          <span class="module-meta-tag">⏱ 3h</span>
+          <span class="module-meta-tag">🌙 Soirée</span>
+          <span class="module-meta-tag">📱 Algo 2026</span>
+        </div>
+      </div>
+      <div class="module-card-footer">
+        <span class="module-format">📅 Calendrier 4 semaines remis</span>
+        <button class="btn-detail" onclick="openModal('B3');event.stopPropagation()">Voir la fiche →</button>
+      </div>
+    </div>
+
+    <!-- B4 -->
+    <div class="module-card B" data-filiere="B" onclick="openModal('B4')">
+      <div class="module-card-header">
+        <div>
+          <span class="module-code">B4</span>
+          <div class="module-title" style="margin-top:.5rem">Crypto &amp; Blockchain</div>
+        </div>
+        <span class="module-price-badge paid">60 €</span>
+      </div>
+      <div class="module-card-body">
+        <div class="module-tagline">Niveau zéro à intermédiaire : comprendre, évaluer les risques, décider en connaissance de cause</div>
+        <div class="module-meta">
+          <span class="module-meta-tag">⏱ 3h</span>
+          <span class="module-meta-tag">🌙 Soirée</span>
+          <span class="module-meta-tag">₿ Bitcoin · ETH</span>
+        </div>
+      </div>
+      <div class="module-card-footer">
+        <span class="module-format">🔐 Wallet démo créé</span>
+        <button class="btn-detail" onclick="openModal('B4');event.stopPropagation()">Voir la fiche →</button>
+      </div>
+    </div>
+
+    <!-- B5 -->
+    <div class="module-card B" data-filiere="B" onclick="openModal('B5')">
+      <div class="module-card-header">
+        <div>
+          <span class="module-code">B5</span>
+          <div class="module-title" style="margin-top:.5rem">Cybersécurité pour non-techs</div>
+        </div>
+        <span class="module-price-badge paid">50 €</span>
+      </div>
+      <div class="module-card-body">
+        <div class="module-tagline">Protéger ses données, ses comptes, son asso ou sa TPE — checklist personnalisée en sortie</div>
+        <div class="module-meta">
+          <span class="module-meta-tag">⏱ 3h</span>
+          <span class="module-meta-tag">☀️ Samedi matin</span>
+          <span class="module-meta-tag">🔒 Bitwarden · 2FA</span>
+        </div>
+      </div>
+      <div class="module-card-footer">
+        <span class="module-format">✅ Checklist 15 points remise</span>
+        <button class="btn-detail" onclick="openModal('B5');event.stopPropagation()">Voir la fiche →</button>
+      </div>
+    </div>
+
+    <!-- B6 -->
+    <div class="module-card B" data-filiere="B" onclick="openModal('B6')">
+      <div class="module-card-header">
+        <div>
+          <span class="module-code">B6</span>
+          <div class="module-title" style="margin-top:.5rem">Automatiser ses tâches</div>
+        </div>
+        <span class="module-price-badge paid">65 €</span>
+      </div>
+      <div class="module-card-body">
+        <div class="module-tagline">Zapier, Make, Google Sheets avancé : créer 1 automatisation fonctionnelle ce soir</div>
+        <div class="module-meta">
+          <span class="module-meta-tag">⏱ 3h</span>
+          <span class="module-meta-tag">🌙 Soirée</span>
+          <span class="module-meta-tag">⚙️ Niveau intermédiaire</span>
+        </div>
+      </div>
+      <div class="module-card-footer">
+        <span class="module-format">🤖 Automatisation en prod</span>
+        <button class="btn-detail" onclick="openModal('B6');event.stopPropagation()">Voir la fiche →</button>
+      </div>
+    </div>
+
+  </div><!-- /modules-grid B -->
+
+  <!-- ══ FILIÈRE C ══ -->
+  <div class="section-header" data-filiere="C">
+    <h2 style="color:var(--filiereC)">🟢 Filière C · Gestion &amp; Impact</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="filiere-intro C" data-filiere="C">
+    <div class="filiere-intro-dot"></div>
+    <div>
+      <h3>Gestion &amp; Impact</h3>
+      <p>La filière la plus finançable (OPCO, France Travail, subventions associatives). Public : chefs de projet associatifs, indépendants, TPE. Gérez, financez, conformez-vous — simplement.</p>
+    </div>
+  </div>
+
+  <div class="modules-grid">
+
+    <!-- C1 -->
+    <div class="module-card C" data-filiere="C" onclick="openModal('C1')">
+      <div class="module-card-header">
+        <div>
+          <span class="module-code">C1</span>
+          <div class="module-title" style="margin-top:.5rem">Demande de subvention</div>
+        </div>
+        <span class="module-price-badge free">GRATUIT*</span>
+      </div>
+      <div class="module-card-body">
+        <div class="module-tagline">Structure, pièges à éviter, budget prévisionnel : ébaucher sa propre demande ce matin</div>
+        <div class="module-meta">
+          <span class="module-meta-tag">⏱ 3h</span>
+          <span class="module-meta-tag">☀️ Samedi matin</span>
+          <span class="module-meta-tag">🏛️ Département 82</span>
+        </div>
+      </div>
+      <div class="module-card-footer">
+        <span class="module-format">📄 Trame dossier + 5 contacts</span>
+        <button class="btn-detail" onclick="openModal('C1');event.stopPropagation()">Voir la fiche →</button>
+      </div>
+    </div>
+
+    <!-- C2 -->
+    <div class="module-card C" data-filiere="C" onclick="openModal('C2')">
+      <div class="module-card-header">
+        <div>
+          <span class="module-code">C2</span>
+          <div class="module-title" style="margin-top:.5rem">Comptabilité pour les assos</div>
+        </div>
+        <span class="module-price-badge paid">45 €</span>
+      </div>
+      <div class="module-card-body">
+        <div class="module-tagline">Compte de résultat, trésorerie, budget prévisionnel : gérer ses finances sans être comptable</div>
+        <div class="module-meta">
+          <span class="module-meta-tag">⏱ 3h</span>
+          <span class="module-meta-tag">☀️ Samedi matin</span>
+          <span class="module-meta-tag">📊 LibreOffice · Excel</span>
+        </div>
+      </div>
+      <div class="module-card-footer">
+        <span class="module-format">📋 Tableur budget remis</span>
+        <button class="btn-detail" onclick="openModal('C2');event.stopPropagation()">Voir la fiche →</button>
+      </div>
+    </div>
+
+    <!-- C3 -->
+    <div class="module-card C" data-filiere="C" onclick="openModal('C3')">
+      <div class="module-card-header">
+        <div>
+          <span class="module-code">C3</span>
+          <div class="module-title" style="margin-top:.5rem">RGPD pour TPE et assos</div>
+        </div>
+        <span class="module-price-badge paid">50 €</span>
+      </div>
+      <div class="module-card-body">
+        <div class="module-tagline">Ce que la loi exige réellement — registre de traitement créé pendant la session</div>
+        <div class="module-meta">
+          <span class="module-meta-tag">⏱ 3h</span>
+          <span class="module-meta-tag">🌙 Soirée</span>
+          <span class="module-meta-tag">⚖️ CNIL · Conformité</span>
+        </div>
+      </div>
+      <div class="module-card-footer">
+        <span class="module-format">📋 Registre + mentions légales</span>
+        <button class="btn-detail" onclick="openModal('C3');event.stopPropagation()">Voir la fiche →</button>
+      </div>
+    </div>
+
+    <!-- C4 -->
+    <div class="module-card C" data-filiere="C" onclick="openModal('C4')">
+      <div class="module-card-header">
+        <div>
+          <span class="module-code">C4</span>
+          <div class="module-title" style="margin-top:.5rem">Excel de A à Z</div>
+        </div>
+        <span class="module-price-badge paid">55 €</span>
+      </div>
+      <div class="module-card-body">
+        <div class="module-tagline">Formules, tableaux croisés dynamiques, mise en forme conditionnelle — sur vos données réelles</div>
+        <div class="module-meta">
+          <span class="module-meta-tag">⏱ 3h</span>
+          <span class="module-meta-tag">☀️ Samedi matin</span>
+          <span class="module-meta-tag">📈 TCD · RECHERCHEV</span>
+        </div>
+      </div>
+      <div class="module-card-footer">
+        <span class="module-format">📊 Dashboard perso remis</span>
+        <button class="btn-detail" onclick="openModal('C4');event.stopPropagation()">Voir la fiche →</button>
+      </div>
+    </div>
+
+    <!-- C5 -->
+    <div class="module-card C" data-filiere="C" onclick="openModal('C5')">
+      <div class="module-card-header">
+        <div>
+          <span class="module-code">C5</span>
+          <div class="module-title" style="margin-top:.5rem">Créer son offre et son tarif</div>
+        </div>
+        <span class="module-price-badge paid">55 €</span>
+      </div>
+      <div class="module-card-body">
+        <div class="module-tagline">Structurer son offre, fixer ses prix, calculer sa rentabilité — pour indépendants et micro-entrepreneurs</div>
+        <div class="module-meta">
+          <span class="module-meta-tag">⏱ 3h</span>
+          <span class="module-meta-tag">🌙 Soirée</span>
+          <span class="module-meta-tag">💰 TJM · Rentabilité</span>
+        </div>
+      </div>
+      <div class="module-card-footer">
+        <span class="module-format">📑 Offre + tableau rentabilité</span>
+        <button class="btn-detail" onclick="openModal('C5');event.stopPropagation()">Voir la fiche →</button>
+      </div>
+    </div>
+
+    <!-- C6 -->
+    <div class="module-card C" data-filiere="C" onclick="openModal('C6')">
+      <div class="module-card-header">
+        <div>
+          <span class="module-code">C6</span>
+          <div class="module-title" style="margin-top:.5rem">Mécénat &amp; levée de fonds locale</div>
+        </div>
+        <span class="module-price-badge free">GRATUIT*</span>
+      </div>
+      <div class="module-card-body">
+        <div class="module-tagline">Approcher des entreprises locales, construire un dossier de mécénat, contractualiser</div>
+        <div class="module-meta">
+          <span class="module-meta-tag">⏱ 3h</span>
+          <span class="module-meta-tag">🌙 Soirée</span>
+          <span class="module-meta-tag">🤝 Loi Aillagon</span>
+        </div>
+      </div>
+      <div class="module-card-footer">
+        <span class="module-format">📁 Dossier mécénat + scripts</span>
+        <button class="btn-detail" onclick="openModal('C6');event.stopPropagation()">Voir la fiche →</button>
+      </div>
+    </div>
+
+  </div><!-- /modules-grid C -->
+
+  <!-- ══ FINANCEMENT ══ -->
+  <div class="financement-section">
+    <h3>💶 Financements disponibles</h3>
+    <div class="financement-grid">
+      <div class="financement-card">
+        <strong>OPCO (Uniformation / Atlas / AKTO)</strong>
+        <span>Prise en charge pour salariés et associations. Tarification 200–600 €/session avec certification Qualiopi à venir.</span>
+      </div>
+      <div class="financement-card">
+        <strong>France Travail Montauban</strong>
+        <span>Conventionnement AIF pour demandeurs d'emploi. Sessions gratuites rémunérées. Contact : Direction Territoriale 82.</span>
+      </div>
+      <div class="financement-card">
+        <strong>Département du Tarn-et-Garonne</strong>
+        <span>Financement sessions gratuites A3, C1, C6 via appel à projets « Cohésion sociale et insertion ».</span>
+      </div>
+      <div class="financement-card">
+        <strong>Région Occitanie</strong>
+        <span>« Occitanie Formations » — soutien à la formation professionnelle dans les territoires peu dotés.</span>
+      </div>
+      <div class="financement-card">
+        <strong>Mécénat local</strong>
+        <span>BNP Paribas 82, Crédit Agricole NMP, Caisse d'Épargne — mécénat compétences ou financier.</span>
+      </div>
+      <div class="financement-card">
+        <strong>Pass Académie</strong>
+        <span>Abonnement mensuel à 80 € — accès illimité à toutes les sessions du mois. Bientôt disponible.</span>
+      </div>
+    </div>
+    <p style="margin-top:1rem;font-size:.8rem;color:var(--muted)">* Les sessions GRATUIT sont financées par le Département 82, des fondations ou le mécénat local.</p>
+  </div>
+
+  <!-- ══ PASS CTA ══ -->
+  <div class="pass-section">
+    <h3>📩 Inscrivez-vous dès maintenant</h3>
+    <p>Toutes les inscriptions se font par email ou par téléphone. Indiquez le module souhaité, votre nom et votre structure — nous vous confirmons votre place sous 24h.</p>
+    <a href="mailto:contact@genie-montauban.fr?subject=Inscription Académie des Compétences" class="btn-white">Je m'inscris →</a>
+  </div>
+
+  <!-- ══ FORMATEUR ══ -->
+  <div class="formateur-banner">
+    <h3>🎓 Vous êtes expert·e local·e ?</h3>
+    <p>L'Académie recrute des formateurs locaux dans tous les domaines. Rémunération 100–200 € / session · Autonomie pédagogique · Visibilité réseau Génie.</p>
+    <a href="mailto:contact@genie-montauban.fr?subject=Candidature formateur Académie" class="btn-white" style="background:var(--primary);color:#fff;">Proposer mon module →</a>
+  </div>
+
+  <!-- ══ RÉSEAUX ══ -->
+  <div class="social-banner">
+    <h3>Suivez l'Académie</h3>
+    <p>Annonces de sessions, portraits de formateurs, témoignages — tout en temps réel sur LinkedIn et Facebook.</p>
+    <div class="social-links">
+      <a href="https://www.linkedin.com/company/g%C3%A9nie-montauban-tiers-lieu/" target="_blank" rel="noopener" class="btn-social btn-linkedin">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        LinkedIn
+      </a>
+      <a href="https://www.facebook.com/profile.php?id=61585419075483" target="_blank" rel="noopener" class="btn-social btn-facebook">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        Facebook
+      </a>
+    </div>
+  </div>
+
+</main>
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer>
+  <p>© 2026 Génie — Tiers-lieu à Montauban &nbsp;·&nbsp; <a href="mailto:contact@genie-montauban.fr">contact@genie-montauban.fr</a> &nbsp;·&nbsp; <a href="tel:+33651509718">06 51 50 97 18</a> &nbsp;·&nbsp; 📍 12 rue du Génie, 82000 Montauban</p>
+</footer>
+
+<!-- ══════════ MODAL ══════════ -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOverlay(event)">
+  <div class="modal" id="modal">
+    <!-- dynamically filled by JS -->
+  </div>
+</div>
+
+<!-- ══════════ JS ══════════ -->
+<script>
+/* ── Données modules ── */
+const modules = {
+  A1: {
+    filiere:'A', code:'A1', prix:'50 €', format:'Présentiel · Soirée',
+    titre:'Prise de parole en public',
+    tagline:'Prendre la parole sans stress, avec impact — en 3 heures de pratique intensive',
+    objectifs:[
+      'Identifier et gérer son stress avant et pendant une prise de parole',
+      'Maîtriser les techniques de communication verbale (voix, débit, articulation)',
+      'Utiliser le langage non-verbal de façon consciente (posture, regard, gestuelle)',
+      'Structurer un message clair et mémorable en 2 minutes',
+      'Débriefing personnalisé sur sa propre prise de parole filmée'
+    ],
+    programme:[
+      {label:'Temps 1 · Comprendre sa communication (45 min)', items:['Diagnostic individuel : mon profil de communicant','Physiologie du stress et techniques de régulation rapide','Les 3 canaux : verbal, para-verbal, non-verbal']},
+      {label:'Temps 2 · Construire et structurer son message (45 min)', items:['La structure PEPS (Problème–Empathie–Proposition–Solution)','L\'accroche, le corps, la conclusion mémorable','Exercice : rédiger son pitch de 2 minutes']},
+      {label:'Temps 3 · Mise en situation filmée et débriefing (90 min)', items:['Tour de table : chaque participant passe devant le groupe','Feedback bienveillant du groupe et du formateur','Deuxième passage : mesurer la progression','Plan d\'action individuel personnalisé']}
+    ],
+    cadeau:'Une vidéo de votre prise de parole + un plan d\'action personnalisé sur 3 points à travailler',
+    public:'Professionnels souhaitant gagner en aisance orale, managers, porteurs de projet, toute personne intimidée par la prise de parole',
+    prerequis:'Aucun prérequis · Apporter un sujet de 2 min à présenter'
+  },
+  A2: {
+    filiere:'A', code:'A2', prix:'50 €', format:'Présentiel · Samedi matin',
+    titre:'Négocier autrement',
+    tagline:'Méthodes non-conflictuelles pour obtenir ce que vous voulez sans brûler les ponts',
+    objectifs:[
+      'Distinguer négociation positionnelle et négociation basée sur les intérêts',
+      'Appliquer les principes fondamentaux de la Communication Non-Violente (CNV)',
+      'Utiliser le BATNA simplifié pour négocier sereinement',
+      'Gérer les émotions et les conflits dans une négociation',
+      'Conclure un accord mutuellement satisfaisant'
+    ],
+    programme:[
+      {label:'Temps 1 · Les bases de la négociation (45 min)', items:['Négociation distributive vs intégrative','Identifier ses positions vs ses intérêts réels','Introduction à la CNV : Observation, Sentiment, Besoin, Demande']},
+      {label:'Temps 2 · Outils pratiques (45 min)', items:['Le BATNA : connaître sa meilleure alternative','L\'écoute active comme outil de négociation','Ancrage et contre-ancrage : maîtriser la première offre']},
+      {label:'Temps 3 · Jeux de rôle et débriefing (90 min)', items:['3 scénarios en binômes : client, partenariat, salaire','Analyse collective des stratégies','Construction de sa boîte à outils de négociateur']}
+    ],
+    cadeau:'Fiche-mémo "Mes 5 réflexes de négociateur" + les scénarios travaillés en session',
+    public:'Managers, indépendants, acteurs associatifs, tout professionnel en situation de négociation régulière',
+    prerequis:'Apporter une situation de négociation réelle à travailler'
+  },
+  A3: {
+    filiere:'A', code:'A3', prix:'GRATUIT*', format:'Présentiel · Samedi matin',
+    titre:'Créer son activité ESS',
+    tagline:'Du projet à la structure juridique : association, SCOP, micro-entreprise — sans se perdre',
+    objectifs:[
+      'Distinguer les formes juridiques ESS : association loi 1901, SCOP, SCIC, micro-entreprise',
+      'Choisir la structure adaptée à son projet et ses objectifs',
+      'Identifier les démarches clés de création',
+      'Connaître les sources de financement spécifiques à l\'ESS',
+      'Éviter les 5 erreurs classiques des créateurs de structures ESS'
+    ],
+    programme:[
+      {label:'Temps 1 · Cartographie des structures ESS (50 min)', items:['L\'ESS en France et dans le Tarn-et-Garonne','Association, SCOP, SCIC, CAE : fonctionnement et différences','Micro-entreprise et portage salarial comme alternatives']},
+      {label:'Temps 2 · Choisir sa structure (40 min)', items:['Matrice de décision : 5 questions pour trouver la bonne forme','Cas pratiques : 3 projets, 3 structures différentes','Les démarches administratives pas à pas']},
+      {label:'Temps 3 · Financer et se lancer (50 min)', items:['Subventions, OPCA, crowdfunding solidaire, mécénat local','Les ressources du territoire : CRESS 82, BGE, France Travail','Ébauche de sa feuille de route de création']}
+    ],
+    cadeau:'Feuille de route personnalisée avec la structure recommandée, les 3 premières démarches et les contacts locaux',
+    public:'Porteurs de projet ESS, bénévoles créant une association, salariés en reconversion, demandeurs d\'emploi',
+    prerequis:'Avoir un projet ou une idée, même floue · Aucun prérequis juridique — financement Département 82'
+  },
+  A4: {
+    filiere:'A', code:'A4', prix:'45 €', format:'Présentiel · Soirée',
+    titre:'Leadership au féminin',
+    tagline:'Affirmer son leadership, briser les biais, construire son réseau stratégique',
+    objectifs:[
+      'Identifier les biais de genre en entreprise et leurs effets concrets',
+      'Développer un style de leadership assertif et authentique',
+      'Construire une stratégie de réseautage professionnel efficace',
+      'Formuler des demandes claires et défendre ses idées sans s\'excuser',
+      'Créer des alliances et du mentorat entre femmes professionnelles'
+    ],
+    programme:[
+      {label:'Temps 1 · Comprendre les biais et leurs effets (50 min)', items:['Biais de genre : imposteur, syndrome de la bonne élève, auto-censure','Les micro-agressions au quotidien : les reconnaître et y répondre','Apports de la psychologie sociale : stéréotypes et auto-réalisation']},
+      {label:'Temps 2 · Construire son leadership assertif (50 min)', items:['Assertivité vs passivité vs agressivité : trouver sa zone juste','Techniques de communication assertive (DESC, CNV)','Exercice : reformuler ses victoires sans les minimiser']},
+      {label:'Temps 3 · Réseautage et cercle de parole (60 min)', items:['Stratégie de réseau : cartographier ses relations professionnelles','Comment trouver et devenir un mentor','Cercle de parole : partage d\'un défi et soutien collectif']}
+    ],
+    cadeau:'Une carte de réseau personnelle + 3 engagements concrets pris en public pour les 30 prochains jours',
+    public:'Femmes en poste, managers féminines, entrepreneures, femmes en reconversion',
+    prerequis:'Ouverture d\'esprit et envie de partager · Aucun prérequis de niveau ou de fonction'
+  },
+  A5: {
+    filiere:'A', code:'A5', prix:'50 €', format:'Présentiel · Samedi matin',
+    titre:'Énergie & priorités',
+    tagline:'Retrouver du temps, de l\'énergie et de la clarté quand on gère plusieurs casquettes',
+    objectifs:[
+      'Distinguer l\'urgent de l\'important avec la matrice d\'Eisenhower',
+      'Appliquer le time-blocking pour structurer ses journées',
+      'Identifier ses "voleurs de temps" personnels et les neutraliser',
+      'Créer des routines matinales et vespérales efficaces',
+      'Apprendre à dire non avec bienveillance'
+    ],
+    programme:[
+      {label:'Temps 1 · Diagnostic de son organisation (45 min)', items:['Audit de sa semaine type : où part vraiment mon temps ?','Identifier ses pics d\'énergie et les aligner sur ses tâches','Les 5 ennemis de la productivité des multi-casquettes']},
+      {label:'Temps 2 · Outils de priorisation (60 min)', items:['Matrice d\'Eisenhower : urgent/important — exercice en temps réel','La règle des 2 minutes (Getting Things Done)','Time-blocking : construire sa semaine idéale bloc par bloc']},
+      {label:'Temps 3 · Routines et mise en pratique (45 min)', items:['Concevoir sa routine matinale en 15 minutes','La revue hebdomadaire : 30 min pour tout débloquer','Plan de la semaine suivante remis en fin de session']}
+    ],
+    cadeau:'Agenda de la semaine suivante restructuré + liste de 3 nouvelles habitudes à implanter',
+    public:'Multi-casquettes : parents, salariés, bénévoles, créateurs · Managers débordés · Indépendants',
+    prerequis:'Apporter son agenda ou liste de tâches de la semaine'
+  },
+  A6: {
+    filiere:'A', code:'A6', prix:'50 €', format:'Présentiel · Soirée (scène ouverte)',
+    titre:'Pitch ton projet',
+    tagline:'Convaincre en 3 minutes : financeurs, partenaires, clients — en scène ouverte',
+    objectifs:[
+      'Maîtriser la structure du pitch en 3 minutes (Problème–Solution–Traction–Appel)',
+      'Adapter son message à son audience (investisseur, partenaire, client, jury)',
+      'Gérer les questions difficiles et les objections',
+      'Utiliser le storytelling pour rendre son projet mémorable',
+      'Pitcher en conditions réelles devant le groupe et des invités'
+    ],
+    programme:[
+      {label:'Temps 1 · Anatomie d\'un pitch gagnant (45 min)', items:['Les 4 questions auxquelles tout pitch doit répondre','Erreurs classiques : trop technique, trop long, pas d\'appel à l\'action','Exemples de pitchs locaux analysés en groupe']},
+      {label:'Temps 2 · Construction de son pitch (60 min)', items:['Rédaction de son accroche en 10 secondes','Structure du problème/solution avec données et storytelling','Formulation de son appel à l\'action spécifique']},
+      {label:'Temps 3 · Scène ouverte et débriefing (75 min)', items:['Chaque participant pitche devant le groupe (3 min)','Panel de feedback : formateur + 2 invités externes','Deuxième passage intégrant les retours reçus']}
+    ],
+    cadeau:'Pitch écrit en version finale + slides si souhaité + contacts des invités du panel',
+    public:'Porteurs de projet, entrepreneurs, associations cherchant des financements, professionnels défendant un projet en interne',
+    prerequis:'Avoir un projet à pitcher (même à l\'état d\'idée) · A1 est un plus (non obligatoire)'
+  },
+  B1: {
+    filiere:'B', code:'B1', prix:'55 €', format:'Présentiel · Soirée',
+    titre:'IA au quotidien',
+    tagline:'ChatGPT, Claude, Gemini : 5 prompts personnalisés à votre métier, en repartant ce soir',
+    objectifs:[
+      'Comprendre ce qu\'est l\'IA générative et ses limites réelles',
+      'Utiliser ChatGPT, Claude et Gemini pour des cas d\'usage concrets',
+      'Rédiger des prompts efficaces avec la méthode RACI',
+      'Automatiser 3 tâches récurrentes grâce à l\'IA',
+      'Repartir avec 5 prompts personnalisés à son propre métier'
+    ],
+    programme:[
+      {label:'Temps 1 · Comprendre l\'IA sans jargon (40 min)', items:['Comment fonctionne un LLM ? Explication accessible','Ce que l\'IA fait bien, invente, ne sait pas faire','Panorama des outils : ChatGPT, Claude, Gemini, Copilot']},
+      {label:'Temps 2 · Maîtriser le prompting (60 min)', items:['La méthode RACI : Rôle, Action, Contexte, Indicateurs','Prompts pour rédiger, résumer, traduire, reformuler, analyser','Exercice collectif : améliorer un prompt en 3 itérations']},
+      {label:'Temps 3 · Cas d\'usage par métier (80 min)', items:['Atelier par profil : commerçant, asso, indépendant, manager, créatif','Chaque participant crée ses 5 prompts pendant la session','Démonstration live : traiter une vraie tâche en moins de 5 min']}
+    ],
+    cadeau:'Une bibliothèque personnelle de 5 prompts prêts à l\'emploi, testés et validés pendant la session',
+    public:'Professionnels curieux de l\'IA, dirigeants TPE/PME, responsables associatifs, salariés voulant intégrer l\'IA',
+    prerequis:'Savoir utiliser un navigateur web · Apporter son ordinateur ou tablette · Avoir un compte Gmail'
+  },
+  B2: {
+    filiere:'B', code:'B2', prix:'50 €', format:'Présentiel · Samedi matin',
+    titre:'Canva Pro',
+    tagline:'De zéro à un kit graphique pro : 3 visuels finalisés et prêts à publier ce matin',
+    objectifs:[
+      'Maîtriser l\'interface Canva et ses fonctionnalités essentielles',
+      'Créer une charte graphique cohérente (couleurs, polices, éléments)',
+      'Concevoir des visuels pour les réseaux sociaux (posts, stories, couvertures)',
+      'Réaliser un flyer ou une affiche professionnelle',
+      'Organiser ses créations dans des dossiers réutilisables'
+    ],
+    programme:[
+      {label:'Temps 1 · Les bases de Canva (45 min)', items:['Navigation dans l\'interface : templates, éléments, texte, couleurs','Créer sa palette de couleurs et ses polices de marque','Les formats essentiels : post carré, story, A4, bannière']},
+      {label:'Temps 2 · Créer ses premiers visuels (75 min)', items:['Création d\'un post Instagram à partir d\'un template','Conception d\'un flyer événementiel professionnel','Astuces : suppression de fond, cadres, effets photos']},
+      {label:'Temps 3 · Kit graphique et organisation (60 min)', items:['Créer son Kit de marque (couleurs, logo, polices sauvegardées)','Dupliquer et adapter des templates pour gagner du temps','Exporter aux bons formats (PNG, PDF, MP4)']}
+    ],
+    cadeau:'3 visuels finalisés prêts à publier : 1 post réseau social, 1 flyer, 1 couverture Facebook/LinkedIn',
+    public:'Responsables communication d\'associations, entrepreneurs, community managers débutants',
+    prerequis:'Apporter un ordinateur ou tablette · Créer un compte Canva gratuit avant la session · Avoir un logo ou photo de son activité'
+  },
+  B3: {
+    filiere:'B', code:'B3', prix:'55 €', format:'Présentiel · Soirée',
+    titre:'Instagram & LinkedIn Pro',
+    tagline:'Stratégie, algorithmes, calendrier éditorial : créer sa première série de posts ce soir',
+    objectifs:[
+      'Comprendre les algorithmes Instagram et LinkedIn en 2026',
+      'Définir sa stratégie de contenu en 3 piliers éditoriaux',
+      'Rédiger des légendes et accroches qui génèrent de l\'engagement',
+      'Construire un calendrier éditorial sur 4 semaines',
+      'Créer sa première série de 3 posts pendant la session'
+    ],
+    programme:[
+      {label:'Temps 1 · Décoder les algorithmes (45 min)', items:['Comment Instagram choisit qui voit vos publications en 2026','LinkedIn : les 3 indicateurs qui boostent votre portée organique','Formats qui performent : carrousel, Reel, vidéo courte, texte long']},
+      {label:'Temps 2 · Stratégie de contenu (45 min)', items:['Définir ses 3 piliers éditoriaux (éduquer, inspirer, vendre)','La règle 80/20 : contenu de valeur vs contenu commercial','Trouver ses idées de posts avec des outils gratuits']},
+      {label:'Temps 3 · Création en session (90 min)', items:['Rédaction de 3 accroches percutantes pour ses posts','Mise en page sur Canva ou application native','Construction du calendrier éditorial des 4 prochaines semaines']}
+    ],
+    cadeau:'3 posts finalisés prêts à publier + un calendrier éditorial de 4 semaines personnalisé',
+    public:'Entrepreneurs, indépendants, responsables communication, community managers autodidactes',
+    prerequis:'Avoir un compte Instagram et/ou LinkedIn actif · Apporter son téléphone ou ordinateur · Avoir une activité à communiquer'
+  },
+  B4: {
+    filiere:'B', code:'B4', prix:'60 €', format:'Présentiel · Soirée',
+    titre:'Crypto & Blockchain',
+    tagline:'Niveau zéro à intermédiaire : comprendre, évaluer les risques, décider en connaissance de cause',
+    objectifs:[
+      'Expliquer simplement ce qu\'est la blockchain et son fonctionnement',
+      'Distinguer les principales cryptomonnaies et leurs cas d\'usage',
+      'Évaluer les risques réels d\'un investissement en crypto',
+      'Ouvrir et sécuriser un portefeuille numérique',
+      'Détecter les arnaques et escroqueries les plus courantes'
+    ],
+    programme:[
+      {label:'Temps 1 · Comprendre la blockchain (50 min)', items:['La blockchain expliquée avec une métaphore accessible','Bitcoin, Ethereum, stablecoins : différences et utilités','Les cas d\'usage réels : paiement, NFT, contrats intelligents, DeFi']},
+      {label:'Temps 2 · Investir sans se faire piéger (50 min)', items:['Les marchés crypto : volatilité, cycles, psychologie','Top 5 des arnaques crypto et comment les identifier','Fiscalité française des crypto-actifs (règles 2026)']},
+      {label:'Temps 3 · Pratique guidée (60 min)', items:['Créer son premier portefeuille crypto en sécurité (MetaMask)','Lire un graphique et un whitepaper : les 5 indicateurs','Simulation d\'achat sur exchange : sans argent réel']}
+    ],
+    cadeau:'Checklist personnelle "Avant d\'investir" + un portefeuille de démonstration créé et sécurisé',
+    public:'Curieux, épargnants, entrepreneurs intéressés par les paiements crypto, professionnels voulant comprendre la blockchain',
+    prerequis:'Curiosité et ouverture d\'esprit · Aucune connaissance technique préalable · Apporter un ordinateur ou smartphone'
+  },
+  B5: {
+    filiere:'B', code:'B5', prix:'50 €', format:'Présentiel · Samedi matin',
+    titre:'Cybersécurité pour non-techs',
+    tagline:'Protéger ses données, ses comptes, son asso ou sa TPE — checklist personnalisée en sortie',
+    objectifs:[
+      'Comprendre les menaces cyber réelles : phishing, ransomware, vol de données',
+      'Sécuriser ses mots de passe avec un gestionnaire',
+      'Activer l\'authentification à deux facteurs (2FA) sur ses comptes clés',
+      'Protéger les données de son asso ou TPE (obligations RGPD basiques)',
+      'Réagir efficacement en cas d\'incident de sécurité'
+    ],
+    programme:[
+      {label:'Temps 1 · Menaces réelles et mécanismes d\'attaque (50 min)', items:['Les 5 attaques les plus courantes en 2026','Phishing : reconnaître un email frauduleux en 30 secondes','Démonstration live : ce qu\'un pirate peut voir de vous en 5 min']},
+      {label:'Temps 2 · Sécuriser ses outils (60 min)', items:['Mots de passe robustes : installation et configuration de Bitwarden','2FA : activation sur Gmail, Facebook, LinkedIn, HelloAsso','Wi-Fi public, VPN, mises à jour : les bons réflexes']},
+      {label:'Temps 3 · Protection de sa structure (50 min)', items:['Cartographie des risques pour son asso ou TPE','Plan de sauvegarde simple en 3 niveaux','Que faire si on a cliqué sur un lien suspect : procédure d\'urgence']}
+    ],
+    cadeau:'Checklist cybersécurité personnalisée à 15 points + les outils installés et configurés',
+    public:'Dirigeants de TPE, responsables associatifs, salariés manipulant des données sensibles',
+    prerequis:'Utilisation quotidienne d\'internet et d\'email · Apporter son ordinateur ou smartphone'
+  },
+  B6: {
+    filiere:'B', code:'B6', prix:'65 €', format:'Présentiel · Soirée — niveau intermédiaire',
+    titre:'Automatiser ses tâches',
+    tagline:'Zapier, Make, Google Sheets avancé : créer 1 automatisation fonctionnelle ce soir',
+    objectifs:[
+      'Comprendre le principe des automatisations "no-code" (déclencheur–action)',
+      'Créer un scénario fonctionnel avec Zapier ou Make',
+      'Automatiser une tâche Google Sheets avec des formules avancées',
+      'Connecter 2 outils métier entre eux sans code',
+      'Évaluer le temps gagné et la fiabilité de son automatisation'
+    ],
+    programme:[
+      {label:'Temps 1 · Logique des automatisations (40 min)', items:['Qu\'est-ce que le no-code ? Différence Zapier / Make / n8n','Identifier ses tâches automatisables : critères et exemples','Connexion aux APIs sans code : le concept en 10 minutes']},
+      {label:'Temps 2 · Zapier / Make en pratique (80 min)', items:['Création d\'un compte et navigation dans l\'interface','Atelier : créer un Zap (formulaire → Sheets → email de confirmation)','Gestion des erreurs et débogage d\'une automatisation']},
+      {label:'Temps 3 · Google Sheets avancé (60 min)', items:['Formules dynamiques : IMPORTRANGE, QUERY, ARRAYFORMULA','Automatiser un tableau de bord avec actualisation automatique','Chaque participant termine avec son automatisation personnelle']}
+    ],
+    cadeau:'Une automatisation fonctionnelle en production + la documentation de son scénario pour la maintenir',
+    public:'Professionnels avec bases en outils numériques, entrepreneurs, community managers, responsables administratifs',
+    prerequis:'Maîtrise basique de Google Sheets ou Excel · Compte Google actif · Apporter son ordinateur · Avoir identifié une tâche répétitive'
+  },
+  C1: {
+    filiere:'C', code:'C1', prix:'GRATUIT*', format:'Présentiel · Samedi matin',
+    titre:'Demande de subvention',
+    tagline:'Structure, pièges à éviter, budget prévisionnel : ébaucher sa propre demande ce matin',
+    objectifs:[
+      'Identifier les financeurs pertinents selon son projet (Département, Région, Europe, fondations)',
+      'Comprendre les critères d\'éligibilité et de sélection des jurys',
+      'Structurer une demande de subvention convaincante en 7 parties',
+      'Construire un budget prévisionnel équilibré et crédible',
+      'Éviter les 5 erreurs qui font rejeter un dossier'
+    ],
+    programme:[
+      {label:'Temps 1 · Cartographie des financeurs (50 min)', items:['Les financeurs publics locaux : Département 82, Région Occitanie, DDETS','Les fondations et mécènes : critères, calendriers, montants','L\'Europe (FEDER, FSE, LEADER) : pour qui, comment ?']},
+      {label:'Temps 2 · Structurer sa demande (50 min)', items:['Les 7 parties d\'un dossier de subvention gagnant','Rédiger un résumé exécutif percutant (la 1ère page qui fait tout)','Les indicateurs d\'impact : ce que les jurys veulent voir']},
+      {label:'Temps 3 · Budget et mise en pratique (60 min)', items:['Construire un budget prévisionnel réaliste : charges, produits, équilibre','Les erreurs budgétaires éliminatoires','Chaque participant ébauche la trame de sa propre demande']}
+    ],
+    cadeau:'La trame de sa demande de subvention avec les 7 parties remplies en ébauche + une liste de 5 financeurs pertinents',
+    public:'Responsables et bénévoles d\'associations, porteurs de projet ESS, chefs de projets d\'utilité sociale',
+    prerequis:'Avoir un projet associatif ou social à financer · Apporter les documents de son association si disponibles — financement Département 82'
+  },
+  C2: {
+    filiere:'C', code:'C2', prix:'45 €', format:'Présentiel · Samedi matin',
+    titre:'Comptabilité pour les assos',
+    tagline:'Compte de résultat, trésorerie, budget prévisionnel : gérer ses finances sans être comptable',
+    objectifs:[
+      'Lire et interpréter un compte de résultat d\'association',
+      'Distinguer résultat, trésorerie et solvabilité',
+      'Construire un budget prévisionnel annuel sur tableur',
+      'Assurer le suivi mensuel de la trésorerie',
+      'Préparer les documents pour l\'assemblée générale annuelle'
+    ],
+    programme:[
+      {label:'Temps 1 · Les bases de la comptabilité associative (55 min)', items:['Spécificités de la comptabilité des associations (vs entreprise)','Le compte de résultat : produits, charges, résultat — lecture guidée','Le bilan simplifié : actif, passif, fonds associatifs']},
+      {label:'Temps 2 · Budget prévisionnel et suivi (65 min)', items:['Construire son budget prévisionnel sur tableur (modèle fourni)','Postes budgétaires essentiels d\'une asso : salaires, locaux, événements','Suivi mensuel : tableau de trésorerie, alertes rouge et verte']},
+      {label:'Temps 3 · Obligations légales et outils (40 min)', items:['Obligations selon le type et la taille de l\'association','Le rapport financier pour l\'AG : ce qui doit y figurer','Outils gratuits : LibreOffice Calc, HelloAsso']}
+    ],
+    cadeau:'Tableur de budget prévisionnel personnalisé + tableau de suivi de trésorerie mensuel prêt à l\'emploi',
+    public:'Trésoriers d\'associations débutants, dirigeants associatifs, bénévoles en charge de la gestion financière',
+    prerequis:'Aucune connaissance comptable préalable · Apporter un ordinateur avec LibreOffice ou Excel installé'
+  },
+  C3: {
+    filiere:'C', code:'C3', prix:'50 €', format:'Présentiel · Soirée',
+    titre:'RGPD pour TPE et assos',
+    tagline:'Ce que la loi exige réellement — registre de traitement créé pendant la session',
+    objectifs:[
+      'Comprendre les 6 principes fondamentaux du RGPD (sans juriste)',
+      'Identifier les données à risque dans sa propre structure',
+      'Créer et tenir un registre des activités de traitement',
+      'Rédiger une mention légale conforme pour son site web ou formulaire',
+      'Savoir quoi faire en cas de violation de données'
+    ],
+    programme:[
+      {label:'Temps 1 · RGPD démystifié (50 min)', items:['Ce que le RGPD exige vraiment pour une petite structure','Les 6 principes RGPD en langage courant','Sanctions réelles : quand la CNIL sanctionne-t-elle ?']},
+      {label:'Temps 2 · Identifier ses traitements (50 min)', items:['Qu\'est-ce qu\'une "donnée personnelle" ? Exemples concrets','Cartographier les données de sa structure : adhérents, clients, salariés','Bases légales : consentement, contrat, intérêt légitime']},
+      {label:'Temps 3 · Mise en conformité pratique (60 min)', items:['Créer son registre des traitements (outil CNIL, modèle simplifié)','Rédiger une mention d\'information RGPD pour son formulaire','Chaque participant repart avec son registre ébauché']}
+    ],
+    cadeau:'Registre de traitement des données ébauché + mention légale RGPD rédigée pour son site ou formulaire',
+    public:'Dirigeants de TPE, responsables d\'associations, webmasters gérant un site avec formulaire de contact',
+    prerequis:'Avoir une structure qui collecte des données personnelles · Apporter un ordinateur pour travailler sur son propre cas'
+  },
+  C4: {
+    filiere:'C', code:'C4', prix:'55 €', format:'Présentiel · Samedi matin',
+    titre:'Excel de A à Z',
+    tagline:'Formules, tableaux croisés dynamiques, mise en forme conditionnelle — sur vos données réelles',
+    objectifs:[
+      'Maîtriser les formules essentielles : SOMME.SI, NB.SI, RECHERCHEV, SI imbriqués',
+      'Créer un tableau croisé dynamique (TCD) et l\'analyser',
+      'Appliquer la mise en forme conditionnelle pour visualiser les données',
+      'Protéger et sécuriser ses feuilles de calcul',
+      'Construire un tableau de bord visuel et dynamique'
+    ],
+    programme:[
+      {label:'Temps 1 · Formules indispensables (60 min)', items:['SOMME, MOYENNE, NB, MIN, MAX : les incontournables','SI imbriqués, ET, OU : conditions logiques','RECHERCHEV et INDEX/EQUIV : trouver et relier des données']},
+      {label:'Temps 2 · Tableaux croisés dynamiques (60 min)', items:['Créer un TCD en 5 étapes','Filtres, segments, calculs automatiques','Transformer un TCD en graphique dynamique']},
+      {label:'Temps 3 · Mise en forme et tableau de bord (60 min)', items:['Mise en forme conditionnelle : codes couleurs, barres, icônes','Verrouiller des cellules et protéger son classeur','Construire son tableau de bord personnalisé en 30 minutes']}
+    ],
+    cadeau:'Tableau de bord Excel finalisé basé sur ses propres données + fichier modèle avec toutes les formules commentées',
+    public:'Professionnels utilisant Excel mais de façon limitée, gestionnaires associatifs, indépendants, salariés',
+    prerequis:'Savoir créer un classeur et saisir des données · Apporter son ordinateur avec Excel ou LibreOffice Calc · Apporter si possible un fichier de données réel'
+  },
+  C5: {
+    filiere:'C', code:'C5', prix:'55 €', format:'Présentiel · Soirée',
+    titre:'Créer son offre et son tarif',
+    tagline:'Structurer son offre, fixer ses prix, calculer sa rentabilité — pour indépendants et micro-entrepreneurs',
+    objectifs:[
+      'Définir une offre claire, lisible et différenciante',
+      'Calculer son taux journalier moyen (TJM) et ses prix de revient',
+      'Fixer ses tarifs en tenant compte du marché et de sa valeur perçue',
+      'Créer des formules d\'offre (entrée de gamme, cœur, premium)',
+      'Calculer son seuil de rentabilité mensuel et annuel'
+    ],
+    programme:[
+      {label:'Temps 1 · Construire son offre (55 min)', items:['L\'offre vs le catalogue : comment synthétiser ce qu\'on propose','La proposition de valeur unique : en 1 phrase convaincante','Packager son offre : créer des formules A/B/C']},
+      {label:'Temps 2 · Fixer ses prix (55 min)', items:['Les 3 méthodes de tarification : coût, concurrence, valeur perçue','Calculer son TJM (Taux Journalier Moyen) selon son statut','L\'erreur fatale : se sous-facturer et ses conséquences']},
+      {label:'Temps 3 · Rentabilité et mise en pratique (50 min)', items:['Calculer son seuil de rentabilité mensuel sur tableur','Simuler 3 scénarios : prudent, réaliste, optimiste','Chaque participant repart avec son offre structurée et son tableau de rentabilité']}
+    ],
+    cadeau:'Offre structurée en 3 formules + tableau de rentabilité personnalisé avec calcul du TJM et du seuil de rentabilité',
+    public:'Indépendants, freelances, micro-entrepreneurs, porteurs de projet, salariés envisageant de passer au statut indépendant',
+    prerequis:'Avoir une activité ou un projet d\'activité concret · Apporter son ordinateur ou un carnet'
+  },
+  C6: {
+    filiere:'C', code:'C6', prix:'GRATUIT*', format:'Présentiel · Soirée',
+    titre:'Mécénat & levée de fonds locale',
+    tagline:'Approcher des entreprises locales, construire un dossier de mécénat, contractualiser',
+    objectifs:[
+      'Distinguer mécénat, parrainage et sponsoring et leurs régimes fiscaux',
+      'Identifier les entreprises locales mécènes potentielles dans le bassin montalbannais',
+      'Construire un dossier de mécénat attractif et professionnel',
+      'Réaliser un premier contact et mener un entretien de sollicitation',
+      'Rédiger une convention de mécénat et délivrer le reçu fiscal Cerfa'
+    ],
+    programme:[
+      {label:'Temps 1 · Comprendre le mécénat (50 min)', items:['Mécénat vs sponsoring : différences juridiques et fiscales','Avantages pour l\'entreprise mécène : déduction fiscale 60% (loi Aillagon)','Panorama des mécènes locaux : BNP 82, Crédit Agricole NMP, Caisse d\'Épargne']},
+      {label:'Temps 2 · Construire son dossier de mécénat (60 min)', items:['Les 6 parties d\'un dossier de mécénat qui convainc','Comment valoriser la contrepartie pour l\'entreprise (visibilité, impact RSE)','Cibler le bon interlocuteur dans l\'entreprise']},
+      {label:'Temps 3 · Le premier contact et la convention (50 min)', items:['Script de premier contact (email + appel téléphonique)','Conduire l\'entretien de sollicitation : les 5 étapes','Convention de mécénat et reçu fiscal Cerfa 11580 : remplissage guidé']}
+    ],
+    cadeau:'Dossier de mécénat en ébauche + liste de 5 entreprises locales à contacter + script d\'email de premier contact',
+    public:'Responsables d\'associations, porteurs de projets culturels ou solidaires, trésoriers, chefs de projet ESS',
+    prerequis:'Avoir un projet associatif ou solidaire concret · Être en capacité de représenter sa structure officiellement — financement mécénat local'
+  }
+};
+
+/* ── Ouvrir la modale ── */
+function openModal(code) {
+  const m = modules[code];
+  if (!m) return;
+  const fil = m.filiere;
+  const colorMap = { A:'var(--filiereA)', B:'var(--filiereB)', C:'var(--filiereC)' };
+  const col = colorMap[fil];
+
+  const progHtml = m.programme.map(t => `
+    <div class="programme-temps">
+      <strong>${t.label}</strong>
+      <ul>${t.items.map(i=>`<li>${i}</li>`).join('')}</ul>
+    </div>`).join('');
+
+  document.getElementById('modal').innerHTML = `
+    <div class="modal-header ${fil}">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <span class="modal-code">${m.code}</span>
+      <div class="modal-title">${m.titre}</div>
+      <div class="modal-tagline">${m.tagline}</div>
+      <div class="modal-infos">
+        <span class="modal-info-tag">⏱ 3h · Présentiel</span>
+        <span class="modal-info-tag">📅 ${m.format}</span>
+        <span class="modal-info-tag">💶 ${m.prix}</span>
+        <span class="modal-info-tag">💳 OPCO · Autofinancement</span>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-section">
+        <h4>Objectifs pédagogiques</h4>
+        <ul>${m.objectifs.map(o=>`<li>${o}</li>`).join('')}</ul>
+      </div>
+      <div class="modal-section">
+        <h4>Public visé &amp; prérequis</h4>
+        <p style="font-size:.87rem;margin-bottom:.5rem;color:var(--text)"><strong>Public :</strong> ${m.public}</p>
+        <p style="font-size:.87rem;color:var(--muted)"><strong>Prérequis :</strong> ${m.prerequis}</p>
+      </div>
+      <div class="modal-section ${fil}-border">
+        <h4>Programme (3 temps)</h4>
+        ${progHtml}
+      </div>
+      <div class="modal-gift">
+        <strong>🎁 Vous repartez avec</strong>
+        ${m.cadeau}
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a href="mailto:contact@genie-montauban.fr?subject=Inscription ${m.code} - ${m.titre}" class="btn-inscrire">Je m'inscris à ce module →</a>
+      <span class="modal-footer-note">📞 06 51 50 97 18 · Confirmation sous 24h</span>
+    </div>`;
+
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function closeModalOnOverlay(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeModal();
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeModal();
+});
+
+/* ── Filtre filières ── */
+const filterBtns = document.querySelectorAll('.filter-btn');
+filterBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    filterBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const f = btn.dataset.filter;
+    document.querySelectorAll('[data-filiere]').forEach(el => {
+      if (f === 'all' || el.dataset.filiere === f) {
+        el.style.display = '';
+      } else {
+        el.style.display = 'none';
+      }
+    });
+  });
+});
+
+/* ── Nav mobile ── */
+const toggle = document.getElementById('menuToggle');
+const navLinks = document.getElementById('navLinks');
+toggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+</script>
+
+</body>
+</html>
