@@ -418,8 +418,9 @@ function adminAddResa(resa) {
   const sheet = ss.getSheetByName('Reservations');
   const statutMap = { 'pending': 'EN_ATTENTE', 'confirmed': 'CONFIRME', 'cancelled': 'ANNULE', 'completed': 'TERMINE' };
   const dureeH = resa.typeDuree === 'demi' ? 4 : resa.typeDuree === 'journee' ? 8 : parseFloat(resa.nbHeures) || 1;
+  const id = resa.id || ('RES-' + Date.now());
   sheet.appendRow([
-    resa.id || ('RES-' + Date.now()),
+    id,
     statutMap[resa.statut] || 'EN_ATTENTE',
     resa.createdAt || new Date().toISOString(),
     resa.nomEspace || resa.espace,
@@ -430,6 +431,8 @@ function adminAddResa(resa) {
     resa.tel || '', resa.orga || '', resa.montant || 0, resa.objet || '',
     resa.options || ''
   ]);
+  ajouterAuCalendrier(resa.nomEspace || resa.espace, resa.date, resa.heureDebut, resa.heureFin,
+    resa.prenom + ' ' + resa.nom, id, resa.email, resa.statut === 'confirmed');
   return { success: true };
 }
 
