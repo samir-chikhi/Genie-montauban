@@ -49,7 +49,7 @@ Bureau privé nomade · Calme · Visio
 
 22 €/jour · 1er étage
 
-Lun–Ven 8h–19h · Sam sur réservation
+7j/7 · 24h/24
 
 Communauté ESS & entrepreneurs
 
@@ -604,8 +604,7 @@ contact@genie-montauban.fr
 
 Horaires
 
-Lun–Ven : 8h–19h  
-Sam : sur réservation
+7j/7 · 24h/24
 
 🚆
 

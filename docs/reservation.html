@@ -90,6 +90,18 @@ textarea{resize:vertical;min-height:75px}
 .conflict-box{background:#FFF8E1;border:1.5px solid #FFE082;border-radius:10px;padding:12px 16px;font-size:13px;color:#7B5E00;margin-top:12px}
 /* GRATUIT */
 .gratuit-info{background:var(--sage-light);border:1.5px solid #B5D4B0;border-radius:10px;padding:12px 16px;font-size:13px;color:var(--sage);margin-top:12px}
+/* MULTI-CRÉNEAUX */
+.creneaux-list{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.creneau-tag{display:flex;align-items:center;justify-content:space-between;background:var(--sage-light);border:1.5px solid #B5D4B0;border-radius:10px;padding:10px 14px;font-size:13px}
+.creneau-tag-info{display:flex;flex-direction:column;gap:2px}
+.creneau-tag-date{font-weight:700;color:var(--ink)}
+.creneau-tag-detail{color:var(--muted);font-size:12px}
+.creneau-tag-prix{font-family:'Fraunces',serif;font-weight:700;color:var(--sage);font-size:15px;margin-right:10px}
+.creneau-del{background:none;border:none;color:#999;font-size:18px;cursor:pointer;padding:0 4px;line-height:1;transition:.15s;flex-shrink:0}
+.creneau-del:hover{color:var(--brick)}
+.btn-add-creneau{display:flex;align-items:center;gap:8px;background:var(--sage-light);border:2px dashed #B5D4B0;color:var(--sage);border-radius:10px;padding:11px 18px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;transition:.2s;width:100%;justify-content:center;margin-top:8px}
+.btn-add-creneau:hover{background:var(--sage);color:#fff;border-style:solid}
+.creneau-empty{text-align:center;color:var(--muted);font-size:13px;padding:12px;border:1.5px dashed var(--border);border-radius:10px;margin-bottom:8px}
 /* SUBMIT */
 .submit-btn{width:100%;background:var(--brick);color:#fff;border:none;padding:16px;border-radius:12px;font-size:16px;font-weight:700;font-family:inherit;cursor:pointer;transition:.2s;margin-top:20px;display:flex;align-items:center;justify-content:center;gap:10px}
 .submit-btn:hover{background:var(--brick-light);transform:translateY(-1px);box-shadow:0 6px 20px rgba(196,98,45,.3)}
@@ -121,7 +133,7 @@ footer strong{color:var(--cream)}
 <header>
   <div class="tag">Tiers-lieu ESS · 12 rue du Génie, Montauban</div>
   <h1>Réservez à<br><em>Génie</em> Montauban</h1>
-  <p>Salles de réunion · Bureaux nomades · Coworking · Lun–Ven 8h–19h | Sam sur réservation</p>
+  <p>Salles de réunion · Bureaux nomades · Coworking · 7j/7 · 24h/24</p>
 </header>
 
 <div id="main-content">
@@ -146,45 +158,55 @@ footer strong{color:var(--cream)}
     <div class="gratuit-info hidden" id="gratuit-info">🌱 <strong>Tarif gratuit disponible</strong> pour les associations loi 1901 de Villebourbon et syndicats de travailleurs de Montauban. Conditions : adhésion Génie (50€/an) + réservation 72h à l'avance + sous réserve de disponibilité.</div>
   </div>
 
-  <!-- ÉTAPE 3 : DATE & DURÉE -->
+  <!-- ÉTAPE 3 : DATE & CRÉNEAUX -->
   <div class="form-sec" id="sec-date">
-    <div class="step-hd"><div class="step-n" id="step-date-n">2</div><div class="step-title">Date et durée</div></div>
-    <div class="fgrid">
-      <div class="fg">
-        <label>Date <span class="req">*</span></label>
-        <input type="date" id="f-date" onchange="updatePrix()">
-      </div>
-      <div class="fg" id="fg-type">
-        <label>Durée</label>
-        <div class="duree-tabs" id="duree-tabs"></div>
-      </div>
-      <div class="fg" id="fg-hdebut">
-        <label>Heure de début</label>
-        <select id="f-hdebut" onchange="updatePrix()">
-          <option>08:00</option><option>08:30</option><option selected>09:00</option><option>09:30</option>
-          <option>10:00</option><option>10:30</option><option>11:00</option><option>11:30</option>
-          <option>12:00</option><option>12:30</option><option>13:00</option><option>13:30</option>
-          <option>14:00</option><option>14:30</option><option>15:00</option><option>15:30</option>
-          <option>16:00</option><option>16:30</option><option>17:00</option><option>17:30</option>
-        </select>
-      </div>
-      <div class="fg" id="fg-nbh" style="display:none">
-        <label>Nombre d'heures</label>
-        <select id="f-nbh" onchange="updatePrix()">
-          <option value="1">1h</option><option value="2" selected>2h</option><option value="3">3h</option>
-          <option value="4">4h</option><option value="5">5h</option><option value="6">6h</option><option value="7">7h</option><option value="8">8h</option>
-        </select>
-      </div>
-      <div class="fg"><label>Participants</label><input type="number" id="f-part" min="1" value="1" onchange="updatePrix()"></div>
-      <div class="fg"><label>Objet de la réservation</label><input type="text" id="f-objet" placeholder="Réunion, formation, atelier…"></div>
+    <div class="step-hd"><div class="step-n" id="step-date-n">2</div><div class="step-title">Créneaux souhaités</div></div>
+
+    <!-- Liste des créneaux ajoutés -->
+    <div id="creneaux-list" class="creneaux-list">
+      <div class="creneau-empty" id="creneaux-empty">Aucun créneau ajouté — configurez un créneau ci-dessous et cliquez sur "Ajouter"</div>
     </div>
-    <div id="conflict-zone"></div>
-    <div class="prix-box" id="prix-box" style="display:none">
-      <div class="prix-hd">
-        <h4>💰 Récapitulatif</h4>
-        <div class="prix-total" id="prix-total">0 €</div>
+
+    <!-- Formulaire d'ajout d'un créneau -->
+    <div style="background:var(--cream);border-radius:12px;padding:18px;border:1px solid var(--border)">
+      <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">Configurer un créneau</div>
+      <div class="fgrid">
+        <div class="fg">
+          <label>Date <span class="req">*</span></label>
+          <input type="date" id="f-date" onchange="updatePrix()">
+        </div>
+        <div class="fg" id="fg-type">
+          <label>Durée</label>
+          <div class="duree-tabs" id="duree-tabs"></div>
+        </div>
+        <div class="fg" id="fg-hdebut">
+          <label>Heure de début</label>
+          <select id="f-hdebut" onchange="updatePrix()"><option>00:00</option><option>00:30</option><option>01:00</option><option>01:30</option><option>02:00</option><option>02:30</option><option>03:00</option><option>03:30</option><option>04:00</option><option>04:30</option><option>05:00</option><option>05:30</option><option>06:00</option><option>06:30</option><option>07:00</option><option>07:30</option><option>08:00</option><option>08:30</option><option selected>09:00</option><option>09:30</option><option>10:00</option><option>10:30</option><option>11:00</option><option>11:30</option><option>12:00</option><option>12:30</option><option>13:00</option><option>13:30</option><option>14:00</option><option>14:30</option><option>15:00</option><option>15:30</option><option>16:00</option><option>16:30</option><option>17:00</option><option>17:30</option><option>18:00</option><option>18:30</option><option>19:00</option><option>19:30</option><option>20:00</option><option>20:30</option><option>21:00</option><option>21:30</option><option>22:00</option><option>22:30</option><option>23:00</option><option>23:30</option></select>
+        </div>
+        <div class="fg" id="fg-nbh" style="display:none">
+          <label>Nombre d'heures</label>
+          <select id="f-nbh" onchange="updatePrix()"><option value="1">1h</option><option value="2" selected>2h</option><option value="3">3h</option><option value="4">4h</option><option value="5">5h</option><option value="6">6h</option><option value="7">7h</option><option value="8">8h</option><option value="9">9h</option><option value="10">10h</option><option value="11">11h</option><option value="12">12h</option><option value="13">13h</option><option value="14">14h</option><option value="15">15h</option><option value="16">16h</option><option value="17">17h</option><option value="18">18h</option><option value="19">19h</option><option value="20">20h</option><option value="21">21h</option><option value="22">22h</option><option value="23">23h</option><option value="24">24h</option></select>
+        </div>
+        <div class="fg"><label>Participants</label><input type="number" id="f-part" min="1" value="1" onchange="updatePrix()"></div>
+        <div class="fg"><label>Objet de ce créneau</label><input type="text" id="f-objet" placeholder="Réunion, formation, atelier…"></div>
       </div>
-      <div class="prix-lines" id="prix-lines"></div>
+      <div id="conflict-zone"></div>
+      <div class="prix-box" id="prix-box" style="display:none;margin-top:12px">
+        <div class="prix-hd">
+          <h4>Ce créneau</h4>
+          <div class="prix-total" id="prix-total">0 €</div>
+        </div>
+        <div class="prix-lines" id="prix-lines"></div>
+      </div>
+      <button class="btn-add-creneau" onclick="ajouterCreneau()">+ Ajouter ce créneau</button>
+    </div>
+
+    <!-- Total multi-créneaux -->
+    <div id="total-box" style="display:none;margin-top:16px;background:linear-gradient(135deg,#FEF3E2,#FDF7EF);border:2px solid #F0C080;border-radius:14px;padding:16px 20px;display:none">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span style="font-weight:700;font-size:14px">Total tous créneaux</span>
+        <span id="total-all" style="font-family:'Fraunces',serif;font-size:28px;font-weight:900;color:var(--brick)">0 €</span>
+      </div>
     </div>
   </div>
 
@@ -240,7 +262,7 @@ footer strong{color:var(--cream)}
 <footer>
   <strong>Génie Montauban</strong> — Le Tiers-Lieu ESS<br>
   12 rue du Génie 82000 Montauban · 06 51 50 97 18 · contact@genie-montauban.fr<br>
-  Lundi–Vendredi 8h–19h | Samedi sur réservation
+  7 jours/7 · 24h/24
 </footer>
 
 <script>
@@ -379,13 +401,108 @@ const gv     = id => (document.getElementById(id)?.value||'').trim();
 
 // ─── ÉTAT ────────────────────────────────────────────────
 let selectedEspace  = null;
-let selectedUsage   = 'reunion';  // 'reunion' | 'nomade' | 'bail'
+let selectedUsage   = 'reunion';
 let selectedProfil  = null;
 let selectedDuree   = null;
 let optBadge        = false;
 let optAdhesion     = false;
 let reservations    = [];
 let currentCat      = 'tout';
+let creneaux        = [];  // liste des créneaux ajoutés
+
+// ─── MULTI-CRÉNEAUX ──────────────────────────────────────
+function ajouterCreneau() {
+  const date   = gv('f-date');
+  const hdebut = gv('f-hdebut');
+  const objet  = gv('f-objet');
+  const nbh    = gv('f-nbh');
+  const part   = gv('f-part') || '1';
+
+  if (!date) { alert('Veuillez sélectionner une date.'); return; }
+  if (!selectedDuree) { alert('Veuillez choisir une durée.'); return; }
+  if (selectedUsage === 'reunion' && !selectedProfil) { alert('Veuillez choisir un profil tarifaire.'); return; }
+
+  const prix = calcPrixCreneau();
+  const dureeLabel = selectedDuree === 'heure'
+    ? `${nbh}h à partir de ${hdebut}`
+    : `${DL[selectedDuree]} à partir de ${hdebut}`;
+
+  creneaux.push({
+    id: Date.now(),
+    date, hdebut, duree: selectedDuree, nbh: parseInt(nbh)||2,
+    objet: objet || 'Non précisé',
+    participants: parseInt(part)||1,
+    usage: selectedUsage,
+    profil: selectedProfil,
+    prix
+  });
+
+  renderCreneaux();
+  // Reset champs date/heure/objet pour le prochain créneau
+  document.getElementById('f-date').value = '';
+  document.getElementById('f-objet').value = '';
+  document.getElementById('prix-box').style.display = 'none';
+}
+
+function supprimerCreneau(id) {
+  creneaux = creneaux.filter(c => c.id !== id);
+  renderCreneaux();
+}
+
+function renderCreneaux() {
+  const list = document.getElementById('creneaux-list');
+  const empty = document.getElementById('creneaux-empty');
+  const totalBox = document.getElementById('total-box');
+
+  // Nettoyer les tags existants (garder l'élément empty)
+  list.querySelectorAll('.creneau-tag').forEach(el => el.remove());
+
+  if (creneaux.length === 0) {
+    empty.style.display = 'block';
+    totalBox.style.display = 'none';
+    return;
+  }
+
+  empty.style.display = 'none';
+  const totalPrix = creneaux.reduce((s, c) => s + c.prix, 0);
+
+  creneaux.forEach(c => {
+    const tag = document.createElement('div');
+    tag.className = 'creneau-tag';
+    const dureeLabel = c.duree === 'heure' ? `${c.nbh}h` : DL[c.duree];
+    tag.innerHTML = `
+      <div class="creneau-tag-info">
+        <div class="creneau-tag-date">📅 ${fDate(c.date)} — ${c.hdebut} · ${dureeLabel}</div>
+        <div class="creneau-tag-detail">${c.objet} · ${c.participants} pers.</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px">
+        <span class="creneau-tag-prix">${fMoney(c.prix)}</span>
+        <button class="creneau-del" onclick="supprimerCreneau(${c.id})" title="Supprimer">×</button>
+      </div>`;
+    list.insertBefore(tag, empty);
+  });
+
+  totalBox.style.display = 'flex';
+  document.getElementById('total-all').textContent = fMoney(totalPrix);
+}
+
+function calcPrixCreneau() {
+  if (!selectedEspace || !selectedDuree) return 0;
+  if (selectedUsage === 'reunion' && selectedEspace.tarifs_reunion) {
+    const profil = selectedProfil || 'locataire';
+    const t = selectedEspace.tarifs_reunion[profil];
+    if (!t) return 0;
+    if (selectedDuree === 'heure') {
+      const nbh = parseInt(gv('f-nbh')) || 1;
+      return t.heure * nbh;
+    }
+    return t[selectedDuree] || 0;
+  }
+  if (selectedUsage === 'nomade' && selectedEspace.tarifs_nomade) {
+    return selectedEspace.tarifs_nomade[selectedDuree] || 0;
+  }
+  return 0;
+}
 
 // ─── RENDU ESPACES ───────────────────────────────────────
 function setCat(cat) {
@@ -650,104 +767,85 @@ function toggleOpt(opt) {
 }
 
 // ─── SOUMISSION ───────────────────────────────────────────
-// Conversion durée → heures numériques (attendu par creerReservation côté serveur)
 const DUREE_H = { heure:1, demi:4, journee:8, semaine:40, mois:160 };
 
 async function submit() {
-  const prenom = gv('f-prenom'), nom = gv('f-nom'), email = gv('f-email'), date = gv('f-date');
+  const prenom = gv('f-prenom'), nom = gv('f-nom'), email = gv('f-email');
   if (!selectedEspace) { alert('Veuillez choisir un espace.'); return; }
-  if (selectedUsage==='reunion' && !selectedProfil) { alert('Veuillez choisir votre profil tarifaire.'); return; }
-  if (!selectedDuree) { alert('Veuillez choisir une durée.'); return; }
-  if (!prenom||!nom||!email||!date) { alert('Veuillez remplir les champs obligatoires (*).'); return; }
+  if (creneaux.length === 0) { alert('Veuillez ajouter au moins un créneau.'); return; }
+  if (!prenom||!nom||!email) { alert('Veuillez remplir les champs obligatoires (*).'); return; }
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { alert('Adresse email invalide.'); return; }
-
   if (SCRIPT_URL === 'VOTRE_URL_ICI') { alert('⚠️ URL Apps Script non configurée.'); return; }
-
-  const nbH = parseInt(gv('f-nbh'))||1;
-  const hd  = gv('f-hdebut') || '09:00';
-  const hf  = heureFin(hd, selectedDuree, nbH);
-  const m   = calcMontant();
-  const now = new Date().toISOString();
-  const ref = genId();
 
   const options = [];
   if (optBadge)    options.push('Accès badge 24h/7j (5€/mois)');
   if (optAdhesion) options.push('Adhésion Génie (50€/an)');
 
-  // Durée en heures numériques pour le serveur (creerReservation l'exige)
-  const dureeH = selectedDuree === 'heure' ? nbH : (DUREE_H[selectedDuree] || 1);
+  const totalEstime = creneaux.reduce((s,c)=>s+c.prix,0)
+    + (optBadge?5:0) + (optAdhesion?50:0);
 
-  // Extras dans le message pour les durées multi-jours
-  const extrasMsg = [];
-  if (selectedDuree === 'semaine') extrasMsg.push('[Durée : Semaine]');
-  if (selectedDuree === 'mois')    extrasMsg.push('[Durée : Mois]');
-
-  // Payload conforme à creerReservation() sur le serveur
-  const payload = {
-    action       : 'RESERVER',
-    espace       : selectedEspace.nom,
-    typeEspace   : selectedUsage,
-    profil       : selectedUsage==='reunion' ? selectedProfil : 'plein',
-    date         : date,
-    heureDebut   : hd,
-    duree        : dureeH,
-    participants : parseInt(gv('f-part'))||1,
-    prenom       : prenom,
-    nom          : nom,
-    email        : email,
-    tel          : gv('f-tel'),
-    structure    : gv('f-orga'),
-    message      : [gv('f-message'), gv('f-objet'), ...extrasMsg].filter(Boolean).join(' | '),
-    montantEstime: m.total,
-    options      : options.join(', ')
-  };
-
+  const ref = genId();
   const btn = document.getElementById('submit-btn');
   btn.disabled=true; btn.textContent='⏳ Envoi en cours…';
   setLoading(true);
 
-  try {
-    const r = await fetch(SCRIPT_URL, {
+  // Envoyer un payload par créneau (compatible avec creerReservation serveur)
+  const sends = creneaux.map(c => {
+    const dureeH = c.duree === 'heure' ? c.nbh : (DUREE_H[c.duree]||1);
+    const hf = heureFin(c.hdebut, c.duree, c.nbh);
+    return fetch(SCRIPT_URL, {
       method:'POST', headers:{'Content-Type':'text/plain'},
-      body: JSON.stringify(payload), redirect:'follow'
+      body: JSON.stringify({
+        action       : 'RESERVER',
+        espace       : selectedEspace.nom,
+        typeEspace   : c.usage,
+        profil       : c.usage==='reunion' ? c.profil : 'plein',
+        date         : c.date,
+        heureDebut   : c.hdebut,
+        heureFin     : hf,
+        duree        : dureeH,
+        participants : c.participants,
+        prenom, nom, email,
+        tel          : gv('f-tel'),
+        structure    : gv('f-orga'),
+        message      : [gv('f-message'), c.objet].filter(Boolean).join(' | '),
+        montantEstime: c.prix,
+        options      : options.join(', '),
+        refGroupe    : ref
+      }), redirect:'follow'
     });
+  });
+
+  try {
+    await Promise.all(sends);
     setLoading(false);
-
-    // Vérification de la réponse serveur
-    let serverOk = false;
-    try {
-      const text = await r.text();
-      const data = JSON.parse(text);
-      if (data && data.success === true)  serverOk = true;
-      else if (data && data.error)        throw new Error(data.error);
-      else                                serverOk = true;
-    } catch(parseErr) {
-      serverOk = true; // Réponse non-JSON rare — on considère OK
-    }
-
-    if (!serverOk) throw new Error('Le serveur a retourné une erreur inattendue.');
 
     document.getElementById('main-content').style.display='none';
     document.getElementById('success').classList.add('show');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top:0, behavior:'smooth' });
 
-    const dl = selectedDuree==='heure'?`${nbH}h (${hd}→${hf})`:DL[selectedDuree];
-    const profilLabel = selectedUsage==='reunion' ? PROFILS.find(p=>p.id===selectedProfil)?.label : 'Bureau nomade';
+    const profilLabel = selectedUsage==='reunion'
+      ? PROFILS.find(p=>p.id===selectedProfil)?.label||selectedProfil
+      : 'Bureau nomade';
+
+    const creneauxHtml = creneaux.map(c => {
+      const dl = c.duree==='heure' ? `${c.nbh}h` : DL[c.duree];
+      return `<div class="sd"><span>📅 ${fDate(c.date)}</span><span>${c.hdebut} · ${dl} · ${fMoney(c.prix)}</span></div>`;
+    }).join('');
 
     document.getElementById('success-details').innerHTML = `
       <h3>📋 Récapitulatif</h3>
       <div class="sd"><span>Référence</span><span style="color:var(--brick);font-family:'Fraunces',serif;font-size:16px">${ref}</span></div>
       <div class="sd"><span>Espace</span><span>${selectedEspace.nom} (${selectedEspace.ref})</span></div>
       <div class="sd"><span>Profil</span><span>${profilLabel}</span></div>
-      <div class="sd"><span>Date</span><span>${fDate(date)}</span></div>
-      <div class="sd"><span>Durée</span><span>${dl}</span></div>
-      <div class="sd"><span>Participants</span><span>${gv('f-part')||1}</span></div>
+      ${creneauxHtml}
+      <div class="sd"><span>Créneaux</span><span>${creneaux.length} créneau${creneaux.length>1?'x':''}</span></div>
       ${options.length ? `<div class="sd"><span>Options</span><span>${options.join(' + ')}</span></div>` : ''}
-      <div class="sd"><span>Montant estimé</span><span style="font-size:18px;color:var(--brick);font-family:'Fraunces',serif">${fMoney(m.total)}${m.base===0&&selectedProfil==='asso'?' (sous réserve validation)':''}</span></div>
+      <div class="sd"><span>Total estimé</span><span style="font-size:18px;color:var(--brick);font-family:'Fraunces',serif">${fMoney(totalEstime)}</span></div>
       <div class="sd"><span>Statut</span><span>⏳ En attente de confirmation — email envoyé sous 24h</span></div>`;
   } catch(e) {
     setLoading(false); btn.disabled=false; btn.textContent='📅 Envoyer ma demande de réservation';
-    alert('Erreur lors de l\'envoi : ' + e.message + '\n\nContactez-nous directement : contact@genie-montauban.fr · 06 51 50 97 18');
+    alert('Erreur lors de l\'envoi : ' + e.message + '\n\nContactez-nous : contact@genie-montauban.fr · 06 51 50 97 18');
   }
 }
 
