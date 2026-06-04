@@ -24,31 +24,33 @@ Votre profil tarifaire
 
 2
 
-Date et durée
+Créneaux souhaités
+
+Aucun créneau ajouté — configurez un créneau ci-dessous et cliquez sur "Ajouter"
+
+Configurer un créneau
 
 Date \*
 
 Durée
 
 Heure de début
-
-08:0008:3009:0009:30
-10:0010:3011:0011:30
-12:0012:3013:0013:30
-14:0014:3015:0015:30
-16:0016:3017:0017:30
+00:0000:3001:0001:3002:0002:3003:0003:3004:0004:3005:0005:3006:0006:3007:0007:3008:0008:3009:0009:3010:0010:3011:0011:3012:0012:3013:0013:3014:0014:3015:0015:3016:0016:3017:0017:3018:0018:3019:0019:3020:0020:3021:0021:3022:0022:3023:0023:30
 
 Nombre d'heures
-
-1h2h3h
-4h5h6h7h8h
+1h2h3h4h5h6h7h8h9h10h11h12h13h14h15h16h17h18h19h20h21h22h23h24h
 
 Participants
 
-Objet de la réservation
+Objet de ce créneau
 
-#### 💰 Récapitulatif
+#### Ce créneau
 
+0 €
+
++ Ajouter ce créneau
+
+Total tous créneaux
 0 €
 
 3

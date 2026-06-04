@@ -11,7 +11,7 @@ Accessible PMR (ascenseur, entrée dédiée). Géré par une association loi 190
 Contact : contact@genie-montauban.fr
 Téléphone : 06 51 50 97 18
 Adresse : 12 rue du Génie, 82000 Montauban, France
-Horaires : Lundi–Vendredi 8h–19h | Samedi sur réservation
+Horaires : 7 jours/7, 24h/24 (accès badge)
 
 ## Services et tarifs
 
@@ -97,7 +97,7 @@ Q : Faut-il être membre pour réserver un espace ?
 R : Non, les non-membres peuvent réserver. L'adhésion (dès 10 €/an) donne 20% de réduction sur tous les espaces.
 
 Q : Génie propose-t-il un accès 24h/24 ?
-R : Oui, les bureaux privatifs disposent d'un accès badge 24h/24. Le coworking est ouvert Lun–Ven 8h–19h.
+R : Oui, les bureaux privatifs disposent d'un accès badge 24h/24. L'espace est accessible 7j/7 et 24h/24 par badge.
 
 Q : Qu'est-ce qu'un tiers-lieu ESS ?
 R : Un espace de travail partagé géré par une structure de l'économie sociale et solidaire, axé sur la communauté, le partage et l'impact local — par opposition à un centre d'affaires commercial.
