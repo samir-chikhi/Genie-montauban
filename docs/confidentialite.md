@@ -13,7 +13,7 @@ Dernière mise à jour : janvier 2026 — Conforme RGPD
 ## Responsable du traitement
 
 Association Génie — 12 rue du Génie, 82000 Montauban  
-Contact : genie.montauban@gmail.com
+Contact : contact@genie-montauban.fr
 
 ## Données collectées
 
@@ -45,7 +45,7 @@ Conformément au RGPD, vous disposez des droits suivants :
 - **Droit d'opposition** : vous opposer à un traitement
 - **Droit à la portabilité** : recevoir vos données dans un format structuré
 
-Pour exercer ces droits : genie.montauban@gmail.com
+Pour exercer ces droits : contact@genie-montauban.fr
 
 En cas de réclamation non résolue, vous pouvez saisir la CNIL : www.cnil.fr
 

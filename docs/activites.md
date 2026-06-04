@@ -165,7 +165,7 @@ Nouveau
 
 Génie accompagne les créateurs d'associations et projets à impact local : espace de travail, mise en réseau, mentorat et soutien méthodologique pour faire émerger vos idées en Tarn-et-Garonne.
 
-📍 Génie Montauban · genie.montauban@gmail.com
+📍 Génie Montauban · contact@genie-montauban.fr
 
 Continu
 📣 Info pratique

@@ -482,7 +482,7 @@ Maria Montessori (PMR)
 Réponse sous 24h · Des frais peuvent s'appliquer selon disponibilité
 
 **✓ Demande envoyée !**  
-Si votre messagerie ne s'ouvre pas, écrivez directement à genie.montauban@gmail.com en précisant votre salle, date et matériel souhaité.
+Si votre messagerie ne s'ouvre pas, écrivez directement à contact@genie-montauban.fr en précisant votre salle, date et matériel souhaité.
 
 Rejoindre Génie
 
@@ -572,8 +572,8 @@ Télécharger la fiche d'adhésion
 
 ✉️ Nous envoyer ma fiche complétée
 
-Bulletin à retourner par email à **genie.montauban@gmail.com** ou à déposer au **12 rue du Génie, 82000 Montauban**  
-*Données RGPD : utilisées uniquement pour la gestion de l'adhésion · Conservation 3 ans · Droits : genie.montauban@gmail.com*
+Bulletin à retourner par email à **contact@genie-montauban.fr** ou à déposer au **12 rue du Génie, 82000 Montauban**  
+*Données RGPD : utilisées uniquement pour la gestion de l'adhésion · Conservation 3 ans · Droits : contact@genie-montauban.fr*
 
 Nous trouver
 
@@ -598,7 +598,7 @@ Téléphone
 
 Email
 
-genie.montauban@gmail.com
+contact@genie-montauban.fr
 
 🕐
 
@@ -619,10 +619,10 @@ Envoyer →
 **✓ Votre messagerie va s'ouvrir**  
 Si aucune fenêtre ne s'ouvre, c'est que vous n'avez pas de logiciel de messagerie configuré sur cet appareil.  
 Dans ce cas, écrivez-nous directement à :  
-genie.montauban@gmail.com
+contact@genie-montauban.fr
  ·  06 51 50 97 18
 
-💡 Ce bouton ouvre votre application mail (Outlook, Mail, Thunderbird…). Si vous utilisez Gmail ou Yahoo dans le navigateur, écrivez-nous directement à genie.montauban@gmail.com
+💡 Ce bouton ouvre votre application mail (Outlook, Mail, Thunderbird…). Si vous utilisez Gmail ou Yahoo dans le navigateur, écrivez-nous directement à contact@genie-montauban.fr
 
 Vous souhaitez visiter ?
 
