@@ -30,7 +30,7 @@ Les prix sont indiqués en euros TTC. L'Association Génie est exonérée de TVA
 
 ## Article 4 — Réservation
 
-Toute réservation est effectuée via le formulaire en ligne ou par email à genie.montauban@gmail.com. Elle est confirmée par retour d'email de la part de l'équipe Génie sous 24 heures ouvrées.
+Toute réservation est effectuée via le formulaire en ligne ou par email à contact@genie-montauban.fr. Elle est confirmée par retour d'email de la part de l'équipe Génie sous 24 heures ouvrées.
 
 La réservation devient ferme et définitive à réception de la confirmation écrite.
 

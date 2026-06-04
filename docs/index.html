@@ -1321,9 +1321,10 @@
     <div>
       <div class="contact-map">
         <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2866.3!2d1.3570!3d44.0174!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12aecf1c6e4b6e0d%3A0x1!2s12+rue+du+G%C3%A9nie%2C+82000+Montauban!5e0!3m2!1sfr!2sfr!4v1700000000"
+          data-src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2866.3!2d1.3570!3d44.0174!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12aecf1c6e4b6e0d%3A0x1!2s12+rue+du+G%C3%A9nie%2C+82000+Montauban!5e0!3m2!1sfr!2sfr!4v1700000000"
           allowfullscreen loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade">
+          referrerpolicy="no-referrer-when-downgrade"
+          id="map-iframe">
         </iframe>
       </div>
       <div style="margin-top:20px;background:var(--navy);border-radius:var(--r);padding:20px 24px;color:rgba(255,255,255,.8)">
@@ -1450,9 +1451,16 @@
   }
 
   // Cookies
+  function loadMap() {
+    const iframe = document.getElementById('map-iframe');
+    if (iframe && iframe.dataset.src && !iframe.src) {
+      iframe.src = iframe.dataset.src;
+    }
+  }
   function acceptCookies() {
     localStorage.setItem('cookie_consent', 'accepted');
     document.getElementById('cookie-banner').classList.remove('show');
+    loadMap();
   }
   function refuseCookies() {
     localStorage.setItem('cookie_consent', 'refused');
@@ -1460,6 +1468,8 @@
   }
   if (!localStorage.getItem('cookie_consent')) {
     setTimeout(() => document.getElementById('cookie-banner').classList.add('show'), 1500);
+  } else if (localStorage.getItem('cookie_consent') === 'accepted') {
+    loadMap();
   }
 
   // Smooth scroll pour les ancres

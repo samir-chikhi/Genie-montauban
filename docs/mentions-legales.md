@@ -14,7 +14,7 @@ Conformément aux dispositions de la loi n°2004-575 du 21 juin 2004
 
 **Association Génie**  
 12 rue du Génie, 82000 Montauban  
-Email : genie.montauban@gmail.com  
+Email : contact@genie-montauban.fr  
 Représentant légal : Samir Chikhi, Président
 
 ## Hébergement
@@ -33,7 +33,7 @@ Toute reproduction, représentation, modification, publication, adaptation de to
 
 Conformément à la loi n°78-17 du 6 janvier 1978 modifiée et au Règlement Général sur la Protection des Données (RGPD), vous disposez d'un droit d'accès, de rectification, de suppression et d'opposition aux données personnelles vous concernant.
 
-Pour exercer ces droits, contactez-nous : genie.montauban@gmail.com
+Pour exercer ces droits, contactez-nous : contact@genie-montauban.fr
 
 ## Cookies
 

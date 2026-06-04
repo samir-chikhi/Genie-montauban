@@ -4,6 +4,25 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Génie Montauban — Administration</title>
+<script>
+(function() {
+  const KEY = 'genie_admin_auth';
+  const HASH = '0000000043be6293';
+  function h(s) {
+    let v = 0;
+    for (let i = 0; i < s.length; i++) v = (Math.imul(31, v) + s.charCodeAt(i)) | 0;
+    return Math.abs(v).toString(16).padStart(16,'0').slice(0,16);
+  }
+  if (sessionStorage.getItem(KEY) !== HASH) {
+    const pwd = prompt('Mot de passe administration Génie :');
+    if (!pwd || h(pwd) !== HASH) {
+      document.write('<style>body{display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;background:#1C1410;color:#F7F2EA;font-size:1.2rem}</style><p>Accès refusé.</p>');
+      throw new Error('Accès refusé');
+    }
+    sessionStorage.setItem(KEY, HASH);
+  }
+})();
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;700;900&family=Cabinet+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{--ink:#1C1410;--brick:#C4622D;--brick-light:#E8804F;--cream:#F7F2EA;--warm:#FDFAF6;--gold:#C8973A;--sage:#4A6741;--sage-light:#EEF3ED;--steel:#2C4A6E;--steel-light:#EDF1F7;--border:#DDD5C8;--muted:#8C7B6B;--red:#C0392B;--red-light:#FDF0EE;}
@@ -276,7 +295,7 @@ textarea{resize:vertical;min-height:65px}
           <div class="card">
             <div class="card-hd"><h3>📧 Contact</h3></div>
             <div class="card-body">
-              <div class="fg"><label>Email</label><input type="email" id="cfg-email" value="genie.montauban@gmail.com"></div>
+              <div class="fg"><label>Email</label><input type="email" id="cfg-email" value="contact@genie-montauban.fr"></div>
               <div class="fg" style="margin-top:10px"><label>Téléphone</label><input type="tel" id="cfg-tel" value="06 51 50 97 18"></div>
               <button class="btn btn-primary btn-sm" style="margin-top:12px" onclick="saveCfg()">Enregistrer</button>
             </div>
@@ -450,7 +469,7 @@ const genId  = () => 'RSV-'+Date.now().toString(36).toUpperCase();
 const gv     = id => (document.getElementById(id)?.value||'').trim();
 const gvb    = id => document.getElementById(id)?.checked||false;
 
-let DB = { reservations:[], config:{email:'genie.montauban@gmail.com', tel:'06 51 50 97 18'} };
+let DB = { reservations:[], config:{email:'contact@genie-montauban.fr', tel:'06 51 50 97 18'} };
 let editId = null, weekOffset = 0;
 
 // ─── API ─────────────────────────────────────────────────
