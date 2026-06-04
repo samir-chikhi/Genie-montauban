@@ -448,18 +448,21 @@ const PROFILS = {
 
 const ESPACES_DEF = {
   bourdelle: { nom:'Antoine Bourdelle', ref:'0-02', type:'reunion', capacite:40, icon:'🏛️',
-    tarifs_reunion:{ ccfa:{heure:30,demi:100,journee:160}, adherent:{heure:24,demi:80,journee:130}, locataire:{heure:15,demi:50,journee:80}, asso:{heure:0,demi:0,journee:0} } },
+    tarifs_reunion:{ ccfa:{heure:40,demi:110,journee:180}, adherent:{heure:30,demi:90,journee:150}, locataire:{heure:20,demi:70,journee:120}, asso:{heure:0,demi:0,journee:0} } },
   freinet:   { nom:'Célestin Freinet',   ref:'1-11', type:'both',   capacite:20, icon:'📋',
-    tarifs_reunion:{ ccfa:{heure:22,demi:70,journee:120}, adherent:{heure:18,demi:60,journee:90}, locataire:{heure:12,demi:35,journee:60}, asso:{heure:0,demi:0,journee:0} } },
+    tarifs_reunion:{ ccfa:{heure:30,demi:90,journee:150}, adherent:{heure:20,demi:60,journee:100}, locataire:{heure:15,demi:45,journee:80}, asso:{heure:0,demi:0,journee:0} } },
   gouges:    { nom:'Olympe de Gouges',   ref:'1-12', type:'reunion', capacite:20, icon:'🤝',
-    tarifs_reunion:{ ccfa:{heure:22,demi:70,journee:120}, adherent:{heure:18,demi:60,journee:90}, locataire:{heure:12,demi:35,journee:60}, asso:{heure:0,demi:0,journee:0} } },
+    tarifs_reunion:{ ccfa:{heure:30,demi:90,journee:150}, adherent:{heure:20,demi:60,journee:100}, locataire:{heure:15,demi:45,journee:80}, asso:{heure:0,demi:0,journee:0} } },
+  aristote:  { nom:'Aristote',           ref:'1-13', type:'nomade',  capacite:2,  icon:'🚪', sous_type:'prive',
+    tarifs_nomade:{ demi:12, journee:22, semaine:90, mois:200 } },
   michel:    { nom:'Louise Michel',      ref:'0-01', type:'nomade',  capacite:4,  icon:'🚪', sous_type:'prive',
     tarifs_nomade:{ demi:10, journee:20, semaine:70, mois:150 } },
   rousseau:  { nom:'Jean-Jacques Rousseau', ref:'1-10', type:'nomade', capacite:20, icon:'💻', sous_type:'coworking',
-    tarifs_nomade:{ demi:10, journee:15, semaine:50, mois:120 } },
+    tarifs_reunion:{ ccfa:{heure:20,demi:60,journee:100}, adherent:{heure:15,demi:45,journee:80}, locataire:{heure:10,demi:30,journee:70}, asso:{heure:0,demi:0,journee:0} },
+    tarifs_nomade:{ demi:10, journee:17, semaine:60, mois:180 } },
   montessori:{ nom:'Maria Montessori',  ref:'-1-14', type:'both',   capacite:4,  icon:'♿',
-    tarifs_reunion:{ ccfa:{heure:15,demi:50,journee:80}, adherent:{heure:12,demi:40,journee:65}, locataire:{heure:8,demi:25,journee:40}, asso:{heure:0,demi:0,journee:0} },
-    tarifs_nomade:{ demi:10, journee:15, semaine:60, mois:140 } }
+    tarifs_reunion:{ ccfa:{heure:20,demi:60,journee:100}, adherent:{heure:15,demi:45,journee:80}, locataire:{heure:10,demi:30,journee:70}, asso:{heure:0,demi:0,journee:0} },
+    tarifs_nomade:{ demi:15, journee:27, semaine:100, mois:216 } }
 };
 
 const DL = { heure:"Heure", demi:"½ journée", journee:"Journée", semaine:"Semaine", mois:"Mois" };
