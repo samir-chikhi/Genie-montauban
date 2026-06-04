@@ -1,0 +1,34 @@
+# llms.txt — Génie Tiers-Lieu de Montauban
+# https://www.genie-montauban.fr
+
+## À propos
+
+Génie est un tiers-lieu ancré dans l'économie sociale et solidaire à Montauban (82).
+Bureaux privatifs, coworking, salles de réunion. À 200m de la gare SNCF. Accessible PMR.
+
+Contact : contact@genie-montauban.fr
+Adresse : 12 rue du Génie, 82000 Montauban
+
+## Pages principales
+
+- https://www.genie-montauban.fr/
+- https://www.genie-montauban.fr/activites.html
+- https://www.genie-montauban.fr/reservation.html
+- https://www.genie-montauban.fr/cgv.html
+- https://www.genie-montauban.fr/confidentialite.html
+- https://www.genie-montauban.fr/mentions-legales.html
+
+## Markdown Mirrors
+
+Pour chaque page, une version texte propre est disponible en ajoutant `.md` à l'URL (sans extension) :
+
+- https://www.genie-montauban.fr/index.md
+- https://www.genie-montauban.fr/activites.md
+- https://www.genie-montauban.fr/reservation.md
+- https://www.genie-montauban.fr/cgv.md
+- https://www.genie-montauban.fr/confidentialite.md
+- https://www.genie-montauban.fr/mentions-legales.md
+
+Ces fichiers sont servis en text/plain, sans HTML, scripts, ni éléments visuels.
+Ils incluent un frontmatter YAML avec title, description, url et last_updated.
+Idéaux pour l'indexation par des IA ou des agents autonomes.
