@@ -1237,8 +1237,26 @@
     </div>
   </div>
 
-  <!-- Boutons d'action -->
-  <div style="text-align:center;display:flex;flex-wrap:wrap;gap:14px;justify-content:center">
+  <!-- HelloAsso — Adhésion en ligne -->
+  <div style="margin-bottom:28px">
+    <div style="font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--navy);margin-bottom:6px;text-align:center">🌐 Adhérer en ligne</div>
+    <p style="text-align:center;font-size:13.5px;color:#666;margin-bottom:16px">Paiement sécurisé via HelloAsso — sans frais pour vous</p>
+    <iframe id="haWidget" allowtransparency="true" scrolling="auto"
+      src="https://www.helloasso.com/associations/association-genie/adhesions/adhesion/widget"
+      style="width:100%;height:750px;border:none;border-radius:12px"
+      onload="window.addEventListener('message', function(e) {
+        const dataHeight = e.data.height;
+        const haWidgetElement = document.getElementById('haWidget');
+        if (dataHeight > parseFloat(haWidgetElement.height || 0)) {
+          haWidgetElement.height = dataHeight + 'px';
+        }
+      })">
+    </iframe>
+    <p style="text-align:center;font-size:11.5px;color:#aaa;margin-top:8px">Paiement traité par HelloAsso · <a href="https://www.helloasso.com" target="_blank" rel="noopener" style="color:#aaa">helloasso.com</a> · Vos données sont protégées</p>
+  </div>
+
+  <!-- Autres modes de paiement / boutons -->
+  <div style="text-align:center;display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-bottom:16px">
     <a href="Fiche_Adhesion_GENIE_2026.pdf" download class="btn-primary" style="display:inline-flex;align-items:center;gap:8px">
       <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
       Télécharger la fiche d'adhésion
@@ -1247,7 +1265,7 @@
       ✉️ Nous envoyer ma fiche complétée
     </a>
   </div>
-  <p style="text-align:center;font-size:12.5px;color:#888;margin-top:12px">Bulletin à retourner par email à <strong>contact@genie-montauban.fr</strong> ou à déposer au <strong>12 rue du Génie, 82000 Montauban</strong><br>
+  <p style="text-align:center;font-size:12.5px;color:#888">Bulletin à retourner par email à <strong>contact@genie-montauban.fr</strong> ou à déposer au <strong>12 rue du Génie, 82000 Montauban</strong><br>
   <em>Données RGPD : utilisées uniquement pour la gestion de l'adhésion · Conservation 3 ans · Droits : contact@genie-montauban.fr</em></p>
 </section>
 

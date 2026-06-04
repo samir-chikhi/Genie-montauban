@@ -568,6 +568,12 @@ Sur convention
 🌐 En ligne – HelloAsso
 📅 Échéancier 3 / 6 / 10 mois (sans frais)
 
+🌐 Adhérer en ligne
+
+Paiement sécurisé via HelloAsso — sans frais pour vous
+
+Paiement traité par HelloAsso · helloasso.com · Vos données sont protégées
+
 Télécharger la fiche d'adhésion
 
 ✉️ Nous envoyer ma fiche complétée
