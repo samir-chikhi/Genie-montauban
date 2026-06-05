@@ -1145,6 +1145,101 @@ function testSysteme() {
 }
 
 // ============================================================
+// MIGRATION SHEET v2 — Écriture directe des données corrigées
+// Basé sur analyse complète de chaque ligne (06/06/2026)
+// Exécuter UNE SEULE FOIS puis supprimer cette fonction.
+// ============================================================
+function migrateReservations() {
+  var ss    = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+  var sheet = ss.getSheetByName('Reservations');
+
+  // ── Données 100% corrigées — analyse ligne par ligne du 06/06/2026 ──
+  // Colonnes : id | prenom | nom | email | tel | orga | espace | nomEspace |
+  //            usage | profil | date | typeDuree | nbHeures | heureDebut |
+  //            heureFin | montant | montantBase | options | statut |
+  //            participants | objet | createdAt | updatedAt | calendarEventId
+  var data = [
+    // ── EN-TÊTES ──
+    ['id','prenom','nom','email','tel','orga','espace','nomEspace','usage','profil',
+     'date','typeDuree','nbHeures','heureDebut','heureFin','montant','montantBase',
+     'options','statut','participants','objet','createdAt','updatedAt','calendarEventId'],
+
+    // ── L01 : Marcelle — Bourdelle — 03/06/2026 (données v4.3 OK) ──
+    ['GEN-MO1L3WA6','Marcelle','','marcelle.naany@gmail.com','0767682102','LE GENIE',
+     'bourdelle','Antoine Bourdelle','reservation-publique','asso',
+     '2026-06-03','demi','4','18:50','22:50','0','0','','CONFIRME','1','',
+     '2026-04-16T14:38:26.094Z','2026-04-17T06:56:48.194Z',
+     '27jp1emh6mq7pokchjeciqt6lc@google.com'],
+
+    // ── L02 : Andrea — Bourdelle — 20/05/2026 (données v4.3 OK) ──
+    ['GEN-MO2PL320','Andrea','','andrea.caro@boutdunez.fr','650488553',
+     'Compagnie du Bout Du nez','bourdelle','Antoine Bourdelle',
+     'reservation-publique','asso','2026-05-20','journee','9','08:50','17:50',
+     '0','0','','CONFIRME','1','',
+     '2026-04-17T09:31:32.664Z','2026-04-17T09:33:04.600Z',
+     's5n5nsnujs9qltht5o1ntg6qe8@google.com'],
+
+    // ── L03 : Augustin — Aristote (colonnes décalées reconstituées, date inconnue) ──
+    ['GEN-MONBPYEJ','Augustin','','anaisreflexologue82@gmail.com','646015367',
+     'Entreprise en cours de création','aristote','Aristote','reunion','plein',
+     '','demi','4','10:05','14:05','12','12','','CONFIRME','1','','','',''],
+
+    // ── L04 : connaissance — Freinet (colonnes décalées reconstituées, date inconnue) ──
+    ['RSV-MOZLZRKO','connaissance','','actresorerie.toulouse@gmail.com','',
+     'antre-connaissance','freinet','Célestin Freinet','reunion','locataire',
+     '','heure','1','10:00','11:00','20','20','','CONFIRME','1','','','',''],
+
+    // ── L05 : connaissance — Freinet (colonnes décalées reconstituées, date inconnue) ──
+    ['RSV-MOZM3W3N','connaissance','','actresorerie.toulouse@gmail.com','',
+     'antre connaissance','freinet','Célestin Freinet','reunion','locataire',
+     '','heure','1','10:00','11:00','20','20','','CONFIRME','1','','','',''],
+
+    // ── L06 : CONNAISSANCE — Freinet (colonnes décalées reconstituées, date inconnue) ──
+    ['RSV-MOZM56KD','CONNAISSANCE','','actresorerie.toulouse@gmail.com','',
+     '','freinet','Célestin Freinet','reunion','locataire',
+     '','heure','1','10:00','11:00','20','20','','CONFIRME','1','','','',''],
+
+    // ── L07 : FNE82/Enercit — Bourdelle (import Calendar, date inconnue) ──
+    ['CAL-MPCGGZQJ','FNE82/Enercit','','','','FNE82/Enercit',
+     'bourdelle','Antoine Bourdelle','reunion','locataire',
+     '','journee','8','09:00','17:00','0','0','','CONFIRME','1',
+     'FNE82/Enercit - Réservation salle Antoine Bourdelle','','',''],
+
+    // ── L08 : Perrine Leparc — Freinet — 05/06/2026 (date corrigée) ──
+    ['GEN-MPXT2VX1','Perrine','Leparc','perrine.leparc@gmail.com','679314094',
+     'particulier','freinet','Célestin Freinet','reservation-publique','plein',
+     '2026-06-05','journee','8','07:30','18:30','180','180','','CONFIRME','1','',
+     '2026-06-03T08:29:55.861Z','2026-06-03T08:29:55.861Z',''],
+
+    // ── L09 : Lefevre — Freinet — 07/06/2026 (date corrigée) ──
+    ['GEN-MPZLMF7Q','Lefevre','','actresorerie.toulouse@gmail.com','641066283',
+     "L'Antre Connaissance",'freinet','Célestin Freinet',
+     'reservation-publique','adherent','2026-06-07','heure','1','10:00','11:00',
+     '20','20','','CONFIRME','1','Ce sera Guillaume Koke qui animera.',
+     '2026-06-04T14:36:42.758Z','2026-06-04T14:36:42.758Z',''],
+
+    // ── L10 : Julie — Bourdelle — 09/06/2026 (date corrigée, virgule supprimée) ──
+    ['GEN-MQ0OIN4B','Julie','','julie.suau@mobicoop.org','768826061',
+     'Association Covoiturons sur le Pouce','bourdelle','Antoine Bourdelle',
+     'reservation-publique','locataire','2026-06-09','demi','4','17:00','20:00',
+     '70','70','Adhésion Génie','CONFIRME','1','Vidéo projecteur ?',
+     '2026-06-05T08:45:31.403Z','2026-06-05T08:45:31.403Z','']
+  ];
+
+  // ── Réécriture complète ──
+  sheet.clearContents();
+  sheet.getRange(1, 1, data.length, 24).setValues(data);
+  sheet.getRange(1, 1, 1, 24)
+    .setFontWeight('bold').setBackground('#1E4A6E').setFontColor('#FFFFFF');
+  sheet.setFrozenRows(1);
+  sheet.autoResizeColumns(1, 24);
+
+  var msg = '✅ Migration OK — ' + (data.length - 1) + ' réservations écrites proprement.';
+  Logger.log(msg);
+  return msg;
+}
+
+// ============================================================
 // SETUP DÉCLENCHEURS
 // ============================================================
 function setupDeclencheurs() {
