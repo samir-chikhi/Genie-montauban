@@ -887,15 +887,27 @@ function syncFromCal(params) {
   const existIds = rows.slice(1).map(r => String(r[0]));
   const now      = new Date().toISOString();
   const imported = [];
+  // Noms des salles Génie — seuls les événements contenant un de ces mots sont importés
+  const SALLES = ['bourdelle','freinet','gouges','aristote','rousseau','montessori',
+                  'génie','genie','✅','⏳'];
+
   (calData.events || []).forEach(ev => {
+    // ── Filtre : n'importer QUE les événements liés aux salles Génie ──
+    const titre = (ev.title || '').toLowerCase();
+    const estGenie = SALLES.some(s => titre.includes(s));
+    if (!estGenie) return; // ignorer les RDV personnels
+
     if (ev.resaId && existIds.includes(ev.resaId)) return;
     const s  = new Date(ev.start);
     const id = 'CAL-' + s.getTime().toString(36).toUpperCase();
     if (existIds.includes(id)) return;
     const hd = pad(s.getHours()) + ':' + pad(s.getMinutes());
     const he = pad(new Date(ev.end).getHours()) + ':' + pad(new Date(ev.end).getMinutes());
-    sheet.appendRow([id,'','',ev.title,'','','',ev.title,'reunion','plein',
-      ev.start.split('T')[0],'heure','',hd,he,0,0,'','EN_ATTENTE',1,
+    // Extraire la salle depuis le titre (format "✅ Bourdelle — Client")
+    const salleMatch = ev.title.match(/✅\s*(\w+)|⏳\s*(\w+)/i);
+    const salleKey   = salleMatch ? (salleMatch[1]||salleMatch[2]).toLowerCase() : '';
+    sheet.appendRow([id,'','',ev.title,'','',salleKey,ev.title,'reunion','locataire',
+      ev.start.split('T')[0],'heure','',hd,he,0,0,'','CONFIRME',1,
       'Importé depuis Calendar',now,now,ev.calEventId||'']);
     imported.push(id);
   });
