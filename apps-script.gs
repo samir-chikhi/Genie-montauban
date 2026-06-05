@@ -1240,6 +1240,33 @@ function migrateReservations() {
 }
 
 // ============================================================
+// NETTOYAGE — Supprime les lignes importées depuis Calendar
+// Exécuter manuellement pour nettoyer les imports parasites
+// ============================================================
+function nettoyerImportsCal() {
+  var ss    = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+  var sheet = ss.getSheetByName('Reservations');
+  var rows  = sheet.getDataRange().getValues();
+  var suppr = 0;
+  // Parcourir en ordre inverse pour ne pas décaler les indices
+  for (var i = rows.length - 1; i >= 1; i--) {
+    var id    = String(rows[i][0] || '');
+    var objet = String(rows[i][20] || '');
+    var email = String(rows[i][3] || '');
+    // Supprimer : lignes CAL- avec "Importé depuis Calendar" OU sans email OU données parasites
+    var isCalImport  = id.startsWith('CAL-') && objet === 'Importé depuis Calendar';
+    var isGarbage    = id.startsWith('RSV-') && !email.includes('@');
+    if (isCalImport || isGarbage) {
+      sheet.deleteRow(i + 1);
+      suppr++;
+    }
+  }
+  var msg = '✅ Nettoyage terminé : ' + suppr + ' lignes supprimées.';
+  Logger.log(msg);
+  return msg;
+}
+
+// ============================================================
 // SETUP DÉCLENCHEURS
 // ============================================================
 function setupDeclencheurs() {
