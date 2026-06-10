@@ -1040,7 +1040,8 @@ function sendEmail(r) {
   const body = encodeURIComponent(
     `Bonjour ${r.prenom},\n\nVotre réservation est confirmée.\n\nRéférence : ${r.id}\nEspace : ${e?.nom||r.espace} (${e?.ref||''})\nDate : ${fDate(r.date)}\nDurée : ${dl}\n${pL?'Profil : '+pL+'\n':''}Montant : ${fMoney(r.montant)}${r.options?'\nOptions : '+r.options:''}\n\nÉquipe Génie Montauban\n${DB.config.tel} · ${DB.config.email}`
   );
-  window.location.href = `mailto:${r.email}?subject=${sub}&body=${body}`;
+  const gmailUrl = `https://mail.google.com/mail/?authuser=genie.montauban%40gmail.com&view=cm&to=${encodeURIComponent(r.email)}&su=${sub}&body=${body}`;
+  window.open(gmailUrl, '_blank');
 }
 
 function printResa(id) {
