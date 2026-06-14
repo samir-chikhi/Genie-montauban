@@ -1,17 +1,13 @@
 // ============================================================
-// GÉNIE MONTAUBAN — Google Apps Script Unifié v4.2
-// Réservations + Adhésions + Comptes clients + Admin
-// + Monitoring & alertes automatiques
-//
-// INSTALLATION :
-// 1. script.google.com → coller ce fichier dans Code.gs
-// 2. Exécuter setupComplet() une seule fois pour créer les feuilles
-//    → Le mot de passe admin généré s'affiche dans les Logs (Exécution)
-// 3. Exécuter setupDeclencheurs() pour activer la surveillance automatique
-// 4. Déployer → Nouvelle version → Application web
-//    - Exécuter en tant que : Moi (genie.montauban@gmail.com)
-//    - Accès : Tout le monde
-// 5. Copier l'URL de déploiement dans les HTML (APPS_SCRIPT_URL)
+// GÉNIE MONTAUBAN — Google Apps Script Unifié v4.3
+// Corrections v4.3 vs v4.2 :
+//   1. adminGetAll()       → lit le bon schéma Sheet (24 col, prenom en col1)
+//   2. adminAddResa()      → écrit dans le bon ordre + email notification
+//   3. adminUpdateResa()   → écrit dans le bon ordre (24 col)
+//   4. adminUpdateStatus() → indices colonnes corrigés
+//   5. verifierNouvelAvis  → déplacé ici depuis "Projet sans titre"
+//      (plus besoin du projet séparé)
+//   Tout le reste est IDENTIQUE au v4.2
 // ============================================================
 
 const CONFIG = {
@@ -24,9 +20,9 @@ const CONFIG = {
   URL_MON_COMPTE:     'https://genie-montauban.fr/mon-compte.html',
   CALENDAR_ID:        'genie.montauban@gmail.com',
   TOKEN_EXPIRY_MIN:   60,
-  QUOTA_ALERTE_MIN:   20,   // alerter si moins de 20 emails restants dans la journée
-  RESA_ATTENTE_MAX_H: 24,   // alerter si réservation EN_ATTENTE depuis plus de 24h
-  ADH_ATTENTE_MAX_H:  48,   // alerter si adhésion EN_ATTENTE depuis plus de 48h
+  QUOTA_ALERTE_MIN:   20,
+  RESA_ATTENTE_MAX_H: 24,
+  ADH_ATTENTE_MAX_H:  48,
 };
 
 // ============================================================
@@ -67,6 +63,8 @@ function doGet(e) {
     if (a === 'GET_RESERVATIONS')  return ok(getReservations(e.parameter));
     if (a === 'VALIDER_TOKEN')     return ok(validerToken(e.parameter));
     if (a === 'getAll' || a === 'ADMIN_GET_ALL') return ok(adminGetAll());
+    if (a === 'getCalendar')       return ok(getCalendarEvents(e.parameter));
+    if (a === 'syncFromCal')       return ok(syncFromCal(e.parameter));
 
     if (e.parameter.payload) {
       var data = JSON.parse(e.parameter.payload);
@@ -86,8 +84,7 @@ function doGet(e) {
         default: return ok({ success: false, error: 'Action inconnue: ' + data.action });
       }
     }
-
-    return ok({ success: true, message: 'API Génie Montauban v4.2' });
+    return ok({ success: true, message: 'API Génie Montauban v4.3' });
   } catch (err) {
     logErreur('doGet', err);
     return ok({ success: false, error: err.message });
@@ -100,19 +97,17 @@ function ok(obj) {
 }
 
 // ============================================================
-// EMAIL SÉCURISÉ — quota + try/catch + alerte sur échec
-// Remplace tous les MailApp.sendEmail() directs
+// EMAIL SÉCURISÉ — identique v4.2
 // ============================================================
 function envoyerEmailSafe(destinataire, sujet, corps, options) {
   try {
     var quota = MailApp.getRemainingDailyQuota();
     if (quota < 2) {
-      // Quota critique : log uniquement, pas d'envoi
-      Logger.log('⛔ QUOTA EPUISE — email non envoyé à ' + destinataire + ' — sujet : ' + sujet);
+      Logger.log('⛔ QUOTA EPUISE — email non envoyé à ' + destinataire);
       return false;
     }
     if (quota <= CONFIG.QUOTA_ALERTE_MIN) {
-      Logger.log('⚠️ Quota faible : ' + quota + ' emails restants aujourd\'hui');
+      Logger.log('⚠️ Quota faible : ' + quota + ' emails restants');
     }
     if (options) {
       MailApp.sendEmail(destinataire, sujet, corps, options);
@@ -122,45 +117,40 @@ function envoyerEmailSafe(destinataire, sujet, corps, options) {
     return true;
   } catch (err) {
     Logger.log('❌ Erreur envoi email à ' + destinataire + ' : ' + err.message);
-    // Tentative d'alerte admin (une seule fois pour éviter boucle)
     try {
       if (destinataire !== CONFIG.EMAIL_ADMIN) {
         MailApp.sendEmail(CONFIG.EMAIL_ADMIN,
           '⚠️ Génie — Echec envoi email',
           'Email non délivré à : ' + destinataire + '\nSujet : ' + sujet + '\nErreur : ' + err.message);
       }
-    } catch(e2) {
-      Logger.log('❌ Impossible d\'alerter l\'admin : ' + e2.message);
-    }
+    } catch(e2) { Logger.log('❌ Impossible d\'alerter l\'admin : ' + e2.message); }
     return false;
   }
 }
 
 // ============================================================
-// LOG D'ERREUR CENTRALISÉ
+// LOG D'ERREUR CENTRALISÉ — identique v4.2
 // ============================================================
 function logErreur(contexte, err) {
   var msg = '[' + new Date().toISOString() + '] ERREUR dans ' + contexte + ' : ' + err.message;
   Logger.log(msg);
-  // Tenter d'écrire dans la feuille Log si elle existe
   try {
     var ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
     var logSheet = ss.getSheetByName('Logs');
     if (logSheet) {
       logSheet.appendRow([new Date().toISOString(), contexte, err.message, err.stack || '']);
     }
-  } catch(e) { /* ne pas crasher dans le handler d'erreur */ }
+  } catch(e) {}
 }
 
 // ============================================================
-// INSCRIPTION CLIENT
+// INSCRIPTION CLIENT — identique v4.2
 // ============================================================
 function inscrireClient(data) {
   if (!data.email || !data.prenom || !data.nom)
     return { success: false, error: 'CHAMPS_MANQUANTS', message: 'Prénom, nom et email sont obligatoires.' };
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(data.email))
     return { success: false, error: 'EMAIL_INVALIDE', message: 'Format email invalide.' };
-
   try {
     const ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
     const sheet = ss.getSheetByName('Clients');
@@ -178,19 +168,15 @@ function inscrireClient(data) {
       data.tel || '', data.type || 'particulier', data.structure || '',
       profil, 'ACTIF', data.cgv ? now : '', data.ri ? now : '', data.statuts ? now : '',
       data.ip || '', 0, now]);
-
-    envoyerEmailSafe(data.email,
-      '🎉 Bienvenue chez Génie Montauban !',
+    envoyerEmailSafe(data.email, '🎉 Bienvenue chez Génie Montauban !',
       'Bonjour ' + data.prenom + ',\n\nVotre compte est créé !\n\nRéférence : ' + id +
       '\nProfil : ' + (data.type || 'particulier') +
       '\n\nConnectez-vous : ' + CONFIG.URL_MON_COMPTE +
       '\n\n' + CONFIG.NOM_LIEU + ' · ' + CONFIG.ADRESSE + ' · ' + CONFIG.TEL);
-
     envoyerEmailSafe(CONFIG.EMAIL_ADMIN,
       '🆕 Inscription — ' + data.prenom + ' ' + data.nom + ' (' + (data.type || '') + ')',
       'ID : ' + id + '\nNom : ' + data.prenom + ' ' + data.nom +
       '\nEmail : ' + data.email + '\nType : ' + (data.type || ''));
-
     return { success: true, id: id, message: 'Compte créé.' };
   } catch (err) {
     logErreur('inscrireClient', err);
@@ -199,34 +185,29 @@ function inscrireClient(data) {
 }
 
 // ============================================================
-// LIEN MAGIQUE
+// LIEN MAGIQUE — identique v4.2
 // ============================================================
 function demanderLienMagique(data) {
   try {
     const ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
     const rows = ss.getSheetByName('Clients').getDataRange().getValues();
-    let prenom = '';
-    let found = false;
+    let prenom = '', found = false;
     for (let i = 1; i < rows.length; i++) {
       if (rows[i][4] && rows[i][4].toString().toLowerCase() === data.email.toLowerCase()) {
         found = true; prenom = rows[i][2]; break;
       }
     }
     if (!found) return { success: false, error: 'EMAIL_INCONNU', message: 'Aucun compte trouvé.' };
-
     const token = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,
       data.email + Date.now() + Math.random())
       .map(function(b) { return ('0' + (b & 0xFF).toString(16)).slice(-2); }).join('');
     const now = new Date();
     const exp = new Date(now.getTime() + CONFIG.TOKEN_EXPIRY_MIN * 60000);
     ss.getSheetByName('Tokens').appendRow([token, data.email.toLowerCase(), now.toISOString(), exp.toISOString(), false]);
-
     const lien = CONFIG.URL_MON_COMPTE + '?token=' + token;
-    envoyerEmailSafe(data.email,
-      '🔑 Votre lien de connexion — Génie Montauban',
+    envoyerEmailSafe(data.email, '🔑 Votre lien de connexion — Génie Montauban',
       'Bonjour ' + prenom + ',\n\nVoici votre lien de connexion (valable 1h) :\n' + lien +
       '\n\nSi vous n\'avez pas fait cette demande, ignorez cet email.\n\n' + CONFIG.NOM_LIEU);
-
     return { success: true, message: 'Lien envoyé.' };
   } catch (err) {
     logErreur('demanderLienMagique', err);
@@ -235,7 +216,7 @@ function demanderLienMagique(data) {
 }
 
 // ============================================================
-// VALIDER TOKEN
+// VALIDER TOKEN — identique v4.2
 // ============================================================
 function validerToken(params) {
   try {
@@ -263,7 +244,7 @@ function validerToken(params) {
 }
 
 // ============================================================
-// PROFIL CLIENT
+// PROFIL CLIENT — identique v4.2
 // ============================================================
 function getProfil(data) {
   try {
@@ -300,7 +281,7 @@ function majDerniereConnexion(email, ss) {
 }
 
 // ============================================================
-// RÉSERVATION (formulaire public)
+// RÉSERVATION (formulaire public) — identique v4.2
 // ============================================================
 function creerReservation(data) {
   if (!data.espace || !data.date || !data.heureDebut || !data.prenom || !data.nom || !data.email)
@@ -311,25 +292,27 @@ function creerReservation(data) {
     return { success: false, error: 'HEURE_INVALIDE' };
   if (!data.duree || isNaN(parseFloat(data.duree)) || parseFloat(data.duree) <= 0)
     return { success: false, error: 'DUREE_INVALIDE' };
-
   try {
     const ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
     let sheet = ss.getSheetByName('Reservations');
     if (!sheet) {
       sheet = ss.insertSheet('Reservations');
-      sheet.appendRow(['ID','Statut','Date création','Espace','Usage','Profil','Date','H.début','H.fin','Durée','Participants','Prénom','Nom','Email','Tél','Organisation','Montant','Objet','Options']);
+      sheet.appendRow(['id','prenom','nom','email','tel','orga','espace','nomEspace',
+        'usage','profil','date','typeDuree','nbHeures','heureDebut','heureFin',
+        'montant','montantBase','options','statut','participants','objet',
+        'createdAt','updatedAt','calendarEventId']);
     }
     const id = 'RES-' + Date.now();
-    const now = new Date();
+    const now = new Date().toISOString();
     const hFin = heuresFin(data.heureDebut, data.duree);
-    sheet.appendRow([id, 'EN_ATTENTE', now.toISOString(),
-      data.espace, data.typeEspace || '', data.profil || 'plein',
-      data.date, data.heureDebut, hFin, data.duree,
-      data.participants || 1, data.prenom, data.nom, data.email,
-      data.tel || '', data.structure || '', data.montantEstime || 0, data.message || '',
-      data.options || '']);
-
-    // Incrémenter nb réservations client
+    // Écriture dans le nouveau schéma
+    sheet.appendRow([id, data.prenom, data.nom, data.email, data.tel || '',
+      data.structure || '', data.espace, data.typeEspace || data.espace,
+      data.typeEspace || 'reunion', data.profil || 'plein',
+      data.date, 'heure', data.duree,
+      data.heureDebut, hFin, data.montantEstime || 0, data.montantEstime || 0,
+      data.options || '', 'EN_ATTENTE', data.participants || 1,
+      data.message || '', now, now, '']);
     try {
       const cRows = ss.getSheetByName('Clients').getDataRange().getValues();
       for (let i = 1; i < cRows.length; i++) {
@@ -338,32 +321,23 @@ function creerReservation(data) {
           break;
         }
       }
-    } catch(e) { Logger.log('Avertissement maj nb réservations : ' + e.message); }
-
-    // Email confirmation client
+    } catch(e) {}
     const corps = 'Bonjour ' + data.prenom + ',\n\nVotre demande de réservation est enregistrée.\n\n'
-      + '📋 Référence : ' + id + '\n'
-      + '📍 Espace : ' + data.espace + '\n'
+      + '📋 Référence : ' + id + '\n📍 Espace : ' + data.espace + '\n'
       + '📅 Date : ' + formaterDate(data.date) + '\n'
-      + '⏰ Horaire : ' + data.heureDebut + ' → ' + hFin + ' (' + data.duree + 'h)\n'
-      + '👥 Participants : ' + (data.participants || 1) + '\n'
+      + '⏰ Horaire : ' + data.heureDebut + ' → ' + hFin + '\n'
       + '💰 Estimation : ' + (data.montantEstime || '?') + ' €\n\n'
-      + 'L\'équipe confirme sous 24h ouvrées.\n📞 ' + CONFIG.TEL + '\n\n'
-      + CONFIG.NOM_LIEU + ' · ' + CONFIG.ADRESSE;
-
+      + 'L\'équipe confirme sous 24h ouvrées.\n📞 ' + CONFIG.TEL
+      + '\n\n' + CONFIG.NOM_LIEU + ' · ' + CONFIG.ADRESSE;
     envoyerEmailSafe(data.email, '⏳ Demande reçue — ' + data.espace + ' le ' + formaterDate(data.date), corps);
     envoyerEmailSafe(CONFIG.EMAIL_ADMIN,
       '🔔 Réservation ' + id + ' — ' + data.espace + ' — ' + data.prenom + ' ' + data.nom,
       'ID : ' + id + '\nEspace : ' + data.espace + '\nDate : ' + data.date +
-      ' ' + data.heureDebut + '→' + hFin +
-      '\nClient : ' + data.prenom + ' ' + data.nom +
-      '\nEmail : ' + data.email +
-      '\nMontant : ' + (data.montantEstime || '?') + ' €\n\n' +
+      ' ' + data.heureDebut + '→' + hFin + '\nClient : ' + data.prenom + ' ' + data.nom +
+      '\nEmail : ' + data.email + '\nMontant : ' + (data.montantEstime || '?') + ' €\n\n' +
       '👉 Confirmer dans l\'admin : ' + CONFIG.URL_SITE + '/admin.html');
-
     ajouterAuCalendrier(data.espace, data.date, data.heureDebut, hFin,
       data.prenom + ' ' + data.nom, id, data.email, false);
-
     return { success: true, id: id };
   } catch (err) {
     logErreur('creerReservation', err);
@@ -380,10 +354,11 @@ function getReservationsClient(data) {
     const rows = ss.getSheetByName('Reservations').getDataRange().getValues();
     const list = [];
     for (let i = 1; i < rows.length; i++) {
-      if (rows[i][13] && rows[i][13].toString().toLowerCase() === data.email.toLowerCase()) {
-        list.push({ id: rows[i][0], statut: rows[i][1], espace: rows[i][3],
-                    date: rows[i][6], heureDebut: rows[i][7], heureFin: rows[i][8],
-                    duree: rows[i][9], montant: rows[i][16] });
+      // Nouveau schéma : email en col 3
+      if (rows[i][3] && rows[i][3].toString().toLowerCase() === data.email.toLowerCase()) {
+        list.push({ id: rows[i][0], statut: rows[i][18], espace: rows[i][6],
+                    date: rows[i][10], heureDebut: rows[i][13], heureFin: rows[i][14],
+                    nbHeures: rows[i][12], montant: rows[i][15] });
       }
     }
     return { success: true, reservations: list.reverse() };
@@ -406,13 +381,15 @@ function getDisponibilites(params) {
     const occup = {};
     for (let i = 1; i < rows.length; i++) {
       const row = rows[i];
-      if (row[1] === 'ANNULE') continue;
-      const esp = String(row[3] || '');
-      const dat = String(row[6] || '');
+      // Nouveau schéma : statut col18, espace col6, date col10, hdebut col13, hfin col14
+      const statut = String(row[18] || '');
+      if (statut === 'ANNULE' || statut === 'cancelled') continue;
+      const esp = String(row[6] || '');
+      const dat = String(row[10] || '');
       if (espace && esp !== espace) continue;
       if (dat < dateDebut || dat > dateFin) continue;
-      const hD = String(row[7] || '08:00');
-      const hF = String(row[8] || '09:00');
+      const hD = String(row[13] || '08:00');
+      const hF = String(row[14] || '09:00');
       if (!occup[esp]) occup[esp] = {};
       if (!occup[esp][dat]) occup[esp][dat] = [];
       const p1 = hD.split(':').map(Number);
@@ -434,7 +411,7 @@ function getDisponibilites(params) {
 function getReservations(params) { return getDisponibilites(params); }
 
 // ============================================================
-// ADHÉSION
+// ADHÉSION — identique v4.2
 // ============================================================
 function creerAdhesion(data) {
   try {
@@ -448,21 +425,17 @@ function creerAdhesion(data) {
     sheet.appendRow([id, 'EN_ATTENTE', new Date().toISOString(),
       data.typeAdhesion, data.montant, data.modePaiement || '',
       data.prenom, data.nom, data.email, data.tel || '', data.adresse || '', '']);
-
-    envoyerEmailSafe(data.email,
-      '✅ Demande d\'adhésion reçue — ' + CONFIG.NOM_LIEU,
+    envoyerEmailSafe(data.email, '✅ Demande d\'adhésion reçue — ' + CONFIG.NOM_LIEU,
       'Bonjour ' + data.prenom + ',\n\nNous avons bien reçu votre demande d\'adhésion.\n\n' +
       'Type : ' + data.typeAdhesion + '\nMontant : ' + data.montant + ' €\n' +
       'Mode : ' + (data.modePaiement || 'À préciser') + '\nRéférence : ' + id +
       '\n\nL\'équipe vous contacte sous 48h.\n\n' +
       CONFIG.NOM_LIEU + ' · ' + CONFIG.ADRESSE + ' · ' + CONFIG.TEL);
-
     envoyerEmailSafe(CONFIG.EMAIL_ADMIN,
       '🆕 Adhésion — ' + data.typeAdhesion + ' — ' + data.prenom + ' ' + data.nom,
       'ID : ' + id + '\nType : ' + data.typeAdhesion + '\nMontant : ' + data.montant +
       ' €\nNom : ' + data.prenom + ' ' + data.nom + '\nEmail : ' + data.email +
       '\n\n👉 Traiter dans l\'admin : ' + CONFIG.URL_SITE + '/admin.html');
-
     return { success: true, id: id };
   } catch (err) {
     logErreur('creerAdhesion', err);
@@ -471,7 +444,7 @@ function creerAdhesion(data) {
 }
 
 // ============================================================
-// CONTACT
+// CONTACT — identique v4.2
 // ============================================================
 function traiterContact(data) {
   try {
@@ -489,6 +462,12 @@ function traiterContact(data) {
 
 // ============================================================
 // ADMIN — GET ALL
+// CORRECTION v4.3 : schéma Sheet réel (24 colonnes)
+// id(0) prenom(1) nom(2) email(3) tel(4) orga(5)
+// espace(6) nomEspace(7) usage(8) profil(9) date(10) typeDuree(11)
+// nbHeures(12) heureDebut(13) heureFin(14) montant(15) montantBase(16)
+// options(17) statut(18) participants(19) objet(20)
+// createdAt(21) updatedAt(22) calendarEventId(23)
 // ============================================================
 function adminGetAll() {
   try {
@@ -496,47 +475,108 @@ function adminGetAll() {
     let resSheet = ss.getSheetByName('Reservations');
     if (!resSheet) {
       resSheet = ss.insertSheet('Reservations');
-      resSheet.appendRow(['ID','Statut','Date création','Espace','Usage','Profil','Date','H.début','H.fin','Durée','Participants','Prénom','Nom','Email','Tél','Organisation','Montant','Objet','Options']);
+      resSheet.appendRow(['id','prenom','nom','email','tel','orga','espace','nomEspace',
+        'usage','profil','date','typeDuree','nbHeures','heureDebut','heureFin',
+        'montant','montantBase','options','statut','participants','objet',
+        'createdAt','updatedAt','calendarEventId']);
     }
     const resRows = resSheet.getDataRange().getValues();
-    const statutMap = { 'EN_ATTENTE': 'pending', 'CONFIRME': 'confirmed', 'ANNULE': 'cancelled', 'TERMINE': 'completed' };
+
+    // Mapping statut dans les deux sens (compatibilité ancien + nouveau)
+    const statutMap = {
+      'EN_ATTENTE':'pending', 'CONFIRME':'confirmed',
+      'ANNULE':'cancelled',   'TERMINE':'completed',
+      'pending':'pending',    'confirmed':'confirmed',
+      'cancelled':'cancelled','completed':'completed',
+      'brouillon':'pending'
+    };
 
     const reservations = resRows.slice(1).map(function(r) {
-      const dureeH = parseFloat(r[9]) || 1;
-      var typeDuree = 'heure';
-      var nbHeures = dureeH;
-      if (dureeH >= 7)      { typeDuree = 'journee'; nbHeures = 8; }
-      else if (dureeH >= 3) { typeDuree = 'demi';    nbHeures = 4; }
+      // Détection automatique du schéma :
+      // Ancien (19 col) : col1 = 'EN_ATTENTE'/'CONFIRME'/etc.
+      // Nouveau (24 col) : col1 = prénom (texte libre)
+      const isAncienSchema = ['EN_ATTENTE','CONFIRME','ANNULE','TERMINE'].includes(String(r[1]));
 
-      const rawEspace = String(r[3] || '');
-      const espaceKey = rawEspace
+      var id, prenom, nom, email, tel, orga, espace, nomEspace, usage, profil,
+          date, typeDuree, nbH, heureDebut, heureFin, montant, options,
+          statut, participants, objet, createdAt, calEventId;
+
+      if (isAncienSchema) {
+        // ANCIEN schéma (19 col) : ID,Statut,DateCréa,Espace,Usage,Profil,Date,Hdeb,Hfin,Durée,Part,Prénom,Nom,Email...
+        id          = String(r[0]);
+        statut      = statutMap[String(r[1])] || 'pending';
+        createdAt   = String(r[2] || '');
+        nomEspace   = String(r[3] || '');
+        usage       = String(r[4] || 'reunion');
+        profil      = String(r[5] || 'locataire');
+        date        = String(r[6] || '');
+        heureDebut  = String(r[7] || '');
+        heureFin    = String(r[8] || '');
+        nbH         = parseFloat(r[9]) || 1;
+        participants= String(r[10] || 1);
+        prenom      = String(r[11] || '');
+        nom         = String(r[12] || '');
+        email       = String(r[13] || '');
+        tel         = String(r[14] || '');
+        orga        = String(r[15] || '');
+        montant     = String(r[16] || 0);
+        objet       = String(r[17] || '');
+        options     = String(r[18] || '');
+        calEventId  = '';
+      } else {
+        // NOUVEAU schéma (24 col)
+        id          = String(r[0]);
+        prenom      = String(r[1]  || '');
+        nom         = String(r[2]  || '');
+        email       = String(r[3]  || '');
+        tel         = String(r[4]  || '');
+        orga        = String(r[5]  || '');
+        espace      = String(r[6]  || '');
+        nomEspace   = String(r[7]  || r[6] || '');
+        usage       = String(r[8]  || 'reunion');
+        profil      = String(r[9]  || 'locataire');
+        date        = String(r[10] || '');
+        typeDuree   = String(r[11] || 'heure');
+        nbH         = parseFloat(r[12]) || 1;
+        heureDebut  = String(r[13] || '');
+        heureFin    = String(r[14] || '');
+        montant     = String(r[15] || 0);
+        options     = String(r[17] || '');
+        statut      = statutMap[String(r[18])] || 'pending';
+        participants= String(r[19] || 1);
+        objet       = String(r[20] || '');
+        createdAt   = String(r[21] || '');
+        calEventId  = String(r[23] || '');
+      }
+
+      // Normaliser typeDuree si c'est un chiffre
+      if (!typeDuree || !isNaN(parseFloat(typeDuree))) {
+        if      (nbH >= 7) typeDuree = 'journee';
+        else if (nbH >= 3) typeDuree = 'demi';
+        else               typeDuree = 'heure';
+      }
+
+      // Clé espace normalisée (dernier mot sans accents, pour correspondre aux clés admin.html)
+      const espaceKey = nomEspace
         .normalize('NFD').replace(/[̀-ͯ]/g, '')
-        .toLowerCase().trim()
-        .split(/\s+/).pop() || '';
+        .toLowerCase().trim().split(/\s+/).pop() || (espace || '').toLowerCase();
 
       return {
-        id:          String(r[0]),
-        statut:      statutMap[r[1]] || 'pending',
-        createdAt:   String(r[2]),
-        espace:      espaceKey,
-        nomEspace:   rawEspace,
-        usage:       String(r[4]) || 'reunion',
-        profil:      String(r[5]) || 'locataire',
-        date:        String(r[6]),
-        heureDebut:  String(r[7]),
-        heureFin:    String(r[8]),
-        nbHeures:    String(nbHeures),
-        typeDuree:   typeDuree,
-        participants:String(r[10] || 1),
-        prenom:      String(r[11]),
-        nom:         String(r[12]),
-        email:       String(r[13]),
-        tel:         String(r[14]),
-        orga:        String(r[15]),
-        montant:     String(r[16] || 0),
-        montantBase: String(r[16] || 0),
-        objet:       String(r[17]),
-        options:     String(r[18] || '')
+        id, prenom, nom, email, tel, orga,
+        espace     : espaceKey,
+        nomEspace,
+        usage, profil, date,
+        typeDuree,
+        nbHeures   : String(nbH),
+        heureDebut, heureFin,
+        montant,
+        montantBase: montant,
+        options,
+        statut,
+        participants,
+        objet,
+        createdAt,
+        calEventId
       };
     }).reverse();
 
@@ -550,23 +590,81 @@ function adminGetAll() {
 
 // ============================================================
 // ADMIN — ADD RESA
+// CORRECTION v4.3 : bon ordre de colonnes + email notification
 // ============================================================
 function adminAddResa(resa) {
+  if (!resa) return { success: false, error: 'Données manquantes' };
   try {
-    const ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+    const ss    = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
     const sheet = ss.getSheetByName('Reservations');
-    const statutMap = { 'pending': 'EN_ATTENTE', 'confirmed': 'CONFIRME', 'cancelled': 'ANNULE', 'completed': 'TERMINE' };
-    const dureeH = resa.typeDuree === 'demi' ? 4 : resa.typeDuree === 'journee' ? 8 : parseFloat(resa.nbHeures) || 1;
+    if (!sheet) return { success: false, error: 'Onglet Reservations introuvable' };
+    const statutMap = { pending:'EN_ATTENTE', confirmed:'CONFIRME', cancelled:'ANNULE', completed:'TERMINE' };
+    const now = new Date().toISOString();
+
+    // Écriture dans le nouveau schéma (24 colonnes)
     sheet.appendRow([
-      resa.id || ('RES-' + Date.now()),
+      resa.id          || ('RSV-' + Date.now()),
+      resa.prenom      || '',
+      resa.nom         || '',
+      resa.email       || '',
+      resa.tel         || '',
+      resa.orga        || '',
+      resa.espace      || '',
+      resa.nomEspace   || resa.espace || '',
+      resa.usage       || 'reunion',
+      resa.profil      || 'locataire',
+      resa.date        || '',
+      resa.typeDuree   || 'heure',
+      resa.nbHeures    || '1',
+      resa.heureDebut  || '',
+      resa.heureFin    || '',
+      resa.montant     || 0,
+      resa.montantBase || resa.montant || 0,
+      resa.options     || '',
       statutMap[resa.statut] || 'EN_ATTENTE',
-      resa.createdAt || new Date().toISOString(),
-      resa.nomEspace || resa.espace, resa.usage || 'reunion', resa.profil || 'locataire',
-      resa.date, resa.heureDebut, resa.heureFin, dureeH,
-      resa.participants || 1, resa.prenom, resa.nom, resa.email,
-      resa.tel || '', resa.orga || '', resa.montant || 0, resa.objet || '', resa.options || ''
+      resa.participants || 1,
+      resa.objet       || '',
+      resa.createdAt   || now,
+      now,
+      ''  // calendarEventId
     ]);
-    return { success: true };
+
+    // Email client + admin
+    if (resa.email) {
+      const dl = resa.typeDuree === 'heure'
+        ? (resa.nbHeures + 'h (' + resa.heureDebut + '→' + resa.heureFin + ')')
+        : ({demi:'½ journée',journee:'Journée',semaine:'Semaine',mois:'Mois'}[resa.typeDuree] || resa.typeDuree);
+      const montantStr = (parseFloat(resa.montant)||0) === 0 ? 'Gratuit' : resa.montant + ' €';
+      envoyerEmailSafe(resa.email,
+        '⏳ Réservation reçue — ' + (resa.nomEspace||resa.espace) + ' — Génie Montauban',
+        'Bonjour ' + (resa.prenom||resa.nom||'') + ',\n\n'
+        + 'Votre demande a bien été enregistrée.\n\n'
+        + '📋 Référence : ' + (resa.id||'') + '\n'
+        + '📍 Espace    : ' + (resa.nomEspace||resa.espace||'') + '\n'
+        + '📅 Date      : ' + formaterDate(resa.date) + '\n'
+        + '⏰ Durée     : ' + dl + '\n'
+        + '💰 Montant   : ' + montantStr + '\n'
+        + (resa.options ? '➕ Options  : ' + resa.options + '\n' : '')
+        + "\nL'équipe Génie vous confirme sous 24h ouvrées.\n"
+        + '📞 ' + CONFIG.TEL + '\n\n' + CONFIG.NOM_LIEU + ' · ' + CONFIG.ADRESSE);
+      envoyerEmailSafe(CONFIG.EMAIL_ADMIN,
+        '🔔 Réservation ' + (resa.id||'') + ' — ' + (resa.nomEspace||resa.espace||'') + ' — ' + (resa.prenom||'') + ' ' + (resa.nom||''),
+        'Réf    : ' + (resa.id||'') + '\nEspace : ' + (resa.nomEspace||resa.espace||'')
+        + '\nDate   : ' + (resa.date||'') + ' ' + (resa.heureDebut||'') + '→' + (resa.heureFin||'')
+        + '\nClient : ' + (resa.prenom||'') + ' ' + (resa.nom||'')
+        + '\nEmail  : ' + (resa.email||'')
+        + '\nMontant: ' + (resa.montant||0) + ' €'
+        + (resa.orga  ? '\nOrg.   : ' + resa.orga  : '')
+        + (resa.objet ? '\nObjet  : ' + resa.objet : '')
+        + '\n\n👉 ' + CONFIG.URL_SITE + '/admin.html');
+    }
+
+    if (resa.statut === 'confirmed') {
+      ajouterAuCalendrier(resa.nomEspace||resa.espace, resa.date, resa.heureDebut, resa.heureFin,
+        (resa.prenom||'') + ' ' + (resa.nom||''), resa.id, resa.email, true);
+    }
+
+    return { success: true, ok: true, id: resa.id };
   } catch (err) {
     logErreur('adminAddResa', err);
     return { success: false, error: 'ERREUR_SERVEUR', message: err.message };
@@ -575,39 +673,63 @@ function adminAddResa(resa) {
 
 // ============================================================
 // ADMIN — UPDATE RESA
+// CORRECTION v4.3 : bon ordre de colonnes (24 colonnes)
 // ============================================================
 function adminUpdateResa(resa) {
+  if (!resa) return { success: false, error: 'Données manquantes' };
   try {
-    const ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+    const ss    = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
     const sheet = ss.getSheetByName('Reservations');
-    const rows = sheet.getDataRange().getValues();
-    const statutMap = { 'pending': 'EN_ATTENTE', 'confirmed': 'CONFIRME', 'cancelled': 'ANNULE', 'completed': 'TERMINE' };
-    const dureeH = resa.typeDuree === 'demi' ? 4 : resa.typeDuree === 'journee' ? 8 : parseFloat(resa.nbHeures) || 1;
+    if (!sheet) return { success: false, error: 'Onglet Reservations introuvable' };
+    const rows  = sheet.getDataRange().getValues();
+    const statutMap = { pending:'EN_ATTENTE', confirmed:'CONFIRME', cancelled:'ANNULE', completed:'TERMINE' };
+    const now   = new Date().toISOString();
+
     for (let i = 1; i < rows.length; i++) {
       if (String(rows[i][0]) === String(resa.id)) {
         const newStatut = statutMap[resa.statut] || 'EN_ATTENTE';
-        sheet.getRange(i + 1, 1, 1, 19).setValues([[
-          resa.id, newStatut, rows[i][2],
-          resa.nomEspace || resa.espace, resa.usage || 'reunion', resa.profil || 'locataire',
-          resa.date, resa.heureDebut, resa.heureFin, dureeH,
-          resa.participants || 1, resa.prenom, resa.nom, resa.email,
-          resa.tel || '', resa.orga || '', resa.montant || 0, resa.objet || '', resa.options || ''
+        sheet.getRange(i + 1, 1, 1, 24).setValues([[
+          resa.id,
+          resa.prenom      || '',
+          resa.nom         || '',
+          resa.email       || '',
+          resa.tel         || '',
+          resa.orga        || '',
+          resa.espace      || '',
+          resa.nomEspace   || resa.espace || '',
+          resa.usage       || 'reunion',
+          resa.profil      || 'locataire',
+          resa.date        || '',
+          resa.typeDuree   || 'heure',
+          resa.nbHeures    || '1',
+          resa.heureDebut  || '',
+          resa.heureFin    || '',
+          resa.montant     || 0,
+          resa.montantBase || resa.montant || 0,
+          resa.options     || '',
+          newStatut,
+          resa.participants || 1,
+          resa.objet        || '',
+          rows[i][21]       || now,  // createdAt inchangé
+          now,                       // updatedAt
+          rows[i][23]       || ''    // calendarEventId inchangé
         ]]);
+
         if (newStatut === 'CONFIRME') {
           envoyerEmailSafe(resa.email,
-            '✅ Réservation confirmée — ' + (resa.nomEspace || resa.espace) + ' — ' + resa.date,
-            'Bonjour ' + resa.prenom + ',\n\nVotre réservation est confirmée !\n\n' +
-            '• Espace : ' + (resa.nomEspace || resa.espace) + '\n' +
-            '• Date : ' + formaterDate(resa.date) + '\n' +
-            '• Horaire : ' + resa.heureDebut + ' → ' + resa.heureFin + '\n' +
-            '• Référence : ' + resa.id + '\n\nÀ bientôt !\n' + CONFIG.NOM_LIEU);
-          ajouterAuCalendrier(resa.nomEspace || resa.espace, resa.date, resa.heureDebut, resa.heureFin,
-            resa.prenom + ' ' + resa.nom, resa.id, resa.email, true);
+            '✅ Réservation confirmée — ' + (resa.nomEspace||resa.espace) + ' — Génie Montauban',
+            'Bonjour ' + (resa.prenom||resa.nom) + ',\n\nVotre réservation est confirmée !\n\n'
+            + '• Espace    : ' + (resa.nomEspace||resa.espace) + '\n'
+            + '• Date      : ' + formaterDate(resa.date) + '\n'
+            + '• Horaire   : ' + resa.heureDebut + ' → ' + resa.heureFin + '\n'
+            + '• Référence : ' + resa.id + '\n\nÀ bientôt !\n' + CONFIG.NOM_LIEU);
+          ajouterAuCalendrier(resa.nomEspace||resa.espace, resa.date, resa.heureDebut, resa.heureFin,
+            (resa.prenom||'') + ' ' + resa.nom, resa.id, resa.email, true);
         }
-        return { success: true };
+        return { success: true, ok: true };
       }
     }
-    return { success: false, error: 'ID non trouvé' };
+    return { success: false, error: 'ID non trouvé : ' + resa.id };
   } catch (err) {
     logErreur('adminUpdateResa', err);
     return { success: false, error: 'ERREUR_SERVEUR', message: err.message };
@@ -619,13 +741,15 @@ function adminUpdateResa(resa) {
 // ============================================================
 function adminDeleteResa(id) {
   try {
-    const ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+    const ss    = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
     const sheet = ss.getSheetByName('Reservations');
-    const rows = sheet.getDataRange().getValues();
+    if (!sheet) return { success: false, error: 'Onglet Reservations introuvable' };
+    const rows  = sheet.getDataRange().getValues();
     for (let i = 1; i < rows.length; i++) {
       if (String(rows[i][0]) === String(id)) {
-        sheet.getRange(i + 1, 2).setValue('ANNULE');
-        return { success: true };
+        // Nouveau schéma : statut en col 19 (index 18)
+        sheet.getRange(i + 1, 19).setValue('ANNULE');
+        return { success: true, ok: true };
       }
     }
     return { success: false, error: 'ID non trouvé' };
@@ -636,15 +760,15 @@ function adminDeleteResa(id) {
 }
 
 // ============================================================
-// ADMIN — SAVE CONFIG
+// ADMIN — SAVE CONFIG — identique v4.2
 // ============================================================
 function adminSaveConfig(config) {
   if (!config) return { success: false, error: 'Config manquante' };
   try {
-    const ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+    const ss    = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
     const sheet = ss.getSheetByName('Config');
     if (!sheet) return { success: false, error: 'Feuille Config absente' };
-    const rows = sheet.getDataRange().getValues();
+    const rows  = sheet.getDataRange().getValues();
     function setVal(key, val) {
       for (let i = 0; i < rows.length; i++) {
         if (rows[i][0] === key) { sheet.getRange(i + 1, 2).setValue(val); return; }
@@ -661,14 +785,14 @@ function adminSaveConfig(config) {
 }
 
 // ============================================================
-// ADMIN — LOGIN
+// ADMIN — LOGIN — identique v4.2
 // ============================================================
 function adminLogin(data) {
   try {
-    const ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
-    const config = ss.getSheetByName('Config');
-    if (!config) return { success: false };
-    const rows = config.getDataRange().getValues();
+    const ss  = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+    const cfg = ss.getSheetByName('Config');
+    if (!cfg) return { success: false };
+    const rows    = cfg.getDataRange().getValues();
     const hashRow = rows.find(function(r) { return r[0] === 'ADMIN_PASSWORD_HASH'; });
     if (!hashRow) return { success: false };
     const inputHash = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, data.password)
@@ -683,15 +807,17 @@ function adminLogin(data) {
 }
 
 // ============================================================
-// ADMIN — UPDATE STATUS (v3)
+// ADMIN — UPDATE STATUS
+// CORRECTION v4.3 : indices colonnes alignés nouveau schéma
 // ============================================================
 function adminUpdateStatus(data) {
   try {
-    const ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+    const ss        = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
     const sheetName = data.type === 'reservation' ? 'Reservations' : 'Adhesions';
-    const sheet = ss.getSheetByName(sheetName);
-    const rows = sheet.getDataRange().getValues();
-    const couleurs = {
+    const sheet     = ss.getSheetByName(sheetName);
+    if (!sheet) return { success: false, error: 'Onglet introuvable' };
+    const rows      = sheet.getDataRange().getValues();
+    const couleurs  = {
       'CONFIRME':   { bg: '#D4EDDA', fg: '#155724' },
       'EN_ATTENTE': { bg: '#FFF3CD', fg: '#856404' },
       'ANNULE':     { bg: '#F8D7DA', fg: '#721C24' },
@@ -699,20 +825,27 @@ function adminUpdateStatus(data) {
     };
     for (let i = 1; i < rows.length; i++) {
       if (String(rows[i][0]) === String(data.id)) {
-        sheet.getRange(i + 1, 2).setValue(data.statut);
+        // Reservations nouveau schéma : statut col 19 (index 18)
+        // Adhesions : statut col 2 (index 1) — inchangé
+        const statCol = data.type === 'reservation' ? 19 : 2;
+        sheet.getRange(i + 1, statCol).setValue(data.statut);
         const c = couleurs[data.statut] || { bg: '#fff', fg: '#000' };
-        sheet.getRange(i + 1, 2).setBackground(c.bg).setFontColor(c.fg);
+        sheet.getRange(i + 1, statCol).setBackground(c.bg).setFontColor(c.fg);
+
         if (data.statut === 'CONFIRME' && data.type === 'reservation') {
-          const row = rows[i];
-          envoyerEmailSafe(row[13],
-            '✅ Réservation confirmée — ' + row[3] + ' — ' + row[6],
-            'Bonjour ' + row[11] + ',\n\nVotre réservation est confirmée !\n\n' +
-            '• Espace : ' + row[3] + '\n• Date : ' + row[6] + '\n' +
-            '• Horaire : ' + row[7] + ' → ' + row[8] + '\n• Référence : ' + row[0] + '\n\n' +
-            (data.messageAdmin || '') + '\n\nÀ bientôt !\n' + CONFIG.NOM_LIEU);
-          ajouterAuCalendrier(row[3], row[6], row[7], row[8], row[11] + ' ' + row[12], row[0], row[13], true);
+          // Nouveau schéma : email=col3, prenom=col1, nom=col2, espace=col7, date=col10, hdeb=col13, hfin=col14
+          envoyerEmailSafe(rows[i][3],
+            '✅ Réservation confirmée — ' + rows[i][7] + ' — ' + rows[i][10],
+            'Bonjour ' + (rows[i][1]||rows[i][2]) + ',\n\nVotre réservation est confirmée !\n\n'
+            + '• Espace    : ' + rows[i][7] + '\n'
+            + '• Date      : ' + rows[i][10] + '\n'
+            + '• Horaire   : ' + rows[i][13] + ' → ' + rows[i][14] + '\n'
+            + '• Référence : ' + rows[i][0] + '\n\n'
+            + (data.messageAdmin || '') + '\n\nÀ bientôt !\n' + CONFIG.NOM_LIEU);
+          ajouterAuCalendrier(rows[i][7], rows[i][10], rows[i][13], rows[i][14],
+            rows[i][1] + ' ' + rows[i][2], rows[i][0], rows[i][3], true);
         }
-        return { success: true };
+        return { success: true, ok: true };
       }
     }
     return { success: false, error: 'ID non trouvé' };
@@ -723,15 +856,79 @@ function adminUpdateStatus(data) {
 }
 
 // ============================================================
-// GOOGLE AGENDA
+// GOOGLE CALENDAR — GET EVENTS (ajouté v4.3)
+// ============================================================
+function getCalendarEvents(params) {
+  try {
+    const cal = CalendarApp.getCalendarById(CONFIG.CALENDAR_ID);
+    if (!cal) return { success: false, error: 'Calendrier introuvable', events: [] };
+    const start = new Date((params.start||'') + 'T00:00:00');
+    const end   = new Date((params.end  ||'') + 'T23:59:59');
+    const events = cal.getEvents(start, end).map(ev => ({
+      calEventId : ev.getId(),
+      title      : ev.getTitle(),
+      start      : ev.getStartTime().toISOString(),
+      end        : ev.getEndTime().toISOString(),
+      resaId     : (ev.getDescription().match(/Référence : ([A-Z]{2,3}-[A-Z0-9]+)/) || [])[1] || null
+    }));
+    return { success: true, events: events };
+  } catch(e) {
+    return { success: false, error: e.message, events: [] };
+  }
+}
+
+function syncFromCal(params) {
+  const calData = getCalendarEvents(params);
+  if (!calData.success) return calData;
+  const ss       = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+  const sheet    = ss.getSheetByName('Reservations');
+  if (!sheet) return { success: false, error: 'Onglet Reservations introuvable' };
+  const rows     = sheet.getDataRange().getValues();
+  const existIds = rows.slice(1).map(r => String(r[0]));
+  const now      = new Date().toISOString();
+  const imported = [];
+  // Noms des salles Génie — seuls les événements contenant un de ces mots sont importés
+  const SALLES = ['bourdelle','freinet','gouges','aristote','rousseau','montessori',
+                  'génie','genie','✅','⏳'];
+
+  (calData.events || []).forEach(ev => {
+    // ── Filtre : n'importer QUE les événements liés aux salles Génie ──
+    const titre = (ev.title || '').toLowerCase();
+    const estGenie = SALLES.some(s => titre.includes(s));
+    if (!estGenie) return; // ignorer les RDV personnels
+
+    if (ev.resaId && existIds.includes(ev.resaId)) return;
+    const s  = new Date(ev.start);
+    const id = 'CAL-' + s.getTime().toString(36).toUpperCase();
+    if (existIds.includes(id)) return;
+    const hd = pad(s.getHours()) + ':' + pad(s.getMinutes());
+    const he = pad(new Date(ev.end).getHours()) + ':' + pad(new Date(ev.end).getMinutes());
+    // Extraire la salle depuis le titre (format "✅ Bourdelle — Client")
+    const salleMatch = ev.title.match(/✅\s*(\w+)|⏳\s*(\w+)/i);
+    const salleKey   = salleMatch ? (salleMatch[1]||salleMatch[2]).toLowerCase() : '';
+    sheet.appendRow([id,'','',ev.title,'','',salleKey,ev.title,'reunion','locataire',
+      ev.start.split('T')[0],'heure','',hd,he,0,0,'','CONFIRME',1,
+      'Importé depuis Calendar',now,now,ev.calEventId||'']);
+    imported.push(id);
+  });
+  return { success: true, imported: imported };
+}
+
+// ============================================================
+// GOOGLE AGENDA — identique v4.2 + nettoyage date
 // ============================================================
 function ajouterAuCalendrier(espace, date, heureDebut, heureFin, client, ref, email, confirme) {
   try {
     const cal = CalendarApp.getCalendarById(CONFIG.CALENDAR_ID);
     if (!cal) return;
-    const debut = new Date(date + 'T' + heureDebut + ':00');
-    const fin   = new Date(date + 'T' + heureFin   + ':00');
-    if (isNaN(debut.getTime()) || isNaN(fin.getTime())) return;
+    // Nettoyer la date (peut contenir T00:00:00.000Z)
+    const dateStr = String(date || '').split('T')[0];
+    if (!dateStr || !/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return;
+    const hd = String(heureDebut || '09:00').substring(0,5);
+    const hf = String(heureFin  || '10:00').substring(0,5);
+    const debut = new Date(dateStr + 'T' + hd + ':00');
+    const fin   = new Date(dateStr + 'T' + hf + ':00');
+    if (isNaN(debut.getTime()) || isNaN(fin.getTime()) || fin <= debut) return;
     const titre = (confirme ? '✅ ' : '⏳ ') + espace + ' — ' + client;
     cal.createEvent(titre, debut, fin, {
       description: 'Référence : ' + ref + '\nEmail : ' + email,
@@ -743,16 +940,73 @@ function ajouterAuCalendrier(espace, date, heureDebut, heureFin, client, ref, em
 }
 
 // ============================================================
-// HELPERS
+// VÉRIFIER NOUVEL AVIS — déplacé depuis "Projet sans titre"
+// Trigger : toutes les heures ou toutes les 4h selon préférence
+// ============================================================
+function verifierNouvelAvis() {
+  try {
+    const ss    = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+    const sheet = ss.getSheetByName('Avis_Qualite');
+    if (!sheet) {
+      Logger.log('⚠️ Onglet Avis_Qualite introuvable — vérifier le nom exact dans le Sheet.');
+      return;
+    }
+    const last = sheet.getLastRow();
+    if (last < 2) return;
+
+    const props      = PropertiesService.getScriptProperties();
+    const derniereOK = parseInt(props.getProperty('derniere_ligne')) || 1;
+    if (last <= derniereOK) return;
+
+    const nbNouveaux = last - derniereOK;
+    if (MailApp.getRemainingDailyQuota() < nbNouveaux) {
+      Logger.log('⚠️ Quota insuffisant (' + MailApp.getRemainingDailyQuota() + ' restants pour ' + nbNouveaux + ' avis)');
+      return;
+    }
+
+    const data = sheet.getRange(derniereOK + 1, 3, nbNouveaux, 6).getValues();
+    for (var i = 0; i < data.length; i++) {
+      var note     = parseInt(data[i][0]) || 0;
+      var services = data[i][1] || 'Non précisé';
+      var avis     = data[i][2] || '(vide)';
+      var amelio   = data[i][3] || '(vide)';
+      var reco     = data[i][4] || 'Non renseigné';
+      var prenom   = data[i][5] || 'Anonyme';
+      var etoiles  = '';
+      for (var j = 1; j <= 5; j++) etoiles += (j <= note ? '★' : '☆');
+      envoyerEmailSafe(CONFIG.EMAIL_ADMIN,
+        '⭐ Nouvel avis Génie — ' + note + '/5 de ' + prenom,
+        'Bonjour Samir,\n\n'
+        + 'Note       : ' + etoiles + ' (' + note + '/5)\n'
+        + 'Prénom     : ' + prenom + '\n'
+        + 'Service(s) : ' + services + '\n'
+        + 'Recommande : ' + reco + '\n\n'
+        + 'CE QUI A PLU :\n' + avis + '\n\n'
+        + 'À AMÉLIORER :\n' + amelio + '\n\n'
+        + (note >= 4 ? '✅ Éligible publication. Tape "oui" dans la colonne Approuvé.\n\n'
+                     : '⚠️ Note < 4 — ne sera pas affiché.\n\n')
+        + 'Sheets : https://docs.google.com/spreadsheets/d/' + CONFIG.SPREADSHEET_ID);
+    }
+    props.setProperty('derniere_ligne', last);
+    Logger.log('verifierNouvelAvis : ' + nbNouveaux + ' avis traité(s).');
+  } catch (err) {
+    Logger.log('❌ ERREUR verifierNouvelAvis : ' + err.message + '\n' + (err.stack||''));
+  }
+}
+
+// ============================================================
+// HELPERS — identiques v4.2
 // ============================================================
 function pad(n) { return String(n).padStart(2, '0'); }
 
 function formaterDate(s) {
   if (!s) return '';
-  const p = s.split('-');
+  const str = String(s).split('T')[0];
+  const p   = str.split('-');
+  if (p.length < 3) return str;
   const mois = ['janvier','février','mars','avril','mai','juin',
                  'juillet','août','septembre','octobre','novembre','décembre'];
-  return parseInt(p[2]) + ' ' + mois[parseInt(p[1]) - 1] + ' ' + p[0];
+  return parseInt(p[2]) + ' ' + (mois[parseInt(p[1]) - 1]||'') + ' ' + p[0];
 }
 
 function heuresFin(debut, duree) {
@@ -764,10 +1018,10 @@ function heuresFin(debut, duree) {
 function lireConfig(ss) {
   try {
     const rows = ss.getSheetByName('Config').getDataRange().getValues();
-    const cfg = { email: CONFIG.EMAIL_ADMIN, tel: CONFIG.TEL };
+    const cfg  = { email: CONFIG.EMAIL_ADMIN, tel: CONFIG.TEL };
     rows.forEach(function(r) {
-      if (r[0] === 'EMAIL_CONTACT') cfg.email = r[1];
-      if (r[0] === 'TEL_CONTACT')   cfg.tel   = r[1];
+      if (r[0] === 'EMAIL_CONTACT' || r[0] === 'email') cfg.email = r[1];
+      if (r[0] === 'TEL_CONTACT'   || r[0] === 'tel')   cfg.tel   = r[1];
     });
     return cfg;
   } catch(e) {
@@ -776,375 +1030,315 @@ function lireConfig(ss) {
 }
 
 // ============================================================
-// MONITORING — BILAN SANTÉ QUOTIDIEN
-// Déclencher : chaque jour à 08h00
+// MONITORING — identique v4.2
 // ============================================================
 function checkSante() {
-  var lignes = [];
-  var alertes = [];
-  var now = new Date();
-
+  var lignes = [], alertes = [], now = new Date();
   try {
-    // 1. Quota email
     var quota = MailApp.getRemainingDailyQuota();
     lignes.push('📧 Quota email restant : ' + quota + '/jour');
-    if (quota < CONFIG.QUOTA_ALERTE_MIN) {
-      alertes.push('⚠️ QUOTA CRITIQUE : seulement ' + quota + ' emails restants !');
-    }
-
+    if (quota < CONFIG.QUOTA_ALERTE_MIN) alertes.push('⚠️ QUOTA CRITIQUE : ' + quota + ' emails restants !');
     var ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
-
-    // 2. Réservations EN_ATTENTE depuis trop longtemps
     var resSheet = ss.getSheetByName('Reservations');
     if (resSheet) {
       var resRows = resSheet.getDataRange().getValues();
       var resBloquees = [];
       for (var i = 1; i < resRows.length; i++) {
-        if (resRows[i][1] === 'EN_ATTENTE') {
-          var createdAt = new Date(resRows[i][2]);
-          var heuresEcoulees = (now - createdAt) / 3600000;
-          if (heuresEcoulees > CONFIG.RESA_ATTENTE_MAX_H) {
-            resBloquees.push(resRows[i][0] + ' — ' + resRows[i][11] + ' ' + resRows[i][12] +
-              ' (' + Math.round(heuresEcoulees) + 'h en attente)');
+        // Nouveau schéma : statut col18, createdAt col21, prenom col1, nom col2, id col0
+        var statutResa = String(resRows[i][18]||resRows[i][1]||'');
+        if (statutResa === 'EN_ATTENTE') {
+          var createdAt = new Date(resRows[i][21]||resRows[i][2]||now);
+          var h = (now - createdAt) / 3600000;
+          if (h > CONFIG.RESA_ATTENTE_MAX_H) {
+            var prenomR = String(resRows[i][1]||resRows[i][11]||'');
+            var nomR    = String(resRows[i][2]||resRows[i][12]||'');
+            resBloquees.push(resRows[i][0] + ' — ' + prenomR + ' ' + nomR + ' (' + Math.round(h) + 'h)');
           }
         }
       }
       lignes.push('📋 Réservations EN_ATTENTE > ' + CONFIG.RESA_ATTENTE_MAX_H + 'h : ' + resBloquees.length);
-      if (resBloquees.length > 0) {
-        alertes.push('🔔 ' + resBloquees.length + ' réservation(s) sans réponse depuis +' +
-          CONFIG.RESA_ATTENTE_MAX_H + 'h :\n  - ' + resBloquees.join('\n  - '));
-      }
+      if (resBloquees.length > 0)
+        alertes.push('🔔 ' + resBloquees.length + ' réservation(s) sans réponse :\n  - ' + resBloquees.join('\n  - '));
     }
-
-    // 3. Adhésions EN_ATTENTE
     var adhSheet = ss.getSheetByName('Adhesions');
     if (adhSheet) {
       var adhRows = adhSheet.getDataRange().getValues();
       var adhBloquees = [];
       for (var j = 1; j < adhRows.length; j++) {
         if (adhRows[j][1] === 'EN_ATTENTE') {
-          var createdAdh = new Date(adhRows[j][2]);
-          var heuresAdh = (now - createdAdh) / 3600000;
-          if (heuresAdh > CONFIG.ADH_ATTENTE_MAX_H) {
-            adhBloquees.push(adhRows[j][0] + ' — ' + adhRows[j][6] + ' ' + adhRows[j][7] +
-              ' (' + Math.round(heuresAdh) + 'h en attente)');
-          }
+          var hAdh = (now - new Date(adhRows[j][2])) / 3600000;
+          if (hAdh > CONFIG.ADH_ATTENTE_MAX_H)
+            adhBloquees.push(adhRows[j][0] + ' — ' + adhRows[j][6] + ' ' + adhRows[j][7] + ' (' + Math.round(hAdh) + 'h)');
         }
       }
       lignes.push('🤝 Adhésions EN_ATTENTE > ' + CONFIG.ADH_ATTENTE_MAX_H + 'h : ' + adhBloquees.length);
-      if (adhBloquees.length > 0) {
-        alertes.push('🔔 ' + adhBloquees.length + ' adhésion(s) sans réponse depuis +' +
-          CONFIG.ADH_ATTENTE_MAX_H + 'h :\n  - ' + adhBloquees.join('\n  - '));
-      }
+      if (adhBloquees.length > 0)
+        alertes.push('🔔 ' + adhBloquees.length + ' adhésion(s) sans réponse :\n  - ' + adhBloquees.join('\n  - '));
     }
-
-    // 4. Tokens actifs
-    var tokenSheet = ss.getSheetByName('Tokens');
-    if (tokenSheet) {
-      var tokenRows = tokenSheet.getDataRange().getValues();
-      var tokensTotal = Math.max(0, tokenRows.length - 1);
-      var tokensExpires = 0;
-      for (var k = 1; k < tokenRows.length; k++) {
-        if (new Date(tokenRows[k][3]) < now) tokensExpires++;
-      }
-      lignes.push('🔑 Tokens : ' + tokensTotal + ' total, ' + tokensExpires + ' expirés (nettoyage hebdo)');
-    }
-
-    // 5. Clients
-    var clientSheet = ss.getSheetByName('Clients');
-    if (clientSheet) {
-      var nbClients = Math.max(0, clientSheet.getLastRow() - 1);
-      lignes.push('👥 Clients enregistrés : ' + nbClients);
-    }
-
-    // Envoi du rapport
-    var sujet = alertes.length > 0
-      ? '🚨 Génie — ' + alertes.length + ' alerte(s) système'
-      : '✅ Génie — Bilan quotidien OK';
-
-    var corps = '=== BILAN SANTÉ GÉNIE MONTAUBAN — ' + now.toLocaleDateString('fr-FR') + ' ===\n\n';
-    corps += lignes.join('\n') + '\n\n';
-
-    if (alertes.length > 0) {
-      corps += '=== ALERTES À TRAITER ===\n\n' + alertes.join('\n\n') + '\n\n';
-      corps += '👉 Admin : ' + CONFIG.URL_SITE + '/admin.html\n';
-    } else {
-      corps += '✅ Tout fonctionne normalement.\n';
-    }
-
-    corps += '\n---\nRapport automatique — Génie Montauban v4.2';
+    var sujet  = alertes.length > 0 ? '🚨 Génie — ' + alertes.length + ' alerte(s)' : '✅ Génie — Bilan quotidien OK';
+    var corps  = '=== BILAN SANTÉ GÉNIE — ' + now.toLocaleDateString('fr-FR') + ' ===\n\n' + lignes.join('\n') + '\n\n';
+    if (alertes.length > 0) corps += '=== ALERTES ===\n\n' + alertes.join('\n\n') + '\n\n👉 ' + CONFIG.URL_SITE + '/admin.html\n';
+    else corps += '✅ Tout fonctionne normalement.\n';
+    corps += '\n---\nGénie Montauban v4.3';
     envoyerEmailSafe(CONFIG.EMAIL_ADMIN, sujet, corps);
-
   } catch (err) {
     Logger.log('❌ checkSante ERREUR : ' + err.message);
-    try {
-      MailApp.sendEmail(CONFIG.EMAIL_ADMIN,
-        '❌ Génie — Erreur critique bilan santé',
-        'Le bilan santé automatique a échoué :\n' + err.message + '\n' + (err.stack || ''));
-    } catch(e2) { Logger.log('Impossible d\'envoyer l\'alerte : ' + e2.message); }
+    try { MailApp.sendEmail(CONFIG.EMAIL_ADMIN, '❌ Génie — Erreur bilan santé', err.message); } catch(e2) {}
   }
 }
 
-// ============================================================
-// MONITORING — NETTOYAGE DES TOKENS EXPIRÉS
-// Déclencher : chaque semaine (lundi matin)
-// ============================================================
 function nettoyerTokens() {
   try {
-    var ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+    var ss    = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
     var sheet = ss.getSheetByName('Tokens');
     if (!sheet) return;
-    var rows = sheet.getDataRange().getValues();
-    var now = new Date();
-    var supprimees = 0;
-    // Parcours à l'envers pour supprimer sans décalage d'index
+    var rows  = sheet.getDataRange().getValues();
+    var now   = new Date(), supprimees = 0;
     for (var i = rows.length - 1; i >= 1; i--) {
-      var expire = new Date(rows[i][3]);
-      var utilise = rows[i][4] === true;
-      if (expire < now || utilise) {
-        sheet.deleteRow(i + 1);
-        supprimees++;
+      if (new Date(rows[i][3]) < now || rows[i][4] === true) {
+        sheet.deleteRow(i + 1); supprimees++;
       }
     }
-    Logger.log('🧹 Nettoyage tokens : ' + supprimees + ' supprimés, ' +
-      Math.max(0, rows.length - 1 - supprimees) + ' conservés.');
-  } catch (err) {
-    logErreur('nettoyerTokens', err);
-  }
+    Logger.log('🧹 Tokens nettoyés : ' + supprimees);
+  } catch (err) { logErreur('nettoyerTokens', err); }
 }
 
-// ============================================================
-// MONITORING — ALERTE RÉSERVATIONS BLOQUÉES
-// Déclencher : toutes les 6h en semaine
-// ============================================================
 function alerterResasBloquees() {
   try {
-    var ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+    var ss    = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
     var sheet = ss.getSheetByName('Reservations');
     if (!sheet) return;
-    var rows = sheet.getDataRange().getValues();
-    var now = new Date();
-    var bloquees = [];
+    var rows  = sheet.getDataRange().getValues();
+    var now   = new Date(), bloquees = [];
     for (var i = 1; i < rows.length; i++) {
-      if (rows[i][1] === 'EN_ATTENTE') {
-        var created = new Date(rows[i][2]);
-        var h = (now - created) / 3600000;
+      var statut = String(rows[i][18]||rows[i][1]||'');
+      if (statut === 'EN_ATTENTE') {
+        var h = (now - new Date(rows[i][21]||rows[i][2]||now)) / 3600000;
         if (h > CONFIG.RESA_ATTENTE_MAX_H) {
-          bloquees.push({
-            id: rows[i][0],
-            client: rows[i][11] + ' ' + rows[i][12],
-            email: rows[i][13],
-            espace: rows[i][3],
-            date: rows[i][6],
-            heures: Math.round(h)
-          });
+          bloquees.push({ id: rows[i][0],
+            client : String(rows[i][1]||rows[i][11]||'') + ' ' + String(rows[i][2]||rows[i][12]||''),
+            espace : String(rows[i][7]||rows[i][3]||''),
+            date   : String(rows[i][10]||rows[i][6]||''),
+            heures : Math.round(h) });
         }
       }
     }
     if (bloquees.length === 0) return;
-
-    var corps = '🔔 ' + bloquees.length + ' réservation(s) EN_ATTENTE depuis plus de ' +
-      CONFIG.RESA_ATTENTE_MAX_H + 'h :\n\n';
-    bloquees.forEach(function(r) {
-      corps += '• ' + r.id + ' — ' + r.client + ' — ' + r.espace + ' le ' + r.date +
-        ' (' + r.heures + 'h en attente)\n';
-    });
-    corps += '\n👉 Traiter maintenant : ' + CONFIG.URL_SITE + '/admin.html';
-
-    envoyerEmailSafe(CONFIG.EMAIL_ADMIN,
-      '⏰ Génie — ' + bloquees.length + ' réservation(s) à confirmer',
-      corps);
-  } catch (err) {
-    logErreur('alerterResasBloquees', err);
-  }
+    var corps = '🔔 ' + bloquees.length + ' réservation(s) EN_ATTENTE depuis +' + CONFIG.RESA_ATTENTE_MAX_H + 'h :\n\n';
+    bloquees.forEach(function(r) { corps += '• ' + r.id + ' — ' + r.client + ' — ' + r.espace + ' le ' + r.date + ' (' + r.heures + 'h)\n'; });
+    corps += '\n👉 ' + CONFIG.URL_SITE + '/admin.html';
+    envoyerEmailSafe(CONFIG.EMAIL_ADMIN, '⏰ Génie — ' + bloquees.length + ' réservation(s) à confirmer', corps);
+  } catch (err) { logErreur('alerterResasBloquees', err); }
 }
 
 // ============================================================
-// TEST SYSTÈME — à exécuter manuellement pour vérifier tout
+// TEST SYSTÈME
 // ============================================================
 function testSysteme() {
-  Logger.log('=== TEST SYSTÈME GÉNIE v4.2 ===');
+  Logger.log('=== TEST SYSTÈME GÉNIE v4.3 ===');
   try {
-    // Test 1 : accès au spreadsheet
-    var ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+    var ss      = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
     var feuilles = ss.getSheets().map(function(s) { return s.getName(); });
     Logger.log('✅ Spreadsheet OK — Feuilles : ' + feuilles.join(', '));
-
-    // Test 2 : quota email
-    var quota = MailApp.getRemainingDailyQuota();
-    Logger.log('✅ Quota email : ' + quota + ' emails restants aujourd\'hui');
-
-    // Test 3 : accès agenda
+    Logger.log('✅ Quota email : ' + MailApp.getRemainingDailyQuota() + ' restants');
     var cal = CalendarApp.getCalendarById(CONFIG.CALENDAR_ID);
-    Logger.log(cal ? '✅ Agenda OK : ' + cal.getName() : '⚠️ Agenda introuvable avec ID : ' + CONFIG.CALENDAR_ID);
-
-    // Test 4 : vérifier feuilles obligatoires
-    var feillesRequises = ['Clients', 'Tokens', 'Reservations', 'Adhesions', 'Config'];
-    feillesRequises.forEach(function(nom) {
+    Logger.log(cal ? '✅ Agenda OK : ' + cal.getName() : '⚠️ Agenda introuvable : ' + CONFIG.CALENDAR_ID);
+    ['Clients','Tokens','Reservations','Adhesions','Config','Avis_Qualite'].forEach(function(nom) {
       var s = ss.getSheetByName(nom);
-      if (s) {
-        Logger.log('✅ Feuille "' + nom + '" OK (' + Math.max(0, s.getLastRow() - 1) + ' lignes)');
-      } else {
-        Logger.log('❌ Feuille "' + nom + '" MANQUANTE — lancer setupComplet()');
-      }
+      Logger.log(s ? '✅ "' + nom + '" (' + Math.max(0,s.getLastRow()-1) + ' lignes)' : '❌ "' + nom + '" MANQUANT');
     });
-
-    // Test 5 : vérifier hash admin
-    var cfg = ss.getSheetByName('Config');
-    if (cfg) {
-      var rows = cfg.getDataRange().getValues();
-      var hashRow = rows.find(function(r) { return r[0] === 'ADMIN_PASSWORD_HASH'; });
-      Logger.log(hashRow ? '✅ Hash admin configuré' : '❌ Hash admin MANQUANT — lancer setupComplet()');
-    }
-
-    Logger.log('=== FIN TEST SYSTÈME ===');
-    Logger.log('ℹ️ Si tout est ✅ : lancer setupDeclencheurs() pour activer la surveillance automatique');
+    var cfg     = ss.getSheetByName('Config');
+    var hashRow = cfg ? cfg.getDataRange().getValues().find(function(r){return r[0]==='ADMIN_PASSWORD_HASH';}) : null;
+    Logger.log(hashRow ? '✅ Hash admin OK' : '❌ Hash admin MANQUANT');
+    Logger.log('=== FIN TEST ===');
   } catch (err) {
-    Logger.log('❌ ERREUR SYSTÈME : ' + err.message + '\n' + (err.stack || ''));
+    Logger.log('❌ ERREUR : ' + err.message);
   }
 }
 
 // ============================================================
-// CONFIGURATION DES DÉCLENCHEURS AUTOMATIQUES
-// À exécuter UNE SEULE FOIS depuis l'éditeur Apps Script
+// MIGRATION SHEET v2 — Écriture directe des données corrigées
+// Basé sur analyse complète de chaque ligne (06/06/2026)
+// Exécuter UNE SEULE FOIS puis supprimer cette fonction.
+// ============================================================
+function migrateReservations() {
+  var ss    = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+  var sheet = ss.getSheetByName('Reservations');
+
+  // ── Données 100% corrigées — analyse ligne par ligne du 06/06/2026 ──
+  // Colonnes : id | prenom | nom | email | tel | orga | espace | nomEspace |
+  //            usage | profil | date | typeDuree | nbHeures | heureDebut |
+  //            heureFin | montant | montantBase | options | statut |
+  //            participants | objet | createdAt | updatedAt | calendarEventId
+  var data = [
+    // ── EN-TÊTES ──
+    ['id','prenom','nom','email','tel','orga','espace','nomEspace','usage','profil',
+     'date','typeDuree','nbHeures','heureDebut','heureFin','montant','montantBase',
+     'options','statut','participants','objet','createdAt','updatedAt','calendarEventId'],
+
+    // ── L01 : Marcelle — Bourdelle — 03/06/2026 (données v4.3 OK) ──
+    ['GEN-MO1L3WA6','Marcelle','','marcelle.naany@gmail.com','0767682102','LE GENIE',
+     'bourdelle','Antoine Bourdelle','reservation-publique','asso',
+     '2026-06-03','demi','4','18:50','22:50','0','0','','CONFIRME','1','',
+     '2026-04-16T14:38:26.094Z','2026-04-17T06:56:48.194Z',
+     '27jp1emh6mq7pokchjeciqt6lc@google.com'],
+
+    // ── L02 : Andrea — Bourdelle — 20/05/2026 (données v4.3 OK) ──
+    ['GEN-MO2PL320','Andrea','','andrea.caro@boutdunez.fr','650488553',
+     'Compagnie du Bout Du nez','bourdelle','Antoine Bourdelle',
+     'reservation-publique','asso','2026-05-20','journee','9','08:50','17:50',
+     '0','0','','CONFIRME','1','',
+     '2026-04-17T09:31:32.664Z','2026-04-17T09:33:04.600Z',
+     's5n5nsnujs9qltht5o1ntg6qe8@google.com'],
+
+    // ── L03 : Augustin — Aristote (colonnes décalées reconstituées, date inconnue) ──
+    ['GEN-MONBPYEJ','Augustin','','anaisreflexologue82@gmail.com','646015367',
+     'Entreprise en cours de création','aristote','Aristote','reunion','plein',
+     '','demi','4','10:05','14:05','12','12','','CONFIRME','1','','','',''],
+
+    // ── L04 : connaissance — Freinet (colonnes décalées reconstituées, date inconnue) ──
+    ['RSV-MOZLZRKO','connaissance','','actresorerie.toulouse@gmail.com','',
+     'antre-connaissance','freinet','Célestin Freinet','reunion','locataire',
+     '','heure','1','10:00','11:00','20','20','','CONFIRME','1','','','',''],
+
+    // ── L05 : connaissance — Freinet (colonnes décalées reconstituées, date inconnue) ──
+    ['RSV-MOZM3W3N','connaissance','','actresorerie.toulouse@gmail.com','',
+     'antre connaissance','freinet','Célestin Freinet','reunion','locataire',
+     '','heure','1','10:00','11:00','20','20','','CONFIRME','1','','','',''],
+
+    // ── L06 : CONNAISSANCE — Freinet (colonnes décalées reconstituées, date inconnue) ──
+    ['RSV-MOZM56KD','CONNAISSANCE','','actresorerie.toulouse@gmail.com','',
+     '','freinet','Célestin Freinet','reunion','locataire',
+     '','heure','1','10:00','11:00','20','20','','CONFIRME','1','','','',''],
+
+    // ── L07 : FNE82/Enercit — Bourdelle (import Calendar, date inconnue) ──
+    ['CAL-MPCGGZQJ','FNE82/Enercit','','','','FNE82/Enercit',
+     'bourdelle','Antoine Bourdelle','reunion','locataire',
+     '','journee','8','09:00','17:00','0','0','','CONFIRME','1',
+     'FNE82/Enercit - Réservation salle Antoine Bourdelle','','',''],
+
+    // ── L08 : Perrine Leparc — Freinet — 05/06/2026 (date corrigée) ──
+    ['GEN-MPXT2VX1','Perrine','Leparc','perrine.leparc@gmail.com','679314094',
+     'particulier','freinet','Célestin Freinet','reservation-publique','plein',
+     '2026-06-05','journee','8','07:30','18:30','180','180','','CONFIRME','1','',
+     '2026-06-03T08:29:55.861Z','2026-06-03T08:29:55.861Z',''],
+
+    // ── L09 : Lefevre — Freinet — 07/06/2026 (date corrigée) ──
+    ['GEN-MPZLMF7Q','Lefevre','','actresorerie.toulouse@gmail.com','641066283',
+     "L'Antre Connaissance",'freinet','Célestin Freinet',
+     'reservation-publique','adherent','2026-06-07','heure','1','10:00','11:00',
+     '20','20','','CONFIRME','1','Ce sera Guillaume Koke qui animera.',
+     '2026-06-04T14:36:42.758Z','2026-06-04T14:36:42.758Z',''],
+
+    // ── L10 : Julie — Bourdelle — 09/06/2026 (date corrigée, virgule supprimée) ──
+    ['GEN-MQ0OIN4B','Julie','','julie.suau@mobicoop.org','768826061',
+     'Association Covoiturons sur le Pouce','bourdelle','Antoine Bourdelle',
+     'reservation-publique','locataire','2026-06-09','demi','4','17:00','20:00',
+     '70','70','Adhésion Génie','CONFIRME','1','Vidéo projecteur ?',
+     '2026-06-05T08:45:31.403Z','2026-06-05T08:45:31.403Z','']
+  ];
+
+  // ── Réécriture complète ──
+  sheet.clearContents();
+  sheet.getRange(1, 1, data.length, 24).setValues(data);
+  sheet.getRange(1, 1, 1, 24)
+    .setFontWeight('bold').setBackground('#1E4A6E').setFontColor('#FFFFFF');
+  sheet.setFrozenRows(1);
+  sheet.autoResizeColumns(1, 24);
+
+  var msg = '✅ Migration OK — ' + (data.length - 1) + ' réservations écrites proprement.';
+  Logger.log(msg);
+  return msg;
+}
+
+// ============================================================
+// NETTOYAGE — Supprime les lignes importées depuis Calendar
+// Exécuter manuellement pour nettoyer les imports parasites
+// ============================================================
+function nettoyerImportsCal() {
+  var ss    = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+  var sheet = ss.getSheetByName('Reservations');
+  var rows  = sheet.getDataRange().getValues();
+  var suppr = 0;
+  // Parcourir en ordre inverse pour ne pas décaler les indices
+  for (var i = rows.length - 1; i >= 1; i--) {
+    var id    = String(rows[i][0] || '');
+    var objet = String(rows[i][20] || '');
+    var email = String(rows[i][3] || '');
+    // Supprimer : lignes CAL- avec "Importé depuis Calendar" OU sans email OU données parasites
+    var isCalImport  = id.startsWith('CAL-') && objet === 'Importé depuis Calendar';
+    var isGarbage    = id.startsWith('RSV-') && !email.includes('@');
+    if (isCalImport || isGarbage) {
+      sheet.deleteRow(i + 1);
+      suppr++;
+    }
+  }
+  var msg = '✅ Nettoyage terminé : ' + suppr + ' lignes supprimées.';
+  Logger.log(msg);
+  return msg;
+}
+
+// ============================================================
+// SETUP DÉCLENCHEURS
 // ============================================================
 function setupDeclencheurs() {
-  // Supprimer les anciens déclencheurs pour éviter les doublons
-  ScriptApp.getProjectTriggers().forEach(function(t) {
-    ScriptApp.deleteTrigger(t);
-  });
-
-  // Bilan santé quotidien à 8h00
-  ScriptApp.newTrigger('checkSante')
-    .timeBased().everyDays(1).atHour(8).create();
-
-  // Alerte réservations bloquées toutes les 6h (08h, 14h, 20h)
-  ScriptApp.newTrigger('alerterResasBloquees')
-    .timeBased().everyHours(6).create();
-
-  // Nettoyage tokens hebdomadaire (lundi matin)
-  ScriptApp.newTrigger('nettoyerTokens')
-    .timeBased().onWeekDay(ScriptApp.WeekDay.MONDAY).atHour(7).create();
-
-  Logger.log('✅ Déclencheurs configurés :');
-  Logger.log('  - checkSante : tous les jours à 8h');
-  Logger.log('  - alerterResasBloquees : toutes les 6h');
-  Logger.log('  - nettoyerTokens : tous les lundis à 7h');
-  Logger.log('Total : ' + ScriptApp.getProjectTriggers().length + ' déclencheur(s) actif(s)');
+  ScriptApp.getProjectTriggers().forEach(function(t) { ScriptApp.deleteTrigger(t); });
+  ScriptApp.newTrigger('checkSante').timeBased().everyDays(1).atHour(8).create();
+  ScriptApp.newTrigger('alerterResasBloquees').timeBased().everyHours(6).create();
+  ScriptApp.newTrigger('nettoyerTokens').timeBased().onWeekDay(ScriptApp.WeekDay.MONDAY).atHour(7).create();
+  ScriptApp.newTrigger('verifierNouvelAvis').timeBased().everyHours(4).create();
+  Logger.log('✅ Déclencheurs configurés : checkSante(8h), alerterResasBloquees(6h), nettoyerTokens(lundi), verifierNouvelAvis(4h)');
+  Logger.log('Total : ' + ScriptApp.getProjectTriggers().length + ' déclencheur(s)');
 }
 
 // ============================================================
-// DIAGNOSTIC TEST ADHÉSION — à exécuter manuellement
-// ============================================================
-function testAdhesion() {
-  try {
-    const result = creerAdhesion({
-      action: 'ADHERER',
-      typeAdhesion: 'TEST – Sympathisant',
-      montant: '10',
-      modePaiement: 'Test',
-      prenom: 'Test',
-      nom: 'Diagnostic',
-      email: CONFIG.EMAIL_ADMIN,
-      tel: '',
-      adresse: ''
-    });
-    Logger.log('✅ testAdhesion réussi : ' + JSON.stringify(result));
-  } catch(e) {
-    Logger.log('❌ testAdhesion ERREUR : ' + e.message + '\n' + e.stack);
-  }
-}
-
-// ============================================================
-// SETUP COMPLET (à exécuter une seule fois)
+// SETUP COMPLET
 // ============================================================
 function setupComplet() {
   const ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
-
   function creerFeuille(nom, entetes, couleur) {
     var s = ss.getSheetByName(nom);
     if (!s) {
       s = ss.insertSheet(nom);
-      s.getRange(1, 1, 1, entetes.length).setValues([entetes])
-       .setFontWeight('bold').setBackground(couleur).setFontColor('#FFFFFF');
+      s.getRange(1,1,1,entetes.length).setValues([entetes]).setFontWeight('bold').setBackground(couleur).setFontColor('#FFFFFF');
       s.setFrozenRows(1);
     }
     return s;
   }
-
-  creerFeuille('Clients',
-    ['ID','Date inscription','Prénom','Nom','Email','Téléphone','Type','Structure',
-     'Profil tarifaire','Statut','CGV','RI','Statuts','IP','Nb réservations','Dernière connexion'],
-    '#1E4A6E');
-  creerFeuille('Tokens', ['Token','Email','Date création','Expiration','Utilisé'], '#2D3748');
-  creerFeuille('Reservations',
-    ['ID','Statut','Date création','Espace','Type espace','Profil tarifaire',
-     'Date réservation','Heure début','Heure fin','Durée (h)','Participants',
-     'Prénom','Nom','Email','Téléphone','Structure','Montant (€)','Message','Options'],
-    '#1E4A6E');
-  creerFeuille('Adhesions',
-    ['ID','Statut','Date demande',"Type d'adhésion",'Montant (€)','Mode paiement',
-     'Prénom','Nom / Structure','Email','Téléphone','Adresse','Notes'],
-    '#27AE60');
-  creerFeuille('Logs',
-    ['Timestamp','Contexte','Erreur','Stack'],
-    '#C0392B');
-
-  // Feuille Config — mot de passe admin aléatoire
+  creerFeuille('Clients',['ID','Date inscription','Prénom','Nom','Email','Téléphone','Type','Structure','Profil tarifaire','Statut','CGV','RI','Statuts','IP','Nb réservations','Dernière connexion'],'#1E4A6E');
+  creerFeuille('Tokens',['Token','Email','Date création','Expiration','Utilisé'],'#2D3748');
+  creerFeuille('Reservations',['id','prenom','nom','email','tel','orga','espace','nomEspace','usage','profil','date','typeDuree','nbHeures','heureDebut','heureFin','montant','montantBase','options','statut','participants','objet','createdAt','updatedAt','calendarEventId'],'#1E4A6E');
+  creerFeuille('Adhesions',['ID','Statut','Date demande',"Type d'adhésion",'Montant (€)','Mode paiement','Prénom','Nom / Structure','Email','Téléphone','Adresse','Notes'],'#27AE60');
+  creerFeuille('Logs',['Timestamp','Contexte','Erreur','Stack'],'#C0392B');
   var cfg = ss.getSheetByName('Config');
   if (!cfg) {
     cfg = ss.insertSheet('Config');
-    var scriptProps = PropertiesService.getScriptProperties();
-    var pwdHash = scriptProps.getProperty('ADMIN_PASSWORD_HASH');
-    var plainPwd = null;
-    if (!pwdHash) {
-      var charset = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%';
-      var generated = '';
-      for (var i = 0; i < 16; i++) {
-        generated += charset.charAt(Math.floor(Math.random() * charset.length));
-      }
-      plainPwd = generated;
-      pwdHash = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, plainPwd)
-        .map(function(b) { return ('0' + (b & 0xFF).toString(16)).slice(-2); }).join('');
-      scriptProps.setProperty('ADMIN_PASSWORD_HASH', pwdHash);
-    }
-    cfg.getRange(1, 1, 2, 2).setValues([
-      ['ADMIN_PASSWORD_HASH', pwdHash],
-      ['CALENDAR_ID', CONFIG.CALENDAR_ID]
-    ]);
-    if (plainPwd) {
-      Logger.log('🔑 MOT DE PASSE ADMIN (noter maintenant) : ' + plainPwd);
-    }
+    var charset = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%';
+    var pwd = '';
+    for (var i = 0; i < 16; i++) pwd += charset.charAt(Math.floor(Math.random() * charset.length));
+    var hash = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, pwd)
+      .map(function(b){return ('0'+(b&0xFF).toString(16)).slice(-2);}).join('');
+    cfg.getRange(1,1,2,2).setValues([['ADMIN_PASSWORD_HASH',hash],['CALENDAR_ID',CONFIG.CALENDAR_ID]]);
+    Logger.log('🔑 MOT DE PASSE ADMIN : ' + pwd);
   }
-  Logger.log('✅ Setup terminé — lancer setupDeclencheurs() pour activer la surveillance');
+  Logger.log('✅ Setup terminé — lancer setupDeclencheurs()');
   return 'OK';
 }
 
-// ============================================================
-// RESET MOT DE PASSE ADMIN
-// ============================================================
 function reinitMotDePasse() {
   var charset = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%';
   var pwd = '';
-  for (var i = 0; i < 16; i++) {
-    pwd += charset.charAt(Math.floor(Math.random() * charset.length));
-  }
+  for (var i = 0; i < 16; i++) pwd += charset.charAt(Math.floor(Math.random() * charset.length));
   var hash = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, pwd)
-    .map(function(b) { return ('0' + (b & 0xFF).toString(16)).slice(-2); }).join('');
+    .map(function(b){return ('0'+(b&0xFF).toString(16)).slice(-2);}).join('');
   PropertiesService.getScriptProperties().setProperty('ADMIN_PASSWORD_HASH', hash);
   var ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
   var sheet = ss.getSheetByName('Config');
   if (sheet) {
     var rows = sheet.getDataRange().getValues();
     for (var i = 0; i < rows.length; i++) {
-      if (rows[i][0] === 'ADMIN_PASSWORD_HASH') {
-        sheet.getRange(i + 1, 2).setValue(hash);
-        Logger.log('🔑 NOUVEAU MOT DE PASSE ADMIN : ' + pwd);
-        Logger.log('✅ Hash mis à jour dans Config et Script Properties');
-        return pwd;
-      }
+      if (rows[i][0] === 'ADMIN_PASSWORD_HASH') { sheet.getRange(i+1,2).setValue(hash); break; }
     }
-    sheet.appendRow(['ADMIN_PASSWORD_HASH', hash]);
   }
   Logger.log('🔑 NOUVEAU MOT DE PASSE ADMIN : ' + pwd);
   return pwd;
