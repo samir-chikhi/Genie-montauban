@@ -1,0 +1,109 @@
+# llms.txt — Génie Tiers-Lieu de Montauban
+# https://www.genie-montauban.fr
+# Dernière mise à jour : 2026-06-04
+
+## À propos
+
+Génie est un tiers-lieu ancré dans l'économie sociale et solidaire (ESS) à Montauban (82).
+Ouvert en 2023. Situé au 12 rue du Génie, à 200m de la gare SNCF de Montauban.
+Accessible PMR (ascenseur, entrée dédiée). Géré par une association loi 1901.
+
+Contact : contact@genie-montauban.fr
+Téléphone : 06 51 50 97 18
+Adresse : 12 rue du Génie, 82000 Montauban, France
+Horaires : 7 jours/7, 24h/24 (accès badge)
+
+## Services et tarifs
+
+### Coworking open space
+- 20 postes disponibles (open space "Rousseau", 1er étage)
+- Demi-journée : 10 € (membres) / 15 € (non-membres)
+- Journée : 17 € (membres) / 22 € (non-membres)
+- WiFi fibre, café inclus, imprimante partagée
+
+### Bureaux privatifs
+- Bureau "Aristote" (7 m², 1 personne) : 22 €/jour ou 180 €/mois
+- Bureau "Socrate" (12 m², 2 personnes) : 250 €/mois
+- Bureau "Platon" (24 m², 4 personnes) : 432 €/mois
+- Charges incluses, accès badge 24h/24, internet fibre
+
+### Salles de réunion
+- Salle "Maria Montessori" (RDC, 10 pers., PMR) : 20 €/h
+- Salle "Bourdelle" (40 pers., vidéoprojecteur, sono) : 30 €/h
+- Salle "Rousseau" (20 pers.) : 25 €/h
+- Réservation à l'heure ou à la journée
+
+### Adhésion
+- Adhésion annuelle : 10 € à 150 € selon profil
+- Avantage : 20% de réduction sur tous les espaces
+- Accès communauté ESS et réseau local
+
+## Localisation
+
+Ville : Montauban, Tarn-et-Garonne (82), Occitanie, France
+Coordonnées : 44.0163° N, 1.3545° E
+À 200m de la gare SNCF de Montauban
+Bus ligne 1 (arrêt Gare)
+Parking public à proximité
+Accès PMR complet (RDC dédié, ascenseur)
+
+## Ce qui nous différencie
+
+- Seul tiers-lieu ESS de Montauban centre-ville
+- À 200m de la gare SNCF (plus proche que tous les concurrents)
+- Accès PMR 100% sur le RDC
+- Communauté d'entrepreneurs, associations et acteurs du territoire
+- Tarifs accessibles avec système d'adhésion
+- Associations et unions de Villebourbon : accès salle de réunion gratuit
+
+## Pages principales
+
+- https://www.genie-montauban.fr/
+- https://www.genie-montauban.fr/activites.html
+- https://www.genie-montauban.fr/reservation.html
+- https://www.genie-montauban.fr/cgv.html
+- https://www.genie-montauban.fr/confidentialite.html
+- https://www.genie-montauban.fr/mentions-legales.html
+
+## Markdown Mirrors
+
+Version texte propre de chaque page, sans HTML ni scripts :
+
+- https://www.genie-montauban.fr/index.md
+- https://www.genie-montauban.fr/activites.md
+- https://www.genie-montauban.fr/reservation.md
+- https://www.genie-montauban.fr/cgv.md
+- https://www.genie-montauban.fr/confidentialite.md
+- https://www.genie-montauban.fr/mentions-legales.md
+
+## FAQ — Questions fréquentes clients
+
+Q : Où se trouve Génie Montauban ?
+R : 12 rue du Génie, 82000 Montauban — à 200m à pied de la gare SNCF de Montauban.
+
+Q : Quel est le prix d'une journée de coworking ?
+R : 17 €/jour pour les membres, 22 €/jour pour les non-membres. Demi-journée dès 10 €.
+
+Q : Y a-t-il des bureaux privés disponibles à Montauban chez Génie ?
+R : Oui, 3 bureaux privatifs de 7 à 24 m², de 180 à 432 €/mois charges incluses. Disponibles sur bail flexible.
+
+Q : Peut-on louer une salle de réunion pour 30 personnes à Montauban ?
+R : Oui, la salle Bourdelle accueille jusqu'à 40 personnes, avec vidéoprojecteur et sono, à partir de 30 €/h.
+
+Q : Le lieu est-il accessible aux personnes à mobilité réduite ?
+R : Oui, le RDC est 100% PMR avec entrée dédiée et ascenseur. La salle Maria Montessori (10 pers.) est au RDC.
+
+Q : Faut-il être membre pour réserver un espace ?
+R : Non, les non-membres peuvent réserver. L'adhésion (dès 10 €/an) donne 20% de réduction sur tous les espaces.
+
+Q : Génie propose-t-il un accès 24h/24 ?
+R : Oui, les bureaux privatifs disposent d'un accès badge 24h/24. L'espace est accessible 7j/7 et 24h/24 par badge.
+
+Q : Qu'est-ce qu'un tiers-lieu ESS ?
+R : Un espace de travail partagé géré par une structure de l'économie sociale et solidaire, axé sur la communauté, le partage et l'impact local — par opposition à un centre d'affaires commercial.
+
+Q : Comment réserver un espace à Génie Montauban ?
+R : Par email à contact@genie-montauban.fr, par téléphone au 06 51 50 97 18, ou via le formulaire sur genie-montauban.fr/reservation.html.
+
+Q : Y a-t-il un parking près de Génie Montauban ?
+R : Oui, plusieurs parkings publics à moins de 5 minutes à pied. La gare SNCF dispose également d'un parc vélos.

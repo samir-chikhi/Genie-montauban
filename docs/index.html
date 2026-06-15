@@ -12,11 +12,13 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://www.genie-montauban.fr/">
   <link rel="canonical" href="https://www.genie-montauban.fr/">
-  <!-- Google Fonts -->
   <link rel="icon" type="image/png" href="favicon.png">
+  <!-- Google Fonts — chargement non-bloquant -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap"></noscript>
   <style>
     /* ═══════════════════════════════════════════════
        VARIABLES & RESET
@@ -474,13 +476,83 @@
       .profils-grid { grid-template-columns: 1fr; }
     }
   </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "@id": "https://www.genie-montauban.fr/#business",
+    "name": "Génie Montauban - le Tiers Lieu",
+    "description": "Tiers-lieu ancré dans l'économie sociale et solidaire à Montauban. Bureaux privatifs, coworking, salles de réunion. À 200m de la gare SNCF. Accessible PMR.",
+    "url": "https://www.genie-montauban.fr",
+    "telephone": "+33651509718",
+    "email": "contact@genie-montauban.fr",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "12 rue du Génie",
+      "addressLocality": "Montauban",
+      "postalCode": "82000",
+      "addressCountry": "FR"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 44.0163,
+      "longitude": 1.3545
+    },
+    "openingHoursSpecification": [{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],"opens":"00:00","closes":"23:59"}],
+        "opens": "08:00",
+        "closes": "19:00"
+      }
+    ],
+    "priceRange": "€€",
+    "amenityFeature": [
+      {"@type": "LocationFeatureSpecification", "name": "WiFi fibre", "value": true},
+      {"@type": "LocationFeatureSpecification", "name": "Accès PMR", "value": true},
+      {"@type": "LocationFeatureSpecification", "name": "Café inclus", "value": true},
+      {"@type": "LocationFeatureSpecification", "name": "Imprimante", "value": true},
+      {"@type": "LocationFeatureSpecification", "name": "Accès 24h/24 par badge", "value": true}
+    ],
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Espaces disponibles",
+      "itemListElement": [
+        {
+          "@type": "Offer",
+          "name": "Coworking open space",
+          "description": "20 postes en open space, WiFi fibre, café inclus",
+          "price": "10",
+          "priceCurrency": "EUR",
+          "unitCode": "HUR"
+        },
+        {
+          "@type": "Offer",
+          "name": "Bureau privatif",
+          "description": "Bureaux de 7 à 24m², accès badge, charges incluses",
+          "price": "180",
+          "priceCurrency": "EUR",
+          "unitCode": "MON"
+        },
+        {
+          "@type": "Offer",
+          "name": "Salle de réunion",
+          "description": "Salles de 4 à 40 personnes, vidéoprojecteur, sono",
+          "price": "20",
+          "priceCurrency": "EUR",
+          "unitCode": "HUR"
+        }
+      ]
+    },
+    "sameAs": [
+      "https://www.facebook.com/61585419075483/"
+    ]
+  }
+  </script>
 </head>
 <body>
 
 <!-- ═══ NAVIGATION ═══ -->
 <nav id="main-nav">
   <a href="#" class="nav-logo">
-    <img src="logo.png" alt="Génie Montauban - Le Tiers Lieu" style="height:48px;width:auto">
+    <img src="logo.png" alt="Génie Montauban - Le Tiers Lieu" style="height:48px;width:auto" width="180" height="48" loading="eager">
   </a>
   <ul class="nav-links" id="nav-links">
     <li><a href="#espaces">Espaces</a></li>
@@ -553,7 +625,7 @@
 <div class="infobanner">
   <div class="infobanner-item">
     <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-    Lun–Ven 8h–19h · Sam sur réservation
+    7j/7 · 24h/24
   </div>
   <div class="infobanner-item">
     <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
@@ -716,7 +788,7 @@
         <div class="espace-nom">Louise Michel</div>
         <div class="espace-prix" style="flex-direction:column;align-items:flex-start;gap:6px">
           <div style="font-size:12px;color:var(--muted)">Bail mensuel : <strong>270€/mois</strong> · Bail 1 an : <strong>255€/mois</strong> · Bail 3/6/9 : <strong>225€/mois</strong></div>
-          <a href="mailto:genie.montauban@gmail.com?subject=Location bureau Aristote" class="btn-primary" style="padding:8px 16px;font-size:13px">Nous contacter →</a>
+          <a href="mailto:contact@genie-montauban.fr?subject=Location bureau Aristote" class="btn-primary" style="padding:8px 16px;font-size:13px">Nous contacter →</a>
         </div>
       </div>
     </div>
@@ -731,7 +803,7 @@
         <div class="espace-nom">Philippe Meirieu</div>
         <div class="espace-prix" style="flex-direction:column;align-items:flex-start;gap:6px">
           <div style="font-size:12px;color:var(--muted)">Bail mensuel : <strong>432€/mois</strong> · Bail 1 an : <strong>408€/mois</strong> · Bail 3/6/9 : <strong>360€/mois</strong></div>
-          <a href="mailto:genie.montauban@gmail.com?subject=Location bureau Philippe Meirieu" class="btn-primary" style="padding:8px 16px;font-size:13px">Nous contacter →</a>
+          <a href="mailto:contact@genie-montauban.fr?subject=Location bureau Philippe Meirieu" class="btn-primary" style="padding:8px 16px;font-size:13px">Nous contacter →</a>
         </div>
       </div>
     </div>
@@ -746,7 +818,7 @@
         <div class="espace-nom">Antoine Lavoisier</div>
         <div class="espace-prix" style="flex-direction:column;align-items:flex-start;gap:6px">
           <div style="font-size:12px;color:var(--muted)">Bail mensuel : <strong>342€/mois</strong> · Bail 1 an : <strong>323€/mois</strong> · Bail 3/6/9 : <strong>285€/mois</strong></div>
-          <a href="mailto:genie.montauban@gmail.com?subject=Location bureau Antoine Lavoisier" class="btn-primary" style="padding:8px 16px;font-size:13px">Nous contacter →</a>
+          <a href="mailto:contact@genie-montauban.fr?subject=Location bureau Antoine Lavoisier" class="btn-primary" style="padding:8px 16px;font-size:13px">Nous contacter →</a>
         </div>
       </div>
     </div>
@@ -761,7 +833,7 @@
         <div class="espace-nom">Aimée Césaire</div>
         <div class="espace-prix" style="flex-direction:column;align-items:flex-start;gap:6px">
           <div style="font-size:12px;color:var(--muted)">Bail mensuel : <strong>306€/mois</strong> · Bail 1 an : <strong>289€/mois</strong> · Bail 3/6/9 : <strong>255€/mois</strong></div>
-          <a href="mailto:genie.montauban@gmail.com?subject=Location bureau Aimée Césaire" class="btn-primary" style="padding:8px 16px;font-size:13px">Nous contacter →</a>
+          <a href="mailto:contact@genie-montauban.fr?subject=Location bureau Aimée Césaire" class="btn-primary" style="padding:8px 16px;font-size:13px">Nous contacter →</a>
         </div>
       </div>
     </div>
@@ -776,7 +848,7 @@
         <div class="espace-nom">Condorcet</div>
         <div class="espace-prix" style="flex-direction:column;align-items:flex-start;gap:6px">
           <div style="font-size:12px;color:var(--muted)">Bail mensuel : <strong>306€/mois</strong> · Bail 1 an : <strong>289€/mois</strong> · Bail 3/6/9 : <strong>255€/mois</strong></div>
-          <a href="mailto:genie.montauban@gmail.com?subject=Location bureau Condorcet" class="btn-primary" style="padding:8px 16px;font-size:13px">Nous contacter →</a>
+          <a href="mailto:contact@genie-montauban.fr?subject=Location bureau Condorcet" class="btn-primary" style="padding:8px 16px;font-size:13px">Nous contacter →</a>
         </div>
       </div>
     </div>
@@ -791,7 +863,7 @@
         <div class="espace-nom">Baden Powell</div>
         <div class="espace-prix" style="flex-direction:column;align-items:flex-start;gap:6px">
           <div style="font-size:12px;color:var(--muted)">Bail mensuel : <strong>288€/mois</strong> · Bail 1 an : <strong>272€/mois</strong> · Bail 3/6/9 : <strong>240€/mois</strong></div>
-          <a href="mailto:genie.montauban@gmail.com?subject=Location bureau Baden Powell" class="btn-primary" style="padding:8px 16px;font-size:13px">Nous contacter →</a>
+          <a href="mailto:contact@genie-montauban.fr?subject=Location bureau Baden Powell" class="btn-primary" style="padding:8px 16px;font-size:13px">Nous contacter →</a>
         </div>
       </div>
     </div>
@@ -806,7 +878,7 @@
         <div class="espace-nom">Célestin Freinet</div>
         <div class="espace-prix" style="flex-direction:column;align-items:flex-start;gap:6px">
           <div style="font-size:12px;color:var(--muted)">Bail mensuel : <strong>432€/mois</strong> · Bail 1 an : <strong>408€/mois</strong> · Bail 3/6/9 : <strong>360€/mois</strong></div>
-          <a href="mailto:genie.montauban@gmail.com?subject=Location bureau Célestin Freinet" class="btn-primary" style="padding:8px 16px;font-size:13px">Nous contacter →</a>
+          <a href="mailto:contact@genie-montauban.fr?subject=Location bureau Célestin Freinet" class="btn-primary" style="padding:8px 16px;font-size:13px">Nous contacter →</a>
         </div>
       </div>
     </div>
@@ -821,7 +893,7 @@
         <div class="espace-nom">Maria Montessori</div>
         <div class="espace-prix" style="flex-direction:column;align-items:flex-start;gap:6px">
           <div style="font-size:12px;color:var(--muted)">Bail mensuel : <strong>216€/mois</strong> · Bail 1 an : <strong>204€/mois</strong> · Bail 3/6/9 : <strong>180€/mois</strong></div>
-          <a href="mailto:genie.montauban@gmail.com?subject=Location bureau Maria Montessori" class="btn-primary" style="padding:8px 16px;font-size:13px">Nous contacter →</a>
+          <a href="mailto:contact@genie-montauban.fr?subject=Location bureau Maria Montessori" class="btn-primary" style="padding:8px 16px;font-size:13px">Nous contacter →</a>
         </div>
       </div>
     </div>
@@ -1060,7 +1132,7 @@
       </div>
       <div id="m-feedback" style="display:none;margin-top:14px;padding:14px 16px;border-radius:8px;font-size:13.5px;line-height:1.6;background:#f0f7f0;border-left:4px solid var(--sage)">
         <strong style="color:var(--navy)">✓ Demande envoyée !</strong><br>
-        Si votre messagerie ne s'ouvre pas, écrivez directement à <a href="mailto:genie.montauban@gmail.com" style="color:var(--gold);font-weight:700">genie.montauban@gmail.com</a> en précisant votre salle, date et matériel souhaité.
+        Si votre messagerie ne s'ouvre pas, écrivez directement à <a href="mailto:contact@genie-montauban.fr" style="color:var(--gold);font-weight:700">contact@genie-montauban.fr</a> en précisant votre salle, date et matériel souhaité.
       </div>
     </form>
   </div>
@@ -1165,18 +1237,36 @@
     </div>
   </div>
 
-  <!-- Boutons d'action -->
-  <div style="text-align:center;display:flex;flex-wrap:wrap;gap:14px;justify-content:center">
+  <!-- HelloAsso — Adhésion en ligne -->
+  <div style="margin-bottom:28px">
+    <div style="font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--navy);margin-bottom:6px;text-align:center">🌐 Adhérer en ligne</div>
+    <p style="text-align:center;font-size:13.5px;color:#666;margin-bottom:16px">Paiement sécurisé via HelloAsso — sans frais pour vous</p>
+    <iframe id="haWidget" allowtransparency="true" scrolling="auto"
+      src="https://www.helloasso.com/associations/association-genie/adhesions/adhesion/widget"
+      style="width:100%;height:750px;border:none;border-radius:12px"
+      onload="window.addEventListener('message', function(e) {
+        const dataHeight = e.data.height;
+        const haWidgetElement = document.getElementById('haWidget');
+        if (dataHeight > parseFloat(haWidgetElement.height || 0)) {
+          haWidgetElement.height = dataHeight + 'px';
+        }
+      })">
+    </iframe>
+    <p style="text-align:center;font-size:11.5px;color:#aaa;margin-top:8px">Paiement traité par HelloAsso · <a href="https://www.helloasso.com" target="_blank" rel="noopener" style="color:#aaa">helloasso.com</a> · Vos données sont protégées</p>
+  </div>
+
+  <!-- Autres modes de paiement / boutons -->
+  <div style="text-align:center;display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-bottom:16px">
     <a href="Fiche_Adhesion_GENIE_2026.pdf" download class="btn-primary" style="display:inline-flex;align-items:center;gap:8px">
       <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
       Télécharger la fiche d'adhésion
     </a>
-    <a href="mailto:genie.montauban@gmail.com?subject=Adhésion Association Génie" class="btn-secondary" style="display:inline-flex;align-items:center;gap:8px">
+    <a href="mailto:contact@genie-montauban.fr?subject=Adhésion Association Génie" class="btn-secondary" style="display:inline-flex;align-items:center;gap:8px">
       ✉️ Nous envoyer ma fiche complétée
     </a>
   </div>
-  <p style="text-align:center;font-size:12.5px;color:#888;margin-top:12px">Bulletin à retourner par email à <strong>genie.montauban@gmail.com</strong> ou à déposer au <strong>12 rue du Génie, 82000 Montauban</strong><br>
-  <em>Données RGPD : utilisées uniquement pour la gestion de l'adhésion · Conservation 3 ans · Droits : genie.montauban@gmail.com</em></p>
+  <p style="text-align:center;font-size:12.5px;color:#888">Bulletin à retourner par email à <strong>contact@genie-montauban.fr</strong> ou à déposer au <strong>12 rue du Génie, 82000 Montauban</strong><br>
+  <em>Données RGPD : utilisées uniquement pour la gestion de l'adhésion · Conservation 3 ans · Droits : contact@genie-montauban.fr</em></p>
 </section>
 
 <!-- ═══ CONTACT ═══ -->
@@ -1207,14 +1297,14 @@
           <div class="contact-item-icon">✉️</div>
           <div>
             <div class="contact-item-label">Email</div>
-            <div class="contact-item-val"><a href="mailto:genie.montauban@gmail.com" style="color:var(--gold)">genie.montauban@gmail.com</a></div>
+            <div class="contact-item-val"><a href="mailto:contact@genie-montauban.fr" style="color:var(--gold)">contact@genie-montauban.fr</a></div>
           </div>
         </div>
         <div class="contact-item">
           <div class="contact-item-icon">🕐</div>
           <div>
             <div class="contact-item-label">Horaires</div>
-            <div class="contact-item-val">Lun–Ven : 8h–19h<br>Sam : sur réservation</div>
+            <div class="contact-item-val">7j/7 · 24h/24</div>
           </div>
         </div>
         <div class="contact-item">
@@ -1235,26 +1325,27 @@
           <strong style="color:var(--navy)">✓ Votre messagerie va s'ouvrir</strong><br>
           Si aucune fenêtre ne s'ouvre, c'est que vous n'avez pas de logiciel de messagerie configuré sur cet appareil.<br>
           <span style="color:var(--navy);font-weight:600">Dans ce cas, écrivez-nous directement à :</span><br>
-          <a href="mailto:genie.montauban@gmail.com" style="color:var(--gold);font-weight:700">genie.montauban@gmail.com</a>
+          <a href="mailto:contact@genie-montauban.fr" style="color:var(--gold);font-weight:700">contact@genie-montauban.fr</a>
           &nbsp;·&nbsp; <a href="tel:+33651509718" style="color:var(--gold);font-weight:700">06 51 50 97 18</a>
         </div>
         <div id="c-mailto-info" style="margin-top:10px;font-size:12px;color:#888;font-style:italic">
-          💡 Ce bouton ouvre votre application mail (Outlook, Mail, Thunderbird…). Si vous utilisez Gmail ou Yahoo dans le navigateur, écrivez-nous directement à <a href="mailto:genie.montauban@gmail.com" style="color:var(--gold)">genie.montauban@gmail.com</a>
+          💡 Ce bouton ouvre votre application mail (Outlook, Mail, Thunderbird…). Si vous utilisez Gmail ou Yahoo dans le navigateur, écrivez-nous directement à <a href="mailto:contact@genie-montauban.fr" style="color:var(--gold)">contact@genie-montauban.fr</a>
         </div>
       </form>
     </div>
     <div>
       <div class="contact-map">
         <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2866.3!2d1.3570!3d44.0174!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12aecf1c6e4b6e0d%3A0x1!2s12+rue+du+G%C3%A9nie%2C+82000+Montauban!5e0!3m2!1sfr!2sfr!4v1700000000"
+          data-src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2866.3!2d1.3570!3d44.0174!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12aecf1c6e4b6e0d%3A0x1!2s12+rue+du+G%C3%A9nie%2C+82000+Montauban!5e0!3m2!1sfr!2sfr!4v1700000000"
           allowfullscreen loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade">
+          referrerpolicy="no-referrer-when-downgrade"
+          id="map-iframe">
         </iframe>
       </div>
       <div style="margin-top:20px;background:var(--navy);border-radius:var(--r);padding:20px 24px;color:rgba(255,255,255,.8)">
         <div style="font-family:'Playfair Display',serif;color:var(--white);font-size:1.1rem;margin-bottom:10px">Vous souhaitez visiter ?</div>
         <p style="font-size:13.5px;line-height:1.7;margin-bottom:14px">Nous organisons des visites du tiers-lieu sur rendez-vous. Une heure pour découvrir les espaces, rencontrer la communauté et trouver la formule qui vous correspond.</p>
-        <a href="mailto:genie.montauban@gmail.com?subject=Demande de visite Génie" class="btn-primary" style="font-size:13px;padding:10px 18px;display:inline-flex">Demander une visite →</a>
+        <a href="mailto:contact@genie-montauban.fr?subject=Demande de visite Génie" class="btn-primary" style="font-size:13px;padding:10px 18px;display:inline-flex">Demander une visite →</a>
       </div>
     </div>
   </div>
@@ -1298,7 +1389,7 @@
       </ul>
       <div style="margin-top:20px">
         <div class="footer-col-title">Contact</div>
-        <p style="font-size:13px;line-height:1.7">12 rue du Génie<br>82000 Montauban<br>📞 <a href="tel:+33651509718" style="color:var(--gold)">06 51 50 97 18</a><br><a href="mailto:genie.montauban@gmail.com" style="color:var(--gold)">genie.montauban@gmail.com</a></p>
+        <p style="font-size:13px;line-height:1.7">12 rue du Génie<br>82000 Montauban<br>📞 <a href="tel:+33651509718" style="color:var(--gold)">06 51 50 97 18</a><br><a href="mailto:contact@genie-montauban.fr" style="color:var(--gold)">contact@genie-montauban.fr</a></p>
       </div>
     </div>
   </div>
@@ -1354,7 +1445,7 @@
     const email = document.getElementById('c-email').value;
     const sujet = document.getElementById('c-sujet').value || 'Contact Génie';
     const message = document.getElementById('c-message').value;
-    const mailto = `mailto:genie.montauban@gmail.com?subject=${encodeURIComponent('[Génie] '+sujet)}&body=${encodeURIComponent('Nom : '+nom+'\nEmail : '+email+'\n\n'+message)}`;
+    const mailto = `mailto:contact@genie-montauban.fr?subject=${encodeURIComponent('[Génie] '+sujet)}&body=${encodeURIComponent('Nom : '+nom+'\nEmail : '+email+'\n\n'+message)}`;
     window.location.href = mailto;
     document.getElementById('c-feedback').style.display = 'block';
   }
@@ -1369,15 +1460,22 @@
     const autre = document.getElementById('m-autre').value;
     const cases = [...document.querySelectorAll('input[name="materiel"]:checked')].map(c => '- '+c.value).join('\n');
     const corps = `Nom : ${nom}\nEmail : ${email}\nDate : ${date}\nSalle : ${salle}\n\nMatériel souhaité :\n${cases || '(aucune case cochée)'}\n\nAutres précisions :\n${autre || '(aucune)'}`;
-    const mailto = `mailto:genie.montauban@gmail.com?subject=${encodeURIComponent('[Génie] Demande matériel – '+date)}&body=${encodeURIComponent(corps)}`;
+    const mailto = `mailto:contact@genie-montauban.fr?subject=${encodeURIComponent('[Génie] Demande matériel – '+date)}&body=${encodeURIComponent(corps)}`;
     window.location.href = mailto;
     document.getElementById('m-feedback').style.display = 'block';
   }
 
   // Cookies
+  function loadMap() {
+    const iframe = document.getElementById('map-iframe');
+    if (iframe && iframe.dataset.src && !iframe.src) {
+      iframe.src = iframe.dataset.src;
+    }
+  }
   function acceptCookies() {
     localStorage.setItem('cookie_consent', 'accepted');
     document.getElementById('cookie-banner').classList.remove('show');
+    loadMap();
   }
   function refuseCookies() {
     localStorage.setItem('cookie_consent', 'refused');
@@ -1385,6 +1483,8 @@
   }
   if (!localStorage.getItem('cookie_consent')) {
     setTimeout(() => document.getElementById('cookie-banner').classList.add('show'), 1500);
+  } else if (localStorage.getItem('cookie_consent') === 'accepted') {
+    loadMap();
   }
 
   // Smooth scroll pour les ancres
