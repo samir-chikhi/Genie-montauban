@@ -567,49 +567,44 @@ async function envoyerReservation() {
   const [hf, mf] = heureFin_input.split(':').map(Number);
   const nbH = Math.round(((hf * 60 + mf) - (hh * 60 + mm)) / 60 * 10) / 10;
 
+  // Payload conforme à creerReservation() : enregistrement Sheets + emails + agenda
   const payload = {
-    action: 'addResa',
-    resa: {
-      id         : ref,
-      prenom     : prenom,
-      nom        : nomFam,
-      email      : email,
-      tel        : document.getElementById('fTel').value.trim(),
-      orga       : document.getElementById('fOrga').value.trim(),
-      espace     : espaceId,
-      nomEspace  : esp.nom,
-      usage      : 'reservation-publique',
-      profil     : profil,
-      date       : date,
-      typeDuree  : duree,
-      nbHeures   : String(nbH),
-      heureDebut : heure,
-      heureFin   : heureFin_input,
-      montant    : String(total),
-      montantBase: String(prix),
-      options    : [badge?'Badge 24h/7j':'', adhes?'Adhésion Génie':''].filter(Boolean).join(', '),
-      statut     : 'pending',
-      participants: '1',
-      objet      : document.getElementById('fMsg').value.trim(),
-      createdAt  : now,
-      updatedAt  : now
-    }
+    action      : 'RESERVER',
+    espace      : esp.nom,
+    typeEspace  : esp.type || 'salle',
+    profil      : profil,
+    date        : date,
+    heureDebut  : heure,
+    duree       : nbH,
+    participants: 1,
+    prenom      : prenom,
+    nom         : nomFam,
+    email       : email,
+    tel         : document.getElementById('fTel').value.trim(),
+    structure   : document.getElementById('fOrga').value.trim(),
+    message     : document.getElementById('fMsg').value.trim(),
+    montantEstime: total,
+    options     : [badge?'Badge 24h/7j (5€/mois)':'', adhes?'Adhésion Génie (50€/an)':''].filter(Boolean).join(', ')
   };
 
   document.getElementById('loadBanner').classList.add('visible');
   document.getElementById('btnEnvoyer').disabled = true;
 
   try {
-    const url  = SCRIPT_URL + '?payload=' + encodeURIComponent(JSON.stringify(payload));
-    const resp = await fetch(url, { redirect: 'follow' });
+    // POST → doPost → creerReservation() : Sheets + email client + email admin + agenda
+    const resp = await fetch(SCRIPT_URL, {
+      method : 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body   : JSON.stringify(payload),
+      redirect: 'follow'
+    });
     const text = await resp.text();
     document.getElementById('loadBanner').classList.remove('visible');
 
     let data = {};
-    try { data = JSON.parse(text); } catch(e) { data = { ok: true }; }
+    try { data = JSON.parse(text); } catch(e) { data = { success: true }; }
 
-    // Succès si ok:true OU success:true OU pas d'erreur explicite
-    if (data.ok || data.success || (!data.error)) {
+    if (data.success || !data.error) {
       document.getElementById('mainPage').style.display = 'none';
       document.getElementById('successCard').classList.add('visible');
       document.getElementById('successRef').textContent = ref;
@@ -621,14 +616,22 @@ async function envoyerReservation() {
   } catch(err) {
     document.getElementById('loadBanner').classList.remove('visible');
     document.getElementById('btnEnvoyer').disabled = false;
-    // Fallback no-cors si CORS bloque
+    // Fallback GET+payload (doGet supporte aussi RESERVER via ?payload=)
     try {
-      await fetch(SCRIPT_URL + '?payload=' + encodeURIComponent(JSON.stringify(payload)), { mode: 'no-cors' });
-      document.getElementById('mainPage').style.display = 'none';
-      document.getElementById('successCard').classList.add('visible');
-      document.getElementById('successRef').textContent = ref;
-      updateSteps(4);
-      window.scrollTo({top:0, behavior:'smooth'});
+      const url2 = SCRIPT_URL + '?payload=' + encodeURIComponent(JSON.stringify(payload));
+      const resp2 = await fetch(url2, { redirect: 'follow' });
+      const text2 = await resp2.text();
+      let data2 = {};
+      try { data2 = JSON.parse(text2); } catch(e) { data2 = { success: true }; }
+      if (data2.success || !data2.error) {
+        document.getElementById('mainPage').style.display = 'none';
+        document.getElementById('successCard').classList.add('visible');
+        document.getElementById('successRef').textContent = ref;
+        updateSteps(4);
+        window.scrollTo({top:0, behavior:'smooth'});
+      } else {
+        throw new Error(data2.error || 'Erreur serveur');
+      }
     } catch(e2) {
       toast('Erreur réseau — Appelez le 06 51 50 97 18', 'err');
     }
