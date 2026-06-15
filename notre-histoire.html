@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notre histoire — Pourquoi on a créé un tiers-lieu (et comment on évite d'y perdre de l'argent) | Génie Montauban</title>
+  <meta name="description" content="Comment est né le Génie, qui s'y retrouve, et comment ce tiers-lieu ESS de Montauban s'organise pour atteindre l'équilibre financier. Le récit complet, chiffres compris.">
+  <meta name="keywords" content="tiers lieu montauban, ESS, économie sociale et solidaire, coworking, modèle économique tiers-lieu, gouvernance SCOP, Génie Montauban">
+  <meta name="author" content="Génie Montauban">
+  <meta property="og:title" content="Notre histoire — Génie, tiers-lieu ESS à Montauban">
+  <meta property="og:description" content="D'où vient le Génie, qui y travaille déjà, et comment on s'organise pour ne pas perdre d'argent : le récit complet, chiffres à l'appui.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://www.genie-montauban.fr/notre-histoire.html">
+  <meta property="og:image" content="https://www.genie-montauban.fr/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Notre histoire — Génie, tiers-lieu ESS à Montauban">
+  <meta name="twitter:description" content="Le récit complet du tiers-lieu Génie : naissance, gouvernance, locataires et modèle économique. Chiffres compris.">
+  <meta name="twitter:image" content="https://www.genie-montauban.fr/og-image.jpg">
+  <link rel="canonical" href="https://www.genie-montauban.fr/notre-histoire.html">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-774PRH98LY"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-774PRH98LY');
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Tiers-lieu ESS en ville moyenne : pourquoi, pour qui, et comment ne pas y perdre d'argent",
+    "description": "Comment est né le Génie, qui s'y retrouve, et comment ce tiers-lieu ESS de Montauban s'organise pour atteindre l'équilibre financier.",
+    "author": {"@type": "Organization", "name": "Génie Montauban"},
+    "publisher": {
+      "@type": "Organization",
+      "name": "Association Génie Montauban",
+      "logo": {"@type": "ImageObject", "url": "https://www.genie-montauban.fr/logo.png"}
+    },
+    "datePublished": "2026-06-15",
+    "image": "https://www.genie-montauban.fr/og-image.jpg",
+    "mainEntityOfPage": {"@type": "WebPage", "@id": "https://www.genie-montauban.fr/notre-histoire.html"}
+  }
+  </script>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy:   #1C2B3A;
+      --gold:   #C9993E;
+      --gold-l: #E8C06A;
+      --cream:  #F7F3ED;
+      --white:  #FFFFFF;
+      --ink:    #1C2B3A;
+      --muted:  #50606E;
+      --light:  #EDE8E1;
+      --sage:   #4A7C6F;
+      --brick:  #8B3A2A;
+      --border: rgba(28,43,58,.12);
+      --shadow: 0 4px 32px rgba(28,43,58,.10);
+      --r:      12px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body { font-family: 'DM Sans', sans-serif; color: var(--ink); background: var(--white); line-height: 1.6; overflow-x: hidden; }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; border: none; background: none; font-family: inherit; }
+    :focus-visible { outline: 2px solid #C9993E; outline-offset: 3px; border-radius: 3px; }
+
+    /* ── NAV (identique à index.html) ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%; height: 72px;
+      background: rgba(255,255,255,.92); backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border); transition: box-shadow .3s;
+    }
+    nav.scrolled { box-shadow: var(--shadow); }
+    .nav-logo { display: flex; align-items: center; gap: 10px; }
+    .nav-logo img { height: 58px; width: auto; }
+    .nav-links { display: flex; align-items: center; gap: 28px; list-style: none; }
+    .nav-links a { font-size: 14px; font-weight: 500; color: var(--muted); transition: color .2s; letter-spacing: .2px; }
+    .nav-links a:hover, .nav-links a.active { color: var(--navy); }
+    .nav-cta {
+      background: var(--gold); color: var(--white) !important;
+      padding: 10px 22px; border-radius: 8px; font-size: 14px; font-weight: 600;
+      transition: background .2s, transform .15s;
+    }
+    .nav-cta:hover { background: #b8882e !important; transform: translateY(-1px); }
+    .nav-burger { display: none; flex-direction: column; gap: 6px; padding: 8px 10px; }
+    .nav-burger span { width: 28px; height: 3px; background: var(--navy); border-radius: 3px; transition: .3s; display: block; }
+
+    /* ── HEADER ARTICLE ── */
+    .article-hero {
+      background: linear-gradient(160deg, var(--navy) 0%, #20364a 60%, #2a4258 100%);
+      color: var(--white);
+      padding: 132px 5% 64px;
+      position: relative; overflow: hidden;
+    }
+    .article-hero::after {
+      content: ''; position: absolute; left: 5%; bottom: 40px; width: 64px; height: 4px;
+      background: var(--gold); border-radius: 2px;
+    }
+    .article-hero-inner { max-width: 760px; margin: 0 auto; }
+    .eyebrow {
+      display: inline-block; font-size: 12px; font-weight: 600;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: var(--gold-l); border: 1px solid rgba(201,153,62,.5);
+      padding: 6px 14px; border-radius: 50px; margin-bottom: 22px;
+    }
+    .article-hero h1 {
+      font-family: 'Playfair Display', serif; font-weight: 900;
+      font-size: clamp(1.9rem, 4.6vw, 3rem); line-height: 1.16; color: var(--white);
+    }
+    .article-meta {
+      margin-top: 18px; font-size: 13.5px; color: rgba(255,255,255,.6);
+      display: flex; flex-wrap: wrap; gap: 8px 18px;
+    }
+
+    /* ── CORPS ARTICLE ── */
+    .article-body { max-width: 720px; margin: 0 auto; padding: 56px 5% 24px; }
+    .lede {
+      font-family: 'Playfair Display', serif; font-style: italic; font-weight: 700;
+      font-size: clamp(1.15rem, 2.4vw, 1.4rem); line-height: 1.5; color: var(--navy);
+      border-left: 3px solid var(--gold); padding-left: 22px; margin-bottom: 40px;
+    }
+    .article-body h2 {
+      font-family: 'Playfair Display', serif; font-weight: 700;
+      font-size: clamp(1.4rem, 3vw, 1.9rem); color: var(--navy);
+      margin: 48px 0 16px; line-height: 1.2;
+    }
+    .article-body h2::after {
+      content: ''; display: block; width: 44px; height: 4px;
+      background: var(--gold); border-radius: 2px; margin-top: 12px;
+    }
+    .article-body p { font-size: 1.06rem; color: #2c3a47; margin-bottom: 18px; }
+    .article-body strong { color: var(--navy); font-weight: 600; }
+    .article-body blockquote {
+      font-family: 'Playfair Display', serif; font-style: italic; font-weight: 700;
+      font-size: clamp(1.25rem, 3vw, 1.6rem); line-height: 1.35; color: var(--navy);
+      border-left: 4px solid var(--brick); padding: 6px 0 6px 24px; margin: 34px 0;
+    }
+
+    /* ── JAUGE 4/7 ── */
+    .stat-card {
+      background: var(--cream); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 26px 26px 22px; margin: 36px 0;
+      box-shadow: var(--shadow);
+    }
+    .stat-label {
+      font-size: 12px; font-weight: 700; letter-spacing: .08em;
+      text-transform: uppercase; color: var(--gold); margin-bottom: 14px;
+    }
+    .stat-bar {
+      display: flex; width: 100%; height: 20px; border-radius: 10px;
+      overflow: hidden; background: #e6ddcd; border: 1px solid var(--border);
+    }
+    .stat-bar .filled { background: var(--sage); width: 57.1%; }
+    .stat-bar .gap { background: repeating-linear-gradient(45deg, var(--gold) 0 6px, transparent 6px 12px); width: 42.9%; }
+    .stat-foot { display: flex; justify-content: space-between; font-size: 14px; margin-top: 12px; color: var(--muted); }
+    .stat-foot strong { color: var(--navy); font-size: 15px; }
+
+    /* ── CTA CONTACT ── */
+    .article-cta {
+      background: var(--navy); color: var(--white);
+      border-radius: var(--r); max-width: 720px; margin: 56px auto 0;
+      padding: 40px 32px;
+    }
+    .article-cta h2 {
+      font-family: 'Playfair Display', serif; font-weight: 700;
+      font-size: clamp(1.35rem, 3vw, 1.75rem); color: var(--white); margin-bottom: 10px;
+    }
+    .article-cta p { color: rgba(255,255,255,.78); font-size: 1rem; }
+    .cta-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+    .cta-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 13px 22px; border-radius: 8px; font-weight: 600; font-size: 15px;
+      transition: background .2s, transform .15s;
+    }
+    .cta-btn.primary { background: var(--gold); color: var(--white); }
+    .cta-btn.primary:hover { background: #b8882e; transform: translateY(-1px); }
+    .cta-btn.ghost { background: rgba(255,255,255,.1); color: var(--white); border: 1px solid rgba(255,255,255,.25); }
+    .cta-btn.ghost:hover { background: rgba(255,255,255,.18); }
+    .cta-alt { margin-top: 18px; font-size: 13.5px; color: rgba(255,255,255,.6); }
+    .cta-alt a { color: var(--gold-l); text-decoration: underline; }
+
+    .back-link { max-width: 720px; margin: 32px auto 0; padding: 0 5%; }
+    .back-link a { font-size: 14px; font-weight: 600; color: var(--muted); }
+    .back-link a:hover { color: var(--gold); }
+
+    /* ── FOOTER (identique à index.html) ── */
+    footer { background: var(--navy); color: rgba(255,255,255,.7); padding: 56px 5% 32px; margin-top: 64px; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; max-width: 1200px; margin-left: auto; margin-right: auto; }
+    .footer-brand-name { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 900; color: var(--white); margin-bottom: 6px; }
+    .footer-brand-sub { font-size: 12px; letter-spacing: .8px; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; }
+    .footer-brand-desc { font-size: 13.5px; line-height: 1.7; max-width: 280px; }
+    .footer-col-title { font-size: 13px; font-weight: 700; color: var(--white); text-transform: uppercase; letter-spacing: .6px; margin-bottom: 16px; }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .footer-links a { font-size: 13.5px; color: rgba(255,255,255,.6); transition: color .2s; }
+    .footer-links a:hover { color: var(--gold); }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,.08); padding-top: 28px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; max-width: 1200px; margin: 0 auto; }
+    .footer-bottom p { font-size: 12.5px; }
+    .footer-legal { display: flex; gap: 20px; }
+    .footer-legal a { font-size: 12.5px; color: rgba(255,255,255,.5); transition: color .2s; }
+    .footer-legal a:hover { color: var(--gold); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-links.open {
+        display: flex; flex-direction: column;
+        position: fixed; top: 72px; left: 0; right: 0; bottom: 0;
+        background: var(--navy); padding: 24px 6%;
+        align-items: flex-start; gap: 0;
+        border-top: 2px solid var(--gold); overflow-y: auto;
+        animation: slideDown .25s ease; z-index: 999;
+      }
+      @keyframes slideDown { from{opacity:0;transform:translateY(-10px)} to{opacity:1;transform:none} }
+      .nav-links.open a { font-size: 20px; font-weight: 600; color: #fff; padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,.12); width: 100%; display: block; }
+      .nav-links.open a:last-child { border-bottom: none; }
+      .nav-links.open .nav-cta { margin-top: 20px; width: 100%; text-align: center; font-size: 18px; padding: 14px; }
+      .nav-burger { display: flex; }
+      .article-hero { padding: 104px 6% 48px; }
+      .footer-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) { footer { padding: 40px 16px 24px; } }
+  </style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav id="main-nav">
+  <a href="index.html" class="nav-logo">
+    <img src="logo.png" alt="Génie Montauban - Le Tiers Lieu" style="height:48px;width:auto">
+  </a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="index.html#espaces">Espaces</a></li>
+    <li><a href="index.html#tarifs">Tarifs</a></li>
+    <li><a href="index.html#services">Services</a></li>
+    <li><a href="index.html#rejoindre">Adhésion</a></li>
+    <li><a href="notre-histoire.html" class="active">Notre histoire</a></li>
+    <li><a href="activites.html">Activités &amp; Actualités</a></li>
+    <li><a href="inscription.html">Mon compte</a></li>
+    <li><a href="reservation.html" class="nav-cta">Réserver</a></li>
+  </ul>
+  <button class="nav-burger" id="nav-burger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ═══ HEADER ARTICLE ═══ -->
+<header class="article-hero">
+  <div class="article-hero-inner">
+    <span class="eyebrow">Vie du lieu</span>
+    <h1>Tiers-lieu ESS en ville moyenne : pourquoi, pour qui, et comment ne pas y perdre d'argent</h1>
+    <div class="article-meta">
+      <span>🏠 Le Génie · Montauban</span>
+      <span>🔑 Coulisses</span>
+      <span>📖 Lecture ~9 min</span>
+    </div>
+  </div>
+</header>
+
+<!-- ═══ CORPS ═══ -->
+<article class="article-body">
+  <p class="lede">Un tiers-lieu, ce n'est ni un bureau classique ni un espace de coworking comme on en voit dans les métropoles : c'est un lieu partagé où des associations, des indépendants et des habitants se croisent, travaillent et organisent des activités ensemble. Le Génie, à Montauban, en est un. Voici comment il est né, qui s'y retrouve aujourd'hui, et surtout, comment on s'organise pour ne pas y perdre d'argent.</p>
+
+  <h2>Tout est parti d'une visite de bureau</h2>
+  <p>Je n'avais pas prévu de créer un tiers-lieu. Je venais simplement louer un bureau pour CCFA, mon entreprise de conseil et de formation. Le propriétaire de l'immeuble m'a expliqué qu'il cherchait en réalité à louer l'ensemble du bâtiment. Il n'habite pas Montauban, et il n'avait plus l'âge de se lancer dans une nouvelle aventure commerciale.</p>
+  <p>Je lui ai proposé qu'on s'associe. Il a refusé, mais m'a dit une phrase qui a tout changé&nbsp;:</p>
+  <blockquote>« Je vous fais confiance, faites-le. »</blockquote>
+  <p>Avant de me lancer, j'ai fait ce que je sais faire&nbsp;: une étude de marché, sur mes réseaux, notamment LinkedIn. Le résultat était net. La demande de salles de réunion et de lieux de rencontre citoyenne était forte. La demande de location de bureaux à l'année, beaucoup moins. De l'audace, un peu de témérité, et c'était parti.</p>
+
+  <h2>Pas un projet solo</h2>
+  <p>Première décision importante&nbsp;: je ne voulais pas en faire un business personnel, j'avais déjà mes activités avec CCFA. J'ai contacté deux personnes de confiance, Marcelle et Andrea. Marcelle, avec son association Myself, était à un tournant stratégique. Andrea venait de créer Topogramme et vivait la même chose. Les deux ont répondu la même chose, en substance&nbsp;: si c'est toi qui portes ça, on fonce, ce sera tout bénéfice pour tout le monde.</p>
+  <p>C'est comme ça que le Génie est né. Et très vite, avec les locataires, les associations du quartier et les sympathisants, on l'a structuré officiellement, avec tous les ressorts démocratiques qu'on a voulu inscrire dans nos statuts.</p>
+
+  <h2>Un lieu partagé se décide ensemble</h2>
+  <p>Dans nos statuts et notre règlement intérieur, on a repris un principe des SCOP, les sociétés coopératives où chaque associé pèse autant qu'un autre dans les votes&nbsp;: un adhérent, une voix. Concrètement, au démarrage, c'est moi qui ai fait la majorité des propositions, il fallait bien que la machine se mette en route. Mais l'idée, depuis le début, c'est que tout se décide collectivement, et que chacun prenne sa part.</p>
+  <p>On organise des réunions d'échanges régulières, ouvertes à tous les occupants du lieu, autour de quatre temps&nbsp;: écouter les usages et les besoins, partager les expériences et les idées, améliorer les espaces et les usages, et décider ensemble des règles qui nous rassemblent.</p>
+  <blockquote>Seul, on va plus vite. Ensemble, on va plus loin.</blockquote>
+  <p>Depuis la création, j'ai été un peu vite. Maintenant, il faut qu'on aille loin, dans le temps.</p>
+
+  <h2>Qui vient au Génie</h2>
+  <p>Aujourd'hui, on a quatre locataires à temps plein, et chacun raconte une partie de ce qu'est le Génie.</p>
+  <p>Il y a d'abord FNE, l'association départementale France Nature Environnement, qui s'est retrouvée sans locaux et dont le projet correspond, philosophiquement, à tout ce qu'on défend.</p>
+  <p>Il y a OVNI, l'entreprise de Loïc Langloys. Il travaillait seul, dans un bureau en ville, a vu un de mes posts sur LinkedIn, est venu me voir et m'a dit en substance&nbsp;: ce serait top de pouvoir partager, échanger, avoir une machine à café commune. C'est exactement le profil qu'on visait, des indépendants ou de petites entreprises qui veulent sortir de l'isolement.</p>
+  <p>Il y a aussi une entrepreneuse, seule, qui voulait tester son activité sans pouvoir se permettre un bail 3-6-9. Elle vient un jour par semaine. C'est typiquement la réponse d'un tiers-lieu&nbsp;: un sas pour tester un projet, et on a déjà d'autres demandes de ce type sur Montauban.</p>
+  <p>Et il y a Mobicoop, une coopérative ESS qui fait la promotion de l'autopartage et du stop organisé en milieu rural, à l'échelle nationale.</p>
+  <p>On n'a presque pas communiqué là-dessus, c'est venu surtout par le bouche-à-oreille. Et pourtant, ces quatre profils correspondent exactement à ce qu'on visait au départ&nbsp;: un lieu mixte, entreprises et associations, qui mettent en commun leurs ressources et leurs compétences pour s'entraider. Photocopieur commun, salle de réunion équipée pour la visio, machine à café sur le rooftop, terrasse. On n'a pas le baby-foot des startups qu'on voit à la télé. Mais ce qu'on a correspond à une vraie réalité, celle de petites structures qui ont besoin de tout ce qu'offre une entreprise un peu plus grande, sans en avoir les moyens seules.</p>
+
+  <h2>Ce que ça change si vous rejoignez le Génie</h2>
+  <p>Si vous lisez cet article en vous demandant si le Génie pourrait être votre prochain bureau, voici concrètement ce que ça implique.</p>
+  <p>Le loyer moyen est de 350&nbsp;€ par mois, tout compris&nbsp;: charges, accès, usage des espaces communs. Sur notre grille tarifaire 2026, un bail 3/6/9 revient à 15&nbsp;€/m² quel que soit le bureau, du 12&nbsp;m² à 180&nbsp;€ au 24&nbsp;m² à 432&nbsp;€. Un bail à l'année tourne autour de 17&nbsp;€/m², un bail mensuel à 18&nbsp;€/m². À Montauban, des bureaux individuels comparables (12 à 30&nbsp;m²) se louent plutôt entre 19 et 22&nbsp;€/m² sur le marché classique&nbsp;: même notre formule la plus flexible, le bail mensuel, reste en dessous.</p>
+  <p>L'accès est autonome, 24h/24 et 7j/7, grâce aux serrures électroniques qu'on a installées&nbsp;: pas besoin de caler vos horaires sur ceux de quelqu'un d'autre. Vous avez accès à une salle de réunion équipée pour la visio, à un photocopieur commun, à une terrasse et un coin café sur le rooftop.</p>
+  <p>Côté engagement, on n'est pas sur un bail 3-6-9 classique. Une de nos locataires a commencé à un jour par semaine, le temps de tester son activité, avant d'aller plus loin si elle le souhaite. C'est pensé comme un sas, pas comme un saut dans le vide.</p>
+  <p>Vous arrivez aussi dans un écosystème déjà en place&nbsp;: une association environnementale (FNE), une entreprise individuelle (OVNI), une coopérative ESS nationale (Mobicoop), et une porteuse de projet en test. Le programme d'animations (cowork-café hebdomadaire, conférences-débats et ateliers numériques mensuels) crée des occasions régulières de croiser ces profils, sans effort particulier de votre part. Et si vous voulez monter en compétences, l'Académie des Compétences propose des modules courts et accessibles, avec une passerelle vers des certifications CCFA si vous voulez aller plus loin.</p>
+  <p>Enfin, en tant que membre, vous participez aux réunions d'échanges mensuelles et vous avez une voix, au même titre que tout le monde, dans les décisions qui concernent le lieu.</p>
+  <p>Pour commencer, on privilégie une rencontre sur place, avec si besoin un essai d'une journée avant tout engagement.</p>
+
+  <h2>Le calcul qui décide de tout</h2>
+  <p>Parlons argent, parce que c'est là que ça coince le plus, et que c'est sans doute le plus utile pour qui voudrait monter un projet similaire.</p>
+  <p>Aujourd'hui, financièrement, c'est tendu. L'immeuble coûte environ 3&nbsp;000&nbsp;€ par mois, charges comprises, hors masse salariale. C'est CCFA, mon entreprise, qui couvre l'essentiel de ces dépenses depuis le début. Pour que ça reste propre juridiquement, on a rédigé une convention entre CCFA et l'association Génie, qui prévoit notamment le remboursement de cette avance. Sans ça, on pourrait me reprocher un abus de biens sociaux, c'est-à-dire l'utilisation des ressources d'une entreprise au profit d'un tiers, ici l'association.</p>
+  <p>On vise le mois de décembre pour équilibrer le budget de Génie, afin que l'association prenne le relais et commence à rembourser CCFA.</p>
+  <p>Voici les chiffres. Chaque locataire à temps plein paie en moyenne 350&nbsp;€ par mois. On en a quatre aujourd'hui, il en faudrait sept pour équilibrer les charges. Les animations doivent rapporter environ 500&nbsp;€ par mois en plus.</p>
+
+  <div class="stat-card">
+    <div class="stat-label">Où on en est</div>
+    <div class="stat-bar"><div class="filled"></div><div class="gap"></div></div>
+    <div class="stat-foot">
+      <span><strong>4</strong> locataires aujourd'hui</span>
+      <span><strong>7</strong> = équilibre</span>
+    </div>
+  </div>
+
+  <p>Sept locataires à 350&nbsp;€, ça fait 2&nbsp;450&nbsp;€. Avec les 500&nbsp;€ d'animations, on arrive à 2&nbsp;950&nbsp;€ sur 3&nbsp;000&nbsp;€ de charges. Donc à sept locataires, on est quasiment à l'équilibre. Aujourd'hui, on en est à quatre.</p>
+  <blockquote>Il nous manque trois locataires. Pas quinze, pas trente. Trois.</blockquote>
+  <p>Si on recrute quelqu'un pour l'animation et la gestion du lieu, il faut ajouter environ 2&nbsp;500&nbsp;€ par mois, soit 5&nbsp;500&nbsp;€ de charges totales. Avec 2&nbsp;950&nbsp;€ de recettes locataires et animations, il manquerait alors 2&nbsp;550&nbsp;€ par mois, et pour les combler uniquement avec des loyers à 350&nbsp;€, il faudrait environ quinze locataires, ce qui n'est pas réaliste dans cet immeuble. Pour recruter, il faudra donc d'autres leviers&nbsp;: subventions liées à notre mission ESS et éducation populaire, partenariats avec des entreprises locales, location de salles à la journée pour des tiers, et l'Académie des Compétences, dont je parle plus bas.</p>
+  <p>Si je devais conseiller quelque chose à quelqu'un qui se lance dans un projet similaire&nbsp;: essayez de lever des fonds, auprès de particuliers ou de structures partenaires, avant de vous lancer. Moi, le calendrier était trop contraint, l'immeuble n'était pas à moi, je n'ai pas pu attendre de trouver des partenaires. Le modèle où l'entreprise commerciale avance la trésorerie fonctionne, mais il faut que cette entreprise ait les reins assez solides pour tenir tout le temps du montage.</p>
+
+  <h2>Les animations : de la visibilité, de la communauté, et un peu de chiffre d'affaires</h2>
+  <p>On a construit un programme d'animations sur l'année, organisé autour de cinq familles&nbsp;: les grands événements médiatiques (Coupe du monde, Jeux Olympiques, Eurovision, Tour de France), les événements astronomiques et scientifiques (nuits des étoiles, éclipses, fête de la science), les animations ESS et d'éducation populaire (débats citoyens, café du Génie mensuel, université populaire), les animations de voisinage (apéro des voisins sur le rooftop, repair café, bourse aux plantes, fête des voisins) et les animations numériques (découverte de l'IA, café numérique, soirées jeux vidéo rétro).</p>
+  <p>Le rythme qu'on vise&nbsp;: un cowork-café toutes les semaines, un apéro, une conférence-débat et une animation numérique chaque mois, un grand événement par trimestre, et trois à cinq événements « waouh » par an, comme une éclipse ou la Coupe du monde.</p>
+  <p>Ces animations remplissent plusieurs rôles à la fois. Elles font venir au Génie des gens qui n'y mettraient jamais les pieds spontanément, ce qui nourrit le bouche-à-oreille et, à terme, attire de nouveaux locataires. Elles font vivre le lieu comme une place de village moderne, où il se passe toujours quelque chose. Et certaines, via la location de salle, contribuent directement aux 500&nbsp;€ mensuels qu'on vise.</p>
+
+  <h2>L'Académie des Compétences, ou comment l'ESS finance la suite</h2>
+  <p>À côté de l'animation, on développe une Académie des Compétences. Le principe&nbsp;: sur un module de deux à trois heures, pour un prix très accessible, n'importe qui peut venir acquérir une connaissance ou une compétence. Et si la personne veut aller plus loin, elle peut ensuite obtenir une certification via CCFA, en partant de ce petit module suivi au Génie.</p>
+  <p>C'est exactement la passerelle qu'on cherchait entre la mission ESS de Génie, accessible à tous, et l'activité de formation certifiante de CCFA, qui génère du revenu. C'est probablement, à terme, l'un des leviers les plus solides pour atteindre l'équilibre sans dénaturer le projet.</p>
+
+  <h2>Six mois d'existence, trois leçons</h2>
+  <p>On n'a que six mois de recul, donc je reste prudent sur les grandes leçons. Mais il y a trois choses que je referais différemment, et que je conseille d'anticiper dès le départ à qui voudrait monter un lieu similaire.</p>
+  <p>La première, c'est l'accès autonome au lieu. On a dû changer toutes les serrures pour des serrures électroniques, pour que chacun puisse entrer à n'importe quelle heure, n'importe quel jour, sans dépendre d'une clé ou de quelqu'un pour ouvrir. Ça a pris du temps, et ça aurait dû être réglé avant l'ouverture, pas après.</p>
+  <p>La deuxième, c'est la communication papier. On a aujourd'hui des flyers, distribués par nos stagiaires, mais on aurait dû commencer ça beaucoup plus tôt. Honnêtement, à ce stade, ça n'a pas encore donné de résultats concrets en termes de nouveaux locataires.</p>
+  <p>La troisième, c'est le site internet. Je l'ai fait seul, et ça a pris du temps. Aujourd'hui, il est opérationnel, les futurs utilisateurs peuvent réserver directement en ligne, mais un site fonctionnel devrait être prêt dès le lancement, pas six mois après.</p>
+
+  <h2>Pourquoi on continue à prendre des stagiaires, même quand ça ne marche pas encore</h2>
+  <p>Sur la prospection commerciale avec nos stagiaires, je suis honnête&nbsp;: ça n'a pas encore pris. Mais prendre des stagiaires fait partie de la philosophie du lieu. On a déjà accueilli quatre ou cinq stagiaires en commerce, venant de BTS GEA ou en Erasmus, comme Fran, un étudiant espagnol. Il faut laisser leur chance aux jeunes, et le Génie est fait pour ça.</p>
+  <p>On n'a pas les moyens de prendre des stagiaires plus longtemps que deux mois, faute de pouvoir les gratifier au-delà. Si on développe de nouvelles activités et qu'on dégage plus de ressources, on ira plus loin avec les jeunes du territoire. Mais on n'attend pas d'avoir tout résolu pour commencer à le faire.</p>
+
+  <h2>Où on veut être dans deux ou trois ans</h2>
+  <p>Si tout se passe bien, dans deux ou trois ans, je vois le Génie comme un lieu repéré à Montauban pour le soutien aux jeunes, l'animation de territoire et la formation professionnelle, avec une équipe capable de répondre aux associations comme aux petites entreprises sur plusieurs sujets&nbsp;: stratégie, communication, formation, information et orientation.</p>
+  <p>On a déjà l'agrément Tiers-Lieu. On vise maintenant les agréments ESUS (entreprise solidaire d'utilité sociale) et JEP (jeunesse et éducation populaire), qu'on ne peut obtenir qu'après quelques années d'existence. On vient aussi de déposer un dossier pour être référencés Guid'Asso, le réseau national d'accompagnement des associations. Et comme je suis par ailleurs consultant pour le DLA, le Dispositif Local d'Accompagnement, je ne vois pas de raison pour que le Génie ne remplisse pas, à terme, le rôle pour lequel il a été créé.</p>
+
+  <h2>Si vous hésitez à vous lancer</h2>
+  <p>Mon message tiendra en deux phrases. N'attendez pas le moment parfait, ni les partenaires parfaits&nbsp;: une opportunité, un peu d'audace et une étude de marché rapide peuvent suffire pour démarrer. Mais construisez dès le premier jour la structure démocratique et juridique du projet, parce que c'est elle qui lui permettra de tenir, longtemps après votre élan initial.</p>
+</article>
+
+<!-- ═══ CTA CONTACT ═══ -->
+<section class="article-cta" id="contact">
+  <h2>Envie de visiter, de tester un jour, ou de devenir partenaire&nbsp;?</h2>
+  <p>Trois façons simples de donner suite — un message qui part directement, ou une visite à réserver en ligne.</p>
+  <div class="cta-actions">
+    <a class="cta-btn primary" href="mailto:genie.montauban@gmail.com?subject=Je%20d%C3%A9couvre%20le%20G%C3%A9nie&body=Bonjour%2C%0A%0AJ'ai%20lu%20votre%20article%20sur%20le%20tiers-lieu%20et%20j'aimerais%20en%20savoir%20plus%20sur%20%3A%0A%0A">✉️ Nous écrire</a>
+    <a class="cta-btn ghost" href="reservation.html">📅 Réserver une visite</a>
+    <a class="cta-btn ghost" href="tel:+33651509718">📞 06 51 50 97 18</a>
+  </div>
+  <p class="cta-alt">Vous préférez un formulaire complet&nbsp;? <a href="index.html#contact">Page Contact du Génie →</a></p>
+</section>
+
+<div class="back-link">
+  <a href="activites.html">← Retour aux activités &amp; actualités</a>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand-name">Génie</div>
+      <div class="footer-brand-sub">Tiers-Lieu · Montauban</div>
+      <p class="footer-brand-desc">Un espace de coworking et de collaboration ancré dans l'économie sociale et solidaire, au service du territoire montalbannais.</p>
+      <div style="display:flex;gap:10px;margin-top:16px;">
+        <a href="https://www.linkedin.com/company/g%C3%A9nie-montauban-tiers-lieu/" target="_blank" rel="noopener" title="Génie sur LinkedIn" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;background:rgba(255,255,255,.1);border-radius:8px;text-decoration:none;font-size:16px;color:#fff;">in</a>
+        <a href="https://www.facebook.com/profile.php?id=61585419075483" target="_blank" rel="noopener" title="Génie sur Facebook" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;background:rgba(255,255,255,.1);border-radius:8px;text-decoration:none;font-size:16px;color:#fff;">f</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Espaces</div>
+      <ul class="footer-links">
+        <li><a href="index.html#espaces">Antoine Bourdelle</a></li>
+        <li><a href="index.html#espaces">Célestin Freinet</a></li>
+        <li><a href="index.html#espaces">Olympe de Gouges</a></li>
+        <li><a href="index.html#espaces">Aristote</a></li>
+        <li><a href="index.html#espaces">Jean-Jacques Rousseau</a></li>
+        <li><a href="index.html#espaces">Maria Montessori</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Navigation</div>
+      <ul class="footer-links">
+        <li><a href="tarifs.html">Tarifs 2026</a></li>
+        <li><a href="index.html#services">Services</a></li>
+        <li><a href="index.html#rejoindre">Adhésion</a></li>
+        <li><a href="notre-histoire.html">Notre histoire</a></li>
+        <li><a href="activites.html">Activités & Actualités</a></li>
+        <li><a href="reservation.html">Réservation en ligne</a></li>
+        <li><a href="inscription.html">Créer mon compte</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Contact</div>
+      <ul class="footer-links">
+        <li><a href="tel:+33651509718">06 51 50 97 18</a></li>
+        <li><a href="mailto:genie.montauban@gmail.com">genie.montauban@gmail.com</a></li>
+        <li><a href="index.html#contact">12 rue du Génie, 82000 Montauban</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Association Génie Montauban — Tous droits réservés</span>
+    <div class="footer-legal">
+      <a href="mentions_legales.html">Mentions légales</a>
+      <a href="confidentialite.html">Confidentialité</a>
+      <a href="cgv.html">CGV</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+'use strict';
+// ── NAV SCROLL ──
+window.addEventListener('scroll', function() {
+  document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 10);
+});
+// ── NAV MOBILE ──
+var burger = document.getElementById('nav-burger');
+var navLinks = document.getElementById('nav-links');
+burger.addEventListener('click', function() {
+  navLinks.classList.toggle('open');
+  var spans = burger.querySelectorAll('span');
+  if (navLinks.classList.contains('open')) {
+    spans[0].style.transform = 'rotate(45deg) translate(5px,5px)';
+    spans[1].style.opacity   = '0';
+    spans[2].style.transform = 'rotate(-45deg) translate(5px,-5px)';
+  } else {
+    spans.forEach(function(s) { s.style.transform = ''; s.style.opacity = ''; });
+  }
+});
+navLinks.querySelectorAll('a').forEach(function(a) {
+  a.addEventListener('click', function() {
+    navLinks.classList.remove('open');
+    burger.querySelectorAll('span').forEach(function(s) { s.style.transform = ''; s.style.opacity = ''; });
+  });
+});
+</script>
+
+</body>
+</html>

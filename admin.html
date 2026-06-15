@@ -319,8 +319,9 @@ textarea{resize:vertical;min-height:65px}
           <!-- Boutons Google Calendar -->
           <button id="cal-toggle-btn" class="btn btn-sm btn-cal" onclick="toggleCalendarView()" title="Afficher/masquer les événements Google Calendar">📅 Google Cal ✓</button>
           <span id="cal-sync-state" style="font-size:11px;color:var(--sage);white-space:nowrap"></span>
-          <button class="btn btn-sm btn-secondary" onclick="syncCalendarToSheets()" title="Importer les événements Calendar non liés dans Sheets">⬇️ Importer Cal</button>
-          <a href="https://calendar.google.com/calendar/u/1/r/week" target="_blank" class="btn btn-sm btn-ghost">🔗 Ouvrir Cal</a>
+          <!-- Bouton désactivé temporairement — calendrier à reconfigurer -->
+          <!-- <button class="btn btn-sm btn-secondary" onclick="syncCalendarToSheets()">⬇️ Importer Cal</button> -->
+          <a href="https://calendar.google.com/calendar/r/week?authuser=genie.montauban@gmail.com" target="_blank" class="btn btn-sm btn-ghost">🔗 Ouvrir Cal</a>
         </div>
 
         <!-- Grille planning -->
@@ -410,7 +411,7 @@ textarea{resize:vertical;min-height:65px}
               <div style="display:flex;gap:8px;flex-wrap:wrap">
                 <button class="btn btn-secondary btn-sm" onclick="showSetup()">✏️ Modifier URL</button>
                 <a id="sheet-link" href="https://docs.google.com/spreadsheets/d/1mf3D2YGnpWpzufGOaLLaomxAkuzp0AiJY7RzcbpIq2w/edit" target="_blank" class="btn btn-sage btn-sm">📋 Google Sheets</a>
-                <a href="https://calendar.google.com/calendar/u/1/r" target="_blank" class="btn btn-cal btn-sm">📅 Google Calendar</a>
+                <a href="https://calendar.google.com/calendar/r?authuser=genie.montauban@gmail.com" target="_blank" class="btn btn-cal btn-sm">📅 Google Calendar</a>
               </div>
             </div>
           </div>
@@ -430,7 +431,7 @@ textarea{resize:vertical;min-height:65px}
               <p style="font-size:13px;color:var(--muted);margin-bottom:12px">Auto-refresh toutes les <strong>30 secondes</strong>. Les réservations sont <strong>automatiquement synchronisées</strong> avec Google Calendar à chaque création / modification.</p>
               <div style="display:flex;gap:8px;flex-wrap:wrap">
                 <button class="btn btn-primary btn-sm" onclick="loadData(true)">🔄 Forcer sync Sheets</button>
-                <button class="btn btn-cal btn-sm" onclick="syncCalendarToSheets()">⬇️ Importer depuis Cal</button>
+                <!-- <button class="btn btn-cal btn-sm" onclick="syncCalendarToSheets()">⬇️ Importer depuis Cal</button> -->
               </div>
               <div style="margin-top:10px;padding:10px;background:var(--cream);border-radius:8px;font-size:12px;color:var(--muted)" id="data-info"></div>
             </div>
@@ -1039,7 +1040,8 @@ function sendEmail(r) {
   const body = encodeURIComponent(
     `Bonjour ${r.prenom},\n\nVotre réservation est confirmée.\n\nRéférence : ${r.id}\nEspace : ${e?.nom||r.espace} (${e?.ref||''})\nDate : ${fDate(r.date)}\nDurée : ${dl}\n${pL?'Profil : '+pL+'\n':''}Montant : ${fMoney(r.montant)}${r.options?'\nOptions : '+r.options:''}\n\nÉquipe Génie Montauban\n${DB.config.tel} · ${DB.config.email}`
   );
-  window.location.href = `mailto:${r.email}?subject=${sub}&body=${body}`;
+  const gmailUrl = `https://mail.google.com/mail/?authuser=genie.montauban%40gmail.com&view=cm&to=${encodeURIComponent(r.email)}&su=${sub}&body=${body}`;
+  window.open(gmailUrl, '_blank');
 }
 
 function printResa(id) {
@@ -1332,7 +1334,7 @@ function showCalEventDetail(calEventId, title, start, end) {
   document.getElementById('det-foot').innerHTML=`
     <button class="btn btn-ghost" onclick="closeModal('mdetail')">Fermer</button>
     <button class="btn btn-primary" onclick="convertCalToResa('${encodeURIComponent(title)}','${start}','${end}')">➕ Créer une réservation</button>
-    <a href="https://calendar.google.com/calendar/u/1/r" target="_blank" class="btn btn-cal">🔗 Ouvrir Google Cal</a>`;
+    <a href="https://calendar.google.com/calendar/r?authuser=genie.montauban@gmail.com" target="_blank" class="btn btn-cal">🔗 Ouvrir Google Cal</a>`;
 
   openModal('mdetail');
 }
