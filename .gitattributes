@@ -1,0 +1,27 @@
+# Normalise les fins de ligne en LF dans le dépôt
+# Les fichiers texte seront convertis en LF à l'entrée (git add)
+# et resteront en LF en local (ou CRLF si core.autocrlf=true)
+
+* text=auto eol=lf
+
+# Fichiers HTML/CSS/JS/GS : toujours LF
+*.html text eol=lf
+*.css  text eol=lf
+*.js   text eol=lf
+*.gs   text eol=lf
+*.md   text eol=lf
+*.txt  text eol=lf
+*.xml  text eol=lf
+*.json text eol=lf
+*.yml  text eol=lf
+*.py   text eol=lf
+
+# Fichiers binaires : pas de conversion
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ico  binary
+*.pdf  binary
+*.webp binary
+*.svg  text eol=lf
