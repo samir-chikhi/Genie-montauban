@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Proposer un module — Académie des Compétences et de la Connaissance — Génie Montauban</title>
+  <meta name="description" content="Proposez votre module de formation à l'Académie des Compétences et de la Connaissance du Génie Montauban. Formulaire de contact pour les intervenants." />
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary:   #2D6A4F;
+      --primary-d: #1B4332;
+      --secondary: #52B788;
+      --accent:    #B7E4C7;
+      --soft:      #D8F3DC;
+      --bg:        #F8FAF9;
+      --surface:   #FFFFFF;
+      --text:      #1B1B1B;
+      --muted:     #5A7A6E;
+      --radius:    12px;
+      --shadow:    0 4px 24px rgba(45,106,79,.10);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); line-height: 1.65; }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--surface);
+      border-bottom: 1px solid var(--accent);
+      padding: 0 clamp(1rem, 4vw, 3rem);
+      display: flex; align-items: center; justify-content: space-between;
+      height: 64px;
+      box-shadow: 0 2px 12px rgba(45,106,79,.08);
+    }
+    .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--primary); text-decoration: none; font-weight: 700; letter-spacing: -.02em; }
+    .nav-links { display: flex; gap: 2rem; list-style: none; align-items: center; }
+    .nav-links a { text-decoration: none; font-size: .9rem; font-weight: 500; color: var(--muted); transition: color .2s; }
+    .nav-links a:hover { color: var(--primary); }
+    .nav-cta { background: var(--primary); color: #fff !important; padding: .45rem 1.2rem; border-radius: 50px; }
+    .nav-toggle { display: none; background: none; border: none; cursor: pointer; flex-direction: column; gap: 5px; padding: 4px; }
+    .nav-toggle span { display: block; width: 22px; height: 2px; background: var(--primary); transition: transform .3s, opacity .3s; }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(135deg, var(--primary-d) 0%, var(--primary) 60%, #1d7a5f 100%);
+      padding: clamp(3rem,7vw,5rem) clamp(1rem,6vw,4rem);
+      text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .hero-label {
+      display: inline-block;
+      background: rgba(255,255,255,.15); color: var(--accent);
+      font-size: .75rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase;
+      padding: .35rem 1rem; border-radius: 50px;
+      border: 1px solid rgba(255,255,255,.2); margin-bottom: 1.2rem; position: relative;
+    }
+    .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 4vw, 3rem); color: #fff; line-height: 1.15; position: relative; margin-bottom: .8rem; }
+    .hero h1 em { font-style: italic; color: var(--accent); }
+    .hero p { color: rgba(255,255,255,.82); font-size: 1.05rem; max-width: 580px; margin: 0 auto; position: relative; }
+
+    /* BREADCRUMB */
+    .breadcrumb {
+      padding: .8rem clamp(1rem,6vw,4rem);
+      font-size: .82rem; color: var(--muted);
+      border-bottom: 1px solid var(--accent);
+      background: var(--surface);
+    }
+    .breadcrumb a { color: var(--primary); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+
+    /* MAIN */
+    main { max-width: 860px; margin: 0 auto; padding: 3rem clamp(1rem,4vw,2rem) 5rem; }
+
+    /* INTRO CARD */
+    .intro-card {
+      background: var(--surface);
+      border: 1px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 2rem 2.5rem;
+      margin-bottom: 2.5rem;
+      box-shadow: var(--shadow);
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 1.5rem;
+    }
+    .intro-item { text-align: center; }
+    .intro-item .ico { font-size: 2rem; margin-bottom: .5rem; }
+    .intro-item strong { display: block; font-size: .92rem; color: var(--primary-d); margin-bottom: .25rem; }
+    .intro-item span { font-size: .8rem; color: var(--muted); }
+
+    /* FORM CARD */
+    .form-card {
+      background: var(--surface);
+      border: 1px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 2.5rem;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    .form-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+    }
+    .form-card h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem; color: var(--primary-d);
+      margin-bottom: .5rem;
+    }
+    .form-subtitle { font-size: .88rem; color: var(--muted); margin-bottom: 2rem; }
+
+    /* FORM FIELDS */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+    .form-group { display: flex; flex-direction: column; gap: .4rem; }
+    .form-group.full { grid-column: 1 / -1; }
+    label { font-size: .82rem; font-weight: 600; color: var(--primary-d); letter-spacing: .02em; }
+    label .req { color: #e53e3e; margin-left: 2px; }
+    input, select, textarea {
+      font-family: 'DM Sans', sans-serif;
+      font-size: .9rem;
+      padding: .65rem .9rem;
+      border: 1.5px solid var(--accent);
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text);
+      transition: border-color .2s, box-shadow .2s;
+      outline: none;
+      width: 100%;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(45,106,79,.1);
+      background: #fff;
+    }
+    textarea { resize: vertical; min-height: 100px; }
+    select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%235A7A6E' stroke-width='2' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right .75rem center; padding-right: 2rem; }
+
+    /* SECTION DIVIDER */
+    .form-section-title {
+      font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em;
+      color: var(--muted);
+      margin: 2rem 0 1rem;
+      padding-bottom: .5rem;
+      border-bottom: 1px solid var(--accent);
+      grid-column: 1 / -1;
+    }
+
+    /* CHECKBOX GROUP */
+    .checkbox-group { display: flex; flex-wrap: wrap; gap: .75rem; }
+    .checkbox-label {
+      display: flex; align-items: center; gap: .5rem;
+      font-size: .85rem; cursor: pointer;
+      background: var(--bg); border: 1.5px solid var(--accent);
+      padding: .4rem .9rem; border-radius: 50px;
+      transition: all .2s;
+    }
+    .checkbox-label:has(input:checked) {
+      background: var(--soft); border-color: var(--primary); color: var(--primary-d);
+    }
+    .checkbox-label input { width: auto; border: none; background: none; box-shadow: none; padding: 0; }
+
+    /* CONSENT */
+    .consent-block {
+      background: var(--bg);
+      border: 1px solid var(--accent);
+      border-radius: 8px;
+      padding: 1rem 1.2rem;
+      margin-top: 1.5rem;
+      grid-column: 1 / -1;
+    }
+    .consent-block label { display: flex; align-items: flex-start; gap: .75rem; font-size: .82rem; font-weight: 400; color: var(--muted); cursor: pointer; }
+    .consent-block input { width: 18px; height: 18px; margin-top: 1px; flex-shrink: 0; cursor: pointer; accent-color: var(--primary); }
+
+    /* SUBMIT */
+    .form-submit {
+      margin-top: 2rem;
+      display: flex; justify-content: flex-end; align-items: center;
+      gap: 1rem; flex-wrap: wrap;
+    }
+    .btn-submit {
+      background: var(--primary); color: #fff;
+      font-family: 'DM Sans', sans-serif; font-size: .95rem; font-weight: 600;
+      padding: .8rem 2.2rem; border-radius: 50px;
+      border: none; cursor: pointer;
+      transition: background .2s, transform .15s;
+    }
+    .btn-submit:hover { background: var(--primary-d); transform: translateY(-1px); }
+    .form-note { font-size: .78rem; color: var(--muted); }
+
+    /* SUCCESS MESSAGE */
+    .success-msg {
+      display: none;
+      background: linear-gradient(135deg, var(--soft), var(--accent));
+      border: 1px solid rgba(82,183,136,.4);
+      border-radius: var(--radius);
+      padding: 2rem; text-align: center;
+      margin-top: 1.5rem;
+    }
+    .success-msg h3 { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--primary-d); margin-bottom: .5rem; }
+    .success-msg p { font-size: .9rem; color: var(--muted); }
+
+    /* FOOTER */
+    footer { background: var(--primary-d); color: rgba(255,255,255,.7); text-align: center; padding: 2rem; font-size: .82rem; }
+    footer a { color: var(--accent); text-decoration: none; }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-links.open {
+        display: flex !important; flex-direction: column;
+        position: fixed; top: 64px; left: 0; right: 0; bottom: 0;
+        background: #ffffff;
+        padding: 0; z-index: 999;
+        overflow-y: auto;
+        box-shadow: 0 8px 32px rgba(0,0,0,.15);
+        gap: 0;
+      }
+      .nav-links.open li { border-bottom: 1px solid var(--accent); padding: 0 1.5rem; list-style: none; }
+      .nav-links.open li:last-child { border-bottom: none; padding: 1.2rem 1.5rem; }
+      .nav-links.open a { font-size: 1.05rem !important; color: var(--text) !important; padding: 1rem 0; display: block; width: 100%; text-decoration: none; font-weight: 500; }
+      .nav-links.open .nav-cta { background: var(--primary) !important; color: #fff !important; text-align: center; border-radius: 50px; padding: .8rem 1.5rem !important; display: block; }
+      .nav-toggle { display: flex !important; }
+      .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+      .nav-toggle.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+      .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+      .intro-card { grid-template-columns: 1fr; }
+      .form-grid { grid-template-columns: 1fr; }
+      .form-card { padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Génie</a>
+  <button class="nav-toggle" id="menuToggle" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html">Accueil</a></li>
+    <li><a href="notre-histoire.html">Notre histoire</a></li>
+    <li><a href="activites.html">Activités</a></li>
+    <li><a href="academie.html" class="active">Académie</a></li>
+    <li><a href="inscription.html">Mon compte</a></li>
+    <li><a href="reservation.html" class="nav-cta">Réserver</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-label">Académie des Compétences et de la Connaissance · Génie Montauban</div>
+  <h1>Proposer un <em>module</em></h1>
+  <p>Vous avez une expertise à partager ? Remplissez ce formulaire et nous reviendrons vers vous pour organiser votre session.</p>
+</section>
+
+<div class="breadcrumb">
+  <a href="index.html">Accueil</a> &rsaquo; <a href="academie.html">Académie</a> &rsaquo; Proposer un module
+</div>
+
+<main>
+
+  <div class="intro-card">
+    <div class="intro-item">
+      <div class="ico">🧠</div>
+      <strong>Expertise locale</strong>
+      <span>Partagez votre savoir-faire avec la communauté montalbanaise</span>
+    </div>
+    <div class="intro-item">
+      <div class="ico">⏱</div>
+      <strong>Format 3h</strong>
+      <span>Sessions pratiques, livrables concrets, petits groupes</span>
+    </div>
+    <div class="intro-item">
+      <div class="ico">🤝</div>
+      <strong>Soutien complet</strong>
+      <span>Génie s'occupe de la communication, de la salle et de la logistique</span>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <h2>Formulaire d'organisation d'une session</h2>
+    <p class="form-subtitle">Tous les champs marqués <span style="color:#e53e3e">*</span> sont obligatoires. Nous vous répondons sous 5 jours ouvrés.</p>
+
+    <form id="propositionForm" action="https://formspree.io/f/genie.montauban@gmail.com" method="POST" novalidate>
+      <div class="form-grid">
+
+        <div class="form-section-title">Vos coordonnées</div>
+
+        <div class="form-group">
+          <label for="prenom">Prénom <span class="req">*</span></label>
+          <input type="text" id="prenom" name="prenom" placeholder="Marie" required autocomplete="given-name" />
+        </div>
+        <div class="form-group">
+          <label for="nom">Nom <span class="req">*</span></label>
+          <input type="text" id="nom" name="nom" placeholder="Dupont" required autocomplete="family-name" />
+        </div>
+        <div class="form-group">
+          <label for="email">Email <span class="req">*</span></label>
+          <input type="email" id="email" name="email" placeholder="marie@exemple.fr" required autocomplete="email" />
+        </div>
+        <div class="form-group">
+          <label for="telephone">Téléphone</label>
+          <input type="tel" id="telephone" name="telephone" placeholder="06 XX XX XX XX" autocomplete="tel" />
+        </div>
+        <div class="form-group full">
+          <label for="organisation">Structure / Organisation (si applicable)</label>
+          <input type="text" id="organisation" name="organisation" placeholder="Association, entreprise, indépendant…" />
+        </div>
+
+        <div class="form-section-title">Votre module</div>
+
+        <div class="form-group full">
+          <label for="titre">Titre du module proposé <span class="req">*</span></label>
+          <input type="text" id="titre" name="titre" placeholder="Ex. : Créer son site web sans coder" required />
+        </div>
+        <div class="form-group full">
+          <label for="domaine">Domaine / filière <span class="req">*</span></label>
+          <select id="domaine" name="domaine" required>
+            <option value="" disabled selected>Choisissez une filière</option>
+            <option value="Empowerment & Leadership">Empowerment &amp; Leadership</option>
+            <option value="Tech & Numérique">Tech &amp; Numérique</option>
+            <option value="Gestion & Impact">Gestion &amp; Impact</option>
+            <option value="Bien-être & Développement personnel">Bien-être &amp; Développement personnel</option>
+            <option value="Arts & Culture">Arts &amp; Culture</option>
+            <option value="Sciences & Environnement">Sciences &amp; Environnement</option>
+            <option value="Autre">Autre</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label for="description">Description du module <span class="req">*</span></label>
+          <textarea id="description" name="description" placeholder="Décrivez en quelques phrases le contenu, l'objectif principal et ce que les participants repartiront avec…" required style="min-height:120px;"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="public">Public cible <span class="req">*</span></label>
+          <input type="text" id="public" name="public" placeholder="Ex. : Indépendants, dirigeants d'asso, tout public…" required />
+        </div>
+        <div class="form-group">
+          <label for="niveau">Niveau des participants</label>
+          <select id="niveau" name="niveau">
+            <option value="Débutant">Débutant — aucun prérequis</option>
+            <option value="Intermédiaire" selected>Intermédiaire</option>
+            <option value="Avancé">Avancé</option>
+            <option value="Tous niveaux">Tous niveaux</option>
+          </select>
+        </div>
+
+        <div class="form-section-title">Format & logistique</div>
+
+        <div class="form-group">
+          <label for="duree">Durée souhaitée</label>
+          <select id="duree" name="duree">
+            <option value="3h (format standard)" selected>3h — format standard Académie</option>
+            <option value="1h30 (atelier express)">1h30 — atelier express</option>
+            <option value="Journée complète (6h)">Journée complète (6h)</option>
+            <option value="Autre">Autre (précisez dans les commentaires)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="participants">Nombre de participants souhaité</label>
+          <select id="participants" name="participants">
+            <option value="Petit groupe (5-10)">Petit groupe (5–10 pers.)</option>
+            <option value="Groupe moyen (10-20)" selected>Groupe moyen (10–20 pers.)</option>
+            <option value="Grand groupe (20+)">Grand groupe (20+ pers.)</option>
+          </select>
+        </div>
+
+        <div class="form-group full">
+          <label>Format de la session</label>
+          <div class="checkbox-group">
+            <label class="checkbox-label"><input type="checkbox" name="format" value="Présentiel" checked /> Présentiel</label>
+            <label class="checkbox-label"><input type="checkbox" name="format" value="Hybride (présentiel + en ligne)" /> Hybride</label>
+            <label class="checkbox-label"><input type="checkbox" name="format" value="En ligne uniquement" /> En ligne uniquement</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="dates">Date(s) souhaitée(s)</label>
+          <input type="text" id="dates" name="dates" placeholder="Ex. : Septembre 2026, samedi matin…" />
+        </div>
+        <div class="form-group">
+          <label for="materiel">Matériel / équipement nécessaire</label>
+          <input type="text" id="materiel" name="materiel" placeholder="Vidéoprojecteur, paper board, Wi-Fi…" />
+        </div>
+
+        <div class="form-group full">
+          <label for="commentaires">Informations complémentaires</label>
+          <textarea id="commentaires" name="commentaires" placeholder="Tout ce qui vous semble utile à préciser : expérience en animation, liens vers des supports, partenariats envisagés…"></textarea>
+        </div>
+
+        <div class="consent-block">
+          <label>
+            <input type="checkbox" name="consentement" required />
+            <span>J'accepte que les informations saisies soient utilisées par l'équipe du Génie pour traiter ma demande et me recontacter. Aucune donnée ne sera transmise à des tiers. <a href="confidentialite.html" target="_blank" style="color:var(--primary)">Politique de confidentialité</a></span>
+          </label>
+        </div>
+
+      </div><!-- /form-grid -->
+
+      <div class="form-submit">
+        <span class="form-note">Réponse garantie sous 5 jours ouvrés</span>
+        <button type="submit" class="btn-submit">Envoyer ma proposition →</button>
+      </div>
+
+    </form>
+
+    <div class="success-msg" id="successMsg">
+      <h3>Merci pour votre proposition !</h3>
+      <p>L'équipe du Génie a bien reçu votre message. Nous vous répondons sous 5 jours ouvrés pour co-construire votre session avec vous.</p>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <p>© 2026 Génie — Tiers-lieu à Montauban &nbsp;·&nbsp; <a href="mailto:genie.montauban@gmail.com">genie.montauban@gmail.com</a> &nbsp;·&nbsp; <a href="academie.html">Retour à l'Académie</a></p>
+</footer>
+
+<script>
+  /* Nav mobile */
+  const toggle = document.getElementById('menuToggle');
+  const navLinks = document.getElementById('navLinks');
+  toggle.addEventListener('click', () => {
+    navLinks.classList.toggle('open');
+    toggle.classList.toggle('open');
+  });
+  document.addEventListener('click', e => {
+    if (!toggle.contains(e.target) && !navLinks.contains(e.target)) {
+      navLinks.classList.remove('open');
+      toggle.classList.remove('open');
+    }
+  });
+  navLinks.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      toggle.classList.remove('open');
+    });
+  });
+
+  /* Form submission feedback */
+  const form = document.getElementById('propositionForm');
+  form.addEventListener('submit', e => {
+    const required = form.querySelectorAll('[required]');
+    let valid = true;
+    required.forEach(el => {
+      if (!el.value.trim()) {
+        el.style.borderColor = '#e53e3e';
+        valid = false;
+      } else {
+        el.style.borderColor = '';
+      }
+    });
+    if (!valid) {
+      e.preventDefault();
+      return;
+    }
+    e.preventDefault();
+    document.getElementById('successMsg').style.display = 'block';
+    form.style.display = 'none';
+    document.getElementById('successMsg').scrollIntoView({behavior: 'smooth'});
+  });
+</script>
+
+</body>
+</html>
