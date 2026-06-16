@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Académie des Compétences — Génie Montauban</title>
-  <meta name="description" content="L'Académie des Compétences du Génie : micro-formations de 3h animées par des experts locaux. Empowerment, Tech & Numérique, Gestion & Impact. À partir de 45 € — financement OPCO possible." />
+  <title>Académie des Compétences et de la Connaissance — Génie Montauban</title>
+  <meta name="description" content="L'Académie des Compétences et de la Connaissance du Génie : micro-formations de 3h animées par des experts locaux. Empowerment, Tech & Numérique, Gestion & Impact. À partir de 45 € — financement OPCO possible." />
   <meta name="keywords" content="formation montauban, académie compétences, micro-formation, empowerment, leadership, IA, numérique, gestion, ESS, tiers-lieu" />
-  <meta property="og:title" content="Académie des Compétences — Le Génie Montauban" />
+  <meta property="og:title" content="Académie des Compétences et de la Connaissance — Le Génie Montauban" />
   <meta property="og:description" content="18 modules de 3h, animés par des experts locaux. Leadership, Tech, Gestion. À partir de 45 €, financement OPCO possible." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://www.genie-montauban.fr/academie.html" />
@@ -597,19 +597,27 @@
 
     /* ─── CTA FORMATEUR ─── */
     .formateur-banner {
-      background: var(--bg);
-      border: 1.5px dashed var(--secondary);
+      background: linear-gradient(135deg, #f0fdf4, #e6f4ea);
+      border: 1px solid rgba(82,183,136,.35);
       border-radius: var(--radius);
-      padding: 1.8rem 2rem;
+      padding: 2.5rem 2rem;
       text-align: center;
       margin-top: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .formateur-banner::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
     }
     .formateur-banner h3 {
       font-family: 'Playfair Display', serif;
-      font-size: 1.2rem; margin-bottom: .5rem;
+      font-size: 1.3rem; margin-bottom: .6rem;
       color: var(--primary-d);
     }
-    .formateur-banner p { font-size: .88rem; color: var(--muted); margin-bottom: 1rem; }
+    .formateur-banner p { font-size: .9rem; color: var(--muted); margin-bottom: 1.2rem; max-width: 560px; margin-left: auto; margin-right: auto; }
 
     /* ─── SOCIAL ─── */
     .social-banner {
@@ -647,18 +655,49 @@
     }
     footer a { color: var(--accent); text-decoration: none; }
 
-    /* ─── RESPONSIVE ─── */
     @media (max-width: 768px) {
       .nav-links { display: none; }
       .nav-links.open {
-        display: flex; flex-direction: column;
-        position: absolute; top: 64px; left: 0; right: 0;
-        background: var(--surface);
-        padding: 1rem 1.5rem;
-        border-bottom: 1px solid var(--accent);
-        gap: 1rem; z-index: 99;
+        display: flex !important; flex-direction: column;
+        position: fixed; top: 64px; left: 0; right: 0; bottom: 0;
+        background: #ffffff;
+        padding: 0;
+        z-index: 999;
+        overflow-y: auto;
+        box-shadow: 0 8px 32px rgba(0,0,0,.15);
+        gap: 0;
       }
-      .nav-toggle { display: block; }
+      .nav-links.open li {
+        border-bottom: 1px solid var(--accent);
+        padding: 0 1.5rem;
+        list-style: none;
+      }
+      .nav-links.open li:last-child {
+        border-bottom: none;
+        padding: 1.2rem 1.5rem;
+      }
+      .nav-links.open a {
+        font-size: 1.05rem !important;
+        color: var(--text) !important;
+        padding: 1rem 0;
+        display: block;
+        width: 100%;
+        text-decoration: none;
+        font-weight: 500;
+      }
+      .nav-links.open .nav-cta {
+        background: var(--primary) !important;
+        color: #fff !important;
+        text-align: center;
+        border-radius: 50px;
+        padding: .8rem 1.5rem !important;
+        display: block;
+      }
+      .nav-toggle { display: flex !important; flex-direction: column; justify-content: center; gap: 5px; padding: 4px; }
+      .nav-toggle span { transition: transform .3s, opacity .3s; }
+      .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+      .nav-toggle.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+      .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
       .modules-grid { grid-template-columns: 1fr; }
       .filters-bar { top: 64px; }
       .modal-body, .modal-header, .modal-footer { padding-left: 1.2rem; padding-right: 1.2rem; }
@@ -677,10 +716,10 @@
   </button>
   <ul class="nav-links" id="navLinks">
     <li><a href="index.html">Accueil</a></li>
-    <li><a href="index.html#espaces">Espaces</a></li>
-    <li><a href="index.html#tarifs">Tarifs</a></li>
+    <li><a href="notre-histoire.html">Notre histoire</a></li>
     <li><a href="activites.html">Activités</a></li>
     <li><a href="academie.html" class="active">Académie</a></li>
+    <li><a href="inscription.html">Mon compte</a></li>
     <li><a href="reservation.html" class="nav-cta">Réserver</a></li>
   </ul>
 </nav>
@@ -688,7 +727,7 @@
 <!-- ══════════ HERO ══════════ -->
 <section class="hero">
   <div class="hero-label">Tiers-lieu Génie · Montauban · T3 2026</div>
-  <h1>L'<em>Académie</em><br>des Compétences</h1>
+  <h1>L'<em>Académie</em> des Compétences<br><em>et de la Connaissance</em></h1>
   <p>Montez en compétences en 3 heures, animé par quelqu'un que vous pouvez croiser au marché le samedi matin — sur un sujet qui change vraiment votre quotidien.</p>
 
   <div class="hero-stats">
@@ -1235,11 +1274,11 @@
     <a href="mailto:contact@genie-montauban.fr?subject=Inscription Académie des Compétences" class="btn-white">Je m'inscris →</a>
   </div>
 
-  <!-- ══ FORMATEUR ══ -->
+  <!-- ══ PROPOSER UN MODULE ══ -->
   <div class="formateur-banner">
-    <h3>🎓 Vous êtes expert·e local·e ?</h3>
-    <p>L'Académie recrute des formateurs locaux dans tous les domaines. Rémunération 100–200 € / session · Autonomie pédagogique · Visibilité réseau Génie.</p>
-    <a href="mailto:contact@genie-montauban.fr?subject=Candidature formateur Académie" class="btn-white" style="background:var(--primary);color:#fff;">Proposer mon module →</a>
+    <h3>Vous êtes expert·e local·e ?</h3>
+    <p>L'Académie accueille des intervenants passionnés dans tous les domaines — entrepreneuriat, numérique, droit, bien-être, arts, sciences… Partagez vos savoirs avec la communauté montalbanaise.</p>
+    <a href="proposition-formateur.html" class="btn-white" style="background:var(--primary);color:#fff;">Proposer un module →</a>
   </div>
 
   <!-- ══ RÉSEAUX ══ -->
@@ -1726,7 +1765,22 @@ filterBtns.forEach(btn => {
 /* ── Nav mobile ── */
 const toggle = document.getElementById('menuToggle');
 const navLinks = document.getElementById('navLinks');
-toggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+toggle.addEventListener('click', () => {
+  navLinks.classList.toggle('open');
+  toggle.classList.toggle('open');
+});
+document.addEventListener('click', e => {
+  if (!toggle.contains(e.target) && !navLinks.contains(e.target)) {
+    navLinks.classList.remove('open');
+    toggle.classList.remove('open');
+  }
+});
+navLinks.querySelectorAll('a').forEach(a => {
+  a.addEventListener('click', () => {
+    navLinks.classList.remove('open');
+    toggle.classList.remove('open');
+  });
+});
 </script>
 
 </body>

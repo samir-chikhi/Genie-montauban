@@ -235,7 +235,12 @@
     }
     .section-header h2 {
       font-family: 'Playfair Display', serif;
-      font-size: 1.5rem; color: var(--primary);
+      font-size: 1.4rem; color: var(--primary-d);
+      white-space: nowrap;
+      letter-spacing: -.01em;
+    }
+    .section-header .line {
+      flex: 1; height: 1px; background: linear-gradient(90deg, var(--accent), transparent);
     }
     .section-header .line {
       flex: 1; height: 1px; background: var(--accent);
@@ -342,18 +347,26 @@
       box-shadow: 0 12px 36px rgba(45,106,79,.14);
     }
     .event-card-header {
-      height: 130px;
+      height: 150px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 3rem;
+      font-size: 2.8rem;
       position: relative;
+      overflow: hidden;
+    }
+    .event-card-header::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
     }
     .event-card-date {
-      position: absolute; top: 12px; right: 12px;
-      background: rgba(255,255,255,.9);
+      position: absolute; top: 10px; right: 10px;
+      background: rgba(255,255,255,.92);
       color: var(--primary-d);
-      font-size: .72rem; font-weight: 700;
-      padding: .3rem .7rem;
-      border-radius: 50px;
+      font-size: .7rem; font-weight: 700;
+      letter-spacing: .04em;
+      padding: .3rem .65rem;
+      border-radius: 20px;
       backdrop-filter: blur(4px);
     }
     .event-card-body {
@@ -397,6 +410,7 @@
     .news-card {
       background: var(--surface);
       border: 1px solid var(--accent);
+      border-left: 4px solid var(--secondary);
       border-radius: var(--radius);
       padding: 1.4rem 1.6rem;
       display: flex; flex-direction: column; gap: .6rem;
@@ -406,6 +420,7 @@
     .news-card:hover {
       transform: translateY(-3px);
       box-shadow: 0 10px 32px rgba(45,106,79,.13);
+      border-left-color: var(--primary);
     }
     .news-card .news-date {
       font-size: .75rem; color: var(--muted);
@@ -534,8 +549,47 @@
       .event-featured-visual { min-height: 160px; padding: 1.5rem; }
       .event-featured-body { padding: 1.4rem; }
       .nav-links { display: none; }
-      .nav-links.open { display: flex; flex-direction: column; position: absolute; top: 64px; left: 0; right: 0; background: var(--surface); padding: 1rem 1.5rem; border-bottom: 1px solid var(--accent); gap: 1rem; }
-      .nav-toggle { display: block; }
+      .nav-links.open {
+        display: flex !important; flex-direction: column;
+        position: fixed; top: 64px; left: 0; right: 0; bottom: 0;
+        background: #ffffff;
+        padding: 0;
+        z-index: 999;
+        overflow-y: auto;
+        box-shadow: 0 8px 32px rgba(0,0,0,.15);
+        gap: 0;
+      }
+      .nav-links.open li {
+        border-bottom: 1px solid var(--accent);
+        padding: 0 1.5rem;
+        list-style: none;
+      }
+      .nav-links.open li:last-child {
+        border-bottom: none;
+        padding: 1.2rem 1.5rem;
+      }
+      .nav-links.open a {
+        font-size: 1.05rem !important;
+        color: var(--text) !important;
+        padding: 1rem 0;
+        display: block;
+        width: 100%;
+        text-decoration: none;
+        font-weight: 500;
+      }
+      .nav-links.open .nav-cta {
+        background: var(--primary) !important;
+        color: #fff !important;
+        text-align: center;
+        border-radius: 50px;
+        padding: .8rem 1.5rem !important;
+        display: block;
+      }
+      .nav-toggle { display: flex !important; flex-direction: column; justify-content: center; gap: 5px; padding: 4px; }
+      .nav-toggle span { transition: transform .3s, opacity .3s; }
+      .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+      .nav-toggle.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+      .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
     }
   </style>
 </head>
@@ -549,9 +603,10 @@
   </button>
   <ul class="nav-links" id="navLinks">
     <li><a href="index.html">Accueil</a></li>
-    <li><a href="index.html#espaces">Espaces</a></li>
-    <li><a href="index.html#tarifs">Tarifs</a></li>
-    <li><a href="activites.html" class="active">Activités & Actualités</a></li>
+    <li><a href="notre-histoire.html">Notre histoire</a></li>
+    <li><a href="activites.html" class="active">Activités</a></li>
+    <li><a href="academie.html">Académie</a></li>
+    <li><a href="inscription.html">Mon compte</a></li>
     <li><a href="reservation.html" class="nav-cta">Réserver</a></li>
   </ul>
 </nav>
@@ -950,7 +1005,22 @@
   /* Nav mobile */
   const toggle = document.getElementById('menuToggle');
   const navLinks = document.getElementById('navLinks');
-  toggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+  toggle.addEventListener('click', () => {
+    navLinks.classList.toggle('open');
+    toggle.classList.toggle('open');
+  });
+  document.addEventListener('click', e => {
+    if (!toggle.contains(e.target) && !navLinks.contains(e.target)) {
+      navLinks.classList.remove('open');
+      toggle.classList.remove('open');
+    }
+  });
+  navLinks.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      toggle.classList.remove('open');
+    });
+  });
 </script>
 
 </body>
