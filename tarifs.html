@@ -17,169 +17,209 @@
   <meta name="twitter:image" content="https://www.genie-montauban.fr/og-image.jpg">
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --navy:    #0D2B45;
-      --gold:    #C9A84C;
-      --gold-lt: #E8C96E;
-      --teal:    #1A6B72;
-      --teal-lt: #2A9EA8;
-      --cream:   #F8F5EF;
-      --white:   #FFFFFF;
-      --gray:    #6B7280;
-      --dark:    #1C1C1C;
-      --success: #2D7D46;
-      --warn:    #B45309;
-      --radius:  10px;
-      --font-head: 'Syne', sans-serif;
-      --font-body: 'DM Sans', sans-serif;
+      --bg-950: #0F172A; --bg-900: #1E293B; --bg-800: #334155;
+      --slate-400: #94A3B8; --slate-300: #CBD5E1; --slate-200: #E2E8F0;
+      --emerald: #10B981; --emerald-l: #34D399; --emerald-d: #059669;
+      --violet: #8B5CF6;
+      --amber: #F59E0B; --amber-l: #FCD34D;
+      --teal: #0D9488;
+      --green: #16A34A;
+      --glass-bg: rgba(255,255,255,0.05);
+      --glass-border: rgba(255,255,255,0.08);
+      --radius: 12px;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-    body { font-family: var(--font-body); color: var(--dark); background: var(--white); }
+    body { font-family: 'DM Sans', sans-serif; color: var(--slate-300); background: var(--bg-950); }
     a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; border: none; background: none; font-family: inherit; }
+    :focus-visible { outline: 2px solid var(--emerald); outline-offset: 3px; border-radius: 3px; }
 
     /* ── NAV ── */
     nav {
-      position: sticky; top: 0; z-index: 50;
-      background: rgba(13,43,69,0.97); display: flex; align-items: center;
-      justify-content: space-between; padding: 0 32px; height: 60px;
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(15,23,42,0.85); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--glass-border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%; height: 64px;
     }
-    .nav-logo { font-family: var(--font-head); font-weight: 800; font-size: 1.4rem; color: var(--gold); }
-    .nav-back { color: rgba(255,255,255,0.8); font-size: 0.88rem; display: flex; align-items: center; gap: 6px; transition: color .2s; }
-    .nav-back:hover { color: var(--gold); }
-    .nav-res {
-      background: var(--gold); color: var(--navy); font-weight: 700; font-size: 0.82rem;
-      padding: 7px 18px; border-radius: 6px; transition: background .2s;
+    .nav-logo { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 1.5rem; color: var(--emerald); letter-spacing: -.02em; }
+    .nav-links { display: flex; gap: 28px; list-style: none; align-items: center; }
+    .nav-links a { font-size: 14px; font-weight: 500; color: var(--slate-400); transition: color .2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--slate-200); }
+    .nav-cta {
+      background: var(--emerald) !important; color: var(--bg-950) !important;
+      padding: 9px 20px; border-radius: 8px; font-weight: 600;
     }
-    .nav-res:hover { background: var(--gold-lt); }
+    .nav-cta:hover { background: var(--emerald-l) !important; }
+    .nav-toggle { display: none; flex-direction: column; gap: 6px; padding: 8px; }
+    .nav-toggle span { display: block; width: 24px; height: 2px; background: var(--slate-300); border-radius: 2px; transition: .3s; }
 
     /* ── HERO ── */
     .tarifs-hero {
-      background: linear-gradient(135deg, var(--navy) 0%, var(--teal) 100%);
-      padding: 60px 32px; text-align: center;
+      position: relative; overflow: hidden; background: var(--bg-950);
+      padding: 72px 5% 56px; text-align: center;
     }
+    .hero-orb {
+      position: absolute; border-radius: 50%; filter: blur(80px); pointer-events: none;
+    }
+    .hero-orb-1 { width: 480px; height: 480px; background: rgba(139,92,246,.14); top: -120px; left: -80px; }
+    .hero-orb-2 { width: 360px; height: 360px; background: rgba(16,185,129,.12); bottom: -60px; right: -40px; }
     .tarifs-hero h1 {
-      font-family: var(--font-head); font-weight: 800; font-size: clamp(1.8rem, 4vw, 2.8rem);
-      color: var(--white); letter-spacing: -0.02em; margin-bottom: 12px;
+      font-family: 'Playfair Display', serif; font-weight: 900;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      color: var(--slate-200); letter-spacing: -.02em; margin-bottom: 12px;
+      position: relative; z-index: 1;
     }
-    .tarifs-hero p { color: rgba(255,255,255,0.7); font-size: 1rem; margin-bottom: 28px; }
-    .hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-    .btn-dl {
+    .tarifs-hero h1 span { color: var(--emerald-l); }
+    .tarifs-hero p { color: var(--slate-400); font-size: 1rem; margin-bottom: 28px; position: relative; z-index: 1; }
+    .hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; position: relative; z-index: 1; }
+    .btn-action {
       display: inline-flex; align-items: center; gap: 8px;
-      background: var(--gold); color: var(--navy); font-family: var(--font-head);
-      font-weight: 700; font-size: 0.9rem; padding: 12px 24px; border-radius: 8px;
-      cursor: pointer; border: none; transition: background .2s; text-decoration: none;
+      font-weight: 600; font-size: .9rem; padding: 11px 22px; border-radius: 8px;
+      cursor: pointer; transition: .2s; text-decoration: none;
     }
-    .btn-dl:hover { background: var(--gold-lt); }
-    .btn-print {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: transparent; color: var(--white); border: 1.5px solid rgba(255,255,255,0.35);
-      font-family: var(--font-head); font-weight: 600; font-size: 0.9rem;
-      padding: 12px 24px; border-radius: 8px; cursor: pointer; border: none; transition: .2s;
-    }
-    .btn-print:hover { border-color: var(--gold); color: var(--gold); }
+    .btn-action.primary { background: var(--emerald); color: var(--bg-950); border: none; }
+    .btn-action.primary:hover { background: var(--emerald-l); }
+    .btn-action.ghost { background: var(--glass-bg); color: var(--slate-300); border: 1px solid var(--glass-border); }
+    .btn-action.ghost:hover { background: rgba(255,255,255,.1); color: var(--slate-200); }
 
     /* ── WRAPPER ── */
-    .tarifs-wrapper { max-width: 1000px; margin: 0 auto; padding: 48px 24px 80px; }
+    .tarifs-wrapper { max-width: 1000px; margin: 0 auto; padding: 48px 5% 80px; }
 
     /* ── FILTRES PROFIL ── */
     .profil-filter {
-      background: var(--cream); border-radius: var(--radius); padding: 20px 24px;
+      background: var(--glass-bg); border: 1px solid var(--glass-border);
+      backdrop-filter: blur(12px);
+      border-radius: var(--radius); padding: 18px 22px;
       margin-bottom: 40px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
     }
-    .profil-filter label { font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gray); }
+    .profil-filter label { font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--slate-400); }
     .profil-btns { display: flex; gap: 8px; flex-wrap: wrap; }
     .profil-btn {
-      padding: 8px 16px; border-radius: 20px; border: 1.5px solid rgba(13,43,69,0.15);
-      background: var(--white); font-family: var(--font-body); font-size: 0.82rem;
-      font-weight: 600; color: var(--navy); cursor: pointer; transition: .15s;
+      padding: 8px 16px; border-radius: 20px; border: 1.5px solid var(--glass-border);
+      background: rgba(255,255,255,.04); font-family: 'DM Sans', sans-serif; font-size: .82rem;
+      font-weight: 600; color: var(--slate-400); cursor: pointer; transition: .15s;
     }
-    .profil-btn.active, .profil-btn:hover { background: var(--navy); color: var(--white); border-color: var(--navy); }
-    .profil-btn.active-adherent { background: var(--warn); border-color: var(--warn); color: var(--white); }
-    .profil-btn.active-locataire { background: var(--teal); border-color: var(--teal); color: var(--white); }
-    .profil-btn.active-asso { background: var(--success); border-color: var(--success); color: var(--white); }
+    .profil-btn:hover { border-color: var(--emerald); color: var(--slate-200); }
+    .profil-btn.active { background: rgba(16,185,129,.15); border-color: var(--emerald); color: var(--emerald-l); }
+    .profil-btn.active-adherent { background: rgba(245,158,11,.12); border-color: var(--amber); color: var(--amber-l); }
+    .profil-btn.active-locataire { background: rgba(13,148,136,.12); border-color: var(--teal); color: #5EEAD4; }
+    .profil-btn.active-asso { background: rgba(22,163,74,.12); border-color: var(--green); color: #86EFAC; }
 
     /* ── SECTION TITRE ── */
     .tarif-section { margin-bottom: 48px; }
     .tarif-section-title {
-      font-family: var(--font-head); font-weight: 800; font-size: 1.2rem; color: var(--navy);
+      font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1.2rem; color: var(--slate-200);
       display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
-      padding-bottom: 12px; border-bottom: 2px solid rgba(201,168,76,0.25);
+      padding-bottom: 12px; border-bottom: 1px solid var(--glass-border);
     }
 
     /* ── TABLE TARIFS ── */
-    .tarif-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
-    .tarif-table thead tr { background: var(--navy); color: var(--white); }
+    .tarif-table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+    .tarif-table thead tr { background: var(--bg-800); }
     .tarif-table thead th {
-      padding: 12px 14px; text-align: left; font-family: var(--font-head); font-size: 0.78rem;
-      font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+      padding: 12px 14px; text-align: left; font-size: .75rem;
+      font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--slate-300);
     }
-    .tarif-table tbody tr { border-bottom: 1px solid rgba(0,0,0,0.06); transition: background .15s; }
-    .tarif-table tbody tr:hover { background: var(--cream); }
+    .tarif-table tbody tr { border-bottom: 1px solid var(--glass-border); transition: background .15s; }
+    .tarif-table tbody tr:hover { background: rgba(255,255,255,.03); }
     .tarif-table tbody td { padding: 12px 14px; vertical-align: top; }
-    .col-espace { font-weight: 600; color: var(--navy); }
-    .col-espace small { font-weight: 400; color: var(--gray); display: block; font-size: 0.8rem; }
-    .price-plein { font-weight: 700; color: var(--navy); }
-    .price-adherent { font-weight: 700; color: var(--warn); }
-    .price-locataire { font-weight: 700; color: var(--teal); }
-    .price-asso { font-weight: 700; color: var(--success); }
-    .price-highlight { background: rgba(201,168,76,0.08); border-radius: 4px; padding: 2px 6px; }
+    .col-espace { font-weight: 600; color: var(--slate-200); }
+    .col-espace small { font-weight: 400; color: var(--slate-400); display: block; font-size: .8rem; }
+    .price-plein { font-weight: 700; color: var(--slate-200); }
+    .price-adherent { font-weight: 700; color: var(--amber-l); }
+    .price-locataire { font-weight: 700; color: #5EEAD4; }
+    .price-asso { font-weight: 700; color: #86EFAC; }
 
-    /* Colonne mise en évidence selon profil actif */
-    .tarif-table td.col-active { background: rgba(201,168,76,0.06); }
+    .tarif-table td.col-active { background: rgba(16,185,129,.05); }
 
     /* ── CARD BAIL ── */
     .bail-table-wrap {
-      background: linear-gradient(135deg, rgba(13,43,69,0.04), rgba(26,107,114,0.04));
-      border: 1.5px solid rgba(26,107,114,0.2); border-radius: var(--radius); overflow: hidden;
-      margin-bottom: 16px;
+      background: var(--glass-bg); border: 1px solid var(--glass-border);
+      border-radius: var(--radius); overflow: hidden; margin-bottom: 16px;
+      backdrop-filter: blur(12px);
     }
     .bail-table-head {
-      background: linear-gradient(135deg, var(--navy), var(--teal));
-      color: var(--white); padding: 14px 20px;
-      display: flex; justify-content: space-between; align-items: center;
+      background: var(--bg-800); color: var(--slate-200);
+      padding: 14px 20px; display: flex; justify-content: space-between; align-items: center;
     }
-    .bail-table-head h4 { font-family: var(--font-head); font-weight: 700; font-size: 0.95rem; }
-    .bail-table-head span { font-size: 0.78rem; color: rgba(255,255,255,0.7); }
+    .bail-table-head h4 { font-family: 'Playfair Display', serif; font-weight: 700; font-size: .95rem; }
+    .bail-table-head span { font-size: .78rem; color: var(--slate-400); }
     .bail-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
-    .bail-col { padding: 16px 20px; border-right: 1px solid rgba(0,0,0,0.06); }
+    .bail-col { padding: 16px 20px; border-right: 1px solid var(--glass-border); }
     .bail-col:last-child { border-right: none; }
-    .bail-col.best { background: rgba(201,168,76,0.06); }
-    .bail-col-name { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gray); margin-bottom: 6px; }
-    .bail-col-price { font-family: var(--font-head); font-weight: 800; font-size: 1.2rem; color: var(--navy); }
-    .bail-col-note { font-size: 0.75rem; color: var(--gray); margin-top: 4px; }
-    .bail-col-badge { font-size: 0.68rem; font-weight: 700; background: var(--gold); color: var(--navy); padding: 2px 8px; border-radius: 10px; display: inline-block; margin-top: 4px; }
+    .bail-col.best { background: rgba(16,185,129,.06); }
+    .bail-col-name { font-size: .75rem; text-transform: uppercase; letter-spacing: .08em; color: var(--slate-400); margin-bottom: 6px; }
+    .bail-col-price { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 1.2rem; color: var(--slate-200); }
+    .bail-col-note { font-size: .75rem; color: var(--slate-400); margin-top: 4px; }
+    .bail-col-badge {
+      font-size: .68rem; font-weight: 700; background: rgba(16,185,129,.15); color: var(--emerald-l);
+      border: 1px solid rgba(52,211,153,.25); padding: 2px 8px; border-radius: 10px;
+      display: inline-block; margin-top: 4px;
+    }
+
+    /* ── NOTE ── */
+    .table-note {
+      font-size: .8rem; color: var(--slate-400); margin-top: 10px;
+      background: var(--glass-bg); padding: 12px 16px; border-radius: 8px;
+      border-left: 3px solid var(--emerald);
+    }
 
     /* ── SERVICES ── */
     .services-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
     .service-item {
-      background: var(--cream); border-radius: 8px; padding: 16px;
-      border: 1px solid rgba(13,43,69,0.08);
+      background: var(--glass-bg); border: 1px solid var(--glass-border);
+      border-radius: 8px; padding: 16px;
     }
-    .service-name { font-weight: 600; font-size: 0.85rem; color: var(--navy); margin-bottom: 4px; }
-    .service-price { font-family: var(--font-head); font-weight: 700; font-size: 1rem; color: var(--teal); }
+    .service-name { font-weight: 600; font-size: .85rem; color: var(--slate-200); margin-bottom: 4px; }
+    .service-price { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1rem; color: var(--emerald-l); }
 
     /* ── LÉGENDE ── */
     .legende {
-      background: var(--cream); border-radius: var(--radius); padding: 20px 24px; margin-top: 48px;
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px;
+      background: var(--glass-bg); border: 1px solid var(--glass-border);
+      border-radius: var(--radius); padding: 20px 24px; margin-top: 48px;
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px;
+      backdrop-filter: blur(12px);
     }
-    .legende-item { display: flex; align-items: center; gap: 10px; font-size: 0.82rem; }
-    .legende-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+    .legende-item { display: flex; align-items: center; gap: 10px; font-size: .82rem; color: var(--slate-400); }
+    .legende-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--bg-900); border-top: 1px solid var(--glass-border);
+      color: var(--slate-400); text-align: center; padding: 28px; font-size: .8rem;
+    }
+    .footer-logo-text { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 1.1rem; color: var(--emerald); margin-bottom: 8px; }
+    footer a { color: var(--slate-400); margin: 0 8px; transition: color .2s; }
+    footer a:hover { color: var(--emerald); }
 
     /* ── PRINT ── */
     @media print {
-      nav, .profil-filter, .hero-actions, .btn-dl, .btn-print { display: none !important; }
+      nav, .profil-filter, .hero-actions { display: none !important; }
       .tarifs-hero { padding: 24px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-      .tarifs-hero h1 { font-size: 1.6rem; }
-      body { font-size: 11px; }
+      body { background: white; color: black; font-size: 11px; }
       .tarif-table { font-size: 10px; }
-      .tarifs-wrapper { padding: 16px; }
       .tarif-section { page-break-inside: avoid; }
     }
 
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-links.open {
+        display: flex !important; flex-direction: column;
+        position: fixed; top: 64px; left: 0; right: 0; bottom: 0;
+        background: rgba(15,23,42,0.97); backdrop-filter: blur(20px);
+        border-top: 1px solid var(--glass-border); z-index: 999; overflow-y: auto; gap: 0;
+      }
+      .nav-links.open li { border-bottom: 1px solid var(--glass-border); }
+      .nav-links.open a { font-size: 18px !important; font-weight: 600; color: var(--slate-200) !important; padding: 18px 6%; display: block; }
+      .nav-links.open .nav-cta { margin: 16px 6%; border-radius: 10px; text-align: center; display: block; }
+      .nav-toggle { display: flex; }
+    }
     @media (max-width: 680px) {
       .tarif-table thead th:nth-child(3),
       .tarif-table tbody td:nth-child(3) { display: none; }
@@ -190,17 +230,28 @@
 <body>
 
 <nav>
-  <div class="nav-logo">Génie</div>
-  <a href="index.html" class="nav-back">← Retour au site</a>
-  <a href="reservation.html" class="nav-res">Réserver →</a>
+  <a href="index.html" class="nav-logo">Génie</a>
+  <button class="nav-toggle" id="menuToggle" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html">Accueil</a></li>
+    <li><a href="notre-histoire.html">Notre histoire</a></li>
+    <li><a href="activites.html">Activités</a></li>
+    <li><a href="academie.html">Académie</a></li>
+    <li><a href="inscription.html">Mon compte</a></li>
+    <li><a href="reservation.html" class="nav-cta">Réserver</a></li>
+  </ul>
 </nav>
 
 <div class="tarifs-hero">
-  <h1>📋 Grille tarifaire 2026</h1>
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <h1>📋 Grille tarifaire <span>2026</span></h1>
   <p>Tiers-Lieu Génie Montauban · 12 rue du Génie, 82000 Montauban · contact@genie-montauban.fr</p>
   <div class="hero-actions">
-    <button class="btn-dl" onclick="window.print()">⬇️ Télécharger / Imprimer</button>
-    <a href="reservation.html" class="btn-dl" style="background:rgba(255,255,255,0.12); color:var(--white)">Réserver un espace →</a>
+    <button class="btn-action primary" onclick="window.print()">⬇️ Télécharger / Imprimer</button>
+    <a href="reservation.html" class="btn-action ghost">Réserver un espace →</a>
   </div>
 </div>
 
@@ -215,7 +266,7 @@
       <button class="profil-btn" data-profil="locataire" onclick="setProfilActif('locataire',this)">Locataire (−50%)</button>
       <button class="profil-btn" data-profil="asso" onclick="setProfilActif('asso',this)">Association 82</button>
     </div>
-    <span id="profilNote" style="font-size:0.8rem; color:var(--gray); font-style:italic; margin-left:auto">Non-adhérent · tarif standard</span>
+    <span id="profilNote" style="font-size:.8rem;color:var(--slate-400);font-style:italic;margin-left:auto">Non-adhérent · tarif standard</span>
   </div>
 
   <!-- 1. SALLES DE RÉUNION -->
@@ -233,7 +284,6 @@
         </tr>
       </thead>
       <tbody>
-        <!-- BOURDELLE -->
         <tr>
           <td rowspan="3" class="col-espace">Antoine Bourdelle (0-02)<small>Grande salle · 40 pers.</small></td>
           <td>À l'heure</td>
@@ -256,8 +306,7 @@
           <td class="price-locataire col-locataire">120 €</td>
           <td class="price-asso col-asso">Gratuit*</td>
         </tr>
-        <!-- FREINET -->
-        <tr style="background:rgba(248,245,239,0.5)">
+        <tr style="background:rgba(255,255,255,.02)">
           <td rowspan="3" class="col-espace">Célestin Freinet (1-11)<small>Salle de réunion · 20 pers.</small></td>
           <td>À l'heure</td>
           <td class="price-plein col-plein">30 €</td>
@@ -265,21 +314,20 @@
           <td class="price-locataire col-locataire">15 €</td>
           <td class="price-asso col-asso">Gratuit*</td>
         </tr>
-        <tr style="background:rgba(248,245,239,0.5)">
+        <tr style="background:rgba(255,255,255,.02)">
           <td>Demi-journée (4h)</td>
           <td class="price-plein col-plein">100 €</td>
           <td class="price-adherent col-adherent">60 €</td>
           <td class="price-locataire col-locataire">45 €</td>
           <td class="price-asso col-asso">Gratuit*</td>
         </tr>
-        <tr style="background:rgba(248,245,239,0.5)">
+        <tr style="background:rgba(255,255,255,.02)">
           <td>Journée (8h)</td>
           <td class="price-plein col-plein">180 €</td>
           <td class="price-adherent col-adherent">100 €</td>
           <td class="price-locataire col-locataire">80 €</td>
           <td class="price-asso col-asso">Gratuit*</td>
         </tr>
-        <!-- GOUGES -->
         <tr>
           <td rowspan="3" class="col-espace">Olympe de Gouges (1-12)<small>Salle de réunion · 20 pers.</small></td>
           <td>À l'heure</td>
@@ -302,8 +350,7 @@
           <td class="price-locataire col-locataire">80 €</td>
           <td class="price-asso col-asso">Gratuit*</td>
         </tr>
-        <!-- MONTESSORI -->
-        <tr style="background:rgba(248,245,239,0.5)">
+        <tr style="background:rgba(255,255,255,.02)">
           <td rowspan="3" class="col-espace">Maria Montessori (−1-14)<small>PMR ♿ · 4 pers.</small></td>
           <td>À l'heure</td>
           <td class="price-plein col-plein">20 €</td>
@@ -311,14 +358,14 @@
           <td class="price-locataire col-locataire">10 €</td>
           <td class="price-asso col-asso">Gratuit*</td>
         </tr>
-        <tr style="background:rgba(248,245,239,0.5)">
+        <tr style="background:rgba(255,255,255,.02)">
           <td>Demi-journée (4h)</td>
           <td class="price-plein col-plein">60 €</td>
           <td class="price-adherent col-adherent">45 €</td>
           <td class="price-locataire col-locataire">30 €</td>
           <td class="price-asso col-asso">Gratuit*</td>
         </tr>
-        <tr style="background:rgba(248,245,239,0.5)">
+        <tr style="background:rgba(255,255,255,.02)">
           <td>Journée (8h)</td>
           <td class="price-plein col-plein">100 €</td>
           <td class="price-adherent col-adherent">80 €</td>
@@ -331,7 +378,7 @@
 
   <!-- 2. COWORKING NOMADE -->
   <div class="tarif-section" id="sec-cowork">
-    <div class="tarif-section-title">💻 Espaces coworking & bureaux nomades</div>
+    <div class="tarif-section-title">💻 Espaces coworking &amp; bureaux nomades</div>
     <table class="tarif-table">
       <thead>
         <tr>
@@ -344,7 +391,6 @@
         </tr>
       </thead>
       <tbody>
-        <!-- Aristote -->
         <tr>
           <td rowspan="2" class="col-espace">Aristote (1-13)<small>Bureau privé · 7 m²</small></td>
           <td class="price-adherent">Adhérent</td>
@@ -360,8 +406,7 @@
           <td class="price-plein col-plein">130 €</td>
           <td class="price-plein col-plein">280 €</td>
         </tr>
-        <!-- Rousseau -->
-        <tr style="background:rgba(248,245,239,0.5)">
+        <tr style="background:rgba(255,255,255,.02)">
           <td rowspan="2" class="col-espace">Jean-Jacques Rousseau (1-10)<small>Open space coworking · 28 m²</small></td>
           <td class="price-adherent">Adhérent</td>
           <td class="price-adherent col-adherent">10 €</td>
@@ -369,14 +414,13 @@
           <td class="price-adherent col-adherent">60 €</td>
           <td class="price-adherent col-adherent">180 €</td>
         </tr>
-        <tr style="background:rgba(248,245,239,0.5)">
+        <tr style="background:rgba(255,255,255,.02)">
           <td class="price-plein">Non-adhérent</td>
           <td class="price-plein col-plein">15 €</td>
           <td class="price-plein col-plein">26 €</td>
           <td class="price-plein col-plein">90 €</td>
           <td class="price-plein col-plein">250 €</td>
         </tr>
-        <!-- Montessori nomade -->
         <tr>
           <td rowspan="2" class="col-espace">Maria Montessori (−1-14)<small>Bureau privé PMR ♿ · 12 m²</small></td>
           <td class="price-adherent">Adhérent</td>
@@ -394,7 +438,7 @@
         </tr>
       </tbody>
     </table>
-    <div style="font-size:0.8rem;color:var(--gray);margin-top:10px;background:var(--cream);padding:12px 16px;border-radius:8px;border-left:3px solid var(--gold)">
+    <div class="table-note">
       Tarifs HC (hors charges). L'adhésion à l'association Génie est requise pour le tarif adhérent (à partir de 15 €/an — tarif progressif selon situation). L'adhésion est rentabilisée dès 2 utilisations mensuelles.
     </div>
   </div>
@@ -403,7 +447,7 @@
   <div class="tarif-section" id="sec-bails">
     <div class="tarif-section-title">🔑 Bureaux privatifs en bail — jusqu'à 20% d'économie</div>
 
-    <p style="font-size:0.88rem; color:var(--gray); margin-bottom:20px">
+    <p style="font-size:.88rem;color:var(--slate-400);margin-bottom:20px">
       Charges comprises (eau, électricité, internet fibre). TVA applicable selon statut. 7 bureaux disponibles de 18 à 50 m².
     </p>
 
@@ -450,7 +494,7 @@
           <td class="price-plein">255 €/mois HC</td>
           <td class="price-locataire" style="font-weight:700">225 €/mois HC</td>
         </tr>
-        <tr style="background:rgba(248,245,239,0.5)">
+        <tr style="background:rgba(255,255,255,.02)">
           <td class="col-espace">Philippe Meirieu (0-03)</td>
           <td>24 m²</td>
           <td class="price-plein">432 €/mois HC</td>
@@ -464,7 +508,7 @@
           <td class="price-plein">323 €/mois HC</td>
           <td class="price-locataire" style="font-weight:700">285 €/mois HC</td>
         </tr>
-        <tr style="background:rgba(248,245,239,0.5)">
+        <tr style="background:rgba(255,255,255,.02)">
           <td class="col-espace">Aimée Césaire (1-07)</td>
           <td>17 m²</td>
           <td class="price-plein">306 €/mois HC</td>
@@ -478,7 +522,7 @@
           <td class="price-plein">289 €/mois HC</td>
           <td class="price-locataire" style="font-weight:700">255 €/mois HC</td>
         </tr>
-        <tr style="background:rgba(248,245,239,0.5)">
+        <tr style="background:rgba(255,255,255,.02)">
           <td class="col-espace">Baden Powell (1-09)</td>
           <td>16 m²</td>
           <td class="price-plein">288 €/mois HC</td>
@@ -492,7 +536,7 @@
           <td class="price-plein">408 €/mois HC</td>
           <td class="price-locataire" style="font-weight:700">360 €/mois HC</td>
         </tr>
-        <tr style="background:rgba(248,245,239,0.5)">
+        <tr style="background:rgba(255,255,255,.02)">
           <td class="col-espace">Maria Montessori (−1-14)</td>
           <td>12 m²</td>
           <td class="price-plein">216 €/mois HC</td>
@@ -516,7 +560,7 @@
           <td class="price-adherent" style="font-weight:700">min. 10 € / an</td>
           <td>Soutien à l'association · cotisation libre</td>
         </tr>
-        <tr style="background:rgba(248,245,239,0.5)">
+        <tr style="background:rgba(255,255,255,.02)">
           <td class="col-espace">Jeune 16–30 ans</td>
           <td class="price-adherent" style="font-weight:700">15 à 40 € / an</td>
           <td>Voix délibérative en AG · quota CA garanti · tarifs adhérent</td>
@@ -526,7 +570,7 @@
           <td class="price-adherent" style="font-weight:700">30 à 80 € / an</td>
           <td>Voix délibérative en AG · tarifs préférentiels · annuaire Génie</td>
         </tr>
-        <tr style="background:rgba(248,245,239,0.5)">
+        <tr style="background:rgba(255,255,255,.02)">
           <td class="col-espace">Association</td>
           <td class="price-adherent" style="font-weight:700">50 € / an</td>
           <td>Voix délibérative en AG · salles gratuites (asso Villebourbon + syndicats)</td>
@@ -536,7 +580,7 @@
           <td class="price-adherent" style="font-weight:700">150 € / an</td>
           <td>Voix délibérative en AG · tarifs adhérent pour toute l'équipe</td>
         </tr>
-        <tr style="background:rgba(248,245,239,0.5)">
+        <tr style="background:rgba(255,255,255,.02)">
           <td class="col-espace">Collectivité / Établissement</td>
           <td class="price-adherent" style="font-weight:700">Sur convention</td>
           <td>Voix consultative · nous contacter</td>
@@ -562,30 +606,51 @@
 
   <!-- LÉGENDE -->
   <div class="legende">
-    <div style="grid-column:1/-1; font-family:var(--font-head); font-weight:700; font-size:0.85rem; color:var(--navy); margin-bottom:4px">Légende des profils</div>
-    <div class="legende-item"><div class="legende-dot" style="background:var(--navy)"></div><span><strong>Non-adhérent</strong> : tarif standard, toute personne ou structure non membre</span></div>
-    <div class="legende-item"><div class="legende-dot" style="background:var(--warn)"></div><span><strong>Adhérent</strong> : membre à jour de cotisation (à partir de 15 €/an)</span></div>
-    <div class="legende-item"><div class="legende-dot" style="background:var(--teal)"></div><span><strong>Locataire</strong> : titulaire d'un bail privatif au Génie</span></div>
-    <div class="legende-item"><div class="legende-dot" style="background:var(--success)"></div><span><strong>Asso Villebourbon / syndicat* Gratuit</strong> : adhésion Génie (50€/an) + réservation 72h avant + sous réserve disponibilité</span></div>
-    <div style="grid-column:1/-1; font-size:0.78rem; color:var(--gray); margin-top:4px">
+    <div style="grid-column:1/-1; font-family:'Playfair Display',serif; font-weight:700; font-size:.9rem; color:var(--slate-200); margin-bottom:4px">Légende des profils</div>
+    <div class="legende-item"><div class="legende-dot" style="background:var(--slate-400)"></div><span><strong style="color:var(--slate-300)">Non-adhérent</strong> : tarif standard, toute personne ou structure non membre</span></div>
+    <div class="legende-item"><div class="legende-dot" style="background:var(--amber)"></div><span><strong style="color:var(--slate-300)">Adhérent</strong> : membre à jour de cotisation (à partir de 15 €/an)</span></div>
+    <div class="legende-item"><div class="legende-dot" style="background:var(--teal)"></div><span><strong style="color:var(--slate-300)">Locataire</strong> : titulaire d'un bail privatif au Génie</span></div>
+    <div class="legende-item"><div class="legende-dot" style="background:var(--green)"></div><span><strong style="color:var(--slate-300)">Asso Villebourbon / syndicat* Gratuit</strong> : adhésion Génie (50€/an) + réservation 72h avant + sous réserve disponibilité</span></div>
+    <div style="grid-column:1/-1; font-size:.78rem; color:var(--slate-400); margin-top:4px">
       Prix HC (hors charges) sauf mention contraire. Tarifs en vigueur au 1er mai 2026 — modifiables par décision du Conseil d'Administration de l'Association Génie. Contact : contact@genie-montauban.fr · 06 51 50 97 18
     </div>
   </div>
 
 </div>
 
-<footer style="background:#080F16; color:rgba(255,255,255,0.5); text-align:center; padding:24px; font-size:0.8rem">
-  <div style="font-family:var(--font-head); font-weight:800; font-size:1.1rem; color:#C9A84C; margin-bottom:8px">Génie</div>
+<footer>
+  <div class="footer-logo-text">Génie</div>
   Association Génie — 12 rue du Génie, 82000 Montauban · contact@genie-montauban.fr
   <div style="margin-top:10px">
-    <a href="index.html" style="color:rgba(255,255,255,0.6); margin:0 8px">Accueil</a>
-    <a href="reservation.html" style="color:rgba(255,255,255,0.6); margin:0 8px">Réserver</a>
-    <a href="mentions-legales.html" style="color:rgba(255,255,255,0.6); margin:0 8px">Mentions légales</a>
+    <a href="index.html">Accueil</a>
+    <a href="reservation.html">Réserver</a>
+    <a href="mentions_legales.html">Mentions légales</a>
   </div>
 </footer>
 
 <script>
-/* ── FILTRE PROFIL ── */
+/* NAV MOBILE */
+const menuToggle = document.getElementById('menuToggle');
+const navLinks = document.getElementById('navLinks');
+menuToggle.addEventListener('click', () => {
+  navLinks.classList.toggle('open');
+  const spans = menuToggle.querySelectorAll('span');
+  if (navLinks.classList.contains('open')) {
+    spans[0].style.transform = 'rotate(45deg) translate(5px,5px)';
+    spans[1].style.opacity = '0';
+    spans[2].style.transform = 'rotate(-45deg) translate(5px,-5px)';
+  } else {
+    spans.forEach(s => { s.style.transform = ''; s.style.opacity = ''; });
+  }
+});
+navLinks.querySelectorAll('a').forEach(a => {
+  a.addEventListener('click', () => {
+    navLinks.classList.remove('open');
+    menuToggle.querySelectorAll('span').forEach(s => { s.style.transform = ''; s.style.opacity = ''; });
+  });
+});
+
+/* FILTRE PROFIL */
 const profilNotes = {
   plein: 'Non-adhérent · tarif standard',
   adherent: 'Adhérent actif (50€/an) · environ −20% sur salles et coworking',
@@ -593,7 +658,6 @@ const profilNotes = {
   asso: 'Association locale 82 avec adhésion Génie · salles gratuites sous conditions'
 };
 const profilCols = { plein: '.col-plein', adherent: '.col-adherent', locataire: '.col-locataire', asso: '.col-asso' };
-
 let currentProfil = 'plein';
 
 function setProfilActif(profil, btn) {
@@ -601,18 +665,15 @@ function setProfilActif(profil, btn) {
   document.querySelectorAll('.profil-btn').forEach(b => {
     b.className = 'profil-btn';
   });
-  btn.className = `profil-btn active-${profil === 'plein' ? '' : profil}`.trim() + ' active';
-
+  btn.className = `profil-btn active${profil !== 'plein' ? '-' + profil : ''} active`;
   document.getElementById('profilNote').textContent = profilNotes[profil];
-
-  // Surbrillance de la colonne active
   document.querySelectorAll('.tarif-table td').forEach(td => td.classList.remove('col-active'));
   if (profil !== 'plein') {
     document.querySelectorAll(profilCols[profil]).forEach(td => td.classList.add('col-active'));
   }
 }
 
-/* ── PRINT AUTO si ?print=1 ── */
+/* PRINT AUTO si ?print=1 */
 if (new URLSearchParams(window.location.search).get('print') === '1') {
   window.addEventListener('load', () => setTimeout(() => window.print(), 600));
 }
