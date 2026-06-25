@@ -1,0 +1,161 @@
+﻿# 🎉 Calendrier d’animations — Tiers Lieu Génie
+
+### “Le Tiers Lieu qui crée du lien” — animations gratuites, communauté d’égéens
+
+-----
+
+## 1. Méthodologie : 6 familles de “déclencheurs”
+
+Le principe (validé par tes deux exemples : éclipse + projection Coupe du Monde) est simple : **on ne crée pas l’événement, on capte un événement qui existe déjà** (mondial, national, local ou symbolique) et on en fait un prétexte de rencontre au Génie. Coût marketing quasi nul (l’actu fait la promo pour toi), et le format est réutilisable à l’infini.
+
+6 réservoirs à piocher toute l’année :
+
+1. **Grands rendez-vous médiatiques** : sport (Coupe du Monde, Tour de France, Roland-Garros, Eurovision), ciel (éclipses, pluies d’étoiles filantes, pleine lune), pop culture (sorties cinéma/streaming attendues).
+1. **Journées mondiales/nationales “à message”** : droits des femmes, Terre, paix, lecture, poésie — utiles pour ancrer Génie comme lieu engagé.
+1. **Calendrier ESS / éducation populaire** : Mois de l’ESS, Repair Café, Disco Soupe, Gratiferia, cafés-débats, ateliers de savoirs.
+1. **Vie de quartier / voisinage** : Fête des Voisins, trocs, marchés de producteurs, brocantes.
+1. **Saisonnier / fêtes populaires** : Halloween, Chandeleur, Épiphanie, Noël, Carnaval, solstices.
+1. **Numérique & savoirs** : “Café IA”, initiation no-code, repair café numérique — en lien avec ton expertise CCFA, mais ici en **gratuit grand public** pour faire rayonner Génie.
+
+> *Glossaire express* : **ESS** = Économie Sociale et Solidaire (associations, coopératives, mutuelles) ; **Disco Soupe** = atelier de cuisine collective à partir d’invendus alimentaires, sur fond de musique, pour lutter contre le gaspillage ; **Gratiferia** = marché gratuit où chacun dépose/prend des objets sans argent ; **éduc pop** = éducation populaire, courant qui vise l’émancipation par le savoir partagé entre pairs hors cadre scolaire.
+
+-----
+
+## 2. Modèle économique : gratuit pour le public, pas gratuit pour Génie
+
+Pour respecter la contrainte **“ne pas perdre d’argent”**, chaque animation suit la même mécanique que tes deux exemples :
+
+- **Entrée libre et gratuite** → c’est l’appât communautaire, non négociable.
+- **Buvette participative / cantine pop** → “ramène ce que tu aimes” ou prix libre/conscience → couvre les frais annexes (gobelets, déco) et génère un petit excédent.
+- **Coût matériel = 0 ou mutualisé** → emprunt de matériel (club d’astronomie pour les télescopes, ludothèque pour les jeux, médiathèque pour la lecture), dons d’adhérents, bénévolat des interns/adhérents.
+- **KPI à suivre** : nombre de nouveaux visages, taux de conversion visiteur → adhérent, montant moyen “buvette”. Un tableur simple (ou ton backend Apps Script existant) peut tracker ça par événement.
+- **Créneaux** : caler les animations hors plages de location payante des salles, pour ne jamais cannibaliser le chiffre d’affaires locatif.
+
+-----
+
+## 3. Calendrier annuel (juillet 2026 → juin 2027)
+
+### 🌞 Juillet 2026
+
+- **14 juillet** — *Fête nationale* → Apéro citoyen + pétanque sur le parvis/rooftop.
+- **14-15 juillet** — *Demi-finales Coupe du Monde 2026* → Projections grand écran (format “match” déjà testé).
+- **18-19 juillet** — *Petite finale & Finale Coupe du Monde (MetLife Stadium, 19/07)* → Soirée événement, plus grosse buvette de l’été, ouverte aux non-adhérents pour recruter.
+- **Fin juillet** — *Tour de France (étapes pyrénéennes)* → Projection étape + apéro vélo, mini-troc de pièces vélo.
+
+### 🌑 Août 2026
+
+- **12 août** — *Éclipse solaire totale + pic des Perséides (pluie d’étoiles filantes, nuit du 12-13)* → Ton événement déjà prévu : double-le avec une **veillée d’observation des étoiles filantes** le même soir (matériel : jumelles, transats, pas de coût).
+- **1er week-end d’août** — *Nuit des Étoiles (rendez-vous national)* → Atelier astro enfants + observation, en partenariat avec un club d’astronomie du 82 (prêt de télescope).
+- **Mi-août** — *Disco Soupe estivale* → Récup invendus marché + cuisine collective + DJ amateur adhérent.
+- **Fin août** — *Préparation rentrée* → “Apéro retrouvailles” informel, teaser du programme de septembre.
+
+### 🍂 Septembre 2026
+
+- **Début septembre (rentrée)** — *Forum des associations Montauban* → Stand Génie + portes ouvertes le même week-end au Tiers Lieu.
+- **11-13 septembre** — *Fête des 400 Coups de Montauban* (événement majeur de la ville) → Faire du Génie le **“camp de base” des adhérents** : point de ralliement, vestiaire, brunch de récupération le dimanche matin.
+- **19-20 septembre** — *Journées Européennes du Patrimoine* → Mini-expo sur l’histoire du bâtiment/quartier + visite du Tiers Lieu “version coulisses” (atelier, espaces de travail).
+- **21 septembre** — *Journée internationale de la Paix* → Café-débat citoyen.
+
+### 🔬 Octobre 2026
+
+- **1ère semaine** — *Fête de la Science* → Ateliers expériences en famille (chimie de cuisine, électricité simple) animés par des adhérents ou lycéens (lien avec tes interns).
+- **Tout le mois** — *Octobre Rose* → Stand info + petite marche/marche nordique collective au départ du Génie.
+- **Mensuel (à lancer ce mois-ci)** — *Repair Café* (1er samedi du mois) → Réparation gratuite d’objets/électroménager par des bénévoles bricoleurs.
+- **31 octobre** — *Halloween* → Soirée déguisée + chasse au trésor pour enfants/ados (parfait projet pour tes 2 interns lycéens).
+
+### 🤝 Novembre 2026
+
+- **Tout le mois** — *Mois de l’Économie Sociale et Solidaire* → Cycle de 2-3 conférences/portes ouvertes présentant le modèle Génie/CCFA comme cas d’école ESS local — excellente vitrine pour ta prospection Pack Certif.
+- **19 novembre** — *Beaujolais Nouveau* → Soirée dégustation + jeux de société.
+- **25 novembre** — *Journée internationale contre les violences faites aux femmes* → Projection-débat.
+- **“Green Friday” (alternative au Black Friday)** → Gratiferia (marché gratuit d’objets) + Repair Café spécial électronique.
+
+### 🎄 Décembre 2026
+
+- **1er week-end** — *Téléthon* → Vente de gâteaux/tombola solidaire tenue par les adhérents.
+- **Tout le mois** — *Marché de Noël solidaire* → Vente des créations/produits des adhérents et structures ESS partenaires (1-2 samedis).
+- **21 décembre** — *Solstice d’hiver* → Veillée contes + chocolat chaud (lien possible avec ta sensibilité maçonnique pour une veillée symbolique autour de la lumière, sans prosélytisme — juste l’ambiance).
+- **Fin décembre** — *“Réveillon des oubliés”* → Repas partagé solidaire pour les personnes seules, en lien avec une assoc caritative locale.
+
+### 📖 Janvier 2027
+
+- **2e/3e week-end** — *Nuit de la Lecture* (rendez-vous national, médiathèques) → Lecture à voix haute + troc de livres, en partenariat avec la médiathèque de Montauban.
+- **Épiphanie** — Galette des rois géante des adhérents.
+- **“Vœux du Tiers Lieu”** → Moment convivial de bilan d’année + perspectives, fédérateur pour la communauté.
+- **Fin janvier** — *Festival Alors Chante (Montauban)* → Soirée “scène ouverte chanson française” en écho au festival, pour capter le public mélomane de passage.
+
+### 🎭 Février 2027
+
+- **2 février** — *Chandeleur* → Soirée crêpes (gratuit, ingrédients mutualisés).
+- **Week-ends de février-mars** — *Tournoi des 6 Nations (rugby)* → Projections des matchs du XV de France.
+- **14 février** — *Saint-Valentin / “Anti-Valentin”* → Soirée “speed-friending” ESS pour célibataires ou non, ambiance décomplexée.
+- **Fin février** — *Carnaval / Mardi Gras* → Défilé costumé enfants + bugnes/merveilles.
+
+### 🌱 Mars 2027
+
+- **8 mars** — *Journée internationale des droits des femmes* → Expo/projection-débat, occasion de mettre en avant les femmes entrepreneuses du réseau ESS.
+- **14 mars** — *Pi Day* → Atelier maths ludiques pour ados (lien interns/lycées).
+- **21 mars** — *Printemps des Poètes* → Lecture de poèmes, scène ouverte slam.
+- **Dernier samedi de mars** — *Earth Hour* → Soirée “sans électricité” : jeux de société à la bougie, ambiance unique.
+
+### 🌍 Avril 2027
+
+- **1er avril** — *Poisson d’avril* → Chasse aux énigmes/blagues dans le Tiers Lieu.
+- **Week-end de Pâques** — *Chasse aux œufs intergénérationnelle* (sur le modèle de celle du Secours Populaire) → en partenariat avec une assoc caritative locale.
+- **22 avril** — *Jour de la Terre* → Clean walk (nettoyage de quartier) + troc de plantes.
+- **Fin avril** — *Semaine du Développement Durable* → Ateliers zéro déchet (cosmétiques maison, couture).
+
+### 🌻 Mai 2027
+
+- **1er mai** → Bal populaire / pique-nique ESS.
+- **Mi-mai** — *Nuit Européenne des Musées* → Ouverture nocturne du Génie + expo des œuvres d’adhérents artistes.
+- **Mi-mai** — *Eurovision* → Soirée retransmission + concours de reprises maison.
+- **Dernier vendredi de mai** — *Fête des Voisins* → Grand barbecue partagé, Génie comme point de rassemblement du quartier (le format le plus stratégique pour le recrutement de proximité).
+
+### 🚲 Juin 2027 — la boucle reprend
+
+- **21 juin** — *Fête de la Musique* → Scène ouverte / bœuf musical adhérents.
+- *Fête du Vélo / semaine mobilité* → Sortie vélo collective.
+- *Festival local (Montauban en Scènes, fin juin)* → “Avant-soirée” / point retrouvailles covoiturage.
+- Et c’est reparti : éclipse/pluie d’étoiles filantes en août, etc.
+
+-----
+
+## 4. Formats “increvables” à industrialiser (indépendants du calendrier)
+
+Ces formats peuvent tourner toute l’année, en rotation, pour combler les mois creux :
+
+|Format                           |Fréquence  |Coût           |Partenaire idéal                                          |
+|---------------------------------|-----------|---------------|----------------------------------------------------------|
+|Repair Café                      |Mensuel    |0€             |Réseau Repair Café France                                 |
+|Café-débat citoyen               |Mensuel    |0€             |Génération.s, assos locales                               |
+|Soirée jeux de société           |Bimensuel  |0€ (ludothèque)|Ludothèque municipale                                     |
+|Disco Soupe                      |Saisonnier |0€ (invendus)  |Marché de Montauban, Banque alimentaire                   |
+|Gratiferia / Donnerie            |Trimestriel|0€             |—                                                         |
+|Couscous Party / cuisine du monde|Trimestriel|Participatif   |Lien avec ton héritage Tlemcen — fort potentiel fédérateur|
+|Café IA / numérique              |Mensuel    |0€             |CCFA (vitrine pédagogique gratuite)                       |
+
+-----
+
+## 5. Partenaires à activer en priorité
+
+- **Club d’astronomie du Tarn-et-Garonne** (prêt de matériel pour éclipses/Nuit des Étoiles).
+- **Médiathèque de Montauban** (Nuit de la Lecture, Printemps des Poètes).
+- **Réseau Repair Café France** (kit de démarrage gratuit).
+- **Secours Populaire 82** (chasse aux œufs, réveillon solidaire).
+- **Lycées partenaires de tes interns** (Fête de la Science, Pi Day → valorisation de leur engagement, à inscrire dans leur plan d’action).
+- **Ludothèque municipale**.
+
+-----
+
+## 6. Automatisation n8n proposée — “Calendrier Génie Auto”
+
+Workflow pour démultiplier sans surcharge de travail :
+
+1. **Source unique** : un Google Sheet “Calendrier annuel Génie” (date, titre, déclencheur, visuel nécessaire O/N, partenaire).
+1. **J-15** : n8n déclenche un appel à l’API Canva (template charte graphique Génie : navy #1B3A6B, terracotta #C05A2B, gold #C9A84C) pour générer automatiquement l’affiche sur le modèle des deux exemples fournis.
+1. **J-7 et J-1** : publication automatique sur les réseaux sociaux (page Génie) + ajout à l’agenda Google partagé des adhérents.
+1. **J-3** : email/newsletter automatique aux adhérents via ton outil de mailing.
+1. **J+1** : envoi automatique du formulaire de feedback (le système Google Forms → Sheets → widget que tu as déjà construit) pour mesurer la satisfaction et le taux de “nouveaux visages”.
+
+Cela transforme ce calendrier en machine semi-autonome : toi tu remplis une ligne, le reste tourne seul.
