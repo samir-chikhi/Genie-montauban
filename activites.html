@@ -638,7 +638,23 @@
       .nav-toggle.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
       .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
       .filters-bar { position: static; }
+      .cal-grid { grid-template-columns: 1fr !important; }
+      .cal-events { grid-template-columns: 1fr 1fr !important; }
     }
+
+    /* ══ CALENDRIER ANNUEL ══ */
+    .cal-section { padding: 3rem 0 2rem; }
+    .cal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.2rem; margin-top: 1.5rem; }
+    .cal-month { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 14px; overflow: hidden; }
+    .cal-month-header { padding: .9rem 1.2rem; display: flex; align-items: center; gap: .7rem; }
+    .cal-month-num { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; line-height: 1; color: var(--emerald); }
+    .cal-month-name { font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--slate-300); }
+    .cal-month-year { font-size: .7rem; color: var(--slate-400); }
+    .cal-events { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; padding: .8rem 1rem 1rem; }
+    .cal-event { background: rgba(255,255,255,.04); border-radius: 8px; padding: .6rem .8rem; }
+    .cal-event-icon { font-size: 1.1rem; margin-bottom: .2rem; }
+    .cal-event-date { font-size: .65rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--emerald-l); margin-bottom: .2rem; }
+    .cal-event-title { font-size: .78rem; font-weight: 600; color: var(--slate-200); line-height: 1.3; }
   </style>
 </head>
 <body>
@@ -693,236 +709,94 @@
 <!-- ══ CONTENU PRINCIPAL ══ -->
 <main>
 
-  <!-- PROCHAIN ÉVÉNEMENT EN VEDETTE -->
+  <!-- PROCHAIN ÉVÉNEMENT (rendu par JS) -->
   <div class="section-header reveal">
     <h2>⭐ Prochain événement</h2>
     <div class="line"></div>
   </div>
+  <div id="prochaine-vedette"></div>
 
-  <div class="event-featured reveal" data-cat="soiree">
-    <div class="event-featured-visual" style="background: linear-gradient(160deg,#0a0e1a,#0d2137,#1a3a5c); position:relative; overflow:hidden;">
-      <div style="position:absolute;inset:0;background:url('match-coupe-monde-2026.png') center/cover no-repeat;opacity:.35;"></div>
-      <div class="event-icon" style="position:relative;">⚽</div>
-      <div class="event-date-badge" style="position:relative;">Mardi 16 juin 2026 · 20h45</div>
-    </div>
-    <div class="event-featured-body">
-      <span class="event-tag tag-soiree">⚽ Soirée</span>
-      <h3>Projection de Match — Coupe du Monde · Mardi 16 juin</h3>
-      <div class="event-meta">
-        <span>📅 Mardi 16 juin 2026</span>
-        <span>🕘 20h45 (coup d'envoi)</span>
-        <span>📍 12 rue du Génie, Montauban</span>
-        <span>🍺 Buvette · 🍔 Cantine Pop'</span>
-      </div>
-      <p>Venez regarder le match ensemble au Génie ! Grande projection, buvette sur place — ramène ce que tu aimes ! Restauration assurée par <strong>la Cantine Pop'</strong>. Une soirée conviviale entre adhérents et amis du tiers-lieu.</p>
-      <a href="mailto:genie.montauban@gmail.com?subject=Soirée Match Coupe du Monde 16 juin" class="btn-reserve">Je viens ! →</a>
-    </div>
-  </div>
-
-  <!-- ÉVÉNEMENTS À VENIR -->
-  <div class="section-header reveal">
+  <!-- ÉVÉNEMENTS À VENIR (rendu par JS) -->
+  <div class="section-header reveal" style="margin-top:2.5rem;">
     <h2>📅 À venir</h2>
     <div class="line"></div>
   </div>
+  <div id="evenements-avenir" class="events-grid"></div>
 
-  <div class="events-grid">
-
-    <div class="event-card reveal reveal-delay-1" data-cat="soiree">
-      <div class="event-card-header" style="background: linear-gradient(135deg,#0a0e1a,#1a3a5c,#C9993E);">
-        ⚽
-        <span class="event-card-date">16 juin 2026</span>
+  <!-- CALENDRIER ANNUEL -->
+  <div class="section-header reveal" style="margin-top:3rem;">
+    <h2>🗓️ Animations récurrentes 2026–2027</h2>
+    <div class="line"></div>
+  </div>
+  <div class="cal-grid reveal">
+    <div class="cal-month">
+      <div class="cal-month-header" style="background:linear-gradient(135deg,#431407,#ea580c22);">
+        <div><div class="cal-month-num">Oct</div><div class="cal-month-year">2026</div></div>
+        <div class="cal-month-name">Octobre</div>
       </div>
-      <div class="event-card-body">
-        <span class="event-tag tag-soiree">⚽ Soirée</span>
-        <h3>Projection de Match — Coupe du Monde</h3>
-        <p>Grande projection au Génie ! Buvette, restauration par la Cantine Pop'. Ramène ce que tu aimes et vis le match en communauté.</p>
-      </div>
-      <div class="event-card-footer">
-        <span class="time">🕘 20h45 · 12 rue du Génie</span>
-        <a href="mailto:genie.montauban@gmail.com?subject=Soirée Match Coupe du Monde 16 juin" class="btn-sm">Je viens !</a>
+      <div class="cal-events">
+        <div class="cal-event"><div class="cal-event-icon">🔬</div><div class="cal-event-date">1ère semaine</div><div class="cal-event-title">Fête de la Science</div></div>
+        <div class="cal-event"><div class="cal-event-icon">🎀</div><div class="cal-event-date">Tout le mois</div><div class="cal-event-title">Octobre Rose</div></div>
+        <div class="cal-event"><div class="cal-event-icon">🔧</div><div class="cal-event-date">1ers samedis</div><div class="cal-event-title">Repair Café</div></div>
+        <div class="cal-event"><div class="cal-event-icon">🎃</div><div class="cal-event-date">31 octobre</div><div class="cal-event-title">Halloween</div></div>
       </div>
     </div>
-
-    <div class="event-card reveal reveal-delay-2" data-cat="soiree">
-      <div class="event-card-header" style="background: linear-gradient(135deg,#0d0d0d,#1a1a2e,#e65100);">
-        🔭
-        <span class="event-card-date">12 août 2026</span>
+    <div class="cal-month">
+      <div class="cal-month-header" style="background:linear-gradient(135deg,#3b0764,#7c3aed22);">
+        <div><div class="cal-month-num">Nov</div><div class="cal-month-year">2026</div></div>
+        <div class="cal-month-name">Novembre</div>
       </div>
-      <div class="event-card-body">
-        <span class="event-tag tag-soiree">🔭 Soirée adhérents</span>
-        <h3>Observons l'Éclipse — Rooftop du Génie</h3>
-        <p>Ensemble, levons les yeux vers un spectacle rare ! Observation sécurisée sur le rooftop, boissons sur place. Un moment unique entre adhérents.</p>
-      </div>
-      <div class="event-card-footer">
-        <span class="time">🕖 19h00 · Sur le rooftop</span>
-        <a href="mailto:genie.montauban@gmail.com?subject=Soirée Éclipse 12 août" class="btn-sm">Je viens !</a>
+      <div class="cal-events">
+        <div class="cal-event"><div class="cal-event-icon">🌱</div><div class="cal-event-date">Tout le mois</div><div class="cal-event-title">Mois de l'ESS</div></div>
+        <div class="cal-event"><div class="cal-event-icon">🍷</div><div class="cal-event-date">19 novembre</div><div class="cal-event-title">Beaujolais Nouveau</div></div>
+        <div class="cal-event"><div class="cal-event-icon">💜</div><div class="cal-event-date">25 novembre</div><div class="cal-event-title">Journée violences femmes</div></div>
+        <div class="cal-event"><div class="cal-event-icon">♻️</div><div class="cal-event-date">Fin novembre</div><div class="cal-event-title">Green Friday + Répar Café</div></div>
       </div>
     </div>
-
-    <div class="event-card reveal reveal-delay-3" data-cat="atelier">
-      <div class="event-card-header" style="background: linear-gradient(135deg,#0f2027,#2c5364);">
-        ₿
-        <span class="event-card-date">Date à confirmer</span>
+    <div class="cal-month">
+      <div class="cal-month-header" style="background:linear-gradient(135deg,#14532d,#c2410c22);">
+        <div><div class="cal-month-num">Déc</div><div class="cal-month-year">2026</div></div>
+        <div class="cal-month-name">Décembre</div>
       </div>
-      <div class="event-card-body">
-        <span class="event-tag tag-atelier">🛠️ Atelier</span>
-        <h3>Atelier Crypto : démystifier les cryptomonnaies</h3>
-        <p>Bitcoin, Ethereum, blockchain… Comprenez les fondamentaux, les risques et les opportunités sans jargon. Accessible à tous, débutants bienvenus.</p>
-      </div>
-      <div class="event-card-footer">
-        <span class="time">🕘 9h00 → 12h00</span>
-        <a href="mailto:genie.montauban@gmail.com" class="btn-sm">S'inscrire</a>
+      <div class="cal-events">
+        <div class="cal-event"><div class="cal-event-icon">❤️</div><div class="cal-event-date">1er week-end</div><div class="cal-event-title">Téléthon</div></div>
+        <div class="cal-event"><div class="cal-event-icon">🎄</div><div class="cal-event-date">Mi-décembre</div><div class="cal-event-title">Marché de Noël</div></div>
+        <div class="cal-event"><div class="cal-event-icon">🌙</div><div class="cal-event-date">21 décembre</div><div class="cal-event-title">Solstice d'hiver</div></div>
+        <div class="cal-event"><div class="cal-event-icon">🎅</div><div class="cal-event-date">Fin décembre</div><div class="cal-event-title">Goûter de Noël</div></div>
       </div>
     </div>
-
-    <div class="event-card reveal reveal-delay-4" data-cat="atelier">
-      <div class="event-card-header" style="background: linear-gradient(135deg,#064e3b,#059669);">
-        ♻️
-        <span class="event-card-date">Date à confirmer</span>
+    <div class="cal-month">
+      <div class="cal-month-header" style="background:linear-gradient(135deg,#78350f,#d97706 22);">
+        <div><div class="cal-month-num">Jan</div><div class="cal-month-year">2027</div></div>
+        <div class="cal-month-name">Janvier</div>
       </div>
-      <div class="event-card-body">
-        <span class="event-tag tag-atelier">🛠️ Atelier</span>
-        <h3>Atelier Anti-gaspi : consommer mieux, jeter moins</h3>
-        <p>Astuces pratiques pour réduire le gaspillage alimentaire et quotidien. Un atelier engagé pour adopter des réflexes éco-responsables facilement.</p>
-      </div>
-      <div class="event-card-footer">
-        <span class="time">🕘 10h00 → 12h00</span>
-        <a href="mailto:genie.montauban@gmail.com" class="btn-sm">S'inscrire</a>
+      <div class="cal-events">
+        <div class="cal-event"><div class="cal-event-icon">👑</div><div class="cal-event-date">Début janvier</div><div class="cal-event-title">Galette des Rois</div></div>
+        <div class="cal-event"><div class="cal-event-icon">♻️</div><div class="cal-event-date">Tout le mois</div><div class="cal-event-title">Janvier Zéro Déchet</div></div>
+        <div class="cal-event"><div class="cal-event-icon">🤖</div><div class="cal-event-date">3ème samedi</div><div class="cal-event-title">Café IA</div></div>
+        <div class="cal-event"><div class="cal-event-icon">🎲</div><div class="cal-event-date">Fin janvier</div><div class="cal-event-title">Soirée Jeux de Société</div></div>
       </div>
     </div>
-
-    <div class="event-card reveal reveal-delay-2" data-cat="conf">
-      <div class="event-card-header" style="background: linear-gradient(135deg,#2e1065,#5b21b6);">
-        🌱
-        <span class="event-card-date">En continu</span>
+    <div class="cal-month">
+      <div class="cal-month-header" style="background:linear-gradient(135deg,#4c1d95,#ec489922);">
+        <div><div class="cal-month-num">Fév</div><div class="cal-month-year">2027</div></div>
+        <div class="cal-month-name">Février</div>
       </div>
-      <div class="event-card-body">
-        <span class="event-tag tag-conf">🌱 Incubateur</span>
-        <h3>Incubateur pour porteurs de projets associatifs</h3>
-        <p>Génie accompagne les créateurs d'associations et de projets à impact local : espace de travail, mentorat, mise en réseau et soutien méthodologique pour faire émerger vos idées.</p>
-      </div>
-      <div class="event-card-footer">
-        <span class="time">📩 Candidature ouverte</span>
-        <a href="mailto:genie.montauban@gmail.com" class="btn-sm">Nous contacter</a>
+      <div class="cal-events">
+        <div class="cal-event"><div class="cal-event-icon">🥞</div><div class="cal-event-date">2 février</div><div class="cal-event-title">Chandeleur Crêpes Party</div></div>
+        <div class="cal-event"><div class="cal-event-icon">🧠</div><div class="cal-event-date">Tout le mois</div><div class="cal-event-title">Mois Santé Mentale</div></div>
+        <div class="cal-event"><div class="cal-event-icon">🎨</div><div class="cal-event-date">Vacances hiver</div><div class="cal-event-title">Ateliers Créatifs Enfants</div></div>
+        <div class="cal-event"><div class="cal-event-icon">🎭</div><div class="cal-event-date">Fin février</div><div class="cal-event-title">Carnaval</div></div>
       </div>
     </div>
-
   </div>
 
-  <!-- ÉVÉNEMENTS PASSÉS -->
+  <!-- ÉVÉNEMENTS PASSÉS (rendu par JS) -->
   <div class="section-header reveal" style="margin-top:3rem;">
     <h2>✅ Événements passés</h2>
     <div class="line"></div>
   </div>
-
-  <div class="events-grid">
-
-    <div class="event-card event-past reveal reveal-delay-1" data-cat="atelier">
-      <div class="event-card-header" style="background: linear-gradient(135deg,#1a237e,#1565c0);">
-        🤝
-        <span class="event-card-date past-badge">✅ 26 mai 2026</span>
-      </div>
-      <div class="event-card-body">
-        <span class="event-tag tag-atelier">🛠️ Atelier</span>
-        <h3>Fresque du Bénévolat</h3>
-        <p>Atelier collaboratif et ludique pour comprendre les enjeux du bénévolat et valoriser l'engagement associatif.</p>
-        <div class="past-stats"><span>🕕 18h30 → 21h30</span></div>
-      </div>
-      <div class="event-card-footer">
-        <span class="time">📍 Salle Bourdelle</span>
-        <span class="past-label">Terminé</span>
-      </div>
-    </div>
-
-    <div class="event-card event-past reveal reveal-delay-2" data-cat="afterwork">
-      <div class="event-card-header" style="background: linear-gradient(135deg,#064e3b,#10b981);">
-        🍻
-        <span class="event-card-date past-badge">✅ 15 mai 2026</span>
-      </div>
-      <div class="event-card-body">
-        <span class="event-tag tag-afterwork">🍻 Afterwork</span>
-        <h3>Afterwork Génie — Vendredi 15 mai</h3>
-        <p>Échanges, détente et liens entre professionnels montalbanais en fin de semaine au Génie.</p>
-        <div class="past-stats"><span>🕕 18h30 → tard</span></div>
-      </div>
-      <div class="event-card-footer">
-        <span class="time">📍 Génie Montauban</span>
-        <span class="past-label">Terminé</span>
-      </div>
-    </div>
-
-    <div class="event-card event-past reveal reveal-delay-3" data-cat="pdj">
-      <div class="event-card-header" style="background: linear-gradient(135deg,#7c2d12,#ea580c);">
-        ☀️
-        <span class="event-card-date past-badge">✅ 15 mai 2026</span>
-      </div>
-      <div class="event-card-body">
-        <span class="event-tag tag-pdj">🥐 Petit-déjeuner</span>
-        <h3>Petit déjeuner thématique — 15 mai</h3>
-        <p>Rendez-vous matinal de la communauté Génie. Café, croissants et échanges entre professionnels montalbanais.</p>
-        <div class="past-stats"><span>🕗 8h00 → 10h00</span></div>
-      </div>
-      <div class="event-card-footer">
-        <span class="time">📍 Salle Bourdelle</span>
-        <span class="past-label">Terminé</span>
-      </div>
-    </div>
-
-    <div class="event-card event-past reveal reveal-delay-4" data-cat="conf">
-      <div class="event-card-header" style="background: linear-gradient(135deg,#500724,#be185d);">
-        💪
-        <span class="event-card-date past-badge">✅ 10 avril 2026</span>
-      </div>
-      <div class="event-card-body">
-        <span class="event-tag tag-soiree">💜 Soirée</span>
-        <h3>Soirée Empowerment — Elles changent le monde</h3>
-        <p>Femmes Inspirantes · Leadership 2026. Une soirée dédiée à l'émancipation féminine, aux parcours de femmes qui transforment leur environnement.</p>
-        <div class="past-stats"><span>📅 19h30 → 22h30</span></div>
-      </div>
-      <div class="event-card-footer">
-        <span class="time">📍 12 rue du Génie, Montauban</span>
-        <span class="past-label">Terminé</span>
-      </div>
-    </div>
-
-    <div class="event-card event-past reveal reveal-delay-1" data-cat="pdj">
-      <div class="event-card-header" style="background: linear-gradient(135deg,#3b1c0a,#92400e);">
-        ☀️
-        <span class="event-card-date past-badge">✅ 13 mars 2026</span>
-      </div>
-      <div class="event-card-body">
-        <span class="event-tag tag-pdj">🥐 Petit-déjeuner</span>
-        <h3>Petit déjeuner — Rencontre &amp; networking</h3>
-        <p>10 personnes ont répondu présent pour ce rendez-vous matinal au cœur du tiers-lieu. Croissants, café et échanges entre professionnels montalbanais.</p>
-        <div class="past-stats"><span>👥 10 participants</span></div>
-      </div>
-      <div class="event-card-footer">
-        <span class="time">🕖 7h00 → 10h00 · 12 rue du Génie</span>
-        <span class="past-label">Terminé</span>
-      </div>
-    </div>
-
-    <div class="event-card event-past reveal reveal-delay-2" data-cat="pdj">
-      <div class="event-card-header" style="background: linear-gradient(135deg,#2d1b00,#78350f);">
-        🏛️
-        <span class="event-card-date past-badge">✅ 13 fév. 2026</span>
-      </div>
-      <div class="event-card-body">
-        <span class="event-tag tag-pdj">🥐 Petit-déjeuner</span>
-        <h3>Petit déjeuner — Visite du tiers-lieu</h3>
-        <p>Premier petit-déjeuner de découverte du Génie ! Visite des espaces, présentation de l'offre et rencontre avec l'équipe fondatrice. 4 participants, 14 intéressés.</p>
-        <div class="past-stats">
-          <span>👥 4 participants</span>
-          <span>⭐ 14 intéressés</span>
-        </div>
-      </div>
-      <div class="event-card-footer">
-        <span class="time">🕖 7h00 → 10h00 · 12 rue du Génie</span>
-        <span class="past-label">Terminé</span>
-      </div>
-    </div>
-
-  </div>
+  <div id="evenements-passes" class="events-grid"></div>
 
   <!-- ACTUALITÉS -->
   <div class="section-header reveal">
@@ -1021,21 +895,157 @@
 </footer>
 
 <script>
+  /* ══════════════════════════════════════════════
+     DONNÉES — tous les événements
+     date:null = sans date fixe (toujours affiché dans "À venir")
+  ══════════════════════════════════════════════ */
+  const EVENTS = [
+    // ── PASSÉS ──
+    { date:'2026-02-13', icon:'🏛️', cat:'pdj',      tag:'🥐 Petit-déjeuner', title:'Petit déjeuner — Visite du tiers-lieu',      desc:'Premier petit-déjeuner de découverte du Génie ! Visite des espaces, présentation de l\'offre et rencontre avec l\'équipe fondatrice. 4 participants, 14 intéressés.', time:'🕖 7h00 → 10h00', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#2d1b00,#78350f)' },
+    { date:'2026-03-13', icon:'☀️', cat:'pdj',      tag:'🥐 Petit-déjeuner', title:'Petit déjeuner — Rencontre & networking',     desc:'10 professionnels montalbanais ont répondu présent pour ce rendez-vous matinal au cœur du tiers-lieu. Croissants, café et échanges.', time:'🕖 7h00 → 10h00', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#3b1c0a,#92400e)' },
+    { date:'2026-04-10', icon:'💪', cat:'conf',     tag:'💜 Soirée',         title:'Soirée Empowerment — Elles changent le monde',desc:'Femmes Inspirantes · Leadership 2026. Soirée dédiée à l\'émancipation féminine et aux parcours inspirants.', time:'🕖 19h30 → 22h30', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#500724,#be185d)' },
+    { date:'2026-05-15', icon:'🍻', cat:'afterwork',tag:'🍻 Afterwork',      title:'Afterwork Génie — Vendredi 15 mai',           desc:'Échanges, détente et liens entre professionnels montalbanais en fin de semaine.', time:'🕕 18h30 → tard', lieu:'Génie Montauban', grad:'linear-gradient(135deg,#064e3b,#10b981)' },
+    { date:'2026-05-15', icon:'☀️', cat:'pdj',      tag:'🥐 Petit-déjeuner', title:'Petit déjeuner thématique — 15 mai',          desc:'Rendez-vous matinal de la communauté Génie. Café, croissants et échanges entre professionnels.', time:'🕗 8h00 → 10h00', lieu:'Salle Bourdelle', grad:'linear-gradient(135deg,#7c2d12,#ea580c)' },
+    { date:'2026-05-26', icon:'🤝', cat:'atelier',  tag:'🛠️ Atelier',       title:'Fresque du Bénévolat',                        desc:'Atelier collaboratif et ludique pour comprendre les enjeux du bénévolat et valoriser l\'engagement associatif.', time:'🕕 18h30 → 21h30', lieu:'Salle Bourdelle', grad:'linear-gradient(135deg,#1a237e,#1565c0)' },
+    { date:'2026-06-16', icon:'⚽', cat:'soiree',   tag:'⚽ Soirée',         title:'Projection Match — Coupe du Monde',           desc:'Grande projection au Génie ! Buvette, restauration par la Cantine Pop\'. Soirée conviviale entre adhérents et amis du tiers-lieu.', time:'🕘 20h45', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#0a0e1a,#1a3a5c,#C9993E)' },
+    // ── À VENIR ──
+    { date:'2026-08-12', icon:'🔭', cat:'soiree',   tag:'🔭 Soirée adhérents',title:"Observons l'Éclipse — Rooftop du Génie",   desc:'Ensemble, levons les yeux vers un spectacle rare ! Observation sécurisée sur le rooftop, boissons sur place. Un moment unique entre adhérents.', time:'🕖 19h00', lieu:'Rooftop du Génie', grad:'linear-gradient(135deg,#0d0d0d,#1a1a2e,#e65100)', mailto:'genie.montauban@gmail.com?subject=Soirée Éclipse 12 août' },
+    // OCTOBRE 2026
+    { date:'2026-10-01', dateLabel:"1ère semaine d'oct.", icon:'🔬', cat:'atelier', tag:'🔬 Science',    title:'Fête de la Science',                          desc:'Ateliers expériences en famille ! Venez explorer les sciences avec vos enfants dans une ambiance ludique et interactive.', time:'⏰ Programme à venir', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#0c4a6e,#0284c7)' },
+    { date:'2026-10-01', dateLabel:'Tout le mois',        icon:'🎀', cat:'conf',    tag:'🎀 Solidarité', title:'Octobre Rose',                                desc:'Sensibilisation au dépistage du cancer du sein. Stand info + marche collective au départ du Génie.', time:'📅 Tout le mois', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#831843,#ec4899)' },
+    { date:'2026-10-03', dateLabel:'1ers samedis du mois',icon:'🔧', cat:'atelier', tag:'🔧 Repair Café',title:'Repair Café',                                 desc:'Réparons ensemble au lieu de le casser ! Apportez vos objets en panne, repartez avec des objets réparés et de nouvelles compétences.', time:'🕘 9h00 → 12h00', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#14532d,#16a34a)' },
+    { date:'2026-10-31', icon:'🎃', cat:'soiree',  tag:'🎃 Halloween',  title:'Halloween — Soirée déguisée',                desc:'Soirée déguisée + chasse au(x) bonbons enfants/ados. Venez costumés pour une soirée frissons et sucreries !', time:'🕗 18h00', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#431407,#ea580c)' },
+    // NOVEMBRE 2026
+    { date:'2026-11-01', dateLabel:'Tout le mois', icon:'🌱', cat:'conf',    tag:'🌱 ESS',         title:"Mois de l'Économie Sociale et Solidaire",     desc:'Conférences portes ouvertes sur l\'ESS, ses acteurs et ses enjeux à Montauban et en Tarn-et-Garonne.', time:'📅 Programme à venir', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#14532d,#065f46)' },
+    { date:'2026-11-19', icon:'🍷', cat:'soiree',  tag:'🍷 Soirée',      title:'Beaujolais Nouveau',                          desc:'Projection + débat autour du Beaujolais Nouveau. Soirée conviviale pour célébrer ensemble ce rendez-vous de novembre.', time:'🕗 18h30', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#4a0f1a,#9b1c3d)', mailto:'genie.montauban@gmail.com?subject=Beaujolais Nouveau 2026' },
+    { date:'2026-11-25', icon:'💜', cat:'conf',    tag:'💜 Engagement',  title:'Journée contre les violences faites aux femmes',desc:'Projection + débat. Soirée de sensibilisation et de solidarité au Génie.', time:'🕗 18h30', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#3b0764,#7c3aed)' },
+    { date:'2026-11-27', icon:'♻️', cat:'atelier', tag:'♻️ Green Friday',title:'Green Friday + Répar Café',                   desc:'Spécial vêtements + jouets de société. Alternative au Black Friday : donnez, échangez, réparez !', time:'🕗 9h00 → 18h00', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#14532d,#22c55e)' },
+    // DÉCEMBRE 2026
+    { date:'2026-12-05', dateLabel:'1er week-end', icon:'❤️', cat:'conf',    tag:'❤️ Téléthon',    title:'Téléthon',                                       desc:'Mobilisons-nous pour le Téléthon ! Animations, collecte et solidarité au Génie tout le week-end.', time:'📅 5–6 décembre', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#7f1d1d,#ef4444)' },
+    { date:'2026-12-12', dateLabel:'Mi-décembre',  icon:'🎄', cat:'soiree',  tag:'🎄 Marché',      title:'Marché de Noël',                                 desc:'Artisans & créateurs locaux. Découvrez les créations de nos membres et partenaires pour les fêtes.', time:'📅 Mi-décembre', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#14532d,#c2410c)' },
+    { date:'2026-12-21', icon:'🌙', cat:'soiree',  tag:'🌙 Solstice',    title:"Solstice d'hiver",                            desc:"Soirée contes autour du coin du feu. Venez célébrer la nuit la plus longue de l'année avec des histoires et de la chaleur humaine.", time:'🕗 18h00', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#0f172a,#312e81)' },
+    { date:'2026-12-23', dateLabel:'Fin décembre', icon:'🎅', cat:'atelier', tag:'🎅 Enfants',     title:'Goûter de Noël',                                 desc:'Jeux & ateliers pour enfants. Un après-midi magique pour les petits et leurs familles avant les fêtes.', time:'🕐 14h00 → 17h00', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#7f1d1d,#16a34a)' },
+    // JANVIER 2027
+    { date:'2027-01-06', dateLabel:'Début janvier', icon:'👑', cat:'soiree',  tag:'👑 Tradition',  title:'Galette des Rois',                               desc:"Partageons la galette ! Le rendez-vous de début d'année pour se retrouver et commencer 2027 ensemble.", time:'🕗 17h00', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#78350f,#d97706)', mailto:'genie.montauban@gmail.com?subject=Galette des Rois 2027' },
+    { date:'2027-01-01', dateLabel:'Tout le mois', icon:'♻️', cat:'atelier', tag:'♻️ Éco',        title:'Janvier Zéro Déchet',                            desc:'Ateliers & défis éco-responsables tout le mois. Rejoignez le défi collectif pour adopter de nouveaux réflexes durables.', time:'📅 Tout le mois', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#14532d,#059669)' },
+    { date:'2027-01-17', dateLabel:'3ème samedi',  icon:'🤖', cat:'atelier', tag:'🤖 Café IA',    title:'Café IA',                                        desc:"Découvrir, comprendre, échanger autour de l'intelligence artificielle. Pour tous, sans prérequis techniques.", time:'🕘 9h30 → 11h30', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#1e1b4b,#4f46e5)' },
+    { date:'2027-01-25', dateLabel:'Fin janvier',  icon:'🎲', cat:'soiree',  tag:'🎲 Jeux',       title:'Soirée Jeux de Société',                         desc:'Apporte ton jeu et découvres-en de nouveaux ! Soirée détente et convivialité pour la communauté Génie.', time:'🕗 18h00 → 22h00', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#312e81,#6d28d9)' },
+    // FÉVRIER 2027
+    { date:'2027-02-02', icon:'🥞', cat:'soiree',  tag:'🥞 Chandeleur',  title:'Chandeleur — Crêpes Party',                   desc:'La Chandeleur au Génie ! Venez partager des crêpes et célébrer ensemble cette tradition gourmande.', time:'🕛 12h00', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#78350f,#f59e0b)', mailto:'genie.montauban@gmail.com?subject=Chandeleur 2027' },
+    { date:'2027-02-01', dateLabel:'Tout le mois', icon:'🧠', cat:'conf',    tag:'🧠 Santé',      title:'Mois de la Santé Mentale',                       desc:'Conférences, ateliers et ressources sur la santé mentale. Brisons les tabous et parlons-en ensemble.', time:'📅 Programme à venir', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#1e3a5f,#2563eb)' },
+    { date:'2027-02-14', dateLabel:"Vacances d'hiver", icon:'🎨', cat:'atelier', tag:'🎨 Créatif',title:'Ateliers Créatifs Enfants & Ados',               desc:'Pendant les vacances scolaires d\'hiver, des ateliers créatifs pour les 6–17 ans. Peinture, collage, fabrication…', time:"📅 Vacances d'hiver", lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#4a044e,#a855f7)' },
+    { date:'2027-02-21', dateLabel:'Fin février',  icon:'🎭', cat:'soiree',  tag:'🎭 Carnaval',   title:'Carnaval',                                       desc:'Venez déguisés pour fêter le Carnaval au Génie ! Animations, défilé et bonne humeur pour toute la famille.', time:'🕐 14h00', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#4c1d95,#ec4899)' },
+    // ── SANS DATE (toujours dans "À venir") ──
+    { date:null, icon:'₿',  cat:'atelier', tag:'🛠️ Atelier',    title:'Atelier Crypto : démystifier les cryptomonnaies',   desc:'Bitcoin, Ethereum, blockchain… Comprenez les fondamentaux et les risques sans jargon. Accessible à tous, débutants bienvenus.', time:'🕘 9h00 → 12h00', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#0f2027,#2c5364)' },
+    { date:null, icon:'♻️', cat:'atelier', tag:'🛠️ Atelier',    title:'Atelier Anti-gaspi : consommer mieux, jeter moins', desc:'Astuces pratiques pour réduire le gaspillage alimentaire et quotidien. Un atelier engagé pour adopter des réflexes éco-responsables.', time:'🕘 10h00 → 12h00', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#064e3b,#059669)' },
+    { date:null, icon:'🌱', cat:'conf',    tag:'🌱 Incubateur', title:'Incubateur pour porteurs de projets associatifs',    desc:'Génie accompagne les créateurs d\'associations et de projets à impact local : espace de travail, mentorat, mise en réseau.', time:'📩 Candidature ouverte', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#2e1065,#5b21b6)' },
+  ];
+
+  /* ══════════════════════════════════════════════
+     RENDU DYNAMIQUE
+  ══════════════════════════════════════════════ */
+  function fmtDate(dateStr, label) {
+    if (label) return label;
+    const d = new Date(dateStr + 'T12:00:00');
+    return d.toLocaleDateString('fr-FR', { day:'numeric', month:'long', year:'numeric' });
+  }
+
+  function cardHtml(e, i, isPast) {
+    const dateDisplay = e.date ? fmtDate(e.date, e.dateLabel) : 'Date à confirmer';
+    const delay = (i % 4) + 1;
+    if (isPast) {
+      return `<div class="event-card event-past reveal reveal-delay-${delay}" data-cat="${e.cat}">
+        <div class="event-card-header" style="background:${e.grad}">
+          ${e.icon}<span class="event-card-date past-badge">✅ ${fmtDate(e.date, e.dateLabel)}</span>
+        </div>
+        <div class="event-card-body">
+          <span class="event-tag tag-${e.cat}">${e.tag}</span>
+          <h3>${e.title}</h3><p>${e.desc}</p>
+        </div>
+        <div class="event-card-footer">
+          <span class="time">${e.time} · ${e.lieu}</span>
+          <span class="past-label">Terminé</span>
+        </div>
+      </div>`;
+    }
+    const mailto = e.mailto || 'genie.montauban@gmail.com';
+    const btnLabel = e.date ? 'Je viens !' : 'S\'inscrire';
+    return `<div class="event-card reveal reveal-delay-${delay}" data-cat="${e.cat}">
+      <div class="event-card-header" style="background:${e.grad}">
+        ${e.icon}<span class="event-card-date">${dateDisplay}</span>
+      </div>
+      <div class="event-card-body">
+        <span class="event-tag tag-${e.cat}">${e.tag}</span>
+        <h3>${e.title}</h3><p>${e.desc}</p>
+      </div>
+      <div class="event-card-footer">
+        <span class="time">${e.time} · ${e.lieu}</span>
+        <a href="mailto:${mailto}" class="btn-sm">${btnLabel}</a>
+      </div>
+    </div>`;
+  }
+
+  function renderEvents() {
+    const today = new Date(); today.setHours(0,0,0,0);
+    const upcoming = EVENTS.filter(e => !e.date || new Date(e.date + 'T12:00:00') >= today)
+                           .sort((a,b) => (a.date||'9999') < (b.date||'9999') ? -1 : 1);
+    const past     = EVENTS.filter(e => e.date && new Date(e.date + 'T12:00:00') < today)
+                           .sort((a,b) => a.date > b.date ? -1 : 1);
+
+    // Événement vedette
+    const feat = upcoming[0];
+    const featEl = document.getElementById('prochaine-vedette');
+    if (feat && featEl) {
+      const dateLbl = feat.date ? fmtDate(feat.date, feat.dateLabel) : 'À venir';
+      const mailto  = feat.mailto || 'genie.montauban@gmail.com';
+      featEl.innerHTML = `<div class="event-featured reveal" data-cat="${feat.cat}">
+        <div class="event-featured-visual" style="background:${feat.grad}">
+          <div class="event-icon">${feat.icon}</div>
+          <div class="event-date-badge">${dateLbl}</div>
+        </div>
+        <div class="event-featured-body">
+          <span class="event-tag tag-${feat.cat}">${feat.tag}</span>
+          <h3>${feat.title}</h3>
+          <div class="event-meta">
+            <span>📅 ${dateLbl}</span><span>${feat.time}</span><span>📍 ${feat.lieu}</span>
+          </div>
+          <p>${feat.desc}</p>
+          <a href="mailto:${mailto}" class="btn-reserve">Je viens ! →</a>
+        </div>
+      </div>`;
+    }
+
+    // Grille à venir (sans le premier)
+    const avenirEl = document.getElementById('evenements-avenir');
+    if (avenirEl) avenirEl.innerHTML = upcoming.slice(1).map((e,i) => cardHtml(e,i,false)).join('');
+
+    // Grille passés
+    const passesEl = document.getElementById('evenements-passes');
+    if (passesEl) passesEl.innerHTML = past.map((e,i) => cardHtml(e,i,true)).join('');
+
+    // Re-observe les nouveaux éléments
+    document.querySelectorAll('#prochaine-vedette .reveal, #evenements-avenir .reveal, #evenements-passes .reveal')
+      .forEach(el => revealObserver.observe(el));
+  }
+
+  /* ── Scroll reveal ── */
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+  /* ── Rendu événements ── */
+  renderEvents();
+
   /* ── Filtre par catégorie ── */
   const filterBtns = document.querySelectorAll('.filter-btn');
-  const cards = document.querySelectorAll('[data-cat]');
-
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       filterBtns.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       const f = btn.dataset.filter;
-      cards.forEach(c => {
-        if (f === 'all' || c.dataset.cat === f) {
-          c.style.display = '';
-        } else {
-          c.style.display = 'none';
-        }
+      document.querySelectorAll('[data-cat]').forEach(c => {
+        c.style.display = (f === 'all' || c.dataset.cat === f) ? '' : 'none';
       });
     });
   });
@@ -1054,22 +1064,8 @@
     }
   });
   navLinks.querySelectorAll('a').forEach(a => {
-    a.addEventListener('click', () => {
-      navLinks.classList.remove('open');
-      toggle.classList.remove('open');
-    });
+    a.addEventListener('click', () => { navLinks.classList.remove('open'); toggle.classList.remove('open'); });
   });
-
-  /* ── Scroll reveal ── */
-  const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-      }
-    });
-  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
-
-  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 </script>
 
 </body>
