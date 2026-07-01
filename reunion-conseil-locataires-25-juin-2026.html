@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ordre du jour — Conseil des locataires du Génie, 25 juin 2026</title>
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+
+:root {
+  --color-navy:      #1C2B3A;
+  --color-gold:      #C9993E;
+  --color-gold-l:    #E8C06A;
+  --color-gold-dark: #b8882e;
+  --color-cream:     #F7F3ED;
+  --color-light:     #EDE8E1;
+  --color-white:     #FFFFFF;
+  --color-ink:       #1C2B3A;
+  --color-muted:     #50606E;
+  --color-sage:      #4A7C6F;
+  --color-sage-dark: #3a6158;
+  --color-brick:     #8B3A2A;
+  --color-success:   #1a7a4a;
+  --color-error:     #c0392b;
+  --color-border:    rgba(28,43,58,.12);
+  --color-border-md: rgba(28,43,58,.25);
+
+  --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-body:    'DM Sans', system-ui, -apple-system, sans-serif;
+  --font-mono:    'DM Mono', 'Courier New', monospace;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 14px;
+  --radius-pill: 20px;
+
+  --shadow-card:    0 4px 32px rgba(28,43,58,.10);
+  --shadow-card-sm: 0 2px 16px rgba(28,43,58,.07);
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+a { color: var(--color-gold-dark); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── PRINT ── */
+@media print {
+  .no-print { display: none !important; }
+  .card { break-inside: avoid; }
+  header.hero { padding: 24px 5% 20px; }
+}
+
+header.hero {
+  background: var(--color-navy);
+  color: rgba(255,255,255,.92);
+  padding: 56px 5% 48px;
+}
+.hero-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+.hero-inner img.logo { height: 44px; }
+.hero-text .tag {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--color-gold-l);
+  display: block;
+  margin-bottom: 10px;
+}
+.hero-text h1 {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(1.8rem, 3.6vw, 2.6rem);
+  line-height: 1.1;
+  letter-spacing: -0.5px;
+  margin: 0 0 10px;
+  color: #fff;
+}
+.hero-text .meta {
+  font-size: 14px;
+  color: rgba(255,255,255,.7);
+}
+.hero-text .meta strong { color: rgba(255,255,255,.92); }
+
+/* ── ROLES STRIP ── */
+.roles-strip {
+  background: rgba(255,255,255,.07);
+  border-top: 1px solid rgba(255,255,255,.1);
+  padding: 14px 5%;
+}
+.roles-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+.role-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: rgba(255,255,255,.8);
+}
+.role-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--color-gold-l);
+  margin-right: 2px;
+}
+.role-name {
+  background: rgba(255,255,255,.12);
+  border-radius: var(--radius-pill);
+  padding: 3px 12px;
+  font-weight: 500;
+}
+.role-name.empty {
+  background: rgba(201,153,62,.25);
+  color: var(--color-gold-l);
+  font-style: italic;
+}
+
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 48px 5% 96px;
+}
+
+.card {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card-sm);
+  padding: 32px 36px;
+  margin-bottom: 32px;
+  border: 1px solid var(--color-border);
+}
+
+/* ── ALERT CARD ── */
+.card-alert {
+  border-left: 4px solid var(--color-gold);
+  background: linear-gradient(135deg, #fffdf8, var(--color-white));
+}
+
+.section-tag {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  display: block;
+  margin-bottom: 8px;
+}
+
+h2.ds-h2 {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(1.5rem, 2.8vw, 2rem);
+  line-height: 1.15;
+  letter-spacing: -0.5px;
+  color: var(--color-navy);
+  margin: 0 0 18px;
+}
+
+h3.point-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: var(--color-navy);
+  margin: 0 0 6px;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+h3.point-title .num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--color-navy);
+  color: var(--color-gold-l);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+ul.facts, ul.facts ul {
+  margin: 0;
+  padding-left: 20px;
+}
+ul.facts li { margin-bottom: 8px; }
+ul.facts > li > strong { color: var(--color-navy); }
+
+.subfacts {
+  margin-top: 6px;
+  margin-bottom: 14px;
+}
+
+.tenants {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 14px 0 4px;
+}
+.tenant-pill {
+  background: var(--color-light);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  padding: 6px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-navy);
+}
+
+.docs {
+  margin-top: 16px;
+  padding: 16px 18px;
+  background: var(--color-cream);
+  border-radius: var(--radius-md);
+  border-left: 3px solid var(--color-gold);
+}
+.docs .docs-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  color: var(--color-sage-dark);
+  margin-bottom: 8px;
+  display: block;
+}
+.docs ul {
+  margin: 0;
+  padding-left: 0;
+  list-style: none;
+}
+.docs li {
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.doc-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--color-white);
+  border: 1px solid var(--color-border-md);
+  border-radius: var(--radius-sm);
+  padding: 7px 14px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--color-navy);
+  transition: .2s ease;
+}
+.doc-link:hover {
+  border-color: var(--color-gold);
+  background: var(--color-gold-l);
+  text-decoration: none;
+}
+.doc-link .ext {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--color-white);
+  background: var(--color-brick);
+  border-radius: 4px;
+  padding: 2px 5px;
+  text-transform: uppercase;
+}
+.doc-link .ext.docx { background: var(--color-sage); }
+.doc-link .ext.xlsx { background: var(--color-success); }
+.doc-link .ext.txt  { background: var(--color-muted); }
+
+.objectif {
+  margin-top: 10px;
+  font-size: 14.5px;
+  color: var(--color-muted);
+  font-style: italic;
+}
+
+/* ── DECISION BOX ── */
+.decision-block {
+  margin: 20px 0;
+  border: 1px solid var(--color-border-md);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+.decision-header {
+  background: var(--color-navy);
+  color: var(--color-gold-l);
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.decision-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  border-bottom: 1px solid var(--color-border);
+}
+.decision-option {
+  padding: 12px 16px;
+  border-right: 1px solid var(--color-border);
+  font-size: 13px;
+}
+.decision-option:last-child { border-right: none; }
+.decision-option .opt-label { font-weight: 600; color: var(--color-navy); margin-bottom: 2px; }
+.decision-option .opt-desc { font-size: 12px; color: var(--color-muted); }
+.decision-footer {
+  background: var(--color-cream);
+  padding: 10px 16px;
+  font-size: 13px;
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.decision-footer .df-label { font-weight: 600; color: var(--color-navy); }
+.decision-footer .df-line { flex: 1; border-bottom: 1px solid var(--color-border-md); min-width: 120px; margin-top: 6px; }
+
+table.planning {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  font-size: 14.5px;
+}
+table.planning th {
+  text-align: left;
+  font-size: 11px;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  border-bottom: 2px solid var(--color-border-md);
+  padding: 8px 10px;
+}
+table.planning td {
+  padding: 10px 10px;
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: top;
+}
+table.planning td.time {
+  font-family: var(--font-mono);
+  color: var(--color-brick);
+  font-weight: 500;
+  white-space: nowrap;
+}
+table.planning td.type { white-space: nowrap; }
+table.planning tr.risk td { background: #fff8f0; }
+.badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .4px;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+}
+.badge.echange   { background: rgba(74,124,111,.15); color: var(--color-sage-dark); }
+.badge.info      { background: rgba(201,153,62,.15); color: var(--color-gold-dark); }
+.badge.travail   { background: rgba(139,58,42,.12); color: var(--color-brick); }
+.badge.conclusion{ background: rgba(28,43,58,.10); color: var(--color-navy); }
+.badge.pause     { background: rgba(80,96,110,.12); color: var(--color-muted); }
+.badge.attention { background: rgba(192,57,43,.12); color: var(--color-error); }
+
+/* ── PARKING ── */
+.parking-block {
+  margin-top: 18px;
+  padding: 16px 18px;
+  background: #fff8f0;
+  border: 1px dashed var(--color-gold);
+  border-radius: var(--radius-md);
+}
+.parking-block .park-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  color: var(--color-gold-dark);
+  margin-bottom: 10px;
+}
+.parking-lines { display: flex; flex-direction: column; gap: 8px; }
+.parking-line {
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 8px 14px;
+  font-size: 13px;
+  color: var(--color-muted);
+  font-style: italic;
+}
+
+/* ── DECISIONS TRACKER ── */
+.decisions-tracker {
+  display: grid;
+  gap: 10px;
+}
+.dt-row {
+  display: grid;
+  grid-template-columns: 1fr 160px 140px;
+  gap: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  font-size: 13px;
+}
+.dt-cell {
+  padding: 10px 14px;
+  border-right: 1px solid var(--color-border);
+}
+.dt-cell:last-child { border-right: none; }
+.dt-header .dt-cell { background: var(--color-navy); color: var(--color-gold-l); font-weight: 600; font-size: 11px; letter-spacing: .5px; text-transform: uppercase; }
+.dt-row.priority .dt-cell:first-child { border-left: 3px solid var(--color-brick); }
+.dt-row.optional .dt-cell:first-child { border-left: 3px solid var(--color-gold); }
+.dt-row.defer .dt-cell:first-child { border-left: 3px solid var(--color-sage); }
+.dt-tag { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; display: inline-block; padding: 1px 6px; border-radius: 4px; margin-bottom: 2px; }
+.dt-tag.p { background: rgba(139,58,42,.12); color: var(--color-brick); }
+.dt-tag.o { background: rgba(201,153,62,.12); color: var(--color-gold-dark); }
+.dt-tag.d { background: rgba(74,124,111,.12); color: var(--color-sage-dark); }
+.dt-cell.responsible { font-size: 12px; color: var(--color-muted); font-style: italic; }
+.dt-cell.deadline    { font-size: 12px; color: var(--color-muted); font-family: var(--font-mono); }
+
+.all-docs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 10px;
+}
+
+footer {
+  text-align: center;
+  padding: 32px 5% 56px;
+  font-size: 13px;
+  color: var(--color-muted);
+}
+footer a { color: var(--color-sage-dark); font-weight: 600; }
+
+.divider {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: 28px 0;
+}
+
+/* ── INFOBOX ── */
+.infobox {
+  margin: 14px 0;
+  padding: 12px 16px;
+  border-left: 3px solid var(--color-sage);
+  background: rgba(74,124,111,.06);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 13.5px;
+  color: var(--color-sage-dark);
+  font-style: italic;
+}
+.infobox.warn {
+  border-left-color: var(--color-brick);
+  background: rgba(139,58,42,.06);
+  color: var(--color-brick);
+}
+
+/* ── MISE À JOUR DOCUMENTAIRE ── */
+.update-card {
+  border: 1px solid rgba(74,124,111,.3);
+  background: rgba(74,124,111,.05);
+}
+.update-card ul.facts { font-size: 14.5px; }
+.doc-link.highlight {
+  border-color: var(--color-sage);
+  box-shadow: 0 0 0 1px rgba(74,124,111,.25);
+}
+.doc-link .ext.new { background: var(--color-error); }
+.tag-archive {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  background: var(--color-light);
+  border-radius: 4px;
+  padding: 1px 6px;
+  margin-left: 4px;
+}
+.tenant-flag {
+  font-size: 12.5px;
+  color: var(--color-brick);
+  font-style: italic;
+  margin-top: 8px;
+  display: block;
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <img class="logo" src="assets/logo-horizontal.png" alt="Génie Montauban">
+    <div class="hero-text">
+      <span class="tag">Conseil des locataires — Première réunion</span>
+      <h1>Ordre du jour · 25 juin 2026</h1>
+      <div class="meta">Tiers-Lieu Génie — 12 rue du Génie, 82000 Montauban &nbsp;·&nbsp; <strong>Jeudi 25 juin 2026</strong></div>
+    </div>
+  </div>
+  <!-- Bande rôles -->
+  <div class="roles-strip no-print" style="margin-top:24px; margin-left:-5%; margin-right:-5%; padding-left:5%; padding-right:5%;">
+    <div class="roles-inner">
+      <div class="role-item"><span class="role-label">Animateur</span><span class="role-name empty">À désigner en séance</span></div>
+      <div class="role-item"><span class="role-label">Secrétaire de séance</span><span class="role-name empty">À désigner en séance</span></div>
+      <div class="role-item"><span class="role-label">Gardien du temps</span><span class="role-name empty">À désigner en séance</span></div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- ══ MISE À JOUR DOCUMENTAIRE ══ -->
+  <section class="card update-card">
+    <span class="section-tag">Mise à jour documentaire — 25 juin 2026</span>
+    <h2 class="ds-h2" style="margin-bottom:14px;">Avant de lire l'ordre du jour</h2>
+    <p style="color:var(--color-muted); font-size:14.5px; margin-top:-6px;">
+      Une relecture de l'ensemble des documents du dossier a été faite avant la réunion pour corriger les incohérences trouvées. Le détail complet est dans la note ci-dessous.
+    </p>
+    <ul class="facts">
+      <li><strong>Corrigé :</strong> tarif du badge d'accès 24h/24 harmonisé à 5&nbsp;€/mois dans le règlement intérieur (une version affichait 25&nbsp;€), coquille corrigée sur le bon de réservation de salle, et le budget prévisionnel (formules cassées) recalculé.</li>
+      <li><strong>Archivé :</strong> l'ancienne charte « Savoir-vivre » 1 page (remplacée par la Charte v2 ci-dessous) et l'audit de janvier 2026, devenus obsolètes.</li>
+      <li><strong>À trancher ce soir :</strong> la liste exacte des locataires actuels — voir la note ⚠ plus bas dans le Préambule.</li>
+    </ul>
+    <div class="docs">
+      <span class="docs-label">Document clé pour ce soir</span>
+      <ul>
+        <li><a class="doc-link highlight" href="00_Synthese_Reunion/Note_Synthese_Incoherences_25juin2026.docx" target="_blank"><span class="ext new">DOCX</span> Note de synthèse — incohérences &amp; points à trancher</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ══ RÈGLES DE LA RÉUNION ══ -->
+  <section class="card card-alert">
+    <span class="section-tag">Avant de commencer — règles du jeu</span>
+    <h2 class="ds-h2" style="margin-bottom:14px;">Comment nous allons travailler ce soir</h2>
+    <ul class="facts">
+      <li><strong>Un animateur, un gardien du temps, un secrétaire de séance</strong> sont désignés dès l'ouverture.</li>
+      <li><strong>Chaque point a une limite de temps affichée.</strong> Le gardien du temps signale 5 min avant la fin.</li>
+      <li><strong>Le "parking" :</strong> tout sujet hors agenda est noté sur la feuille de parking et traité en fin de réunion ou reporté. Il ne coupe pas le fil.</li>
+      <li><strong>L'objectif de ce soir</strong> n'est pas de tout résoudre, mais de prendre des décisions concrètes avec un responsable et une échéance pour chacune.</li>
+      <li><strong>Le PV</strong> sera envoyé sous 48h. Il est validé sans retour sous 5 jours.</li>
+    </ul>
+  </section>
+
+  <!-- ══ PRÉAMBULE ══ -->
+  <section class="card">
+    <span class="section-tag">Préambule</span>
+    <h2 class="ds-h2">Ce qui est déjà acté (vérités établies)</h2>
+    <p style="color:var(--color-muted); font-size:14.5px; margin-top:-6px;">
+      Ces éléments sont formalisés et <strong>ne sont pas sujets à débat ce soir</strong>.
+      Ils sont présentés pour information, lecture de 15 minutes maximum.
+    </p>
+
+    <ul class="facts">
+      <li><strong>Structure et gouvernance</strong>
+        <ul class="subfacts">
+          <li>L'association GÉNIE Tiers-Lieu (SIRET 100&nbsp;178&nbsp;730&nbsp;00014, RNA W822009896) est l'occupante du lieu dans le cadre d'une convention d'occupation précaire avec CCFA (représentée par Samir Chikhi).</li>
+          <li>Siège : 12 rue du Génie, 82000 Montauban.</li>
+          <li>La transformation en sous-location payante est prévue une fois que l'activité génère suffisamment de revenus.</li>
+          <li>Un règlement intérieur a été adopté le 02/02/2026 par le Conseil d'Administration.</li>
+        </ul>
+        <div class="docs">
+          <span class="docs-label">Documents de référence</span>
+          <ul>
+            <li><a class="doc-link" href="00_Preambule_Documents_Constitutifs/STATUTS-GENIE.pdf" target="_blank"><span class="ext pdf">PDF</span> Statuts de l'association GÉNIE</a></li>
+            <li><a class="doc-link" href="00_Preambule_Documents_Constitutifs/PV-AG-CONSTITUTIVE-16-01-2026.pdf" target="_blank"><span class="ext pdf">PDF</span> PV de l'AG constitutive</a></li>
+            <li><a class="doc-link" href="00_Preambule_Documents_Constitutifs/CONVENTION_OCCUPATION_PRECAIRE_CCFA.pdf" target="_blank"><span class="ext pdf">PDF</span> Convention CCFA</a></li>
+          </ul>
+        </div>
+      </li>
+      <li><strong>Locataires actuels (contrats en cours)</strong>
+        <div class="tenants">
+          <span class="tenant-pill">Antre-connaissance</span>
+          <span class="tenant-pill">FNE</span>
+          <span class="tenant-pill">Nadine DAUGE</span>
+          <span class="tenant-pill">Ovni-graphics / Langloys</span>
+        </div>
+        <span class="tenant-flag">⚠ Cette liste diverge selon les sources internes (CRM, contrats, grille tarifaire) — à valider et figer ce soir, voir la note de synthèse.</span>
+      </li>
+      <li><strong>Accès et horaires</strong> (actés dans le règlement intérieur)
+        <ul class="subfacts">
+          <li>Lun–ven : 8h00–19h00 · Samedi sur réservation · Dimanche/jours fériés : fermé.</li>
+          <li>Accès 24h/24h avec badge en option (5&nbsp;€/mois) · Perte de badge : 20&nbsp;€.</li>
+          <li>Badge et code d'accès strictement personnels — prêt interdit.</li>
+        </ul>
+      </li>
+      <li><strong>Aspect juridique</strong> : il est légal d'être simultanément Président de l'association et dirigeant d'une entreprise locataire, sous conditions strictes (prix du marché, déclaration de conflit d'intérêts, validation CA avec retrait du dirigeant concerné).</li>
+    </ul>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ══ POINTS ══ -->
+  <section class="card">
+    <span class="section-tag">Points à discuter / décider</span>
+    <h2 class="ds-h2" style="margin-bottom:28px;">Ordre du jour</h2>
+
+    <!-- POINT 1 -->
+    <h3 class="point-title"><span class="num">1</span> Règlement intérieur — Appropriation collective <small style="font-size:.75rem; font-family:var(--font-mono); color:var(--color-muted); font-weight:400;">20 min</small></h3>
+    <p><strong>Contexte :</strong> le règlement intérieur (version février 2026) existe et a été adopté par le CA. Ce soir, il s'agit d'en présenter les grandes lignes et de l'enrichir collectivement.</p>
+    <p><strong>Ce qu'on propose :</strong> lecture des 5 rubriques clés → retours → vote d'adoption par les locataires → liste des ajustements à porter au prochain CA.</p>
+    <p class="objectif">Objectif : que chacun se sente auteur du document, pas destinataire d'une contrainte.</p>
+
+    <div class="infobox warn">⚠ Questions à poser impérativement : Que se passe-t-il en cas de conflit entre locataires — qui arbitre ? Qu'est-ce qui est considéré comme un comportement inacceptable (bruit, odeurs, visiteurs) ? Quelle procédure en cas de manquement répété ?</div>
+
+    <div class="docs">
+      <span class="docs-label">Document support</span>
+      <ul>
+        <li><a class="doc-link" href="01_Reglement_Interieur/Reglement_Interieur_Genie_ACTUEL.docx" target="_blank"><span class="ext docx">DOCX</span> Règlement intérieur Génie (version actuelle)</a></li>
+      </ul>
+    </div>
+
+    <hr class="divider">
+
+    <!-- POINT 2 -->
+    <h3 class="point-title"><span class="num">2</span> Fonctionnement au quotidien <small style="font-size:.75rem; font-family:var(--font-mono); color:var(--color-muted); font-weight:400;">35 min — 2 blocs</small></h3>
+
+    <div class="infobox">Ce point est divisé en deux blocs pour éviter le débordement. Le gardien du temps alerte à 15 min pour clore le bloc A.</div>
+
+    <p style="margin-top:14px"><strong>Bloc A — Propreté & consommables (15 min)</strong></p>
+    <ul class="facts">
+      <li><strong>Ménage des zones communes :</strong> rotation hebdomadaire entre locataires, prestataire mutualisé, ou modèle mixte ?</li>
+      <li><strong>Qui sort les poubelles ?</strong> Jour de collecte : _______ · Responsable : rotation ou désigné ?</li>
+      <li><strong>Qui achète le papier toilette, le savon, le café ?</strong> Budget mensuel estimé : _______ € · Financé par : l'association / cagnotte locataires / autre ?</li>
+      <li><strong>Frigo :</strong> nettoyage le vendredi — par qui concrètement ? Aliments non étiquetés : délai avant suppression ?</li>
+      <li><strong>Imprimante :</strong> cartouches et papier sur quel budget ? Quota par locataire ou usage libre ?</li>
+    </ul>
+
+    <div class="decision-block">
+      <div class="decision-header">📋 Décision A1 — Ménage des zones communes</div>
+      <div class="decision-options">
+        <div class="decision-option"><div class="opt-label">Option A — Rotation</div><div class="opt-desc">Planning hebdomadaire affiché, chaque locataire assure 1 semaine sur N</div></div>
+        <div class="decision-option"><div class="opt-label">Option B — Prestataire</div><div class="opt-desc">Coût partagé (prorata m² ou nombre de locataires)</div></div>
+        <div class="decision-option"><div class="opt-label">Option C — Mixte</div><div class="opt-desc">Entretien quotidien par chacun + grand nettoyage prestataire 1×/mois</div></div>
+      </div>
+      <div class="decision-footer">
+        <span><span class="df-label">Décision :</span></span><span class="df-line"></span>
+        <span><span class="df-label">Responsable :</span></span><span class="df-line"></span>
+        <span><span class="df-label">Dès le :</span></span><span class="df-line"></span>
+      </div>
+    </div>
+
+    <div class="decision-block" style="margin-top:10px">
+      <div class="decision-header">📋 Décision A2 — Financement des consommables communs</div>
+      <div class="decision-options">
+        <div class="decision-option"><div class="opt-label">Option A — Association</div><div class="opt-desc">Achat centralisé par l'asso sur budget dédié</div></div>
+        <div class="decision-option"><div class="opt-label">Option B — Cagnotte</div><div class="opt-desc">Cotisation mensuelle (ex: 10€/locataire), référent tournant</div></div>
+        <div class="decision-option"><div class="opt-label">Option C — Désigné</div><div class="opt-desc">Un locataire volontaire achète, remboursé sur facture</div></div>
+      </div>
+      <div class="decision-footer">
+        <span><span class="df-label">Décision :</span></span><span class="df-line"></span>
+        <span><span class="df-label">Référent :</span></span><span class="df-line"></span>
+        <span><span class="df-label">Budget estimé :</span></span><span class="df-line"></span>
+      </div>
+    </div>
+
+    <p style="margin-top:20px"><strong>Bloc B — Événements, visiteurs & équipements (20 min)</strong></p>
+    <ul class="facts">
+      <li><strong>Visiteurs ponctuels :</strong> registre papier, notification canal commun, ou confiance implicite ? Le visiteur peut-il circuler seul ?</li>
+      <li><strong>Organiser un événement dans l'espace :</strong> qui valide ? Délai de prévenance ? Qui fait le ménage après ? Remise en place du mobilier ?</li>
+      <li><strong>WiFi visiteurs :</strong> réseau dédié "Génie_Visiteurs" ou partage du réseau principal ?</li>
+      <li><strong>Musique :</strong> casque obligatoire en open space ? Règle sur les appels téléphoniques longs ?</li>
+      <li><strong>Animaux de compagnie :</strong> autorisés, interdits, ou sur accord collectif ?</li>
+      <li><strong>Casiers (10&nbsp;€/mois) :</strong> qui en a besoin ? Procédure d'attribution ?</li>
+      <li><strong>Colis reçus :</strong> que fait-on quand le destinataire est absent ? Espace de dépôt ?</li>
+      <li><strong>Urgences techniques hors heures :</strong> quel numéro appeler ? Qui est d'astreinte côté association ?</li>
+    </ul>
+
+    <div class="decision-block">
+      <div class="decision-header">📋 Décision B1 — Canal de communication entre locataires</div>
+      <div class="decision-options">
+        <div class="decision-option"><div class="opt-label">WhatsApp</div><div class="opt-desc">Simple, déjà utilisé, notifications en temps réel</div></div>
+        <div class="decision-option"><div class="opt-label">Slack</div><div class="opt-desc">Canaux thématiques, historique, intégrations</div></div>
+        <div class="decision-option"><div class="opt-label">Email</div><div class="opt-desc">Liste de diffusion, trace écrite formelle</div></div>
+      </div>
+      <div class="decision-footer">
+        <span><span class="df-label">Décision :</span></span><span class="df-line"></span>
+        <span><span class="df-label">Administrateur :</span></span><span class="df-line"></span>
+        <span><span class="df-label">Créé avant le :</span></span><span class="df-line"></span>
+      </div>
+    </div>
+
+    <div class="docs" style="margin-top:16px">
+      <span class="docs-label">Documents support</span>
+      <ul>
+        <li><a class="doc-link highlight" href="Charte_Savoir_Vivre_Genie_v2_25juin2026.docx" target="_blank"><span class="ext docx">DOCX</span> ✨ Charte v2 enrichie — à adopter ce soir</a></li>
+        <li><a class="doc-link" href="06_Archives/Savoir_vivre_au_Genie.pdf" target="_blank"><span class="ext pdf">PDF</span> Ancienne charte « Savoir-vivre »<span class="tag-archive">archivée</span></a></li>
+        <li><a class="doc-link" href="02_Vie_Quotidienne/Calendrier_Animations_2026_2027.txt" target="_blank"><span class="ext txt">TXT</span> Calendrier des animations 2026-2027</a></li>
+      </ul>
+    </div>
+
+    <hr class="divider">
+
+    <!-- POINT 3 -->
+    <h3 class="point-title"><span class="num">3</span> Site web — 3 décisions concrètes <small style="font-size:.75rem; font-family:var(--font-mono); color:var(--color-muted); font-weight:400;">15 min</small></h3>
+    <p>Ce point est volontairement recentré. Le site (genie-montauban.fr) fonctionne. Ce soir : trois décisions seulement.</p>
+    <ul class="facts">
+      <li><strong>Décision 1 :</strong> Qui est responsable des mises à jour du site ? Délai de réponse en cas d'erreur signalée ?</li>
+      <li><strong>Décision 2 :</strong> Les locataires veulent-ils une page "Annuaire des entreprises du Génie" ? Si oui, qui rédige sa propre fiche ? Délai ?</li>
+      <li><strong>Décision 3 :</strong> Les tarifs affichés correspondent-ils aux pratiques réelles ? Vérification express (5 min).</li>
+    </ul>
+    <div class="infobox">La refonte globale du site (fonctionnalités, réservation en ligne…) est un chantier à part entière — à inscrire à l'ordre du jour d'une prochaine réunion.</div>
+    <div class="docs">
+      <span class="docs-label">Document support</span>
+      <ul>
+        <li><a class="doc-link" href="03_Site_Web_Tarifs/Grille_tarifaire_Genie_ACTUELLE_Mai2026.pdf" target="_blank"><span class="ext pdf">PDF</span> Grille tarifaire actuelle (mai 2026)</a></li>
+      </ul>
+    </div>
+
+    <hr class="divider">
+
+    <!-- POINT 4 -->
+    <h3 class="point-title"><span class="num">4</span> Comment contribuer à la vie du Génie ? <small style="font-size:.75rem; font-family:var(--font-mono); color:var(--color-muted); font-weight:400;">20 min</small></h3>
+    <p>Ce point remplace "Perspectives et vision" pour cette première réunion. L'objectif n'est pas de planifier mais d'identifier les énergies disponibles.</p>
+    <ul class="facts">
+      <li><strong>Synergie entre locataires :</strong> y a-t-il des compétences, services ou besoins mutualisables entre les 4 structures ? (échanges de services, co-traitance, orientations clients…)</li>
+      <li><strong>Événements collectifs :</strong> chaque locataire a-t-il un projet d'animation pour lequel il aurait besoin des espaces ? (atelier, conférence, soirée, démonstration…)</li>
+      <li><strong>Partenariats :</strong> quelles structures, associations, réseaux chaque locataire connaît-il qui pourraient bénéficier au Génie ?</li>
+      <li><strong>Stagiaire administratif :</strong> une offre est publiée — les locataires ont-ils des contacts ou des relais pour diffuser l'offre ?</li>
+      <li><strong>Adhésion à l'association :</strong> il est important que toutes les structures qui utilisent le lieu soient adhérentes du Génie — c'est une condition du bon fonctionnement collectif (gouvernance, voix aux décisions) et du modèle économique de l'association (cotisations). À vérifier ce soir : qui est adhérent aujourd'hui, qui ne l'est pas encore.</li>
+    </ul>
+    <div class="infobox">Les sujets CRM, modèle économique et financement concernent l'association. Ils seront présentés lors d'une réunion dédiée une fois la base de vie collective installée.</div>
+    <div class="docs">
+      <span class="docs-label">Documents support</span>
+      <ul>
+        <li><a class="doc-link" href="04_Perspectives_Strategie/Offre_Stage_Assistant_Administratif.docx" target="_blank"><span class="ext docx">DOCX</span> Offre de stage — Assistant administratif</a></li>
+        <li><a class="doc-link" href="05_Annexes_Procedures_Contrats/Fiche_Adhesion_GENIE_2026_ACTUELLE.docx" target="_blank"><span class="ext docx">DOCX</span> Fiche d'adhésion</a></li>
+      </ul>
+    </div>
+
+    <hr class="divider">
+
+    <!-- POINT 5 -->
+    <h3 class="point-title"><span class="num">5</span> Questions ouvertes & parking <small style="font-size:.75rem; font-family:var(--font-mono); color:var(--color-muted); font-weight:400;">10 min</small></h3>
+    <ul class="facts">
+      <li><strong>Tour de table :</strong> chaque locataire exprime en 1 phrase ce qu'il retient de la réunion et une attente pour la prochaine.</li>
+      <li><strong>Sujets du parking :</strong> traitement express (30 sec/sujet) — décision : traité maintenant / reporté à la prochaine réunion / délégué à un binôme.</li>
+    </ul>
+
+    <div class="parking-block">
+      <div class="park-label">🅿 Feuille de parking — sujets hors agenda à traiter</div>
+      <div class="parking-lines">
+        <div class="parking-line">Sujet 1 : _______________________________________________</div>
+        <div class="parking-line">Sujet 2 : _______________________________________________</div>
+        <div class="parking-line">Sujet 3 : _______________________________________________</div>
+        <div class="parking-line">Sujet 4 : _______________________________________________</div>
+      </div>
+    </div>
+
+  </section>
+
+  <hr class="divider">
+
+  <!-- DÉROULÉ RÉVISÉ -->
+  <section class="card">
+    <span class="section-tag">Proposition de déroulé révisé</span>
+    <h2 class="ds-h2">Programme (2h40)</h2>
+    <table class="planning">
+      <thead>
+        <tr><th>Temps</th><th>Sujet</th><th>Type</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="time">10 min</td><td><strong>Ouverture :</strong> désignation animateur / secrétaire / gardien du temps · règles du jeu · rappel de l'objectif</td><td class="type"><span class="badge info">Information</span></td></tr>
+        <tr><td class="time">10 min</td><td><strong>Tour de table :</strong> nom + activité + 1 attente de la réunion (notée sur paper board)</td><td class="type"><span class="badge echange">Échange</span></td></tr>
+        <tr><td class="time">15 min</td><td><strong>Préambule :</strong> présentation des documents constitutifs — lecture express, pas de débat</td><td class="type"><span class="badge info">Information</span></td></tr>
+        <tr><td class="time">20 min</td><td><strong>Point 1</strong> — Règlement intérieur : grandes lignes + retours + questions clés</td><td class="type"><span class="badge travail">Travail collectif</span></td></tr>
+        <tr class="risk"><td class="time">15 min</td><td><strong>Point 2A</strong> — Propreté & consommables : ménage, poubelles, papier toilette, café, frigo ⚠ limité à 15 min</td><td class="type"><span class="badge attention">Décisions</span></td></tr>
+        <tr class="risk"><td class="time">20 min</td><td><strong>Point 2B</strong> — Événements, visiteurs, équipements, canal de comm' ⚠ limité à 20 min</td><td class="type"><span class="badge attention">Décisions</span></td></tr>
+        <tr><td class="time">15 min</td><td><strong>Point 3</strong> — Site web : 3 décisions max (responsable / annuaire / tarifs)</td><td class="type"><span class="badge echange">Échange</span></td></tr>
+        <tr><td class="time">20 min</td><td><strong>Point 4</strong> — Contributions à la vie du Génie : synergies, événements, partenariats, offre de stage, adhésion de toutes les structures, budget prévisionnel (transparence)</td><td class="type"><span class="badge travail">Travail collectif</span></td></tr>
+        <tr><td class="time">10 min</td><td><strong>Point 5</strong> — Tour de table final + traitement du parking</td><td class="type"><span class="badge echange">Échange</span></td></tr>
+        <tr><td class="time">15 min</td><td><strong>Clôture :</strong> lecture des décisions prises · validation · prochaine réunion : date + ordre du jour provisoire</td><td class="type"><span class="badge conclusion">Conclusion</span></td></tr>
+      </tbody>
+    </table>
+    <p class="objectif">Durée totale : 2h40 · Les lignes en orange sont les points à risque de débordement — le gardien du temps est particulièrement vigilant.</p>
+  </section>
+
+  <!-- DÉCISIONS À PRENDRE -->
+  <section class="card">
+    <span class="section-tag">Suivi des décisions</span>
+    <h2 class="ds-h2">Ce qui doit sortir de la réunion</h2>
+    <p style="color:var(--color-muted); font-size:14px; margin-top:-6px;">Chaque décision doit avoir un responsable nommé et une échéance. Sans ça, rien n'avancera.</p>
+
+    <div class="decisions-tracker">
+      <div class="dt-row dt-header">
+        <div class="dt-cell">Décision</div>
+        <div class="dt-cell">Responsable</div>
+        <div class="dt-cell">Échéance</div>
+      </div>
+      <div class="dt-row priority">
+        <div class="dt-cell"><span class="dt-tag p">Priorité</span><br>Animateur des réunions de locataires</div>
+        <div class="dt-cell responsible">_______________________</div>
+        <div class="dt-cell deadline">Ce soir</div>
+      </div>
+      <div class="dt-row priority">
+        <div class="dt-cell"><span class="dt-tag p">Priorité</span><br>Canal de communication entre locataires (outil + admin)</div>
+        <div class="dt-cell responsible">_______________________</div>
+        <div class="dt-cell deadline">48h</div>
+      </div>
+      <div class="dt-row priority">
+        <div class="dt-cell"><span class="dt-tag p">Priorité</span><br>Ménage zones communes : modèle choisi + planning</div>
+        <div class="dt-cell responsible">_______________________</div>
+        <div class="dt-cell deadline">7 jours</div>
+      </div>
+      <div class="dt-row priority">
+        <div class="dt-cell"><span class="dt-tag p">Priorité</span><br>Consommables communs : qui achète + budget mensuel</div>
+        <div class="dt-cell responsible">_______________________</div>
+        <div class="dt-cell deadline">7 jours</div>
+      </div>
+      <div class="dt-row priority">
+        <div class="dt-cell"><span class="dt-tag p">Priorité</span><br>Numéro d'urgence technique hors heures ouvrées</div>
+        <div class="dt-cell responsible">Association GÉNIE</div>
+        <div class="dt-cell deadline">Ce soir</div>
+      </div>
+      <div class="dt-row priority">
+        <div class="dt-cell"><span class="dt-tag p">Priorité</span><br>Date de la prochaine réunion</div>
+        <div class="dt-cell responsible">_______________________</div>
+        <div class="dt-cell deadline">Ce soir</div>
+      </div>
+      <div class="dt-row priority">
+        <div class="dt-cell"><span class="dt-tag p">Priorité</span><br>Adhésion de toutes les structures locataires</div>
+        <div class="dt-cell responsible">Chaque locataire</div>
+        <div class="dt-cell deadline">Ce soir</div>
+      </div>
+      <div class="dt-row optional">
+        <div class="dt-cell"><span class="dt-tag o">Souhaitable</span><br>Procédure visiteurs (registre ou notification)</div>
+        <div class="dt-cell responsible">_______________________</div>
+        <div class="dt-cell deadline">15 jours</div>
+      </div>
+      <div class="dt-row optional">
+        <div class="dt-cell"><span class="dt-tag o">Souhaitable</span><br>Page annuaire locataires sur le site : oui/non + fiche par locataire</div>
+        <div class="dt-cell responsible">_______________________</div>
+        <div class="dt-cell deadline">30 jours</div>
+      </div>
+      <div class="dt-row optional">
+        <div class="dt-cell"><span class="dt-tag o">Souhaitable</span><br>Règle bruit / musique / animaux</div>
+        <div class="dt-cell responsible">_______________________</div>
+        <div class="dt-cell deadline">Prochaine réunion</div>
+      </div>
+      <div class="dt-row defer">
+        <div class="dt-cell"><span class="dt-tag d">Reporté</span><br>Modèle économique & passage à la sous-location payante</div>
+        <div class="dt-cell responsible">Association GÉNIE</div>
+        <div class="dt-cell deadline">Prochaine réunion</div>
+      </div>
+      <div class="dt-row defer">
+        <div class="dt-cell"><span class="dt-tag d">Reporté</span><br>Refonte site web (outil de réservation, nouvelles fonctionnalités)</div>
+        <div class="dt-cell responsible">À désigner</div>
+        <div class="dt-cell deadline">Prochaine réunion</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOUS LES DOCUMENTS -->
+  <section class="card">
+    <span class="section-tag">Annexe</span>
+    <h2 class="ds-h2">Tous les documents de la réunion</h2>
+    <div class="all-docs-grid">
+      <a class="doc-link" href="00_Preambule_Documents_Constitutifs/STATUTS-GENIE.pdf" target="_blank"><span class="ext pdf">PDF</span> Statuts GÉNIE</a>
+      <a class="doc-link" href="00_Preambule_Documents_Constitutifs/PV-AG-CONSTITUTIVE-16-01-2026.pdf" target="_blank"><span class="ext pdf">PDF</span> PV AG constitutive</a>
+      <a class="doc-link" href="00_Preambule_Documents_Constitutifs/CONVENTION_OCCUPATION_PRECAIRE_CCFA.pdf" target="_blank"><span class="ext pdf">PDF</span> Convention CCFA</a>
+      <a class="doc-link" href="01_Reglement_Interieur/Reglement_Interieur_Genie_ACTUEL.docx" target="_blank"><span class="ext docx">DOCX</span> Règlement intérieur</a>
+      <a class="doc-link highlight" href="Charte_Savoir_Vivre_Genie_v2_25juin2026.docx" target="_blank"><span class="ext docx">DOCX</span> ✨ Charte v2 enrichie</a>
+      <a class="doc-link" href="02_Vie_Quotidienne/Calendrier_Animations_2026_2027.txt" target="_blank"><span class="ext txt">TXT</span> Calendrier animations</a>
+      <a class="doc-link" href="03_Site_Web_Tarifs/Grille_tarifaire_Genie_ACTUELLE_Mai2026.pdf" target="_blank"><span class="ext pdf">PDF</span> Grille tarifaire</a>
+      <a class="doc-link" href="04_Perspectives_Strategie/Offre_Stage_Assistant_Administratif.docx" target="_blank"><span class="ext docx">DOCX</span> Offre de stage</a>
+      <a class="doc-link" href="05_Annexes_Procedures_Contrats/Procedure_location.pdf" target="_blank"><span class="ext pdf">PDF</span> Procédure de location</a>
+      <a class="doc-link" href="05_Annexes_Procedures_Contrats/CGV_Genie_ACTUELLE.docx" target="_blank"><span class="ext docx">DOCX</span> CGV</a>
+      <a class="doc-link" href="05_Annexes_Procedures_Contrats/Contrat_Coworking_Genie.docx" target="_blank"><span class="ext docx">DOCX</span> Contrat coworking</a>
+      <a class="doc-link" href="05_Annexes_Procedures_Contrats/Contrat_Bureau_Privatif_Genie.docx" target="_blank"><span class="ext docx">DOCX</span> Contrat bureau privatif</a>
+      <a class="doc-link" href="05_Annexes_Procedures_Contrats/Bon_Reservation_Salle_Genie.docx" target="_blank"><span class="ext docx">DOCX</span> Bon de réservation salle</a>
+      <a class="doc-link" href="05_Annexes_Procedures_Contrats/Fiche_Adhesion_GENIE_2026_ACTUELLE.docx" target="_blank"><span class="ext docx">DOCX</span> Fiche d'adhésion</a>
+      <a class="doc-link highlight" href="00_Synthese_Reunion/Note_Synthese_Incoherences_25juin2026.docx" target="_blank"><span class="ext new">DOCX</span> Note de synthèse (25/06)</a>
+      <a class="doc-link" href="06_Archives/Savoir_vivre_au_Genie.pdf" target="_blank"><span class="ext pdf">PDF</span> Ancienne charte savoir-vivre<span class="tag-archive">archivée</span></a>
+      <a class="doc-link" href="06_Archives/Audit_Genie_Complet_90_fichiers.docx" target="_blank"><span class="ext docx">DOCX</span> Audit janvier 2026<span class="tag-archive">archivé</span></a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  Génie Tiers-Lieu — 12 rue du Génie, 82000 Montauban &nbsp;·&nbsp; <a href="https://www.genie-montauban.fr" target="_blank">genie-montauban.fr</a>
+  &nbsp;·&nbsp; Ordre du jour — version finale, mise à jour le 25 juin 2026
+</footer>
+
+</body>
+</html>
