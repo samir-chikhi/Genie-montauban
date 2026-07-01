@@ -50,50 +50,52 @@
   }
   </script>
 
-  <!-- Google Fonts : cohérence avec le site principal -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
 
   <style>
-    /* ─── Variables — cohérentes avec index.html ─── */
     :root {
-      --primary:   #2D6A4F;
-      --primary-d: #1B4332;
-      --secondary: #52B788;
-      --accent:    #B7E4C7;
-      --soft:      #D8F3DC;
-      --bg:        #F8FAF9;
-      --surface:   #FFFFFF;
-      --text:      #1B1B1B;
-      --muted:     #5A7A6E;
-      --radius:    12px;
-      --shadow:    0 4px 24px rgba(45,106,79,.10);
+      --bg-950: #0F172A;
+      --bg-900: #1E293B;
+      --bg-800: #334155;
+      --slate-400: #94A3B8;
+      --slate-300: #CBD5E1;
+      --slate-200: #E2E8F0;
+      --emerald: #10B981;
+      --emerald-l: #34D399;
+      --emerald-d: #059669;
+      --violet: #8B5CF6;
+      --glass-bg: rgba(255,255,255,0.05);
+      --glass-border: rgba(255,255,255,0.08);
+      --glass-bg-md: rgba(30,41,59,0.6);
+      --radius: 16px;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: 'DM Sans', sans-serif;
-      background: var(--bg);
-      color: var(--text);
+      background: var(--bg-950);
+      color: var(--slate-300);
       line-height: 1.65;
     }
 
-    /* ─── NAV — identique au reste du site ─── */
+    /* ── NAV ── */
     nav {
       position: sticky; top: 0; z-index: 100;
-      background: var(--surface);
-      border-bottom: 1px solid var(--accent);
+      background: rgba(15,23,42,0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--glass-border);
       padding: 0 clamp(1rem, 4vw, 3rem);
       display: flex; align-items: center; justify-content: space-between;
       height: 64px;
-      box-shadow: 0 2px 12px rgba(45,106,79,.08);
     }
     .nav-logo {
       font-family: 'Playfair Display', serif;
       font-size: 1.4rem;
-      color: var(--primary);
+      color: var(--emerald);
       text-decoration: none;
       font-weight: 700;
       letter-spacing: -0.02em;
@@ -104,110 +106,123 @@
     }
     .nav-links a {
       text-decoration: none;
-      font-size: .9rem;
-      font-weight: 500;
-      color: var(--muted);
+      font-size: .9rem; font-weight: 500;
+      color: var(--slate-400);
       transition: color .2s;
       letter-spacing: .02em;
     }
-    .nav-links a:hover,
-    .nav-links a.active { color: var(--primary); }
-    .nav-links a.active {
-      border-bottom: 2px solid var(--secondary);
-      padding-bottom: 2px;
-    }
+    .nav-links a:hover { color: var(--emerald); }
+    .nav-links a.active { color: var(--emerald); border-bottom: 2px solid var(--emerald); padding-bottom: 2px; }
     .nav-cta {
-      background: var(--primary);
-      color: #fff !important;
-      padding: .45rem 1.2rem;
+      background: var(--emerald) !important;
+      color: #0F172A !important;
+      padding: .45rem 1.2rem !important;
       border-radius: 50px;
+      font-weight: 600 !important;
       transition: background .2s !important;
     }
-    .nav-cta:hover { background: var(--primary-d) !important; color: #fff !important; }
+    .nav-cta:hover { background: var(--emerald-l) !important; }
 
-    /* hamburger mobile */
     .nav-toggle { display: none; background: none; border: none; cursor: pointer; }
     .nav-toggle span {
       display: block; width: 22px; height: 2px;
-      background: var(--primary); margin: 5px 0;
-      transition: transform .3s;
+      background: var(--slate-300); margin: 5px 0;
+      transition: transform .3s, opacity .3s;
     }
 
-    /* ─── HERO BANNER ─── */
+    /* ── HERO ── */
     .hero {
-      background: linear-gradient(135deg, var(--primary-d) 0%, var(--primary) 60%, var(--secondary) 100%);
-      padding: clamp(3rem,8vw,6rem) clamp(1rem,6vw,4rem);
-      text-align: center;
       position: relative;
       overflow: hidden;
+      padding: clamp(4rem,10vw,7rem) clamp(1rem,6vw,4rem);
+      text-align: center;
+      background: var(--bg-950);
     }
-    .hero::before {
-      content: '';
-      position: absolute; inset: 0;
-      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    .hero-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: .35;
+      animation: orbFloat 8s ease-in-out infinite;
     }
+    .hero-orb-1 {
+      width: 420px; height: 420px;
+      background: var(--violet);
+      top: -120px; left: -80px;
+      animation-delay: 0s;
+    }
+    .hero-orb-2 {
+      width: 380px; height: 380px;
+      background: var(--emerald);
+      bottom: -100px; right: -60px;
+      animation-delay: -4s;
+    }
+    @keyframes orbFloat {
+      0%, 100% { transform: translate(0,0) scale(1); }
+      33%       { transform: translate(30px,-20px) scale(1.05); }
+      66%       { transform: translate(-20px,15px) scale(.97); }
+    }
+    .hero-inner { position: relative; max-width: 700px; margin: 0 auto; }
     .hero-label {
       display: inline-block;
-      background: rgba(255,255,255,.15);
-      color: var(--accent);
-      font-size: .75rem;
-      font-weight: 500;
-      letter-spacing: .12em;
-      text-transform: uppercase;
+      background: rgba(16,185,129,.12);
+      color: var(--emerald);
+      font-size: .75rem; font-weight: 600;
+      letter-spacing: .12em; text-transform: uppercase;
       padding: .35rem 1rem;
       border-radius: 50px;
-      border: 1px solid rgba(255,255,255,.2);
-      margin-bottom: 1.2rem;
-      position: relative;
+      border: 1px solid rgba(16,185,129,.25);
+      margin-bottom: 1.4rem;
     }
     .hero h1 {
       font-family: 'Playfair Display', serif;
-      font-size: clamp(2rem, 5vw, 3.5rem);
-      color: #fff;
-      line-height: 1.15;
-      position: relative;
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      color: var(--slate-200);
+      line-height: 1.12;
       margin-bottom: .8rem;
     }
+    .hero h1 span { color: var(--emerald); }
     .hero p {
-      color: rgba(255,255,255,.8);
+      color: var(--slate-400);
       font-size: 1.05rem;
-      max-width: 580px;
+      max-width: 560px;
       margin: 0 auto 2rem;
-      position: relative;
     }
     .hero-badges {
       display: flex; flex-wrap: wrap; gap: .7rem;
       justify-content: center;
-      position: relative;
     }
     .badge {
-      background: rgba(255,255,255,.12);
-      border: 1px solid rgba(255,255,255,.25);
-      color: #fff;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      color: var(--slate-300);
       font-size: .82rem;
       padding: .4rem .95rem;
       border-radius: 50px;
       backdrop-filter: blur(4px);
     }
 
-    /* ─── FILTRES ─── */
+    /* ── FILTRES ── */
     .filters-bar {
-      background: var(--surface);
-      border-bottom: 1px solid var(--accent);
+      background: rgba(30,41,59,0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--glass-border);
       padding: 1rem clamp(1rem,6vw,4rem);
       display: flex; flex-wrap: wrap; gap: .6rem;
       align-items: center;
+      position: sticky; top: 64px; z-index: 90;
     }
     .filter-label {
       font-size: .8rem; font-weight: 500;
-      color: var(--muted);
+      color: var(--slate-400);
       text-transform: uppercase; letter-spacing: .08em;
       margin-right: .5rem;
     }
     .filter-btn {
-      border: 1.5px solid var(--accent);
+      border: 1.5px solid var(--glass-border);
       background: transparent;
-      color: var(--muted);
+      color: var(--slate-400);
       font-family: 'DM Sans', sans-serif;
       font-size: .82rem; font-weight: 500;
       padding: .4rem 1rem;
@@ -215,55 +230,60 @@
       cursor: pointer;
       transition: all .2s;
     }
-    .filter-btn:hover, .filter-btn.active {
-      background: var(--primary);
-      border-color: var(--primary);
-      color: #fff;
+    .filter-btn:hover {
+      border-color: var(--emerald);
+      color: var(--emerald);
+    }
+    .filter-btn.active {
+      background: var(--emerald);
+      border-color: var(--emerald);
+      color: #0F172A;
+      font-weight: 600;
     }
 
-    /* ─── MAIN LAYOUT ─── */
+    /* ── MAIN ── */
     main {
       max-width: 1180px;
       margin: 0 auto;
       padding: 3rem clamp(1rem,4vw,2rem) 5rem;
     }
 
-    /* ─── SECTION TITRE ─── */
+    /* ── SECTION HEADER ── */
     .section-header {
       display: flex; align-items: center; gap: 1rem;
       margin: 3rem 0 1.5rem;
     }
     .section-header h2 {
       font-family: 'Playfair Display', serif;
-      font-size: 1.4rem; color: var(--primary-d);
+      font-size: 1.4rem;
+      color: var(--slate-200);
       white-space: nowrap;
       letter-spacing: -.01em;
     }
     .section-header .line {
-      flex: 1; height: 1px; background: linear-gradient(90deg, var(--accent), transparent);
-    }
-    .section-header .line {
-      flex: 1; height: 1px; background: var(--accent);
+      flex: 1; height: 1px;
+      background: linear-gradient(90deg, rgba(16,185,129,.3), transparent);
     }
 
-    /* ─── ÉVÉNEMENT EN VEDETTE ─── */
+    /* ── ÉVÉNEMENT VEDETTE ── */
     .event-featured {
-      background: var(--surface);
+      background: var(--glass-bg-md);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      border-left: 3px solid var(--emerald);
       border-radius: var(--radius);
-      box-shadow: var(--shadow);
       overflow: hidden;
       display: grid;
       grid-template-columns: 1fr 2fr;
       margin-bottom: 2.5rem;
-      border: 1px solid var(--accent);
       transition: transform .25s, box-shadow .25s;
     }
     .event-featured:hover {
       transform: translateY(-3px);
-      box-shadow: 0 12px 40px rgba(45,106,79,.15);
+      box-shadow: 0 12px 40px rgba(16,185,129,.12);
     }
     .event-featured-visual {
-      background: linear-gradient(160deg, var(--primary) 0%, var(--secondary) 100%);
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
       padding: 2.5rem;
@@ -272,8 +292,8 @@
     }
     .event-icon { font-size: 3.5rem; margin-bottom: 1rem; }
     .event-date-badge {
-      background: rgba(255,255,255,.15);
-      border: 1px solid rgba(255,255,255,.3);
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.2);
       color: #fff;
       font-size: .78rem; font-weight: 600;
       letter-spacing: .08em; text-transform: uppercase;
@@ -292,41 +312,40 @@
       padding: .25rem .75rem;
       border-radius: 50px;
     }
-    .tag-pdj     { background: #FFF3E0; color: #E65100; }
-    .tag-afterwork { background: #E8F5E9; color: #1B5E20; }
-    .tag-conf    { background: #E3F2FD; color: #0D47A1; }
-    .tag-atelier { background: #F3E5F5; color: #4A148C; }
-    .tag-news    { background: var(--soft); color: var(--primary-d); }
-    .tag-actu    { background: #FFF9C4; color: #F57F17; }
+    .tag-pdj      { background: rgba(251,191,36,.15); color: #FCD34D; }
+    .tag-afterwork { background: rgba(16,185,129,.15); color: var(--emerald-l); }
+    .tag-conf     { background: rgba(59,130,246,.15); color: #93C5FD; }
+    .tag-atelier  { background: rgba(139,92,246,.15); color: #C4B5FD; }
+    .tag-news     { background: rgba(148,163,184,.1); color: var(--slate-300); }
+    .tag-actu     { background: rgba(251,191,36,.12); color: #FCD34D; }
+    .tag-soiree   { background: rgba(251,146,60,.15); color: #FED7AA; }
 
     .event-featured-body h3 {
       font-family: 'Playfair Display', serif;
       font-size: 1.6rem; line-height: 1.2;
-      color: var(--primary-d);
+      color: var(--slate-200);
     }
     .event-meta {
       display: flex; flex-wrap: wrap; gap: .8rem;
-      font-size: .83rem; color: var(--muted);
+      font-size: .83rem; color: var(--slate-400);
     }
     .event-meta span { display: flex; align-items: center; gap: .3rem; }
-    .event-featured-body p {
-      font-size: .92rem; color: #444;
-    }
+    .event-featured-body p { font-size: .92rem; color: var(--slate-400); }
     .btn-reserve {
       display: inline-flex; align-items: center; gap: .5rem;
-      background: var(--primary);
-      color: #fff;
+      background: var(--emerald);
+      color: #0F172A;
       text-decoration: none;
-      font-size: .88rem; font-weight: 500;
+      font-size: .88rem; font-weight: 600;
       padding: .65rem 1.5rem;
       border-radius: 50px;
       align-self: flex-start;
       transition: background .2s, transform .15s;
       margin-top: .5rem;
     }
-    .btn-reserve:hover { background: var(--primary-d); transform: translateY(-1px); }
+    .btn-reserve:hover { background: var(--emerald-l); transform: translateY(-1px); }
 
-    /* ─── GRILLE D'ÉVÉNEMENTS ─── */
+    /* ── GRILLE ÉVÉNEMENTS ── */
     .events-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -334,17 +353,19 @@
       margin-bottom: 1rem;
     }
     .event-card {
-      background: var(--surface);
-      border: 1px solid var(--accent);
+      background: var(--glass-bg-md);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
       border-radius: var(--radius);
-      box-shadow: var(--shadow);
       overflow: hidden;
       display: flex; flex-direction: column;
-      transition: transform .25s, box-shadow .25s;
+      transition: transform .25s, box-shadow .25s, border-color .2s;
     }
     .event-card:hover {
       transform: translateY(-4px);
-      box-shadow: 0 12px 36px rgba(45,106,79,.14);
+      box-shadow: 0 12px 36px rgba(16,185,129,.12);
+      border-color: rgba(16,185,129,.3);
     }
     .event-card-header {
       height: 150px;
@@ -357,17 +378,18 @@
       content: '';
       position: absolute; bottom: 0; left: 0; right: 0;
       height: 3px;
-      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      background: linear-gradient(90deg, var(--emerald), var(--violet));
     }
     .event-card-date {
       position: absolute; top: 10px; right: 10px;
-      background: rgba(255,255,255,.92);
-      color: var(--primary-d);
+      background: rgba(15,23,42,.75);
+      color: var(--slate-300);
       font-size: .7rem; font-weight: 700;
       letter-spacing: .04em;
       padding: .3rem .65rem;
       border-radius: 20px;
-      backdrop-filter: blur(4px);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--glass-border);
     }
     .event-card-body {
       padding: 1.2rem 1.4rem;
@@ -375,89 +397,124 @@
     }
     .event-card-body h3 {
       font-family: 'Playfair Display', serif;
-      font-size: 1.05rem; color: var(--primary-d);
+      font-size: 1.05rem; color: var(--slate-200);
       line-height: 1.25;
     }
-    .event-card-body p {
-      font-size: .85rem; color: #555;
-      flex: 1;
-    }
+    .event-card-body p { font-size: .85rem; color: var(--slate-400); flex: 1; }
     .event-card-footer {
       padding: .9rem 1.4rem;
-      border-top: 1px solid var(--accent);
+      border-top: 1px solid var(--glass-border);
       display: flex; justify-content: space-between; align-items: center;
     }
-    .event-card-footer .time {
-      font-size: .78rem; color: var(--muted);
-    }
+    .event-card-footer .time { font-size: .78rem; color: var(--slate-400); }
     .btn-sm {
       font-size: .78rem; font-weight: 600;
-      color: var(--primary);
+      color: var(--emerald);
       text-decoration: none;
-      border: 1.5px solid var(--primary);
+      border: 1.5px solid var(--emerald);
       padding: .3rem .8rem;
       border-radius: 50px;
       transition: all .2s;
     }
-    .btn-sm:hover { background: var(--primary); color: #fff; }
+    .btn-sm:hover { background: var(--emerald); color: #0F172A; }
 
-    /* ─── GRILLE ACTUALITÉS ─── */
+    /* ── ÉVÉNEMENTS PASSÉS ── */
+    .event-past { opacity: .65; }
+    .event-past .event-card-header { filter: saturate(.5) brightness(.8); }
+    .past-badge {
+      background: rgba(15,23,42,.85) !important;
+      color: var(--slate-400) !important;
+      font-weight: 700;
+      border: 1px solid var(--glass-border) !important;
+    }
+    .past-label {
+      font-size: .75rem; font-weight: 600;
+      color: var(--slate-400);
+      border: 1px solid var(--glass-border);
+      padding: .2rem .65rem;
+      border-radius: 50px;
+    }
+    .past-stats {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      font-size: .78rem; color: var(--emerald);
+      font-weight: 600;
+      background: rgba(16,185,129,.08);
+      border-radius: 8px;
+      padding: .4rem .75rem;
+      margin-top: .2rem;
+    }
+
+    /* ── GRILLE ACTUALITÉS ── */
     .news-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 1.5rem;
     }
     .news-card {
-      background: var(--surface);
-      border: 1px solid var(--accent);
-      border-left: 4px solid var(--secondary);
+      background: var(--glass-bg-md);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      border-left: 3px solid var(--emerald);
       border-radius: var(--radius);
       padding: 1.4rem 1.6rem;
       display: flex; flex-direction: column; gap: .6rem;
-      box-shadow: var(--shadow);
-      transition: transform .25s, box-shadow .25s;
+      transition: transform .25s, box-shadow .25s, border-color .2s;
+      text-decoration: none;
+      color: inherit;
     }
     .news-card:hover {
       transform: translateY(-3px);
-      box-shadow: 0 10px 32px rgba(45,106,79,.13);
-      border-left-color: var(--primary);
+      box-shadow: 0 10px 32px rgba(16,185,129,.12);
+      border-left-color: var(--emerald-l);
     }
     .news-card .news-date {
-      font-size: .75rem; color: var(--muted);
-      letter-spacing: .04em;
+      font-size: .75rem; color: var(--emerald);
+      letter-spacing: .04em; font-weight: 500;
     }
     .news-card h3 {
       font-family: 'Playfair Display', serif;
-      font-size: 1rem; color: var(--primary-d);
+      font-size: 1rem; color: var(--slate-200);
       line-height: 1.3;
     }
-    .news-card p { font-size: .84rem; color: #555; }
+    .news-card p { font-size: .84rem; color: var(--slate-400); flex: 1; }
     .news-card .source {
       margin-top: auto;
-      font-size: .75rem; color: var(--secondary);
+      font-size: .75rem; color: var(--emerald);
       font-weight: 500;
     }
 
-    /* ─── BANNIÈRE RÉSEAUX SOCIAUX ─── */
+    /* ── SOCIAL BANNER ── */
     .social-banner {
-      background: linear-gradient(135deg, var(--soft) 0%, var(--accent) 100%);
+      position: relative; overflow: hidden;
+      background: var(--glass-bg-md);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
       border-radius: var(--radius);
       padding: 2.5rem;
       text-align: center;
       margin-top: 3rem;
-      border: 1px solid rgba(82,183,136,.3);
+    }
+    .social-banner::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 20% 50%, rgba(139,92,246,.08) 0%, transparent 60%),
+                  radial-gradient(ellipse at 80% 50%, rgba(16,185,129,.08) 0%, transparent 60%);
+      pointer-events: none;
     }
     .social-banner h3 {
       font-family: 'Playfair Display', serif;
-      font-size: 1.4rem; color: var(--primary-d);
-      margin-bottom: .6rem;
+      font-size: 1.4rem; color: var(--slate-200);
+      margin-bottom: .6rem; position: relative;
     }
     .social-banner p {
-      color: var(--muted); font-size: .9rem;
+      color: var(--slate-400); font-size: .9rem;
       max-width: 480px; margin: 0 auto 1.5rem;
+      position: relative;
     }
     .social-links {
       display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+      position: relative;
     }
     .btn-social {
       display: inline-flex; align-items: center; gap: .6rem;
@@ -467,13 +524,13 @@
       text-decoration: none;
       transition: transform .2s, box-shadow .2s;
     }
-    .btn-social:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.12); }
+    .btn-social:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.3); }
     .btn-linkedin { background: #0A66C2; color: #fff; }
     .btn-facebook { background: #1877F2; color: #fff; }
 
-    /* ─── CTA INSCRIPTION ─── */
+    /* ── CTA ── */
     .cta-section {
-      background: var(--primary);
+      background: var(--emerald);
       border-radius: var(--radius);
       padding: 2.5rem;
       text-align: center;
@@ -483,21 +540,21 @@
     .cta-section::before {
       content: '';
       position: absolute; inset: 0;
-      background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,.04) 100%);
+      background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,.08) 100%);
     }
     .cta-section h3 {
       font-family: 'Playfair Display', serif;
-      font-size: 1.5rem; color: #fff;
+      font-size: 1.5rem; color: #0F172A;
       margin-bottom: .5rem; position: relative;
     }
     .cta-section p {
-      color: rgba(255,255,255,.75); font-size: .9rem;
+      color: rgba(15,23,42,.7); font-size: .9rem;
       max-width: 500px; margin: 0 auto 1.5rem;
       position: relative;
     }
-    .btn-white {
+    .btn-dark {
       display: inline-block;
-      background: #fff; color: var(--primary);
+      background: #0F172A; color: var(--emerald);
       font-weight: 700; font-size: .9rem;
       padding: .75rem 2rem;
       border-radius: 50px;
@@ -505,45 +562,33 @@
       position: relative;
       transition: transform .2s, box-shadow .2s;
     }
-    .btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.15); }
+    .btn-dark:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.3); }
 
-    /* ─── FOOTER ─── */
+    /* ── FOOTER ── */
     footer {
-      background: var(--primary-d);
-      color: rgba(255,255,255,.7);
+      background: #060D1A;
+      color: var(--slate-400);
       text-align: center;
       padding: 2rem;
       font-size: .82rem;
+      border-top: 1px solid var(--glass-border);
     }
-    footer a { color: var(--accent); text-decoration: none; }
+    footer a { color: var(--emerald); text-decoration: none; }
+    footer a:hover { color: var(--emerald-l); }
 
-    /* ─── ÉVÉNEMENTS PASSÉS ─── */
-    .event-past { opacity: .88; }
-    .event-past .event-card-header { filter: saturate(.65) brightness(.92); }
-    .past-badge {
-      background: rgba(0,0,0,.55) !important;
-      color: #a5d6a7 !important;
-      font-weight: 700;
+    /* ── SCROLL REVEAL ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity .55s ease, transform .55s ease;
     }
-    .past-label {
-      font-size: .75rem; font-weight: 600;
-      color: var(--muted);
-      border: 1px solid var(--accent);
-      padding: .2rem .65rem;
-      border-radius: 50px;
-      background: var(--soft);
-    }
-    .past-stats {
-      display: flex; gap: 1rem; flex-wrap: wrap;
-      font-size: .78rem; color: var(--secondary);
-      font-weight: 600;
-      background: var(--soft);
-      border-radius: 8px;
-      padding: .4rem .75rem;
-      margin-top: .2rem;
-    }
+    .reveal.visible { opacity: 1; transform: none; }
+    .reveal-delay-1 { transition-delay: .1s; }
+    .reveal-delay-2 { transition-delay: .2s; }
+    .reveal-delay-3 { transition-delay: .3s; }
+    .reveal-delay-4 { transition-delay: .4s; }
 
-    /* ─── RESPONSIVE ─── */
+    /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
       .event-featured { grid-template-columns: 1fr; }
       .event-featured-visual { min-height: 160px; padding: 1.5rem; }
@@ -552,15 +597,16 @@
       .nav-links.open {
         display: flex !important; flex-direction: column;
         position: fixed; top: 64px; left: 0; right: 0; bottom: 0;
-        background: #ffffff;
+        background: rgba(15,23,42,0.97);
+        backdrop-filter: blur(20px);
         padding: 0;
         z-index: 999;
         overflow-y: auto;
-        box-shadow: 0 8px 32px rgba(0,0,0,.15);
+        border-top: 1px solid var(--glass-border);
         gap: 0;
       }
       .nav-links.open li {
-        border-bottom: 1px solid var(--accent);
+        border-bottom: 1px solid var(--glass-border);
         padding: 0 1.5rem;
         list-style: none;
       }
@@ -570,7 +616,7 @@
       }
       .nav-links.open a {
         font-size: 1.05rem !important;
-        color: var(--text) !important;
+        color: var(--slate-300) !important;
         padding: 1rem 0;
         display: block;
         width: 100%;
@@ -578,24 +624,26 @@
         font-weight: 500;
       }
       .nav-links.open .nav-cta {
-        background: var(--primary) !important;
-        color: #fff !important;
+        background: var(--emerald) !important;
+        color: #0F172A !important;
         text-align: center;
         border-radius: 50px;
         padding: .8rem 1.5rem !important;
         display: block;
+        font-weight: 600 !important;
       }
       .nav-toggle { display: flex !important; flex-direction: column; justify-content: center; gap: 5px; padding: 4px; }
       .nav-toggle span { transition: transform .3s, opacity .3s; }
       .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
       .nav-toggle.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
       .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+      .filters-bar { position: static; }
     }
   </style>
 </head>
 <body>
 
-<!-- ══════════════ NAVIGATION ══════════════ -->
+<!-- ══ NAVIGATION ══ -->
 <nav>
   <a href="index.html" class="nav-logo">Génie</a>
   <button class="nav-toggle" id="menuToggle" aria-label="Menu">
@@ -611,21 +659,26 @@
   </ul>
 </nav>
 
-<!-- ══════════════ HERO ══════════════ -->
+<!-- ══ HERO ══ -->
 <section class="hero">
-  <div class="hero-label">Tiers-lieu Génie · Montauban</div>
-  <h1>Activités &amp; Actualités</h1>
-  <p>Bien plus qu'un espace de travail : un lieu de vie où se rencontrent idées, talents et envies.</p>
-  <div class="hero-badges">
-    <span class="badge">☀️ Petits-déjeuners thématiques</span>
-    <span class="badge">🍻 Afterworks</span>
-    <span class="badge">🎤 Conférences</span>
-    <span class="badge">🛠️ Ateliers</span>
-    <span class="badge">📰 Actualités</span>
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="hero-inner">
+    <div class="hero-label">Tiers-lieu Génie · Montauban</div>
+    <h1>Activités &amp; <span>Actualités</span></h1>
+    <p>Bien plus qu'un espace de travail : un lieu de vie où se rencontrent idées, talents et envies.</p>
+    <div class="hero-badges">
+      <span class="badge">☀️ Petits-déjeuners thématiques</span>
+      <span class="badge">🍻 Afterworks</span>
+      <span class="badge">🎤 Conférences</span>
+      <span class="badge">🛠️ Ateliers</span>
+      <span class="badge">🌙 Soirées</span>
+      <span class="badge">📰 Actualités</span>
+    </div>
   </div>
 </section>
 
-<!-- ══════════════ FILTRES ══════════════ -->
+<!-- ══ FILTRES ══ -->
 <div class="filters-bar">
   <span class="filter-label">Filtrer :</span>
   <button class="filter-btn active" data-filter="all">Tout voir</button>
@@ -633,26 +686,27 @@
   <button class="filter-btn" data-filter="afterwork">🍻 Afterwork</button>
   <button class="filter-btn" data-filter="conf">🎤 Conférence</button>
   <button class="filter-btn" data-filter="atelier">🛠️ Atelier</button>
+  <button class="filter-btn" data-filter="soiree">🌙 Soirée</button>
   <button class="filter-btn" data-filter="news">📰 Actualités</button>
 </div>
 
-<!-- ══════════════ CONTENU PRINCIPAL ══════════════ -->
+<!-- ══ CONTENU PRINCIPAL ══ -->
 <main>
 
   <!-- PROCHAIN ÉVÉNEMENT EN VEDETTE -->
-  <div class="section-header">
+  <div class="section-header reveal">
     <h2>⭐ Prochain événement</h2>
     <div class="line"></div>
   </div>
 
-  <div class="event-featured" data-cat="soiree">
+  <div class="event-featured reveal" data-cat="soiree">
     <div class="event-featured-visual" style="background: linear-gradient(160deg,#0a0e1a,#0d2137,#1a3a5c); position:relative; overflow:hidden;">
       <div style="position:absolute;inset:0;background:url('match-coupe-monde-2026.png') center/cover no-repeat;opacity:.35;"></div>
       <div class="event-icon" style="position:relative;">⚽</div>
       <div class="event-date-badge" style="position:relative;">Mardi 16 juin 2026 · 20h45</div>
     </div>
     <div class="event-featured-body">
-      <span class="event-tag" style="background:#fff3cd;color:#856404;">⚽ Soirée</span>
+      <span class="event-tag tag-soiree">⚽ Soirée</span>
       <h3>Projection de Match — Coupe du Monde · Mardi 16 juin</h3>
       <div class="event-meta">
         <span>📅 Mardi 16 juin 2026</span>
@@ -665,22 +719,21 @@
     </div>
   </div>
 
-  <!-- ══ ÉVÉNEMENTS À VENIR ══ -->
-  <div class="section-header">
+  <!-- ÉVÉNEMENTS À VENIR -->
+  <div class="section-header reveal">
     <h2>📅 À venir</h2>
     <div class="line"></div>
   </div>
 
   <div class="events-grid">
 
-    <!-- Projection de Match — Coupe du Monde · 16 juin 2026 -->
-    <div class="event-card" data-cat="soiree">
+    <div class="event-card reveal reveal-delay-1" data-cat="soiree">
       <div class="event-card-header" style="background: linear-gradient(135deg,#0a0e1a,#1a3a5c,#C9993E);">
         ⚽
         <span class="event-card-date">16 juin 2026</span>
       </div>
       <div class="event-card-body">
-        <span class="event-tag" style="background:#fff3cd;color:#856404;">⚽ Soirée</span>
+        <span class="event-tag tag-soiree">⚽ Soirée</span>
         <h3>Projection de Match — Coupe du Monde</h3>
         <p>Grande projection au Génie ! Buvette, restauration par la Cantine Pop'. Ramène ce que tu aimes et vis le match en communauté.</p>
       </div>
@@ -690,14 +743,13 @@
       </div>
     </div>
 
-    <!-- Observons l'Éclipse — 12 août 2026 -->
-    <div class="event-card" data-cat="soiree">
+    <div class="event-card reveal reveal-delay-2" data-cat="soiree">
       <div class="event-card-header" style="background: linear-gradient(135deg,#0d0d0d,#1a1a2e,#e65100);">
         🔭
         <span class="event-card-date">12 août 2026</span>
       </div>
       <div class="event-card-body">
-        <span class="event-tag" style="background:#fff3e0;color:#e65100;">🔭 Soirée adhérents</span>
+        <span class="event-tag tag-soiree">🔭 Soirée adhérents</span>
         <h3>Observons l'Éclipse — Rooftop du Génie</h3>
         <p>Ensemble, levons les yeux vers un spectacle rare ! Observation sécurisée sur le rooftop, boissons sur place. Un moment unique entre adhérents.</p>
       </div>
@@ -707,8 +759,7 @@
       </div>
     </div>
 
-    <!-- Atelier Crypto -->
-    <div class="event-card" data-cat="atelier">
+    <div class="event-card reveal reveal-delay-3" data-cat="atelier">
       <div class="event-card-header" style="background: linear-gradient(135deg,#0f2027,#2c5364);">
         ₿
         <span class="event-card-date">Date à confirmer</span>
@@ -724,9 +775,8 @@
       </div>
     </div>
 
-    <!-- Atelier Anti-gaspi -->
-    <div class="event-card" data-cat="atelier">
-      <div class="event-card-header" style="background: linear-gradient(135deg,#1b5e20,#66bb6a);">
+    <div class="event-card reveal reveal-delay-4" data-cat="atelier">
+      <div class="event-card-header" style="background: linear-gradient(135deg,#064e3b,#059669);">
         ♻️
         <span class="event-card-date">Date à confirmer</span>
       </div>
@@ -741,9 +791,8 @@
       </div>
     </div>
 
-    <!-- Incubateur projets associatifs -->
-    <div class="event-card" data-cat="conf">
-      <div class="event-card-header" style="background: linear-gradient(135deg,#4a0072,#7b1fa2);">
+    <div class="event-card reveal reveal-delay-2" data-cat="conf">
+      <div class="event-card-header" style="background: linear-gradient(135deg,#2e1065,#5b21b6);">
         🌱
         <span class="event-card-date">En continu</span>
       </div>
@@ -758,19 +807,18 @@
       </div>
     </div>
 
-  </div><!-- /events-grid à venir -->
+  </div>
 
-  <!-- ══ ÉVÉNEMENTS PASSÉS ══ -->
-  <div class="section-header" style="margin-top:3rem;">
+  <!-- ÉVÉNEMENTS PASSÉS -->
+  <div class="section-header reveal" style="margin-top:3rem;">
     <h2>✅ Événements passés</h2>
     <div class="line"></div>
   </div>
 
   <div class="events-grid">
 
-    <!-- Fresque du Bénévolat 26 mai 2026 — PASSÉ -->
-    <div class="event-card event-past" data-cat="atelier">
-      <div class="event-card-header" style="background: linear-gradient(135deg,#1a237e,#1565c0); filter: saturate(.7);">
+    <div class="event-card event-past reveal reveal-delay-1" data-cat="atelier">
+      <div class="event-card-header" style="background: linear-gradient(135deg,#1a237e,#1565c0);">
         🤝
         <span class="event-card-date past-badge">✅ 26 mai 2026</span>
       </div>
@@ -786,9 +834,8 @@
       </div>
     </div>
 
-    <!-- Afterwork 15 mai 2026 — PASSÉ -->
-    <div class="event-card event-past" data-cat="afterwork">
-      <div class="event-card-header" style="background: linear-gradient(135deg,#1B4332,#52B788); filter: saturate(.7);">
+    <div class="event-card event-past reveal reveal-delay-2" data-cat="afterwork">
+      <div class="event-card-header" style="background: linear-gradient(135deg,#064e3b,#10b981);">
         🍻
         <span class="event-card-date past-badge">✅ 15 mai 2026</span>
       </div>
@@ -804,9 +851,8 @@
       </div>
     </div>
 
-    <!-- PDJ 15 mai 2026 — PASSÉ -->
-    <div class="event-card event-past" data-cat="pdj">
-      <div class="event-card-header" style="background: linear-gradient(135deg,#bf360c,#ff7043); filter: saturate(.7);">
+    <div class="event-card event-past reveal reveal-delay-3" data-cat="pdj">
+      <div class="event-card-header" style="background: linear-gradient(135deg,#7c2d12,#ea580c);">
         ☀️
         <span class="event-card-date past-badge">✅ 15 mai 2026</span>
       </div>
@@ -822,19 +868,16 @@
       </div>
     </div>
 
-    <!-- Soirée Empowerment 10 avril 2026 — RÉEL PASSÉ -->
-    <div class="event-card event-past" data-cat="conf">
-      <div class="event-card-header" style="background: linear-gradient(135deg,#880e4f,#c2185b); filter: saturate(.7);">
+    <div class="event-card event-past reveal reveal-delay-4" data-cat="conf">
+      <div class="event-card-header" style="background: linear-gradient(135deg,#500724,#be185d);">
         💪
         <span class="event-card-date past-badge">✅ 10 avril 2026</span>
       </div>
       <div class="event-card-body">
-        <span class="event-tag" style="background:#fce4ec;color:#880e4f;">💜 Soirée</span>
+        <span class="event-tag tag-soiree">💜 Soirée</span>
         <h3>Soirée Empowerment — Elles changent le monde</h3>
-        <p>Femmes Inspirantes · Leadership 2026. Une soirée dédiée à l'émancipation féminine, aux parcours de femmes qui transforment leur environnement. Partages, inspiration et échanges dans une ambiance bienveillante.</p>
-        <div class="past-stats">
-          <span>📅 19h30 → 22h30</span>
-        </div>
+        <p>Femmes Inspirantes · Leadership 2026. Une soirée dédiée à l'émancipation féminine, aux parcours de femmes qui transforment leur environnement.</p>
+        <div class="past-stats"><span>📅 19h30 → 22h30</span></div>
       </div>
       <div class="event-card-footer">
         <span class="time">📍 12 rue du Génie, Montauban</span>
@@ -842,9 +885,8 @@
       </div>
     </div>
 
-    <!-- PDJ 13 mars 2026 — RÉEL -->
-    <div class="event-card event-past" data-cat="pdj">
-      <div class="event-card-header" style="background: linear-gradient(135deg,#5D4037,#A1887F); filter: saturate(.7);">
+    <div class="event-card event-past reveal reveal-delay-1" data-cat="pdj">
+      <div class="event-card-header" style="background: linear-gradient(135deg,#3b1c0a,#92400e);">
         ☀️
         <span class="event-card-date past-badge">✅ 13 mars 2026</span>
       </div>
@@ -852,9 +894,7 @@
         <span class="event-tag tag-pdj">🥐 Petit-déjeuner</span>
         <h3>Petit déjeuner — Rencontre &amp; networking</h3>
         <p>10 personnes ont répondu présent pour ce rendez-vous matinal au cœur du tiers-lieu. Croissants, café et échanges entre professionnels montalbanais.</p>
-        <div class="past-stats">
-          <span>👥 10 participants</span>
-        </div>
+        <div class="past-stats"><span>👥 10 participants</span></div>
       </div>
       <div class="event-card-footer">
         <span class="time">🕖 7h00 → 10h00 · 12 rue du Génie</span>
@@ -862,9 +902,8 @@
       </div>
     </div>
 
-    <!-- PDJ 13 fév 2026 Visite — RÉEL -->
-    <div class="event-card event-past" data-cat="pdj">
-      <div class="event-card-header" style="background: linear-gradient(135deg,#4E342E,#8D6E63); filter: saturate(.7);">
+    <div class="event-card event-past reveal reveal-delay-2" data-cat="pdj">
+      <div class="event-card-header" style="background: linear-gradient(135deg,#2d1b00,#78350f);">
         🏛️
         <span class="event-card-date past-badge">✅ 13 fév. 2026</span>
       </div>
@@ -883,65 +922,65 @@
       </div>
     </div>
 
-  </div><!-- /events-grid passés -->
+  </div>
 
   <!-- ACTUALITÉS -->
-  <div class="section-header">
+  <div class="section-header reveal">
     <h2>📰 Actualités</h2>
     <div class="line"></div>
   </div>
 
-  <div class="news-grid" data-cat="news">
+  <div class="news-grid">
 
-    <a class="news-card" href="notre-histoire.html" style="text-decoration:none;color:inherit;border-color:var(--primary);border-width:1.5px;">
+    <a class="news-card reveal reveal-delay-1" href="notre-histoire.html" data-cat="news">
       <span class="news-date">Juin 2026</span>
-      <span class="event-tag" style="background:#FFF3E0;color:#8B3A2A;">🔑 Coulisses</span>
+      <span class="event-tag tag-soiree">🔑 Coulisses</span>
       <h3>Pourquoi on a créé un tiers-lieu (et comment on évite d'y perdre de l'argent)</h3>
       <p>Tout est parti d'une visite de bureau pour CCFA et d'une phrase du propriétaire : « Je vous fais confiance, faites-le. » Aujourd'hui, il nous manque 3 locataires pour atteindre l'équilibre — gouvernance, chiffres, animations : on vous raconte tout, sans filtre.</p>
       <span class="source">📍 Génie Montauban · Lire l'histoire complète →</span>
     </a>
 
-    <div class="news-card">
+    <div class="news-card reveal reveal-delay-2" data-cat="news">
       <span class="news-date">20 avril 2026</span>
-      <span class="event-tag tag-actu">💻 Numérique</span>
+      <span class="event-tag tag-conf">💻 Numérique</span>
       <h3>Génie au "82 fait son numérique" — 2e édition</h3>
       <p>Pour marquer sa participation au salon numérique du département, Génie a présenté ses atouts : fibre haut débit, vidéoprojecteur, espace café, valeurs associatives — à 200m de la Gare de Montauban.</p>
       <span class="source">📍 Génie Montauban · Facebook · 20 avril 2026</span>
     </div>
 
-    <div class="news-card">
+    <div class="news-card reveal reveal-delay-3" data-cat="news">
       <span class="news-date">10 avril 2026</span>
-      <span class="event-tag" style="background:#fce4ec;color:#880e4f;">💜 Empowerment</span>
+      <span class="event-tag tag-soiree">💜 Empowerment</span>
       <h3>"Elles changent le monde" — Retour sur la Soirée Empowerment</h3>
       <p>Le 10 avril, Génie a accueilli la soirée Femmes Inspirantes / Leadership 2026, de 19h30 à 22h30. Une soirée dédiée à l'empowerment féminin, aux trajectoires inspirantes et au leadership au féminin à Montauban.</p>
       <span class="source">📍 Génie Montauban · 12 rue du Génie</span>
     </div>
 
-    <div class="news-card">
+    <div class="news-card reveal reveal-delay-4" data-cat="news">
       <span class="news-date">Mars 2026</span>
-      <span class="event-tag tag-news">🥐 Événement</span>
+      <span class="event-tag tag-pdj">🥐 Événement</span>
       <h3>2e petit-déjeuner : déjà 10 participants autour de la table !</h3>
       <p>Le 13 mars 2026, la communauté Génie grandit. 10 professionnels montalbanais ont répondu présent pour ce rendez-vous matinal de networking au 12 rue du Génie.</p>
       <span class="source">📍 Génie Montauban · Facebook</span>
     </div>
 
-    <div class="news-card">
+    <div class="news-card reveal reveal-delay-1" data-cat="news">
       <span class="news-date">Février 2026</span>
-      <span class="event-tag tag-news">🏠 Ouverture</span>
+      <span class="event-tag tag-afterwork">🏠 Ouverture</span>
       <h3>Premier petit-déjeuner : le Génie ouvre ses portes à la communauté</h3>
       <p>Le 13 février 2026, 4 participants et 14 personnes intéressées ont découvert le tiers-lieu, visité les espaces et rencontré l'équipe fondatrice. Un premier rendez-vous plein de promesses !</p>
       <span class="source">📍 Génie Montauban · Facebook</span>
     </div>
 
-    <div class="news-card">
+    <div class="news-card reveal reveal-delay-2" data-cat="news">
       <span class="news-date">Nouveau</span>
-      <span class="event-tag" style="background:#ede7f6;color:#4a0072;">🌱 Incubateur</span>
+      <span class="event-tag tag-conf">🌱 Incubateur</span>
       <h3>Génie lance son incubateur pour porteurs de projets associatifs</h3>
       <p>Génie accompagne les créateurs d'associations et projets à impact local : espace de travail, mise en réseau, mentorat et soutien méthodologique pour faire émerger vos idées en Tarn-et-Garonne.</p>
       <span class="source">📍 Génie Montauban · genie.montauban@gmail.com</span>
     </div>
 
-    <div class="news-card">
+    <div class="news-card reveal reveal-delay-3" data-cat="news">
       <span class="news-date">Continu</span>
       <span class="event-tag tag-actu">📣 Info pratique</span>
       <h3>Réservez vos salles en ligne, 7j/7, 24h/24</h3>
@@ -949,10 +988,10 @@
       <span class="source">📍 genie-montauban.fr</span>
     </div>
 
-  </div><!-- /news-grid -->
+  </div>
 
   <!-- RÉSEAUX SOCIAUX -->
-  <div class="social-banner">
+  <div class="social-banner reveal">
     <h3>Suivez-nous pour ne rien rater</h3>
     <p>Les événements, coulisses et actualités en temps réel sur LinkedIn et Facebook.</p>
     <div class="social-links">
@@ -967,23 +1006,22 @@
     </div>
   </div>
 
-  <!-- CTA INSCRIPTION -->
-  <div class="cta-section">
+  <!-- CTA -->
+  <div class="cta-section reveal">
     <h3>Vous souhaitez proposer un événement ?</h3>
     <p>Génie met à disposition ses espaces pour vos conférences, ateliers et formations. Parlons-en !</p>
-    <a href="mailto:genie.montauban@gmail.com" class="btn-white">📩 Nous contacter</a>
+    <a href="mailto:genie.montauban@gmail.com" class="btn-dark">📩 Nous contacter</a>
   </div>
 
 </main>
 
-<!-- ══════════════ FOOTER ══════════════ -->
+<!-- ══ FOOTER ══ -->
 <footer>
   <p>© 2026 Génie — Tiers-lieu à Montauban &nbsp;·&nbsp; <a href="mailto:genie.montauban@gmail.com">genie.montauban@gmail.com</a></p>
 </footer>
 
-<!-- ══════════════ JS : filtre + nav mobile ══════════════ -->
 <script>
-  /* Filtre par catégorie */
+  /* ── Filtre par catégorie ── */
   const filterBtns = document.querySelectorAll('.filter-btn');
   const cards = document.querySelectorAll('[data-cat]');
 
@@ -1002,7 +1040,7 @@
     });
   });
 
-  /* Nav mobile */
+  /* ── Nav mobile ── */
   const toggle = document.getElementById('menuToggle');
   const navLinks = document.getElementById('navLinks');
   toggle.addEventListener('click', () => {
@@ -1021,6 +1059,17 @@
       toggle.classList.remove('open');
     });
   });
+
+  /* ── Scroll reveal ── */
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 </script>
 
 </body>
