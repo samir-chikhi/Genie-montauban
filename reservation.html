@@ -131,6 +131,57 @@ input[type=radio],input[type=checkbox]{width:auto;height:auto;padding:0;border:n
   nav{padding:0 16px}
   .page{padding:24px 16px 60px}
 }
+/* ══ GUIDE UTILISATEUR ══ */
+.guide-section{background:#f0ede7;padding:72px 0 88px;border-top:1px solid rgba(13,43,69,.1)}
+.guide-container{max-width:860px;margin:0 auto;padding:0 24px}
+.guide-header{text-align:center;margin-bottom:52px}
+.guide-badge{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);background:rgba(26,107,114,.1);border:1px solid rgba(26,107,114,.25);padding:5px 16px;border-radius:20px;margin-bottom:14px}
+.guide-main-title{font-family:var(--font-head);font-weight:800;font-size:clamp(1.5rem,3.5vw,2.1rem);color:var(--navy);letter-spacing:-.02em;margin-bottom:12px}
+.guide-main-desc{font-size:.97rem;color:var(--gray);max-width:540px;margin:0 auto;line-height:1.7}
+.guide-intro-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:52px}
+.guide-info-card{background:var(--white);border:1px solid rgba(13,43,69,.08);border-radius:10px;padding:22px 24px;display:flex;flex-direction:column;gap:6px;transition:box-shadow .2s}
+.guide-info-card:hover{box-shadow:0 4px 16px rgba(13,43,69,.08)}
+.guide-info-card.full{grid-column:1/-1}
+.guide-info-icon{font-size:1.6rem;margin-bottom:4px}
+.guide-info-card h3{font-family:var(--font-head);font-weight:700;font-size:.98rem;color:var(--navy)}
+.guide-info-card p,.guide-info-card ul{font-size:.88rem;color:var(--gray);line-height:1.7}
+.guide-info-card ul{padding-left:0;list-style:none;display:flex;flex-direction:column;gap:5px}
+.guide-info-card ul li{padding-left:14px;position:relative}
+.guide-info-card ul li::before{content:'→';position:absolute;left:0;color:var(--teal);font-weight:700}
+.guide-block-title{font-family:var(--font-head);font-weight:800;font-size:clamp(1.2rem,2.5vw,1.6rem);color:var(--navy);letter-spacing:-.02em;margin-bottom:8px}
+.guide-block-desc{font-size:.92rem;color:var(--gray);margin-bottom:32px;line-height:1.7}
+.guide-hr{border:none;border-top:1px solid rgba(13,43,69,.1);margin:0 0 52px}
+.guide-steps{display:flex;flex-direction:column;gap:4px;margin-bottom:52px}
+.guide-step{display:flex;gap:18px;padding:18px 20px;border-radius:10px;transition:background .15s}
+.guide-step:hover{background:rgba(13,43,69,.03)}
+.guide-step-num{width:36px;height:36px;border-radius:50%;background:var(--navy);color:var(--white);font-family:var(--font-head);font-weight:800;font-size:.9rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.guide-step-body{flex:1}
+.guide-step-body h4{font-family:var(--font-head);font-weight:700;font-size:.97rem;color:var(--navy);margin-bottom:6px}
+.guide-step-body p{font-size:.87rem;color:var(--gray);line-height:1.7}
+.guide-step-body a{color:var(--teal);text-decoration:none;font-weight:600}
+.guide-step-body a:hover{text-decoration:underline}
+.guide-step-body ul,.guide-step-body ol{margin-top:8px;padding-left:18px;font-size:.87rem;color:var(--gray);line-height:1.7}
+.guide-step-body li{margin-bottom:4px}
+.guide-step-body .checks{list-style:none;padding-left:0;display:flex;flex-direction:column;gap:5px;margin-top:8px}
+.guide-step-body .checks li{display:flex;align-items:flex-start;gap:8px}
+.guide-step-body .checks li::before{content:'✓';color:var(--success);font-weight:700;flex-shrink:0}
+.guide-rules{background:var(--white);border:1px solid rgba(13,43,69,.08);border-radius:10px;padding:28px;margin-bottom:20px}
+.guide-rules h3{font-family:var(--font-head);font-weight:700;font-size:1.05rem;color:var(--navy);margin-bottom:18px}
+.guide-rules-list{list-style:none;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.guide-rules-list li{display:flex;align-items:flex-start;gap:10px;font-size:.88rem;color:var(--gray);line-height:1.5}
+.guide-rules-list li::before{content:'✓';color:var(--success);font-weight:700;flex-shrink:0;margin-top:1px}
+.guide-help{background:var(--navy);border-radius:10px;padding:28px 32px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.guide-help-text h3{font-family:var(--font-head);font-weight:700;font-size:1rem;color:var(--white);margin-bottom:4px}
+.guide-help-text p{font-size:.88rem;color:rgba(255,255,255,.65)}
+.guide-help-btn{display:inline-flex;align-items:center;gap:8px;background:var(--gold);color:#fff;padding:11px 24px;border-radius:8px;font-family:var(--font-head);font-weight:700;font-size:.9rem;text-decoration:none;white-space:nowrap;transition:opacity .2s}
+.guide-help-btn:hover{opacity:.88}
+@media(max-width:640px){
+  .guide-intro-grid{grid-template-columns:1fr}
+  .guide-info-card.full{grid-column:1}
+  .guide-rules-list{grid-template-columns:1fr}
+  .guide-help{flex-direction:column;align-items:flex-start}
+  .guide-step{padding:14px 12px}
+}
 </style>
 </head>
 <body>
@@ -285,6 +336,207 @@ input[type=radio],input[type=checkbox]{width:auto;height:auto;padding:0;border:n
 </div>
 
 <div class="toasts" id="toasts"></div>
+
+<!-- ═══ GUIDE UTILISATEUR ═══ -->
+<section class="guide-section" id="guide-utilisateur">
+  <div class="guide-container">
+
+    <!-- EN-TÊTE -->
+    <div class="guide-header">
+      <div class="guide-badge">Guide utilisateur</div>
+      <h2 class="guide-main-title">Tout savoir sur le Génie</h2>
+      <p class="guide-main-desc">Bienvenue dans votre tiers-lieu associatif. Retrouvez ici toutes les informations pratiques et les étapes pour réserver votre espace en ligne.</p>
+    </div>
+
+    <!-- INFOS GÉNÉRALES -->
+    <div class="guide-intro-grid">
+      <div class="guide-info-card">
+        <div class="guide-info-icon">🏠</div>
+        <h3>Bienvenue au Génie</h3>
+        <p>Tiers-lieu associatif dédié au coworking, à la coopération et à l'innovation sociale. Entrepreneurs, associations, indépendants, étudiants et citoyens souhaitant travailler, se réunir ou développer des projets y sont les bienvenus.</p>
+      </div>
+      <div class="guide-info-card">
+        <div class="guide-info-icon">📍</div>
+        <h3>Informations pratiques</h3>
+        <ul>
+          <li>12 rue du Génie, 82000 Montauban</li>
+          <li>Du lundi au vendredi de 8h à 19h</li>
+          <li>Entrée sécurisée, badge possible</li>
+        </ul>
+      </div>
+      <div class="guide-info-card">
+        <div class="guide-info-icon">🗂️</div>
+        <h3>Espaces disponibles</h3>
+        <ul>
+          <li>Espace de coworking partagé</li>
+          <li>Bureaux privatifs</li>
+          <li>Salles de réunion (4 à 20 personnes)</li>
+          <li>Espaces événementiels selon disponibilité</li>
+        </ul>
+      </div>
+      <div class="guide-info-card">
+        <div class="guide-info-icon">⚡</div>
+        <h3>Services inclus</h3>
+        <p>Wi-Fi haut débit, café/thé, vidéoprojecteur ou écran de présentation, mobilier adapté — tout est compris dans votre réservation.</p>
+      </div>
+      <div class="guide-info-card full">
+        <div class="guide-info-icon">💶</div>
+        <h3>Tarification</h3>
+        <p>Les tarifs varient selon le type d'espace et le profil de l'utilisateur (entreprise, association, adhérent, etc.). Des tarifs préférentiels sont proposés aux adhérents de l'association Génie — consultez notre <a href="tarifs.html" style="color:var(--teal);font-weight:600;text-decoration:none;">grille tarifaire complète</a>.</p>
+      </div>
+    </div>
+
+    <hr class="guide-hr">
+
+    <!-- COMMENT RÉSERVER -->
+    <h2 class="guide-block-title">Comment réserver un espace en ligne ?</h2>
+    <p class="guide-block-desc">Pas besoin d'être un expert en informatique ! La réservation s'effectue directement sur le site internet du Génie. Suivez simplement les étapes ci-dessous.</p>
+
+    <div class="guide-steps">
+
+      <div class="guide-step">
+        <div class="guide-step-num">1</div>
+        <div class="guide-step-body">
+          <h4>Accéder au site internet</h4>
+          <p>Ouvrez votre navigateur internet (Google Chrome, Microsoft Edge, Firefox ou Safari). Dans la barre de recherche, tapez <a href="https://www.genie-montauban.fr" target="_blank" rel="noopener">www.genie-montauban.fr</a> puis appuyez sur la touche <strong>Entrée</strong>.</p>
+        </div>
+      </div>
+
+      <div class="guide-step">
+        <div class="guide-step-num">2</div>
+        <div class="guide-step-body">
+          <h4>Accéder à la réservation</h4>
+          <p>Une fois sur le site, recherchez le bouton <strong>« Réserver »</strong> ou <strong>« Réserver un espace »</strong> et cliquez dessus avec votre souris ou votre doigt sur smartphone. Vous arrivez alors sur cette page de réservation.</p>
+        </div>
+      </div>
+
+      <div class="guide-step">
+        <div class="guide-step-num">3</div>
+        <div class="guide-step-body">
+          <h4>Choisir l'espace souhaité</h4>
+          <p>Plusieurs espaces peuvent être proposés. Prenez le temps de lire leur description puis sélectionnez celui qui correspond à votre besoin :</p>
+          <ul>
+            <li>Coworking</li>
+            <li>Bureau individuel</li>
+            <li>Salle de réunion</li>
+            <li>Salle de formation</li>
+          </ul>
+          <p style="margin-top:8px">Cliquez ensuite sur l'espace choisi.</p>
+        </div>
+      </div>
+
+      <div class="guide-step">
+        <div class="guide-step-num">4</div>
+        <div class="guide-step-body">
+          <h4>Sélectionner une date</h4>
+          <p>Un calendrier apparaît.</p>
+          <ol>
+            <li>Choisissez le jour souhaité.</li>
+            <li>Les dates disponibles sont affichées automatiquement.</li>
+            <li>Cliquez sur la date qui vous convient.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="guide-step">
+        <div class="guide-step-num">5</div>
+        <div class="guide-step-body">
+          <h4>Choisir un horaire</h4>
+          <p>Sélectionnez ensuite :</p>
+          <ul>
+            <li>l'heure de début ;</li>
+            <li>l'heure de fin ;</li>
+            <li>ou la formule proposée (heure, demi-journée ou journée).</li>
+          </ul>
+          <p style="margin-top:8px">Vérifiez que les horaires correspondent bien à vos besoins.</p>
+        </div>
+      </div>
+
+      <div class="guide-step">
+        <div class="guide-step-num">6</div>
+        <div class="guide-step-body">
+          <h4>Renseigner vos informations</h4>
+          <p>Complétez les champs demandés :</p>
+          <ul>
+            <li>Nom</li>
+            <li>Prénom</li>
+            <li>Adresse e-mail</li>
+            <li>Numéro de téléphone</li>
+          </ul>
+          <p style="margin-top:8px">Vérifiez soigneusement votre adresse e-mail car elle servira à recevoir la confirmation de réservation.</p>
+        </div>
+      </div>
+
+      <div class="guide-step">
+        <div class="guide-step-num">7</div>
+        <div class="guide-step-body">
+          <h4>Vérifier votre réservation</h4>
+          <p>Avant de confirmer, prenez quelques secondes pour contrôler :</p>
+          <ul class="checks">
+            <li>l'espace choisi ;</li>
+            <li>la date ;</li>
+            <li>les horaires ;</li>
+            <li>vos coordonnées.</li>
+          </ul>
+          <p style="margin-top:8px">Si une information est incorrecte, vous pouvez revenir en arrière pour la modifier.</p>
+        </div>
+      </div>
+
+      <div class="guide-step">
+        <div class="guide-step-num">8</div>
+        <div class="guide-step-body">
+          <h4>Confirmer la réservation</h4>
+          <p>Lorsque tout est correct :</p>
+          <ol>
+            <li>Cliquez sur <strong>« Confirmer »</strong>.</li>
+            <li>Si un paiement est demandé, suivez les instructions affichées à l'écran.</li>
+            <li>Attendez la validation finale.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="guide-step">
+        <div class="guide-step-num">9</div>
+        <div class="guide-step-body">
+          <h4>Recevoir la confirmation</h4>
+          <p>Après validation, un e-mail de confirmation vous est envoyé. Cet e-mail contient :</p>
+          <ul class="checks">
+            <li>le lieu réservé ;</li>
+            <li>la date ;</li>
+            <li>les horaires ;</li>
+            <li>les informations utiles pour votre arrivée.</li>
+          </ul>
+          <p style="margin-top:8px"><strong>Conservez cet e-mail jusqu'à votre venue.</strong></p>
+          <p style="margin-top:8px;font-style:italic;font-size:.82rem;">Vous n'avez pas reçu l'e-mail ? Vérifiez votre dossier « Courriers indésirables » ou « Spam », vérifiez que l'adresse saisie est correcte, ou contactez l'équipe du Génie.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RÈGLES DE BONNE UTILISATION -->
+    <div class="guide-rules">
+      <h3>📋 Règles de bonne utilisation</h3>
+      <p style="font-size:.88rem;color:var(--gray);margin-bottom:16px;line-height:1.6">Afin de garantir un cadre agréable pour tous :</p>
+      <ul class="guide-rules-list">
+        <li>Respectez les autres usagers.</li>
+        <li>Maintenez les espaces propres.</li>
+        <li>Rangez le matériel après utilisation.</li>
+        <li>Limitez les nuisances sonores.</li>
+        <li>Signalez tout problème à l'équipe d'accueil.</li>
+      </ul>
+    </div>
+
+    <!-- BESOIN D'AIDE -->
+    <div class="guide-help">
+      <div class="guide-help-text">
+        <h3>Besoin d'aide ?</h3>
+        <p>L'équipe du Génie est à votre disposition pour vous accompagner.</p>
+      </div>
+      <a href="tel:+33651509718" class="guide-help-btn">📞 06 51 50 97 18</a>
+    </div>
+
+  </div>
+</section>
 
 <script>
 // ══════════════════════════════════════════════════
