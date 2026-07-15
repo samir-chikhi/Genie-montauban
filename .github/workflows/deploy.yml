@@ -6,12 +6,15 @@ on:
       - main
   schedule:
     # Tous les jours à 5h17 UTC : régénère sitemap, llms.txt et miroirs
-    # markdown, puis redéploie le site — SEO à jour sans intervention.
+    # markdown, les committe, puis le site est redéployé — SEO à jour
+    # sans aucune intervention.
     - cron: '17 5 * * *'
   workflow_dispatch:
 
 permissions:
-  contents: read
+  # write : le workflow committe les fichiers SEO régénérés dans la branche
+  # (GitHub Pages sert le contenu de la branche — voir étape "Committer")
+  contents: write
   pages: write
   id-token: write
 
@@ -42,6 +45,21 @@ jobs:
         run: |
           pip install --quiet beautifulsoup4 markdownify
           python generate_seo.py
+
+      - name: Committer les fichiers SEO régénérés
+        # GitHub Pages sert le contenu de la branche main : les fichiers
+        # régénérés doivent donc être committés pour être publiés.
+        # Un push via GITHUB_TOKEN ne redéclenche pas ce workflow (pas de boucle).
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add sitemap.xml llms.txt md/
+          if ! git diff --cached --quiet; then
+            git commit -m "chore(seo): régénération automatique (sitemap, llms.txt, miroirs md)"
+            git push
+          else
+            echo "Aucun changement SEO à committer."
+          fi
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
