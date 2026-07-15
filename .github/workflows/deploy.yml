@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - main
+  schedule:
+    # Tous les jours à 5h17 UTC : régénère sitemap, llms.txt et miroirs
+    # markdown, puis redéploie le site — SEO à jour sans intervention.
+    - cron: '17 5 * * *'
   workflow_dispatch:
 
 permissions:
@@ -24,6 +28,20 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # Historique complet requis : les dates <lastmod> du sitemap
+          # sont tirées du dernier commit de chaque page
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Régénérer les fichiers SEO (sitemap, llms.txt, miroirs md)
+        run: |
+          pip install --quiet beautifulsoup4 markdownify
+          python generate_seo.py
 
       - name: Configure Pages
         uses: actions/configure-pages@v5

@@ -1,0 +1,100 @@
+# Génie — Tiers-Lieu de Montauban
+
+> Génie est un tiers-lieu ancré dans l'économie sociale et solidaire (ESS) à Montauban (Tarn-et-Garonne, Occitanie). Coworking, bureaux privatifs, salles de réunion jusqu'à 40 personnes, micro-formations. À 200 m de la gare SNCF de Montauban. Accessible PMR. Géré par une association loi 1901.
+
+Dernière mise à jour : 2026-07-15
+
+## Informations pratiques
+
+- Adresse : 12 rue du Génie, 82000 Montauban, France
+- Téléphone : 06 51 50 97 18 (+33 6 51 50 97 18)
+- Email : genie.montauban@gmail.com
+- Site : https://genie-montauban.fr
+- Horaires : lun–ven 8h–19h, sam 9h–17h — accès badge 24h/24 et 7j/7 pour les résidents
+- Coordonnées GPS : 44.0181° N, 1.3559° E
+- À 200 m à pied de la gare SNCF de Montauban, parkings publics à proximité
+- Accessible PMR : entrée dédiée, salle de réunion au rez-de-chaussée
+
+## Services et tarifs (2026)
+
+### Coworking (open space)
+- Demi-journée : 10 € (adhérent) / 15 € (non-adhérent)
+- Journée : 15 € (adhérent) / 22 € (non-adhérent)
+- WiFi fibre, café inclus, imprimante partagée
+
+### Salles de réunion
+- Salle Bourdelle (jusqu'à 40 personnes, vidéoprojecteur + sono) : 45 €/h
+- Salle Olympe de Gouges (10-15 personnes, écran TV interactif) : 30 €/h
+- Petite salle de réunion : 20 €/h
+- Réservation à l'heure, à la demi-journée ou à la journée
+
+### Bureaux privatifs
+- De 12 à 24 m², de 15 à 18 €/m²/mois hors charges selon l'engagement
+- Exemples : 12 m² dès 180 €/mois, 24 m² dès 360 €/mois (bail 1 an)
+- Accès badge 24h/24, internet fibre inclus
+
+### Adhésion à l'association
+- Individuelle : 15 €/an — Association : 50 €/an — Structure ESS : 150 €/an
+- Tarifs préférentiels sur tous les espaces, vote en AG, réseau ESS local
+
+### Académie des Compétences et de la Connaissance
+- Micro-formations de 3h animées par des experts locaux
+- Thèmes : empowerment, tech & numérique, gestion & impact
+- À partir de 45 €, financement OPCO possible
+
+## Pages principales
+
+- [Accueil](https://genie-montauban.fr/) : présentation du tiers-lieu, espaces, FAQ
+- [Réservation](https://genie-montauban.fr/reservation.html) : réservation en ligne des espaces
+- [Tarifs](https://genie-montauban.fr/tarifs.html) : grille tarifaire complète
+- [Activités & agenda](https://genie-montauban.fr/activites.html) : événements et actualités
+- [Académie](https://genie-montauban.fr/academie.html) : catalogue des micro-formations
+- [Notre histoire](https://genie-montauban.fr/notre-histoire.html) : genèse du projet
+- [Adhésion / inscription](https://genie-montauban.fr/inscription.html) : créer un compte
+- [Proposer un module](https://genie-montauban.fr/proposition-formateur.html) : pour les formateurs
+
+## Miroirs Markdown (version texte propre pour IA)
+
+- https://genie-montauban.fr/md/index.md
+- https://genie-montauban.fr/md/reservation.md
+- https://genie-montauban.fr/md/tarifs.md
+- https://genie-montauban.fr/md/activites.md
+- https://genie-montauban.fr/md/academie.md
+- https://genie-montauban.fr/md/notre-histoire.md
+
+## Ce qui différencie Génie
+
+- Seul tiers-lieu ESS du centre-ville de Montauban
+- Le plus proche de la gare SNCF de Montauban (200 m à pied)
+- Accessible PMR
+- Tarifs associatifs accessibles, gouvernance partagée
+- Communauté d'entrepreneurs, d'associations et d'acteurs du territoire du Tarn-et-Garonne
+
+## FAQ
+
+Q : Où trouver un espace de coworking à Montauban ?
+R : Au tiers-lieu Génie, 12 rue du Génie, 82000 Montauban, à 200 m de la gare SNCF. Ouvert aux indépendants, télétravailleurs, associations et entreprises.
+
+Q : Quel est le prix d'une journée de coworking à Montauban chez Génie ?
+R : 15 €/jour pour les adhérents, 22 €/jour pour les non-adhérents. Demi-journée dès 10 €.
+
+Q : Peut-on louer une salle de réunion pour 40 personnes à Montauban ?
+R : Oui, la salle Bourdelle du Génie accueille jusqu'à 40 personnes, avec vidéoprojecteur et sono, à 45 €/h.
+
+Q : Y a-t-il des bureaux privés à louer à Montauban ?
+R : Oui, Génie propose des bureaux privatifs de 12 à 24 m², de 15 à 18 €/m²/mois hors charges, accès badge 24h/24.
+
+Q : Le tiers-lieu Génie est-il accessible aux personnes à mobilité réduite ?
+R : Oui, entrée dédiée et salle de réunion accessible au rez-de-chaussée.
+
+Q : Faut-il être adhérent pour réserver ?
+R : Non. L'adhésion (dès 15 €/an) donne simplement accès aux tarifs préférentiels.
+
+Q : Comment réserver un espace à Génie Montauban ?
+R : En ligne sur https://genie-montauban.fr/reservation.html, par téléphone au 06 51 50 97 18 ou par email à genie.montauban@gmail.com.
+
+Q : Qu'est-ce qu'un tiers-lieu ESS ?
+R : Un espace de travail partagé géré par une structure de l'économie sociale et solidaire, axé sur la communauté, la coopération et l'impact local — par opposition à un centre d'affaires commercial.
+
+Q : Génie propose-t-il des formations ?
+R : Oui, l'Académie des Compétences et de la Connaissance propose des micro-formations de 3h à partir de 45 €, avec financement OPCO possible.
