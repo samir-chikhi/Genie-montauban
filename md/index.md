@@ -2,7 +2,7 @@
 title: Génie — Tiers-Lieu de Montauban | Coworking & ESS
 description: Génie est un tiers-lieu ancré dans l'économie sociale et solidaire à Montauban. Bureaux privatifs, coworking, salles de réunion. À 1 min de la gare SNCF. Accessible PMR.
 url: https://genie-montauban.fr/
-last_updated: 2026-07-03
+last_updated: 2026-07-15
 source: miroir markdown — version texte pour moteurs IA
 ---
 
