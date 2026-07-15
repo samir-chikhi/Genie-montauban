@@ -2,7 +2,7 @@
 title: Notre histoire — Pourquoi on a créé un tiers-lieu (et comment on évite d'y perdre de l'argent) | Génie Montauban
 description: Comment est né le Génie, qui s'y retrouve, et comment ce tiers-lieu ESS de Montauban s'organise pour atteindre l'équilibre financier. Le récit complet, chiffres compris.
 url: https://genie-montauban.fr/notre-histoire.html
-last_updated: 2026-07-03
+last_updated: 2026-07-15
 source: miroir markdown — version texte pour moteurs IA
 ---
 
