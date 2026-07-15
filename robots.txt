@@ -1,8 +1,16 @@
+# robots.txt — Génie, Tiers-Lieu de Montauban
+# https://genie-montauban.fr
+# Tous les robots sont les bienvenus, y compris les crawlers IA
+# (GPTBot, ClaudeBot, PerplexityBot, Google-Extended, Applebot-Extended, etc.)
+# Résumé structuré du site pour les IA : https://genie-montauban.fr/llms.txt
+
 User-agent: *
 Allow: /
 Disallow: /admin.html
 Disallow: /mon-compte.html
 Disallow: /crypto-session1.html
 Disallow: /crypto-session2.html
+Disallow: /reunion-conseil-locataires-25-juin-2026.html
 Disallow: /docs/
-Sitemap: https://www.genie-montauban.fr/sitemap.xml
+
+Sitemap: https://genie-montauban.fr/sitemap.xml
