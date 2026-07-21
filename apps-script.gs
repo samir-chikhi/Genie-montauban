@@ -62,6 +62,13 @@ function cleEspace(nom) {
   return null;
 }
 
+// Clé espace d'une ligne de réservation. La colonne 6 (espace) porte le nom
+// réel de la salle ('Antoine Bourdelle') ; la colonne 7 peut contenir le type
+// ('salle'/'nomade'). On résout donc col6 en priorité, puis col7 en secours.
+function cleEspaceRow(row) {
+  return cleEspace(row[6]) || cleEspace(row[7]);
+}
+
 // Meilleur prix serveur pour nbH heures (hors options badge/adhésion).
 // null si l'espace est inconnu de la grille.
 function calculerMontantServeur(espaceNom, nbH, profil) {
@@ -437,10 +444,21 @@ function majDerniereConnexion(email, ss) {
 // ============================================================
 // RÉSERVATION (formulaire public) — identique v4.2
 // ============================================================
-// Convertit "HH:MM" en minutes depuis minuit (defaut si invalide)
+// Convertit une heure en minutes depuis minuit. Robuste : Google Sheets
+// peut renvoyer soit une chaîne "10:00", soit un objet Date (heure), soit
+// une fraction de journée. Retourne `defaut` si illisible.
 function hMin(v, defaut) {
-  var m = String(v || '').match(/^(\d{1,2}):(\d{2})/);
+  if (v instanceof Date) return v.getHours() * 60 + v.getMinutes();
+  if (typeof v === 'number' && v > 0 && v < 1) return Math.round(v * 1440); // fraction de jour
+  var m = String(v == null ? '' : v).match(/(\d{1,2}):(\d{2})/);
   return m ? (+m[1]) * 60 + (+m[2]) : defaut;
+}
+
+// Normalise une date en 'yyyy-MM-dd'. Robuste : Sheets convertit souvent
+// la chaîne ISO écrite en cellule Date à la relecture.
+function dateISO(v) {
+  if (v instanceof Date) return Utilities.formatDate(v, Session.getScriptTimeZone(), 'yyyy-MM-dd');
+  return String(v || '').split('T')[0].trim();
 }
 
 // Nombre de réservations actives qui chevauchent [debMin, finMin[
@@ -450,8 +468,8 @@ function compterChevauchements(rows, cle, dateStr, debMin, finMin, emailExclu) {
   for (var i = 1; i < rows.length; i++) {
     var statut = String(rows[i][18] || '');
     if (statut === 'ANNULE' || statut === 'cancelled') continue;
-    if (String(rows[i][10] || '').split('T')[0] !== dateStr) continue;
-    if (cleEspace(rows[i][7] || rows[i][6]) !== cle) continue;
+    if (dateISO(rows[i][10]) !== dateStr) continue;
+    if (cleEspaceRow(rows[i]) !== cle) continue;
     if (emailExclu && String(rows[i][3] || '').toLowerCase() === emailExclu) continue;
     var d = hMin(rows[i][13], 8 * 60);
     var f = hMin(rows[i][14], d + 60);
@@ -504,9 +522,9 @@ function creerReservation(data) {
       const statut = String(rows[i][18] || '');
       if (statut === 'ANNULE' || statut === 'cancelled') continue;
       if (String(rows[i][3] || '').toLowerCase() === email &&
-          String(rows[i][10] || '').split('T')[0] === data.date &&
-          String(rows[i][13] || '') === data.heureDebut &&
-          cleEspace(rows[i][7] || rows[i][6]) === cle) {
+          dateISO(rows[i][10]) === data.date &&
+          hMin(rows[i][13], -1) === debMin &&
+          cleEspaceRow(rows[i]) === cle) {
         return { success: true, id: String(rows[i][0]), dejaEnregistree: true,
                  message: 'Cette réservation était déjà enregistrée.' };
       }
@@ -620,17 +638,13 @@ function getDisponibilites(params) {
       const statut = String(row[18] || '');
       if (statut === 'ANNULE' || statut === 'cancelled') continue;
       const esp = String(row[6] || '');
-      const dat = String(row[10] || '');
+      const dat = dateISO(row[10]);  // robuste (cellule Date ou texte)
       if (espace && esp !== espace) continue;
       if (dat < dateDebut || dat > dateFin) continue;
-      const hD = String(row[13] || '08:00');
-      const hF = String(row[14] || '09:00');
       if (!occup[esp]) occup[esp] = {};
       if (!occup[esp][dat]) occup[esp][dat] = [];
-      const p1 = hD.split(':').map(Number);
-      const p2 = hF.split(':').map(Number);
-      let cur = p1[0] * 60 + (p1[1] || 0);
-      const end = p2[0] * 60 + (p2[1] || 0);
+      let cur = hMin(row[13], 8 * 60);       // robuste (cellule heure ou texte)
+      const end = hMin(row[14], cur + 60);
       while (cur < end) {
         occup[esp][dat].push(pad(Math.floor(cur / 60)) + ':' + pad(cur % 60));
         cur += 30;
