@@ -679,15 +679,30 @@ async function soumettre() {
     montantEstime: Math.round(tarif * S.duree + badge),
   };
 
-  // Envoi en arrière-plan (non bloquant) — Content-Type text/plain évite le preflight CORS
-  fetch(APPS_SCRIPT_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'text/plain' },
-    body: JSON.stringify(payload),
-    redirect: 'follow'
-  }).catch(() => {}); // Erreur réseau tolérée (admin notifié s'il y a un problème)
+  // Envoi avec lecture de la vraie réponse serveur (créneau occupé, quota… affichés)
+  let data = {};
+  try {
+    const r = await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify(payload),
+      redirect: 'follow'
+    });
+    const text = await r.text();
+    try { data = JSON.parse(text); } catch(e) { data = { success: true }; }
+  } catch(e) {
+    data = { success: false, error: 'RESEAU', message: 'Erreur réseau — appelez le 06 51 50 97 18.' };
+  }
 
-  const id = 'RES-' + Date.now();
+  if (!data.success && data.error) {
+    // Refus serveur : réafficher le formulaire avec le message précis
+    btn.disabled = false;
+    btn.innerHTML = 'Confirmer ma réservation';
+    alert(data.message || ('Réservation impossible : ' + data.error));
+    return;
+  }
+
+  const id = data.id || ('RES-' + Date.now());
 
   // Sauvegarder dans l'historique local
   try {

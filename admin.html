@@ -649,18 +649,55 @@ let showCal     = true;    // toggle affichage couche Calendar
 // ─────────────────────────────────────────────────────────
 // LOGIN
 // ─────────────────────────────────────────────────────────
-function checkLogin() {
+// v5 : le mot de passe est vérifié CÔTÉ SERVEUR (ADMIN_LOGIN) qui délivre
+// un token de session (8h), exigé ensuite par toutes les actions admin.
+let ADMIN_TOKEN = sessionStorage.getItem('genie_admin_token') || '';
+
+async function checkLogin() {
   const pwd = document.getElementById('login-pwd').value;
-  if (pwd === 'Tlemcen5530!' || pwd === 'genie2026') {
+  const err = document.getElementById('login-err');
+  if (!pwd) return;
+  try {
+    const url = new URL(APPS_SCRIPT_URL_DEFAULT);
+    url.searchParams.set('payload', JSON.stringify({ action: 'ADMIN_LOGIN', password: pwd }));
+    const r = await fetch(url.toString(), { redirect: 'follow' });
+    const data = await r.json();
+    if (data && data.success && data.token) {
+      ADMIN_TOKEN = data.token;
+      sessionStorage.setItem('genie_admin_token', ADMIN_TOKEN);
+      document.getElementById('login-pwd').value = '';
+      document.getElementById('login-screen').classList.add('hidden');
+      document.getElementById('main-layout').style.display = 'flex';
+      init();
+    } else {
+      err.textContent = (data && data.message) || 'Mot de passe incorrect.';
+      err.style.display = 'block';
+      setTimeout(() => err.style.display = 'none', 3500);
+    }
+  } catch (e) {
+    err.textContent = 'Erreur réseau : ' + e.message;
+    err.style.display = 'block';
+    setTimeout(() => err.style.display = 'none', 3500);
+  }
+}
+
+// Session expirée ou invalide → retour à l'écran de connexion
+function logoutAdmin() {
+  ADMIN_TOKEN = '';
+  sessionStorage.removeItem('genie_admin_token');
+  document.getElementById('main-layout').style.display = 'none';
+  document.getElementById('login-screen').classList.remove('hidden');
+}
+
+// Reprise de session : si un token existe déjà (onglet rechargé), on tente
+// directement — un token expiré déclenchera logoutAdmin() au 1er appel.
+document.addEventListener('DOMContentLoaded', () => {
+  if (ADMIN_TOKEN) {
     document.getElementById('login-screen').classList.add('hidden');
     document.getElementById('main-layout').style.display = 'flex';
     init();
-  } else {
-    const err = document.getElementById('login-err');
-    err.style.display = 'block';
-    setTimeout(() => err.style.display='none', 2500);
   }
-}
+});
 
 // ─────────────────────────────────────────────────────────
 // INIT
@@ -682,9 +719,11 @@ async function apiGet(params={}) {
   if (!SCRIPT_URL) throw new Error('URL non configurée');
   const url = new URL(SCRIPT_URL);
   Object.entries(params).forEach(([k,v]) => url.searchParams.set(k,v));
+  url.searchParams.set('adminToken', ADMIN_TOKEN);
   const r = await fetch(url.toString(), {redirect:'follow'});
   if (!r.ok) throw new Error('HTTP '+r.status);
   const data = await r.json();
+  if (data.error === 'NON_AUTORISE') { logoutAdmin(); throw new Error('Session expirée — reconnectez-vous.'); }
   if (data.error) throw new Error(data.error);
   return data;
 }
@@ -692,34 +731,38 @@ async function apiGet(params={}) {
 async function apiPost(body) {
   if (!SCRIPT_URL) throw new Error('URL non configurée');
   // Envoi via GET+payload (contourne la redirection 302 du POST Apps Script)
+  body = Object.assign({}, body, { adminToken: ADMIN_TOKEN });
   const url = new URL(SCRIPT_URL);
   url.searchParams.set('payload', JSON.stringify(body));
+  let r, text;
   try {
-    const r = await fetch(url.toString(), { redirect: 'follow' });
-    const text = await r.text();
-    try {
-      const data = JSON.parse(text);
-      if (data && data.error) throw new Error(data.error);
-      return data;
-    } catch(e) {
-      // Réponse non-JSON (page Google auth) : écriture probablement OK, on vérifie
-      if (body.action === 'addResa' || body.action === 'updateResa') {
-        const tid = body.resa && body.resa.id;
-        if (tid) {
-          for (let i = 0; i < 5; i++) {
-            await new Promise(r => setTimeout(r, 1500));
-            try {
-              const check = await apiGet({ action: 'getAll' });
-              if ((check.reservations||[]).find(r => r.id === tid)) return { ok:true, id:tid };
-            } catch(e2) {}
-          }
-        }
-      }
-      return { ok: true };
-    }
+    r = await fetch(url.toString(), { redirect: 'follow' });
+    text = await r.text();
   } catch(e) {
     throw new Error('Erreur réseau : ' + e.message);
   }
+  let data = null;
+  try { data = JSON.parse(text); } catch(eParse) { data = null; }
+  if (data) {
+    // Réponse JSON : les erreurs serveur sont de VRAIES erreurs (plus de faux succès)
+    if (data.error === 'NON_AUTORISE') { logoutAdmin(); throw new Error('Session expirée — reconnectez-vous.'); }
+    if (data.error) throw new Error(data.error);
+    return data;
+  }
+  // Réponse non-JSON (page Google auth) : écriture probablement OK, on vérifie
+  if (body.action === 'addResa' || body.action === 'updateResa') {
+    const tid = body.resa && body.resa.id;
+    if (tid) {
+      for (let i = 0; i < 5; i++) {
+        await new Promise(r => setTimeout(r, 1500));
+        try {
+          const check = await apiGet({ action: 'getAll' });
+          if ((check.reservations||[]).find(r => r.id === tid)) return { ok:true, id:tid };
+        } catch(e2) {}
+      }
+    }
+  }
+  return { ok: true };
 }
 
 // ─────────────────────────────────────────────────────────

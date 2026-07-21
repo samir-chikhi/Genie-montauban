@@ -1383,11 +1383,11 @@ function envoyerAdhesion() {
   btn.disabled = true;
   btn.textContent = '⏳ Envoi en cours…';
 
-  // Envoi en no-cors (Apps Script JSONP-like, pas de réponse lisible) + notification immédiate
+  // Envoi avec lecture de la vraie réponse serveur (succès confirmé ou erreur affichée)
   fetch(APPS_SCRIPT_URL, {
     method: 'POST',
-    mode: 'no-cors',
     headers: { 'Content-Type': 'text/plain' },
+    redirect: 'follow',
     body: JSON.stringify({
       action:       'ADHERER',
       typeAdhesion: type,
@@ -1399,11 +1399,21 @@ function envoyerAdhesion() {
       tel:          document.getElementById('mbr-tel').value.trim(),
       adresse:      document.getElementById('mbr-adresse').value.trim()
     })
-  }).catch(function() {});
-
-  // Affichage du succès immédiatement (no-cors ne retourne pas de réponse lisible)
-  btn.textContent = '✅ Demande envoyée !';
-  showNotif('🎉 Demande envoyée ! L\'équipe Génie vous contacte sous 48h par email.', 'success');
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (data && data.success) {
+      btn.textContent = '✅ Demande envoyée !';
+      showNotif('🎉 Demande envoyée ! L\'équipe Génie vous contacte sous 48h par email.', 'success');
+    } else {
+      throw new Error((data && data.message) || (data && data.error) || 'Erreur serveur');
+    }
+  })
+  .catch(function(e) {
+    btn.disabled = false;
+    btn.textContent = '✉️ Envoyer ma demande d\'adhésion';
+    showNotif('⚠️ Envoi impossible (' + e.message + '). Réessayez ou appelez le 06 51 50 97 18.', 'error');
+  });
 }
 
 // ── CONTACT ──
@@ -1426,21 +1436,31 @@ function envoyerContact() {
   var nom    = document.getElementById('c-nom').value.trim();
   var sujet  = document.getElementById('c-sujet').value.trim();
 
-  // Envoi Apps Script en no-cors
+  // Envoi avec lecture de la vraie réponse serveur
   fetch(APPS_SCRIPT_URL, {
     method: 'POST',
-    mode: 'no-cors',
     headers: { 'Content-Type': 'text/plain' },
+    redirect: 'follow',
     body: JSON.stringify({ action: 'CONTACT', prenom: prenom, nom: nom, email: email, sujet: sujet, message: message })
-  }).catch(function() {});
-
-  // Feedback
-  showNotif('✅ Message envoyé ! Nous vous répondons sous 24h.', 'success');
-  document.getElementById('c-email').value   = '';
-  document.getElementById('c-message').value = '';
-  document.getElementById('c-prenom').value  = '';
-  document.getElementById('c-nom').value     = '';
-  document.getElementById('c-sujet').value   = '';
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (data && data.success) {
+      showNotif('✅ Message envoyé ! Nous vous répondons sous 24h.', 'success');
+      document.getElementById('c-email').value   = '';
+      document.getElementById('c-message').value = '';
+      document.getElementById('c-prenom').value  = '';
+      document.getElementById('c-nom').value     = '';
+      document.getElementById('c-sujet').value   = '';
+    } else {
+      throw new Error((data && data.message) || (data && data.error) || 'Erreur serveur');
+    }
+  })
+  .catch(function(e) {
+    errEl.textContent = '⚠️ Envoi impossible (' + e.message + '). Réessayez ou appelez le 06 51 50 97 18.';
+    errEl.style.display = 'block';
+    setTimeout(function() { errEl.style.display = 'none'; }, 6000);
+  });
 }
 
 // ── SMOOTH SCROLL ──
