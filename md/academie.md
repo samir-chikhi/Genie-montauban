@@ -2,7 +2,7 @@
 title: Académie des Compétences et de la Connaissance — Génie Montauban
 description: L'Académie des Compétences et de la Connaissance du Génie : micro-formations de 3h animées par des experts locaux. Empowerment, Tech & Numérique, Gestion & Impact. À partir de 45 € — financement OPCO possible.
 url: https://genie-montauban.fr/academie.html
-last_updated: 2026-07-15
+last_updated: 2026-07-21
 source: miroir markdown — version texte pour moteurs IA
 ---
 
