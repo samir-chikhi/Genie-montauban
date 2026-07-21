@@ -902,12 +902,19 @@ async function envoyerReservation() {
     if (data.success || !data.error) {
       document.getElementById('mainPage').style.display = 'none';
       document.getElementById('successCard').classList.add('visible');
-      document.getElementById('successRef').textContent = ref;
+      document.getElementById('successRef').textContent = data.id || ref;
       updateSteps(4);
       window.scrollTo({top:0, behavior:'smooth'});
-    } else {
-      throw new Error(data.error || 'Erreur serveur');
+      return;
     }
+    // Refus métier du serveur (créneau occupé, trop de demandes…) :
+    // afficher le message précis, sans retenter l'envoi
+    if (['CRENEAU_OCCUPE','TROP_DE_REQUETES','DATE_PASSEE','DATE_INVALIDE','HEURE_INVALIDE','DUREE_INVALIDE','EMAIL_INVALIDE','CHAMPS_MANQUANTS'].includes(data.error)) {
+      document.getElementById('btnEnvoyer').disabled = false;
+      toast(data.message || 'Réservation impossible : ' + data.error, 'err');
+      return;
+    }
+    throw new Error(data.error || 'Erreur serveur');
   } catch(err) {
     document.getElementById('loadBanner').classList.remove('visible');
     document.getElementById('btnEnvoyer').disabled = false;
@@ -921,9 +928,11 @@ async function envoyerReservation() {
       if (data2.success || !data2.error) {
         document.getElementById('mainPage').style.display = 'none';
         document.getElementById('successCard').classList.add('visible');
-        document.getElementById('successRef').textContent = ref;
+        document.getElementById('successRef').textContent = data2.id || ref;
         updateSteps(4);
         window.scrollTo({top:0, behavior:'smooth'});
+      } else if (data2.message) {
+        toast(data2.message, 'err');
       } else {
         throw new Error(data2.error || 'Erreur serveur');
       }
