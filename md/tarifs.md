@@ -2,7 +2,7 @@
 title: Tarifs — Génie Montauban | Tiers-Lieu ESS
 description: Grille tarifaire complète du tiers-lieu Génie Montauban : coworking, salles de réunion, bureaux privatifs, domiciliation. Tarifs adhérents, locataires, associations.
 url: https://genie-montauban.fr/tarifs.html
-last_updated: 2026-07-21
+last_updated: 2026-07-31
 source: miroir markdown — version texte pour moteurs IA
 ---
 
@@ -85,9 +85,9 @@ Flexibilité maximale
 | Louise Michel (0-01) | 15 m² | 270 €/mois HC | 255 €/mois HC | 225 €/mois HC |
 | Philippe Meirieu (0-03) | 24 m² | 432 €/mois HC | 408 €/mois HC | 360 €/mois HC |
 | Antoine Lavoisier (0-04) | 19 m² | 342 €/mois HC | 323 €/mois HC | 285 €/mois HC |
-| Aimée Césaire (1-07) | 17 m² | 306 €/mois HC | 289 €/mois HC | 255 €/mois HC |
-| Condorcet (1-08) | 17 m² | 306 €/mois HC | 289 €/mois HC | 255 €/mois HC |
-| Baden Powell (1-09) | 16 m² | 288 €/mois HC | 272 €/mois HC | 240 €/mois HC |
+| Aimé Césaire (1-07) Loué | 17 m² | Actuellement loué — écrivez-nous pour être prévenu d'une disponibilité | | |
+| Condorcet (1-08) Loué | 17 m² | Actuellement loué — écrivez-nous pour être prévenu d'une disponibilité | | |
+| Baden Powell (1-09) Loué | 16 m² | Actuellement loué — écrivez-nous pour être prévenu d'une disponibilité | | |
 | Célestin Freinet (1-11) | 24 m² | 432 €/mois HC | 408 €/mois HC | 360 €/mois HC |
 | Maria Montessori (−1-14) | 12 m² | 216 €/mois HC | 204 €/mois HC | 180 €/mois HC |
 
