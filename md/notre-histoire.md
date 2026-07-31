@@ -10,7 +10,7 @@ Un tiers-lieu, ce n'est ni un bureau classique ni un espace de coworking comme o
 
 ## Tout est parti d'une visite de bureau
 
-Je n'avais pas prévu de créer un tiers-lieu. Je venais simplement louer un bureau pour CCFA, mon entreprise de conseil et de formation. Le propriétaire de l'immeuble m'a expliqué qu'il cherchait en réalité à louer l'ensemble du bâtiment. Il n'habite pas Montauban, et il n'avait plus l'âge de se lancer dans une nouvelle aventure commerciale.
+Je n'avais pas prévu de créer un tiers-lieu. Je venais simplement louer un bureau pour MUSIVA, mon entreprise de conseil et de formation. Le propriétaire de l'immeuble m'a expliqué qu'il cherchait en réalité à louer l'ensemble du bâtiment. Il n'habite pas Montauban, et il n'avait plus l'âge de se lancer dans une nouvelle aventure commerciale.
 
 Je lui ai proposé qu'on s'associe. Il a refusé, mais m'a dit une phrase qui a tout changé :
 
@@ -20,7 +20,7 @@ Avant de me lancer, j'ai fait ce que je sais faire : une étude de marché, sur
 
 ## Pas un projet solo
 
-Première décision importante : je ne voulais pas en faire un business personnel, j'avais déjà mes activités avec CCFA. J'ai contacté deux personnes de confiance, Marcelle et Andrea. Marcelle, avec son association Myself, était à un tournant stratégique. Andrea venait de créer Topogramme et vivait la même chose. Les deux ont répondu la même chose, en substance : si c'est toi qui portes ça, on fonce, ce sera tout bénéfice pour tout le monde.
+Première décision importante : je ne voulais pas en faire un business personnel, j'avais déjà mes activités avec MUSIVA. J'ai contacté deux personnes de confiance, Marcelle et Andrea. Marcelle, avec son association Myself, était à un tournant stratégique. Andrea venait de créer Topogramme et vivait la même chose. Les deux ont répondu la même chose, en substance : si c'est toi qui portes ça, on fonce, ce sera tout bénéfice pour tout le monde.
 
 C'est comme ça que le Génie est né. Et très vite, avec les locataires, les associations du quartier et les sympathisants, on l'a structuré officiellement, avec tous les ressorts démocratiques qu'on a voulu inscrire dans nos statuts.
 
@@ -58,7 +58,7 @@ L'accès est autonome, 24h/24 et 7j/7, grâce aux serrures électroniques qu'on 
 
 Côté engagement, on n'est pas sur un bail 3-6-9 classique. Une de nos locataires a commencé à un jour par semaine, le temps de tester son activité, avant d'aller plus loin si elle le souhaite. C'est pensé comme un sas, pas comme un saut dans le vide.
 
-Vous arrivez aussi dans un écosystème déjà en place : une association pour l'environnement, une entreprise individuelle (OVNI), une coopérative ESS nationale (Mobicoop), et une porteuse de projet en test. Le programme d'animations (cowork-café hebdomadaire, conférences-débats et ateliers numériques mensuels) crée des occasions régulières de croiser ces profils, sans effort particulier de votre part. Et si vous voulez monter en compétences, l'Académie des Compétences propose des modules courts et accessibles, avec une passerelle vers des certifications CCFA si vous voulez aller plus loin.
+Vous arrivez aussi dans un écosystème déjà en place : une association pour l'environnement, une entreprise individuelle (OVNI), une coopérative ESS nationale (Mobicoop), et une porteuse de projet en test. Le programme d'animations (cowork-café hebdomadaire, conférences-débats et ateliers numériques mensuels) crée des occasions régulières de croiser ces profils, sans effort particulier de votre part. Et si vous voulez monter en compétences, l'Académie des Compétences propose des modules courts et accessibles, avec une passerelle vers des certifications MUSIVA si vous voulez aller plus loin.
 
 Enfin, en tant que membre, vous participez aux réunions d'échanges mensuelles et vous avez une voix, au même titre que tout le monde, dans les décisions qui concernent le lieu.
 
@@ -68,9 +68,9 @@ Pour commencer, on privilégie une rencontre sur place, avec si besoin un essai 
 
 Parlons argent, parce que c'est là que ça coince le plus, et que c'est sans doute le plus utile pour qui voudrait monter un projet similaire.
 
-Aujourd'hui, financièrement, c'est tendu. L'immeuble coûte environ 3 000 € par mois, charges comprises, hors masse salariale. C'est CCFA, mon entreprise, qui couvre l'essentiel de ces dépenses depuis le début. Pour que ça reste propre juridiquement, on a rédigé une convention entre CCFA et l'association Génie, qui prévoit notamment le remboursement de cette avance. Sans ça, on pourrait me reprocher un abus de biens sociaux, c'est-à-dire l'utilisation des ressources d'une entreprise au profit d'un tiers, ici l'association.
+Aujourd'hui, financièrement, c'est tendu. L'immeuble coûte environ 3 000 € par mois, charges comprises, hors masse salariale. C'est MUSIVA, mon entreprise, qui couvre l'essentiel de ces dépenses depuis le début. Pour que ça reste propre juridiquement, on a rédigé une convention entre MUSIVA et l'association Génie, qui prévoit notamment le remboursement de cette avance. Sans ça, on pourrait me reprocher un abus de biens sociaux, c'est-à-dire l'utilisation des ressources d'une entreprise au profit d'un tiers, ici l'association.
 
-On vise le mois de décembre pour équilibrer le budget de Génie, afin que l'association prenne le relais et commence à rembourser CCFA.
+On vise le mois de décembre pour équilibrer le budget de Génie, afin que l'association prenne le relais et commence à rembourser MUSIVA.
 
 Voici les chiffres. Chaque locataire à temps plein paie en moyenne 350 € par mois. On en a quatre aujourd'hui, il en faudrait sept pour équilibrer les charges. Les animations doivent rapporter environ 500 € par mois en plus.
 
@@ -97,9 +97,9 @@ Ces animations remplissent plusieurs rôles à la fois. Elles font venir au Gén
 
 ## L'Académie des Compétences, ou comment l'ESS finance la suite
 
-À côté de l'animation, on développe une Académie des Compétences. Le principe : sur un module de deux à trois heures, pour un prix très accessible, n'importe qui peut venir acquérir une connaissance ou une compétence. Et si la personne veut aller plus loin, elle peut ensuite obtenir une certification via CCFA, en partant de ce petit module suivi au Génie.
+À côté de l'animation, on développe une Académie des Compétences. Le principe : sur un module de deux à trois heures, pour un prix très accessible, n'importe qui peut venir acquérir une connaissance ou une compétence. Et si la personne veut aller plus loin, elle peut ensuite obtenir une certification via MUSIVA, en partant de ce petit module suivi au Génie.
 
-C'est exactement la passerelle qu'on cherchait entre la mission ESS de Génie, accessible à tous, et l'activité de formation certifiante de CCFA, qui génère du revenu. C'est probablement, à terme, l'un des leviers les plus solides pour atteindre l'équilibre sans dénaturer le projet.
+C'est exactement la passerelle qu'on cherchait entre la mission ESS de Génie, accessible à tous, et l'activité de formation certifiante de MUSIVA, qui génère du revenu. C'est probablement, à terme, l'un des leviers les plus solides pour atteindre l'équilibre sans dénaturer le projet.
 
 ## Six mois d'existence, trois leçons
 
@@ -131,7 +131,7 @@ Mon message tiendra en deux phrases. N'attendez pas le moment parfait, ni les pa
 
 Trois façons simples de donner suite — un message qui part directement, ou une visite à réserver en ligne.
 
-[✉️ Nous écrire](mailto:genie.montauban@gmail.com?subject=Je%20d%C3%A9couvre%20le%20G%C3%A9nie&body=Bonjour%2C%0A%0AJ'ai%20lu%20votre%20article%20sur%20le%20tiers-lieu%20et%20j'aimerais%20en%20savoir%20plus%20sur%20%3A%0A%0A)
+[✉️ Nous écrire](mailto:contact@genie-montauban.fr?subject=Je%20d%C3%A9couvre%20le%20G%C3%A9nie&body=Bonjour%2C%0A%0AJ'ai%20lu%20votre%20article%20sur%20le%20tiers-lieu%20et%20j'aimerais%20en%20savoir%20plus%20sur%20%3A%0A%0A)
 [📅 Réserver une visite](reservation.html)
 [📞 06 51 50 97 18](tel:+33651509718)
 
