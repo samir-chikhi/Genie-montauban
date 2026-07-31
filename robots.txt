@@ -11,6 +11,5 @@ Disallow: /mon-compte.html
 Disallow: /crypto-session1.html
 Disallow: /crypto-session2.html
 Disallow: /reunion-conseil-locataires-25-juin-2026.html
-Disallow: /docs/
 
 Sitemap: https://genie-montauban.fr/sitemap.xml
