@@ -24,7 +24,7 @@ Génie met à disposition les espaces suivants :
 
 ## Article 3 — Tarifs
 
-Les tarifs applicables sont ceux en vigueur au moment de la réservation, affichés sur le site et dans la grille tarifaire 2026. Quatre profils tarifaires existent : CCFA (tarif plein), Adhérent Génie (~20% de réduction), Locataire (tarif préférentiel), Association/Syndicat de Villebourbon (gratuit sous conditions).
+Les tarifs applicables sont ceux en vigueur au moment de la réservation, affichés sur le site et dans la grille tarifaire 2026. Quatre profils tarifaires existent : MUSIVA (tarif plein), Adhérent Génie (~20% de réduction), Locataire (tarif préférentiel), Association/Syndicat de Villebourbon (gratuit sous conditions).
 
 Les prix sont indiqués en euros TTC. L'Association Génie est exonérée de TVA en application de l'article 261-7 du Code général des impôts.
 

@@ -289,7 +289,7 @@ Tarifs dégressifs selon votre statut. Les associations syndicales et de Villebo
 
 🏢
 
-CCFA / Tarif plein
+MUSIVA / Tarif plein
 
 Entreprises, professions libérales, prestataires externes
 
@@ -321,7 +321,7 @@ Associations de Villebourbon et syndicats — **gratuit**
 | **Montessori** (PMR) | 20 / 15 / 10 € | 60 / 45 / 30 € | 100 / 80 / 70 € |
 | Asso / Villebourbon | | Gratuit | |
 
-Tarifs dans l'ordre : CCFA / Adhérent / Locataire
+Tarifs dans l'ordre : MUSIVA / Adhérent / Locataire
 
 ### Bureaux nomades & Coworking
 
