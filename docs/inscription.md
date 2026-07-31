@@ -83,7 +83,7 @@ Les présentes CGV s'appliquent à l'ensemble des prestations de l'Association G
 
 **Bureaux privatifs :** bail 3/6/9 (15€ HC/m²/mois), bail annuel (17€ HC/m²/mois), mensuel (18€ HC/m²/mois). Charges TCC = HC + 23%.
 
-**Salles de réunion :** 4 catégories tarifaires (CCFA, Adhérent, Locataire, Association/Syndicat gratuit). Badge 24h/7j : 25€/mois.
+**Salles de réunion :** 4 catégories tarifaires (MUSIVA, Adhérent, Locataire, Association/Syndicat gratuit). Badge 24h/7j : 25€/mois.
 
 #### Article 4 – Réservation
 

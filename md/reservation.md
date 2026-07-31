@@ -52,7 +52,7 @@ Durée
 
 ## 📅 Date, heure & coordonnées
 
-ℹ️ Pour modifier une réservation existante, indiquez votre référence dans "Précisions" ou contactez-nous à **genie.montauban@gmail.com**.
+ℹ️ Pour modifier une réservation existante, indiquez votre référence dans "Précisions" ou contactez-nous à **contact@genie-montauban.fr**.
 
 Date souhaitée \*
 

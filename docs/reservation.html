@@ -273,9 +273,9 @@ const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyJ-Dk-yZZNdfxFigchP
 
 // ─── DONNÉES ESPACES ────────────────────────────────────
 // Profils tarifaires pour les salles de réunion
-// Ordre : [CCFA, Adhérent, Locataire, Association(gratuit)]
+// Ordre : [MUSIVA, Adhérent, Locataire, Association(gratuit)]
 const PROFILS = [
-  { id:'ccfa',      label:'CCFA exclusivement', desc:'Réservation CCFA uniquement',       color:'#7C3AED' },
+  { id:'MUSIVA',      label:'MUSIVA exclusivement', desc:'Réservation MUSIVA uniquement',       color:'#7C3AED' },
   { id:'adherent',  label:'Adhérent Génie',      desc:'Membres de l\'association Génie',   color:'#2563EB' },
   { id:'locataire', label:'Locataire / Extérieur',desc:'Entreprise, particulier, public',  color:'var(--brick)' },
   { id:'asso',      label:'Association / Syndicat',desc:'Loi 1901 Villebourbon + syndicats — sous conditions', color:'var(--sage)' }
@@ -284,7 +284,7 @@ const PROFILS = [
 // Espaces réservables
 // type: 'reunion' | 'nomade' | 'both'
 // Pour type 'both' : l'utilisateur choisit l'usage
-// tarifs_reunion : { ccfa, adherent, locataire } x { heure, demi, journee }
+// tarifs_reunion : { MUSIVA, adherent, locataire } x { heure, demi, journee }
 // tarifs_nomade  : { demi, journee, semaine, mois }
 const ESPACES = [
   {
@@ -297,7 +297,7 @@ const ESPACES = [
     desc: 'Grande salle lumineuse avec terrasse, vidéoprojecteur, sono — idéale formations et assemblées',
     icon: '🏛️',
     tarifs_reunion: {
-      ccfa:      { heure:40, demi:110, journee:180 },
+      MUSIVA:      { heure:40, demi:110, journee:180 },
       adherent:  { heure:30, demi:90,  journee:150 },
       locataire: { heure:20, demi:70,  journee:120 },
       asso:      { heure:0,  demi:0,   journee:0   }
@@ -314,7 +314,7 @@ const ESPACES = [
     desc: 'Salle modulable, paperboard, disponible à la journée ou en bail mensuel',
     icon: '📋',
     tarifs_reunion: {
-      ccfa:      { heure:30, demi:90,  journee:150 },
+      MUSIVA:      { heure:30, demi:90,  journee:150 },
       adherent:  { heure:20, demi:60,  journee:100 },
       locataire: { heure:15, demi:45,  journee:80  },
       asso:      { heure:0,  demi:0,   journee:0   }
@@ -331,7 +331,7 @@ const ESPACES = [
     desc: 'Salle de réunion lumineuse, écran TV, paperboard, accès 1er étage',
     icon: '🤝',
     tarifs_reunion: {
-      ccfa:      { heure:30, demi:90,  journee:150 },
+      MUSIVA:      { heure:30, demi:90,  journee:150 },
       adherent:  { heure:20, demi:60,  journee:100 },
       locataire: { heure:15, demi:45,  journee:80  },
       asso:      { heure:0,  demi:0,   journee:0   }
@@ -384,7 +384,7 @@ const ESPACES = [
     desc: 'Salle accessible PMR, usage flexible : réunion ou bureau nomade privé — rez-de-jardin',
     icon: '♿',
     tarifs_reunion: {
-      ccfa:      { heure:20, demi:60, journee:100 },
+      MUSIVA:      { heure:20, demi:60, journee:100 },
       adherent:  { heure:15, demi:45, journee:80  },
       locataire: { heure:10, demi:30, journee:70  },
       asso:      { heure:0,  demi:0,  journee:0   }
