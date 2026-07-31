@@ -324,7 +324,7 @@ textarea{resize:vertical;min-height:65px}
           <span id="cal-sync-state" style="font-size:11px;color:var(--sage);white-space:nowrap"></span>
           <!-- Bouton désactivé temporairement — calendrier à reconfigurer -->
           <!-- <button class="btn btn-sm btn-secondary" onclick="syncCalendarToSheets()">⬇️ Importer Cal</button> -->
-          <a href="https://calendar.google.com/calendar/r/week?authuser=genie.montauban@gmail.com" target="_blank" class="btn btn-sm btn-ghost">🔗 Ouvrir Cal</a>
+          <a href="https://calendar.google.com/calendar/r/week?authuser=contact@genie-montauban.fr" target="_blank" class="btn btn-sm btn-ghost">🔗 Ouvrir Cal</a>
         </div>
 
         <!-- Grille planning -->
@@ -414,7 +414,7 @@ textarea{resize:vertical;min-height:65px}
               <div style="display:flex;gap:8px;flex-wrap:wrap">
                 <button class="btn btn-secondary btn-sm" onclick="showSetup()">✏️ Modifier URL</button>
                 <a id="sheet-link" href="https://docs.google.com/spreadsheets/d/1mf3D2YGnpWpzufGOaLLaomxAkuzp0AiJY7RzcbpIq2w/edit" target="_blank" class="btn btn-sage btn-sm">📋 Google Sheets</a>
-                <a href="https://calendar.google.com/calendar/r?authuser=genie.montauban@gmail.com" target="_blank" class="btn btn-cal btn-sm">📅 Google Calendar</a>
+                <a href="https://calendar.google.com/calendar/r?authuser=contact@genie-montauban.fr" target="_blank" class="btn btn-cal btn-sm">📅 Google Calendar</a>
               </div>
             </div>
           </div>
@@ -422,7 +422,7 @@ textarea{resize:vertical;min-height:65px}
           <div class="card">
             <div class="card-hd"><h3>📧 Contact</h3></div>
             <div class="card-body">
-              <div class="fg"><label>Email</label><input type="email" id="cfg-email" value="genie.montauban@gmail.com"></div>
+              <div class="fg"><label>Email</label><input type="email" id="cfg-email" value="contact@genie-montauban.fr"></div>
               <div class="fg" style="margin-top:10px"><label>Téléphone</label><input type="tel" id="cfg-tel" value="06 51 50 97 18"></div>
               <button class="btn btn-primary btn-sm" style="margin-top:12px" onclick="saveCfg()">Enregistrer</button>
             </div>
@@ -495,7 +495,7 @@ textarea{resize:vertical;min-height:65px}
         <div class="fg" id="r-profil-fg">
           <label>Profil tarifaire</label>
           <select id="r-profil" onchange="calcModalPrix()">
-            <option value="ccfa">CCFA exclusivement</option>
+            <option value="MUSIVA">MUSIVA exclusivement</option>
             <option value="adherent">Adhérent Génie</option>
             <option value="locataire">Locataire / Extérieur</option>
             <option value="asso">Association / Syndicat (gratuit)</option>
@@ -604,7 +604,7 @@ const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1mf3D2YGnpWpzufGOaLLao
 // DONNÉES DE RÉFÉRENCE
 // ─────────────────────────────────────────────────────────
 const PROFILS = {
-  ccfa     : { label:'CCFA',           color:'#5B21B6' },
+  MUSIVA     : { label:'MUSIVA',           color:'#5B21B6' },
   adherent : { label:'Adhérent',       color:'#0369A1' },
   locataire: { label:'Locataire',      color:'var(--brick)' },
   asso     : { label:'Asso/Syndicat',  color:'var(--sage)' }
@@ -612,17 +612,17 @@ const PROFILS = {
 
 const ESPACES_DEF = {
   bourdelle : { nom:'Antoine Bourdelle',     ref:'0-02',  type:'reunion', capacite:40,  icon:'🏛️',
-    tarifs_reunion:{ ccfa:{heure:40,demi:110,journee:180}, adherent:{heure:30,demi:90,journee:150}, locataire:{heure:20,demi:70,journee:120}, asso:{heure:0,demi:0,journee:0} } },
+    tarifs_reunion:{ MUSIVA:{heure:40,demi:110,journee:180}, adherent:{heure:30,demi:90,journee:150}, locataire:{heure:20,demi:70,journee:120}, asso:{heure:0,demi:0,journee:0} } },
   freinet   : { nom:'Célestin Freinet',      ref:'1-11',  type:'both',    capacite:20,  icon:'📋',
-    tarifs_reunion:{ ccfa:{heure:30,demi:90,journee:150}, adherent:{heure:20,demi:60,journee:100}, locataire:{heure:15,demi:45,journee:80}, asso:{heure:0,demi:0,journee:0} } },
+    tarifs_reunion:{ MUSIVA:{heure:30,demi:90,journee:150}, adherent:{heure:20,demi:60,journee:100}, locataire:{heure:15,demi:45,journee:80}, asso:{heure:0,demi:0,journee:0} } },
   gouges    : { nom:'Olympe de Gouges',      ref:'1-12',  type:'reunion', capacite:20,  icon:'🤝',
-    tarifs_reunion:{ ccfa:{heure:30,demi:90,journee:150}, adherent:{heure:20,demi:60,journee:100}, locataire:{heure:15,demi:45,journee:80}, asso:{heure:0,demi:0,journee:0} } },
+    tarifs_reunion:{ MUSIVA:{heure:30,demi:90,journee:150}, adherent:{heure:20,demi:60,journee:100}, locataire:{heure:15,demi:45,journee:80}, asso:{heure:0,demi:0,journee:0} } },
   michel    : { nom:'Louise Michel',         ref:'0-01',  type:'nomade',  capacite:4,   icon:'🚪', sous_type:'prive',
     tarifs_nomade:{ demi:12, journee:22, semaine:90, mois:200 } },
   rousseau  : { nom:'Jean-Jacques Rousseau', ref:'1-10',  type:'nomade',  capacite:20,  icon:'💻', sous_type:'coworking',
     tarifs_nomade:{ demi:10, journee:17, semaine:60, mois:180 } },
   montessori: { nom:'Maria Montessori',      ref:'-1-14', type:'both',    capacite:4,   icon:'♿',
-    tarifs_reunion:{ ccfa:{heure:20,demi:60,journee:100}, adherent:{heure:15,demi:45,journee:80}, locataire:{heure:10,demi:30,journee:70}, asso:{heure:0,demi:0,journee:0} },
+    tarifs_reunion:{ MUSIVA:{heure:20,demi:60,journee:100}, adherent:{heure:15,demi:45,journee:80}, locataire:{heure:10,demi:30,journee:70}, asso:{heure:0,demi:0,journee:0} },
     tarifs_nomade:{ demi:15, journee:27, semaine:100, mois:216 } }
 };
 
@@ -642,7 +642,7 @@ const gvSet  = (id,val) => { const el=document.getElementById(id); if(el) el.val
 // ─────────────────────────────────────────────────────────
 // ÉTAT GLOBAL
 // ─────────────────────────────────────────────────────────
-let DB          = { reservations:[], config:{email:'genie.montauban@gmail.com', tel:'06 51 50 97 18'} };
+let DB          = { reservations:[], config:{email:'contact@genie-montauban.fr', tel:'06 51 50 97 18'} };
 let editId      = null;
 let weekOffset  = 0;
 let calEvents   = [];      // événements Google Calendar en mémoire
@@ -1380,7 +1380,7 @@ function showCalEventDetail(calEventId, title, start, end) {
   document.getElementById('det-foot').innerHTML=`
     <button class="btn btn-ghost" onclick="closeModal('mdetail')">Fermer</button>
     <button class="btn btn-primary" onclick="convertCalToResa('${encodeURIComponent(title)}','${start}','${end}')">➕ Créer une réservation</button>
-    <a href="https://calendar.google.com/calendar/r?authuser=genie.montauban@gmail.com" target="_blank" class="btn btn-cal">🔗 Ouvrir Google Cal</a>`;
+    <a href="https://calendar.google.com/calendar/r?authuser=contact@genie-montauban.fr" target="_blank" class="btn btn-cal">🔗 Ouvrir Google Cal</a>`;
 
   openModal('mdetail');
 }

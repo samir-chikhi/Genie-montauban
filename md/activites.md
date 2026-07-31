@@ -261,7 +261,7 @@ Carnaval
 
 ### Pourquoi on a créé un tiers-lieu (et comment on évite d'y perdre de l'argent)
 
-Tout est parti d'une visite de bureau pour CCFA et d'une phrase du propriétaire : « Je vous fais confiance, faites-le. » Aujourd'hui, il nous manque 3 locataires pour atteindre l'équilibre — gouvernance, chiffres, animations : on vous raconte tout, sans filtre.
+Tout est parti d'une visite de bureau pour MUSIVA et d'une phrase du propriétaire : « Je vous fais confiance, faites-le. » Aujourd'hui, il nous manque 3 locataires pour atteindre l'équilibre — gouvernance, chiffres, animations : on vous raconte tout, sans filtre.
 
 📍 Génie Montauban · Lire l'histoire complète →](notre-histoire.html)
 
@@ -308,7 +308,7 @@ Nouveau
 
 Génie accompagne les créateurs d'associations et projets à impact local : espace de travail, mise en réseau, mentorat et soutien méthodologique pour faire émerger vos idées en Tarn-et-Garonne.
 
-📍 Génie Montauban · genie.montauban@gmail.com
+📍 Génie Montauban · contact@genie-montauban.fr
 
 Continu
 📣 Info pratique
@@ -330,4 +330,4 @@ Les événements, coulisses et actualités en temps réel sur LinkedIn et Facebo
 
 Génie met à disposition ses espaces pour vos conférences, ateliers et formations. Parlons-en !
 
-[📩 Nous contacter](mailto:genie.montauban@gmail.com)
+[📩 Nous contacter](mailto:contact@genie-montauban.fr)

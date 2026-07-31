@@ -174,7 +174,7 @@ Louise Michel
 
 Bail mensuel : **270€/mois** · Bail 1 an : **255€/mois** · Bail 3/6/9 : **225€/mois**
 
-[Nous contacter →](mailto:genie.montauban@gmail.com?subject=Location bureau Louise Michel)
+[Nous contacter →](mailto:contact@genie-montauban.fr?subject=Location bureau Louise Michel)
 
 🏢
 
@@ -186,7 +186,7 @@ Philippe Meirieu
 
 Bail mensuel : **432€/mois** · Bail 1 an : **408€/mois** · Bail 3/6/9 : **360€/mois**
 
-[Nous contacter →](mailto:genie.montauban@gmail.com?subject=Location bureau Philippe Meirieu)
+[Nous contacter →](mailto:contact@genie-montauban.fr?subject=Location bureau Philippe Meirieu)
 
 🏢
 
@@ -198,7 +198,7 @@ Aimée Césaire
 
 Bail mensuel : **306€/mois** · Bail 1 an : **289€/mois** · Bail 3/6/9 : **255€/mois**
 
-[Nous contacter →](mailto:genie.montauban@gmail.com?subject=Location bureau Aimée Césaire)
+[Nous contacter →](mailto:contact@genie-montauban.fr?subject=Location bureau Aimée Césaire)
 
 🏢
 
@@ -210,7 +210,7 @@ Condorcet
 
 Bail mensuel : **306€/mois** · Bail 1 an : **289€/mois** · Bail 3/6/9 : **255€/mois**
 
-[Nous contacter →](mailto:genie.montauban@gmail.com?subject=Location bureau Condorcet)
+[Nous contacter →](mailto:contact@genie-montauban.fr?subject=Location bureau Condorcet)
 
 🏢
 
@@ -222,7 +222,7 @@ Baden Powell
 
 Bail mensuel : **288€/mois** · Bail 1 an : **272€/mois** · Bail 3/6/9 : **240€/mois**
 
-[Nous contacter →](mailto:genie.montauban@gmail.com?subject=Location bureau Baden Powell)
+[Nous contacter →](mailto:contact@genie-montauban.fr?subject=Location bureau Baden Powell)
 
 ♿
 
@@ -234,7 +234,7 @@ Maria Montessori
 
 Bail mensuel : **216€/mois** · Bail 1 an : **204€/mois** · Bail 3/6/9 : **180€/mois**
 
-[Nous contacter →](mailto:genie.montauban@gmail.com?subject=Location bureau Maria Montessori)
+[Nous contacter →](mailto:contact@genie-montauban.fr?subject=Location bureau Maria Montessori)
 
 Grille tarifaire 2026
 
@@ -246,7 +246,7 @@ Tarifs dégressifs selon votre statut. Les associations syndicales et de Villebo
 
 🏢
 
-CCFA / Tarif plein
+MUSIVA / Tarif plein
 
 Entreprises, professions libérales, prestataires externes
 
@@ -278,7 +278,7 @@ Associations de Villebourbon et syndicats — **gratuit**
 | **Montessori** (PMR) | 20 / 15 / 10 € | 60 / 45 / 30 € | 100 / 80 / 70 € |
 | Asso / Villebourbon | | Gratuit | |
 
-Tarifs dans l'ordre : CCFA / Adhérent / Locataire
+Tarifs dans l'ordre : MUSIVA / Adhérent / Locataire
 
 ### Bureaux nomades & Coworking
 
@@ -437,7 +437,7 @@ Grande projection collective ! Buvette sur place, restauration par la Cantine Po
 
 Entrée libre
 
-[Je viens ! →](mailto:genie.montauban@gmail.com?subject=Soirée Match Coupe du Monde 16 juin)
+[Je viens ! →](mailto:contact@genie-montauban.fr?subject=Soirée Match Coupe du Monde 16 juin)
 
 12
 
@@ -451,7 +451,7 @@ Ensemble, levons les yeux vers un spectacle rare ! Observation sécurisée sur l
 
 Adhérents
 
-[Je viens ! →](mailto:genie.montauban@gmail.com?subject=Soirée Éclipse 12 août)
+[Je viens ! →](mailto:contact@genie-montauban.fr?subject=Soirée Éclipse 12 août)
 
 [Voir tous les événements →](activites.html)
 
@@ -573,7 +573,7 @@ J'accepte que mes données soient utilisées pour la gestion de mon adhésion (c
 ✉️ Envoyer ma demande d'adhésion
 [⬇️ Télécharger la fiche PDF](Fiche_Adhesion_GENIE_2026.pdf)
 
-Bulletin à retourner par email à **genie.montauban@gmail.com** ou au **12 rue du Génie, 82000 Montauban**
+Bulletin à retourner par email à **contact@genie-montauban.fr** ou au **12 rue du Génie, 82000 Montauban**
 
 Nous trouver
 
@@ -598,7 +598,7 @@ Téléphone
 
 Email
 
-[genie.montauban@gmail.com](mailto:genie.montauban@gmail.com)
+[contact@genie-montauban.fr](mailto:contact@genie-montauban.fr)
 
 🕐
 
@@ -648,7 +648,7 @@ Oui. La salle Maria Montessori au rez-de-jardin est 100% accessible PMR avec ent
 
 #### Puis-je visiter avant de réserver ?
 
-Absolument. Appelez-nous au 06 51 50 97 18 ou écrivez à genie.montauban@gmail.com — nous organisons des visites en semaine.
+Absolument. Appelez-nous au 06 51 50 97 18 ou écrivez à contact@genie-montauban.fr — nous organisons des visites en semaine.
 
 #### Les associations ont-elles des tarifs spéciaux ?
 
