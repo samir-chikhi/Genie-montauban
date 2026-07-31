@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com; frame-src https://www.google.com; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>Génie — Tiers-Lieu de Montauban | Coworking & ESS</title>
   <meta name="description" content="Génie est un tiers-lieu ancré dans l'économie sociale et solidaire à Montauban. Bureaux privatifs, coworking, salles de réunion. À 1 min de la gare SNCF. Accessible PMR.">
   <meta name="keywords" content="coworking montauban, tiers lieu montauban, espace collaboratif, ESS, économie sociale solidaire, bureau partagé, salle réunion montauban">
@@ -11,16 +13,16 @@
   <meta property="og:title" content="Génie — Tiers-Lieu de Montauban">
   <meta property="og:description" content="Espace de coworking, bureaux et salles de réunion au cœur de Montauban. ESS, innovation sociale, communauté.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://www.genie-montauban.fr/">
-  <meta property="og:image" content="https://www.genie-montauban.fr/coworking3.jpg">
+  <meta property="og:url" content="https://genie-montauban.fr/">
+  <meta property="og:image" content="https://genie-montauban.fr/coworking3.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="Génie — Tiers-lieu coworking à Montauban, 12 rue du Génie">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Génie — Tiers-Lieu de Montauban | Coworking & ESS">
   <meta name="twitter:description" content="Bureaux, coworking et salles de réunion au cœur de Montauban. 200m gare SNCF. Accessible PMR. À partir de 10€/demi-journée.">
-  <meta name="twitter:image" content="https://www.genie-montauban.fr/coworking3.jpg">
-  <link rel="canonical" href="https://www.genie-montauban.fr/">
+  <meta name="twitter:image" content="https://genie-montauban.fr/coworking3.jpg">
+  <link rel="canonical" href="https://genie-montauban.fr/">
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-774PRH98LY"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -35,11 +37,11 @@
     "name": "Génie — Tiers-Lieu de Montauban",
     "legalName": "Association Génie Montauban",
     "description": "Tiers-lieu associatif ESS à Montauban. Coworking, bureaux privatifs, salles de réunion jusqu'à 40 personnes. À 200m de la gare SNCF. Accessible PMR. Ouvert aux particuliers, associations et entreprises.",
-    "url": "https://www.genie-montauban.fr",
+    "url": "https://genie-montauban.fr",
     "telephone": "+33651509718",
     "email": "genie.montauban@gmail.com",
-    "image": ["https://www.genie-montauban.fr/coworking3.jpg", "https://www.genie-montauban.fr/og-image.jpg", "https://www.genie-montauban.fr/facade.png"],
-    "logo": "https://www.genie-montauban.fr/logo.png",
+    "image": ["https://genie-montauban.fr/coworking3.jpg", "https://genie-montauban.fr/og-image.jpg", "https://genie-montauban.fr/facade.png"],
+    "logo": "https://genie-montauban.fr/logo.png",
     "priceRange": "€–€€",
     "currenciesAccepted": "EUR",
     "paymentAccepted": "Virement, Chèque, Espèces",
@@ -516,7 +518,9 @@
     <li><a href="#services">Services</a></li>
     <li><a href="#rejoindre">Adhésion</a></li>
     <li><a href="#contact">Contact</a></li>
+    <li><a href="notre-histoire.html">Notre histoire</a></li>
     <li><a href="activites.html">Activités &amp; Actualités</a></li>
+    <li><a href="academie.html">Académie</a></li>
     <li><a href="inscription.html">Mon compte</a></li>
     <li><a href="reservation.html" class="nav-cta">Réserver</a></li>
   </ul>
@@ -1381,11 +1385,11 @@ function envoyerAdhesion() {
   btn.disabled = true;
   btn.textContent = '⏳ Envoi en cours…';
 
-  // Envoi en no-cors (Apps Script JSONP-like, pas de réponse lisible) + notification immédiate
+  // Envoi avec lecture de la vraie réponse serveur (succès confirmé ou erreur affichée)
   fetch(APPS_SCRIPT_URL, {
     method: 'POST',
-    mode: 'no-cors',
     headers: { 'Content-Type': 'text/plain' },
+    redirect: 'follow',
     body: JSON.stringify({
       action:       'ADHERER',
       typeAdhesion: type,
@@ -1397,11 +1401,21 @@ function envoyerAdhesion() {
       tel:          document.getElementById('mbr-tel').value.trim(),
       adresse:      document.getElementById('mbr-adresse').value.trim()
     })
-  }).catch(function() {});
-
-  // Affichage du succès immédiatement (no-cors ne retourne pas de réponse lisible)
-  btn.textContent = '✅ Demande envoyée !';
-  showNotif('🎉 Demande envoyée ! L\'équipe Génie vous contacte sous 48h par email.', 'success');
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (data && data.success) {
+      btn.textContent = '✅ Demande envoyée !';
+      showNotif('🎉 Demande envoyée ! L\'équipe Génie vous contacte sous 48h par email.', 'success');
+    } else {
+      throw new Error((data && data.message) || (data && data.error) || 'Erreur serveur');
+    }
+  })
+  .catch(function(e) {
+    btn.disabled = false;
+    btn.textContent = '✉️ Envoyer ma demande d\'adhésion';
+    showNotif('⚠️ Envoi impossible (' + e.message + '). Réessayez ou appelez le 06 51 50 97 18.', 'error');
+  });
 }
 
 // ── CONTACT ──
@@ -1424,21 +1438,31 @@ function envoyerContact() {
   var nom    = document.getElementById('c-nom').value.trim();
   var sujet  = document.getElementById('c-sujet').value.trim();
 
-  // Envoi Apps Script en no-cors
+  // Envoi avec lecture de la vraie réponse serveur
   fetch(APPS_SCRIPT_URL, {
     method: 'POST',
-    mode: 'no-cors',
     headers: { 'Content-Type': 'text/plain' },
+    redirect: 'follow',
     body: JSON.stringify({ action: 'CONTACT', prenom: prenom, nom: nom, email: email, sujet: sujet, message: message })
-  }).catch(function() {});
-
-  // Feedback
-  showNotif('✅ Message envoyé ! Nous vous répondons sous 24h.', 'success');
-  document.getElementById('c-email').value   = '';
-  document.getElementById('c-message').value = '';
-  document.getElementById('c-prenom').value  = '';
-  document.getElementById('c-nom').value     = '';
-  document.getElementById('c-sujet').value   = '';
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (data && data.success) {
+      showNotif('✅ Message envoyé ! Nous vous répondons sous 24h.', 'success');
+      document.getElementById('c-email').value   = '';
+      document.getElementById('c-message').value = '';
+      document.getElementById('c-prenom').value  = '';
+      document.getElementById('c-nom').value     = '';
+      document.getElementById('c-sujet').value   = '';
+    } else {
+      throw new Error((data && data.message) || (data && data.error) || 'Erreur serveur');
+    }
+  })
+  .catch(function(e) {
+    errEl.textContent = '⚠️ Envoi impossible (' + e.message + '). Réessayez ou appelez le 06 51 50 97 18.';
+    errEl.style.display = 'block';
+    setTimeout(function() { errEl.style.display = 'none'; }, 6000);
+  });
 }
 
 // ── SMOOTH SCROLL ──

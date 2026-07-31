@@ -11,7 +11,7 @@ from markdownify import markdownify as md
 import re
 
 DOCS_DIR = Path(__file__).parent / "docs"
-BASE_URL = "https://www.genie-montauban.fr"
+BASE_URL = "https://genie-montauban.fr"
 
 # Pages publiques à traiter (on exclut admin)
 EXCLUDE = {"admin.html"}

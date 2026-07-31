@@ -1,13 +1,23 @@
 // ============================================================
-// GÉNIE MONTAUBAN — Google Apps Script Unifié v4.3
-// Corrections v4.3 vs v4.2 :
-//   1. adminGetAll()       → lit le bon schéma Sheet (24 col, prenom en col1)
-//   2. adminAddResa()      → écrit dans le bon ordre + email notification
-//   3. adminUpdateResa()   → écrit dans le bon ordre (24 col)
-//   4. adminUpdateStatus() → indices colonnes corrigés
-//   5. verifierNouvelAvis  → déplacé ici depuis "Projet sans titre"
-//      (plus besoin du projet séparé)
-//   Tout le reste est IDENTIQUE au v4.2
+// GÉNIE MONTAUBAN — Google Apps Script Unifié v5.0
+// Durcissement v5.0 vs v4.3 :
+//   1. AUTH ADMIN : toutes les actions admin (getAll, addResa,
+//      updateResa, deleteResa, saveConfig, ADMIN_UPDATE_STATUS,
+//      getCalendar, syncFromCal) exigent un token de session délivré
+//      par ADMIN_LOGIN et vérifié côté serveur. Sessions 8h.
+//   2. ANTI DOUBLE-RÉSERVATION : creerReservation vérifie les
+//      chevauchements de créneaux (LockService + capacité par espace).
+//   3. PRIX SERVEUR : le montant est recalculé depuis la grille
+//      tarifaire serveur ; écart signalé dans l'email admin.
+//   4. SANITISATION : neutralisation de l'injection de formules
+//      Sheets (=, +, @) sur toutes les entrées publiques.
+//   5. RATE LIMITING : max 5 soumissions/heure par email sur les
+//      formulaires publics (réservation, inscription, adhésion, contact).
+//   6. IDEMPOTENCE : une resoumission identique (même email/espace/
+//      date/heure) renvoie la réservation existante au lieu d'un doublon.
+//   7. deleteResa supprime aussi l'événement Google Calendar lié.
+//   Mot de passe admin : exécuter definirMotDePasseAdmin() dans
+//   l'éditeur → hash stocké dans Config, mot de passe envoyé par email.
 // ============================================================
 
 const CONFIG = {
@@ -23,7 +33,150 @@ const CONFIG = {
   QUOTA_ALERTE_MIN:   20,
   RESA_ATTENTE_MAX_H: 24,
   ADH_ATTENTE_MAX_H:  48,
+  SESSION_ADMIN_H:    8,   // durée de validité d'une session admin
+  RATE_LIMIT_MAX:     5,   // soumissions max / heure / email
 };
+
+// ============================================================
+// GRILLE TARIFAIRE SERVEUR — alignée sur tarifs.html (référence)
+// capacite = nb de réservations simultanées possibles sur le même créneau
+// ============================================================
+const TARIFS = {
+  bourdelle  : { type:'salle',  capacite:1,  plein:{heure:45,demi:150,journee:250}, adherent:{heure:30,demi:90,journee:150}, locataire:{heure:20,demi:70,journee:120}, asso:{heure:0,demi:0,journee:0} },
+  freinet    : { type:'salle',  capacite:1,  plein:{heure:30,demi:100,journee:180}, adherent:{heure:20,demi:60,journee:100}, locataire:{heure:15,demi:45,journee:80},  asso:{heure:0,demi:0,journee:0} },
+  gouges     : { type:'salle',  capacite:1,  plein:{heure:30,demi:100,journee:180}, adherent:{heure:20,demi:60,journee:100}, locataire:{heure:15,demi:45,journee:80},  asso:{heure:0,demi:0,journee:0} },
+  montessori : { type:'salle',  capacite:1,  plein:{heure:20,demi:60,journee:100},  adherent:{heure:15,demi:45,journee:80},  locataire:{heure:10,demi:30,journee:70},  asso:{heure:0,demi:0,journee:0} },
+  aristote   : { type:'nomade', capacite:1,  plein:{demi:18,journee:33,semaine:130,mois:280}, adherent:{demi:12,journee:22,semaine:90,mois:200}, locataire:{demi:12,journee:22,semaine:90,mois:200}, asso:{demi:0,journee:0,semaine:0,mois:0} },
+  rousseau   : { type:'nomade', capacite:20, plein:{demi:15,journee:26,semaine:90,mois:250},  adherent:{demi:10,journee:17,semaine:60,mois:180}, locataire:{demi:10,journee:17,semaine:60,mois:180}, asso:{demi:0,journee:0,semaine:0,mois:0} },
+  michel     : { type:'nomade', capacite:1,  plein:{demi:12,journee:22,semaine:90,mois:200},  adherent:{demi:12,journee:22,semaine:90,mois:200}, locataire:{demi:12,journee:22,semaine:90,mois:200}, asso:{demi:0,journee:0,semaine:0,mois:0} },
+};
+
+// Retrouve la clé tarifaire d'un espace depuis son nom libre
+// ('Antoine Bourdelle' → 'bourdelle'). null si espace inconnu.
+function cleEspace(nom) {
+  var s = String(nom || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+  var cles = Object.keys(TARIFS);
+  for (var i = 0; i < cles.length; i++) {
+    if (s.indexOf(cles[i]) !== -1) return cles[i];
+  }
+  return null;
+}
+
+// Clé espace d'une ligne de réservation. La colonne 6 (espace) porte le nom
+// réel de la salle ('Antoine Bourdelle') ; la colonne 7 peut contenir le type
+// ('salle'/'nomade'). On résout donc col6 en priorité, puis col7 en secours.
+function cleEspaceRow(row) {
+  return cleEspace(row[6]) || cleEspace(row[7]);
+}
+
+// Meilleur prix serveur pour nbH heures (hors options badge/adhésion).
+// null si l'espace est inconnu de la grille.
+function calculerMontantServeur(espaceNom, nbH, profil) {
+  var cle = cleEspace(espaceNom);
+  if (!cle) return null;
+  var p = ['plein', 'adherent', 'locataire', 'asso'].indexOf(String(profil)) !== -1 ? profil : 'plein';
+  var t = TARIFS[cle][p];
+  var candidats = [];
+  if (t.heure !== undefined) candidats.push(t.heure * Math.ceil(nbH));
+  if (t.demi !== undefined && nbH <= 4) candidats.push(t.demi);
+  if (t.journee !== undefined && nbH <= 8) candidats.push(t.journee);
+  if (!candidats.length) candidats.push(t.journee !== undefined ? t.journee : (t.demi || 0));
+  return Math.min.apply(null, candidats);
+}
+
+// ============================================================
+// SÉCURITÉ v5 — sanitisation, rate limiting, sessions admin
+// ============================================================
+
+// Neutralise l'injection de formules Sheets et borne la longueur
+function sanit(v) {
+  if (v === null || v === undefined) return '';
+  var s = String(v);
+  if (/^[=+@\t\r]/.test(s)) s = "'" + s;
+  return s.substring(0, 2000);
+}
+
+// true si l'appelant (clé = email) n'a pas dépassé le quota horaire
+function rateLimitOk(cle) {
+  try {
+    var cache = CacheService.getScriptCache();
+    var k = 'rl_' + String(cle || 'anonyme').toLowerCase();
+    var n = parseInt(cache.get(k) || '0', 10);
+    if (n >= CONFIG.RATE_LIMIT_MAX) return false;
+    cache.put(k, String(n + 1), 3600);
+    return true;
+  } catch (e) { return true; }
+}
+
+function hashSha256(txt) {
+  return Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, txt)
+    .map(function(b) { return ('0' + (b & 0xFF).toString(16)).slice(-2); }).join('');
+}
+
+function lireSessions() {
+  try {
+    return JSON.parse(PropertiesService.getScriptProperties().getProperty('ADMIN_SESSIONS') || '{}');
+  } catch (e) { return {}; }
+}
+
+function ecrireSessions(sessions) {
+  PropertiesService.getScriptProperties().setProperty('ADMIN_SESSIONS', JSON.stringify(sessions));
+}
+
+function creerSessionAdmin() {
+  var sessions = lireSessions();
+  var now = Date.now();
+  Object.keys(sessions).forEach(function(t) { if (sessions[t] < now) delete sessions[t]; });
+  var token = Utilities.getUuid() + '-' + hashSha256(String(Math.random()) + now).substring(0, 12);
+  sessions[token] = now + CONFIG.SESSION_ADMIN_H * 3600000;
+  ecrireSessions(sessions);
+  return token;
+}
+
+function verifierSessionAdmin(token) {
+  if (!token) return false;
+  var sessions = lireSessions();
+  return !!(sessions[token] && sessions[token] > Date.now());
+}
+
+// null si la session est valide, sinon l'objet d'erreur à renvoyer
+function requireAdmin(data) {
+  return verifierSessionAdmin(data && data.adminToken)
+    ? null
+    : { success: false, error: 'NON_AUTORISE', message: 'Session admin requise. Reconnectez-vous.' };
+}
+
+// À exécuter DEPUIS L'ÉDITEUR Apps Script pour (ré)initialiser le mot
+// de passe admin : génère un mot de passe fort, stocke son hash dans
+// l'onglet Config, invalide les sessions et envoie le mot de passe
+// par email à CONFIG.EMAIL_ADMIN. À relancer pour changer de mot de passe.
+function definirMotDePasseAdmin() {
+  var alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789!#%*+';
+  var mdp = '';
+  for (var i = 0; i < 16; i++) mdp += alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+  var ss  = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+  var cfg = ss.getSheetByName('Config') || ss.insertSheet('Config');
+  var rows = cfg.getDataRange().getValues();
+  var hash = hashSha256(mdp);
+  var trouve = false;
+  for (var j = 0; j < rows.length; j++) {
+    if (rows[j][0] === 'ADMIN_PASSWORD_HASH') { cfg.getRange(j + 1, 2).setValue(hash); trouve = true; break; }
+  }
+  if (!trouve) cfg.appendRow(['ADMIN_PASSWORD_HASH', hash]);
+  ecrireSessions({});
+  MailApp.sendEmail(CONFIG.EMAIL_ADMIN, '🔐 Génie — Nouveau mot de passe admin',
+    'Nouveau mot de passe de l\'interface admin (' + CONFIG.URL_SITE + '/admin.html) :\n\n' + mdp +
+    '\n\nConservez-le dans un gestionnaire de mots de passe.\n' +
+    'Pour le changer : relancer definirMotDePasseAdmin() dans l\'éditeur Apps Script.\n' +
+    'Toutes les sessions admin en cours ont été déconnectées.');
+  Logger.log('✅ Mot de passe régénéré et envoyé à ' + CONFIG.EMAIL_ADMIN);
+}
+
+// À exécuter DEPUIS L'ÉDITEUR uniquement (tests/maintenance) :
+// crée une session admin et affiche le token dans le journal.
+function genererSessionAdminDepuisEditeur() {
+  Logger.log('Token de session admin (valable ' + CONFIG.SESSION_ADMIN_H + 'h) : ' + creerSessionAdmin());
+}
 
 // ============================================================
 // POINT D'ENTRÉE POST
@@ -39,12 +192,13 @@ function doPost(e) {
       case 'GET_RESERVATIONS_CLIENT': return ok(getReservationsClient(data));
       case 'ADHERER':                 return ok(creerAdhesion(data));
       case 'CONTACT':                 return ok(traiterContact(data));
-      case 'addResa':                 return ok(adminAddResa(data.resa));
-      case 'updateResa':              return ok(adminUpdateResa(data.resa));
-      case 'deleteResa':              return ok(adminDeleteResa(data.id));
-      case 'saveConfig':              return ok(adminSaveConfig(data.config));
+      // ── Actions admin : session vérifiée côté serveur ──
+      case 'addResa':                 return ok(requireAdmin(data) || adminAddResa(data.resa));
+      case 'updateResa':              return ok(requireAdmin(data) || adminUpdateResa(data.resa));
+      case 'deleteResa':              return ok(requireAdmin(data) || adminDeleteResa(data.id));
+      case 'saveConfig':              return ok(requireAdmin(data) || adminSaveConfig(data.config));
       case 'ADMIN_LOGIN':             return ok(adminLogin(data));
-      case 'ADMIN_UPDATE_STATUS':     return ok(adminUpdateStatus(data));
+      case 'ADMIN_UPDATE_STATUS':     return ok(requireAdmin(data) || adminUpdateStatus(data));
       default: return ok({ success: false, error: 'Action inconnue: ' + data.action });
     }
   } catch (err) {
@@ -62,9 +216,13 @@ function doGet(e) {
     if (a === 'GET_DISPO')         return ok(getDisponibilites(e.parameter));
     if (a === 'GET_RESERVATIONS')  return ok(getReservations(e.parameter));
     if (a === 'VALIDER_TOKEN')     return ok(validerToken(e.parameter));
-    if (a === 'getAll' || a === 'ADMIN_GET_ALL') return ok(adminGetAll());
-    if (a === 'getCalendar')       return ok(getCalendarEvents(e.parameter));
-    if (a === 'syncFromCal')       return ok(syncFromCal(e.parameter));
+    // ── Lectures admin : session vérifiée côté serveur ──
+    if (a === 'getAll' || a === 'ADMIN_GET_ALL')
+      return ok(requireAdmin(e.parameter) || adminGetAll());
+    if (a === 'getCalendar')
+      return ok(requireAdmin(e.parameter) || getCalendarEvents(e.parameter));
+    if (a === 'syncFromCal')
+      return ok(requireAdmin(e.parameter) || syncFromCal(e.parameter));
 
     if (e.parameter.payload) {
       var data = JSON.parse(e.parameter.payload);
@@ -73,18 +231,19 @@ function doGet(e) {
         case 'INSCRIRE':            return ok(inscrireClient(data));
         case 'ADHERER':             return ok(creerAdhesion(data));
         case 'CONTACT':             return ok(traiterContact(data));
-        case 'addResa':             return ok(adminAddResa(data.resa));
-        case 'updateResa':          return ok(adminUpdateResa(data.resa));
-        case 'deleteResa':          return ok(adminDeleteResa(data.id));
+        // ── Actions admin : session vérifiée côté serveur ──
+        case 'addResa':             return ok(requireAdmin(data) || adminAddResa(data.resa));
+        case 'updateResa':          return ok(requireAdmin(data) || adminUpdateResa(data.resa));
+        case 'deleteResa':          return ok(requireAdmin(data) || adminDeleteResa(data.id));
         case 'ADMIN_LOGIN':         return ok(adminLogin(data));
-        case 'ADMIN_UPDATE_STATUS': return ok(adminUpdateStatus(data));
-        case 'saveConfig':          return ok(adminSaveConfig(data.config));
+        case 'ADMIN_UPDATE_STATUS': return ok(requireAdmin(data) || adminUpdateStatus(data));
+        case 'saveConfig':          return ok(requireAdmin(data) || adminSaveConfig(data.config));
         case 'GET_RESERVATIONS_CLIENT': return ok(getReservationsClient(data));
         case 'GET_PROFIL':          return ok(getProfil(data));
         default: return ok({ success: false, error: 'Action inconnue: ' + data.action });
       }
     }
-    return ok({ success: true, message: 'API Génie Montauban v4.3' });
+    return ok({ success: true, message: 'API Génie Montauban v5.0' });
   } catch (err) {
     logErreur('doGet', err);
     return ok({ success: false, error: err.message });
@@ -151,6 +310,8 @@ function inscrireClient(data) {
     return { success: false, error: 'CHAMPS_MANQUANTS', message: 'Prénom, nom et email sont obligatoires.' };
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(data.email))
     return { success: false, error: 'EMAIL_INVALIDE', message: 'Format email invalide.' };
+  if (!rateLimitOk('insc_' + data.email))
+    return { success: false, error: 'TROP_DE_REQUETES', message: 'Trop de tentatives. Réessayez dans une heure.' };
   try {
     const ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
     const sheet = ss.getSheetByName('Clients');
@@ -164,10 +325,10 @@ function inscrireClient(data) {
     let profil = 'plein';
     if (data.type === 'asso') profil = 'asso';
     else if (data.type === 'locataire') profil = 'locataire';
-    sheet.appendRow([id, now, data.prenom, data.nom, data.email.toLowerCase(),
-      data.tel || '', data.type || 'particulier', data.structure || '',
+    sheet.appendRow([id, now, sanit(data.prenom), sanit(data.nom), data.email.toLowerCase(),
+      sanit(data.tel), sanit(data.type || 'particulier'), sanit(data.structure),
       profil, 'ACTIF', data.cgv ? now : '', data.ri ? now : '', data.statuts ? now : '',
-      data.ip || '', 0, now]);
+      sanit(data.ip), 0, now]);
     envoyerEmailSafe(data.email, '🎉 Bienvenue chez Génie Montauban !',
       'Bonjour ' + data.prenom + ',\n\nVotre compte est créé !\n\nRéférence : ' + id +
       '\nProfil : ' + (data.type || 'particulier') +
@@ -283,15 +444,62 @@ function majDerniereConnexion(email, ss) {
 // ============================================================
 // RÉSERVATION (formulaire public) — identique v4.2
 // ============================================================
+// Convertit une heure en minutes depuis minuit. Robuste : Google Sheets
+// peut renvoyer soit une chaîne "10:00", soit un objet Date (heure), soit
+// une fraction de journée. Retourne `defaut` si illisible.
+function hMin(v, defaut) {
+  if (v instanceof Date) return v.getHours() * 60 + v.getMinutes();
+  if (typeof v === 'number' && v > 0 && v < 1) return Math.round(v * 1440); // fraction de jour
+  var m = String(v == null ? '' : v).match(/(\d{1,2}):(\d{2})/);
+  return m ? (+m[1]) * 60 + (+m[2]) : defaut;
+}
+
+// Normalise une date en 'yyyy-MM-dd'. Robuste : Sheets convertit souvent
+// la chaîne ISO écrite en cellule Date à la relecture.
+function dateISO(v) {
+  if (v instanceof Date) return Utilities.formatDate(v, Session.getScriptTimeZone(), 'yyyy-MM-dd');
+  return String(v || '').split('T')[0].trim();
+}
+
+// Nombre de réservations actives qui chevauchent [debMin, finMin[
+// sur le même espace et la même date
+function compterChevauchements(rows, cle, dateStr, debMin, finMin, emailExclu) {
+  var n = 0;
+  for (var i = 1; i < rows.length; i++) {
+    var statut = String(rows[i][18] || '');
+    if (statut === 'ANNULE' || statut === 'cancelled') continue;
+    if (dateISO(rows[i][10]) !== dateStr) continue;
+    if (cleEspaceRow(rows[i]) !== cle) continue;
+    if (emailExclu && String(rows[i][3] || '').toLowerCase() === emailExclu) continue;
+    var d = hMin(rows[i][13], 8 * 60);
+    var f = hMin(rows[i][14], d + 60);
+    if (debMin < f && finMin > d) n++;
+  }
+  return n;
+}
+
 function creerReservation(data) {
   if (!data.espace || !data.date || !data.heureDebut || !data.prenom || !data.nom || !data.email)
     return { success: false, error: 'CHAMPS_MANQUANTS' };
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(data.email))
+    return { success: false, error: 'EMAIL_INVALIDE' };
   if (!/^\d{4}-\d{2}-\d{2}$/.test(data.date))
     return { success: false, error: 'DATE_INVALIDE' };
+  if (data.date < new Date().toISOString().split('T')[0])
+    return { success: false, error: 'DATE_PASSEE', message: 'La date est déjà passée.' };
   if (!/^\d{1,2}:\d{2}$/.test(data.heureDebut))
     return { success: false, error: 'HEURE_INVALIDE' };
   if (!data.duree || isNaN(parseFloat(data.duree)) || parseFloat(data.duree) <= 0)
     return { success: false, error: 'DUREE_INVALIDE' };
+  if (!rateLimitOk(data.email))
+    return { success: false, error: 'TROP_DE_REQUETES', message: 'Trop de demandes. Réessayez dans une heure ou appelez le ' + CONFIG.TEL + '.' };
+
+  var lock = LockService.getScriptLock();
+  try {
+    lock.waitLock(20000);
+  } catch (e) {
+    return { success: false, error: 'SERVEUR_OCCUPE', message: 'Serveur occupé, merci de réessayer.' };
+  }
   try {
     const ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
     let sheet = ss.getSheetByName('Reservations');
@@ -302,21 +510,61 @@ function creerReservation(data) {
         'montant','montantBase','options','statut','participants','objet',
         'createdAt','updatedAt','calendarEventId']);
     }
-    const id = 'RES-' + Date.now();
+    const hFin   = heuresFin(data.heureDebut, data.duree);
+    const rows   = sheet.getDataRange().getValues();
+    const email  = String(data.email).toLowerCase();
+    const cle    = cleEspace(data.espace);
+    const debMin = hMin(data.heureDebut, 8 * 60);
+    const finMin = hMin(hFin, debMin + 60);
+
+    // Idempotence : resoumission identique → renvoyer l'existante
+    for (let i = 1; i < rows.length; i++) {
+      const statut = String(rows[i][18] || '');
+      if (statut === 'ANNULE' || statut === 'cancelled') continue;
+      if (String(rows[i][3] || '').toLowerCase() === email &&
+          dateISO(rows[i][10]) === data.date &&
+          hMin(rows[i][13], -1) === debMin &&
+          cleEspaceRow(rows[i]) === cle) {
+        return { success: true, id: String(rows[i][0]), dejaEnregistree: true,
+                 message: 'Cette réservation était déjà enregistrée.' };
+      }
+    }
+
+    // Anti double-réservation : capacité de l'espace sur le créneau
+    if (cle) {
+      const capacite = TARIFS[cle].capacite;
+      if (compterChevauchements(rows, cle, data.date, debMin, finMin, email) >= capacite) {
+        return { success: false, error: 'CRENEAU_OCCUPE',
+                 message: 'Ce créneau vient d\'être réservé. Choisissez un autre horaire ou appelez le ' + CONFIG.TEL + '.' };
+      }
+    }
+
+    // Prix recalculé côté serveur (hors options badge/adhésion)
+    const nbH = parseFloat(data.duree);
+    const montantServeur = calculerMontantServeur(data.espace, nbH, data.profil);
+    const montantClient  = parseFloat(data.montantEstime) || 0;
+    // Options facturées côté client : badge 25 €, adhésion 50 €
+    let montantOptions = 0;
+    const opts = String(data.options || '');
+    if (opts.indexOf('Badge') !== -1)    montantOptions += 25;
+    if (opts.indexOf('Adhésion') !== -1) montantOptions += 50;
+    const montantAttendu = montantServeur === null ? null : montantServeur + montantOptions;
+    const ecart = montantAttendu === null ? 0 : Math.abs(montantClient - montantAttendu);
+
+    const id  = 'RES-' + Date.now();
     const now = new Date().toISOString();
-    const hFin = heuresFin(data.heureDebut, data.duree);
-    // Écriture dans le nouveau schéma
-    sheet.appendRow([id, data.prenom, data.nom, data.email, data.tel || '',
-      data.structure || '', data.espace, data.typeEspace || data.espace,
-      data.typeEspace || 'reunion', data.profil || 'plein',
-      data.date, 'heure', data.duree,
-      data.heureDebut, hFin, data.montantEstime || 0, data.montantEstime || 0,
-      data.options || '', 'EN_ATTENTE', data.participants || 1,
-      data.message || '', now, now, '']);
+    sheet.appendRow([id, sanit(data.prenom), sanit(data.nom), sanit(email), sanit(data.tel),
+      sanit(data.structure), sanit(data.espace), sanit(data.typeEspace || data.espace),
+      sanit(data.typeEspace || 'reunion'), sanit(data.profil || 'plein'),
+      data.date, 'heure', nbH,
+      data.heureDebut, hFin, montantClient,
+      montantServeur === null ? montantClient : montantServeur,
+      sanit(data.options), 'EN_ATTENTE', parseInt(data.participants) || 1,
+      sanit(data.message), now, now, '']);
     try {
       const cRows = ss.getSheetByName('Clients').getDataRange().getValues();
       for (let i = 1; i < cRows.length; i++) {
-        if (cRows[i][4] && cRows[i][4].toString().toLowerCase() === data.email.toLowerCase()) {
+        if (cRows[i][4] && cRows[i][4].toString().toLowerCase() === email) {
           ss.getSheetByName('Clients').getRange(i + 1, 15).setValue((parseInt(cRows[i][14]) || 0) + 1);
           break;
         }
@@ -334,14 +582,19 @@ function creerReservation(data) {
       '🔔 Réservation ' + id + ' — ' + data.espace + ' — ' + data.prenom + ' ' + data.nom,
       'ID : ' + id + '\nEspace : ' + data.espace + '\nDate : ' + data.date +
       ' ' + data.heureDebut + '→' + hFin + '\nClient : ' + data.prenom + ' ' + data.nom +
-      '\nEmail : ' + data.email + '\nMontant : ' + (data.montantEstime || '?') + ' €\n\n' +
-      '👉 Confirmer dans l\'admin : ' + CONFIG.URL_SITE + '/admin.html');
-    ajouterAuCalendrier(data.espace, data.date, data.heureDebut, hFin,
+      '\nEmail : ' + data.email + '\nMontant client : ' + (data.montantEstime || '?') + ' €' +
+      (montantAttendu !== null ? '\nMontant grille : ' + montantAttendu + ' €' : '') +
+      (ecart > 0.5 ? '\n⚠️ ÉCART DE PRIX : vérifier avant confirmation !' : '') +
+      '\n\n👉 Confirmer dans l\'admin : ' + CONFIG.URL_SITE + '/admin.html');
+    const evId = ajouterAuCalendrier(data.espace, data.date, data.heureDebut, hFin,
       data.prenom + ' ' + data.nom, id, data.email, false);
+    if (evId) sheet.getRange(sheet.getLastRow(), 24).setValue(evId);
     return { success: true, id: id };
   } catch (err) {
     logErreur('creerReservation', err);
     return { success: false, error: 'ERREUR_SERVEUR', message: err.message };
+  } finally {
+    lock.releaseLock();
   }
 }
 
@@ -385,17 +638,13 @@ function getDisponibilites(params) {
       const statut = String(row[18] || '');
       if (statut === 'ANNULE' || statut === 'cancelled') continue;
       const esp = String(row[6] || '');
-      const dat = String(row[10] || '');
+      const dat = dateISO(row[10]);  // robuste (cellule Date ou texte)
       if (espace && esp !== espace) continue;
       if (dat < dateDebut || dat > dateFin) continue;
-      const hD = String(row[13] || '08:00');
-      const hF = String(row[14] || '09:00');
       if (!occup[esp]) occup[esp] = {};
       if (!occup[esp][dat]) occup[esp][dat] = [];
-      const p1 = hD.split(':').map(Number);
-      const p2 = hF.split(':').map(Number);
-      let cur = p1[0] * 60 + (p1[1] || 0);
-      const end = p2[0] * 60 + (p2[1] || 0);
+      let cur = hMin(row[13], 8 * 60);       // robuste (cellule heure ou texte)
+      const end = hMin(row[14], cur + 60);
       while (cur < end) {
         occup[esp][dat].push(pad(Math.floor(cur / 60)) + ':' + pad(cur % 60));
         cur += 30;
@@ -414,6 +663,10 @@ function getReservations(params) { return getDisponibilites(params); }
 // ADHÉSION — identique v4.2
 // ============================================================
 function creerAdhesion(data) {
+  if (!data.email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(data.email))
+    return { success: false, error: 'EMAIL_INVALIDE' };
+  if (!rateLimitOk('adh_' + data.email))
+    return { success: false, error: 'TROP_DE_REQUETES', message: 'Trop de tentatives. Réessayez dans une heure.' };
   try {
     const ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
     let sheet = ss.getSheetByName('Adhesions');
@@ -423,8 +676,8 @@ function creerAdhesion(data) {
     }
     const id = 'ADH-' + Date.now();
     sheet.appendRow([id, 'EN_ATTENTE', new Date().toISOString(),
-      data.typeAdhesion, data.montant, data.modePaiement || '',
-      data.prenom, data.nom, data.email, data.tel || '', data.adresse || '', '']);
+      sanit(data.typeAdhesion), sanit(data.montant), sanit(data.modePaiement),
+      sanit(data.prenom), sanit(data.nom), sanit(data.email), sanit(data.tel), sanit(data.adresse), '']);
     envoyerEmailSafe(data.email, '✅ Demande d\'adhésion reçue — ' + CONFIG.NOM_LIEU,
       'Bonjour ' + data.prenom + ',\n\nNous avons bien reçu votre demande d\'adhésion.\n\n' +
       'Type : ' + data.typeAdhesion + '\nMontant : ' + data.montant + ' €\n' +
@@ -447,6 +700,10 @@ function creerAdhesion(data) {
 // CONTACT — identique v4.2
 // ============================================================
 function traiterContact(data) {
+  if (!data.email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(data.email))
+    return { success: false, error: 'EMAIL_INVALIDE' };
+  if (!rateLimitOk('contact_' + data.email))
+    return { success: false, error: 'TROP_DE_REQUETES', message: 'Trop de messages. Réessayez dans une heure.' };
   try {
     envoyerEmailSafe(CONFIG.EMAIL_ADMIN,
       '💬 Contact site — ' + (data.sujet || '(sans sujet)'),
@@ -749,6 +1006,15 @@ function adminDeleteResa(id) {
       if (String(rows[i][0]) === String(id)) {
         // Nouveau schéma : statut en col 19 (index 18)
         sheet.getRange(i + 1, 19).setValue('ANNULE');
+        // Supprimer l'événement Google Calendar lié (v5)
+        try {
+          const calEventId = String(rows[i][23] || '');
+          if (calEventId) {
+            const cal = CalendarApp.getCalendarById(CONFIG.CALENDAR_ID);
+            const ev  = cal && cal.getEventById(calEventId);
+            if (ev) ev.deleteEvent();
+          }
+        } catch(eCal) { Logger.log('Suppression événement Calendar impossible : ' + eCal.message); }
         return { success: true, ok: true };
       }
     }
@@ -794,12 +1060,15 @@ function adminLogin(data) {
     if (!cfg) return { success: false };
     const rows    = cfg.getDataRange().getValues();
     const hashRow = rows.find(function(r) { return r[0] === 'ADMIN_PASSWORD_HASH'; });
-    if (!hashRow) return { success: false };
-    const inputHash = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, data.password)
-      .map(function(b) { return ('0' + (b & 0xFF).toString(16)).slice(-2); }).join('');
-    return inputHash === hashRow[1]
-      ? { success: true, token: inputHash.substring(0, 16) }
-      : { success: false };
+    if (!hashRow) return { success: false, error: 'MDP_NON_INITIALISE',
+      message: 'Exécuter definirMotDePasseAdmin() dans l\'éditeur Apps Script.' };
+    // Rate limiting anti force brute (5 essais/heure)
+    if (!rateLimitOk('adminlogin'))
+      return { success: false, error: 'TROP_DE_REQUETES', message: 'Trop de tentatives. Réessayez dans une heure.' };
+    const inputHash = hashSha256(String(data.password || ''));
+    if (inputHash !== hashRow[1]) return { success: false };
+    // Session serveur : token aléatoire, jamais dérivé du mot de passe
+    return { success: true, token: creerSessionAdmin(), expireDansH: CONFIG.SESSION_ADMIN_H };
   } catch (err) {
     logErreur('adminLogin', err);
     return { success: false, error: 'ERREUR_SERVEUR' };
@@ -920,22 +1189,24 @@ function syncFromCal(params) {
 function ajouterAuCalendrier(espace, date, heureDebut, heureFin, client, ref, email, confirme) {
   try {
     const cal = CalendarApp.getCalendarById(CONFIG.CALENDAR_ID);
-    if (!cal) return;
+    if (!cal) return '';
     // Nettoyer la date (peut contenir T00:00:00.000Z)
     const dateStr = String(date || '').split('T')[0];
-    if (!dateStr || !/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return;
+    if (!dateStr || !/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return '';
     const hd = String(heureDebut || '09:00').substring(0,5);
     const hf = String(heureFin  || '10:00').substring(0,5);
     const debut = new Date(dateStr + 'T' + hd + ':00');
     const fin   = new Date(dateStr + 'T' + hf + ':00');
-    if (isNaN(debut.getTime()) || isNaN(fin.getTime()) || fin <= debut) return;
+    if (isNaN(debut.getTime()) || isNaN(fin.getTime()) || fin <= debut) return '';
     const titre = (confirme ? '✅ ' : '⏳ ') + espace + ' — ' + client;
-    cal.createEvent(titre, debut, fin, {
+    const ev = cal.createEvent(titre, debut, fin, {
       description: 'Référence : ' + ref + '\nEmail : ' + email,
       location: CONFIG.ADRESSE
     });
+    return ev ? ev.getId() : '';
   } catch (err) {
     Logger.log('Calendrier erreur : ' + err.message);
+    return '';
   }
 }
 
