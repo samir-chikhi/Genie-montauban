@@ -33,10 +33,11 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "Organization",
+    "@type": ["NGO", "LocalBusiness"],
+    "@id": "https://genie-montauban.fr/#organization",
     "name": "Génie — Tiers-lieu d'éducation populaire de Montauban",
     "legalName": "Association Génie Montauban",
-    "alternateName": "Génie Montauban",
+    "alternateName": ["Génie Montauban", "Génie Montauban - le Tiers Lieu", "Le Génie", "Tiers-lieu Génie"],
     "description": "Association loi 1901 relevant de l'économie sociale et solidaire (ESS). Tiers-lieu d'éducation populaire à Montauban : ateliers, Veillées du Génie (université populaire), accompagnement de porteurs de projet, Académie des Compétences. La location d'espaces de coworking et de salles de réunion est une activité accessoire qui finance les missions sociales.",
     "url": "https://genie-montauban.fr",
     "telephone": "+33651509718",
@@ -71,6 +72,24 @@
         {"@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "09:00", "closes": "17:00"}
       ]
     },
+    "geo": {"@type": "GeoCoordinates", "latitude": 44.0181, "longitude": 1.3559},
+    "hasMap": "https://www.google.com/maps/search/?api=1&query=12%20rue%20du%20G%C3%A9nie%2C%2082000%20Montauban",
+    "openingHoursSpecification": [
+      {"@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"], "opens": "08:00", "closes": "19:00"},
+      {"@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "09:00", "closes": "17:00"}
+    ],
+    "publicAccess": true,
+    "isAccessibleForFree": true,
+    "smokingAllowed": false,
+    "priceRange": "€",
+    "currenciesAccepted": "EUR",
+    "areaServed": [
+      {"@type": "City", "name": "Montauban"},
+      {"@type": "AdministrativeArea", "name": "Tarn-et-Garonne"},
+      {"@type": "AdministrativeArea", "name": "Occitanie"}
+    ],
+    "slogan": "Ici, on ne loue pas des bureaux : on fabrique du pouvoir d'agir.",
+    "keywords": "tiers-lieu Montauban, éducation populaire, université populaire, ESS, coworking Montauban, salle de réunion Montauban, association Montauban, Tarn-et-Garonne",
     "sameAs": [
       "https://www.linkedin.com/company/g%C3%A9nie-montauban-tiers-lieu/",
       "https://www.facebook.com/profile.php?id=61585419075483"
@@ -107,6 +126,17 @@
         "priceCurrency": "EUR"
       }
     ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": "https://genie-montauban.fr/#website",
+    "url": "https://genie-montauban.fr/",
+    "name": "Génie — Tiers-lieu de Montauban",
+    "inLanguage": "fr-FR",
+    "publisher": {"@id": "https://genie-montauban.fr/#organization"}
   }
   </script>
   <script type="application/ld+json">
@@ -670,6 +700,13 @@
     .cookie-refuse { background: rgba(255,255,255,.1); color: rgba(255,255,255,.85); padding: 8px 18px; border-radius: 8px; font-size: 13px; border: 1px solid rgba(255,255,255,.2); cursor: pointer; }
 
     /* ── RESPONSIVE ── */
+    /* Entre 769 et 1100px la barre de nav porte 10 entrées : on resserre
+       l'espacement pour éviter qu'elle ne déborde avant le passage au burger. */
+    @media (min-width: 769px) and (max-width: 1100px) {
+      .nav-links { gap: 14px; }
+      .nav-links a { font-size: 13px; }
+      .nav-cta { padding: 9px 16px; }
+    }
     @media (max-width: 1024px) {
       .tarifs-intro { grid-template-columns: 1fr; }
       .footer-grid { grid-template-columns: 1fr 1fr; }
@@ -785,6 +822,7 @@
     <li><a href="#espaces">Espaces</a></li>
     <li><a href="#transparence">Transparence</a></li>
     <li><a href="notre-histoire.html">Notre histoire</a></li>
+    <li><a href="venir-au-genie.html">Venir</a></li>
     <li><a href="#rejoindre" class="nav-cta-ghost">Adhérer</a></li>
     <li><a href="reservation.html" class="nav-cta">Réserver</a></li>
   </ul>
@@ -1583,13 +1621,30 @@
     <div id="gav-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;"></div>
 
     <!-- BOUTON DONNER SON AVIS -->
-    <div style="text-align:center;margin-top:28px;">
+    <!--
+      L'avis Google est en première position, volontairement : c'est le seul des
+      deux qui compte pour le référencement local et pour la fiche d'établissement.
+      Le formulaire interne reste disponible en second — c'est lui qui alimente
+      les témoignages affichés ci-dessus (feuille Avis_Qualite).
+
+      LIEN AVIS GOOGLE : pour l'instant ce lien ouvre la fiche dans Google Maps,
+      le visiteur clique ensuite sur « Rédiger un avis ». Pour ouvrir directement
+      le formulaire d'avis, remplacez l'URL par le lien court fourni par Google :
+      fiche d'établissement → « Demander des avis » → lien de la forme
+      https://g.page/r/XXXXXXXXXXXX/review
+      Ce lien apparaît à deux endroits : ici et dans venir-au-genie.html.
+    -->
+    <div style="text-align:center;margin-top:28px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+      <a href="https://www.google.com/maps/search/?api=1&query=G%C3%A9nie%20Montauban%20le%20Tiers%20Lieu%2C%2012%20rue%20du%20G%C3%A9nie%2C%2082000%20Montauban" target="_blank" rel="noopener"
+         style="display:inline-block;background:#C9993E;color:white;padding:12px 28px;border-radius:8px;font-weight:700;font-size:14px;text-decoration:none;">
+        ⭐ Nous laisser un avis Google
+      </a>
       <a href="https://forms.gle/9qtVCMTJbaiJSQVw7" target="_blank" rel="noopener"
-         style="display:inline-block;background:#C9993E;color:white;padding:12px 28px;border-radius:8px;font-weight:700;font-size:14px;text-decoration:none;margin-right:12px;">
-        ✍ Laisser mon avis
+         style="display:inline-block;background:transparent;color:#1C2B3A;padding:12px 28px;border-radius:8px;font-weight:700;font-size:14px;text-decoration:none;border:2px solid #1C2B3A;">
+        ✍ Donner un avis détaillé
       </a>
       <a href="reservation.html"
-         style="display:inline-block;background:transparent;color:#1C2B3A;padding:12px 28px;border-radius:8px;font-weight:700;font-size:14px;text-decoration:none;border:2px solid #1C2B3A;">
+         style="display:inline-block;background:transparent;color:#50606E;padding:12px 20px;border-radius:8px;font-weight:600;font-size:14px;text-decoration:none;">
         Réserver une visite →
       </a>
     </div>
@@ -1776,15 +1831,16 @@
       <div class="contact-item"><div class="ci-ico" aria-hidden="true">📍</div><div><div class="ci-label">Adresse</div><div class="ci-val">12 rue du Génie<br>82000 Montauban</div></div></div>
       <div class="contact-item"><div class="ci-ico" aria-hidden="true">📞</div><div><div class="ci-label">Téléphone</div><div class="ci-val"><a href="tel:+33651509718">06 51 50 97 18</a></div></div></div>
       <div class="contact-item"><div class="ci-ico" aria-hidden="true">✉️</div><div><div class="ci-label">Email</div><div class="ci-val"><a href="mailto:contact@genie-montauban.fr">contact@genie-montauban.fr</a></div></div></div>
-      <div class="contact-item"><div class="ci-ico" aria-hidden="true">🕐</div><div><div class="ci-label">Horaires</div><div class="ci-val">Lun–Ven : 8h–19h<br>Sam : sur réservation</div></div></div>
-      <div class="contact-item"><div class="ci-ico" aria-hidden="true">🚆</div><div><div class="ci-label">Accès</div><div class="ci-val">200m de la gare SNCF<br>Bus ligne 1 — arrêt Gare</div></div></div>
-      <div style="margin-top:16px;">
+      <div class="contact-item"><div class="ci-ico" aria-hidden="true">🕐</div><div><div class="ci-label">Horaires</div><div class="ci-val">Lun–Ven : 8h–19h<br>Sam : 9h–17h sur réservation</div></div></div>
+      <div class="contact-item"><div class="ci-ico" aria-hidden="true">🚆</div><div><div class="ci-label">Accès</div><div class="ci-val">200m de la gare SNCF — 3 min à pied<br>Bus ligne 1 — arrêt Gare<br><a href="venir-au-genie.html" style="color:var(--gold-d);font-weight:700;font-size:13px;">Plan d'accès détaillé, parking et PMR →</a></div></div></div>
+      <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;">
         <a href="reservation.html" style="display:inline-block;background:var(--navy);color:#fff;padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:700;font-size:13px;">📅 Demander une visite →</a>
+        <a href="https://www.google.com/maps/dir/?api=1&destination=12%20rue%20du%20G%C3%A9nie%2C%2082000%20Montauban" target="_blank" rel="noopener" style="display:inline-block;background:transparent;color:var(--navy);border:2px solid var(--navy);padding:8px 18px;border-radius:8px;text-decoration:none;font-weight:700;font-size:13px;">➤ Itinéraire</a>
       </div>
     </div>
     <div>
       <div class="contact-map">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2866.3!2d1.3570!3d44.0174!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12aecf1c6e4b6e0d%3A0x1!2s12+rue+du+G%C3%A9nie%2C+82000+Montauban!5e0!3m2!1sfr!2sfr!4v1700000000" title="Carte — 12 rue du Génie, 82000 Montauban" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <iframe src="https://www.google.com/maps?q=12+rue+du+G%C3%A9nie,+82000+Montauban&hl=fr&z=16&output=embed" title="Carte — 12 rue du Génie, 82000 Montauban" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
       </div>
       <div class="contact-form-bloc" style="margin-top:20px;">
         <h3>✉️ Nous écrire</h3>
@@ -1853,7 +1909,8 @@
         <li><a href="mon-compte.html">Mon espace membre</a></li>
         <li><a href="tel:+33651509718">06 51 50 97 18</a></li>
         <li><a href="mailto:contact@genie-montauban.fr">contact@genie-montauban.fr</a></li>
-        <li><a href="#contact">12 rue du Génie, 82000 Montauban</a></li>
+        <li><a href="venir-au-genie.html">12 rue du Génie, 82000 Montauban</a></li>
+        <li><a href="venir-au-genie.html">Venir au Génie — plan d'accès</a></li>
       </ul>
     </div>
   </div>
