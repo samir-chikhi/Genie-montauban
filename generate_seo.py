@@ -29,6 +29,7 @@ PAGES = [
     ("tarifs.html",                 "0.9", "monthly"),
     ("activites.html",              "0.8", "weekly"),
     ("academie.html",               "0.8", "monthly"),
+    ("venir-au-genie.html",         "0.8", "monthly"),
     ("notre-histoire.html",         "0.7", "yearly"),
     ("inscription.html",            "0.6", "monthly"),
     ("proposition-formateur.html",  "0.5", "monthly"),
@@ -42,6 +43,7 @@ PAGES = [
 MIRROR_PAGES = [
     "index.html", "reservation.html", "tarifs.html",
     "activites.html", "academie.html", "notre-histoire.html",
+    "venir-au-genie.html",
 ]
 
 

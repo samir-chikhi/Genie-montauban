@@ -789,7 +789,8 @@ Ce qu'ils en disent
 
 Chargement des avis…
 
-[✍ Laisser mon avis](https://forms.gle/9qtVCMTJbaiJSQVw7)
+[⭐ Nous laisser un avis Google](https://www.google.com/maps/search/?api=1&query=G%C3%A9nie%20Montauban%20le%20Tiers%20Lieu%2C%2012%20rue%20du%20G%C3%A9nie%2C%2082000%20Montauban)
+[✍ Donner un avis détaillé](https://forms.gle/9qtVCMTJbaiJSQVw7)
 [Réserver une visite →](reservation.html)
 
 Questions fréquentes
@@ -854,14 +855,16 @@ Email
 Horaires
 
 Lun–Ven : 8h–19h  
-Sam : sur réservation
+Sam : 9h–17h sur réservation
 
 Accès
 
-200m de la gare SNCF  
-Bus ligne 1 — arrêt Gare
+200m de la gare SNCF — 3 min à pied  
+Bus ligne 1 — arrêt Gare  
+[Plan d'accès détaillé, parking et PMR →](venir-au-genie.html)
 
 [📅 Demander une visite →](reservation.html)
+[➤ Itinéraire](https://www.google.com/maps/dir/?api=1&destination=12%20rue%20du%20G%C3%A9nie%2C%2082000%20Montauban)
 
 ### ✉️ Nous écrire
 

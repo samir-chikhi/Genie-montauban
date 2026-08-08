@@ -45,6 +45,7 @@ Dernière mise à jour : 2026-08-08
 ## Pages principales
 
 - [Accueil](https://genie-montauban.fr/) : présentation du tiers-lieu, espaces, FAQ
+- [Venir au Génie](https://genie-montauban.fr/venir-au-genie.html) : plan d'accès, itinéraire, stationnement, accès PMR
 - [Réservation](https://genie-montauban.fr/reservation.html) : réservation en ligne des espaces
 - [Tarifs](https://genie-montauban.fr/tarifs.html) : grille tarifaire complète
 - [Activités & agenda](https://genie-montauban.fr/activites.html) : événements et actualités
@@ -53,9 +54,21 @@ Dernière mise à jour : 2026-08-08
 - [Adhésion / inscription](https://genie-montauban.fr/inscription.html) : créer un compte
 - [Proposer un module](https://genie-montauban.fr/proposition-formateur.html) : pour les formateurs
 
+## Venir au Génie (accès)
+
+- Adresse exacte : 12 rue du Génie, 82000 Montauban — quartier Villebourbon
+- Depuis la gare SNCF de Montauban-Ville-Bourbon : 200 m, environ 3 minutes à pied, sans transport intermédiaire
+- En train : gare de Montauban-Ville-Bourbon, sur l'axe Toulouse – Bordeaux et le réseau TER Occitanie
+- En bus : ligne 1 du réseau urbain, arrêt Gare
+- En voiture : stationnement en voirie rue du Génie et rues adjacentes ; places supplémentaires dans le secteur de la gare
+- À vélo : quartier plat, environ 10 minutes depuis la place Nationale par le pont Vieux
+- Accès PMR : entrée dédiée de plain-pied, salle Maria Montessori accessible au rez-de-jardin
+- Page dédiée : https://genie-montauban.fr/venir-au-genie.html
+
 ## Miroirs Markdown (version texte propre pour IA)
 
 - https://genie-montauban.fr/md/index.md
+- https://genie-montauban.fr/md/venir-au-genie.md
 - https://genie-montauban.fr/md/reservation.md
 - https://genie-montauban.fr/md/tarifs.md
 - https://genie-montauban.fr/md/activites.md
