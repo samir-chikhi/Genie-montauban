@@ -103,8 +103,24 @@
       letter-spacing: -0.02em;
     }
     .nav-links {
-      display: flex; gap: 2rem; list-style: none;
+      display: flex; gap: 1.1rem; list-style: none;
       align-items: center;
+    }
+    /* menu identique à celui de l'accueil : bouton « Adhérer » en contour */
+    .nav-cta-ghost {
+      border: 1.5px solid var(--emerald);
+      color: var(--emerald) !important;
+      padding: .35rem 1rem; border-radius: 50px;
+      font-weight: 600 !important;
+      transition: background .2s, color .2s;
+    }
+    .nav-cta-ghost:hover { background: var(--emerald); color: #0F172A !important; }
+    /* 9 entrées : entre le burger (≤768px) et le grand écran, il faut resserrer */
+    @media (min-width: 981px) and (max-width: 1150px) {
+      .nav-links { gap: .6rem; }
+      .nav-links a { font-size: .78rem; letter-spacing: 0; }
+      .nav-cta { padding: .4rem .85rem !important; }
+      .nav-cta-ghost { padding: .3rem .75rem; }
     }
     .nav-links a {
       text-decoration: none;
@@ -591,10 +607,8 @@
     .reveal-delay-4 { transition-delay: .4s; }
 
     /* ── RESPONSIVE ── */
-    @media (max-width: 768px) {
-      .event-featured { grid-template-columns: 1fr; }
-      .event-featured-visual { min-height: 160px; padding: 1.5rem; }
-      .event-featured-body { padding: 1.4rem; }
+    /* 9 entrées de menu : bascule en burger dès 980px, sinon il chevauche le logo. */
+    @media (max-width: 980px) {
       .nav-links { display: none; }
       .nav-links.open {
         display: flex !important; flex-direction: column;
@@ -625,6 +639,10 @@
         text-decoration: none;
         font-weight: 500;
       }
+      .nav-links.open .nav-cta-ghost {
+        display: block; text-align: center;
+        border-radius: 50px; padding: .7rem 1.5rem;
+      }
       .nav-links.open .nav-cta {
         background: var(--emerald) !important;
         color: #0F172A !important;
@@ -639,6 +657,12 @@
       .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
       .nav-toggle.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
       .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    }
+
+    @media (max-width: 768px) {
+      .event-featured { grid-template-columns: 1fr; }
+      .event-featured-visual { min-height: 160px; padding: 1.5rem; }
+      .event-featured-body { padding: 1.4rem; }
       .filters-bar { position: static; }
       .cal-grid { grid-template-columns: 1fr !important; }
       .cal-events { grid-template-columns: 1fr 1fr !important; }
@@ -668,11 +692,14 @@
     <span></span><span></span><span></span>
   </button>
   <ul class="nav-links" id="navLinks">
-    <li><a href="index.html">Accueil</a></li>
+    <li><a href="index.html#manifeste">Le projet</a></li>
+    <li><a href="index.html#apprendre">Apprendre</a></li>
+    <li><a href="index.html#entreprendre">Entreprendre</a></li>
+    <li><a href="activites.html" class="active">Agenda</a></li>
+    <li><a href="espaces.html">Espaces</a></li>
+    <li><a href="index.html#transparence">Transparence</a></li>
     <li><a href="notre-histoire.html">Notre histoire</a></li>
-    <li><a href="activites.html" class="active">Activités</a></li>
-    <li><a href="academie.html">Académie</a></li>
-    <li><a href="inscription.html">Mon compte</a></li>
+    <li><a href="index.html#rejoindre" class="nav-cta-ghost">Adhérer</a></li>
     <li><a href="reservation.html" class="nav-cta">Réserver</a></li>
   </ul>
 </nav>

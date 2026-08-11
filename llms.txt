@@ -45,6 +45,7 @@ Dernière mise à jour : 2026-08-11
 ## Pages principales
 
 - [Accueil](https://genie-montauban.fr/) : présentation du tiers-lieu, espaces, FAQ
+- [Nos espaces](https://genie-montauban.fr/espaces.html) : les douze espaces en détail, par famille — salles de réunion (#reunion), bureaux nomades (#nomade), coworking (#coworking), bureaux en bail (#bail)
 - [Réservation](https://genie-montauban.fr/reservation.html) : réservation en ligne des espaces
 - [Tarifs](https://genie-montauban.fr/tarifs.html) : grille tarifaire complète
 - [Activités & agenda](https://genie-montauban.fr/activites.html) : événements et actualités
