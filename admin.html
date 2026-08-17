@@ -32,6 +32,7 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--cream);color:var(
 .nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:8px;color:rgba(255,255,255,.6);cursor:pointer;transition:.15s;font-size:13px;font-weight:500;margin-bottom:1px}
 .nav-item:hover{background:rgba(255,255,255,.07);color:#fff}
 .nav-item.active{background:var(--brick);color:#fff}
+.nav-count{margin-left:auto;background:#FFF3CD;color:#856404;border-radius:10px;padding:1px 7px;font-size:11px;font-weight:700}
 .sync-bar{padding:10px 14px;border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:8px}
 .dot{width:8px;height:8px;border-radius:50%;background:#4CAF50;flex-shrink:0}
 .dot.loading{background:var(--gold);animation:pulse 1s infinite}
@@ -239,6 +240,7 @@ textarea{resize:vertical;min-height:65px}
       <div class="nav-item" onclick="go('planning')">📅 Planning</div>
       <div class="nav-item" onclick="go('reservations')">📋 Réservations</div>
       <div class="nav-s">Gestion</div>
+      <div class="nav-item" onclick="go('adhesions')">🤝 Adhésions <span id="nav-adh-badge" class="nav-count" hidden></span></div>
       <div class="nav-item" onclick="go('clients')">👥 Clients</div>
       <div class="nav-item" onclick="go('espaces')">🏢 Espaces & Tarifs</div>
       <div class="nav-s">Outils</div>
@@ -377,6 +379,28 @@ textarea{resize:vertical;min-height:65px}
             <table>
               <thead><tr><th>#</th><th>Client</th><th>Espace</th><th>Usage/Profil</th><th>Date</th><th>Horaire</th><th>Durée</th><th>Montant</th><th>Options</th><th>Statut</th><th></th></tr></thead>
               <tbody id="resa-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════ PAGE ADHÉSIONS ════════════════ -->
+      <div id="page-adhesions" class="page">
+        <div class="filter-bar">
+          <input type="text" id="f-adh-search" placeholder="🔍 Nom, email, type…" oninput="renderAdhesions()" style="flex:1;min-width:160px">
+          <select id="f-adh-statut" onchange="renderAdhesions()">
+            <option value="">Tous statuts</option>
+            <option value="pending">En attente</option>
+            <option value="confirmed">Validée</option>
+            <option value="cancelled">Refusée</option>
+          </select>
+        </div>
+        <div class="stats-grid" id="adh-stats" style="margin-bottom:18px"></div>
+        <div class="card">
+          <div class="tw">
+            <table>
+              <thead><tr><th>#</th><th>Demandé le</th><th>Adhérent</th><th>Type</th><th>Montant</th><th>Paiement</th><th>Contact</th><th>Statut</th><th></th></tr></thead>
+              <tbody id="adh-body"></tbody>
             </table>
           </div>
         </div>
@@ -642,7 +666,11 @@ const gvSet  = (id,val) => { const el=document.getElementById(id); if(el) el.val
 // ─────────────────────────────────────────────────────────
 // ÉTAT GLOBAL
 // ─────────────────────────────────────────────────────────
-let DB          = { reservations:[], config:{email:'contact@genie-montauban.fr', tel:'06 51 50 97 18'} };
+let DB          = { reservations:[], adhesions:[], config:{email:'contact@genie-montauban.fr', tel:'06 51 50 97 18'} };
+// Échappement HTML : les adhésions proviennent d'un formulaire public et
+// sanit() côté serveur ne neutralise que l'injection de formules CSV.
+const esc = v => String(v==null?'':v).replace(/[&<>"']/g, c =>
+  ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
 let editId      = null;
 let weekOffset  = 0;
 let calEvents   = [];      // événements Google Calendar en mémoire
@@ -782,7 +810,12 @@ async function loadData(manual=false) {
       nbHeures    : parseInt(r.nbHeures)||1,
       participants: parseInt(r.participants)||1
     }));
+    // Champ absent (et non vide) = backend pas encore redéployé : on le
+    // distingue pour ne pas afficher une liste vide trompeuse.
+    DB.adhesionsSupportees = Array.isArray(data.adhesions);
+    DB.adhesions = (data.adhesions||[]).map(a => ({ ...a, montant: parseFloat(a.montant)||0 }));
     if (data.config) Object.assign(DB.config, data.config);
+    majBadgeAdhesions();
     setSyncState('ok','Sync. '+new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}));
     if (manual) { hideLoader(); toast('Données actualisées'); }
     refreshPage();
@@ -1131,6 +1164,7 @@ const PAGE_T = {
   dashboard   : 'Tableau de bord',
   planning    : 'Planning semaine',
   reservations: 'Réservations',
+  adhesions   : 'Adhésions',
   clients     : 'Clients',
   espaces     : 'Espaces & Tarifs 2026',
   donnees     : 'Données & Configuration'
@@ -1158,7 +1192,7 @@ function go(name) {
   document.getElementById('ptitle').textContent = PAGE_T[name];
   document.getElementById('topbar-actions').innerHTML =
     `<button class="btn btn-ghost btn-sm" onclick="loadData(true)">🔄 Actualiser</button>` +
-    (!['espaces','donnees'].includes(name) ? `<button class="btn btn-primary" onclick="openModal('mresa')">➕ Nouvelle réservation</button>` : '');
+    (!['espaces','donnees','adhesions'].includes(name) ? `<button class="btn btn-primary" onclick="openModal('mresa')">➕ Nouvelle réservation</button>` : '');
   refreshPage(name);
 }
 
@@ -1167,6 +1201,7 @@ function refreshPage(name) {
   if      (n==='dashboard')    renderDashboard();
   else if (n==='planning')     renderPlanning();
   else if (n==='reservations') renderTable();
+  else if (n==='adhesions')    renderAdhesions();
   else if (n==='clients')      renderClients();
   else if (n==='espaces')      renderEspaces();
   else if (n==='donnees')      renderDonnees();
@@ -1429,6 +1464,88 @@ function renderTable() {
         <button class="btn btn-sm btn-ghost" onclick="printResa('${r.id}')">🖨️</button>
       </td>
     </tr>`).join('') : '<tr><td colspan="11" style="text-align:center;padding:28px;color:var(--muted)">Aucune réservation</td></tr>';
+}
+
+// ─────────────────────────────────────────────────────────
+// ADHÉSIONS
+// ─────────────────────────────────────────────────────────
+function adhStatusBadge(s) {
+  return ({
+    confirmed : '<span class="badge b-confirmed">✓ Validée</span>',
+    pending   : '<span class="badge b-pending">⏳ En attente</span>',
+    completed : '<span class="badge b-completed">● Terminée</span>',
+    cancelled : '<span class="badge b-cancelled">✗ Refusée</span>'
+  })[s] || esc(s);
+}
+
+function majBadgeAdhesions() {
+  const b = document.getElementById('nav-adh-badge');
+  if (!b) return;
+  const n = DB.adhesions.filter(a => a.statut === 'pending').length;
+  b.textContent = n;
+  b.hidden = n === 0;
+}
+
+function renderAdhesions() {
+  const q  = (document.getElementById('f-adh-search')?.value || '').toLowerCase();
+  const st = document.getElementById('f-adh-statut')?.value || '';
+  let A = DB.adhesions;
+  if (q)  A = A.filter(a => `${a.prenom} ${a.nom} ${a.email} ${a.type} ${a.tel}`.toLowerCase().includes(q));
+  if (st) A = A.filter(a => a.statut === st);
+
+  const tous    = DB.adhesions;
+  const enAtt   = tous.filter(a => a.statut === 'pending');
+  const valides = tous.filter(a => a.statut === 'confirmed');
+  document.getElementById('adh-stats').innerHTML = `
+    <div class="stat-card sc-gold"><div class="stat-label">En attente</div><div class="stat-value">${enAtt.length}</div><div class="stat-sub">à traiter</div></div>
+    <div class="stat-card sc-sage"><div class="stat-label">Adhésions validées</div><div class="stat-value">${valides.length}</div><div class="stat-sub">membres à jour</div></div>
+    <div class="stat-card sc-brick"><div class="stat-label">Cotisations encaissées</div><div class="stat-value">${fMoney(valides.reduce((s,a)=>s+Number(a.montant),0))}</div><div class="stat-sub">total validé</div></div>
+    <div class="stat-card sc-steel"><div class="stat-label">Demandes reçues</div><div class="stat-value">${tous.length}</div><div class="stat-sub">depuis ouverture</div></div>`;
+
+  document.getElementById('adh-body').innerHTML = A.length ? A.map(a => `
+    <tr>
+      <td style="font-size:11px;font-weight:700;color:var(--brick);font-family:'Fraunces',serif">${esc(a.id)}</td>
+      <td style="font-size:12px">${fDate(a.date)}</td>
+      <td><strong>${esc(a.prenom)} ${esc(a.nom)}</strong>${a.adresse?`<br><span style="font-size:11px;color:var(--muted)">${esc(a.adresse)}</span>`:''}</td>
+      <td style="font-size:12px">${esc(a.type)||'—'}</td>
+      <td><span class="amount">${fMoney(a.montant)}</span></td>
+      <td style="font-size:12px">${esc(a.modePaiement)||'—'}</td>
+      <td style="font-size:12px">
+        <a href="mailto:${encodeURIComponent(a.email)}">${esc(a.email)}</a>
+        ${a.tel?`<br><a href="tel:${encodeURIComponent(a.tel)}">${esc(a.tel)}</a>`:''}
+      </td>
+      <td>${adhStatusBadge(a.statut)}</td>
+      <td>
+        ${a.statut!=='confirmed' ? `<button class="btn btn-sm btn-primary" onclick="setAdhesionStatut('${esc(a.id)}','CONFIRME')" title="Valider l'adhésion">✓</button>` : ''}
+        ${a.statut!=='cancelled' ? `<button class="btn btn-sm btn-ghost" onclick="setAdhesionStatut('${esc(a.id)}','ANNULE')" title="Refuser">✗</button>` : ''}
+        ${a.statut!=='pending'   ? `<button class="btn btn-sm btn-secondary" onclick="setAdhesionStatut('${esc(a.id)}','EN_ATTENTE')" title="Remettre en attente">⏳</button>` : ''}
+      </td>
+    </tr>`).join('') : `<tr><td colspan="9" style="text-align:center;padding:28px;color:var(--muted)">${
+      DB.adhesionsSupportees === false
+        ? '⚠️ Le script Google Apps Script doit être redéployé pour lire les adhésions.<br><span style="font-size:12px">Les demandes sont bien enregistrées dans l\'onglet <strong>Adhesions</strong> du Sheet — l\'API ne les renvoie pas encore.</span>'
+        : 'Aucune demande d\'adhésion'
+    }</td></tr>`;
+
+  majBadgeAdhesions();
+}
+
+async function setAdhesionStatut(id, statut) {
+  const libelle = { CONFIRME:'validée', ANNULE:'refusée', EN_ATTENTE:'remise en attente' }[statut] || statut;
+  showLoader('Mise à jour…','');
+  try {
+    // ADMIN_UPDATE_STATUS gère déjà l'onglet Adhesions côté serveur
+    // (type ≠ 'reservation' ⇒ feuille Adhesions, statut en colonne 2).
+    await apiPost({ action:'ADMIN_UPDATE_STATUS', type:'adhesion', id, statut });
+    const a = DB.adhesions.find(x => x.id === id);
+    if (a) a.statut = { CONFIRME:'confirmed', ANNULE:'cancelled', EN_ATTENTE:'pending' }[statut] || a.statut;
+    renderAdhesions();
+    hideLoader();
+    toast('Adhésion ' + libelle);
+    loadData(false);
+  } catch(e) {
+    hideLoader();
+    toast('Erreur : ' + e.message, 'err');
+  }
 }
 
 // ─────────────────────────────────────────────────────────

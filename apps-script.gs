@@ -837,8 +837,37 @@ function adminGetAll() {
       };
     }).reverse();
 
+    // ── Adhésions ─────────────────────────────────────────────────────
+    // Onglet écrit par creerAdhesion() :
+    // ID | Statut | Date | Type | Montant | Paiement | Prénom | Nom |
+    // Email | Tél | Adresse | Notes
+    // Sans cette lecture, les demandes d'adhésion arrivaient bien dans le
+    // Sheet et par email, mais restaient invisibles dans l'admin.
+    var adhesions = [];
+    const adhSheet = ss.getSheetByName('Adhesions');
+    if (adhSheet && adhSheet.getLastRow() > 1) {
+      adhesions = adhSheet.getDataRange().getValues().slice(1)
+        .filter(function(a) { return a[0]; })
+        .map(function(a) {
+          return {
+            id           : String(a[0]),
+            statut       : statutMap[String(a[1])] || 'pending',
+            date         : String(a[2]  || ''),
+            type         : String(a[3]  || ''),
+            montant      : String(a[4]  || 0),
+            modePaiement : String(a[5]  || ''),
+            prenom       : String(a[6]  || ''),
+            nom          : String(a[7]  || ''),
+            email        : String(a[8]  || ''),
+            tel          : String(a[9]  || ''),
+            adresse      : String(a[10] || ''),
+            notes        : String(a[11] || '')
+          };
+        }).reverse();
+    }
+
     const cfg = lireConfig(ss);
-    return { success: true, reservations: reservations, config: cfg };
+    return { success: true, reservations: reservations, adhesions: adhesions, config: cfg };
   } catch (err) {
     logErreur('adminGetAll', err);
     return { success: false, error: 'ERREUR_SERVEUR', message: err.message };
