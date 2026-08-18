@@ -327,9 +327,11 @@ function inscrireClient(data) {
     }
     const id = 'CLI-' + Date.now();
     const now = new Date().toISOString();
-    let profil = 'plein';
-    if (data.type === 'asso') profil = 'asso';
-    else if (data.type === 'locataire') profil = 'locataire';
+    // Le profil tarifaire n'est JAMAIS accorde sur declaration : locataire
+    // et asso supposent un bail ou un justificatif, et sont poses a la main
+    // dans la feuille Clients. Le statut d'adherent, lui, se deduit de la
+    // feuille Adhesions. Toute inscription demarre donc au tarif plein.
+    const profil = 'plein';
     sheet.appendRow([id, now, sanit(data.prenom), sanit(data.nom), data.email.toLowerCase(),
       sanit(data.tel), sanit(data.type || 'particulier'), sanit(data.structure),
       profil, 'ACTIF', data.cgv ? now : '', data.ri ? now : '', data.statuts ? now : '',
@@ -422,6 +424,54 @@ function getProfil(data) {
     logErreur('getProfil', err);
     return { success: false, error: 'ERREUR_SERVEUR', message: err.message };
   }
+}
+
+// ============================================================
+// PROFIL TARIFAIRE — decide par le serveur, jamais par le client
+// ============================================================
+// Un adherent est "a jour" si la feuille Adhesions porte pour son email
+// une ligne CONFIRME dont l'echeance n'est pas depassee. Peu importe le
+// canal de paiement : HelloAsso, virement, cheque ou especes convergent
+// tous vers cette feuille, validee dans l'admin.
+//
+// Les profils "locataire" et "asso" ne s'auto-declarent pas : ils sont
+// poses a la main dans la feuille Clients (colonne profilTarifaire), car
+// ils supposent un bail signe ou un justificatif associatif.
+
+function estAdherentAJour(email, ss) {
+  if (!email) return false;
+  const sheet = ss.getSheetByName('Adhesions');
+  if (!sheet || sheet.getLastRow() < 2) return false;
+  const mail = String(email).toLowerCase().trim();
+  const rows = sheet.getDataRange().getValues();
+  const now  = new Date();
+  for (let i = 1; i < rows.length; i++) {
+    if (String(rows[i][8] || '').toLowerCase().trim() !== mail) continue;
+    if (String(rows[i][1]) !== 'CONFIRME') continue;
+    // colonne 13 (index 12) : echeance ; a defaut, date de demande + 12 mois
+    var ech = rows[i][12];
+    if (!ech) {
+      var d = new Date(rows[i][2]);
+      if (isNaN(d.getTime())) continue;
+      d.setFullYear(d.getFullYear() + 1);
+      ech = d;
+    } else {
+      ech = new Date(ech);
+      if (isNaN(ech.getTime())) continue;
+    }
+    if (ech >= now) return true;
+  }
+  return false;
+}
+
+// Profil facturable retenu par le serveur. Le navigateur n'a pas voix.
+function profilServeur(email, ss) {
+  const c = getProfilParEmail(email, ss);
+  const declare = c ? String(c.profilTarifaire || '').toLowerCase().trim() : '';
+  // Seuls locataire et asso peuvent avoir ete poses a la main par l'admin.
+  if (declare === 'locataire' || declare === 'asso') return declare;
+  if (estAdherentAJour(email, ss)) return 'adherent';
+  return 'plein';
 }
 
 function getProfilParEmail(email, ss) {
@@ -545,9 +595,12 @@ function creerReservation(data) {
       }
     }
 
-    // Prix recalculé côté serveur (hors options badge/adhésion)
+    // Prix recalculé côté serveur (hors options badge/adhésion).
+    // Le profil vient de la base, pas du navigateur : sinon il suffirait
+    // d'annoncer "locataire" pour obtenir -50 %.
     const nbH = parseFloat(data.duree);
-    const montantServeur = calculerMontantServeur(data.espace, nbH, data.profil);
+    const profilFacture  = profilServeur(email, ss);
+    const montantServeur = calculerMontantServeur(data.espace, nbH, profilFacture);
     const montantClient  = parseFloat(data.montantEstime) || 0;
     // Options facturées côté client : badge 25 €, adhésion 50 €
     let montantOptions = 0;
@@ -561,9 +614,10 @@ function creerReservation(data) {
     const now = new Date().toISOString();
     sheet.appendRow([id, sanit(data.prenom), sanit(data.nom), sanit(email), sanit(data.tel),
       sanit(data.structure), sanit(data.espace), sanit(data.typeEspace || data.espace),
-      sanit(data.typeEspace || 'reunion'), sanit(data.profil || 'plein'),
+      sanit(data.typeEspace || 'reunion'), profilFacture,
       data.date, 'heure', nbH,
-      data.heureDebut, hFin, montantClient,
+      data.heureDebut, hFin,
+      montantServeur === null ? montantClient : montantServeur,
       montantServeur === null ? montantClient : montantServeur,
       sanit(data.options), 'EN_ATTENTE', parseInt(data.participants) || 1,
       sanit(data.message), now, now, '']);
@@ -678,7 +732,7 @@ function creerAdhesion(data) {
     let sheet = ss.getSheetByName('Adhesions');
     if (!sheet) {
       sheet = ss.insertSheet('Adhesions');
-      sheet.appendRow(['ID','Statut','Date','Type','Montant','Paiement','Prénom','Nom','Email','Tél','Adresse','Notes']);
+      sheet.appendRow(['ID','Statut','Date','Type','Montant','Paiement','Prénom','Nom','Email','Tél','Adresse','Notes','Echeance']);
     }
     const id = 'ADH-' + Date.now();
     sheet.appendRow([id, 'EN_ATTENTE', new Date().toISOString(),
@@ -1005,7 +1059,8 @@ function adminGetAll() {
             email        : String(a[8]  || ''),
             tel          : String(a[9]  || ''),
             adresse      : String(a[10] || ''),
-            notes        : String(a[11] || '')
+            notes        : String(a[11] || ''),
+            echeance     : String(a[12] || '')
           };
         }).reverse();
     }
@@ -1271,6 +1326,14 @@ function adminUpdateStatus(data) {
         // Adhesions : statut col 2 (index 1) — inchangé
         const statCol = data.type === 'reservation' ? 19 : 2;
         sheet.getRange(i + 1, statCol).setValue(data.statut);
+
+        // Adhesion validee : on pose l'echeance a 12 mois, ce qui rend le
+        // tarif adherent effectif quel que soit le moyen de paiement.
+        if (data.type !== 'reservation' && data.statut === 'CONFIRME') {
+          var ech = new Date();
+          ech.setFullYear(ech.getFullYear() + 1);
+          sheet.getRange(i + 1, 13).setValue(ech.toISOString().split('T')[0]);
+        }
         const c = couleurs[data.statut] || { bg: '#fff', fg: '#000' };
         sheet.getRange(i + 1, statCol).setBackground(c.bg).setFontColor(c.fg);
 
