@@ -610,6 +610,13 @@ function creerReservation(data) {
     const montantAttendu = montantServeur === null ? null : montantServeur + montantOptions;
     const ecart = montantAttendu === null ? 0 : Math.abs(montantClient - montantAttendu);
 
+    // Espace inconnu du bareme : on ne peut pas facturer un montant sur
+    // parole. On refuse plutot que d'encaisser un prix non verifie.
+    if (montantServeur === null) {
+      return { success: false, error: 'ESPACE_INCONNU',
+               message: 'Cet espace ne peut pas être réservé en ligne. Écrivez-nous.' };
+    }
+
     const id  = 'RES-' + Date.now();
     const now = new Date().toISOString();
     sheet.appendRow([id, sanit(data.prenom), sanit(data.nom), sanit(email), sanit(data.tel),
@@ -621,6 +628,8 @@ function creerReservation(data) {
       montantServeur === null ? montantClient : montantServeur,
       sanit(data.options), 'EN_ATTENTE', parseInt(data.participants) || 1,
       sanit(data.message), now, now, '']);
+    const ligne          = sheet.getLastRow();
+    const montantFacture = montantServeur === null ? montantClient : montantServeur;
     try {
       const cRows = ss.getSheetByName('Clients').getDataRange().getValues();
       for (let i = 1; i < cRows.length; i++) {
@@ -649,7 +658,23 @@ function creerReservation(data) {
     const evId = ajouterAuCalendrier(data.espace, data.date, data.heureDebut, hFin,
       data.prenom + ' ' + data.nom, id, data.email, false);
     if (evId) sheet.getRange(sheet.getLastRow(), 24).setValue(evId);
-    return { success: true, id: id };
+    // Paiement immediat : le creneau est tenu par la ligne EN_ATTENTE
+    // (la detection de conflit la compte deja), et le client part payer
+    // dans la foulee. libererCreneauxExpires() le rendra si rien n'arrive.
+    var paiementUrl = null;
+    if (montantFacture > 0) {
+      var co = haCheckout({ id: id, type: 'reservation', montant: montantFacture,
+        libelle: (data.typeEspace || data.espace) + ' — ' + data.date +
+                 (data.heureDebut ? ' ' + data.heureDebut : ''),
+        prenom: data.prenom, nom: data.nom, email: email });
+      if (co && co.url) {
+        paiementUrl = co.url;
+        sheet.getRange(ligne, 25).setValue(co.id);
+        sheet.getRange(ligne, 26).setValue(co.url);
+        sheet.getRange(ligne, 27).setValue('EN_ATTENTE_PAIEMENT');
+      }
+    }
+    return { success: true, id: id, paiementUrl: paiementUrl, montant: montantFacture };
   } catch (err) {
     logErreur('creerReservation', err);
     return { success: false, error: 'ERREUR_SERVEUR', message: err.message };
@@ -732,7 +757,7 @@ function creerAdhesion(data) {
     let sheet = ss.getSheetByName('Adhesions');
     if (!sheet) {
       sheet = ss.insertSheet('Adhesions');
-      sheet.appendRow(['ID','Statut','Date','Type','Montant','Paiement','Prénom','Nom','Email','Tél','Adresse','Notes','Echeance']);
+      sheet.appendRow(['ID','Statut','Date','Type','Montant','Paiement','Prénom','Nom','Email','Tél','Adresse','Notes','Echeance','paymentUrl','paymentState']);
     }
     const id = 'ADH-' + Date.now();
     sheet.appendRow([id, 'EN_ATTENTE', new Date().toISOString(),
@@ -749,7 +774,21 @@ function creerAdhesion(data) {
       'ID : ' + id + '\nType : ' + data.typeAdhesion + '\nMontant : ' + data.montant +
       ' €\nNom : ' + data.prenom + ' ' + data.nom + '\nEmail : ' + data.email +
       '\n\n👉 Traiter dans l\'admin : ' + CONFIG.URL_SITE + '/admin.html');
-    return { success: true, id: id };
+    // Meme parcours de paiement que les reservations : tout remonte dans
+    // le meme tableau de bord HelloAsso.
+    var paiementUrl = null;
+    var mt = parseFloat(String(data.montant).replace(',', '.')) || 0;
+    if (mt > 0) {
+      var co = haCheckout({ id: id, type: 'adhesion', montant: mt,
+        libelle: 'Adhésion ' + CONFIG.NOM_LIEU + ' — ' + sanit(data.typeAdhesion),
+        prenom: data.prenom, nom: data.nom, email: data.email });
+      if (co && co.url) {
+        paiementUrl = co.url;
+        sheet.getRange(sheet.getLastRow(), 14).setValue(co.url);
+        sheet.getRange(sheet.getLastRow(), 15).setValue('EN_ATTENTE_PAIEMENT');
+      }
+    }
+    return { success: true, id: id, paiementUrl: paiementUrl };
   } catch (err) {
     logErreur('creerAdhesion', err);
     return { success: false, error: 'ERREUR_SERVEUR', message: err.message };
@@ -837,16 +876,19 @@ function haToken() {
 }
 
 // Cree une intention de paiement. Retourne { url, id } ou null.
-function haCreerCheckout(resa) {
+// Sert aux reservations comme aux adhesions : un seul tableau de bord
+// HelloAsso, un seul webhook, un seul rapprochement.
+//   o = { id, type:'reservation'|'adhesion', libelle, montant, prenom, nom, email }
+function haCheckout(o) {
   if (!haConfigure()) return null;
-  const cents = Math.round(Number(resa.montant) * 100);
-  if (!cents || cents <= 0) return null;   // gratuites : aucun paiement
+  const cents = Math.round(Number(o.montant) * 100);
+  if (!cents || cents <= 0) return null;   // gratuit : aucun paiement
 
   const token = haToken();
   if (!token) return null;
 
-  const libelle = (resa.nomEspace + ' — ' + resa.date +
-    (resa.heureDebut ? ' ' + resa.heureDebut : '')).slice(0, 250);
+  const libelle = String(o.libelle || o.id).slice(0, 250);
+  const resa = o;
 
   const body = {
     totalAmount:      cents,
@@ -861,7 +903,7 @@ function haCreerCheckout(resa) {
       lastName:  String(resa.nom    || '').slice(0, 255),
       email:     String(resa.email  || '').slice(0, 255)
     },
-    metadata: { resaId: String(resa.id) }
+    metadata: { resaId: String(o.id), type: String(o.type || 'reservation') }
   };
 
   const r = UrlFetchApp.fetch(
@@ -873,7 +915,7 @@ function haCreerCheckout(resa) {
   const code = r.getResponseCode();
   if (code !== 200 && code !== 201) {
     // 409 = association non verifiee cote HelloAsso
-    logErreur('haCreerCheckout', new Error('HTTP ' + code + ' ' + r.getContentText().slice(0, 400)));
+    logErreur('haCheckout', new Error('HTTP ' + code + ' ' + r.getContentText().slice(0, 400)));
     return null;
   }
   const j = JSON.parse(r.getContentText());
@@ -889,9 +931,32 @@ function haWebhook(data) {
     if (d.state !== 'Authorized') return { success: true, ignore: 'state=' + d.state };
 
     const resaId = data.metadata && data.metadata.resaId;
+    const type   = (data.metadata && data.metadata.type) || 'reservation';
     if (!resaId) return { success: true, ignore: 'sans resaId' };
 
-    const ss    = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+    const ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+
+    // ── Adhesion payee en ligne : meme traitement qu'une validation
+    // manuelle, echeance a 12 mois comprise.
+    if (type === 'adhesion') {
+      const aSheet = ss.getSheetByName('Adhesions');
+      if (!aSheet) return { success: false, error: 'Onglet Adhesions introuvable' };
+      const aRows = aSheet.getDataRange().getValues();
+      for (let i = 1; i < aRows.length; i++) {
+        if (String(aRows[i][0]) !== String(resaId)) continue;
+        aSheet.getRange(i + 1, 2).setValue('CONFIRME');
+        aSheet.getRange(i + 1, 2).setBackground('#D4EDDA').setFontColor('#155724');
+        var ech = new Date(); ech.setFullYear(ech.getFullYear() + 1);
+        aSheet.getRange(i + 1, 13).setValue(ech.toISOString().split('T')[0]);
+        aSheet.getRange(i + 1, 15).setValue('PAYE');
+        envoyerEmailSafe(CONFIG.EMAIL_ADMIN, '💳 Adhésion payée — ' + resaId,
+          'Montant : ' + (Number(d.amount || 0) / 100).toFixed(2) + ' EUR\n' +
+          'Adhésion : ' + resaId + '\nValable jusqu au ' + ech.toISOString().split('T')[0]);
+        return { success: true, ok: true };
+      }
+      return { success: true, ignore: 'adhesion introuvable : ' + resaId };
+    }
+
     const sheet = ss.getSheetByName('Reservations');
     if (!sheet) return { success: false, error: 'Onglet introuvable' };
 
@@ -901,6 +966,22 @@ function haWebhook(data) {
         sheet.getRange(i + 1, 27).setValue('PAYE');                    // paymentState
         sheet.getRange(i + 1, 28).setValue(d.paymentReceiptUrl || ''); // recu
         sheet.getRange(i + 1, 27).setBackground('#D4EDDA').setFontColor('#155724');
+        // Le paiement vaut confirmation : le creneau est definitivement pris.
+        sheet.getRange(i + 1, 19).setValue('CONFIRME');
+        try {
+          ajouterAuCalendrier(rows[i][7], rows[i][10], rows[i][13], rows[i][14],
+            rows[i][1] + ' ' + rows[i][2], rows[i][0], rows[i][3], true);
+        } catch (eCal) { logErreur('haWebhook/calendrier', eCal); }
+        envoyerEmailSafe(rows[i][3], '✅ Paiement reçu — ' + rows[i][7] + ' — ' + rows[i][10],
+          'Bonjour ' + (rows[i][1] || rows[i][2]) + ',\n\nVotre paiement est bien reçu, '
+          + 'votre réservation est confirmée.\n\n'
+          + '• Espace    : ' + rows[i][7] + '\n'
+          + '• Date      : ' + rows[i][10] + '\n'
+          + '• Horaire   : ' + rows[i][13] + ' → ' + rows[i][14] + '\n'
+          + '• Référence : ' + rows[i][0] + '\n'
+          + (d.paymentReceiptUrl ? '• Reçu      : ' + d.paymentReceiptUrl + '\n' : '')
+          + '\nConditions générales : ' + CONFIG.URL_SITE + '/cgv.html\n'
+          + '\nÀ bientôt !\n' + CONFIG.NOM_LIEU);
         envoyerEmailSafe(CONFIG.EMAIL_ADMIN,
           '💳 Paiement recu — ' + resaId,
           'Montant : ' + (Number(d.amount || 0) / 100).toFixed(2) + ' EUR\n' +
@@ -914,6 +995,52 @@ function haWebhook(data) {
     logErreur('haWebhook', err);
     return { success: false, error: 'ERREUR_SERVEUR', message: err.message };
   }
+}
+
+// ============================================================
+// CRENEAUX IMPAYES — liberation automatique
+// ============================================================
+// Une reservation EN_ATTENTE bloque le creneau (la detection de conflit
+// la compte). Sans expiration, un panier abandonne gelerait le planning.
+// A declencher toutes les 10 min : voir installerDeclencheurs().
+const DELAI_PAIEMENT_MIN = 30;
+
+function libererCreneauxExpires() {
+  try {
+    const ss    = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+    const sheet = ss.getSheetByName('Reservations');
+    if (!sheet || sheet.getLastRow() < 2) return { success: true, liberes: 0 };
+
+    const rows  = sheet.getDataRange().getValues();
+    const limite = Date.now() - DELAI_PAIEMENT_MIN * 60 * 1000;
+    let n = 0;
+
+    for (let i = 1; i < rows.length; i++) {
+      if (String(rows[i][18]) !== 'EN_ATTENTE') continue;
+      if (String(rows[i][26]) !== 'EN_ATTENTE_PAIEMENT') continue;  // jamais parti en paiement
+      const cree = new Date(rows[i][21]);
+      if (isNaN(cree.getTime()) || cree.getTime() > limite) continue;
+
+      sheet.getRange(i + 1, 19).setValue('ANNULE');
+      sheet.getRange(i + 1, 19).setBackground('#F8D7DA').setFontColor('#721C24');
+      sheet.getRange(i + 1, 27).setValue('EXPIRE');
+      n++;
+    }
+    if (n) logErreur('libererCreneauxExpires', new Error(n + ' creneau(x) libere(s)'));
+    return { success: true, liberes: n };
+  } catch (err) {
+    logErreur('libererCreneauxExpires', err);
+    return { success: false, error: err.message };
+  }
+}
+
+// A lancer UNE FOIS depuis l'editeur Apps Script pour poser le declencheur.
+function installerDeclencheurs() {
+  ScriptApp.getProjectTriggers().forEach(function (t) {
+    if (t.getHandlerFunction() === 'libererCreneauxExpires') ScriptApp.deleteTrigger(t);
+  });
+  ScriptApp.newTrigger('libererCreneauxExpires').timeBased().everyMinutes(10).create();
+  return 'Declencheur installe : liberation des creneaux impayes toutes les 10 min.';
 }
 
 function adminGetAll() {
@@ -1342,10 +1469,11 @@ function adminUpdateStatus(data) {
           var blocPaiement = '';
           var montantResa  = Number(rows[i][15]) || 0;
           if (montantResa > 0) {
-            var co = haCreerCheckout({
-              id: rows[i][0], prenom: rows[i][1], nom: rows[i][2], email: rows[i][3],
-              nomEspace: rows[i][7], date: rows[i][10], heureDebut: rows[i][13],
-              montant: montantResa
+            var co = haCheckout({
+              id: rows[i][0], type: 'reservation', montant: montantResa,
+              libelle: rows[i][7] + ' — ' + rows[i][10] +
+                       (rows[i][13] ? ' ' + rows[i][13] : ''),
+              prenom: rows[i][1], nom: rows[i][2], email: rows[i][3]
             });
             if (co && co.url) {
               sheet.getRange(i + 1, 25).setValue(co.id);

@@ -902,6 +902,14 @@ async function envoyerReservation() {
     try { data = JSON.parse(text); } catch(e) { data = { success: true }; }
 
     if (data.success || !data.error) {
+      // Le serveur a verifie la disponibilite et calcule le montant : si un
+      // paiement est du, on envoie directement sur HelloAsso. Le creneau est
+      // tenu 30 min, puis libere automatiquement s il n est pas regle.
+      if (data.paiementUrl) {
+        document.getElementById('btnEnvoyer').textContent = '↪ Redirection vers le paiement…';
+        window.location.href = data.paiementUrl;
+        return;
+      }
       document.getElementById('mainPage').style.display = 'none';
       document.getElementById('successCard').classList.add('visible');
       document.getElementById('successRef').textContent = data.id || ref;
@@ -911,7 +919,7 @@ async function envoyerReservation() {
     }
     // Refus métier du serveur (créneau occupé, trop de demandes…) :
     // afficher le message précis, sans retenter l'envoi
-    if (['CRENEAU_OCCUPE','TROP_DE_REQUETES','DATE_PASSEE','DATE_INVALIDE','HEURE_INVALIDE','DUREE_INVALIDE','EMAIL_INVALIDE','CHAMPS_MANQUANTS'].includes(data.error)) {
+    if (['CRENEAU_OCCUPE','ESPACE_INCONNU','TROP_DE_REQUETES','DATE_PASSEE','DATE_INVALIDE','HEURE_INVALIDE','DUREE_INVALIDE','EMAIL_INVALIDE','CHAMPS_MANQUANTS'].includes(data.error)) {
       document.getElementById('btnEnvoyer').disabled = false;
       toast(data.message || 'Réservation impossible : ' + data.error, 'err');
       return;
