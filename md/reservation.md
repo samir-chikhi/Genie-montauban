@@ -60,7 +60,9 @@ Heure de début \*
 
 Heure de fin \*
 
-Nom complet \*
+Prénom \*
+
+Nom \*
 
 Email \*
 
@@ -93,6 +95,19 @@ Votre demande a été reçue. L'équipe Génie vous confirmera par email sous 24
 REF-XXXXXX
 
   
+  
+📅 Nouvelle réservation
+ 
+[← Retour au site](index.html)
+
+✅
+
+## Paiement confirmé
+
+Votre réservation est enregistrée. Un e-mail de confirmation vient de vous être envoyé.
+
+—
+
   
 📅 Nouvelle réservation
  
