@@ -316,9 +316,13 @@ input[type=radio],input[type=checkbox]{width:auto;height:auto;padding:0;border:n
         <label for="fHeureFin">Heure de fin <span class="req">*</span></label>
         <input type="time" id="fHeureFin" required min="08:00" max="22:00" step="1800">
       </div>
-      <div class="form-group full">
-        <label for="fNom">Nom complet <span class="req">*</span></label>
-        <input type="text" id="fNom" placeholder="Prénom Nom" required>
+      <div class="form-group">
+        <label for="fPrenom">Prénom <span class="req">*</span></label>
+        <input type="text" id="fPrenom" placeholder="Marie" required>
+      </div>
+      <div class="form-group">
+        <label for="fNom">Nom <span class="req">*</span></label>
+        <input type="text" id="fNom" placeholder="Dupont" required>
       </div>
       <div class="form-group">
         <label for="fEmail">Email <span class="req">*</span></label>
@@ -375,6 +379,20 @@ input[type=radio],input[type=checkbox]{width:auto;height:auto;padding:0;border:n
   <p>Votre demande a été reçue. L'équipe Génie vous confirmera par email sous 24h.</p>
   <div class="success-ref" id="successRef">REF-XXXXXX</div>
   <br><br>
+  <button class="btn-modify" onclick="nouvelleReservation()">📅 Nouvelle réservation</button>
+  &nbsp;
+  <a href="index.html" class="btn-modify">← Retour au site</a>
+</div>
+
+<!-- Confirmation affichee au retour de HelloAsso (?paiement=ok) -->
+<div class="success-card" id="paidCard">
+  <div class="success-icon">✅</div>
+  <h2>Paiement confirmé</h2>
+  <p>Votre réservation est enregistrée. Un e-mail de confirmation vient de vous être envoyé.</p>
+  <div class="success-ref" id="paidRef">—</div>
+  <table id="paidTable" style="margin:22px auto 0;border-collapse:collapse;font-size:15px;text-align:left;max-width:420px;width:100%"></table>
+  <p id="paidRecu" style="margin-top:18px"></p>
+  <br>
   <button class="btn-modify" onclick="nouvelleReservation()">📅 Nouvelle réservation</button>
   &nbsp;
   <a href="index.html" class="btn-modify">← Retour au site</a>
@@ -640,7 +658,7 @@ document.addEventListener('DOMContentLoaded', () => {
   updateSteps(1);
   const tom = new Date(); tom.setDate(tom.getDate()+1);
   document.getElementById('fDate').min = tom.toISOString().split('T')[0];
-  ['fDate','fHeure','fHeureFin','fNom','fEmail','fTel','fOrga','fMsg','fBadge','fAdhesion'].forEach(id => {
+  ['fDate','fHeure','fHeureFin','fPrenom','fNom','fEmail','fTel','fOrga','fMsg','fBadge','fAdhesion'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.addEventListener('change', updateRecap);
     if (el && el.type !== 'checkbox') el.addEventListener('input', updateRecap);
@@ -750,7 +768,7 @@ function updateRecap() {
     ['Date',         document.getElementById('fDate')?.value || '—'],
     ['Heure de début', document.getElementById('fHeure')?.value || '—'],
     ['Heure de fin',   document.getElementById('fHeureFin')?.value || '—'],
-    ['Nom',          document.getElementById('fNom')?.value || '—'],
+    ['Nom',          ((document.getElementById('fPrenom')?.value || '') + ' ' + (document.getElementById('fNom')?.value || '')).trim() || '—'],
     ['Email',        document.getElementById('fEmail')?.value || '—'],
     ['Téléphone',    document.getElementById('fTel')?.value || '—'],
     ['Montant total',isAsso ? 'Gratuit*' : total + ' €'],
@@ -787,6 +805,12 @@ function revenirEnEdition() {
     document.getElementById('fDate').scrollIntoView({behavior:'smooth', block:'center'});
     document.getElementById('fDate').focus();
     return;
+  }
+  if (!document.getElementById('fPrenom').value) {
+    document.getElementById('fPrenom').scrollIntoView({behavior:'smooth', block:'center'});
+    document.getElementById('fPrenom').focus();
+    toast('Indiquez votre prénom.', 'err');
+    return false;
   }
   if (!document.getElementById('fNom').value) {
     document.getElementById('fNom').scrollIntoView({behavior:'smooth', block:'center'});
@@ -839,7 +863,7 @@ async function envoyerReservation() {
   if (!duree)     { toast('Choisissez une durée.', 'err'); revenirEnEdition(); return; }
   const date  = document.getElementById('fDate').value;
   const heure = document.getElementById('fHeure').value;
-  const nom   = document.getElementById('fNom').value.trim();
+  const nom   = (document.getElementById('fPrenom').value.trim() + ' ' + document.getElementById('fNom').value.trim()).trim();
   const email = document.getElementById('fEmail').value.trim();
   if (!date)  { toast('Indiquez une date.', 'err'); document.getElementById('fDate').focus(); return; }
   if (!heure) { toast('Indiquez une heure.', 'err'); document.getElementById('fHeure').focus(); return; }
@@ -856,9 +880,10 @@ async function envoyerReservation() {
   const total  = prix + (badge?25:0) + (adhes?50:0);
   const ref    = 'GEN-' + Date.now().toString(36).toUpperCase();
   const now    = new Date().toISOString();
-  const parts  = nom.split(' ');
-  const prenom = parts[0];
-  const nomFam = parts.slice(1).join(' ') || nom;
+  // Deux champs distincts : plus de decoupage au premier espace, qui
+  // inversait prenom et nom des que la saisie ne suivait pas l ordre attendu.
+  const prenom = document.getElementById('fPrenom').value.trim();
+  const nomFam = document.getElementById('fNom').value.trim();
 
   const [hh, mm] = heure.split(':').map(Number);
   const [hf, mf] = heureFin_input.split(':').map(Number);
@@ -906,6 +931,16 @@ async function envoyerReservation() {
       // paiement est du, on envoie directement sur HelloAsso. Le creneau est
       // tenu 30 min, puis libere automatiquement s il n est pas regle.
       if (data.paiementUrl) {
+        // On garde le recapitulatif pour l afficher au retour de HelloAsso :
+        // l URL de retour ne transporte que des identifiants techniques.
+        try {
+          sessionStorage.setItem('genie_resa', JSON.stringify({
+            ref: data.id || ref, espace: esp.nom, date: date,
+            heureDebut: heure, heureFin: heureFin_input,
+            montant: data.montant != null ? data.montant : total,
+            prenom: prenom, email: email
+          }));
+        } catch (e) {}
         document.getElementById('btnEnvoyer').textContent = '↪ Redirection vers le paiement…';
         window.location.href = data.paiementUrl;
         return;
@@ -951,6 +986,55 @@ async function envoyerReservation() {
     }
   }
 }
+
+// ─────────────────────────────────────────────────────────
+// RETOUR DE PAIEMENT HELLOASSO
+// ─────────────────────────────────────────────────────────
+// HelloAsso renvoie ici avec ?paiement=ok&checkoutIntentId=..&code=succeeded
+// &orderId=.. : que des identifiants techniques. Le recapitulatif lisible
+// vient de sessionStorage, pose juste avant la redirection.
+(function afficherRetourPaiement() {
+  const q = new URLSearchParams(location.search);
+  if (q.get('paiement') !== 'ok') return;
+
+  let r = {};
+  try { r = JSON.parse(sessionStorage.getItem('genie_resa') || '{}'); } catch (e) {}
+
+  const fDate = d => {
+    if (!d) return null;
+    const dt = new Date(String(d) + 'T12:00:00');
+    return isNaN(dt) ? String(d) : dt.toLocaleDateString('fr-FR',
+      { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  };
+  const fPrix = m => (m === 0 || m === '0') ? 'Gratuit'
+    : (m == null ? null : Number(m).toLocaleString('fr-FR', { minimumFractionDigits: 2 }) + ' €');
+
+  const lignes = [
+    ['Espace',  r.espace],
+    ['Date',    fDate(r.date)],
+    ['Horaire', r.heureDebut ? (r.heureDebut + (r.heureFin ? ' → ' + r.heureFin : '')) : null],
+    ['Montant réglé', fPrix(r.montant)],
+    ['Confirmation', r.email ? ('envoyée à ' + r.email) : null]
+  ].filter(l => l[1]);
+
+  document.getElementById('paidRef').textContent = r.ref || q.get('orderId') || '';
+  document.getElementById('paidTable').innerHTML = lignes.map(l =>
+    '<tr><td style="padding:7px 12px 7px 0;color:#6B7A8A;white-space:nowrap">' + l[0] +
+    '</td><td style="padding:7px 0;font-weight:600">' + String(l[1]).replace(/[&<>"]/g,
+      c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])) + '</td></tr>').join('');
+
+  const ord = q.get('orderId');
+  if (ord && /^[0-9]+$/.test(ord)) {
+    document.getElementById('paidRecu').innerHTML =
+      '<a href="https://www.helloasso.com/associations/association-genie/checkout/paiement-attestation/' +
+      ord + '" target="_blank" rel="noopener noreferrer">🧾 Télécharger mon reçu HelloAsso</a>';
+  }
+
+  document.getElementById('mainPage').style.display = 'none';
+  document.getElementById('paidCard').classList.add('visible');
+  try { sessionStorage.removeItem('genie_resa'); } catch (e) {}
+  window.scrollTo({ top: 0 });
+})();
 </script>
 </body>
 </html>
