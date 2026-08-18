@@ -972,12 +972,12 @@ function haWebhook(data) {
           ajouterAuCalendrier(rows[i][7], rows[i][10], rows[i][13], rows[i][14],
             rows[i][1] + ' ' + rows[i][2], rows[i][0], rows[i][3], true);
         } catch (eCal) { logErreur('haWebhook/calendrier', eCal); }
-        envoyerEmailSafe(rows[i][3], '✅ Paiement reçu — ' + rows[i][7] + ' — ' + rows[i][10],
+        envoyerEmailSafe(rows[i][3], '✅ Paiement reçu — ' + rows[i][7] + ' — ' + formaterDate(dateISO(rows[i][10])),
           'Bonjour ' + (rows[i][1] || rows[i][2]) + ',\n\nVotre paiement est bien reçu, '
           + 'votre réservation est confirmée.\n\n'
           + '• Espace    : ' + rows[i][7] + '\n'
-          + '• Date      : ' + rows[i][10] + '\n'
-          + '• Horaire   : ' + rows[i][13] + ' → ' + rows[i][14] + '\n'
+          + '• Date      : ' + formaterDate(dateISO(rows[i][10])) + '\n'
+          + '• Horaire   : ' + formaterHeure(rows[i][13]) + ' → ' + formaterHeure(rows[i][14]) + '\n'
           + '• Référence : ' + rows[i][0] + '\n'
           + (d.paymentReceiptUrl ? '• Reçu      : ' + d.paymentReceiptUrl + '\n' : '')
           + '\nConditions générales : ' + CONFIG.URL_SITE + '/cgv.html\n'
@@ -1471,7 +1471,7 @@ function adminUpdateStatus(data) {
           if (montantResa > 0) {
             var co = haCheckout({
               id: rows[i][0], type: 'reservation', montant: montantResa,
-              libelle: rows[i][7] + ' — ' + rows[i][10] +
+              libelle: rows[i][7] + ' — ' + formaterDate(dateISO(rows[i][10])) +
                        (rows[i][13] ? ' ' + rows[i][13] : ''),
               prenom: rows[i][1], nom: rows[i][2], email: rows[i][3]
             });
@@ -1492,11 +1492,11 @@ function adminUpdateStatus(data) {
           }
           // Nouveau schéma : email=col3, prenom=col1, nom=col2, espace=col7, date=col10, hdeb=col13, hfin=col14
           envoyerEmailSafe(rows[i][3],
-            '✅ Réservation confirmée — ' + rows[i][7] + ' — ' + rows[i][10],
+            '✅ Réservation confirmée — ' + rows[i][7] + ' — ' + formaterDate(dateISO(rows[i][10])),
             'Bonjour ' + (rows[i][1]||rows[i][2]) + ',\n\nVotre réservation est confirmée !\n\n'
             + '• Espace    : ' + rows[i][7] + '\n'
-            + '• Date      : ' + rows[i][10] + '\n'
-            + '• Horaire   : ' + rows[i][13] + ' → ' + rows[i][14] + '\n'
+            + '• Date      : ' + formaterDate(dateISO(rows[i][10])) + '\n'
+            + '• Horaire   : ' + formaterHeure(rows[i][13]) + ' → ' + formaterHeure(rows[i][14]) + '\n'
             + '• Référence : ' + rows[i][0] + '\n\n'
             + blocPaiement
             + (data.messageAdmin || '') + '\n\nÀ bientôt !\n' + CONFIG.NOM_LIEU);
@@ -1658,6 +1658,14 @@ function verifierNouvelAvis() {
 // HELPERS — identiques v4.2
 // ============================================================
 function pad(n) { return String(n).padStart(2, '0'); }
+
+// Les heures viennent de Sheets comme des Date calees au 30/12/1899 : sans
+// formatage, l email affichait "Sat Dec 30 1899 17:38:00 GMT+0009".
+function formaterHeure(v) {
+  var m = hMin(v, null);
+  if (m === null || isNaN(m)) return String(v == null ? '' : v);
+  return pad(Math.floor(m / 60)) + ':' + pad(m % 60);
+}
 
 function formaterDate(s) {
   if (!s) return '';
