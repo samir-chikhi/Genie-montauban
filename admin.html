@@ -1088,6 +1088,15 @@ function editResa(id) {
 // ─────────────────────────────────────────────────────────
 // BADGES HTML
 // ─────────────────────────────────────────────────────────
+function paiementBadge(r) {
+  if (!r.paiement) return '';
+  if (r.paiement === 'PAYE') return '<br><span class="badge b-confirmed">💳 Payé</span>';
+  if (r.paiement === 'EN_ATTENTE_PAIEMENT') return r.paiementUrl
+    ? '<br><a class="badge b-pending" href="' + esc(r.paiementUrl) + '" target="_blank" rel="noopener noreferrer">💳 Lien de paiement</a>'
+    : '<br><span class="badge b-pending">💳 À régler</span>';
+  return '';
+}
+
 function statusBadge(s) {
   return ({
     confirmed : '<span class="badge b-confirmed">✓ Confirmée</span>',
@@ -1383,7 +1392,7 @@ function showDetail(id) {
       <div class="di"><label>Options</label><span>${esc(r.options||'Aucune')}</span></div>
       <div class="di full"><label>Objet</label><span>${esc(r.objet||'—')}</span></div>
       <div class="di"><label>Montant</label><span class="amount" style="font-size:20px;color:var(--brick)">${fMoney(r.montant)}</span></div>
-      <div class="di"><label>Statut</label><span>${statusBadge(r.statut)}</span></div>
+      <div class="di"><label>Statut</label><span>${statusBadge(r.statut)}${paiementBadge(r)}</span></div>
       ${r.calEventId?`<div class="di full"><label>Google Calendar</label><span style="font-size:12px;color:var(--cal)">📅 Événement synchronisé</span></div>`:''}
     </div>`;
 
@@ -1462,7 +1471,7 @@ function renderTable() {
       <td>${esc(DL[r.typeDuree]||r.typeDuree||'—')}${r.typeDuree==='heure'?' × '+esc(r.nbHeures)+'h':''}</td>
       <td><span class="amount">${fMoney(r.montant)}</span></td>
       <td style="font-size:11px">${esc(r.options||'—')}${r.calEventId?'<br><span style="color:var(--cal)">📅</span>':''}</td>
-      <td>${statusBadge(r.statut)}</td>
+      <td>${statusBadge(r.statut)}${paiementBadge(r)}</td>
       <td onclick="event.stopPropagation()">
         <button class="btn btn-sm btn-secondary" onclick="editResa('${escId(r.id)}')">✏️</button>
         <button class="btn btn-sm btn-ghost" onclick="printResa('${escId(r.id)}')">🖨️</button>

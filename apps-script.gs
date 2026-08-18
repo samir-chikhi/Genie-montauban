@@ -27,6 +27,9 @@ const CONFIG = {
   ADRESSE:            '12 rue du Génie, 82000 Montauban',
   TEL:                '06 51 50 97 18',
   URL_SITE:           'https://genie-montauban.fr',
+  // Identifiants API HelloAsso : jamais ici (depot public), ils sont lus
+  // dans Fichier > Parametres du projet > Proprietes du script.
+  HELLOASSO_SLUG:     'association-genie',
   URL_MON_COMPTE:     'https://genie-montauban.fr/mon-compte.html',
   CALENDAR_ID:        'genie.montauban@gmail.com',
   TOKEN_EXPIRY_MIN:   60,
@@ -184,6 +187,8 @@ function genererSessionAdminDepuisEditeur() {
 function doPost(e) {
   try {
     const data = JSON.parse(e.postData.contents);
+    // Notification HelloAsso : pas de champ "action", mais un "eventType".
+    if (!data.action && data.eventType) return ok(haWebhook(data));
     switch (data.action) {
       case 'INSCRIRE':                return ok(inscrireClient(data));
       case 'DEMANDER_LIEN':           return ok(demanderLienMagique(data));
@@ -508,7 +513,8 @@ function creerReservation(data) {
       sheet.appendRow(['id','prenom','nom','email','tel','orga','espace','nomEspace',
         'usage','profil','date','typeDuree','nbHeures','heureDebut','heureFin',
         'montant','montantBase','options','statut','participants','objet',
-        'createdAt','updatedAt','calendarEventId']);
+        'createdAt','updatedAt','calendarEventId',
+        'checkoutIntentId','paymentUrl','paymentState','paymentReceiptUrl']);
     }
     const hFin   = heuresFin(data.heureDebut, data.duree);
     const rows   = sheet.getDataRange().getValues();
@@ -726,6 +732,136 @@ function traiterContact(data) {
 // options(17) statut(18) participants(19) objet(20)
 // createdAt(21) updatedAt(22) calendarEventId(23)
 // ============================================================
+// ============================================================
+// HELLOASSO — Checkout (paiement en ligne des reservations)
+// ============================================================
+// Flux retenu : la demande est enregistree EN_ATTENTE, l'admin la valide,
+// et c'est la validation qui genere le lien de paiement envoye par email.
+// Le webhook HelloAsso marque ensuite la reservation comme payee.
+//
+// Les identifiants viennent des Proprietes du script, jamais du depot :
+//   HELLOASSO_CLIENT_ID / HELLOASSO_CLIENT_SECRET
+// Sans eux, tout degrade proprement : la reservation est confirmee comme
+// avant, simplement sans lien de paiement.
+
+function haCreds() {
+  const p = PropertiesService.getScriptProperties();
+  return {
+    id:     p.getProperty('HELLOASSO_CLIENT_ID'),
+    secret: p.getProperty('HELLOASSO_CLIENT_SECRET')
+  };
+}
+
+function haConfigure() {
+  const c = haCreds();
+  return !!(c.id && c.secret);
+}
+
+// Token OAuth2 client_credentials, mis en cache (il expire en ~30 min).
+function haToken() {
+  const cache  = CacheService.getScriptCache();
+  const cached = cache.get('ha_token');
+  if (cached) return cached;
+
+  const c = haCreds();
+  if (!c.id || !c.secret) return null;
+
+  const r = UrlFetchApp.fetch('https://api.helloasso.com/oauth2/token', {
+    method: 'post',
+    contentType: 'application/x-www-form-urlencoded',
+    payload: { client_id: c.id, client_secret: c.secret, grant_type: 'client_credentials' },
+    muteHttpExceptions: true
+  });
+  if (r.getResponseCode() !== 200) {
+    logErreur('haToken', new Error('HTTP ' + r.getResponseCode() + ' ' + r.getContentText().slice(0, 300)));
+    return null;
+  }
+  const j = JSON.parse(r.getContentText());
+  // marge de 2 min avant l'expiration reelle
+  cache.put('ha_token', j.access_token, Math.max(60, (j.expires_in || 1800) - 120));
+  return j.access_token;
+}
+
+// Cree une intention de paiement. Retourne { url, id } ou null.
+function haCreerCheckout(resa) {
+  if (!haConfigure()) return null;
+  const cents = Math.round(Number(resa.montant) * 100);
+  if (!cents || cents <= 0) return null;   // gratuites : aucun paiement
+
+  const token = haToken();
+  if (!token) return null;
+
+  const libelle = (resa.nomEspace + ' — ' + resa.date +
+    (resa.heureDebut ? ' ' + resa.heureDebut : '')).slice(0, 250);
+
+  const body = {
+    totalAmount:      cents,
+    initialAmount:    cents,
+    itemName:         libelle,
+    backUrl:          CONFIG.URL_SITE + '/reservation.html',
+    errorUrl:         CONFIG.URL_SITE + '/reservation.html?paiement=erreur',
+    returnUrl:        CONFIG.URL_SITE + '/reservation.html?paiement=ok',
+    containsDonation: false,
+    payer: {
+      firstName: String(resa.prenom || '').slice(0, 255),
+      lastName:  String(resa.nom    || '').slice(0, 255),
+      email:     String(resa.email  || '').slice(0, 255)
+    },
+    metadata: { resaId: String(resa.id) }
+  };
+
+  const r = UrlFetchApp.fetch(
+    'https://api.helloasso.com/v5/organizations/' + CONFIG.HELLOASSO_SLUG + '/checkout-intents',
+    { method: 'post', contentType: 'application/json',
+      headers: { Authorization: 'Bearer ' + token },
+      payload: JSON.stringify(body), muteHttpExceptions: true });
+
+  const code = r.getResponseCode();
+  if (code !== 200 && code !== 201) {
+    // 409 = association non verifiee cote HelloAsso
+    logErreur('haCreerCheckout', new Error('HTTP ' + code + ' ' + r.getContentText().slice(0, 400)));
+    return null;
+  }
+  const j = JSON.parse(r.getContentText());
+  return { url: j.redirectUrl, id: j.id };
+}
+
+// Notification HelloAsso : paiement autorise sur un checkout.
+// Le lien avec la reservation passe par metadata.resaId, pose a la creation.
+function haWebhook(data) {
+  try {
+    if (!data || data.eventType !== 'Payment') return { success: true, ignore: 'eventType' };
+    const d = data.data || {};
+    if (d.state !== 'Authorized') return { success: true, ignore: 'state=' + d.state };
+
+    const resaId = data.metadata && data.metadata.resaId;
+    if (!resaId) return { success: true, ignore: 'sans resaId' };
+
+    const ss    = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+    const sheet = ss.getSheetByName('Reservations');
+    if (!sheet) return { success: false, error: 'Onglet introuvable' };
+
+    const rows = sheet.getDataRange().getValues();
+    for (let i = 1; i < rows.length; i++) {
+      if (String(rows[i][0]) === String(resaId)) {
+        sheet.getRange(i + 1, 27).setValue('PAYE');                    // paymentState
+        sheet.getRange(i + 1, 28).setValue(d.paymentReceiptUrl || ''); // recu
+        sheet.getRange(i + 1, 27).setBackground('#D4EDDA').setFontColor('#155724');
+        envoyerEmailSafe(CONFIG.EMAIL_ADMIN,
+          '💳 Paiement recu — ' + resaId,
+          'Montant : ' + (Number(d.amount || 0) / 100).toFixed(2) + ' EUR\n' +
+          'Reservation : ' + resaId + '\n' +
+          'Recu : ' + (d.paymentReceiptUrl || '—'));
+        return { success: true, ok: true };
+      }
+    }
+    return { success: true, ignore: 'reservation introuvable : ' + resaId };
+  } catch (err) {
+    logErreur('haWebhook', err);
+    return { success: false, error: 'ERREUR_SERVEUR', message: err.message };
+  }
+}
+
 function adminGetAll() {
   try {
     const ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
@@ -735,7 +871,8 @@ function adminGetAll() {
       resSheet.appendRow(['id','prenom','nom','email','tel','orga','espace','nomEspace',
         'usage','profil','date','typeDuree','nbHeures','heureDebut','heureFin',
         'montant','montantBase','options','statut','participants','objet',
-        'createdAt','updatedAt','calendarEventId']);
+        'createdAt','updatedAt','calendarEventId',
+        'checkoutIntentId','paymentUrl','paymentState','paymentReceiptUrl']);
     }
     const resRows = resSheet.getDataRange().getValues();
 
@@ -756,7 +893,8 @@ function adminGetAll() {
 
       var id, prenom, nom, email, tel, orga, espace, nomEspace, usage, profil,
           date, typeDuree, nbH, heureDebut, heureFin, montant, options,
-          statut, participants, objet, createdAt, calEventId;
+          statut, participants, objet, createdAt, calEventId,
+          paiement, paiementUrl;
 
       if (isAncienSchema) {
         // ANCIEN schéma (19 col) : ID,Statut,DateCréa,Espace,Usage,Profil,Date,Hdeb,Hfin,Durée,Part,Prénom,Nom,Email...
@@ -780,6 +918,8 @@ function adminGetAll() {
         objet       = String(r[17] || '');
         options     = String(r[18] || '');
         calEventId  = '';
+        paiement    = '';
+        paiementUrl = '';
       } else {
         // NOUVEAU schéma (24 col)
         id          = String(r[0]);
@@ -804,6 +944,8 @@ function adminGetAll() {
         objet       = String(r[20] || '');
         createdAt   = String(r[21] || '');
         calEventId  = String(r[23] || '');
+        paiement    = String(r[26] || '');
+        paiementUrl = String(r[25] || '');
       }
 
       // Normaliser typeDuree si c'est un chiffre
@@ -833,7 +975,9 @@ function adminGetAll() {
         participants,
         objet,
         createdAt,
-        calEventId
+        calEventId,
+        paiement,
+        paiementUrl
       };
     }).reverse();
 
@@ -1131,6 +1275,30 @@ function adminUpdateStatus(data) {
         sheet.getRange(i + 1, statCol).setBackground(c.bg).setFontColor(c.fg);
 
         if (data.statut === 'CONFIRME' && data.type === 'reservation') {
+          // Lien de paiement HelloAsso genere au moment de la validation.
+          var blocPaiement = '';
+          var montantResa  = Number(rows[i][15]) || 0;
+          if (montantResa > 0) {
+            var co = haCreerCheckout({
+              id: rows[i][0], prenom: rows[i][1], nom: rows[i][2], email: rows[i][3],
+              nomEspace: rows[i][7], date: rows[i][10], heureDebut: rows[i][13],
+              montant: montantResa
+            });
+            if (co && co.url) {
+              sheet.getRange(i + 1, 25).setValue(co.id);
+              sheet.getRange(i + 1, 26).setValue(co.url);
+              sheet.getRange(i + 1, 27).setValue('EN_ATTENTE_PAIEMENT');
+              blocPaiement =
+                '\n💳 REGLER EN LIGNE (paiement securise HelloAsso, sans frais) :\n'
+                + co.url + '\n'
+                + '\nConditions generales de vente : ' + CONFIG.URL_SITE + '/cgv.html\n'
+                + 'Reglement interieur : ' + CONFIG.URL_SITE + '/notre-histoire.html\n';
+            } else {
+              blocPaiement = '\nLe reglement se fait sur place ou par virement — nous vous recontactons.\n';
+            }
+          } else {
+            blocPaiement = '\nCe creneau vous est offert : aucun reglement n est demande.\n';
+          }
           // Nouveau schéma : email=col3, prenom=col1, nom=col2, espace=col7, date=col10, hdeb=col13, hfin=col14
           envoyerEmailSafe(rows[i][3],
             '✅ Réservation confirmée — ' + rows[i][7] + ' — ' + rows[i][10],
@@ -1139,6 +1307,7 @@ function adminUpdateStatus(data) {
             + '• Date      : ' + rows[i][10] + '\n'
             + '• Horaire   : ' + rows[i][13] + ' → ' + rows[i][14] + '\n'
             + '• Référence : ' + rows[i][0] + '\n\n'
+            + blocPaiement
             + (data.messageAdmin || '') + '\n\nÀ bientôt !\n' + CONFIG.NOM_LIEU);
           ajouterAuCalendrier(rows[i][7], rows[i][10], rows[i][13], rows[i][14],
             rows[i][1] + ' ' + rows[i][2], rows[i][0], rows[i][3], true);
