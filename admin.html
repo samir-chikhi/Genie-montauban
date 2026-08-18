@@ -560,6 +560,32 @@ textarea{resize:vertical;min-height:65px}
           </select>
         </div>
         <div class="fg"><label>Participants</label><input type="number" id="r-part" min="1" value="1"></div>
+        <div class="fg">
+          <label>Montant négocié (€)</label>
+          <input type="number" id="r-montant-perso" min="0" step="0.5" placeholder="laisser vide = tarif grille">
+          <span class="hint">Remplace le prix calculé. Pour un total sur plusieurs séances, c'est le prix PAR séance.</span>
+        </div>
+        <div class="fg">
+          <label>Répéter</label>
+          <select id="r-repeat">
+            <option value="1">Une seule date</option>
+            <option value="2">2 séances hebdomadaires</option>
+            <option value="3">3 séances hebdomadaires</option>
+            <option value="4">4 séances hebdomadaires</option>
+            <option value="5">5 séances hebdomadaires</option>
+            <option value="6">6 séances hebdomadaires</option>
+          </select>
+          <span class="hint">Même créneau, chaque semaine à partir de la date choisie.</span>
+        </div>
+        <div class="fg">
+          <label>Règlement</label>
+          <select id="r-reglement">
+            <option value="Virement">Virement</option>
+            <option value="Sur place">Sur place (chèque / espèces)</option>
+            <option value="En ligne">En ligne (HelloAsso)</option>
+            <option value="Gratuit">Gratuit</option>
+          </select>
+        </div>
         <div class="fg full"><label>Objet</label><textarea id="r-objet" placeholder="Réunion, formation, atelier…"></textarea></div>
         <div class="fg full">
           <label>Options supplémentaires</label>
@@ -862,8 +888,14 @@ async function saveResa(silent) {
   const hd=gv('r-hdebut'), hf=heureFin(hd,duree,nbH);
   const badge=gvb('r-badge'), adhesion=gvb('r-adhesion');
   const m     = calcMontant(espace, usage, profil, duree, nbH);
-  const opts  = [badge?'Badge 24h/7j':'', adhesion?'Adhésion Génie':''].filter(Boolean).join(', ');
-  const total = m + (badge?25:0) + (adhesion?50:0);
+  const regl  = gv('r-reglement');
+  const opts  = [badge?'Badge 24h/7j':'', adhesion?'Adhésion Génie':'', regl?('Règlement : '+regl):'']
+                  .filter(Boolean).join(', ');
+  const perso = gv('r-montant-perso').trim();
+  // Un montant saisi par l'admin prime sur la grille : c'est le cas des
+  // remises negociees (formation sur plusieurs seances, partenariat…).
+  const total = perso !== '' ? parseFloat(perso.replace(',','.')) || 0
+                              : m + (badge?25:0) + (adhesion?50:0);
   const now   = new Date().toISOString();
 
   const resa = {
@@ -890,19 +922,37 @@ async function saveResa(silent) {
     updatedAt  : now
   };
 
-  showLoader(editId?'Modification…':'Création…','Sauvegarde Google Sheets + Calendar');
+  // Repetition hebdomadaire : une formation sur plusieurs seances se saisit
+  // une fois. Chaque seance est une reservation autonome, donc annulable ou
+  // deplacable independamment.
+  const nbSeances = editId ? 1 : (parseInt(gv('r-repeat')) || 1);
+
+  showLoader(editId?'Modification…':'Création…',
+    nbSeances>1 ? nbSeances+' séances hebdomadaires' : 'Sauvegarde Google Sheets + Calendar');
   try {
-    await apiPost({ action: editId ? 'updateResa' : 'addResa', resa });
-    const full = { ...resa, montant:total, nbHeures:nbH, participants:parseInt(resa.participants) };
+    const creees = [];
+    for (let k = 0; k < nbSeances; k++) {
+      const d = new Date(date + 'T12:00:00');
+      d.setDate(d.getDate() + k*7);
+      const dISO = d.toISOString().split('T')[0];
+      const r = k === 0 ? resa
+        : { ...resa, id: 'RSV-' + Date.now() + '-' + k, date: dISO,
+            createdAt: new Date().toISOString() };
+      if (k > 0) r.date = dISO;
+      await apiPost({ action: editId ? 'updateResa' : 'addResa', resa: r });
+      creees.push({ ...r, montant:total, nbHeures:nbH, participants:parseInt(r.participants) });
+    }
+    const full = creees[0];
     if (editId) {
       const i = DB.reservations.findIndex(r=>r.id===editId);
       if (i>=0) DB.reservations[i] = full;
     } else {
-      DB.reservations.unshift(full);
+      creees.slice().reverse().forEach(r => DB.reservations.unshift(r));
     }
     hideLoader();
     closeModal('mresa');
-    toast(editId ? 'Modifiée ! 📅 Calendar mis à jour.' : 'Créée ! 📅 Événement Calendar créé.');
+    toast(editId ? 'Modifiée ! 📅 Calendar mis à jour.'
+                 : (nbSeances>1 ? nbSeances+' séances créées ! 📅' : 'Créée ! 📅 Événement Calendar créé.'));
     if (!silent) sendEmail(resa);
     renderDashboard(); renderTable();
     setTimeout(() => loadData(false), 3000);
