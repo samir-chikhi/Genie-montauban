@@ -90,7 +90,7 @@
          stats (blanc 68 %, 12,5 px) passent sous les 4,5:1 exigés par WCAG AA. */
       background:
         linear-gradient(rgba(28,43,58,.82), rgba(28,43,58,.82)),
-        url('assets/img/facade-1600.webp') center/cover no-repeat;
+        url('../img/facade-1600.webp') center/cover no-repeat;
       position: relative; overflow: hidden; padding: 120px 5% 72px;
     }
     .hero-bg { position: absolute; inset: 0; z-index: 0; background: radial-gradient(ellipse 60% 80% at 80% 50%, rgba(201,153,62,.15) 0%, transparent 60%), radial-gradient(ellipse 40% 40% at 10% 80%, rgba(74,124,111,.12) 0%, transparent 50%); }
@@ -335,6 +335,12 @@
     .espaces-tabs { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 32px; }
     .espace-tab { display: inline-flex; align-items: center; gap: 8px; background: var(--white); border: 1px solid var(--border); border-radius: 8px; padding: 9px 16px; font-size: 14px; font-weight: 500; color: var(--muted); cursor: pointer; transition: all .2s; }
     .espace-tab .ico { width: 17px; height: 17px; }
+    /* État au chargement : l'onglet « Tous » est actif, les fiches en bail
+       doivent donc être masquées dès le premier rendu — sinon 12 fiches
+       s'affichent, puis 6 dès qu'on touche aux onglets. filtrerEspaces()
+       force display:block pour les réafficher : ne pas remplacer par une
+       chaîne vide, cette règle reprendrait le dessus. */
+    .espace-hidden { display: none; }
     .espace-tab:hover, .espace-tab.active { background: var(--navy); color: var(--white); border-color: var(--navy); }
     .espaces-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; }
     .espace-card { background: var(--white); border-radius: var(--r); border: 1px solid var(--border); overflow: hidden; transition: transform .25s, box-shadow .25s; }
