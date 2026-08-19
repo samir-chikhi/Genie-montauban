@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://docs.google.com; frame-src https://www.google.com; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://docs.google.com; frame-src https://www.google.com; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>Génie — Tiers-lieu d'éducation populaire et d'ESS à Montauban</title>
   <meta name="description" content="Tiers-lieu d'éducation populaire à Montauban : ateliers, Veillées du Génie (université populaire), accompagnement de projets à impact, Académie des Compétences. Et des espaces de coworking et de réunion qui financent tout ça.">
@@ -298,6 +298,7 @@
 
   <div class="espaces-cta-duo">
     <a href="espaces.html" class="btn-primary">Voir les douze fiches →</a>
+    <a href="espaces.html#entreprises" class="btn-sage">Institutions &amp; entreprises →</a>
     <a href="tarifs.html" class="btn-sage">Grille tarifaire complète →</a>
     <a href="reservation.html" class="btn-sage">Réserver en ligne →</a>
   </div>
@@ -1030,11 +1031,11 @@
         <input type="number" id="mbr-montant" placeholder="ex. 45" min="10" step="5">
         <span class="hint">Selon votre profil et vos revenus</span>
       </div>
-      <div class="fg"><label>Prénom <span class="req">*</span></label><input type="text" id="mbr-prenom" placeholder="Marie"></div>
-      <div class="fg"><label>Nom / Structure <span class="req">*</span></label><input type="text" id="mbr-nom" placeholder="Dupont ou Association XYZ"></div>
-      <div class="fg"><label>Email <span class="req">*</span></label><input type="email" id="mbr-email" placeholder="marie@structure.fr"></div>
-      <div class="fg"><label>Téléphone</label><input type="tel" id="mbr-tel" placeholder="06 XX XX XX XX"></div>
-      <div class="fg form-full"><label>Adresse postale</label><input type="text" id="mbr-adresse" placeholder="12 rue de la Paix, 82000 Montauban"></div>
+      <div class="fg"><label>Prénom <span class="req">*</span></label><input type="text" id="mbr-prenom" autocomplete="given-name" placeholder="Marie"></div>
+      <div class="fg"><label>Nom / Structure <span class="req">*</span></label><input type="text" id="mbr-nom" autocomplete="family-name" placeholder="Dupont ou Association XYZ"></div>
+      <div class="fg"><label>Email <span class="req">*</span></label><input type="email" id="mbr-email" autocomplete="email" placeholder="marie@structure.fr"></div>
+      <div class="fg"><label>Téléphone</label><input type="tel" id="mbr-tel" autocomplete="tel" placeholder="06 XX XX XX XX"></div>
+      <div class="fg form-full"><label>Adresse postale</label><input type="text" id="mbr-adresse" autocomplete="street-address" placeholder="12 rue de la Paix, 82000 Montauban"></div>
       <div class="fg form-full"><label>Mode de paiement souhaité</label>
         <select id="mbr-paiement">
           <option value="Virement bancaire">🔁 Virement bancaire</option>
@@ -1344,9 +1345,9 @@
       <div class="contact-form-bloc" style="margin-top:20px;">
         <h3>✉️ Nous écrire</h3>
         <div class="form-grid-2" style="grid-template-columns:1fr 1fr;">
-          <div class="fg"><label>Prénom</label><input type="text" id="c-prenom" placeholder="Marie"></div>
-          <div class="fg"><label>Nom</label><input type="text" id="c-nom" placeholder="Dupont"></div>
-          <div class="fg form-full"><label>Email <span class="req">*</span></label><input type="email" id="c-email" placeholder="marie@exemple.fr"></div>
+          <div class="fg"><label>Prénom</label><input type="text" id="c-prenom" autocomplete="given-name" placeholder="Marie"></div>
+          <div class="fg"><label>Nom</label><input type="text" id="c-nom" autocomplete="family-name" placeholder="Dupont"></div>
+          <div class="fg form-full"><label>Email <span class="req">*</span></label><input type="email" id="c-email" autocomplete="email" placeholder="marie@exemple.fr"></div>
           <div class="fg form-full"><label>Sujet</label><input type="text" id="c-sujet" placeholder="Question sur les tarifs…"></div>
           <div class="fg form-full"><label>Message <span class="req">*</span></label><textarea id="c-message" placeholder="Votre message…" style="min-height:100px;"></textarea></div>
           <!-- Honeypot anti-spam -->
@@ -1500,9 +1501,9 @@ function filtrerEspaces(type, btn) {
   btn.classList.add('active');
   document.querySelectorAll('.espace-card').forEach(function(c) {
     if (type === 'tous') {
-      c.style.display = c.classList.contains('espace-hidden') ? 'none' : '';
+      c.style.display = c.classList.contains('espace-hidden') ? 'none' : 'block';
     } else {
-      c.style.display = c.dataset.type === type ? '' : 'none';
+      c.style.display = c.dataset.type === type ? 'block' : 'none';
     }
   });
 }
