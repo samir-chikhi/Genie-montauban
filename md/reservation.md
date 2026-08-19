@@ -6,6 +6,8 @@ last_updated: 2026-08-19
 source: miroir markdown — version texte pour moteurs IA
 ---
 
+[Aller au contenu](#contenu)
+
 Envoi en cours… Cela peut prendre quelques secondes.
 
 # Réserver un espace

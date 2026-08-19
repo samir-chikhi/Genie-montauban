@@ -1,10 +1,12 @@
 ---
-title: Notre histoire — Pourquoi on a créé un tiers-lieu (et comment on évite d'y perdre de l'argent) | Génie Montauban
+title: Notre histoire — un tiers-lieu ESS viable | Génie Montauban
 description: Comment est né le Génie, qui s'y retrouve, et comment ce tiers-lieu ESS de Montauban s'organise pour atteindre l'équilibre financier. Le récit complet, chiffres compris.
 url: https://genie-montauban.fr/notre-histoire.html
 last_updated: 2026-08-19
 source: miroir markdown — version texte pour moteurs IA
 ---
+
+[Aller au contenu](#contenu)
 
 Un tiers-lieu, ce n'est ni un bureau classique ni un espace de coworking comme on en voit dans les métropoles : c'est un lieu partagé où des associations, des indépendants et des habitants se croisent, travaillent et organisent des activités ensemble. Le Génie, à Montauban, en est un. Voici comment il est né, qui s'y retrouve aujourd'hui, et surtout, comment on s'organise pour ne pas y perdre d'argent.
 

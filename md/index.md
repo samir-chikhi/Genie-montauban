@@ -6,6 +6,8 @@ last_updated: 2026-08-19
 source: miroir markdown — version texte pour moteurs IA
 ---
 
+[Aller au contenu](#contenu)
+
 🤝 Une personne, une voix — adhésion avec droit de vote dès 15 € par an, soutien dès 10 €
 [Adhérer →](#rejoindre)
 ✕
