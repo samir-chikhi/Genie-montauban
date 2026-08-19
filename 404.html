@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page introuvable — Génie Montauban</title>
+  <meta name="description" content="Cette page n'existe pas ou a été déplacée. Retrouvez les espaces, les tarifs, l'agenda et le formulaire de réservation du tiers-lieu Génie à Montauban.">
+  <meta name="robots" content="noindex, follow">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <link rel="icon" href="/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --navy:#1C2B3A; --gold:#C9993E; --cream:#F7F3ED; --white:#fff;
+      --muted:#50606E; --light:#EDE8E1; --sage:#4A7C6F;
+    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{
+      font-family:'DM Sans',system-ui,sans-serif;background:var(--cream);color:var(--navy);
+      min-height:100vh;display:flex;flex-direction:column;align-items:center;
+      justify-content:center;padding:32px 20px;line-height:1.6;
+    }
+    .wrap{max-width:620px;width:100%;text-align:center}
+    .logo{height:56px;width:auto;margin-bottom:28px}
+    .code{
+      font-family:'Playfair Display',Georgia,serif;font-size:clamp(64px,14vw,110px);
+      font-weight:900;color:var(--gold);line-height:1;letter-spacing:-.02em;
+    }
+    h1{
+      font-family:'Playfair Display',Georgia,serif;font-size:clamp(24px,5vw,32px);
+      font-weight:700;margin:8px 0 14px;
+    }
+    p.lead{color:var(--muted);font-size:17px;margin-bottom:32px}
+    .links{
+      display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+      gap:12px;margin-bottom:32px;text-align:left;
+    }
+    .links a{
+      display:block;background:var(--white);border:1px solid var(--light);
+      border-radius:12px;padding:15px 18px;text-decoration:none;color:var(--navy);
+      font-weight:600;font-size:15px;transition:border-color .18s,transform .18s;
+    }
+    .links a span{display:block;font-weight:400;font-size:13px;color:var(--muted);margin-top:3px}
+    .links a:hover{border-color:var(--gold);transform:translateY(-2px)}
+    .cta{
+      display:inline-block;background:var(--navy);color:var(--white);text-decoration:none;
+      padding:14px 30px;border-radius:999px;font-weight:600;font-size:16px;transition:background .18s;
+    }
+    .cta:hover{background:var(--sage)}
+    .help{margin-top:26px;font-size:14px;color:var(--muted)}
+    .help a{color:var(--navy);font-weight:600}
+    :focus-visible{outline:3px solid var(--sage);outline-offset:3px}
+  </style>
+  <!-- chemin absolu : la page 404 peut être servie depuis n'importe quelle URL -->
+  <link rel="stylesheet" href="/responsive-fixes.css">
+  <link rel="canonical" href="https://genie-montauban.fr/404.html">
+  <style>.skip-link{position:absolute;left:-9999px;top:0;z-index:10000;background:#111;color:#fff;padding:10px 18px;border-radius:0 0 8px 0;font:600 15px/1.2 system-ui,sans-serif;text-decoration:none}.skip-link:focus{left:0}:focus-visible{outline:3px solid #2563eb;outline-offset:2px}</style>
+</head>
+<body>
+<a class="skip-link" href="#contenu">Aller au contenu</a>
+  <main id="contenu" class="wrap">
+    <img src="/logo.png" alt="Génie — Tiers-Lieu de Montauban" class="logo" width="315" height="200"
+         style="height:56px;width:auto" fetchpriority="high" fetchpriority="high">
+    <p class="code">404</p>
+    <h1>Cette page n'existe pas</h1>
+    <p class="lead">
+      Le lien est peut-être ancien, ou l'adresse comporte une faute de frappe.
+      Voici les pages les plus utiles pour retrouver votre chemin.
+    </p>
+
+    <nav class="links" aria-label="Pages principales">
+      <a href="/">Accueil <span>Le tiers-lieu en bref</span></a>
+      <a href="/tarifs.html">Tarifs <span>Coworking, bureaux, salles</span></a>
+      <a href="/reservation.html">Réserver <span>Choisir un espace et un créneau</span></a>
+      <a href="/activites.html">Activités <span>Agenda et actualités</span></a>
+      <a href="/academie.html">Académie <span>Micro-formations de 3 h</span></a>
+      <a href="/notre-histoire.html">Notre histoire <span>Le projet et l'équipe</span></a>
+    </nav>
+
+    <a class="cta" href="/">Retour à l'accueil</a>
+
+    <p class="help">
+      Vous cherchiez autre chose ? Écrivez-nous à
+      <a href="mailto:genie.montauban@gmail.com">genie.montauban@gmail.com</a>
+      ou appelez le <a href="tel:+33651509718">06 51 50 97 18</a>.
+    </p>
+  </main>
+</body>
+</html>

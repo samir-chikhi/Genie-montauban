@@ -47,10 +47,13 @@
     ]
   }
   </script>
+  <style>.skip-link{position:absolute;left:-9999px;top:0;z-index:10000;background:#111;color:#fff;padding:10px 18px;border-radius:0 0 8px 0;font:600 15px/1.2 system-ui,sans-serif;text-decoration:none}.skip-link:focus{left:0}:focus-visible{outline:3px solid #2563eb;outline-offset:2px}</style>
+  <link rel="stylesheet" href="responsive-fixes.css">
 </head>
 <body>
+<a class="skip-link" href="#contenu">Aller au contenu</a>
 <nav>
-  <a href="index.html" class="nav-logo"><img src="logo.png" alt="Génie Montauban" style="height:40px;width:auto;vertical-align:middle"></a>
+  <a href="index.html" class="nav-logo"><img src="logo.png" alt="Génie Montauban" style="height:40px;width:auto;vertical-align:middle" fetchpriority="high" width="315" height="200"></a>
   <a href="index.html" class="nav-back">← Retour au site</a>
 </nav>
 <div class="container">
