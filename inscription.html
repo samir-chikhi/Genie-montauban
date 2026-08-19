@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com; frame-src https://www.google.com; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com; frame-src https://www.google.com; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
   <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Créer mon compte — Génie Montauban</title>
 <meta name="description" content="Créez votre compte membre au tiers-lieu Génie Montauban. Accédez aux tarifs adhérents, réservez vos espaces en ligne et rejoignez notre communauté ESS.">
@@ -219,24 +219,24 @@ body{font-family:'DM Sans',sans-serif;background:var(--fond);color:var(--texte);
     <div class="form-grid">
       <div class="fg">
         <label>Prénom <span class="req">*</span></label>
-        <input type="text" id="f-prenom" placeholder="Marie">
+        <input type="text" id="f-prenom" autocomplete="given-name" placeholder="Marie">
       </div>
       <div class="fg">
         <label>Nom <span class="req">*</span></label>
-        <input type="text" id="f-nom" placeholder="Dupont">
+        <input type="text" id="f-nom" autocomplete="family-name" placeholder="Dupont">
       </div>
       <div class="fg full">
         <label>Email <span class="req">*</span></label>
-        <input type="email" id="f-email" placeholder="marie@exemple.fr">
+        <input type="email" id="f-email" autocomplete="email" placeholder="marie@exemple.fr">
         <span class="hint">Cet email servira à vous connecter</span>
       </div>
       <div class="fg">
         <label>Téléphone</label>
-        <input type="tel" id="f-tel" placeholder="06 XX XX XX XX">
+        <input type="tel" id="f-tel" autocomplete="tel" placeholder="06 XX XX XX XX">
       </div>
       <div class="fg full" id="bloc-structure" style="display:none">
         <label>Nom de la structure <span class="req">*</span></label>
-        <input type="text" id="f-structure" placeholder="Association XYZ, SARL ABC…">
+        <input type="text" id="f-structure" autocomplete="organization" placeholder="Association XYZ, SARL ABC…">
       </div>
     </div>
 
