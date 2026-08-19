@@ -148,6 +148,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--fond);color:var(--texte);
     ]
   }
   </script>
+  <link rel="stylesheet" href="responsive-fixes.css">
 </head>
 <body>
 
@@ -218,24 +219,24 @@ body{font-family:'DM Sans',sans-serif;background:var(--fond);color:var(--texte);
 
     <div class="form-grid">
       <div class="fg">
-        <label>Prénom <span class="req">*</span></label>
+        <label for="f-prenom">Prénom <span class="req">*</span></label>
         <input type="text" id="f-prenom" autocomplete="given-name" placeholder="Marie">
       </div>
       <div class="fg">
-        <label>Nom <span class="req">*</span></label>
+        <label for="f-nom">Nom <span class="req">*</span></label>
         <input type="text" id="f-nom" autocomplete="family-name" placeholder="Dupont">
       </div>
       <div class="fg full">
-        <label>Email <span class="req">*</span></label>
+        <label for="f-email">Email <span class="req">*</span></label>
         <input type="email" id="f-email" autocomplete="email" placeholder="marie@exemple.fr">
         <span class="hint">Cet email servira à vous connecter</span>
       </div>
       <div class="fg">
-        <label>Téléphone</label>
+        <label for="f-tel">Téléphone</label>
         <input type="tel" id="f-tel" autocomplete="tel" placeholder="06 XX XX XX XX">
       </div>
       <div class="fg full" id="bloc-structure" style="display:none">
-        <label>Nom de la structure <span class="req">*</span></label>
+        <label for="f-structure">Nom de la structure <span class="req">*</span></label>
         <input type="text" id="f-structure" autocomplete="organization" placeholder="Association XYZ, SARL ABC…">
       </div>
     </div>
@@ -279,13 +280,13 @@ body{font-family:'DM Sans',sans-serif;background:var(--fond);color:var(--texte);
         <h4>Article 13 – Litiges</h4>
         <p>Tribunal judiciaire de Montauban. Médiation disponible sur demande.</p>
       </div>
-      <div class="doc-check" id="check-cgv" onclick="toggleCheck('cgv')">
-        <input type="checkbox" id="cb-cgv">
+      <label class="doc-check" id="check-cgv" for="cb-cgv">
+        <input type="checkbox" id="cb-cgv" onchange="majDocCheck('cgv')">
         <div>
           <div class="dc-label">✅ J'ai lu et j'accepte les Conditions Générales de Vente</div>
           <div class="dc-sub">Obligatoire pour utiliser les espaces Génie</div>
         </div>
-      </div>
+      </label>
     </div>
 
     <!-- RÈGLEMENT INTÉRIEUR -->
@@ -308,13 +309,13 @@ body{font-family:'DM Sans',sans-serif;background:var(--fond);color:var(--texte);
         <h4>Article 7 – WiFi</h4>
         <p>Usage professionnel uniquement. Téléchargements illégaux interdits (responsabilité pénale personnelle).</p>
       </div>
-      <div class="doc-check" id="check-ri" onclick="toggleCheck('ri')">
-        <input type="checkbox" id="cb-ri">
+      <label class="doc-check" id="check-ri" for="cb-ri">
+        <input type="checkbox" id="cb-ri" onchange="majDocCheck('ri')">
         <div>
           <div class="dc-label">✅ J'ai lu et j'accepte le Règlement Intérieur</div>
           <div class="dc-sub">Obligatoire pour accéder aux espaces Génie</div>
         </div>
-      </div>
+      </label>
     </div>
 
     <!-- STATUTS -->
@@ -335,13 +336,13 @@ body{font-family:'DM Sans',sans-serif;background:var(--fond);color:var(--texte);
         <h4>Valeurs ESS</h4>
         <p>Solidarité, utilité sociale, gouvernance démocratique, non-lucrativité, ancrage territorial. L'association vise les labels ESUS, JEP et France Tiers-Lieux.</p>
       </div>
-      <div class="doc-check" id="check-statuts" onclick="toggleCheck('statuts')">
-        <input type="checkbox" id="cb-statuts">
+      <label class="doc-check" id="check-statuts" for="cb-statuts">
+        <input type="checkbox" id="cb-statuts" onchange="majDocCheck('statuts')">
         <div>
           <div class="dc-label">✅ J'ai lu et j'accepte les Statuts de l'Association Génie</div>
           <div class="dc-sub">Requis pour adhérer ou utiliser les espaces</div>
         </div>
-      </div>
+      </label>
     </div>
 
     <!-- RGPD -->
@@ -418,9 +419,12 @@ function toggleDoc(id) {
   bloc.classList.toggle('open');
 }
 
-function toggleCheck(key) {
+// La case pilote son propre état via le <label> qui l'englobe : on ne fait
+// que refléter ce nouvel état. L'ancienne version inversait « cb.checked »
+// à la main, si bien qu'un clic direct sur la case la cochait puis la
+// décochait aussitôt — elle paraissait ne pas répondre.
+function majDocCheck(key) {
   const cb = document.getElementById('cb-' + key);
-  cb.checked = !cb.checked;
   docsSignes[key] = cb.checked;
 
   const checkEl = document.getElementById('check-' + key);
