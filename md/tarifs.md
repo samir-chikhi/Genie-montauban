@@ -6,6 +6,8 @@ last_updated: 2026-08-19
 source: miroir markdown — version texte pour moteurs IA
 ---
 
+[Aller au contenu](#contenu)
+
 # 📋 Grille tarifaire 2026
 
 Tiers-Lieu Génie Montauban · 12 rue du Génie, 82000 Montauban · contact@genie-montauban.fr
