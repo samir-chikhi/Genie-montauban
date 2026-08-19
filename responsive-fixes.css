@@ -1,0 +1,45 @@
+/* ============================================================
+   Corrections d'affichage mobile
+   ------------------------------------------------------------
+   Sur un écran de 390 px (iPhone courant), plusieurs pages
+   débordaient horizontalement : le visiteur devait faire défiler
+   la page de gauche à droite pour lire le contenu.
+
+   Trois causes, trois corrections :
+     1. les enfants de grilles CSS ne peuvent pas rétrécir sous
+        leur largeur « min-content » tant que min-width vaut auto ;
+     2. les tableaux de tarifs sont plus larges que l'écran ;
+     3. les cercles décoratifs flous du bandeau débordent à droite.
+   ============================================================ */
+
+html,
+body {
+  overflow-x: clip;               /* filet de sécurité : jamais de défilement latéral */
+}
+
+body {
+  overflow-wrap: break-word;      /* les mots très longs ne forcent plus la largeur */
+}
+
+@media (max-width: 768px) {
+
+  /* 1. Autoriser les cellules de grille à se réduire */
+  [class*="grid"] > * {
+    min-width: 0;
+  }
+
+  /* 2. Tableaux larges : défilement horizontal DANS le tableau,
+        pas dans la page entière */
+  table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* 3. Décorations purement visuelles : inutiles sur mobile,
+        et elles élargissaient la page */
+  .hero-orb {
+    display: none;
+  }
+}

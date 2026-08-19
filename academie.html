@@ -316,8 +316,11 @@
     ]
   }
   </script>
+  <style>.skip-link{position:absolute;left:-9999px;top:0;z-index:10000;background:#111;color:#fff;padding:10px 18px;border-radius:0 0 8px 0;font:600 15px/1.2 system-ui,sans-serif;text-decoration:none}.skip-link:focus{left:0}:focus-visible{outline:3px solid #2563eb;outline-offset:2px}</style>
+  <link rel="stylesheet" href="responsive-fixes.css">
 </head>
 <body>
+<a class="skip-link" href="#contenu">Aller au contenu</a>
 
 <!-- ══════════ NAVIGATION ══════════ -->
 <nav>
@@ -336,7 +339,7 @@
 </nav>
 
 <!-- ══════════ HERO ══════════ -->
-<section class="hero">
+<section id="contenu" class="hero">
   <div class="hero-orb hero-orb-1"></div>
   <div class="hero-orb hero-orb-2"></div>
   <div class="hero-label">Tiers-lieu Génie · Montauban · T3 2026</div>
