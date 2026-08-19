@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com; frame-src https://www.google.com; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com; frame-src https://www.google.com; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
   <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Génie Montauban — Administration</title>
 <meta name="robots" content="noindex,nofollow">
@@ -326,7 +326,7 @@ textarea{resize:vertical;min-height:65px}
           <span id="cal-sync-state" style="font-size:11px;color:var(--sage);white-space:nowrap"></span>
           <!-- Bouton désactivé temporairement — calendrier à reconfigurer -->
           <!-- <button class="btn btn-sm btn-secondary" onclick="syncCalendarToSheets()">⬇️ Importer Cal</button> -->
-          <a href="https://calendar.google.com/calendar/r/week?authuser=contact@genie-montauban.fr" target="_blank" class="btn btn-sm btn-ghost">🔗 Ouvrir Cal</a>
+          <a href="https://calendar.google.com/calendar/r/week?authuser=contact@genie-montauban.fr" target="_blank" rel="noopener" class="btn btn-sm btn-ghost">🔗 Ouvrir Cal</a>
         </div>
 
         <!-- Grille planning -->
@@ -437,8 +437,8 @@ textarea{resize:vertical;min-height:65px}
               <div style="background:var(--cream);border-radius:8px;padding:9px 12px;font-size:11px;word-break:break-all;color:var(--muted);margin-bottom:12px" id="url-display">—</div>
               <div style="display:flex;gap:8px;flex-wrap:wrap">
                 <button class="btn btn-secondary btn-sm" onclick="showSetup()">✏️ Modifier URL</button>
-                <a id="sheet-link" href="https://docs.google.com/spreadsheets/d/1mf3D2YGnpWpzufGOaLLaomxAkuzp0AiJY7RzcbpIq2w/edit" target="_blank" class="btn btn-sage btn-sm">📋 Google Sheets</a>
-                <a href="https://calendar.google.com/calendar/r?authuser=contact@genie-montauban.fr" target="_blank" class="btn btn-cal btn-sm">📅 Google Calendar</a>
+                <a id="sheet-link" href="https://docs.google.com/spreadsheets/d/1mf3D2YGnpWpzufGOaLLaomxAkuzp0AiJY7RzcbpIq2w/edit" target="_blank" rel="noopener" class="btn btn-sage btn-sm">📋 Google Sheets</a>
+                <a href="https://calendar.google.com/calendar/r?authuser=contact@genie-montauban.fr" target="_blank" rel="noopener" class="btn btn-cal btn-sm">📅 Google Calendar</a>
               </div>
             </div>
           </div>
@@ -1478,7 +1478,7 @@ function showCalEventDetail(calEventId, title, start, end) {
   document.getElementById('det-foot').innerHTML=`
     <button class="btn btn-ghost" onclick="closeModal('mdetail')">Fermer</button>
     <button class="btn btn-primary" onclick="convertCalToResa('${encodeURIComponent(title)}','${start}','${end}')">➕ Créer une réservation</button>
-    <a href="https://calendar.google.com/calendar/r?authuser=contact@genie-montauban.fr" target="_blank" class="btn btn-cal">🔗 Ouvrir Google Cal</a>`;
+    <a href="https://calendar.google.com/calendar/r?authuser=contact@genie-montauban.fr" target="_blank" rel="noopener" class="btn btn-cal">🔗 Ouvrir Google Cal</a>`;
 
   openModal('mdetail');
 }
