@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com; frame-src https://www.google.com; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com; frame-src https://www.google.com; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
   <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Réserver un espace — Génie Montauban</title>
 <meta name="description" content="Réservez un espace au tiers-lieu Génie Montauban : coworking, salles de réunion, bureaux. Réservation en ligne simple et rapide.">
@@ -318,23 +318,23 @@ input[type=radio],input[type=checkbox]{width:auto;height:auto;padding:0;border:n
       </div>
       <div class="form-group">
         <label for="fPrenom">Prénom <span class="req">*</span></label>
-        <input type="text" id="fPrenom" placeholder="Marie" required>
+        <input type="text" id="fPrenom" autocomplete="given-name" placeholder="Marie" required>
       </div>
       <div class="form-group">
         <label for="fNom">Nom <span class="req">*</span></label>
-        <input type="text" id="fNom" placeholder="Dupont" required>
+        <input type="text" id="fNom" autocomplete="family-name" placeholder="Dupont" required>
       </div>
       <div class="form-group">
         <label for="fEmail">Email <span class="req">*</span></label>
-        <input type="email" id="fEmail" required>
+        <input type="email" id="fEmail" autocomplete="email" required>
       </div>
       <div class="form-group">
         <label for="fTel">Téléphone</label>
-        <input type="tel" id="fTel" placeholder="06 …">
+        <input type="tel" id="fTel" autocomplete="tel" placeholder="06 …">
       </div>
       <div class="form-group full">
         <label for="fOrga">Organisation / Structure</label>
-        <input type="text" id="fOrga" placeholder="Entreprise, association…">
+        <input type="text" id="fOrga" autocomplete="organization" placeholder="Entreprise, association…">
       </div>
       <div class="form-group full">
         <label for="fMsg">Précisions / Besoins spéciaux</label>
