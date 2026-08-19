@@ -2,7 +2,7 @@
 title: Génie — Tiers-lieu d'éducation populaire et d'ESS à Montauban
 description: Tiers-lieu d'éducation populaire à Montauban : ateliers, Veillées du Génie (université populaire), accompagnement de projets à impact, Académie des Compétences. Et des espaces de coworking et de réunion qui financent tout ça.
 url: https://genie-montauban.fr/
-last_updated: 2026-08-11
+last_updated: 2026-08-19
 source: miroir markdown — version texte pour moteurs IA
 ---
 
@@ -51,6 +51,7 @@ Bureau privatif dès 180 €/mois
 *Salles gratuites pour les assos de Villebourbon et les syndicats*
 
 [Voir les douze fiches →](espaces.html)
+[Institutions & entreprises →](espaces.html#entreprises)
 [Grille tarifaire complète →](tarifs.html)
 [Réserver en ligne →](reservation.html)
 
