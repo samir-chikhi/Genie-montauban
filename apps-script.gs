@@ -16,6 +16,26 @@
 //   6. IDEMPOTENCE : une resoumission identique (même email/espace/
 //      date/heure) renvoie la réservation existante au lieu d'un doublon.
 //   7. deleteResa supprime aussi l'événement Google Calendar lié.
+// Durcissement v5.1 :
+//   8. AUTH CLIENT : GET_PROFIL et GET_RESERVATIONS_CLIENT exigent un
+//      jeton de session délivré par VALIDER_TOKEN (lien magique).
+//      Auparavant, connaître l'email d'un adhérent suffisait à lire son
+//      profil et toutes ses réservations. Sessions 24h.
+//   9. WEBHOOK SIGNÉ : la notification de paiement HelloAsso exige un
+//      secret partagé, sans quoi déclarer une réservation « payée » ne
+//      coûtait qu'une requête. Le montant encaissé est aussi comparé au
+//      montant attendu ; un écart alerte l'admin sans confirmer.
+//  10. Le lien magique est soumis au rate limiting, pour ne pas noyer
+//      une boîte mail ni épuiser le quota d'envoi du script.
+//
+// PROPRIÉTÉS DU SCRIPT À RENSEIGNER (Paramètres du projet → Propriétés) :
+//   HELLOASSO_CLIENT_ID       identifiant API HelloAsso
+//   HELLOASSO_CLIENT_SECRET   secret API HelloAsso
+//   HELLOASSO_WEBHOOK_SECRET  chaîne aléatoire de votre choix, à recopier
+//                             à la fin de l'URL de notification déclarée
+//                             chez HelloAsso : …/exec?whsecret=LA_CHAINE
+//                             Sans elle, les paiements ne sont plus
+//                             enregistrés automatiquement.
 //   Mot de passe admin : exécuter definirMotDePasseAdmin() dans
 //   l'éditeur → hash stocké dans Config, mot de passe envoyé par email.
 // ============================================================
@@ -37,6 +57,7 @@ const CONFIG = {
   RESA_ATTENTE_MAX_H: 24,
   ADH_ATTENTE_MAX_H:  48,
   SESSION_ADMIN_H:    8,   // durée de validité d'une session admin
+  SESSION_CLIENT_H:   24,  // durée de validité d'une session « Mon compte »
   RATE_LIMIT_MAX:     5,   // soumissions max / heure / email
 };
 
@@ -149,6 +170,59 @@ function requireAdmin(data) {
     : { success: false, error: 'NON_AUTORISE', message: 'Session admin requise. Reconnectez-vous.' };
 }
 
+// ============================================================
+// SESSIONS CLIENT
+// ============================================================
+// Le lien magique authentifie une fois, puis la page « Mon compte »
+// interrogeait le serveur avec le seul email. Connaître l'adresse d'un
+// adhérent suffisait donc à lire son profil et toutes ses réservations.
+// Le lien magique délivre désormais un jeton de session lié à cet email,
+// et c'est lui qui ouvre l'accès aux données personnelles.
+
+function lireSessionsClient() {
+  try {
+    return JSON.parse(PropertiesService.getScriptProperties().getProperty('CLIENT_SESSIONS') || '{}');
+  } catch (e) { return {}; }
+}
+
+function ecrireSessionsClient(sessions) {
+  PropertiesService.getScriptProperties().setProperty('CLIENT_SESSIONS', JSON.stringify(sessions));
+}
+
+function creerSessionClient(email) {
+  var sessions = lireSessionsClient();
+  var now = Date.now();
+  // purge des sessions expirées à chaque création : la propriété reste petite
+  Object.keys(sessions).forEach(function(t) {
+    if (!sessions[t] || sessions[t].exp < now) delete sessions[t];
+  });
+  var token = Utilities.getUuid() + '-' + hashSha256(String(Math.random()) + now).substring(0, 12);
+  sessions[token] = { email: String(email).toLowerCase(),
+                      exp: now + CONFIG.SESSION_CLIENT_H * 3600000 };
+  ecrireSessionsClient(sessions);
+  return token;
+}
+
+// Renvoie l'email associé à la session, ou null si elle est absente/expirée
+function emailDeSession(token) {
+  if (!token) return null;
+  var s = lireSessionsClient()[token];
+  return (s && s.exp > Date.now()) ? s.email : null;
+}
+
+// Renvoie null si l'accès est légitime, sinon l'objet d'erreur à renvoyer.
+// En cas de succès, data.email est réécrit avec l'email de la session :
+// un client ne peut donc pas demander les données d'un autre.
+function requireClient(data) {
+  var email = emailDeSession(data && data.clientToken);
+  if (!email) {
+    return { success: false, error: 'NON_AUTORISE',
+             message: 'Session expirée. Demandez un nouveau lien de connexion.' };
+  }
+  data.email = email;
+  return null;
+}
+
 // À exécuter DEPUIS L'ÉDITEUR Apps Script pour (ré)initialiser le mot
 // de passe admin : génère un mot de passe fort, stocke son hash dans
 // l'onglet Config, invalide les sessions et envoie le mot de passe
@@ -188,7 +262,10 @@ function doPost(e) {
   try {
     const data = JSON.parse(e.postData.contents);
     // Notification HelloAsso : pas de champ "action", mais un "eventType".
-    if (!data.action && data.eventType) return ok(haWebhook(data));
+    // HelloAsso ne signe pas ses notifications : on exige un secret partagé
+    // dans l'URL de notification, sans quoi n'importe qui pourrait déclarer
+    // une réservation ou une adhésion payée.
+    if (!data.action && data.eventType) return ok(haWebhook(data, e && e.parameter));
     switch (data.action) {
       case 'INSCRIRE':                return ok(inscrireClient(data));
       case 'DEMANDER_LIEN':           return ok(demanderLienMagique(data));
@@ -357,6 +434,13 @@ function inscrireClient(data) {
 // ============================================================
 function demanderLienMagique(data) {
   try {
+    // Sans limite, on pouvait noyer la boîte d'un adhérent sous les liens
+    // et épuiser le quota d'envoi Gmail du script — ce qui aurait coupé
+    // TOUS les emails du site (confirmations comprises).
+    if (!rateLimitOk('lien_' + data.email)) {
+      return { success: false, error: 'TROP_DE_DEMANDES',
+               message: 'Trop de demandes. Réessayez dans une heure.' };
+    }
     const ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
     const rows = ss.getSheetByName('Clients').getDataRange().getValues();
     let prenom = '', found = false;
@@ -401,7 +485,10 @@ function validerToken(params) {
         const profil = getProfilParEmail(email, ss);
         if (!profil) return { success: false, error: 'CLIENT_INCONNU' };
         majDerniereConnexion(email, ss);
-        return { success: true, email: email, profil: profil };
+        // Le lien magique est à usage unique : il ouvre une session dont
+        // le jeton accompagnera ensuite chaque lecture de données.
+        return { success: true, email: email, profil: profil,
+                 clientToken: creerSessionClient(email) };
       }
     }
     return { success: false, error: 'TOKEN_INVALIDE' };
@@ -416,6 +503,8 @@ function validerToken(params) {
 // ============================================================
 function getProfil(data) {
   try {
+    const refus = requireClient(data);
+    if (refus) return refus;
     const ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
     const profil = getProfilParEmail(data.email, ss);
     if (!profil) return { success: false, error: 'CLIENT_INCONNU' };
@@ -688,6 +777,8 @@ function creerReservation(data) {
 // ============================================================
 function getReservationsClient(data) {
   try {
+    const refus = requireClient(data);
+    if (refus) return refus;
     const ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
     const rows = ss.getSheetByName('Reservations').getDataRange().getValues();
     const list = [];
@@ -924,8 +1015,24 @@ function haCheckout(o) {
 
 // Notification HelloAsso : paiement autorise sur un checkout.
 // Le lien avec la reservation passe par metadata.resaId, pose a la creation.
-function haWebhook(data) {
+function haWebhook(data, params) {
   try {
+    // ── Authentification de la notification ──────────────────────────
+    // Le secret est stocké dans les propriétés du script et recopié à la
+    // fin de l'URL de notification déclarée chez HelloAsso :
+    //   https://script.google.com/…/exec?whsecret=LE_SECRET
+    // Sans lui, l'endpoint est ouvert : marquer une réservation « payée »
+    // ne coûterait qu'une requête.
+    var attendu = PropertiesService.getScriptProperties().getProperty('HELLOASSO_WEBHOOK_SECRET');
+    if (!attendu) {
+      logErreur('haWebhook', new Error('HELLOASSO_WEBHOOK_SECRET absent : notification refusée'));
+      return { success: false, error: 'WEBHOOK_NON_CONFIGURE' };
+    }
+    if (!params || String(params.whsecret || '') !== attendu) {
+      logErreur('haWebhook', new Error('Notification refusée : secret absent ou incorrect'));
+      return { success: false, error: 'NON_AUTORISE' };
+    }
+
     if (!data || data.eventType !== 'Payment') return { success: true, ignore: 'eventType' };
     const d = data.data || {};
     if (d.state !== 'Authorized') return { success: true, ignore: 'state=' + d.state };
@@ -963,6 +1070,21 @@ function haWebhook(data) {
     const rows = sheet.getDataRange().getValues();
     for (let i = 1; i < rows.length; i++) {
       if (String(rows[i][0]) === String(resaId)) {
+        // Le montant encaissé doit couvrir le montant attendu (en centimes).
+        // Un écart signale une manipulation du panier ou un bug de tarif :
+        // on n'encaisse pas silencieusement, on alerte.
+        var attenduCts = Math.round(Number(rows[i][15] || 0) * 100);
+        var recuCts    = Math.round(Number(d.amount || 0));
+        if (attenduCts > 0 && recuCts + 1 < attenduCts) {
+          envoyerEmailSafe(CONFIG.EMAIL_ADMIN, '⚠️ Paiement insuffisant — ' + resaId,
+            'Montant attendu : ' + (attenduCts / 100).toFixed(2) + ' EUR\n' +
+            'Montant reçu    : ' + (recuCts / 100).toFixed(2) + ' EUR\n' +
+            'Réservation     : ' + resaId + '\n\n' +
+            'La réservation n\'a pas été confirmée automatiquement.');
+          logErreur('haWebhook', new Error('Montant insuffisant sur ' + resaId +
+            ' : ' + recuCts + ' < ' + attenduCts));
+          return { success: true, ignore: 'montant insuffisant' };
+        }
         sheet.getRange(i + 1, 27).setValue('PAYE');                    // paymentState
         sheet.getRange(i + 1, 28).setValue(d.paymentReceiptUrl || ''); // recu
         sheet.getRange(i + 1, 27).setBackground('#D4EDDA').setFontColor('#155724');
