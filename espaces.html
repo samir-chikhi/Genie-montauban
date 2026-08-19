@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com; frame-src https://www.google.com; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
   <meta name="referrer" content="strict-origin-when-cross-origin">
-  <title>Nos espaces — Salles de réunion, coworking et bureaux à Montauban | Génie</title>
+  <title>Nos espaces — coworking et salles à Montauban | Génie</title>
   <meta name="description" content="Les douze espaces du tiers-lieu Génie à Montauban : salles de réunion dès 20 €/h, coworking dès 10 €/½ journée, bureaux en bail. Devis pour institutions et entreprises. 200 m de la gare, accès PMR.">
   <link rel="canonical" href="https://genie-montauban.fr/espaces.html">
   <meta property="og:title" content="Nos espaces — Salles de réunion, coworking et bureaux à Montauban | Génie">
@@ -64,11 +64,14 @@
       .ancres { padding: 8px 4%; }
     }
   </style>
+  <style>.skip-link{position:absolute;left:-9999px;top:0;z-index:10000;background:#111;color:#fff;padding:10px 18px;border-radius:0 0 8px 0;font:600 15px/1.2 system-ui,sans-serif;text-decoration:none}.skip-link:focus{left:0}:focus-visible{outline:3px solid #2563eb;outline-offset:2px}</style>
+  <link rel="stylesheet" href="responsive-fixes.css">
 </head>
 <body>
+<a class="skip-link" href="#contenu">Aller au contenu</a>
 <nav id="main-nav">
   <a href="index.html" class="nav-logo">
-    <img src="logo.png" alt="Génie Montauban — tiers-lieu d'éducation populaire" width="315" height="200" style="height:48px;width:auto">
+    <img src="logo.png" alt="Génie Montauban — tiers-lieu d'éducation populaire" style="height:48px;width:auto" fetchpriority="high" width="315" height="200">
   </a>
   <ul class="nav-links" id="nav-links">
     <li><a href="index.html#manifeste">Le projet</a></li>
@@ -108,7 +111,7 @@
 </svg>
 
 <!-- ═══ EN-TÊTE DE PAGE ═══ -->
-<section class="page-head">
+<section id="contenu" class="page-head">
   <div class="fil" style="margin-bottom:20px"><a href="index.html">Accueil</a> · Nos espaces</div>
   <div class="section-head">
     <span class="section-tag">Travailler ici</span>
@@ -236,7 +239,7 @@
   <div class="espaces-grid">
 <div class="espace-card" data-type="nomade">
       <div class="espace-media">
-        <picture><source type="image/webp" srcset="assets/img/bureau-cheminee-800.webp 800w, assets/img/bureau-cheminee-1600.webp 1600w" sizes="(max-width: 700px) 100vw, 365px"><img src="bureau-cheminee.jpg" alt="Bureau nomade Aristote avec cheminée ancienne — Génie Montauban" width="3472" height="4640" loading="lazy" decoding="async"></picture>
+        <picture><source type="image/webp" srcset="assets/img/bureau-cheminee-800.webp 800w, assets/img/bureau-cheminee-1600.webp 1600w" sizes="(max-width: 700px) 100vw, 365px"><img src="bureau-cheminee.jpg" alt="Bureau nomade Aristote avec cheminée ancienne — Génie Montauban" loading="lazy" decoding="async" width="1800" height="2406"></picture>
         <span class="espace-badge">Bureau privé · 7 m²</span>
         <div class="espace-icon" aria-hidden="true"><svg class="ico"><use href="#i-porte"/></svg></div>
       </div>
@@ -267,7 +270,7 @@
   <div class="espaces-grid">
 <div class="espace-card" data-type="coworking">
       <div class="espace-media">
-        <picture><source type="image/webp" srcset="assets/img/coworking3-800.webp 800w, assets/img/coworking3-1600.webp 1600w" sizes="(max-width: 700px) 100vw, 365px"><img src="coworking3.jpg" alt="Espace coworking Jean-Jacques Rousseau, grandes fenêtres ouvertes — Génie Montauban" width="3472" height="4640" loading="lazy" decoding="async"></picture>
+        <picture><source type="image/webp" srcset="assets/img/coworking3-800.webp 800w, assets/img/coworking3-1600.webp 1600w" sizes="(max-width: 700px) 100vw, 365px"><img src="coworking3.jpg" alt="Espace coworking Jean-Jacques Rousseau, grandes fenêtres ouvertes — Génie Montauban" loading="lazy" decoding="async" width="1800" height="2406"></picture>
         <span class="espace-badge">Coworking · 28 m²</span>
         <div class="espace-icon" aria-hidden="true"><svg class="ico"><use href="#i-laptop"/></svg></div>
       </div>
@@ -298,7 +301,7 @@
   <div class="espaces-grid">
 <div class="espace-card" data-type="bail">
       <div class="espace-media">
-        <picture><source type="image/webp" srcset="assets/img/coworking4-800.webp 800w, assets/img/coworking4-1600.webp 1600w" sizes="(max-width: 700px) 100vw, 365px"><img src="coworking4.jpg" alt="Bureau privatif Louise Michel, lumineux — Génie Montauban" width="3472" height="4640" loading="lazy" decoding="async"></picture>
+        <picture><source type="image/webp" srcset="assets/img/coworking4-800.webp 800w, assets/img/coworking4-1600.webp 1600w" sizes="(max-width: 700px) 100vw, 365px"><img src="coworking4.jpg" alt="Bureau privatif Louise Michel, lumineux — Génie Montauban" loading="lazy" decoding="async" width="1800" height="2406"></picture>
         <span class="espace-badge">15 m²</span>
         <div class="espace-icon" aria-hidden="true"><svg class="ico"><use href="#i-immeuble"/></svg></div>
       </div>

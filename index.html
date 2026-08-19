@@ -43,7 +43,7 @@
     "email": "contact@genie-montauban.fr",
     "nonprofitStatus": "Association loi 1901 — Économie Sociale et Solidaire (loi du 31 juillet 2014)",
     "foundingDate": "2022",
-    "image": ["https://genie-montauban.fr/og-image.jpg", "https://genie-montauban.fr/facade.png", "https://genie-montauban.fr/coworking3.jpg"],
+    "image": ["https://genie-montauban.fr/og-image.jpg", "https://genie-montauban.fr/facade.jpg", "https://genie-montauban.fr/coworking3.jpg"],
     "logo": "https://genie-montauban.fr/logo.png",
     "address": {
       "@type": "PostalAddress",
@@ -186,13 +186,16 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/site.css">
+  <style>.skip-link{position:absolute;left:-9999px;top:0;z-index:10000;background:#111;color:#fff;padding:10px 18px;border-radius:0 0 8px 0;font:600 15px/1.2 system-ui,sans-serif;text-decoration:none}.skip-link:focus{left:0}:focus-visible{outline:3px solid #2563eb;outline-offset:2px}</style>
+  <link rel="stylesheet" href="responsive-fixes.css">
 </head>
 <body>
+<a class="skip-link" href="#contenu">Aller au contenu</a>
 
 <!-- ═══ NAV ═══ -->
 <nav id="main-nav">
   <a href="#" class="nav-logo">
-    <img src="logo.png" alt="Génie Montauban — tiers-lieu d'éducation populaire" width="315" height="200" style="height:48px;width:auto">
+    <img src="logo.png" alt="Génie Montauban — tiers-lieu d'éducation populaire" style="height:48px;width:auto" fetchpriority="high" width="315" height="200">
   </a>
   <ul class="nav-links" id="nav-links">
     <li><a href="#manifeste">Le projet</a></li>
@@ -250,31 +253,31 @@
     <div class="g-main">
       <picture>
         <source type="image/webp" srcset="assets/img/coworking3-800.webp 800w, assets/img/coworking3-1600.webp 1600w" sizes="(max-width: 900px) 50vw, 620px">
-        <img src="coworking3.jpg" alt="Espace de travail lumineux avec grandes fenêtres ouvertes, Génie Montauban" width="3472" height="4640" loading="lazy" decoding="async">
+        <img src="coworking3.jpg" alt="Espace de travail lumineux avec grandes fenêtres ouvertes, Génie Montauban" loading="lazy" decoding="async" width="1800" height="2406">
       </picture>
     </div>
     <div class="g-side">
       <picture>
         <source type="image/webp" srcset="assets/img/bureau-cheminee-800.webp 800w, assets/img/bureau-cheminee-1600.webp 1600w" sizes="(max-width: 900px) 50vw, 310px">
-        <img src="bureau-cheminee.jpg" alt="Bureau nomade avec cheminée ancienne, Génie Montauban" width="3472" height="4640" loading="lazy" decoding="async">
+        <img src="bureau-cheminee.jpg" alt="Bureau nomade avec cheminée ancienne, Génie Montauban" loading="lazy" decoding="async" width="1800" height="2406">
       </picture>
     </div>
     <div class="g-side">
       <picture>
         <source type="image/webp" srcset="assets/img/coworking4-800.webp 800w, assets/img/coworking4-1600.webp 1600w" sizes="(max-width: 900px) 50vw, 310px">
-        <img src="coworking4.jpg" alt="Bureau privatif lumineux, Génie Montauban" width="3472" height="4640" loading="lazy" decoding="async">
+        <img src="coworking4.jpg" alt="Bureau privatif lumineux, Génie Montauban" loading="lazy" decoding="async" width="1800" height="2406">
       </picture>
     </div>
     <div class="g-side">
       <picture>
         <source type="image/webp" srcset="assets/img/bureau-laptop-800.webp 800w, assets/img/bureau-laptop-1600.webp 1600w" sizes="(max-width: 900px) 50vw, 310px">
-        <img src="bureau-laptop.jpg" alt="Poste de coworking avec lampe dorée, Génie Montauban" width="3472" height="4640" loading="lazy" decoding="async">
+        <img src="bureau-laptop.jpg" alt="Poste de coworking avec lampe dorée, Génie Montauban" loading="lazy" decoding="async" width="1800" height="2406">
       </picture>
     </div>
     <div class="g-side">
       <picture>
         <source type="image/webp" srcset="assets/img/coworking1-800.webp 800w, assets/img/coworking1-1600.webp 1024w" sizes="(max-width: 900px) 50vw, 310px">
-        <img src="coworking1.png" alt="Ambiance de travail, Génie Montauban" width="1024" height="1536" loading="lazy" decoding="async">
+        <img src="coworking1.jpg" alt="Ambiance de travail, Génie Montauban" loading="lazy" decoding="async" width="1024" height="1536">
       </picture>
     </div>
   </div>
@@ -392,7 +395,7 @@
     <!-- NOMADE -->
     <div class="espace-card" data-type="nomade">
       <div class="espace-media">
-        <picture><source type="image/webp" srcset="assets/img/bureau-cheminee-800.webp 800w, assets/img/bureau-cheminee-1600.webp 1600w" sizes="(max-width: 700px) 100vw, 365px"><img src="bureau-cheminee.jpg" alt="Bureau nomade Aristote avec cheminée ancienne — Génie Montauban" width="3472" height="4640" loading="lazy" decoding="async"></picture>
+        <picture><source type="image/webp" srcset="assets/img/bureau-cheminee-800.webp 800w, assets/img/bureau-cheminee-1600.webp 1600w" sizes="(max-width: 700px) 100vw, 365px"><img src="bureau-cheminee.jpg" alt="Bureau nomade Aristote avec cheminée ancienne — Génie Montauban" loading="lazy" decoding="async" width="1800" height="2406"></picture>
         <span class="espace-badge">Bureau privé · 7 m²</span>
         <div class="espace-icon" aria-hidden="true"><svg class="ico"><use href="#i-porte"/></svg></div>
       </div>
@@ -413,7 +416,7 @@
     <!-- COWORKING -->
     <div class="espace-card" data-type="coworking">
       <div class="espace-media">
-        <picture><source type="image/webp" srcset="assets/img/coworking3-800.webp 800w, assets/img/coworking3-1600.webp 1600w" sizes="(max-width: 700px) 100vw, 365px"><img src="coworking3.jpg" alt="Espace coworking Jean-Jacques Rousseau, grandes fenêtres ouvertes — Génie Montauban" width="3472" height="4640" loading="lazy" decoding="async"></picture>
+        <picture><source type="image/webp" srcset="assets/img/coworking3-800.webp 800w, assets/img/coworking3-1600.webp 1600w" sizes="(max-width: 700px) 100vw, 365px"><img src="coworking3.jpg" alt="Espace coworking Jean-Jacques Rousseau, grandes fenêtres ouvertes — Génie Montauban" loading="lazy" decoding="async" width="1800" height="2406"></picture>
         <span class="espace-badge">Coworking · 28 m²</span>
         <div class="espace-icon" aria-hidden="true"><svg class="ico"><use href="#i-laptop"/></svg></div>
       </div>
@@ -434,7 +437,7 @@
     <!-- BAIL -->
     <div class="espace-card espace-hidden" data-type="bail">
       <div class="espace-media">
-        <picture><source type="image/webp" srcset="assets/img/coworking4-800.webp 800w, assets/img/coworking4-1600.webp 1600w" sizes="(max-width: 700px) 100vw, 365px"><img src="coworking4.jpg" alt="Bureau privatif Louise Michel, lumineux — Génie Montauban" width="3472" height="4640" loading="lazy" decoding="async"></picture>
+        <picture><source type="image/webp" srcset="assets/img/coworking4-800.webp 800w, assets/img/coworking4-1600.webp 1600w" sizes="(max-width: 700px) 100vw, 365px"><img src="coworking4.jpg" alt="Bureau privatif Louise Michel, lumineux — Génie Montauban" loading="lazy" decoding="async" width="1800" height="2406"></picture>
         <span class="espace-badge">15 m²</span>
         <div class="espace-icon" aria-hidden="true"><svg class="ico"><use href="#i-immeuble"/></svg></div>
       </div>
@@ -1070,25 +1073,25 @@
   </div>
   <div class="eco-grid">
     <a class="eco-item" href="https://www.musiva.fr" target="_blank" rel="noopener noreferrer">
-      <span class="eco-logo"><img src="assets/img/partenaires/musiva.png" alt="" width="160" height="160" loading="lazy" decoding="async"></span>
+      <span class="eco-logo"><img src="assets/img/partenaires/musiva.png" alt="" loading="lazy" decoding="async" width="160" height="160"></span>
       <span class="eco-nom">Musiva</span>
       <span class="eco-desc">Organisme de formation et cabinet de conseil.</span>
       <span class="eco-lien">musiva.fr <span aria-hidden="true">↗</span><span class="sr-only">(nouvelle fenêtre)</span></span>
     </a>
     <a class="eco-item" href="https://topogramme.fr/" target="_blank" rel="noopener noreferrer">
-      <span class="eco-logo"><img src="assets/img/partenaires/topogramme.png" alt="" width="159" height="45" loading="lazy" decoding="async"></span>
+      <span class="eco-logo"><img src="assets/img/partenaires/topogramme.png" alt="" loading="lazy" decoding="async" width="159" height="45"></span>
       <span class="eco-nom">Topogramme</span>
       <span class="eco-desc">Association de développement artistique.</span>
       <span class="eco-lien">topogramme.fr <span aria-hidden="true">↗</span><span class="sr-only">(nouvelle fenêtre)</span></span>
     </a>
     <a class="eco-item" href="https://www.mobicoop.fr/" target="_blank" rel="noopener noreferrer">
-      <span class="eco-logo"><img src="assets/img/partenaires/mobicoop.png" alt="" width="160" height="160" loading="lazy" decoding="async"></span>
+      <span class="eco-logo"><img src="assets/img/partenaires/mobicoop.png" alt="" loading="lazy" decoding="async" width="160" height="160"></span>
       <span class="eco-nom">Mobicoop</span>
       <span class="eco-desc">Coopérative ESS nationale : autopartage et stop organisé en milieu rural.</span>
       <span class="eco-lien">mobicoop.fr <span aria-hidden="true">↗</span><span class="sr-only">(nouvelle fenêtre)</span></span>
     </a>
     <a class="eco-item" href="https://reseaumyself.fr/" target="_blank" rel="noopener noreferrer">
-      <span class="eco-logo"><img src="assets/img/partenaires/myself.jpg" alt="" width="160" height="158" loading="lazy" decoding="async"></span>
+      <span class="eco-logo"><img src="assets/img/partenaires/myself.jpg" alt="" loading="lazy" decoding="async" width="160" height="158"></span>
       <span class="eco-nom">Myself</span>
       <span class="eco-desc">Association de développement personnel.</span>
       <span class="eco-lien">reseaumyself.fr <span aria-hidden="true">↗</span><span class="sr-only">(nouvelle fenêtre)</span></span>
@@ -1300,7 +1303,7 @@
 </script>
 
 <!-- ═══ FAQ ═══ -->
-<section class="faq-section">
+<section id="contenu" class="faq-section">
   <div class="container">
     <div style="text-align:center;margin-bottom:40px;">
       <div class="section-tag">Questions fréquentes</div>
