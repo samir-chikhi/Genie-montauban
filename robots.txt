@@ -3,13 +3,13 @@
 # Tous les robots sont les bienvenus, y compris les crawlers IA
 # (GPTBot, ClaudeBot, PerplexityBot, Google-Extended, Applebot-Extended, etc.)
 # Résumé structuré du site pour les IA : https://genie-montauban.fr/llms.txt
+#
+# Les pages privées (admin, espace membre, sessions, comptes-rendus internes)
+# ne sont pas listées ici : chacune porte déjà <meta name="robots"
+# content="noindex,nofollow">. Les lister dans ce fichier public revenait à
+# publier leurs URLs sans en bloquer l'accès.
 
 User-agent: *
 Allow: /
-Disallow: /admin.html
-Disallow: /mon-compte.html
-Disallow: /crypto-session1.html
-Disallow: /crypto-session2.html
-Disallow: /reunion-conseil-locataires-25-juin-2026.html
 
 Sitemap: https://genie-montauban.fr/sitemap.xml

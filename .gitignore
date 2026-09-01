@@ -3,3 +3,7 @@ package.json
 package-lock.json
 .claude/*
 !.claude/skills/
+
+# Travail SEO d'un autre site, gardé en local seulement
+MUSIVA-seo-update/
+MUSIVA-seo-update.zip

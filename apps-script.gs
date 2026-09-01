@@ -709,7 +709,7 @@ function creerReservation(data) {
     const id  = 'RES-' + Date.now();
     const now = new Date().toISOString();
     sheet.appendRow([id, sanit(data.prenom), sanit(data.nom), sanit(email), sanit(data.tel),
-      sanit(data.structure), sanit(data.espace), sanit(data.typeEspace || data.espace),
+      sanit(data.structure), sanit(data.espace), sanit(data.nomEspace || data.espace),
       sanit(data.typeEspace || 'reunion'), profilFacture,
       data.date, 'heure', nbH,
       data.heureDebut, hFin,
@@ -1258,10 +1258,21 @@ function adminGetAll() {
         else               typeDuree = 'heure';
       }
 
-      // Clé espace normalisée (dernier mot sans accents, pour correspondre aux clés admin.html)
-      const espaceKey = nomEspace
+      // Clé espace normalisée (dernier mot sans accents, pour correspondre aux
+      // clés admin.html : 'Antoine Bourdelle' -> 'bourdelle').
+      // col6 (espace) porte le nom réel de la salle et prime. col7 (nomEspace)
+      // a longtemps reçu le TYPE ('salle'/'nomade') au lieu du nom : on ne s'en
+      // sert qu'en secours, et jamais si c'est un simple mot de type — sinon
+      // toutes les réservations publiques s'affichaient « salle ».
+      var _srcEspace = String(espace || '').trim();
+      if (!_srcEspace || /^(salle|nomade|reunion|bureau)$/i.test(_srcEspace)) {
+        var _altEspace = String(nomEspace || '').trim();
+        if (_altEspace && !/^(salle|nomade|reunion|bureau)$/i.test(_altEspace))
+          _srcEspace = _altEspace;
+      }
+      const espaceKey = _srcEspace
         .normalize('NFD').replace(/[̀-ͯ]/g, '')
-        .toLowerCase().trim().split(/\s+/).pop() || (espace || '').toLowerCase();
+        .toLowerCase().trim().split(/\s+/).pop() || '';
 
       return {
         id, prenom, nom, email, tel, orga,
