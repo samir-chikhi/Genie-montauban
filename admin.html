@@ -87,8 +87,9 @@ tr:last-child td{border-bottom:none}tr:hover td{background:#FEFCF9}
 .b-pending{background:#FFF8E1;color:#E65100}
 .b-cancelled{background:#FDECEA;color:#B71C1C}
 .b-completed{background:var(--steel-light);color:var(--steel)}
-.eb{display:inline-flex;align-items:center;padding:3px 9px;border-radius:6px;font-size:11px;font-weight:600}
+.eb{display:inline-flex;align-items:center;padding:3px 9px;border-radius:6px;font-size:11px;font-weight:600;background:#EEF0F2;color:#475569}
 .eb-bourdelle{background:#EDE9FE;color:#5B21B6}
+.eb-aristote{background:#FFEDD5;color:#9A3412}
 .eb-freinet{background:#E0F2FE;color:#0369A1}
 .eb-gouges{background:#FCE7F3;color:#9D174D}
 .eb-michel{background:#F0FDF4;color:#166534}
@@ -323,6 +324,7 @@ textarea{resize:vertical;min-height:65px}
             <option value="gouges">De Gouges</option>
             <option value="michel">Louise Michel</option>
             <option value="rousseau">Rousseau</option>
+            <option value="aristote">Aristote</option>
             <option value="montessori">Montessori</option>
           </select>
           <!-- Boutons Google Calendar -->
@@ -369,6 +371,7 @@ textarea{resize:vertical;min-height:65px}
             <option value="gouges">De Gouges</option>
             <option value="michel">Louise Michel</option>
             <option value="rousseau">Rousseau</option>
+            <option value="aristote">Aristote</option>
             <option value="montessori">Montessori</option>
           </select>
           <select id="f-usage" onchange="renderTable()">
@@ -675,6 +678,8 @@ const ESPACES_DEF = {
     tarifs_nomade:{ demi:12, journee:22, semaine:90, mois:200 } },
   rousseau  : { nom:'Jean-Jacques Rousseau', ref:'1-10',  type:'nomade',  capacite:20,  icon:'💻', sous_type:'coworking',
     tarifs_nomade:{ demi:10, journee:17, semaine:60, mois:180 } },
+  aristote  : { nom:'Aristote',              ref:'—',     type:'nomade',  capacite:7,   icon:'🚪', sous_type:'prive',
+    tarifs_nomade:{ demi:12, journee:22, semaine:90, mois:200 } },
   montessori: { nom:'Maria Montessori',      ref:'-1-14', type:'both',    capacite:4,   icon:'♿',
     tarifs_reunion:{ MUSIVA:{heure:20,demi:60,journee:100}, adherent:{heure:15,demi:45,journee:80}, locataire:{heure:10,demi:30,journee:70}, asso:{heure:0,demi:0,journee:0} },
     tarifs_nomade:{ demi:15, journee:27, semaine:100, mois:216 } }
@@ -1160,8 +1165,16 @@ function statusBadge(s) {
   })[s] || s;
 }
 
-function espaceBadge(k) {
-  const e = ESPACES_DEF[k]; if(!e) return k;
+function espaceBadge(k, nom) {
+  const e = ESPACES_DEF[k];
+  if(!e) {
+    // Espace inconnu de ESPACES_DEF : on affiche quand même un libellé
+    // lisible — le nom complet transmis, sinon la clé capitalisée —
+    // plutôt qu'un « salle » ou un slug brut.
+    const txt = (nom && String(nom).trim()) ||
+                (k ? String(k).charAt(0).toUpperCase()+String(k).slice(1) : '—');
+    return `<span class="eb">📍 ${esc(txt)}</span>`;
+  }
   const mot = e.nom.split(' ');
   // Premier mot significatif (pas les articles)
   const skip = ['De','de','Jean-Jacques','Maria','Louise','Célestin','Olympe','Antoine'];
@@ -1292,7 +1305,7 @@ function renderDashboard() {
   document.getElementById('recent-body').innerHTML = R.slice(0,8).map(r=>
     `<tr style="cursor:pointer" onclick="showDetail('${escId(r.id)}')">
        <td><strong>${esc(r.prenom)} ${esc(r.nom)}</strong></td>
-       <td>${espaceBadge(r.espace)}</td>
+       <td>${espaceBadge(r.espace, r.nomEspace)}</td>
        <td>${fDate(r.date)}</td>
        <td>${profilBadge(r.profil)}</td>
        <td class="amount">${fMoney(r.montant)}</td>
@@ -1302,7 +1315,7 @@ function renderDashboard() {
 
   const last30=new Date(); last30.setDate(last30.getDate()-30);
   const r30   = R.filter(r=>r.date&&new Date(r.date+'T12:00:00')>=last30&&r.statut!=='cancelled');
-  const colors = { bourdelle:'#7C3AED',freinet:'#0284C7',gouges:'#DB2777',michel:'#16A34A',rousseau:'#CA8A04',montessori:'var(--sage)' };
+  const colors = { bourdelle:'#7C3AED',freinet:'#0284C7',gouges:'#DB2777',michel:'#16A34A',rousseau:'#CA8A04',aristote:'#EA580C',montessori:'var(--sage)' };
 
   document.getElementById('occ-bars').innerHTML = Object.keys(ESPACES_DEF).map(k=>{
     const cnt = r30.filter(r=>r.espace===k).length;
@@ -1438,7 +1451,7 @@ function showDetail(id) {
       <div class="di"><label>Organisation</label><span>${esc(r.orga||'—')}</span></div>
       <div class="di"><label>Email</label><span>${esc(r.email)}</span></div>
       <div class="di"><label>Téléphone</label><span>${esc(r.tel||'—')}</span></div>
-      <div class="di"><label>Espace</label><span>${e?e.icon+' '+esc(e.nom):esc(r.espace)} (Bureau ${esc(e?.ref||'')})</span></div>
+      <div class="di"><label>Espace</label><span>${e?e.icon+' '+esc(e.nom):('📍 '+esc(r.nomEspace||r.espace))}${e?.ref?' (Bureau '+esc(e.ref)+')':''}</span></div>
       <div class="di"><label>Usage / Profil</label><span>${r.usage==='nomade'?'Bureau nomade':'Salle réunion'}${r.profil?' · '+((PROFILS[r.profil]||{}).label||r.profil):''}</span></div>
       <div class="di"><label>Date</label><span>${fDate(r.date)}</span></div>
       <div class="di"><label>Durée</label><span>${dl}</span></div>
@@ -1518,7 +1531,7 @@ function renderTable() {
     <tr style="cursor:pointer" onclick="showDetail('${escId(r.id)}')">
       <td style="font-size:11px;font-weight:700;color:var(--brick);font-family:'Fraunces',serif">${esc(r.id)}</td>
       <td><strong>${esc(r.prenom)} ${esc(r.nom)}</strong>${r.orga?`<br><span style="font-size:11px;color:var(--muted)">${esc(r.orga)}</span>`:''}</td>
-      <td>${espaceBadge(r.espace)}</td>
+      <td>${espaceBadge(r.espace, r.nomEspace)}</td>
       <td>${profilBadge(r.profil)}${r.usage==='nomade'?'<br><span style="font-size:11px;color:var(--sage)">Nomade</span>':''}</td>
       <td>${fDate(r.date)}</td>
       <td style="font-size:12px">${esc(r.heureDebut||'—')}${r.heureFin?' → '+esc(r.heureFin):''}</td>
