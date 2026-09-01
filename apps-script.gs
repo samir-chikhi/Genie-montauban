@@ -1038,30 +1038,81 @@ function haWebhook(data, params) {
     if (d.state !== 'Authorized') return { success: true, ignore: 'state=' + d.state };
 
     const resaId = data.metadata && data.metadata.resaId;
-    const type   = (data.metadata && data.metadata.type) || 'reservation';
-    if (!resaId) return { success: true, ignore: 'sans resaId' };
+    const metaType = (data.metadata && data.metadata.type) || '';
+
+    // "C'est une adhésion" si : métadonnée explicite (paiement lancé par le
+    // site), OU un article de type Membership, OU un formulaire HelloAsso de
+    // type Membership. Sans ça, une adhésion prise DIRECTEMENT sur HelloAsso
+    // (QR du bulletin, lien partagé) n'a pas de resaId et était ignorée —
+    // l'adhérent n'apparaissait nulle part dans l'admin.
+    const haItems = Array.isArray(d.items) ? d.items : [];
+    const haOrder = d.order || {};
+    const estAdhesion = metaType === 'adhesion'
+      || haItems.some(function (it) { return String(it && it.type).toLowerCase() === 'membership'; })
+      || String(haOrder.formType || '').toLowerCase() === 'membership';
+
+    // Paiement de réservation sans resaId : rien à rapprocher.
+    if (!resaId && !estAdhesion) return { success: true, ignore: 'sans resaId' };
 
     const ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+    const type = estAdhesion ? 'adhesion' : (metaType || 'reservation');
 
-    // ── Adhesion payee en ligne : meme traitement qu'une validation
-    // manuelle, echeance a 12 mois comprise.
+    // ── Adhesion : soit on confirme la ligne créée par le site (resaId),
+    // soit on crée la ligne pour une adhésion prise directement sur HelloAsso.
     if (type === 'adhesion') {
       const aSheet = ss.getSheetByName('Adhesions');
       if (!aSheet) return { success: false, error: 'Onglet Adhesions introuvable' };
       const aRows = aSheet.getDataRange().getValues();
-      for (let i = 1; i < aRows.length; i++) {
-        if (String(aRows[i][0]) !== String(resaId)) continue;
-        aSheet.getRange(i + 1, 2).setValue('CONFIRME');
-        aSheet.getRange(i + 1, 2).setBackground('#D4EDDA').setFontColor('#155724');
-        var ech = new Date(); ech.setFullYear(ech.getFullYear() + 1);
-        aSheet.getRange(i + 1, 13).setValue(ech.toISOString().split('T')[0]);
-        aSheet.getRange(i + 1, 15).setValue('PAYE');
-        envoyerEmailSafe(CONFIG.EMAIL_ADMIN, '💳 Adhésion payée — ' + resaId,
-          'Montant : ' + (Number(d.amount || 0) / 100).toFixed(2) + ' EUR\n' +
-          'Adhésion : ' + resaId + '\nValable jusqu au ' + ech.toISOString().split('T')[0]);
-        return { success: true, ok: true };
+      var ech = new Date(); ech.setFullYear(ech.getFullYear() + 1);
+      var echStr = ech.toISOString().split('T')[0];
+      var montantEur = Number(d.amount || 0) / 100;
+      var paymentId = String(d.id || (haOrder.id ? 'O' + haOrder.id : '') || Date.now());
+
+      // 1) Adhésion déjà connue (le site l'a créée en attente) : on la confirme.
+      if (resaId) {
+        for (var iM = 1; iM < aRows.length; iM++) {
+          if (String(aRows[iM][0]) !== String(resaId)) continue;
+          aSheet.getRange(iM + 1, 2).setValue('CONFIRME');
+          aSheet.getRange(iM + 1, 2).setBackground('#D4EDDA').setFontColor('#155724');
+          aSheet.getRange(iM + 1, 13).setValue(echStr);
+          aSheet.getRange(iM + 1, 15).setValue('PAYE');
+          envoyerEmailSafe(CONFIG.EMAIL_ADMIN, '💳 Adhésion payée — ' + resaId,
+            'Montant : ' + montantEur.toFixed(2) + ' EUR\n' +
+            'Adhésion : ' + resaId + '\nValable jusqu au ' + echStr);
+          return { success: true, ok: true };
+        }
       }
-      return { success: true, ignore: 'adhesion introuvable : ' + resaId };
+
+      // 2) Idempotence : HelloAsso rejoue ses notifications.
+      var idWebhook = 'HA-' + paymentId;
+      for (var iD = 1; iD < aRows.length; iD++) {
+        if (String(aRows[iD][0]) === idWebhook) return { success: true, ignore: 'deja enregistree' };
+      }
+
+      // 3) Adhésion prise directement sur HelloAsso : on la crée, réglée.
+      var payer   = d.payer || {};
+      var membre  = (haItems[0] && haItems[0].user) || {};
+      var prenom  = String(payer.firstName || membre.firstName || '').trim();
+      var nom     = String(payer.lastName  || membre.lastName  || '').trim();
+      var emailP  = String(payer.email     || '').trim();
+      var adresse = [payer.address, payer.zipCode, payer.city].filter(String).join(' ').trim();
+      var libelle = String((haItems[0] && haItems[0].name) || haOrder.formName || 'Adhésion HelloAsso').trim();
+      var dateStr = d.date ? String(d.date).split('T')[0] : new Date().toISOString().split('T')[0];
+      aSheet.appendRow([idWebhook, 'CONFIRME', dateStr, libelle, montantEur, 'HelloAsso (carte)',
+        prenom, nom, emailP, '', adresse,
+        'Adhésion réglée sur HelloAsso — paiement ' + paymentId, echStr, '', 'PAYE']);
+      aSheet.getRange(aSheet.getLastRow(), 2).setBackground('#D4EDDA').setFontColor('#155724');
+      envoyerEmailSafe(CONFIG.EMAIL_ADMIN,
+        '🆕 Adhésion HelloAsso — ' + (prenom + ' ' + nom).trim(),
+        'Nouvelle adhésion réglée directement sur HelloAsso :\n\n' +
+        'Nom     : ' + prenom + ' ' + nom + '\n' +
+        'Email   : ' + emailP + '\n' +
+        'Montant : ' + montantEur.toFixed(2) + ' EUR\n' +
+        'Type    : ' + libelle + '\n' +
+        'Valable jusqu au : ' + echStr + '\n' +
+        'Réf paiement HelloAsso : ' + paymentId + '\n\n' +
+        'Elle apparait dans l\'admin, onglet Adhésions.');
+      return { success: true, ok: true, cree: idWebhook };
     }
 
     const sheet = ss.getSheetByName('Reservations');
