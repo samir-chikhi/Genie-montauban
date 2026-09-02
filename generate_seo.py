@@ -25,6 +25,7 @@ TODAY = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 # Pages indexables : (fichier, priorité, changefreq)
 PAGES = [
     ("index.html",                  "1.0", "weekly"),
+    ("espaces.html",                "0.9", "monthly"),
     ("reservation.html",            "0.9", "weekly"),
     ("tarifs.html",                 "0.9", "monthly"),
     ("activites.html",              "0.8", "weekly"),
@@ -32,6 +33,7 @@ PAGES = [
     ("notre-histoire.html",         "0.7", "yearly"),
     ("inscription.html",            "0.6", "monthly"),
     ("proposition-formateur.html",  "0.5", "monthly"),
+    ("reglement-interieur-genie.html", "0.4", "yearly"),
     ("cgv.html",                    "0.3", "yearly"),
     ("confidentialite.html",        "0.3", "yearly"),
     ("mentions_legales.html",       "0.3", "yearly"),
@@ -40,7 +42,7 @@ PAGES = [
 
 # Pages avec miroir markdown dans /md/ (référencées dans llms.txt)
 MIRROR_PAGES = [
-    "index.html", "reservation.html", "tarifs.html",
+    "index.html", "espaces.html", "reservation.html", "tarifs.html",
     "activites.html", "academie.html", "notre-histoire.html",
 ]
 
