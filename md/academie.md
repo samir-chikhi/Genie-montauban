@@ -2,7 +2,7 @@
 title: Académie des Compétences et de la Connaissance — Génie Montauban
 description: L'Académie des Compétences et de la Connaissance du Génie : micro-formations de 3h animées par des experts locaux. Empowerment, Tech & Numérique, Gestion & Impact. À partir de 45 € — financement OPCO possible.
 url: https://genie-montauban.fr/academie.html
-last_updated: 2026-08-19
+last_updated: 2026-09-02
 source: miroir markdown — version texte pour moteurs IA
 ---
 
@@ -270,13 +270,13 @@ Toutes les inscriptions se font par email ou par téléphone. Indiquez le module
 
 ### Vous êtes expert·e local·e ?
 
-L'Académie accueille des intervenants passionnés dans tous les domaines — entrepreneuriat, numérique, droit, bien-être, arts, sciences… Partagez vos savoirs avec la communauté montalbanaise.
+L'Académie accueille des intervenants passionnés dans tous les domaines — entrepreneuriat, numérique, droit, bien-être, arts, sciences… Partagez vos savoirs avec la communauté montalbanaise : il suffit de [proposer un module](proposition-formateur.html).
 
 [Proposer un module →](proposition-formateur.html)
 
 ### Suivez l'Académie
 
-Annonces de sessions, portraits de formateurs, témoignages — tout en temps réel sur LinkedIn et Facebook.
+Annonces de sessions, portraits de formateurs, témoignages — tout en temps réel sur LinkedIn et Facebook. Les dates confirmées rejoignent aussi [l'agenda des activités](activites.html).
 
 [LinkedIn](https://www.linkedin.com/company/g%C3%A9nie-montauban-tiers-lieu/)
 [Facebook](https://www.facebook.com/profile.php?id=61585419075483)

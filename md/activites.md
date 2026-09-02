@@ -2,7 +2,7 @@
 title: Activités & Actualités — Génie Montauban
 description: Petits-déjeuners thématiques, afterworks, conférences, ateliers… Découvrez toutes les activités et actualités du tiers-lieu Génie à Montauban.
 url: https://genie-montauban.fr/activites.html
-last_updated: 2026-08-19
+last_updated: 2026-09-02
 source: miroir markdown — version texte pour moteurs IA
 ---
 
@@ -328,6 +328,6 @@ Les événements, coulisses et actualités en temps réel sur LinkedIn et Facebo
 
 ### Vous souhaitez proposer un événement ?
 
-Génie met à disposition ses espaces pour vos conférences, ateliers et formations. Parlons-en !
+Génie met à disposition [ses espaces](espaces.html) pour vos conférences, ateliers et formations — [voir les tarifs](tarifs.html). Parlons-en !
 
 [📩 Nous contacter](mailto:contact@genie-montauban.fr)

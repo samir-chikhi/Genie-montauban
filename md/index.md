@@ -1,8 +1,8 @@
 ---
 title: Génie — Tiers-lieu d'éducation populaire et d'ESS à Montauban
-description: Tiers-lieu d'éducation populaire à Montauban : ateliers, Veillées du Génie (université populaire), accompagnement de projets à impact, Académie des Compétences. Et des espaces de coworking et de réunion qui financent tout ça.
+description: Tiers-lieu d'éducation populaire et d'ESS à Montauban : ateliers, université populaire, accompagnement de projets, et des espaces de coworking et de réunion.
 url: https://genie-montauban.fr/
-last_updated: 2026-08-19
+last_updated: 2026-09-02
 source: miroir markdown — version texte pour moteurs IA
 ---
 
@@ -43,7 +43,7 @@ Travailler ici
 
 ## Douze espaces. *Et une bonne raison de les louer.*
 
-Bureaux privatifs en bail, bureaux nomades à la journée, coworking, salles de réunion. Accès badge 7j/7, fibre, imprimante, café, terrasse sur le rooftop, accessibilité PMR (personnes à mobilité réduite) complète. À 200 m de la gare — on peut venir en train depuis Toulouse ou Bordeaux.
+[Nos espaces](espaces.html) : bureaux privatifs en bail, bureaux nomades à la journée, coworking, salles de réunion. Accès badge 7j/7, fibre, imprimante, café, terrasse sur le rooftop, accessibilité PMR (personnes à mobilité réduite) complète. À 200 m de la gare — on peut venir en train depuis Toulouse ou Bordeaux.
 
 **Et surtout :** ce que vous payez ici finance les ateliers gratuits, l'accompagnement des porteurs de projet et la gratuité des salles pour les associations du quartier. Louer un bureau au Génie, c'est déjà participer.
 
