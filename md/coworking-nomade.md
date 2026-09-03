@@ -37,9 +37,9 @@ Ailleurs à Montauban, la journée nomade va de 16 € (équipements publics) �
 
 ## Comment ça marche ?
 
-1. **Je réserve en ligne.** Je choisis une date, une durée (heure / demi-journée / journée), j'ajoute l'adhésion si c'est ma première fois, je paie par carte. Deux minutes.
-2. **Je reçois ma confirmation.** Un e-mail avec le jour, l'horaire et **les deux codes d'accès** (porte de rue + porte intérieure).
-3. **Je m'installe.** J'arrive, je compose les codes, je prends une place libre dans l'espace ouvert, je me sers un thé. C'est parti.
+1. **Je choisis ma formule.** Heure, demi-journée, journée ou carnet : je clique, je paie par carte sur une page sécurisée Stripe. Deux minutes.
+2. **Je reçois mes accès.** L'équipe m'envoie par e-mail, rapidement après le paiement, la confirmation et **les deux codes d'accès** (porte de rue + porte intérieure). Première venue ? On règle l'adhésion à ce moment-là.
+3. **Je m'installe.** J'arrive aux horaires d'ouverture, je compose les codes, je prends une place libre dans l'espace ouvert, je me sers un thé. C'est parti.
 
 ## Disponibilité
 
@@ -57,4 +57,4 @@ Les impressions sont possibles, payantes, quand l'équipe d'accueil est présent
 **Annulation** gratuite jusqu'à 48 h avant → avoir valable un an.  
 **Vous êtes 3 ou plus ?** [Réservez plutôt une salle de réunion](espaces.html#reunion).
 
-[→ Réserver ma place à L'Escale](reservation.html?espace=rousseau&type=nomade)
+[→ Réserver ma place à L'Escale](#offre)
