@@ -12,25 +12,25 @@ source: miroir markdown — version texte pour moteurs IA
 minimum 1 h
 4 € / h
 Un rendez-vous, une visio au calme, deux heures entre deux trains.
-[Réserver](reservation.html?espace=rousseau&type=nomade&duree=heure)
+[Réserver & payer](https://buy.stripe.com/test_9B6dRa6PNbl020Tf97bo400)
 
 Demi-journée
 4 heures
 9 €
 Une matinée ou un après-midi de travail concentré.
-[Réserver](reservation.html?espace=rousseau&type=nomade&duree=demi)
+[Réserver & payer](https://buy.stripe.com/test_4gM4gAdeb60G7ld2mlbo401)
 
 Pass journée
 8h–19h (sam. 9h–17h), entrées/sorties libres
 15 €
 Une journée complète de télétravail, sans compter les heures.
-[Réserver](reservation.html?espace=rousseau&type=nomade&duree=journee)
+[Réserver & payer](https://buy.stripe.com/test_5kQ7sM5LJ4WC34X3qpbo402)
 
 Carnet 10 journées
 la 11ᵉ offerte
 140 €
 Pour les habitué·es : 1 à 2 jours par semaine, sans y penser.
-[Prendre un carnet](reservation.html?espace=rousseau&type=nomade&duree=carnet)
+[Prendre un carnet](https://buy.stripe.com/test_8x2dRaca7gFkbBtf97bo403)
 
 **Adhésion obligatoire à l'association** — elle couvre l'assurance. Elle se prend en une seule fois, avec votre première réservation : ensuite vous n'y repensez plus de l'année.
 Ailleurs à Montauban, la journée nomade va de 16 € (équipements publics) à 25–36 € (espaces privés). Ici, ce que vous payez finance aussi les ateliers gratuits du tiers-lieu.
