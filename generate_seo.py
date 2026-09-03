@@ -26,6 +26,7 @@ TODAY = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 PAGES = [
     ("index.html",                  "1.0", "weekly"),
     ("espaces.html",                "0.9", "monthly"),
+    ("coworking-nomade.html",       "0.9", "weekly"),
     ("reservation.html",            "0.9", "weekly"),
     ("tarifs.html",                 "0.9", "monthly"),
     ("activites.html",              "0.8", "weekly"),
@@ -42,7 +43,7 @@ PAGES = [
 
 # Pages avec miroir markdown dans /md/ (référencées dans llms.txt)
 MIRROR_PAGES = [
-    "index.html", "espaces.html", "reservation.html", "tarifs.html",
+    "index.html", "espaces.html", "coworking-nomade.html", "reservation.html", "tarifs.html",
     "activites.html", "academie.html", "notre-histoire.html",
 ]
 

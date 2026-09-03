@@ -660,6 +660,18 @@ document.addEventListener('DOMContentLoaded', () => {
   renderDurees();
   updateRecap();
   updateSteps(1);
+
+  // Pré-sélection depuis l'URL (ex. coworking-nomade.html → ?espace=rousseau)
+  try {
+    const qs = new URLSearchParams(location.search);
+    const eParam = (qs.get('espace') || '').toLowerCase().trim();
+    if (eParam && ESPACES.some(e => e.id === eParam)) {
+      selectEspace(eParam);
+      const anchor = document.getElementById('espacesContainer');
+      if (anchor) anchor.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  } catch (e) { /* param illisible : on ignore */ }
+
   const tom = new Date(); tom.setDate(tom.getDate()+1);
   document.getElementById('fDate').min = tom.toISOString().split('T')[0];
   ['fDate','fHeure','fHeureFin','fPrenom','fNom','fEmail','fTel','fOrga','fMsg','fBadge','fAdhesion'].forEach(id => {
@@ -1067,7 +1079,7 @@ async function envoyerReservation() {
       <ul class="footer-links">
         <li><a href="espaces.html">Nos espaces</a></li>
         <li><a href="espaces.html#bureaux">Bureaux privatifs</a></li>
-        <li><a href="espaces.html#coworking">Coworking</a></li>
+        <li><a href="coworking-nomade.html">Coworking à la carte</a></li>
         <li><a href="espaces.html#reunion">Salles de réunion</a></li>
         <li><a href="tarifs.html">Tarifs 2026</a></li>
         <li><a href="reservation.html">Réserver en ligne</a></li>
