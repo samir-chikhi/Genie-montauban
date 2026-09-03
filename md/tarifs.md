@@ -2,7 +2,7 @@
 title: Tarifs — Génie Montauban | Tiers-Lieu ESS
 description: Grille tarifaire complète du tiers-lieu Génie Montauban : coworking, salles de réunion, bureaux privatifs, domiciliation. Tarifs adhérents, locataires, associations.
 url: https://genie-montauban.fr/tarifs.html
-last_updated: 2026-09-02
+last_updated: 2026-09-03
 source: miroir markdown — version texte pour moteurs IA
 ---
 
@@ -14,6 +14,19 @@ Tiers-Lieu Génie Montauban · 12 rue du Génie, 82000 Montauban · contact@geni
 
 ⬇️ Télécharger / Imprimer
 [Réserver un espace →](reservation.html)
+
+Coworking nomade · sans engagement
+
+## L'Escale du Génie — le coworking à la carte
+
+Une place dans l'espace ouvert Jean-Jacques Rousseau, pour une heure ou pour la journée. Adhésion à l'association requise (assurance).
+
+**4 €** / heure
+**9 €** / demi-journée
+**15 €** / journée
+**140 €** / carnet 10 journées (11ᵉ offerte)
+
+[Réserver ma place à L'Escale →](coworking-nomade.html)
 
 Voici la grille complète : salles de réunion, coworking, bureaux nomades et bureaux privatifs en bail. Pour voir chaque espace en photos, parcourez [nos espaces](espaces.html) ; une fois votre choix fait, vous pouvez [réserver en ligne](reservation.html) en quelques minutes. Et si vous cherchez plutôt un atelier ou un rendez-vous, tout est dans [nos activités](activites.html).
 
