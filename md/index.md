@@ -2,7 +2,7 @@
 title: Génie — Tiers-lieu d'éducation populaire et d'ESS à Montauban
 description: Tiers-lieu d'éducation populaire et d'ESS à Montauban : ateliers, université populaire, accompagnement de projets, et des espaces de coworking et de réunion.
 url: https://genie-montauban.fr/
-last_updated: 2026-09-02
+last_updated: 2026-09-03
 source: miroir markdown — version texte pour moteurs IA
 ---
 
@@ -39,6 +39,8 @@ salles qui portent le nom d'une figure de l'émancipation
 
 d'heures d'ouverture en accès gratuit ou solidaire — notre objectif statutaire
 
+[🖥️ Besoin d'une place pour aujourd'hui ? **L'Escale du Génie** — coworking à la carte dès 4 €/h](coworking-nomade.html)
+
 Travailler ici
 
 ## Douze espaces. *Et une bonne raison de les louer.*
@@ -46,6 +48,17 @@ Travailler ici
 [Nos espaces](espaces.html) : bureaux privatifs en bail, bureaux nomades à la journée, coworking, salles de réunion. Accès badge 7j/7, fibre, imprimante, café, terrasse sur le rooftop, accessibilité PMR (personnes à mobilité réduite) complète. À 200 m de la gare — on peut venir en train depuis Toulouse ou Bordeaux.
 
 **Et surtout :** ce que vous payez ici finance les ateliers gratuits, l'accompagnement des porteurs de projet et la gratuité des salles pour les associations du quartier. Louer un bureau au Génie, c'est déjà participer.
+
+[🖥️
+
+Coworking à la carte
+
+Une place à l'heure, en demi-journée ou à la journée. Dès 4 €/h, sans engagement. L'Escale du Génie →](coworking-nomade.html)
+[🔑
+
+Bureaux privatifs
+
+Un bureau à vous, au mois ou à l'année. Badge 24/7, fibre incluse. Voir les fiches →](espaces.html)
 
 Coworking dès 10 €/½ journée
 Bureau nomade dès 12 €/½ journée

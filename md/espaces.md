@@ -2,7 +2,7 @@
 title: Bureaux privatifs, coworking et salles de réunion à Montauban — Génie
 description: Les douze espaces du tiers-lieu Génie à Montauban : salles de réunion dès 20 €/h, coworking dès 10 €/½ journée, bureaux en bail. Devis pour institutions et entreprises. 200 m de la gare, accès PMR.
 url: https://genie-montauban.fr/espaces.html
-last_updated: 2026-09-02
+last_updated: 2026-09-03
 source: miroir markdown — version texte pour moteurs IA
 ---
 
