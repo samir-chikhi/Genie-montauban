@@ -108,14 +108,16 @@
   <link rel="stylesheet" href="assets/css/footer.css">
 
   <!-- ═══════════════════════════════════════════════════════════════════
-       TODO PAIEMENT — remplacer les href="reservation.html?..." des boutons
-       ci-dessous par les Stripe Payment Links une fois créés :
-         Heure 4 €        → https://buy.stripe.com/XXXXXXXX_heure
-         Demi-journée 9 € → https://buy.stripe.com/XXXXXXXX_demi
-         Journée 15 €     → https://buy.stripe.com/XXXXXXXX_journee
-         Carnet 140 €     → https://buy.stripe.com/XXXXXXXX_carnet
-       En attendant, les boutons ouvrent le formulaire de réservation
-       existant, pré-rempli sur l'espace « Jean-Jacques Rousseau ».
+       PAIEMENT — Stripe Payment Links (mode TEST — env. « Association Génie »)
+         Heure 4 €        → buy.stripe.com/test_9B6dRa6PNbl020Tf97bo400
+         Demi-journée 9 € → buy.stripe.com/test_4gM4gAdeb60G7ld2mlbo401
+         Journée 15 €     → buy.stripe.com/test_5kQ7sM5LJ4WC34X3qpbo402
+         Carnet 140 €     → buy.stripe.com/test_8x2dRaca7gFkbBtf97bo403
+       ⚠ Ce sont des liens de TEST : ils n'encaissent pas de vrai paiement.
+       Avant la mise en production, les remplacer par les liens « live »
+       (mêmes produits, dashboard Stripe hors mode test).
+       Phase 2 à venir : Stripe Checkout + webhook → Apps Script
+       (écriture de la résa dans le Sheet + envoi des 2 codes d'accès).
   ═══════════════════════════════════════════════════════════════════ -->
 </head>
 <body>
@@ -167,28 +169,28 @@
         <span class="sub">minimum 1 h</span>
         <span class="prix">4 €<small> / h</small></span>
         <span class="use">Un rendez-vous, une visio au calme, deux heures entre deux trains.</span>
-        <a class="btn" href="reservation.html?espace=rousseau&amp;type=nomade&amp;duree=heure">Réserver</a>
+        <a class="btn" href="https://buy.stripe.com/test_9B6dRa6PNbl020Tf97bo400" target="_blank" rel="noopener">Réserver &amp; payer</a>
       </div>
       <div class="esc-card">
         <span class="form">Demi-journée</span>
         <span class="sub">4 heures</span>
         <span class="prix">9 €</span>
         <span class="use">Une matinée ou un après-midi de travail concentré.</span>
-        <a class="btn" href="reservation.html?espace=rousseau&amp;type=nomade&amp;duree=demi">Réserver</a>
+        <a class="btn" href="https://buy.stripe.com/test_4gM4gAdeb60G7ld2mlbo401" target="_blank" rel="noopener">Réserver &amp; payer</a>
       </div>
       <div class="esc-card">
         <span class="form">Pass journée</span>
         <span class="sub">8h–19h (sam. 9h–17h), entrées/sorties libres</span>
         <span class="prix">15 €</span>
         <span class="use">Une journée complète de télétravail, sans compter les heures.</span>
-        <a class="btn" href="reservation.html?espace=rousseau&amp;type=nomade&amp;duree=journee">Réserver</a>
+        <a class="btn" href="https://buy.stripe.com/test_5kQ7sM5LJ4WC34X3qpbo402" target="_blank" rel="noopener">Réserver &amp; payer</a>
       </div>
       <div class="esc-card carnet">
         <span class="form">Carnet 10 journées</span>
         <span class="sub">la 11ᵉ offerte</span>
         <span class="prix">140 €</span>
         <span class="use">Pour les habitué·es : 1 à 2 jours par semaine, sans y penser.</span>
-        <a class="btn" href="reservation.html?espace=rousseau&amp;type=nomade&amp;duree=carnet">Prendre un carnet</a>
+        <a class="btn" href="https://buy.stripe.com/test_8x2dRaca7gFkbBtf97bo403" target="_blank" rel="noopener">Prendre un carnet</a>
       </div>
     </div>
     <div class="esc-note">
