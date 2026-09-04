@@ -19,7 +19,7 @@ Salles de réunion, bureaux nomades, coworking et bureaux privatifs en bail. Acc
 **Et surtout :** ce que vous payez ici finance les ateliers gratuits, l'accompagnement des porteurs de projet et la gratuité des salles pour les associations du quartier. Louer un bureau au Génie, c'est déjà participer.
 
 Coworking à la carte dès 4 €/h
-Bureau nomade dès 12 €/½ journée
+Salle de réunion dès 20 €/h
 Bureau privatif dès 180 €/mois
 *Salles gratuites pour les assos de Villebourbon et les syndicats de salariés et d'ouvriers*
 
@@ -101,26 +101,19 @@ Tarif plein. Adhérent dès 15 €/h · Locataire dès 10 €/h · Assos de Vill
 
 ## Bureaux nomades
 
-1 espace · bureau fermé
+1 espace · actuellement loué
 
-Un bureau privé à la demi-journée, à la semaine ou au mois, sans bail ni engagement. Pour le télétravail, les visioconférences et les journées où il faut vraiment du calme.
+Un bureau privé à la demi-journée, à la semaine ou au mois, sans bail ni engagement — pour le télétravail, les visioconférences et les journées où il faut vraiment du calme. Notre bureau nomade est actuellement loué ; écrivez-nous pour être prévenu·e s'il se libère, ou voyez [L'Escale du Génie](coworking-nomade.html) pour une place en espace ouvert.
 
-Bureau privé · 7 m²
+Loué · 7 m²
 
 Bureau 1-13 · 1er étage
 
 Aristote
 
-Bureau privé nomade, connexion fibre, calme garanti. Parfait pour télétravail et visioconférence.
+Actuellement loué
 
-- ½ journée18 €
-- Journée33 €
-- Semaine130 €
-- Mois280 €
-
-Tarif non-adhérent, hors charges. **Adhérent : 12 € la ½ journée, 200 €/mois** — l'adhésion (dès 15 €/an) est rentabilisée en deux venues.
-
-[Réserver →](reservation.html)
+[Me prévenir s'il se libère →](mailto:contact@genie-montauban.fr?subject=Bureau Aristote — me prévenir en cas de disponibilité)
 
 ## Coworking
 
@@ -261,8 +254,7 @@ Empowerment & Leadership, Tech & Numérique, Gestion & Impact. Finançables par 
 
 ### Installer
 
-Un poste de coworking pour un salarié en télétravail, un bureau nomade à la journée pour une mission
-détachée, ou un bureau privatif en bail sans engagement 3-6-9. Accès badge, à 200 m de la gare.
+Un poste de coworking pour un salarié en télétravail ou une mission détachée (voir [L'Escale du Génie](coworking-nomade.html)), ou un bureau privatif en bail sans engagement 3-6-9. Accès badge, à 200 m de la gare.
 
 [Voir les bureaux →](#bail)
 

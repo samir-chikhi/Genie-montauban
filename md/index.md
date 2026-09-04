@@ -61,7 +61,7 @@ Bureaux privatifs
 Un bureau à vous, au mois ou à l'année. Badge 24/7, fibre incluse. Voir les fiches →](espaces.html)
 
 Coworking à la carte dès 4 €/h
-Bureau nomade dès 12 €/½ journée
+Salle de réunion dès 20 €/h
 Bureau privatif dès 180 €/mois
 *Salles gratuites pour les assos de Villebourbon et les syndicats*
 
@@ -143,22 +143,15 @@ Tarif plein. Adhérent dès 15 €/h · Locataire dès 10 €/h · Assos de Vill
 
 [Réserver →](reservation.html)
 
-Bureau privé · 7 m²
+Loué · 7 m²
 
 Bureau 1-13 · 1er étage
 
 Aristote
 
-Bureau privé nomade, connexion fibre, calme garanti. Parfait pour télétravail et visioconférence.
+Actuellement loué
 
-- ½ journée18 €
-- Journée33 €
-- Semaine130 €
-- Mois280 €
-
-Tarif non-adhérent, hors charges. **Adhérent : 12 € la ½ journée, 200 €/mois** — l'adhésion (dès 15 €/an) est rentabilisée en deux venues.
-
-[Réserver →](reservation.html)
+[Me prévenir s'il se libère →](mailto:contact@genie-montauban.fr?subject=Bureau Aristote — me prévenir en cas de disponibilité)
 
 Coworking · 28 m²
 
@@ -558,10 +551,9 @@ Tarifs dans l'ordre : MUSIVA / Adhérent / Locataire
 
 | Espace | Profil | ½ journée | Journée | Semaine HC | Mois HC |
 | --- | --- | --- | --- | --- | --- |
-| **Aristote** Privé · 7m² | Adhérent | 12 € | 22 € | 90 € | 200 € |
-| Non-adhérent | 18 € | 33 € | 130 € | 280 € |
-| **Rousseau** Coworking · 28m² | Adhérent | 10 € | 17 € | 60 € | 180 € |
-| Non-adhérent | 15 € | 26 € | 90 € | 250 € |
+| **Aristote** Privé · 7m² | Actuellement loué | | | |
+| **Rousseau** Coworking · 28m² | Adhérent | à la carte → [L'Escale](coworking-nomade.html) | | 60 € | 180 € |
+| Non-adhérent | idem — tarif unique | | 90 € | 250 € |
 | **Montessori** Privé PMR · 12m² | Adhérent | 15 € | 27 € | 100 € | 216 € |
 | Non-adhérent | 22 € | 40 € | 145 € | 300 € |
 

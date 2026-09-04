@@ -60,8 +60,7 @@ Non-adhérent · tarif standard
 
 | Espace | Profil | ½ Journée | Journée | Semaine HC | Mois HC |
 | --- | --- | --- | --- | --- | --- |
-| Aristote (1-13)Bureau privé · 7 m² | Adhérent | 12 € | 22 € | 90 € | 200 € |
-| Non-adhérent | 18 € | 33 € | 130 € | 280 € |
+| Aristote (1-13) LouéBureau privé · 7 m² | Actuellement loué — écrivez-nous pour être prévenu d'une disponibilité | | | | |
 | Jean-Jacques Rousseau (1-10)Open space coworking · 28 m² | Adhérent | à l'heure / journée → [L'Escale](coworking-nomade.html) (dès 4 €/h) | | 60 € | 180 € |
 | Non-adhérent | idem — tarif unique [L'Escale](coworking-nomade.html) | | 90 € | 250 € |
 | Maria Montessori (−1-14)Bureau privé PMR ♿ · 12 m² | Adhérent | 15 € | 27 € | 100 € | 216 € |
