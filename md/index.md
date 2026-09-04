@@ -1,6 +1,6 @@
 ---
-title: Génie — Tiers-lieu d'éducation populaire et d'ESS à Montauban
-description: Tiers-lieu d'éducation populaire et d'ESS à Montauban : ateliers, université populaire, accompagnement de projets, et des espaces de coworking et de réunion.
+title: Génie — Tiers-lieu & coworking à Montauban · éducation populaire, ESS
+description: Génie, le tiers-lieu de Montauban : espace de coworking et salles de réunion à 200 m de la gare, ateliers d'éducation populaire, université populaire et accompagnement de projets (association ESS).
 url: https://genie-montauban.fr/
 last_updated: 2026-09-04
 source: miroir markdown — version texte pour moteurs IA
@@ -14,11 +14,11 @@ source: miroir markdown — version texte pour moteurs IA
 
 ✕
 
-Tiers-lieu d'éducation populaire · ESS
+Tiers-lieu & coworking à Montauban · éducation populaire, ESS
 
 # Ici, on ne loue pas des bureaux. On fabrique du *pouvoir d'agir*.
 
-Association loi 1901 relevant de l'économie sociale et solidaire (ESS), Génie est un lieu ouvert où l'on apprend, où l'on se rencontre et où l'on monte des projets utiles au territoire. Nos espaces de travail financent tout le reste.
+Génie est le **tiers-lieu de Montauban** où l'on apprend, où l'on se rencontre et où l'on monte des projets utiles au territoire — avec un **espace de coworking** et des salles de réunion à 200 m de la gare, qui financent tout le reste. Association loi 1901 relevant de l'économie sociale et solidaire (ESS).
 
 [Découvrir le projet →](#manifeste)
 [Réserver un espace →](reservation.html)
@@ -51,7 +51,7 @@ Travailler ici
 
 [🖥️
 
-Coworking à la carte
+Coworking à Montauban
 
 Une place à l'heure, en demi-journée ou à la journée. Dès 4 €/h, sans engagement. L'Escale du Génie →](coworking-nomade.html)
 [🔑

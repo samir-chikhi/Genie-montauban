@@ -1,10 +1,16 @@
 ---
-title: L'Escale du Génie — coworking à la carte à Montauban, dès 4 €/h
-description: Coworking nomade à Montauban : réservez une place à l'heure (4 €), en demi-journée (9 €) ou à la journée (15 €). À 200 m de la gare, wifi fibre, accès PMR. Sans engagement.
+title: Coworking à Montauban — L'Escale du Génie, dès 4 €/h sans abonnement
+description: Espace de coworking à Montauban, à 200 m de la gare : une place à l'heure (4 €), en demi-journée (9 €) ou à la journée (15 €). Wifi fibre, café, accès PMR. Réservation en ligne, sans abonnement ni engagement.
 url: https://genie-montauban.fr/coworking-nomade.html
-last_updated: 2026-09-03
+last_updated: 2026-09-04
 source: miroir markdown — version texte pour moteurs IA
 ---
+
+## Un espace de coworking à Montauban, ouvert à tout le monde
+
+Vous cherchez un **espace de coworking à Montauban** pour une journée de télétravail, un rendez-vous au calme ou quelques heures entre deux trains ? L'Escale du Génie accueille indépendant·es, télétravailleur·ses, personnes de passage et étudiant·es dans un grand plateau partagé de 28 m², au premier étage du tiers-lieu, **rue du Génie**, à 200 mètres de la gare.
+
+Ce qui change ici : pas d'abonnement, pas d'engagement, des tarifs parmi les plus bas de Montauban (**dès 4 € l'heure**), et un lieu porté par une association d'éducation populaire — ce que vous payez finance aussi les ateliers gratuits du quartier. Wifi fibre, café, imprimante, accès PMR et ouverture le samedi.
 
 ## L'offre, en trois lignes
 
