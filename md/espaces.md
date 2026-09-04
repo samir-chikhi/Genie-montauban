@@ -1,8 +1,8 @@
 ---
 title: Bureaux privatifs, coworking et salles de réunion à Montauban — Génie
-description: Les douze espaces du tiers-lieu Génie à Montauban : salles de réunion dès 20 €/h, coworking dès 10 €/½ journée, bureaux en bail. Devis pour institutions et entreprises. 200 m de la gare, accès PMR.
+description: Les douze espaces du tiers-lieu Génie à Montauban : salles de réunion dès 20 €/h, coworking à la carte dès 4 €/h, bureaux en bail. Devis pour institutions et entreprises. 200 m de la gare, accès PMR.
 url: https://genie-montauban.fr/espaces.html
-last_updated: 2026-09-03
+last_updated: 2026-09-04
 source: miroir markdown — version texte pour moteurs IA
 ---
 
@@ -18,7 +18,7 @@ Salles de réunion, bureaux nomades, coworking et bureaux privatifs en bail. Acc
 
 **Et surtout :** ce que vous payez ici finance les ateliers gratuits, l'accompagnement des porteurs de projet et la gratuité des salles pour les associations du quartier. Louer un bureau au Génie, c'est déjà participer.
 
-Coworking dès 10 €/½ journée
+Coworking à la carte dès 4 €/h
 Bureau nomade dès 12 €/½ journée
 Bureau privatif dès 180 €/mois
 *Salles gratuites pour les assos de Villebourbon et les syndicats*
@@ -126,7 +126,7 @@ Tarif non-adhérent, hors charges. **Adhérent : 12 € la ½ journée, 200 €/
 
 1 espace · 28 m² partagés
 
-Un poste en espace ouvert, imprimante partagée et café inclus. On commence souvent par une demi-journée d'essai, et on voit. L'adhésion (dès 15 €/an) est rentabilisée en deux venues.
+Un poste en espace ouvert, imprimante partagée et café inclus. Pour une venue ponctuelle — à l'heure, en demi-journée ou à la journée — c'est [L'Escale du Génie](coworking-nomade.html) (dès 4 €/h, paiement en ligne). Ci-dessous, les forfaits semaine et mois pour les habitué·es.
 
 Coworking · 28 m²
 
@@ -134,16 +134,14 @@ Bureau 1-10 · 1er étage
 
 Jean-Jacques Rousseau
 
-Grand espace coworking ouvert, imprimante partagée, café inclus. Ambiance collaborative idéale.
+Grand espace coworking ouvert, imprimante partagée, café inclus. Ambiance collaborative idéale. Forfaits pour venir régulièrement.
 
-- ½ journée15 €
-- Journée26 €
 - Semaine90 €
 - Mois250 €
 
-Tarif non-adhérent, hors charges. **Adhérent : 10 € la ½ journée, 180 €/mois** — l'adhésion (dès 15 €/an) est rentabilisée en deux venues.
+Tarif non-adhérent, hors charges. **Adhérent : 60 €/semaine, 180 €/mois** — l'adhésion (dès 15 €/an) est vite rentabilisée. À l'heure ou à la journée ? → [L'Escale du Génie](coworking-nomade.html).
 
-[Réserver →](reservation.html)
+[Réserver un forfait →](reservation.html)
 
 ## Bureaux privatifs à Montauban, en bail longue durée
 

@@ -2,7 +2,7 @@
 title: Tarifs — Génie Montauban | Tiers-Lieu ESS
 description: Grille tarifaire complète du tiers-lieu Génie Montauban : coworking, salles de réunion, bureaux privatifs, domiciliation. Tarifs adhérents, locataires, associations.
 url: https://genie-montauban.fr/tarifs.html
-last_updated: 2026-09-03
+last_updated: 2026-09-04
 source: miroir markdown — version texte pour moteurs IA
 ---
 
@@ -62,8 +62,8 @@ Non-adhérent · tarif standard
 | --- | --- | --- | --- | --- | --- |
 | Aristote (1-13)Bureau privé · 7 m² | Adhérent | 12 € | 22 € | 90 € | 200 € |
 | Non-adhérent | 18 € | 33 € | 130 € | 280 € |
-| Jean-Jacques Rousseau (1-10)Open space coworking · 28 m² | Adhérent | 10 € | 17 € | 60 € | 180 € |
-| Non-adhérent | 15 € | 26 € | 90 € | 250 € |
+| Jean-Jacques Rousseau (1-10)Open space coworking · 28 m² | Adhérent | à l'heure / journée → [L'Escale](coworking-nomade.html) (dès 4 €/h) | | 60 € | 180 € |
+| Non-adhérent | idem — tarif unique [L'Escale](coworking-nomade.html) | | 90 € | 250 € |
 | Maria Montessori (−1-14)Bureau privé PMR ♿ · 12 m² | Adhérent | 15 € | 27 € | 100 € | 216 € |
 | Non-adhérent | 22 € | 40 € | 145 € | 300 € |
 
