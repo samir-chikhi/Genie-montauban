@@ -625,8 +625,12 @@ const ESPACES = [
     tarifs:{ plein:{heure:20,demi:60,journee:100},  adherent:{heure:15,demi:45,journee:80},   locataire:{heure:10,demi:30,journee:70},   asso:{heure:0,demi:0,journee:0} }},
   { id:'aristote',    icon:'🚪', nom:'Aristote',                 cap:'Bureau nomade · 7m²',   type:'nomade',
     tarifs:{ plein:{demi:18,journee:33,semaine:130,mois:280},  adherent:{demi:12,journee:22,semaine:90,mois:200},  locataire:{demi:12,journee:22,semaine:90,mois:200},  asso:{demi:0,journee:0,semaine:0,mois:0} }},
+  // Coworking J.-J. Rousseau : l'usage ponctuel (heure / demi / journée) passe
+  // désormais par « L'Escale du Génie » (coworking-nomade.html, paiement Stripe).
+  // Ici on ne garde que les forfaits semaine / mois.
   { id:'rousseau',    icon:'💻', nom:'Jean-Jacques Rousseau',    cap:'Coworking · 28m²',      type:'cowork',
-    tarifs:{ plein:{demi:15,journee:26,semaine:90,mois:250},   adherent:{demi:10,journee:17,semaine:60,mois:180},  locataire:{demi:10,journee:17,semaine:60,mois:180},  asso:{demi:0,journee:0,semaine:0,mois:0} }},
+    durees:['semaine','mois'],
+    tarifs:{ plein:{semaine:90,mois:250},   adherent:{semaine:60,mois:180},  locataire:{semaine:60,mois:180},  asso:{semaine:0,mois:0} }},
 ];
 const DUREES_SALLE  = ['heure','demi','journee'];
 const DUREES_NOMADE = ['demi','journee','semaine','mois'];
@@ -661,7 +665,7 @@ document.addEventListener('DOMContentLoaded', () => {
   updateRecap();
   updateSteps(1);
 
-  // Pré-sélection depuis l'URL (ex. coworking-nomade.html → ?espace=rousseau)
+  // Pré-sélection d'un espace via ?espace=<id> (deep-links depuis espaces.html)
   try {
     const qs = new URLSearchParams(location.search);
     const eParam = (qs.get('espace') || '').toLowerCase().trim();
@@ -733,7 +737,7 @@ function renderDurees() {
   const c = document.getElementById('dureeBtns');
   if (!espaceId) { c.innerHTML = '<span style="font-size:.82rem;color:var(--gray)">Choisissez d\'abord un espace</span>'; return; }
   const esp = ESPACES.find(e => e.id === espaceId);
-  const liste = (esp.type === 'salle') ? DUREES_SALLE : DUREES_NOMADE;
+  const liste = esp.durees || ((esp.type === 'salle') ? DUREES_SALLE : DUREES_NOMADE);
   c.innerHTML = liste.map(d =>
     `<button class="duree-btn${duree===d?' active':''}" onclick="selectDuree('${d}')">${DUREE_LABELS[d]}</button>`
   ).join('');
