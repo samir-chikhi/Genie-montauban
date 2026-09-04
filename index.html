@@ -347,7 +347,7 @@
 
   <div class="espaces-bandeau">
     <span>Coworking à la carte dès 4 €/h</span>
-    <span>Bureau nomade dès 12 €/½ journée</span>
+    <span>Salle de réunion dès 20 €/h</span>
     <span>Bureau privatif dès 180 €/mois</span>
     <span><em>Salles gratuites pour les assos de Villebourbon et les syndicats</em></span>
   </div>
@@ -449,21 +449,14 @@
     <div class="espace-card" data-type="nomade">
       <div class="espace-media">
         <picture><source type="image/webp" srcset="assets/img/bureau-cheminee-800.webp 800w, assets/img/bureau-cheminee-1600.webp 1600w" sizes="(max-width: 700px) 100vw, 365px"><img src="bureau-cheminee.jpg" alt="Bureau nomade Aristote avec cheminée ancienne — Génie Montauban" loading="lazy" decoding="async" width="1800" height="2406"></picture>
-        <span class="espace-badge">Bureau privé · 7 m²</span>
+        <span class="espace-badge loue">Loué · 7 m²</span>
         <div class="espace-icon" aria-hidden="true"><svg class="ico"><use href="#i-porte"/></svg></div>
       </div>
       <div class="espace-card-body">
         <div class="espace-ref">Bureau 1-13 · 1<sup>er</sup> étage</div>
         <div class="espace-nom">Aristote</div>
-        <div class="espace-desc">Bureau privé nomade, connexion fibre, calme garanti. Parfait pour télétravail et visioconférence.</div>
-        <ul class="espace-tarifs">
-          <li><span class="lbl">½ journée</span><span class="dots"></span><span class="val">18 €</span></li>
-          <li><span class="lbl">Journée</span><span class="dots"></span><span class="val">33 €</span></li>
-          <li><span class="lbl">Semaine</span><span class="dots"></span><span class="val">130 €</span></li>
-          <li><span class="lbl">Mois</span><span class="dots"></span><span class="val">280 €</span></li>
-        </ul>
-        <p class="espace-tarifs-note">Tarif non-adhérent, hors charges. <strong>Adhérent : 12 € la ½ journée, 200 €/mois</strong> — l'adhésion (dès 15 €/an) est rentabilisée en deux venues.</p>
-        <a href="reservation.html" class="btn-reserver-card">Réserver →</a>
+        <div class="espace-loue-note" style="margin-bottom:14px">Actuellement loué</div>
+        <a href="mailto:contact@genie-montauban.fr?subject=Bureau Aristote — me prévenir en cas de disponibilité" class="btn-reserver-card">Me prévenir s'il se libère →</a>
       </div>
     </div>
     <!-- COWORKING -->
@@ -940,10 +933,9 @@
       <table class="tarifs-table">
         <thead><tr><th>Espace</th><th>Profil</th><th>½ journée</th><th>Journée</th><th>Semaine HC</th><th>Mois HC</th></tr></thead>
         <tbody>
-          <tr><td rowspan="2"><strong>Aristote</strong><br><small style="color:var(--muted);font-size:11px">Privé · 7m²</small></td><td>Adhérent</td><td>12 €</td><td>22 €</td><td>90 €</td><td>200 €</td></tr>
-          <tr style="background:#fafaf8"><td>Non-adhérent</td><td>18 €</td><td>33 €</td><td>130 €</td><td>280 €</td></tr>
-          <tr><td rowspan="2"><strong>Rousseau</strong><br><small style="color:var(--muted);font-size:11px">Coworking · 28m²</small></td><td>Adhérent</td><td>10 €</td><td>17 €</td><td>60 €</td><td>180 €</td></tr>
-          <tr style="background:#fafaf8"><td>Non-adhérent</td><td>15 €</td><td>26 €</td><td>90 €</td><td>250 €</td></tr>
+          <tr><td><strong>Aristote</strong><br><small style="color:var(--muted);font-size:11px">Privé · 7m²</small></td><td colspan="4" style="font-style:italic;color:var(--muted)">Actuellement loué</td></tr>
+          <tr><td rowspan="2"><strong>Rousseau</strong><br><small style="color:var(--muted);font-size:11px">Coworking · 28m²</small></td><td>Adhérent</td><td colspan="2" style="font-style:italic;color:var(--muted);font-size:12px">à la carte → <a href="coworking-nomade.html">L'Escale</a></td><td>60 €</td><td>180 €</td></tr>
+          <tr style="background:#fafaf8"><td>Non-adhérent</td><td colspan="2" style="font-style:italic;color:var(--muted);font-size:12px">idem — tarif unique</td><td>90 €</td><td>250 €</td></tr>
           <tr><td rowspan="2"><strong>Montessori</strong><br><small style="color:var(--muted);font-size:11px">Privé PMR · 12m²</small></td><td>Adhérent</td><td>15 €</td><td>27 €</td><td>100 €</td><td>216 €</td></tr>
           <tr style="background:#fafaf8"><td>Non-adhérent</td><td>22 €</td><td>40 €</td><td>145 €</td><td>300 €</td></tr>
         </tbody>
