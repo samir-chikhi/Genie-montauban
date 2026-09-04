@@ -783,7 +783,7 @@ function updateRecap() {
   if (!rows) return;
   rows.innerHTML = [
     ['Espace',       esp ? esp.nom : '—'],
-    ['Profil',       {plein:'Tarif plein',adherent:'Adhérent (−20%)',locataire:'Locataire (−50%)',asso:'Asso Villebourbon &amp; syndicats (Gratuit*)'}[profil]],
+    ['Profil',       {plein:'Tarif plein',adherent:'Adhérent (−20%)',locataire:'Locataire (−50%)',asso:'Asso Villebourbon &amp; syndicats salariés (Gratuit*)'}[profil]],
     ['Durée',        duree ? DUREE_LABELS[duree] : '—'],
     ['Date',         document.getElementById('fDate')?.value || '—'],
     ['Heure de début', document.getElementById('fHeure')?.value || '—'],
