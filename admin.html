@@ -660,8 +660,20 @@ const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1mf3D2YGnpWpzufGOaLLao
 // ─────────────────────────────────────────────────────────
 // DONNÉES DE RÉFÉRENCE
 // ─────────────────────────────────────────────────────────
+// « MUSIVA » = tarif plein / non-adhérent, facturable par la SASU MUSIVA
+// (assujettie à la TVA) pour les entreprises qui ont besoin d'une facture
+// avec TVA. L'association Génie est exonérée de TVA (art. 261-7-1° du CGI,
+// cf. cgv.html) et ne peut pas émettre ce type de facture elle-même. Le
+// montant payé par le client reste le même quelle que soit l'entité qui
+// facture (Génie en direct, exonérée, ou MUSIVA avec TVA) — seule la
+// ventilation comptable HT/TVA change. Confirmé par Samir le 04/09/2026 ;
+// mécanisme à faire valider par l'expert-comptable avant tout usage à
+// grande échelle (cf. règle des « 4 P » sur la lucrativité, note
+// 09_Strategie_Partenariats/20260731_NOTE_Repositionnement-Genie...).
+// La clé technique "MUSIVA" est conservée telle quelle (ne pas renommer :
+// utilisée aussi comme valeur de profil dans les réservations existantes).
 const PROFILS = {
-  MUSIVA     : { label:'MUSIVA',           color:'#5B21B6' },
+  MUSIVA   : { label:'Tarif plein / Entreprise (facturation MUSIVA, TVA)', color:'#5B21B6' },
   adherent : { label:'Adhérent',       color:'#0369A1' },
   locataire: { label:'Locataire',      color:'var(--brick)' },
   asso     : { label:'Asso/Syndicat',  color:'var(--sage)' }
@@ -669,15 +681,32 @@ const PROFILS = {
 
 const ESPACES_DEF = {
   bourdelle : { nom:'Antoine Bourdelle',     ref:'0-02',  type:'reunion', capacite:40,  icon:'🏛️',
-    tarifs_reunion:{ MUSIVA:{heure:40,demi:110,journee:180}, adherent:{heure:30,demi:90,journee:150}, locataire:{heure:20,demi:70,journee:120}, asso:{heure:0,demi:0,journee:0} } },
+    tarifs_reunion:{ MUSIVA:{heure:45,demi:150,journee:250}, adherent:{heure:30,demi:90,journee:150}, locataire:{heure:20,demi:70,journee:120}, asso:{heure:0,demi:0,journee:0} } }, // MUSIVA corrigé 04/09/2026 (était 40/110/180, obsolète)
   freinet   : { nom:'Célestin Freinet',      ref:'1-11',  type:'both',    capacite:20,  icon:'📋',
-    tarifs_reunion:{ MUSIVA:{heure:30,demi:90,journee:150}, adherent:{heure:20,demi:60,journee:100}, locataire:{heure:15,demi:45,journee:80}, asso:{heure:0,demi:0,journee:0} } },
+    tarifs_reunion:{ MUSIVA:{heure:30,demi:100,journee:180}, adherent:{heure:20,demi:60,journee:100}, locataire:{heure:15,demi:45,journee:80}, asso:{heure:0,demi:0,journee:0} } }, // MUSIVA corrigé 04/09/2026 (demi/journée étaient 90/150, obsolètes)
   gouges    : { nom:'Olympe de Gouges',      ref:'1-12',  type:'reunion', capacite:20,  icon:'🤝',
-    tarifs_reunion:{ MUSIVA:{heure:30,demi:90,journee:150}, adherent:{heure:20,demi:60,journee:100}, locataire:{heure:15,demi:45,journee:80}, asso:{heure:0,demi:0,journee:0} } },
-  michel    : { nom:'Louise Michel',         ref:'0-01',  type:'nomade',  capacite:4,   icon:'🚪', sous_type:'prive',
-    tarifs_nomade:{ demi:12, journee:22, semaine:90, mois:200 } },
+    tarifs_reunion:{ MUSIVA:{heure:30,demi:100,journee:180}, adherent:{heure:20,demi:60,journee:100}, locataire:{heure:15,demi:45,journee:80}, asso:{heure:0,demi:0,journee:0} } }, // MUSIVA corrigé 04/09/2026 (demi/journée étaient 90/150, obsolètes)
+  // Louise Michel est un bureau privatif EN BAIL (225-270 €/mois selon durée,
+  // cf. espaces.html) — PAS un poste de coworking. Recatégorisé le 04/09/2026
+  // (argumentaire Samir) en "bureau à la journée" (sous_type bureau_jour),
+  // distinct de l'open space nomade, avec un tarif journalier volontairement
+  // au-dessus du plafond nomade actuel (27 €/j Montessori). Toute demande de
+  // semaine/mois doit être orientée vers un vrai bail (voir tarifs.html) —
+  // les valeurs semaine/mois ci-dessous sont conservées par prudence
+  // technique mais ne doivent plus être proposées en pratique.
+  // Tarifs demi/journée proposés par Samir — quelques mois de recul si besoin
+  // d'ajustement, mécanisme non testé sur un vrai flux de réservation.
+  michel    : { nom:'Louise Michel',         ref:'0-01',  type:'nomade',  capacite:4,   icon:'🚪', sous_type:'bureau_jour',
+    tarifs_nomade:{ demi:20, journee:35, semaine:90, mois:200 } },
+  // Rousseau : le ponctuel (demi-journée / journée) est désormais vendu via
+  // "L'Escale du Génie" (Stripe : 4€/h, 9€/demi-j, 15€/j, 140€/carnet 10j) —
+  // voir DEPLOIEMENT-PHASE-2-STRIPE.md. Valeurs demi/journée alignées le
+  // 04/09/2026 (étaient 10/17, obsolètes) pour une éventuelle réservation
+  // ponctuelle faite manuellement par l'admin ; en usage normal, orienter
+  // l'utilisateur vers L'Escale plutôt que de réserver ici. Semaine/mois
+  // inchangés (corrects, hors périmètre L'Escale).
   rousseau  : { nom:'Jean-Jacques Rousseau', ref:'1-10',  type:'nomade',  capacite:20,  icon:'💻', sous_type:'coworking',
-    tarifs_nomade:{ demi:10, journee:17, semaine:60, mois:180 } },
+    tarifs_nomade:{ demi:9, journee:15, semaine:60, mois:180 } },
   aristote  : { nom:'Aristote',              ref:'—',     type:'nomade',  capacite:7,   icon:'🚪', sous_type:'prive',
     tarifs_nomade:{ demi:12, journee:22, semaine:90, mois:200 } },
   montessori: { nom:'Maria Montessori',      ref:'-1-14', type:'both',    capacite:4,   icon:'♿',
@@ -1674,7 +1703,7 @@ function renderEspaces() {
 
     if (e.tarifs_nomade) {
       c += `${e.tarifs_reunion?'<div style="margin-top:14px;border-top:1px solid var(--border);padding-top:12px"></div>':''}
-        <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px">Bureau nomade ${e.sous_type==='coworking'?'(Coworking)':'(Privé)'}</div>
+        <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px">Bureau nomade ${e.sous_type==='coworking'?'(Coworking)':e.sous_type==='bureau_jour'?'(Bureau à la journée, hors bail)':'(Privé)'}</div>
         <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
         ${Object.entries(e.tarifs_nomade).map(([d,p])=>`<div style="background:var(--cream);border-radius:8px;padding:8px;text-align:center">
           <div style="font-size:10px;color:var(--muted);text-transform:uppercase">${DL[d]||d}</div>

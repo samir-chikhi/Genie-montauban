@@ -231,11 +231,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--fond);color:var(--texte);
         <div class="card">
           <div class="card-title">1️⃣ Choisissez votre espace</div>
           <div class="espaces-grid" id="espaces-grid">
-            <div class="espace-btn" data-espace="Bourdelle" data-tarif-h="40" onclick="selEspace(this)">
+            <div class="espace-btn" data-espace="Bourdelle" data-tarif-h="45" onclick="selEspace(this)">
               <span class="eb-ico">🏛️</span>
               <span class="eb-nom">Antoine Bourdelle</span>
               <span class="eb-sub">40 pers. · RDC</span>
-              <span class="eb-prix" id="prix-Bourdelle">dès 40 €/h</span>
+              <span class="eb-prix" id="prix-Bourdelle">dès 45 €/h</span>
             </div>
             <div class="espace-btn" data-espace="Freinet" data-tarif-h="30" onclick="selEspace(this)">
               <span class="eb-ico">🤝</span>
@@ -255,18 +255,24 @@ body{font-family:'DM Sans',sans-serif;background:var(--fond);color:var(--texte);
               <span class="eb-sub">PMR · 4 pers.</span>
               <span class="eb-prix" id="prix-Montessori">dès 20 €/h</span>
             </div>
-            <div class="espace-btn" data-espace="Aristote" data-tarif-h="12" onclick="selEspace(this)">
+            <div class="espace-btn" data-espace="Aristote" data-tarif-h="18" onclick="selEspace(this)">
               <span class="eb-ico">🚪</span>
               <span class="eb-nom">Aristote</span>
               <span class="eb-sub">Bureau nomade · 1er</span>
-              <span class="eb-prix" id="prix-Aristote">12 €/½j</span>
+              <span class="eb-prix" id="prix-Aristote">18 €/½j</span>
             </div>
-            <div class="espace-btn" data-espace="Rousseau" data-tarif-h="10" onclick="selEspace(this)">
+            <!-- Rousseau retiré de la réservation ponctuelle le 04/09/2026 :
+                 le coworking à l'heure/demi-journée/journée passe désormais
+                 par "L'Escale du Génie" (paiement Stripe), pour éviter un
+                 double circuit de réservation sur le même espace. Semaine/mois
+                 restent gérés par l'admin sur demande directe. -->
+            <a class="espace-btn" href="coworking-nomade.html" target="_blank" rel="noopener"
+               style="text-decoration:none;color:inherit;display:flex">
               <span class="eb-ico">💻</span>
               <span class="eb-nom">Jean-Jacques Rousseau</span>
-              <span class="eb-sub">Coworking · 1er</span>
-              <span class="eb-prix" id="prix-Rousseau">10 €/½j</span>
-            </div>
+              <span class="eb-sub">Coworking ponctuel → L'Escale du Génie</span>
+              <span class="eb-prix">dès 4 €/h — réserver sur L'Escale →</span>
+            </a>
           </div>
         </div>
 
@@ -401,12 +407,22 @@ const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyJ-Dk-yZZNdfxF
 
 // Tarifs selon profil
 const TARIFS = {
-  Bourdelle:   { plein:40, adherent:30, locataire:20, asso:0 },
+  // Corrigé le 04/09/2026 (audit de cohérence tarifaire) — Bourdelle et
+  // Aristote étaient sous-facturés par rapport à tarifs.html.
+  Bourdelle:   { plein:45, adherent:30, locataire:20, asso:0 },
   Freinet:     { plein:30, adherent:20, locataire:15, asso:0 },
   Gouges:      { plein:30, adherent:20, locataire:15, asso:0 },
   Montessori:  { plein:20, adherent:15, locataire:10, asso:0 },
-  Aristote:    { plein:12, adherent:12, locataire:12, asso:0 },
-  Rousseau:    { plein:10, adherent:10, locataire:10, asso:0 },
+  // Aristote : plein=18€/½j (tarif non-adhérent officiel), adherent=12€/½j
+  // (inchangé, correct). Pas de tarif "locataire" officiel publié pour
+  // Aristote — valeur laissée égale à l'adhérent par défaut, à confirmer.
+  Aristote:    { plein:18, adherent:12, locataire:12, asso:0 },
+  // Rousseau : le ponctuel (½j/journée) est désormais vendu via "L'Escale du
+  // Génie" (Stripe, 9€/½j, 15€/j) et ne devrait plus être réservé via cet
+  // écran — bouton retiré ci-dessous (04/09/2026). Ligne conservée par
+  // prudence technique (référencée ailleurs dans le code) mais ne devrait
+  // plus être atteignable depuis l'UI.
+  Rousseau:    { plein:9, adherent:9, locataire:9, asso:0 },
 };
 
 const PROFIL_LABELS = {
