@@ -21,7 +21,7 @@ Salles de réunion, bureaux nomades, coworking et bureaux privatifs en bail. Acc
 Coworking à la carte dès 4 €/h
 Bureau nomade dès 12 €/½ journée
 Bureau privatif dès 180 €/mois
-*Salles gratuites pour les assos de Villebourbon et les syndicats*
+*Salles gratuites pour les assos de Villebourbon et les syndicats de salariés et d'ouvriers*
 
 [Grille tarifaire complète →](tarifs.html)
 [Réserver en ligne →](reservation.html)
@@ -30,7 +30,7 @@ Bureau privatif dès 180 €/mois
 
 4 espaces · 4 à 40 personnes
 
-À l'heure, à la demi-journée ou à la journée. Vidéoprojecteur et sono dans Bourdelle, écran TV dans Gouges, paperboard partout. **Gratuit pour les associations du quartier Villebourbon et les organisations syndicales** — c'est une décision politique, pas un geste commercial.
+À l'heure, à la demi-journée ou à la journée. Vidéoprojecteur et sono dans Bourdelle, écran TV dans Gouges, paperboard partout. **Gratuit pour les associations du quartier Villebourbon et les organisations syndicales d'employés et d'ouvriers** — c'est une décision politique, pas un geste commercial.
 
 40 personnes
 
@@ -44,7 +44,7 @@ Grande salle lumineuse avec terrasse, vidéoprojecteur et sono. Idéale pour for
 - ½ journée150 €
 - Journée250 €
 
-Tarif plein. Adhérent dès 30 €/h · Locataire dès 20 €/h · Assos de Villebourbon et syndicats : **gratuit**.
+Tarif plein. Adhérent dès 30 €/h · Locataire dès 20 €/h · Assos de Villebourbon et syndicats de salariés/ouvriers : **gratuit**.
 
 [Réserver →](reservation.html)
 
@@ -61,7 +61,7 @@ Salle modulable équipée paperboard. Disponible à la demi-journée, journée o
 - ½ journée100 €
 - Journée180 €
 
-Tarif plein. Adhérent dès 20 €/h · Locataire dès 15 €/h · Assos de Villebourbon et syndicats : **gratuit**.
+Tarif plein. Adhérent dès 20 €/h · Locataire dès 15 €/h · Assos de Villebourbon et syndicats de salariés/ouvriers : **gratuit**.
 
 [Réserver →](reservation.html)
 
@@ -78,7 +78,7 @@ Salle de réunion lumineuse avec écran TV et paperboard. Idéale pour réunions
 - ½ journée100 €
 - Journée180 €
 
-Tarif plein. Adhérent dès 20 €/h · Locataire dès 15 €/h · Assos de Villebourbon et syndicats : **gratuit**.
+Tarif plein. Adhérent dès 20 €/h · Locataire dès 15 €/h · Assos de Villebourbon et syndicats de salariés/ouvriers : **gratuit**.
 
 [Réserver →](reservation.html)
 
@@ -95,7 +95,7 @@ Salle totalement accessible PMR. Usage flexible : réunion ou bureau nomade priv
 - ½ journée60 €
 - Journée100 €
 
-Tarif plein. Adhérent dès 15 €/h · Locataire dès 10 €/h · Assos de Villebourbon et syndicats : **gratuit**.
+Tarif plein. Adhérent dès 15 €/h · Locataire dès 10 €/h · Assos de Villebourbon et syndicats de salariés/ouvriers : **gratuit**.
 
 [Réserver →](reservation.html)
 
@@ -274,7 +274,7 @@ activités ne sont pas côte à côte, elles sont liées — la location est ce 
 
 Concrètement, la journée de séminaire que vous nous achetez paie des ateliers gratuits qui se tiennent dans
 la même salle le soir, l'accompagnement de porteurs de projet du quartier, et la gratuité des salles pour
-les associations de Villebourbon et les organisations syndicales.
+les associations de Villebourbon et les organisations syndicales d'employés et d'ouvriers.
 
 Ce n'est pas une intention : nos statuts nous engagent à ouvrir **au moins 30 % de nos heures en accès
 gratuit ou solidaire** et à publier chaque année où nous en sommes. Une personne, une voix, quel que
