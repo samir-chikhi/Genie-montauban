@@ -2,7 +2,7 @@
 title: Génie — Tiers-lieu d'éducation populaire et d'ESS à Montauban
 description: Tiers-lieu d'éducation populaire et d'ESS à Montauban : ateliers, université populaire, accompagnement de projets, et des espaces de coworking et de réunion.
 url: https://genie-montauban.fr/
-last_updated: 2026-09-03
+last_updated: 2026-09-04
 source: miroir markdown — version texte pour moteurs IA
 ---
 
@@ -60,7 +60,7 @@ Bureaux privatifs
 
 Un bureau à vous, au mois ou à l'année. Badge 24/7, fibre incluse. Voir les fiches →](espaces.html)
 
-Coworking dès 10 €/½ journée
+Coworking à la carte dès 4 €/h
 Bureau nomade dès 12 €/½ journée
 Bureau privatif dès 180 €/mois
 *Salles gratuites pour les assos de Villebourbon et les syndicats*
@@ -166,16 +166,14 @@ Bureau 1-10 · 1er étage
 
 Jean-Jacques Rousseau
 
-Grand espace coworking ouvert, imprimante partagée, café inclus. Ambiance collaborative idéale.
+Grand espace coworking ouvert, imprimante partagée, café inclus. Ambiance collaborative idéale. Forfaits pour venir régulièrement.
 
-- ½ journée15 €
-- Journée26 €
 - Semaine90 €
 - Mois250 €
 
-Tarif non-adhérent, hors charges. **Adhérent : 10 € la ½ journée, 180 €/mois** — l'adhésion (dès 15 €/an) est rentabilisée en deux venues.
+Tarif non-adhérent, hors charges. **Adhérent : 60 €/semaine, 180 €/mois**. À l'heure ou à la journée ? → [L'Escale du Génie](coworking-nomade.html).
 
-[Réserver →](reservation.html)
+[Réserver un forfait →](reservation.html)
 
 15 m²
 
