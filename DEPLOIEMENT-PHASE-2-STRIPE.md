@@ -9,29 +9,20 @@ automatique de bout en bout.
 
 ---
 
-## Solution A — codes dans la page de confirmation Stripe (5 min, sans code)
+## Solution A — codes dans la page de confirmation Stripe ✅ FAIT (2026-09-04)
 
-Les 4 codes d'accès sont fixes → on peut les afficher directement après le
-paiement, sur chacun des 4 Payment Links.
+Les 4 Payment Links ont un message de page de confirmation personnalisé
+(onglet **« Page de confirmation »** → **« Remplacer le message par défaut par
+un message personnalisé »**) contenant :
+**porte de rue 5522**, **porte intérieure 213741**, horaires, rappel adhésion, tel.
 
-Pour **chaque** lien (dashboard Stripe → **Paiements → Payment Links** →
-ouvrir le lien → **Modifier**) :
+⚠️ **Le code porte intérieure 213741 expire le 30 décembre 2026.** À changer à
+ce moment-là dans les **4** liens (même chemin) — et dans la propriété de script
+`ESCALE_CODE_PORTE_INT` si la solution B a été déployée.
 
-1. Onglet **« Après le paiement »** (ou « Page de confirmation »).
-2. Choisir **« Afficher un message de confirmation »**.
-3. Coller par exemple :
-
-   > Merci ! Votre place à L'Escale du Génie est réservée.
-   > **Accès (espace Jean-Jacques Rousseau, 1er étage)** — porte de rue : `XXXX` ·
-   > porte intérieure : `YYYY`.
-   > Horaires : lun–ven 8h–19h, sam 9h–17h.
-   > Première venue ? Pensez à régler l'adhésion : https://genie-montauban.fr/index.html#rejoindre
-
-4. **Enregistrer**.
-
-Limite : rien n'est écrit dans le Sheet, et l'e-mail Stripe standard ne
-contient pas ce message (il faut que le client note les codes sur la page).
-Pour un vrai e-mail + un suivi dans l'admin → solution B.
+Limites de la solution A : rien n'est écrit dans le Sheet, et l'e-mail Stripe
+standard ne contient pas ce message (le client doit noter les codes sur la
+page). Pour un vrai e-mail + un suivi dans l'admin → solution B.
 
 ---
 
@@ -119,9 +110,10 @@ manquante).
   dédié + colonne « jetons restants », ou un simple suivi manuel au début).
 - **Avoir annulation 48 h** : géré à la main pour l'instant (rembourser ou
   créer un code promo Stripe).
-- **Conflit de tarifs** : `espaces.html` (section #coworking) et
-  `reservation.html` vendent encore le même espace J.-J. Rousseau à
-  15/26/90/250 € via HelloAsso, alors que L'Escale le vend à 4/9/15 € via
-  Stripe. À trancher : soit L'Escale ne couvre que l'usage ponctuel et
-  `espaces.html` ne garde que semaine/mois, soit tout passe par L'Escale et
-  on retire le coworking de `reservation.html` + `espaces.html`.
+- **Conflit de tarifs** : ✅ tranché (2026-09-04) — L'Escale = usage ponctuel
+  uniquement. `reservation.html` : J.-J. Rousseau ne garde que semaine/mois ;
+  `espaces.html`, l'accueil et `tarifs.html` alignés. Reste `mon-compte.html`
+  (page privée membres) qui affiche encore Rousseau à « 10 €/½j » — flux
+  distinct, à revoir séparément.
+- **Code porte intérieure** : 213741 jusqu'au 30/12/2026, à changer ensuite
+  dans les 4 Payment Links (+ `ESCALE_CODE_PORTE_INT` si solution B déployée).
