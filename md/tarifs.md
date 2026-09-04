@@ -41,7 +41,7 @@ Non-adhérent · tarif standard
 
 🏛️ Salles de réunion
 
-| Salle / Capacité | Durée | Tarif plein | Adhérent ~−20% | Locataire −50% | Asso 82 |
+| Salle / Capacité | Durée | Tarif plein | Adhérent ~−20% | Locataire −50% | Asso Villebourbon |
 | --- | --- | --- | --- | --- | --- |
 | Antoine Bourdelle (0-02)Grande salle · 40 pers. | À l'heure | 45 € | 30 € | 20 € | Gratuit\* |
 | Demi-journée (4h) | 150 € | 90 € | 70 € | Gratuit\* |
@@ -115,7 +115,7 @@ Flexibilité maximale
 | Sympathisant | min. 10 € / an | Soutien à l'association · cotisation libre |
 | Jeune 16–30 ans | 15 à 40 € / an | Voix délibérative en AG · quota CA garanti · tarifs adhérent |
 | Particulier (membre actif) | 30 à 80 € / an | Voix délibérative en AG · tarifs préférentiels · annuaire Génie |
-| Association | 50 € / an | Voix délibérative en AG · salles gratuites (asso Villebourbon + syndicats) |
+| Association | 50 € / an | Voix délibérative en AG · salles gratuites (réservé aux associations du quartier Villebourbon et aux syndicats d'employés et d'ouvriers) |
 | Entreprise / Structure ESS | 150 € / an | Voix délibérative en AG · tarifs adhérent pour toute l'équipe |
 | Collectivité / Établissement | Sur convention | Voix consultative · nous contacter |
 
@@ -137,6 +137,6 @@ Légende des profils
 
 **Locataire** : titulaire d'un bail privatif au Génie
 
-**Asso Villebourbon / syndicat\* Gratuit** : adhésion Génie (50€/an) + réservation 72h avant + sous réserve disponibilité
+**Asso Villebourbon / syndicat d'employés et d'ouvriers\* Gratuit** : adhésion Génie (50€/an) + réservation 72h avant + sous réserve disponibilité. La gratuité ne s'applique ni aux associations extérieures au quartier Villebourbon, ni aux syndicats patronaux ou professionnels.
 
 Prix HC (hors charges) sauf mention contraire. Tarifs en vigueur au 1er mai 2026 — modifiables par décision du Conseil d'Administration de l'Association Génie. Contact : contact@genie-montauban.fr · 06 51 50 97 18

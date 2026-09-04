@@ -537,6 +537,11 @@
 
     /* ── RESPONSIVE ── */
     @media (max-width: 1024px) {
+      /* Bandeau info (haut de page) : au lieu de laisser flex-wrap casser la
+         ligne au hasard (rendu "moche" à 2 lignes inégales, signalé le
+         04/09/2026), on passe volontairement à une grille 2x2 propre. */
+      .infobanner { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 32px; text-align: left; }
+      .infobanner-item { justify-content: flex-start; }
       .tarifs-intro { grid-template-columns: 1fr; }
       .footer-grid { grid-template-columns: 1fr 1fr; }
       .pantheon-grid { grid-template-columns: repeat(2, 1fr); }
@@ -592,6 +597,9 @@
       .manifeste-corps p:last-child { font-size: 1.2rem; }
     }
     @media (max-width: 480px) {
+      /* Bandeau info : 1 seule colonne sur petit mobile (2 colonnes seraient
+         trop serrées avec les libellés les plus longs). */
+      .infobanner { grid-template-columns: 1fr; gap: 12px; }
       section { padding: 44px 4%; }
       .form-actions { flex-direction: column; gap: 10px; }
       .btn-submit-mbr, .btn-dl-mbr { width: 100%; text-align: center; justify-content: center; }
