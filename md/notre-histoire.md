@@ -2,7 +2,7 @@
 title: Notre histoire — un tiers-lieu ESS viable | Génie Montauban
 description: Comment est né le Génie, qui s'y retrouve, et comment ce tiers-lieu ESS de Montauban s'organise pour atteindre l'équilibre financier. Le récit complet, chiffres compris.
 url: https://genie-montauban.fr/notre-histoire.html
-last_updated: 2026-09-04
+last_updated: 2026-09-07
 source: miroir markdown — version texte pour moteurs IA
 ---
 
@@ -12,7 +12,7 @@ Un tiers-lieu, ce n'est ni un bureau classique ni un espace de coworking comme o
 
 ## Tout est parti d'une visite de bureau
 
-Je n'avais pas prévu de créer un tiers-lieu. Je venais simplement louer un bureau pour MUSIVA, mon entreprise de conseil et de formation. Le propriétaire de l'immeuble m'a expliqué qu'il cherchait en réalité à louer l'ensemble du bâtiment. Il n'habite pas Montauban, et il n'avait plus l'âge de se lancer dans une nouvelle aventure commerciale.
+Je n'avais pas prévu de créer un tiers-lieu. Je venais simplement louer un bureau pour MUSIVA, [mon activité de conseil, d'audit et de formation](https://chikhi.fr/). Le propriétaire de l'immeuble m'a expliqué qu'il cherchait en réalité à louer l'ensemble du bâtiment. Il n'habite pas Montauban, et il n'avait plus l'âge de se lancer dans une nouvelle aventure commerciale.
 
 Je lui ai proposé qu'on s'associe. Il a refusé, mais m'a dit une phrase qui a tout changé :
 
