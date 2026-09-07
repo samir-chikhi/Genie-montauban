@@ -84,10 +84,4 @@
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
-  <url>
-    <loc>https://genie-montauban.fr/chikhi-fr.html</loc>
-    <lastmod>2026-09-04</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.2</priority>
-  </url>
 </urlset>

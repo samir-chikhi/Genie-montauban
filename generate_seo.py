@@ -38,7 +38,8 @@ PAGES = [
     ("cgv.html",                    "0.3", "yearly"),
     ("confidentialite.html",        "0.3", "yearly"),
     ("mentions_legales.html",       "0.3", "yearly"),
-    ("chikhi-fr.html",              "0.2", "yearly"),
+    # chikhi-fr.html : page perso retirée du sitemap — redirige désormais vers
+    # https://chikhi.fr/ (site dédié). Ne pas la remettre ici.
 ]
 
 # Pages avec miroir markdown dans /md/ (référencées dans llms.txt)
