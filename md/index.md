@@ -2,7 +2,7 @@
 title: Génie — Tiers-lieu & coworking à Montauban · éducation populaire, ESS
 description: Génie, le tiers-lieu de Montauban : espace de coworking et salles de réunion à 200 m de la gare, ateliers d'éducation populaire, université populaire et accompagnement de projets (association ESS).
 url: https://genie-montauban.fr/
-last_updated: 2026-09-04
+last_updated: 2026-09-07
 source: miroir markdown — version texte pour moteurs IA
 ---
 
@@ -792,8 +792,8 @@ Ils sont déjà là
 Des structures qui partagent le lieu, les soirées ou les projets. Chacune fait son métier — on se contente de mettre la table.
 
 [Musiva
-Organisme de formation et cabinet de conseil.
-musiva.fr (nouvelle fenêtre)](https://www.musiva.fr)
+Organisme de formation Qualiopi et cabinet de conseil à Montauban.
+musiva.fr (nouvelle fenêtre)](https://musiva.fr/)
 [Topogramme
 Association de développement artistique.
 topogramme.fr (nouvelle fenêtre)](https://topogramme.fr/)
