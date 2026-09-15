@@ -132,6 +132,7 @@ textarea{resize:vertical;min-height:65px}
 .ev-rousseau{background:#FEF9C3;color:#854D0E;border-color:#CA8A04}
 .ev-montessori{background:var(--sage-light);color:var(--sage);border-color:var(--sage)}
 .ev-cal{background:var(--cal-light);color:var(--cal);border-color:var(--cal);font-style:italic}
+.ev-conflict{background:var(--red);color:#fff;border-color:var(--red)!important;font-weight:700}
 /* Légende planning */
 .plan-legend{display:flex;gap:12px;font-size:11px;align-items:center;flex-wrap:wrap;padding:10px 4px 0}
 .legend-dot{display:inline-block;width:10px;height:10px;border-radius:2px;border-left:3px solid;margin-right:4px;vertical-align:middle}
@@ -543,11 +544,7 @@ textarea{resize:vertical;min-height:65px}
         <div class="fg" id="r-hdebut-fg">
           <label>Heure début</label>
           <select id="r-hdebut" onchange="calcModalPrix()">
-            <option>08:00</option><option>08:30</option><option selected>09:00</option><option>09:30</option>
-            <option>10:00</option><option>10:30</option><option>11:00</option><option>11:30</option>
-            <option>12:00</option><option>12:30</option><option>13:00</option><option>13:30</option>
-            <option>14:00</option><option>14:30</option><option>15:00</option><option>15:30</option>
-            <option>16:00</option><option>16:30</option><option>17:00</option>
+            <option selected>09:00</option>
           </select>
         </div>
         <div class="fg" id="r-nbh-fg">
@@ -715,7 +712,8 @@ const ESPACES_DEF = {
 };
 
 const DL = { heure:'Heure', demi:'½ journée', journee:'Journée', semaine:'Semaine', mois:'Mois' };
-const HOURS = ['08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00'];
+// 24h/24 avec pas de 30 min (depuis 00:00 à 23:30)
+const HOURS = Array.from({length:48},(_,i)=>{const h=Math.floor(i/2);const m=(i%2)*30;return String(h).padStart(2,'0')+':'+String(m).padStart(2,'0');});
 
 // ─────────────────────────────────────────────────────────
 // HELPERS
@@ -1148,12 +1146,26 @@ function resetForm() {
   gvSet('r-espace',''); gvSet('r-usage','reunion'); gvSet('r-profil','locataire');
   gvSet('r-duree','heure'); gvSet('r-hdebut','09:00'); gvSet('r-nbh','2');
   gvSet('r-statut','confirmed'); gvSet('r-part','1');
+  // Admin : pas de limite de date (peut réserver dans le passé)
+  document.getElementById('r-date').removeAttribute('min');
   document.getElementById('r-date').value = new Date().toISOString().split('T')[0];
   document.getElementById('r-badge').checked=false;
   document.getElementById('r-adhesion').checked=false;
   document.getElementById('modal-prix').style.display='none';
   document.getElementById('r-usage-fg').style.display='none';
   document.getElementById('r-profil-fg').style.display='';
+
+  // Remplir le select des heures (24h/24, pas 30 min)
+  const hdSelect = document.getElementById('r-hdebut');
+  if (hdSelect && hdSelect.options.length <= 1) {
+    HOURS.forEach(h => {
+      const opt = document.createElement('option');
+      opt.value = h;
+      opt.textContent = h;
+      if (h === '09:00') opt.selected = true;
+      hdSelect.appendChild(opt);
+    });
+  }
 }
 
 function editResa(id) {
@@ -1473,8 +1485,34 @@ function showDetail(id) {
   const e=ESPACES_DEF[r.espace];
   const dl=r.typeDuree==='heure'?`${esc(r.nbHeures)}h (${esc(r.heureDebut)}→${esc(r.heureFin)})`:esc(DL[r.typeDuree]||r.typeDuree);
 
+  // Détecter les chevauchements (Patch 3 — alerte conflit)
+  const conflits = DB.reservations.filter(r2 => {
+    if (r2.id === r.id || r2.statut === 'cancelled') return false;
+    if (r2.date !== r.date || r2.espace !== r.espace) return false;
+    const d1 = (r.heureDebut || '00:00').split(':').map(Number);
+    const f1 = (r.heureFin || '01:00').split(':').map(Number);
+    const d2 = (r2.heureDebut || '00:00').split(':').map(Number);
+    const f2 = (r2.heureFin || '01:00').split(':').map(Number);
+    const min1 = d1[0]*60+d1[1], fin1 = f1[0]*60+f1[1];
+    const min2 = d2[0]*60+d2[1], fin2 = f2[0]*60+f2[1];
+    return min1 < fin2 && fin1 > min2;
+  });
+
+  let conflitHtml = '';
+  if (conflits.length > 0) {
+    conflitHtml = `<div style="background:var(--red-light);border-left:4px solid var(--red);border-radius:8px;padding:16px;margin-bottom:16px">
+      <div style="font-weight:700;color:var(--red);margin-bottom:8px">⚠️ CONFLIT DÉTECTÉ</div>
+      <div style="font-size:13px;color:var(--red);line-height:1.6">
+        Cette réservation chevauche ${conflits.length} autre(s) sur le même créneau :
+        <ul style="margin-top:8px;margin-left:20px">
+          ${conflits.map(c => `<li>${esc(c.prenom)} ${esc(c.nom)}</li>`).join('')}
+        </ul>
+      </div>
+    </div>`;
+  }
+
   document.getElementById('det-ref').textContent = r.id;
-  document.getElementById('det-body').innerHTML = `
+  document.getElementById('det-body').innerHTML = conflitHtml + `
     <div class="dgrid">
       <div class="di"><label>Client</label><span>${esc(r.prenom)} ${esc(r.nom)}</span></div>
       <div class="di"><label>Organisation</label><span>${esc(r.orga||'—')}</span></div>

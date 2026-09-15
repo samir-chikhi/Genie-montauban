@@ -606,9 +606,11 @@ function dateISO(v) {
 }
 
 // Nombre de réservations actives qui chevauchent [debMin, finMin[
-// sur le même espace et la même date
+// sur le même espace et la même date (Sheets + Google Calendar — ajout du 15/09)
 function compterChevauchements(rows, cle, dateStr, debMin, finMin, emailExclu) {
   var n = 0;
+
+  // ── 1. Compter les réservations Sheets (statut actif) ──
   for (var i = 1; i < rows.length; i++) {
     var statut = String(rows[i][18] || '');
     if (statut === 'ANNULE' || statut === 'cancelled') continue;
@@ -619,6 +621,38 @@ function compterChevauchements(rows, cle, dateStr, debMin, finMin, emailExclu) {
     var f = hMin(rows[i][14], d + 60);
     if (debMin < f && finMin > d) n++;
   }
+
+  // ── 2. Ajouter les événements Google Calendar "orphelins" ──
+  // (créés directement dans Calendar, sans passer par une réservation Sheets :
+  // ex. un événement interne posé à la main sur la même salle/créneau).
+  // Best-effort : si Calendar est indisponible, on ne bloque pas la réservation.
+  try {
+    var cal = CalendarApp.getCalendarById(CONFIG.CALENDAR_ID);
+    if (cal) {
+      var dateObj = new Date(dateStr + 'T00:00:00');
+      var dateObjEnd = new Date(dateStr + 'T23:59:59');
+      var calEvents = cal.getEvents(dateObj, dateObjEnd);
+
+      calEvents.forEach(function(ev) {
+        var desc = ev.getDescription() || '';
+        var hasResaId = /Référence\s*:\s*([A-Z]{2,3}-[A-Z0-9]+)/.test(desc);
+        if (hasResaId) return; // déjà compté côté Sheets, on ne double-compte pas
+
+        var titre = (ev.getTitle() || '').toLowerCase();
+        if (titre.indexOf(cle) === -1) return; // événement sans lien avec cet espace
+
+        var evStart = ev.getStartTime();
+        var evEnd = ev.getEndTime();
+        var evDebMin = evStart.getHours() * 60 + evStart.getMinutes();
+        var evFinMin = evEnd.getHours() * 60 + evEnd.getMinutes();
+
+        if (debMin < evFinMin && finMin > evDebMin) n++;
+      });
+    }
+  } catch (eCalCheck) {
+    Logger.log('⚠️ Vérification Calendar échouée (ignorée) : ' + eCalCheck.message);
+  }
+
   return n;
 }
 
