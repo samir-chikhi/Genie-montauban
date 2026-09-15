@@ -7,3 +7,7 @@ package-lock.json
 # Travail SEO d'un autre site, gardé en local seulement
 MUSIVA-seo-update/
 MUSIVA-seo-update.zip
+
+.agents/
+.claude/skills/unlazy/
+skills-lock.json
