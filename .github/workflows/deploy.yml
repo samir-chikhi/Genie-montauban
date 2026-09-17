@@ -61,6 +61,16 @@ jobs:
             echo "Aucun changement SEO à committer."
           fi
 
+      - name: Garder le projet Supabase actif (évite la pause après 7 jours d'inactivité)
+        run: |
+          SB_URL=$(grep -oP '(?<=GENIE_SUPABASE_URL = ")[^"]+' assets/js/membres-config.js || true)
+          SB_KEY=$(grep -oP '(?<=GENIE_SUPABASE_ANON_KEY = ")[^"]+' assets/js/membres-config.js || true)
+          if [ -n "$SB_URL" ] && [ -n "$SB_KEY" ]; then
+            curl -s -o /dev/null -w "Supabase ping: %{http_code}\n" "$SB_URL/rest/v1/profiles?select=id&limit=1" -H "apikey: $SB_KEY" -H "Authorization: Bearer $SB_KEY"
+          else
+            echo "Espace membres pas encore configuré (assets/js/membres-config.js vide) — étape ignorée."
+          fi
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 

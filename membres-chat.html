@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co wss://*.supabase.co; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="robots" content="noindex,nofollow">
+<title>Discussion — Espace membres Génie</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/membres.css">
+<link rel="stylesheet" href="assets/css/footer.css">
+</head>
+<body class="gm-body">
+
+<header class="gm-header">
+  <a href="espace-membres.html" class="gm-brand">
+    <img src="logo.png" alt="Génie Montauban" style="height:32px;width:auto">
+    <span><span class="gm-brand-name">Génie</span><span class="gm-brand-sub">Espace membres</span></span>
+  </a>
+  <button class="gm-burger" id="gm-burger" aria-label="Menu">☰</button>
+  <nav class="gm-nav" id="gm-nav">
+    <a href="espace-membres.html">Accueil</a>
+    <a href="membres-articles.html">Articles</a>
+    <a href="membres-calendrier.html">Qui mange au Génie ?</a>
+    <a href="membres-chat.html" class="active">Discussion</a>
+  </nav>
+  <div class="gm-user" id="gm-user-box" style="display:none">
+    <span class="gm-user-name" id="gm-user-name"></span>
+    <button class="gm-btn-out" id="gm-btn-out">Déconnexion</button>
+  </div>
+</header>
+
+<div id="gm-login" class="gm-login-wrap" style="display:none">
+  <div class="gm-login-box">
+    <h2>Espace membres</h2>
+    <p>Réservé aux membres et locataires du Génie. Entrez votre e-mail : vous recevrez un lien de connexion.</p>
+    <div class="gm-field">
+      <label for="gm-email">Adresse e-mail</label>
+      <input class="gm-input" type="email" id="gm-email" placeholder="prenom@exemple.fr" autocomplete="email">
+    </div>
+    <button class="gm-btn gm-btn-primary" id="gm-btn-send" style="width:100%;justify-content:center">Recevoir mon lien de connexion</button>
+    <div class="gm-alert" id="gm-alert"></div>
+    <p style="font-size:12px;color:var(--muted);margin-top:16px">Pas encore invité·e ? Écrivez à l'équipe du Génie — <a href="mailto:contact@genie-montauban.fr">contact@genie-montauban.fr</a>.</p>
+  </div>
+</div>
+
+<div id="gm-app" style="display:none">
+  <div class="gm-shell">
+    <span class="gm-eyebrow">La machine à café</span>
+    <h1 class="gm-h1">Discussion</h1>
+    <p class="gm-lede">Quatre canaux, comme quatre coins de la salle commune.</p>
+
+    <div class="gm-chat-wrap">
+      <div class="gm-chan-list" id="gm-chan-list">
+        <button class="gm-chan active" data-chan="general">💬 Général</button>
+        <button class="gm-chan" data-chan="covoiturage">🚗 Covoiturage</button>
+        <button class="gm-chan" data-chan="bons-plans">🎁 Bons plans</button>
+        <button class="gm-chan" data-chan="annonces-pro">💼 Annonces pro</button>
+      </div>
+      <div class="gm-chat-main">
+        <div class="gm-chat-msgs" id="gm-chat-msgs"><p class="gm-empty">Chargement…</p></div>
+        <form class="gm-chat-form" id="gm-chat-form">
+          <input class="gm-input" id="gm-chat-input" maxlength="1000" placeholder="Écrire un message…" autocomplete="off">
+          <button class="gm-btn gm-btn-sage" type="submit">Envoyer</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-name">Génie</div>
+        <div class="footer-brand-sub">Tiers-lieu d'éducation populaire · Montauban</div>
+        <p class="footer-brand-desc">L'espace membres est réservé aux adhérents et locataires du Génie.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Espace membres</div>
+        <ul class="footer-links">
+          <li><a href="espace-membres.html">Accueil</a></li>
+          <li><a href="membres-articles.html">Articles</a></li>
+          <li><a href="membres-calendrier.html">Qui mange au Génie ?</a></li>
+          <li><a href="membres-chat.html">Discussion</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Association Génie Montauban — association loi 1901 relevant de l'ESS</span>
+      <div class="footer-legal"><a href="mentions_legales.html">Mentions légales</a><a href="confidentialite.html">Confidentialité</a></div>
+    </div>
+  </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="assets/js/membres-config.js"></script>
+<script src="assets/js/membres-auth.js"></script>
+<script src="assets/js/membres-utils.js"></script>
+<script>
+document.getElementById('gm-burger').addEventListener('click', () => document.getElementById('gm-nav').classList.toggle('open'));
+
+if (window.GenieAuth.notConfigured) {
+  const el = document.getElementById('gm-login');
+  el.style.display = 'flex';
+  el.innerHTML = '<div class="gm-login-box"><h2>Configuration en attente</h2><p>L\'espace membres n\'est pas encore relié à sa base de données.</p></div>';
+} else {
+  document.getElementById('gm-btn-send').addEventListener('click', async () => {
+    const email = document.getElementById('gm-email').value.trim();
+    const alertEl = document.getElementById('gm-alert');
+    if (!email) return;
+    const err = await window.GenieAuth.sendMagicLink(email);
+    alertEl.classList.remove('ok', 'err');
+    if (err) { alertEl.textContent = "Cette adresse n'est pas encore invitée. Contactez l'équipe du Génie."; alertEl.classList.add('show', 'err'); }
+    else { alertEl.textContent = "Lien envoyé ! Vérifiez votre boîte mail (et les spams)."; alertEl.classList.add('show', 'ok'); }
+  });
+  document.getElementById('gm-btn-out').addEventListener('click', () => window.GenieAuth.signOut());
+
+  let currentUser = null, currentName = '', activeChannel = 'general', realtimeSub = null;
+
+  function renderMessages(msgs) {
+    const U = window.GenieUtils;
+    const wrap = document.getElementById('gm-chat-msgs');
+    wrap.innerHTML = !msgs.length
+      ? '<p class="gm-empty">Aucun message pour l\'instant. Lancez la discussion !</p>'
+      : msgs.map(m => `<div class="gm-msg${m.user_id === currentUser.id ? ' mine' : ''}">
+          <div class="gm-msg-meta"><span class="gm-msg-author">${U.escapeHtml(m.user_name)}</span><span>${U.formatDate(m.created_at)}</span></div>
+          <div class="gm-msg-body">${U.escapeHtml(m.body)}</div>
+        </div>`).join('');
+    wrap.scrollTop = wrap.scrollHeight;
+  }
+
+  async function loadChannel(channel) {
+    const db = window.genieDb;
+    activeChannel = channel;
+    document.querySelectorAll('.gm-chan').forEach(b => b.classList.toggle('active', b.dataset.chan === channel));
+    const { data } = await db.from('chat_messages').select('*').eq('channel', channel).order('created_at', { ascending: true }).limit(200);
+    renderMessages(data || []);
+
+    if (realtimeSub) db.removeChannel(realtimeSub);
+    realtimeSub = db.channel('chat-' + channel)
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'chat_messages', filter: `channel=eq.${channel}` }, payload => {
+        if (activeChannel !== channel) return;
+        const wrap = document.getElementById('gm-chat-msgs');
+        const empty = wrap.querySelector('.gm-empty');
+        if (empty) wrap.innerHTML = '';
+        const U = window.GenieUtils; const m = payload.new;
+        const div = document.createElement('div');
+        div.className = 'gm-msg' + (m.user_id === currentUser.id ? ' mine' : '');
+        div.innerHTML = `<div class="gm-msg-meta"><span class="gm-msg-author">${U.escapeHtml(m.user_name)}</span><span>${U.formatDate(m.created_at)}</span></div><div class="gm-msg-body">${U.escapeHtml(m.body)}</div>`;
+        wrap.appendChild(div);
+        wrap.scrollTop = wrap.scrollHeight;
+      })
+      .subscribe();
+  }
+
+  document.getElementById('gm-chan-list').addEventListener('click', e => {
+    const btn = e.target.closest('.gm-chan');
+    if (btn) loadChannel(btn.dataset.chan);
+  });
+
+  document.getElementById('gm-chat-form').addEventListener('submit', async e => {
+    e.preventDefault();
+    const input = document.getElementById('gm-chat-input');
+    const body = input.value.trim();
+    if (!body) return;
+    input.value = '';
+    await window.genieDb.from('chat_messages').insert({ channel: activeChannel, user_id: currentUser.id, user_name: currentName, body });
+  });
+
+  window.GenieAuth.guard(async (user, name) => {
+    currentUser = user; currentName = name;
+    document.getElementById('gm-user-box').style.display = 'flex';
+    await loadChannel('general');
+  });
+}
+</script>
+</body>
+</html>
