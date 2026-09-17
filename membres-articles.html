@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co wss://*.supabase.co; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="robots" content="noindex,nofollow">
+<title>Articles des membres — Espace membres Génie</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/membres.css">
+<link rel="stylesheet" href="assets/css/footer.css">
+</head>
+<body class="gm-body">
+
+<header class="gm-header">
+  <a href="espace-membres.html" class="gm-brand">
+    <img src="logo.png" alt="Génie Montauban" style="height:32px;width:auto">
+    <span><span class="gm-brand-name">Génie</span><span class="gm-brand-sub">Espace membres</span></span>
+  </a>
+  <button class="gm-burger" id="gm-burger" aria-label="Menu">☰</button>
+  <nav class="gm-nav" id="gm-nav">
+    <a href="espace-membres.html">Accueil</a>
+    <a href="membres-articles.html" class="active">Articles</a>
+    <a href="membres-calendrier.html">Qui mange au Génie ?</a>
+    <a href="membres-chat.html">Discussion</a>
+  </nav>
+  <div class="gm-user" id="gm-user-box" style="display:none">
+    <span class="gm-user-name" id="gm-user-name"></span>
+    <button class="gm-btn-out" id="gm-btn-out">Déconnexion</button>
+  </div>
+</header>
+
+<div id="gm-login" class="gm-login-wrap" style="display:none">
+  <div class="gm-login-box">
+    <h2>Espace membres</h2>
+    <p>Réservé aux membres et locataires du Génie. Entrez votre e-mail : vous recevrez un lien de connexion.</p>
+    <div class="gm-field">
+      <label for="gm-email">Adresse e-mail</label>
+      <input class="gm-input" type="email" id="gm-email" placeholder="prenom@exemple.fr" autocomplete="email">
+    </div>
+    <button class="gm-btn gm-btn-primary" id="gm-btn-send" style="width:100%;justify-content:center">Recevoir mon lien de connexion</button>
+    <div class="gm-alert" id="gm-alert"></div>
+    <p style="font-size:12px;color:var(--muted);margin-top:16px">Pas encore invité·e ? Écrivez à l'équipe du Génie — <a href="mailto:contact@genie-montauban.fr">contact@genie-montauban.fr</a>.</p>
+  </div>
+</div>
+
+<div id="gm-app" style="display:none">
+  <div class="gm-shell">
+    <span class="gm-eyebrow">Vie du Génie &amp; alentours</span>
+    <h1 class="gm-h1">Articles des membres</h1>
+    <p class="gm-lede">Un bon plan, un conseil, une activité en dehors du Génie, un pro à recommander ? Partagez-le ici.</p>
+
+    <div class="gm-card">
+      <div class="gm-card-title">✍️ Publier un article</div>
+      <div class="gm-field">
+        <label for="gm-title">Titre</label>
+        <input class="gm-input" id="gm-title" maxlength="120" placeholder="Ex. Covoiturage marché du samedi, quelqu'un ?">
+      </div>
+      <div class="gm-field">
+        <label for="gm-category">Catégorie</label>
+        <select class="gm-select" id="gm-category">
+          <option value="service">Service</option>
+          <option value="utile">Utile</option>
+          <option value="divertissement">Divertissement</option>
+          <option value="conseils">Conseils</option>
+          <option value="contacts-pro">Contact professionnel</option>
+          <option value="fournisseurs">Fournisseur / prestataire</option>
+        </select>
+      </div>
+      <div class="gm-field">
+        <label for="gm-body">Message</label>
+        <textarea class="gm-textarea" id="gm-body" maxlength="2000" placeholder="Quelques lignes suffisent…"></textarea>
+      </div>
+      <button class="gm-btn gm-btn-primary" id="gm-btn-post">Publier</button>
+      <div class="gm-alert" id="gm-post-alert"></div>
+    </div>
+
+    <div class="gm-filters" id="gm-filters">
+      <button class="gm-chip active" data-cat="tous">Tous</button>
+      <button class="gm-chip" data-cat="service">Service</button>
+      <button class="gm-chip" data-cat="utile">Utile</button>
+      <button class="gm-chip" data-cat="divertissement">Divertissement</button>
+      <button class="gm-chip" data-cat="conseils">Conseils</button>
+      <button class="gm-chip" data-cat="contacts-pro">Contacts pro</button>
+      <button class="gm-chip" data-cat="fournisseurs">Fournisseurs</button>
+    </div>
+    <div class="gm-field">
+      <input class="gm-input" id="gm-search" placeholder="🔎 Rechercher un mot-clé…">
+    </div>
+
+    <div class="gm-card">
+      <div id="gm-articles-list"><p class="gm-empty">Chargement…</p></div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-name">Génie</div>
+        <div class="footer-brand-sub">Tiers-lieu d'éducation populaire · Montauban</div>
+        <p class="footer-brand-desc">L'espace membres est réservé aux adhérents et locataires du Génie.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Espace membres</div>
+        <ul class="footer-links">
+          <li><a href="espace-membres.html">Accueil</a></li>
+          <li><a href="membres-articles.html">Articles</a></li>
+          <li><a href="membres-calendrier.html">Qui mange au Génie ?</a></li>
+          <li><a href="membres-chat.html">Discussion</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Association Génie Montauban — association loi 1901 relevant de l'ESS</span>
+      <div class="footer-legal"><a href="mentions_legales.html">Mentions légales</a><a href="confidentialite.html">Confidentialité</a></div>
+    </div>
+  </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="assets/js/membres-config.js"></script>
+<script src="assets/js/membres-auth.js"></script>
+<script src="assets/js/membres-utils.js"></script>
+<script>
+document.getElementById('gm-burger').addEventListener('click', () => document.getElementById('gm-nav').classList.toggle('open'));
+
+if (window.GenieAuth.notConfigured) {
+  const el = document.getElementById('gm-login');
+  el.style.display = 'flex';
+  el.innerHTML = '<div class="gm-login-box"><h2>Configuration en attente</h2><p>L\'espace membres n\'est pas encore relié à sa base de données.</p></div>';
+} else {
+  document.getElementById('gm-btn-send').addEventListener('click', async () => {
+    const email = document.getElementById('gm-email').value.trim();
+    const alertEl = document.getElementById('gm-alert');
+    if (!email) return;
+    const err = await window.GenieAuth.sendMagicLink(email);
+    alertEl.classList.remove('ok', 'err');
+    if (err) { alertEl.textContent = "Cette adresse n'est pas encore invitée. Contactez l'équipe du Génie."; alertEl.classList.add('show', 'err'); }
+    else { alertEl.textContent = "Lien envoyé ! Vérifiez votre boîte mail (et les spams)."; alertEl.classList.add('show', 'ok'); }
+  });
+  document.getElementById('gm-btn-out').addEventListener('click', () => window.GenieAuth.signOut());
+
+  let currentUser = null, currentName = '', allArticles = [], activeCat = 'tous';
+
+  function render() {
+    const U = window.GenieUtils;
+    const q = document.getElementById('gm-search').value.trim().toLowerCase();
+    let list = allArticles;
+    if (activeCat !== 'tous') list = list.filter(a => a.category === activeCat);
+    if (q) list = list.filter(a => (a.title + ' ' + a.body).toLowerCase().includes(q));
+    const wrap = document.getElementById('gm-articles-list');
+    wrap.innerHTML = !list.length
+      ? '<p class="gm-empty">Aucun article pour l\'instant.</p>'
+      : list.map(a => `
+        <div class="gm-article">
+          <div class="gm-article-head">
+            <span class="gm-tag gm-tag-${a.category}">${U.categoryLabel(a.category)}</span>
+            <span class="gm-article-title">${U.escapeHtml(a.title)}</span>
+          </div>
+          <div class="gm-article-meta">${U.escapeHtml(a.author_name)} · ${U.formatDate(a.created_at)}</div>
+          <div class="gm-article-body">${U.escapeHtml(a.body)}</div>
+        </div>`).join('');
+  }
+
+  document.getElementById('gm-filters').addEventListener('click', e => {
+    const btn = e.target.closest('.gm-chip');
+    if (!btn) return;
+    document.querySelectorAll('#gm-filters .gm-chip').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    activeCat = btn.dataset.cat;
+    render();
+  });
+  document.getElementById('gm-search').addEventListener('input', render);
+
+  document.getElementById('gm-btn-post').addEventListener('click', async () => {
+    const db = window.genieDb;
+    const title = document.getElementById('gm-title').value.trim();
+    const category = document.getElementById('gm-category').value;
+    const body = document.getElementById('gm-body').value.trim();
+    const alertEl = document.getElementById('gm-post-alert');
+    alertEl.classList.remove('ok', 'err');
+    if (!title || !body) { alertEl.textContent = 'Titre et message sont obligatoires.'; alertEl.classList.add('show', 'err'); return; }
+    const { error } = await db.from('articles').insert({ author_id: currentUser.id, author_name: currentName, category, title, body });
+    if (error) { alertEl.textContent = "Erreur : " + error.message; alertEl.classList.add('show', 'err'); return; }
+    document.getElementById('gm-title').value = '';
+    document.getElementById('gm-body').value = '';
+    alertEl.textContent = 'Publié !'; alertEl.classList.add('show', 'ok');
+    await loadArticles();
+  });
+
+  async function loadArticles() {
+    const db = window.genieDb;
+    const { data } = await db.from('articles').select('*').order('created_at', { ascending: false });
+    allArticles = data || [];
+    render();
+  }
+
+  window.GenieAuth.guard(async (user, name) => {
+    currentUser = user; currentName = name;
+    document.getElementById('gm-user-box').style.display = 'flex';
+    await loadArticles();
+  });
+}
+</script>
+</body>
+</html>
