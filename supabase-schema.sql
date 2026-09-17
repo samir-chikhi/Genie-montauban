@@ -77,4 +77,32 @@ drop policy if exists "chat: envoi par un membre connecté" on public.chat_messa
 create policy "chat: envoi par un membre connecté" on public.chat_messages for insert to authenticated with check (auth.uid() = user_id);
 
 -- ── Temps réel pour le chat (affichage instantané des nouveaux messages) ──
-alter publication supabase_realtime add table public.chat_messages;
+do $$
+begin
+  if not exists (
+    select 1 from pg_publication_tables where pubname = 'supabase_realtime' and tablename = 'chat_messages'
+  ) then
+    alter publication supabase_realtime add table public.chat_messages;
+  end if;
+end $$;
+
+-- 5. Recommandations "à voir, à faire" (activités et sorties hors du Génie)
+create table if not exists public.activities (
+  id bigint generated always as identity primary key,
+  author_id uuid not null references auth.users(id) on delete cascade,
+  author_name text not null,
+  title text not null,
+  description text not null,
+  link text,
+  event_date date,
+  created_at timestamptz not null default now()
+);
+
+alter table public.activities enable row level security;
+
+drop policy if exists "activities: lecture par tous les membres" on public.activities;
+create policy "activities: lecture par tous les membres" on public.activities for select to authenticated using (true);
+drop policy if exists "activities: proposition par un membre connecté" on public.activities;
+create policy "activities: proposition par un membre connecté" on public.activities for insert to authenticated with check (auth.uid() = author_id);
+drop policy if exists "activities: suppression de sa propre proposition" on public.activities;
+create policy "activities: suppression de sa propre proposition" on public.activities for delete to authenticated using (auth.uid() = author_id);
