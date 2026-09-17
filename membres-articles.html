@@ -55,46 +55,51 @@
     <h1 class="gm-h1">Articles des membres</h1>
     <p class="gm-lede">Un bon plan, un conseil, une activité en dehors du Génie, un pro à recommander ? Partagez-le ici.</p>
 
-    <div class="gm-card">
-      <div class="gm-card-title">✍️ Publier un article</div>
-      <div class="gm-field">
-        <label for="gm-title">Titre</label>
-        <input class="gm-input" id="gm-title" maxlength="120" placeholder="Ex. Covoiturage marché du samedi, quelqu'un ?">
-      </div>
-      <div class="gm-field">
-        <label for="gm-category">Catégorie</label>
-        <select class="gm-select" id="gm-category">
-          <option value="service">Service</option>
-          <option value="utile">Utile</option>
-          <option value="divertissement">Divertissement</option>
-          <option value="conseils">Conseils</option>
-          <option value="contacts-pro">Contact professionnel</option>
-          <option value="fournisseurs">Fournisseur / prestataire</option>
-        </select>
-      </div>
-      <div class="gm-field">
-        <label for="gm-body">Message</label>
-        <textarea class="gm-textarea" id="gm-body" maxlength="2000" placeholder="Quelques lignes suffisent…"></textarea>
-      </div>
-      <button class="gm-btn gm-btn-primary" id="gm-btn-post">Publier</button>
-      <div class="gm-alert" id="gm-post-alert"></div>
-    </div>
+    <div class="gm-grid-2">
+      <div>
+        <div class="gm-filters" id="gm-filters">
+          <button class="gm-chip active" data-cat="tous">Tous</button>
+          <button class="gm-chip" data-cat="service">Service</button>
+          <button class="gm-chip" data-cat="utile">Utile</button>
+          <button class="gm-chip" data-cat="divertissement">Divertissement</button>
+          <button class="gm-chip" data-cat="conseils">Conseils</button>
+          <button class="gm-chip" data-cat="contacts-pro">Contacts pro</button>
+          <button class="gm-chip" data-cat="fournisseurs">Fournisseurs</button>
+        </div>
+        <div class="gm-field">
+          <input class="gm-input" id="gm-search" placeholder="🔎 Rechercher un mot-clé…">
+        </div>
 
-    <div class="gm-filters" id="gm-filters">
-      <button class="gm-chip active" data-cat="tous">Tous</button>
-      <button class="gm-chip" data-cat="service">Service</button>
-      <button class="gm-chip" data-cat="utile">Utile</button>
-      <button class="gm-chip" data-cat="divertissement">Divertissement</button>
-      <button class="gm-chip" data-cat="conseils">Conseils</button>
-      <button class="gm-chip" data-cat="contacts-pro">Contacts pro</button>
-      <button class="gm-chip" data-cat="fournisseurs">Fournisseurs</button>
-    </div>
-    <div class="gm-field">
-      <input class="gm-input" id="gm-search" placeholder="🔎 Rechercher un mot-clé…">
-    </div>
-
-    <div class="gm-card">
-      <div id="gm-articles-list"><p class="gm-empty">Chargement…</p></div>
+        <div class="gm-card">
+          <div id="gm-articles-list"><p class="gm-empty">Chargement…</p></div>
+        </div>
+      </div>
+      <div>
+        <div class="gm-card">
+          <div class="gm-card-title">✍️ Publier un article</div>
+          <div class="gm-field">
+            <label for="gm-title">Titre</label>
+            <input class="gm-input" id="gm-title" maxlength="120" placeholder="Ex. Covoiturage marché du samedi, quelqu'un ?">
+          </div>
+          <div class="gm-field">
+            <label for="gm-category">Catégorie</label>
+            <select class="gm-select" id="gm-category">
+              <option value="service">Service</option>
+              <option value="utile">Utile</option>
+              <option value="divertissement">Divertissement</option>
+              <option value="conseils">Conseils</option>
+              <option value="contacts-pro">Contact professionnel</option>
+              <option value="fournisseurs">Fournisseur / prestataire</option>
+            </select>
+          </div>
+          <div class="gm-field">
+            <label for="gm-body">Message</label>
+            <textarea class="gm-textarea" id="gm-body" maxlength="2000" placeholder="Quelques lignes suffisent…"></textarea>
+          </div>
+          <button class="gm-btn gm-btn-primary" id="gm-btn-post">Publier</button>
+          <div class="gm-alert" id="gm-post-alert"></div>
+        </div>
+      </div>
     </div>
   </div>
 

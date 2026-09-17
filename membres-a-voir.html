@@ -55,30 +55,49 @@
     <h1 class="gm-h1">À voir, à faire</h1>
     <p class="gm-lede">Une expo, un concert, une balade, un bon spectacle repéré en dehors du Génie ? Partagez-le aux autres membres.</p>
 
-    <div class="gm-card">
-      <div class="gm-card-title">✍️ Proposer une sortie ou une activité</div>
-      <div class="gm-field">
-        <label for="gm-title">Titre</label>
-        <input class="gm-input" id="gm-title" maxlength="120" placeholder="Ex. Marché de Noël de Montauban">
-      </div>
-      <div class="gm-field">
-        <label for="gm-desc">Description</label>
-        <textarea class="gm-textarea" id="gm-desc" maxlength="2000" placeholder="Quelques lignes pour donner envie…"></textarea>
-      </div>
-      <div class="gm-field">
-        <label for="gm-date">Date (si ponctuel — laisser vide sinon)</label>
-        <input class="gm-input" type="date" id="gm-date">
-      </div>
-      <div class="gm-field">
-        <label for="gm-link">Lien (facultatif)</label>
-        <input class="gm-input" type="url" id="gm-link" placeholder="https://…">
-      </div>
-      <button class="gm-btn gm-btn-primary" id="gm-btn-post">Proposer</button>
-      <div class="gm-alert" id="gm-post-alert"></div>
-    </div>
+    <div class="gm-grid-2">
+      <div>
+        <div class="gm-card">
+          <div class="gm-card-title">✍️ Proposer une sortie ou une activité</div>
+          <div class="gm-field">
+            <label for="gm-title">Titre</label>
+            <input class="gm-input" id="gm-title" maxlength="120" placeholder="Ex. Marché de Noël de Montauban">
+          </div>
+          <div class="gm-field">
+            <label for="gm-desc">Description</label>
+            <textarea class="gm-textarea" id="gm-desc" maxlength="2000" placeholder="Quelques lignes pour donner envie…"></textarea>
+          </div>
+          <div class="gm-field">
+            <label for="gm-date">Date (si ponctuel — laisser vide sinon)</label>
+            <input class="gm-input" type="date" id="gm-date">
+          </div>
+          <div class="gm-field">
+            <label for="gm-link">Lien (facultatif)</label>
+            <input class="gm-input" type="url" id="gm-link" placeholder="https://…">
+          </div>
+          <button class="gm-btn gm-btn-primary" id="gm-btn-post">Proposer</button>
+          <div class="gm-alert" id="gm-post-alert"></div>
+        </div>
 
-    <div class="gm-card">
-      <div id="gm-activities-list"><p class="gm-empty">Chargement…</p></div>
+        <div class="gm-card">
+          <div id="gm-activities-list"><p class="gm-empty">Chargement…</p></div>
+        </div>
+      </div>
+      <div>
+        <div class="gm-card">
+          <div class="gm-cal-nav">
+            <button class="gm-cal-btn" id="gm-agenda-prev">‹</button>
+            <h3 id="gm-agenda-month"></h3>
+            <button class="gm-cal-btn" id="gm-agenda-next">›</button>
+          </div>
+          <div class="gm-cal-grid" id="gm-agenda-dow"></div>
+          <div class="gm-cal-grid" id="gm-agenda-grid" style="margin-top:6px"></div>
+          <div style="margin-top:18px">
+            <div class="gm-card-title" style="margin-bottom:10px">📅 Prochaines dates</div>
+            <ul class="gm-recap-list" id="gm-agenda-upcoming"></ul>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -130,7 +149,7 @@ if (window.GenieAuth.notConfigured) {
   });
   document.getElementById('gm-btn-out').addEventListener('click', () => window.GenieAuth.signOut());
 
-  let currentUser = null, currentName = '';
+  let currentUser = null, currentName = '', activitiesData = [], agendaViewDate = new Date();
 
   function render(activities) {
     const U = window.GenieUtils;
@@ -149,10 +168,55 @@ if (window.GenieAuth.notConfigured) {
         </div>`).join('');
   }
 
+  function isoDate(d) { return d.toISOString().slice(0, 10); }
+
+  function renderAgenda() {
+    const U = window.GenieUtils;
+    const DOW = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
+    document.getElementById('gm-agenda-month').textContent = agendaViewDate.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
+    document.getElementById('gm-agenda-dow').innerHTML = DOW.map(d => `<div class="gm-cal-dow">${d}</div>`).join('');
+
+    const first = new Date(agendaViewDate.getFullYear(), agendaViewDate.getMonth(), 1);
+    const startOffset = (first.getDay() + 6) % 7;
+    const daysInMonth = new Date(agendaViewDate.getFullYear(), agendaViewDate.getMonth() + 1, 0).getDate();
+    const todayIso = isoDate(new Date());
+
+    const byDay = {};
+    activitiesData.forEach(a => { if (a.event_date) (byDay[a.event_date] ||= []).push(a); });
+
+    let cells = '';
+    for (let i = 0; i < startOffset; i++) cells += '<div class="gm-cal-day empty"></div>';
+    for (let d = 1; d <= daysInMonth; d++) {
+      const dateIso = isoDate(new Date(agendaViewDate.getFullYear(), agendaViewDate.getMonth(), d));
+      const items = byDay[dateIso] || [];
+      const isToday = dateIso === todayIso;
+      const titleAttr = items.map(i => U.escapeHtml(i.title)).join(', ');
+      cells += `<div class="gm-cal-day${items.length ? ' mine' : ''}${isToday ? ' today' : ''}" title="${titleAttr}">
+        <div class="gm-cal-daynum">${d}</div>
+        ${items.length ? `<div class="gm-cal-avatars"><span class="gm-cal-avatar">${items.length}</span></div>` : ''}
+      </div>`;
+    }
+    document.getElementById('gm-agenda-grid').innerHTML = cells;
+
+    const upcoming = activitiesData
+      .filter(a => a.event_date && a.event_date >= todayIso)
+      .sort((a, b) => a.event_date.localeCompare(b.event_date))
+      .slice(0, 5);
+    const list = document.getElementById('gm-agenda-upcoming');
+    list.innerHTML = !upcoming.length
+      ? '<li class="gm-empty" style="border:none">Rien de daté à venir.</li>'
+      : upcoming.map(a => `<li><span>${U.formatDayShort(a.event_date)}</span><span>${U.escapeHtml(a.title)}</span></li>`).join('');
+  }
+
+  document.getElementById('gm-agenda-prev').addEventListener('click', () => { agendaViewDate.setMonth(agendaViewDate.getMonth() - 1); renderAgenda(); });
+  document.getElementById('gm-agenda-next').addEventListener('click', () => { agendaViewDate.setMonth(agendaViewDate.getMonth() + 1); renderAgenda(); });
+
   async function loadActivities() {
     const db = window.genieDb;
     const { data } = await db.from('activities').select('*').order('created_at', { ascending: false });
-    render(data || []);
+    activitiesData = data || [];
+    render(activitiesData);
+    renderAgenda();
   }
 
   document.getElementById('gm-btn-post').addEventListener('click', async () => {

@@ -53,21 +53,28 @@
   <div class="gm-shell">
     <span class="gm-eyebrow">La machine à café</span>
     <h1 class="gm-h1">Discussion</h1>
-    <p class="gm-lede">Quatre canaux, comme quatre coins de la salle commune.</p>
+    <p class="gm-lede">Des canaux comme des coins de la salle commune — et vous pouvez en ouvrir un nouveau à tout moment.</p>
 
-    <div class="gm-chat-wrap">
-      <div class="gm-chan-list" id="gm-chan-list">
-        <button class="gm-chan active" data-chan="general">💬 Général</button>
-        <button class="gm-chan" data-chan="covoiturage">🚗 Covoiturage</button>
-        <button class="gm-chan" data-chan="bons-plans">🎁 Bons plans</button>
-        <button class="gm-chan" data-chan="annonces-pro">💼 Annonces pro</button>
+    <div class="gm-grid-2">
+      <div>
+        <div class="gm-chat-wrap">
+          <div class="gm-chan-list" id="gm-chan-list">
+            <p class="gm-empty" style="border:none">Chargement…</p>
+          </div>
+          <div class="gm-chat-main">
+            <div class="gm-chat-msgs" id="gm-chat-msgs"><p class="gm-empty">Chargement…</p></div>
+            <form class="gm-chat-form" id="gm-chat-form">
+              <input class="gm-input" id="gm-chat-input" maxlength="1000" placeholder="Écrire un message…" autocomplete="off">
+              <button class="gm-btn gm-btn-sage" type="submit">Envoyer</button>
+            </form>
+          </div>
+        </div>
       </div>
-      <div class="gm-chat-main">
-        <div class="gm-chat-msgs" id="gm-chat-msgs"><p class="gm-empty">Chargement…</p></div>
-        <form class="gm-chat-form" id="gm-chat-form">
-          <input class="gm-input" id="gm-chat-input" maxlength="1000" placeholder="Écrire un message…" autocomplete="off">
-          <button class="gm-btn gm-btn-sage" type="submit">Envoyer</button>
-        </form>
+      <div>
+        <div class="gm-card">
+          <div class="gm-card-title">🕓 Derniers messages, tous canaux</div>
+          <div id="gm-recent-msgs"><p class="gm-empty">Chargement…</p></div>
+        </div>
       </div>
     </div>
   </div>
@@ -120,7 +127,41 @@ if (window.GenieAuth.notConfigured) {
   });
   document.getElementById('gm-btn-out').addEventListener('click', () => window.GenieAuth.signOut());
 
-  let currentUser = null, currentName = '', activeChannel = 'general', realtimeSub = null;
+  let currentUser = null, currentName = '', activeChannel = 'general', channels = [];
+
+  function slugify(s) {
+    const base = s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/(^-+|-+$)/g, '').slice(0, 40);
+    return base || ('canal-' + Date.now());
+  }
+
+  function channelLabel(id) {
+    const c = channels.find(c => c.id === id);
+    return c ? c.label : id;
+  }
+
+  function renderChannelList() {
+    const wrap = document.getElementById('gm-chan-list');
+    wrap.innerHTML = channels.map(c => `<button class="gm-chan${c.id === activeChannel ? ' active' : ''}" data-chan="${window.GenieUtils.escapeHtml(c.id)}">${window.GenieUtils.escapeHtml(c.label)}</button>`).join('')
+      + `<button class="gm-chan" id="gm-btn-new-chan" style="border:1.5px dashed var(--border);color:var(--muted);margin-top:8px">+ Nouveau canal</button>`;
+  }
+
+  async function loadChannels() {
+    const db = window.genieDb;
+    const { data } = await db.from('channels').select('*').order('created_at', { ascending: true });
+    channels = data && data.length ? data : [{ id: 'general', label: 'Général' }];
+    renderChannelList();
+  }
+
+  async function createChannel() {
+    const label = window.prompt('Nom du nouveau canal (ex. "Jardinage", "Vélo", "Bricolage")');
+    if (!label || !label.trim()) return;
+    const id = slugify(label.trim());
+    const db = window.genieDb;
+    const { error } = await db.from('channels').insert({ id, label: label.trim(), created_by: currentUser.id });
+    if (error && error.code !== '23505') { window.alert('Erreur : ' + error.message); return; }
+    await loadChannels();
+    await loadChannel(id);
+  }
 
   function renderMessages(msgs) {
     const U = window.GenieUtils;
@@ -134,32 +175,37 @@ if (window.GenieAuth.notConfigured) {
     wrap.scrollTop = wrap.scrollHeight;
   }
 
+  function renderRecent(msgs) {
+    const U = window.GenieUtils;
+    const wrap = document.getElementById('gm-recent-msgs');
+    wrap.innerHTML = !msgs.length
+      ? '<p class="gm-empty">Aucun message pour l\'instant.</p>'
+      : msgs.slice(0, 15).map(m => `<div class="gm-article" style="padding:10px 0">
+          <div class="gm-article-head"><span class="gm-tag gm-tag-utile">${U.escapeHtml(channelLabel(m.channel))}</span><span class="gm-article-meta">${U.formatDate(m.created_at)}</span></div>
+          <div class="gm-article-meta">${U.escapeHtml(m.user_name)}</div>
+          <div class="gm-article-body" style="font-size:13px">${U.escapeHtml(m.body.length > 140 ? m.body.slice(0, 140) + '…' : m.body)}</div>
+        </div>`).join('');
+  }
+
+  let recentMsgs = [];
+  async function loadRecent() {
+    const db = window.genieDb;
+    const { data } = await db.from('chat_messages').select('*').order('created_at', { ascending: false }).limit(15);
+    recentMsgs = data || [];
+    renderRecent(recentMsgs);
+  }
+
   async function loadChannel(channel) {
     const db = window.genieDb;
     activeChannel = channel;
-    document.querySelectorAll('.gm-chan').forEach(b => b.classList.toggle('active', b.dataset.chan === channel));
+    document.querySelectorAll('.gm-chan[data-chan]').forEach(b => b.classList.toggle('active', b.dataset.chan === channel));
     const { data } = await db.from('chat_messages').select('*').eq('channel', channel).order('created_at', { ascending: true }).limit(200);
     renderMessages(data || []);
-
-    if (realtimeSub) db.removeChannel(realtimeSub);
-    realtimeSub = db.channel('chat-' + channel)
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'chat_messages', filter: `channel=eq.${channel}` }, payload => {
-        if (activeChannel !== channel) return;
-        const wrap = document.getElementById('gm-chat-msgs');
-        const empty = wrap.querySelector('.gm-empty');
-        if (empty) wrap.innerHTML = '';
-        const U = window.GenieUtils; const m = payload.new;
-        const div = document.createElement('div');
-        div.className = 'gm-msg' + (m.user_id === currentUser.id ? ' mine' : '');
-        div.innerHTML = `<div class="gm-msg-meta"><span class="gm-msg-author">${U.escapeHtml(m.user_name)}</span><span>${U.formatDate(m.created_at)}</span></div><div class="gm-msg-body">${U.escapeHtml(m.body)}</div>`;
-        wrap.appendChild(div);
-        wrap.scrollTop = wrap.scrollHeight;
-      })
-      .subscribe();
   }
 
   document.getElementById('gm-chan-list').addEventListener('click', e => {
-    const btn = e.target.closest('.gm-chan');
+    if (e.target.closest('#gm-btn-new-chan')) { createChannel(); return; }
+    const btn = e.target.closest('.gm-chan[data-chan]');
     if (btn) loadChannel(btn.dataset.chan);
   });
 
@@ -175,7 +221,29 @@ if (window.GenieAuth.notConfigured) {
   window.GenieAuth.guard(async (user, name) => {
     currentUser = user; currentName = name;
     document.getElementById('gm-user-box').style.display = 'flex';
+    await loadChannels();
     await loadChannel('general');
+    await loadRecent();
+
+    const db = window.genieDb;
+    db.channel('chat-all')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'chat_messages' }, payload => {
+        const m = payload.new;
+        recentMsgs = [m, ...recentMsgs].slice(0, 15);
+        renderRecent(recentMsgs);
+        if (m.channel === activeChannel) {
+          const wrap = document.getElementById('gm-chat-msgs');
+          const empty = wrap.querySelector('.gm-empty');
+          if (empty) wrap.innerHTML = '';
+          const U = window.GenieUtils;
+          const div = document.createElement('div');
+          div.className = 'gm-msg' + (m.user_id === currentUser.id ? ' mine' : '');
+          div.innerHTML = `<div class="gm-msg-meta"><span class="gm-msg-author">${U.escapeHtml(m.user_name)}</span><span>${U.formatDate(m.created_at)}</span></div><div class="gm-msg-body">${U.escapeHtml(m.body)}</div>`;
+          wrap.appendChild(div);
+          wrap.scrollTop = wrap.scrollHeight;
+        }
+      })
+      .subscribe();
   });
 }
 </script>
