@@ -106,3 +106,28 @@ drop policy if exists "activities: proposition par un membre connecté" on publi
 create policy "activities: proposition par un membre connecté" on public.activities for insert to authenticated with check (auth.uid() = author_id);
 drop policy if exists "activities: suppression de sa propre proposition" on public.activities;
 create policy "activities: suppression de sa propre proposition" on public.activities for delete to authenticated using (auth.uid() = author_id);
+
+-- 6. Canaux de discussion (extensible : les membres peuvent créer les leurs)
+create table if not exists public.channels (
+  id text primary key,
+  label text not null,
+  created_by uuid references auth.users(id) on delete set null,
+  created_at timestamptz not null default now()
+);
+
+alter table public.channels enable row level security;
+
+drop policy if exists "channels: lecture par tous les membres" on public.channels;
+create policy "channels: lecture par tous les membres" on public.channels for select to authenticated using (true);
+drop policy if exists "channels: création par un membre connecté" on public.channels;
+create policy "channels: création par un membre connecté" on public.channels for insert to authenticated with check (auth.uid() = created_by);
+
+insert into public.channels (id, label, created_by) values
+  ('general', 'Général', null),
+  ('covoiturage', 'Covoiturage', null),
+  ('bons-plans', 'Bons plans', null),
+  ('annonces-pro', 'Annonces pro', null)
+on conflict (id) do nothing;
+
+-- retire la limite fixe de canaux : les membres peuvent désormais en créer de nouveaux
+alter table public.chat_messages drop constraint if exists chat_messages_channel_check;
