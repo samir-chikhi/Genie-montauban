@@ -26,6 +26,7 @@
     <a href="espace-membres.html" class="active">Accueil</a>
     <a href="membres-articles.html">Articles</a>
     <a href="membres-calendrier.html">Qui mange au Génie ?</a>
+    <a href="membres-a-voir.html">À voir, à faire</a>
     <a href="membres-chat.html">Discussion</a>
   </nav>
   <div class="gm-user" id="gm-user-box" style="display:none">
@@ -70,6 +71,10 @@
           <div class="gm-card-title">🍽️ Cette semaine <a href="membres-calendrier.html" class="gm-btn gm-btn-ghost" style="padding:6px 14px;font-size:12.5px">Calendrier →</a></div>
           <ul class="gm-recap-list" id="gm-week-preview"><li class="gm-empty" style="border:none">Chargement…</li></ul>
         </div>
+        <div class="gm-card">
+          <div class="gm-card-title">🗺️ À voir, à faire <a href="membres-a-voir.html" class="gm-btn gm-btn-ghost" style="padding:6px 14px;font-size:12.5px">Tout voir →</a></div>
+          <div id="gm-activities-preview"><p class="gm-empty">Chargement…</p></div>
+        </div>
       </div>
     </div>
   </div>
@@ -87,6 +92,7 @@
           <li><a href="espace-membres.html">Accueil</a></li>
           <li><a href="membres-articles.html">Articles</a></li>
           <li><a href="membres-calendrier.html">Qui mange au Génie ?</a></li>
+          <li><a href="membres-a-voir.html">À voir, à faire</a></li>
           <li><a href="membres-chat.html">Discussion</a></li>
         </ul>
       </div>
@@ -157,6 +163,12 @@ if (window.GenieAuth.notConfigured) {
     list.innerHTML = !days.length
       ? '<li class="gm-empty" style="border:none">Personne d\'inscrit pour l\'instant.</li>'
       : days.map(d => `<li><span>${U.formatDayShort(d)}</span><span>${byDay[d].map(U.escapeHtml).join(', ')}</span></li>`).join('');
+
+    const { data: activities } = await db.from('activities').select('*').order('created_at', { ascending: false }).limit(3);
+    const actWrap = document.getElementById('gm-activities-preview');
+    actWrap.innerHTML = (!activities || !activities.length)
+      ? '<p class="gm-empty">Rien de proposé pour l\'instant.</p>'
+      : activities.map(a => `<div class="gm-article"><div class="gm-article-head"><span class="gm-article-title">${U.escapeHtml(a.title)}</span></div><div class="gm-article-meta">${a.event_date ? '📅 ' + U.formatDayShort(a.event_date) + ' · ' : ''}${U.escapeHtml(a.author_name)}</div></div>`).join('');
   });
 }
 </script>

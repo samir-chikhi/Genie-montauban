@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co wss://*.supabase.co; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="robots" content="noindex,nofollow">
+<title>À voir, à faire — Espace membres Génie</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/membres.css">
+<link rel="stylesheet" href="assets/css/footer.css">
+</head>
+<body class="gm-body">
+
+<header class="gm-header">
+  <a href="espace-membres.html" class="gm-brand">
+    <img src="logo.png" alt="Génie Montauban" style="height:32px;width:auto">
+    <span><span class="gm-brand-name">Génie</span><span class="gm-brand-sub">Espace membres</span></span>
+  </a>
+  <button class="gm-burger" id="gm-burger" aria-label="Menu">☰</button>
+  <nav class="gm-nav" id="gm-nav">
+    <a href="espace-membres.html">Accueil</a>
+    <a href="membres-articles.html">Articles</a>
+    <a href="membres-calendrier.html">Qui mange au Génie ?</a>
+    <a href="membres-a-voir.html" class="active">À voir, à faire</a>
+    <a href="membres-chat.html">Discussion</a>
+  </nav>
+  <div class="gm-user" id="gm-user-box" style="display:none">
+    <span class="gm-user-name" id="gm-user-name"></span>
+    <button class="gm-btn-out" id="gm-btn-out">Déconnexion</button>
+  </div>
+</header>
+
+<div id="gm-login" class="gm-login-wrap" style="display:none">
+  <div class="gm-login-box">
+    <h2>Espace membres</h2>
+    <p>Réservé aux membres et locataires du Génie. Entrez votre e-mail : vous recevrez un lien de connexion.</p>
+    <div class="gm-field">
+      <label for="gm-email">Adresse e-mail</label>
+      <input class="gm-input" type="email" id="gm-email" placeholder="prenom@exemple.fr" autocomplete="email">
+    </div>
+    <button class="gm-btn gm-btn-primary" id="gm-btn-send" style="width:100%;justify-content:center">Recevoir mon lien de connexion</button>
+    <div class="gm-alert" id="gm-alert"></div>
+    <p style="font-size:12px;color:var(--muted);margin-top:16px">Pas encore invité·e ? Écrivez à l'équipe du Génie — <a href="mailto:contact@genie-montauban.fr">contact@genie-montauban.fr</a>.</p>
+  </div>
+</div>
+
+<div id="gm-app" style="display:none">
+  <div class="gm-shell">
+    <span class="gm-eyebrow">Hors les murs</span>
+    <h1 class="gm-h1">À voir, à faire</h1>
+    <p class="gm-lede">Une expo, un concert, une balade, un bon spectacle repéré en dehors du Génie ? Partagez-le aux autres membres.</p>
+
+    <div class="gm-card">
+      <div class="gm-card-title">✍️ Proposer une sortie ou une activité</div>
+      <div class="gm-field">
+        <label for="gm-title">Titre</label>
+        <input class="gm-input" id="gm-title" maxlength="120" placeholder="Ex. Marché de Noël de Montauban">
+      </div>
+      <div class="gm-field">
+        <label for="gm-desc">Description</label>
+        <textarea class="gm-textarea" id="gm-desc" maxlength="2000" placeholder="Quelques lignes pour donner envie…"></textarea>
+      </div>
+      <div class="gm-field">
+        <label for="gm-date">Date (si ponctuel — laisser vide sinon)</label>
+        <input class="gm-input" type="date" id="gm-date">
+      </div>
+      <div class="gm-field">
+        <label for="gm-link">Lien (facultatif)</label>
+        <input class="gm-input" type="url" id="gm-link" placeholder="https://…">
+      </div>
+      <button class="gm-btn gm-btn-primary" id="gm-btn-post">Proposer</button>
+      <div class="gm-alert" id="gm-post-alert"></div>
+    </div>
+
+    <div class="gm-card">
+      <div id="gm-activities-list"><p class="gm-empty">Chargement…</p></div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-name">Génie</div>
+        <div class="footer-brand-sub">Tiers-lieu d'éducation populaire · Montauban</div>
+        <p class="footer-brand-desc">L'espace membres est réservé aux adhérents et locataires du Génie.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Espace membres</div>
+        <ul class="footer-links">
+          <li><a href="espace-membres.html">Accueil</a></li>
+          <li><a href="membres-articles.html">Articles</a></li>
+          <li><a href="membres-calendrier.html">Qui mange au Génie ?</a></li>
+          <li><a href="membres-a-voir.html">À voir, à faire</a></li>
+          <li><a href="membres-chat.html">Discussion</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Association Génie Montauban — association loi 1901 relevant de l'ESS</span>
+      <div class="footer-legal"><a href="mentions_legales.html">Mentions légales</a><a href="confidentialite.html">Confidentialité</a></div>
+    </div>
+  </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="assets/js/membres-config.js"></script>
+<script src="assets/js/membres-auth.js"></script>
+<script src="assets/js/membres-utils.js"></script>
+<script>
+document.getElementById('gm-burger').addEventListener('click', () => document.getElementById('gm-nav').classList.toggle('open'));
+
+if (window.GenieAuth.notConfigured) {
+  const el = document.getElementById('gm-login');
+  el.style.display = 'flex';
+  el.innerHTML = '<div class="gm-login-box"><h2>Configuration en attente</h2><p>L\'espace membres n\'est pas encore relié à sa base de données.</p></div>';
+} else {
+  document.getElementById('gm-btn-send').addEventListener('click', async () => {
+    const email = document.getElementById('gm-email').value.trim();
+    const alertEl = document.getElementById('gm-alert');
+    if (!email) return;
+    const err = await window.GenieAuth.sendMagicLink(email);
+    alertEl.classList.remove('ok', 'err');
+    if (err) { alertEl.textContent = "Cette adresse n'est pas encore invitée. Contactez l'équipe du Génie."; alertEl.classList.add('show', 'err'); }
+    else { alertEl.textContent = "Lien envoyé ! Vérifiez votre boîte mail (et les spams)."; alertEl.classList.add('show', 'ok'); }
+  });
+  document.getElementById('gm-btn-out').addEventListener('click', () => window.GenieAuth.signOut());
+
+  let currentUser = null, currentName = '';
+
+  function render(activities) {
+    const U = window.GenieUtils;
+    const wrap = document.getElementById('gm-activities-list');
+    wrap.innerHTML = !activities.length
+      ? '<p class="gm-empty">Rien de proposé pour l\'instant. Lancez-vous !</p>'
+      : activities.map(a => `
+        <div class="gm-article">
+          <div class="gm-article-head">
+            ${a.event_date ? `<span class="gm-tag gm-tag-utile">📅 ${U.formatDayShort(a.event_date)}</span>` : ''}
+            <span class="gm-article-title">${U.escapeHtml(a.title)}</span>
+          </div>
+          <div class="gm-article-meta">Proposé par ${U.escapeHtml(a.author_name)} · ${U.formatDate(a.created_at)}</div>
+          <div class="gm-article-body">${U.escapeHtml(a.description)}</div>
+          ${a.link ? `<p style="margin-top:8px"><a href="${U.escapeHtml(a.link)}" target="_blank" rel="noopener noreferrer">${U.escapeHtml(a.link)} →</a></p>` : ''}
+        </div>`).join('');
+  }
+
+  async function loadActivities() {
+    const db = window.genieDb;
+    const { data } = await db.from('activities').select('*').order('created_at', { ascending: false });
+    render(data || []);
+  }
+
+  document.getElementById('gm-btn-post').addEventListener('click', async () => {
+    const db = window.genieDb;
+    const title = document.getElementById('gm-title').value.trim();
+    const description = document.getElementById('gm-desc').value.trim();
+    const event_date = document.getElementById('gm-date').value || null;
+    const link = document.getElementById('gm-link').value.trim() || null;
+    const alertEl = document.getElementById('gm-post-alert');
+    alertEl.classList.remove('ok', 'err');
+    if (!title || !description) { alertEl.textContent = 'Titre et description sont obligatoires.'; alertEl.classList.add('show', 'err'); return; }
+    const { error } = await db.from('activities').insert({ author_id: currentUser.id, author_name: currentName, title, description, event_date, link });
+    if (error) { alertEl.textContent = "Erreur : " + error.message; alertEl.classList.add('show', 'err'); return; }
+    document.getElementById('gm-title').value = '';
+    document.getElementById('gm-desc').value = '';
+    document.getElementById('gm-date').value = '';
+    document.getElementById('gm-link').value = '';
+    alertEl.textContent = 'Proposé !'; alertEl.classList.add('show', 'ok');
+    await loadActivities();
+  });
+
+  window.GenieAuth.guard(async (user, name) => {
+    currentUser = user; currentName = name;
+    document.getElementById('gm-user-box').style.display = 'flex';
+    await loadActivities();
+  });
+}
+</script>
+</body>
+</html>
