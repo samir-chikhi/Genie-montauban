@@ -2,7 +2,7 @@
 title: Génie — Tiers-lieu & coworking à Montauban · éducation populaire, ESS
 description: Génie, le tiers-lieu de Montauban : espace de coworking et salles de réunion à 200 m de la gare, ateliers d'éducation populaire, université populaire et accompagnement de projets (association ESS).
 url: https://genie-montauban.fr/
-last_updated: 2026-09-17
+last_updated: 2026-09-18
 source: miroir markdown — version texte pour moteurs IA
 ---
 
@@ -444,34 +444,6 @@ Agenda
 ## Ce qui se passe *ici*
 
 Des rendez-vous ouverts à tous, adhérents ou pas. [Voir toutes les activités →](activites.html)
-
-16
-
-Juin
-
-⚽ Projection Match — Coupe du Monde
-
-20h45 · 12 rue du Génie
-
-Grande projection collective ! Buvette sur place, restauration par la Cantine Pop'. Ramène ce que tu aimes !
-
-Entrée libre
-
-[Je viens ! →](mailto:contact@genie-montauban.fr?subject=Soirée Match Coupe du Monde 16 juin)
-
-12
-
-Août
-
-🔭 Observons l'Éclipse
-
-19h00 · Sur le rooftop
-
-Ensemble, levons les yeux vers un spectacle rare ! Observation sécurisée sur le rooftop, boissons sur place.
-
-Adhérents
-
-[Je viens ! →](mailto:contact@genie-montauban.fr?subject=Soirée Éclipse 12 août)
 
 1er
 
