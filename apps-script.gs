@@ -1176,7 +1176,7 @@ function haWebhook(data, params) {
         // Le paiement vaut confirmation : le creneau est definitivement pris.
         sheet.getRange(i + 1, 19).setValue('CONFIRME');
         try {
-          ajouterAuCalendrier(rows[i][7], rows[i][10], rows[i][13], rows[i][14],
+          remplacerEvenementCalendrier(sheet, i + 1, rows[i][23], rows[i][7], rows[i][10], rows[i][13], rows[i][14],
             rows[i][1] + ' ' + rows[i][2], rows[i][0], rows[i][3], true);
         } catch (eCal) { logErreur('haWebhook/calendrier', eCal); }
         envoyerEmailSafe(rows[i][3], '✅ Paiement reçu — ' + rows[i][7] + ' — ' + formaterDate(dateISO(rows[i][10])),
@@ -1490,7 +1490,8 @@ function adminAddResa(resa) {
     }
 
     if (resa.statut === 'confirmed') {
-      ajouterAuCalendrier(resa.nomEspace||resa.espace, resa.date, resa.heureDebut, resa.heureFin,
+      remplacerEvenementCalendrier(sheet, sheet.getLastRow(), '',
+        resa.nomEspace||resa.espace, resa.date, resa.heureDebut, resa.heureFin,
         (resa.prenom||'') + ' ' + (resa.nom||''), resa.id, resa.email, true);
     }
 
@@ -1553,7 +1554,8 @@ function adminUpdateResa(resa) {
             + '• Date      : ' + formaterDate(resa.date) + '\n'
             + '• Horaire   : ' + resa.heureDebut + ' → ' + resa.heureFin + '\n'
             + '• Référence : ' + resa.id + '\n\nÀ bientôt !\n' + CONFIG.NOM_LIEU);
-          ajouterAuCalendrier(resa.nomEspace||resa.espace, resa.date, resa.heureDebut, resa.heureFin,
+          remplacerEvenementCalendrier(sheet, i + 1, rows[i][23],
+            resa.nomEspace||resa.espace, resa.date, resa.heureDebut, resa.heureFin,
             (resa.prenom||'') + ' ' + resa.nom, resa.id, resa.email, true);
         }
         return { success: true, ok: true };
@@ -1718,7 +1720,7 @@ function adminUpdateStatus(data) {
             + '• Référence : ' + rows[i][0] + '\n\n'
             + blocPaiement
             + (data.messageAdmin || '') + '\n\nÀ bientôt !\n' + CONFIG.NOM_LIEU);
-          ajouterAuCalendrier(rows[i][7], rows[i][10], rows[i][13], rows[i][14],
+          remplacerEvenementCalendrier(sheet, i + 1, rows[i][23], rows[i][7], rows[i][10], rows[i][13], rows[i][14],
             rows[i][1] + ' ' + rows[i][2], rows[i][0], rows[i][3], true);
         }
         return { success: true, ok: true };
@@ -1815,6 +1817,24 @@ function ajouterAuCalendrier(espace, date, heureDebut, heureFin, client, ref, em
     Logger.log('Calendrier erreur : ' + err.message);
     return '';
   }
+}
+
+// Remplace l'événement Calendar d'une ligne Reservations : supprime
+// l'ancien (col 24) s'il existe, crée le nouveau et mémorise son id.
+// Sans ça, chaque modification/confirmation créait un doublon dans
+// Calendar et la suppression admin laissait l'événement en place.
+function remplacerEvenementCalendrier(sheet, ligne, ancienId, espace, date, heureDebut, heureFin, client, ref, email, confirme) {
+  try {
+    if (ancienId) {
+      const cal = CalendarApp.getCalendarById(CONFIG.CALENDAR_ID);
+      const ev  = cal && cal.getEventById(String(ancienId));
+      if (ev) ev.deleteEvent();
+    }
+  } catch (e) { Logger.log('Suppression ancien événement Calendar impossible : ' + e.message); }
+  const evId = ajouterAuCalendrier(espace, date, heureDebut, heureFin, client, ref, email, confirme);
+  try { sheet.getRange(ligne, 24).setValue(evId || ''); }
+  catch (e) { Logger.log('Écriture calendarEventId impossible : ' + e.message); }
+  return evId;
 }
 
 // ============================================================
