@@ -752,6 +752,7 @@ function creerReservation(data) {
       sanit(data.options), 'EN_ATTENTE', parseInt(data.participants) || 1,
       sanit(data.message), now, now, '']);
     const ligne          = sheet.getLastRow();
+    sheet.getRange(ligne, 29).setValue('Site web'); // source (recommandation memoire Issam Chahlal, sept. 2026)
     const montantFacture = montantServeur === null ? montantClient : montantServeur;
     try {
       const cRows = ss.getSheetByName('Clients').getDataRange().getValues();
@@ -2248,4 +2249,121 @@ function reinitMotDePasse() {
   }
   Logger.log('🔑 NOUVEAU MOT DE PASSE ADMIN : ' + pwd);
   return pwd;
+}
+
+// ============================================================
+// SUIVI QUALITÉ & SYNTHÈSE MENSUELLE (recommandations du mémoire
+// Issam Chahlal, sept. 2026). Ajoutées directement dans l'éditeur
+// Apps Script, rapatriées dans le repo le 18/09/2026.
+// ============================================================
+
+/**
+ * Controle qualite des reservations (recommandation n5 du memoire Issam Chahlal, sept. 2026).
+ * Detecte : doublons (email + date + heureDebut), champs obligatoires manquants,
+ * statuts incoherents (ANNULE + paymentState=PAYE sans trace de remboursement).
+ * A executer a la demande depuis l'editeur, ou via un declencheur mensuel.
+ * Envoie un e-mail recapitulatif si des anomalies sont trouvees.
+ */
+function controlerQualiteReservations() {
+  var ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+  var sheet = ss.getSheetByName('Reservations');
+  if (!sheet) { Logger.log('Onglet Reservations introuvable'); return; }
+  var data = sheet.getDataRange().getValues();
+  var anomalies = [];
+  var vus = {};
+  for (var i = 1; i < data.length; i++) {
+    var row = data[i];
+    var ligne = i + 1;
+    var id = row[0], nom = row[2], email = row[3], espace = row[6];
+    var date = row[10], heureDebut = row[13], statut = row[18], paymentState = row[26], paymentReceiptUrl = row[27];
+    var manquants = [];
+    if (!nom) manquants.push('nom');
+    if (!email) manquants.push('email');
+    if (!espace) manquants.push('espace');
+    if (manquants.length) {
+      anomalies.push('Ligne ' + ligne + ' (id ' + id + ') : champs manquants - ' + manquants.join(', '));
+    }
+    if (email && date && heureDebut) {
+      var cle = String(email).toLowerCase().trim() + '|' + String(date) + '|' + String(heureDebut);
+      if (vus[cle]) {
+        anomalies.push('Ligne ' + ligne + ' (id ' + id + ') : doublon possible avec la ligne ' + vus[cle]);
+      } else {
+        vus[cle] = ligne;
+      }
+    }
+    if (statut === 'ANNULE' && paymentState === 'PAYE' && !paymentReceiptUrl) {
+      anomalies.push('Ligne ' + ligne + ' (id ' + id + ') : statut ANNULE avec paiement PAYE et aucune trace de remboursement');
+    }
+  }
+  var resume = anomalies.length ? (anomalies.length + ' anomalie(s) detectee(s) :\n\n' + anomalies.join('\n')) : ('Aucune anomalie detectee sur ' + (data.length - 1) + ' reservations.');
+  Logger.log(resume);
+  if (anomalies.length) {
+    try {
+      var destinataire = Session.getEffectiveUser().getEmail();
+      MailApp.sendEmail(destinataire, '[Genie] Controle qualite reservations - ' + anomalies.length + ' anomalie(s)', resume);
+    } catch (e) {
+      Logger.log('Envoi e-mail impossible : ' + e);
+    }
+  }
+  return resume;
+}
+
+/**
+ * Synthese mensuelle des indicateurs du tableau de bord (recommandation n1 du memoire
+ * Issam Chahlal, sept. 2026 - revue mensuelle courte). Calcule les 6 indicateurs et les
+ * envoie par e-mail. A installer via installerDeclencheurSyntheseMensuelle() (non lance automatiquement).
+ */
+function envoyerSyntheseMensuelle() {
+  var ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+  var sheet = ss.getSheetByName('Reservations');
+  if (!sheet) { Logger.log('Onglet Reservations introuvable'); return; }
+  var data = sheet.getDataRange().getValues();
+  var total = data.length - 1;
+  var confirmees = 0, annulees = 0, dureeTotale = 0, montantTotal = 0, enAttente = 0;
+  for (var i = 1; i < data.length; i++) {
+    var row = data[i];
+    var statut = row[18], nbHeures = row[12], montant = row[15], paymentState = row[26];
+    if (statut === 'CONFIRME') confirmees++;
+    if (statut === 'ANNULE') annulees++;
+    if (statut !== 'ANNULE') {
+      dureeTotale += Number(nbHeures) || 0;
+      montantTotal += Number(montant) || 0;
+    }
+    if (paymentState === 'EN_ATTENTE_PAIEMENT') enAttente++;
+  }
+  var tauxAnnulation = total ? (annulees / total * 100).toFixed(1) : '0.0';
+  var mois = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'MMMM yyyy');
+  var corps = 'Synthese mensuelle Genie Montauban - ' + mois + '\n\n'
+    + 'Nombre total de reservations : ' + total + '\n'
+    + 'Confirmees : ' + confirmees + '\n'
+    + 'Annulees : ' + annulees + ' (taux ' + tauxAnnulation + '%)\n'
+    + 'Duree totale reservee : ' + dureeTotale + ' h\n'
+    + 'Montant total suivi : ' + montantTotal.toFixed(2) + ' EUR\n'
+    + 'Paiements en attente : ' + enAttente + '\n\n'
+    + 'Detail par espace, source et statut de paiement : voir l onglet Tableau de bord du Google Sheet.';
+  Logger.log(corps);
+  try {
+    var destinataire = Session.getEffectiveUser().getEmail();
+    MailApp.sendEmail(destinataire, '[Genie] Synthese mensuelle - ' + mois, corps);
+  } catch (e) {
+    Logger.log('Envoi e-mail impossible : ' + e);
+  }
+  return corps;
+}
+
+/**
+ * Installe le declencheur mensuel pour envoyerSyntheseMensuelle().
+ * Modele sur installerDeclencheurs() qui pose deja un declencheur temporel
+ * pour libererCreneauxExpires. A lancer manuellement une seule fois quand vous etes pret
+ * (ne s'execute pas tout seul a l'ajout de cette fonction).
+ */
+function installerDeclencheurSyntheseMensuelle() {
+  var triggers = ScriptApp.getProjectTriggers();
+  for (var i = 0; i < triggers.length; i++) {
+    if (triggers[i].getHandlerFunction() === 'envoyerSyntheseMensuelle') {
+      ScriptApp.deleteTrigger(triggers[i]);
+    }
+  }
+  ScriptApp.newTrigger('envoyerSyntheseMensuelle').timeBased().onMonthDay(1).atHour(8).create();
+  Logger.log('Declencheur installe : envoyerSyntheseMensuelle() le 1er de chaque mois a 8h.');
 }
