@@ -34,6 +34,13 @@ procédures pas-à-pas quand une action lui revient.
   Samir pour accéder à l'admin.
 - **Footer** : bloc identique sur les 15 pages publiques. Styles autoportants
   dans `assets/css/footer.css` (13 pages ne chargent pas `assets/css/site.css`).
+- **Jamais de lecture directe du Google Sheet depuis le navigateur.** La page
+  d'accueil lisait l'onglet `Avis_Qualite` via `/gviz/tq`, ce qui imposait de
+  partager le classeur en « lecture pour tous » — donc de rendre publics
+  `Clients`, `Reservations`, `Adhesions`, `Tokens` et `Config` (fuite constatée
+  le 22/09/2026, cf. `SECURITE-URGENCE-2026-09.md`). Toute donnée affichée passe
+  par l'API Apps Script, qui filtre. Aucun secret (mot de passe, empreinte, clé
+  API) dans le classeur ni dans le dépôt : Propriétés du script uniquement.
 - **HelloAsso** : creds + `HELLOASSO_WEBHOOK_SECRET` dans les Propriétés du
   script ; l'URL de callback doit finir par `?whsecret=<ce secret>`.
 - `generate_seo.py` : la liste `PAGES` pilote le sitemap ET les miroirs md.
