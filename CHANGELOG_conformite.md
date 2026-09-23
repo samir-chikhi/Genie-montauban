@@ -8,8 +8,30 @@ Chantier réalisé le 23/09/2026 sur la branche `conformite-academie-2026`,
 `[À COMPLÉTER]` listés en fin de document (surlignés en jaune sur le site),
 faire relire `cgv-formation.html` et `reglement-interieur-formation.html`
 par MUSIVA, et redéployer `apps-script.gs` dans l'éditeur Google (voir
-mémoire de session « Apps Script : redéploiement manuel ») pour activer le
-formulaire d'inscription académie.**
+mémoire de session « Apps Script : redéploiement manuel ») pour activer les
+formulaires d'inscription académie ET de proposition de module.**
+
+---
+
+## Correctif du 23/09/2026 (après P2) — formulaire formateur routé vers Apps Script
+
+Samir a confirmé en conditions réelles que le formulaire « proposer un
+module » affichait « Merci ! » sans qu'aucune proposition ne lui parvienne
+jamais (capture d'écran du site en production). Cela confirme le
+diagnostic du lot P1 : l'endpoint Formspree était cassé (erreur 400).
+
+Plutôt que de dépendre de la création d'un compte Formspree par Samir, le
+formulaire a été **routé vers Apps Script** (nouvelle action
+`PROPOSITION_FORMATEUR` / fonction `traiterPropositionFormateur`, calquée
+sur `traiterContact` — email à l'admin, accusé de réception au formateur,
+aucune écriture Sheet). Formspree n'est plus utilisé nulle part sur le
+site ; les mentions dans `confidentialite.html` et `mentions_legales.html`
+ont été mises à jour en conséquence.
+
+**Comme pour `inscription-academie.html`, ce formulaire ne délivrera
+réellement les propositions qu'après redéploiement de `apps-script.gs`
+par Samir.** En attendant, le formulaire échoue proprement (message
+d'erreur + repli email) plutôt que de mentir avec un faux « Merci ».
 
 ---
 
@@ -31,7 +53,7 @@ formulaire d'inscription académie.**
 | Fichier | Avant | Après |
 |---|---|---|
 | `confidentialite.html` | Un seul responsable (Génie), pas de base légale par traitement | Traitements Académie (MUSIVA) et proposition-formateur (Formspree) détaillés, base légale, transferts hors UE, répartition Génie/MUSIVA |
-| `proposition-formateur.html` | **Le formulaire n'envoyait jamais les données** (le JS affichait « Merci ! » sans appel réseau) ; endpoint Formspree au format email obsolète | Vrai `fetch()` avec repli email en cas d'échec. **Testé le 23/09/2026 : l'endpoint Formspree renvoie une erreur 400 (Bad form post request)** — le formulaire est donc en échec géré proprement (message d'erreur + mailto), mais ne parvient à personne tant que Samir n'a pas créé un formulaire sur formspree.io et remplacé l'URL (voir commentaire dans le fichier) |
+| `proposition-formateur.html` | **Le formulaire n'envoyait jamais les données** (le JS affichait « Merci ! » sans appel réseau) ; endpoint Formspree au format email obsolète | Vrai `fetch()` avec repli email en cas d'échec. Testé le 23/09/2026 : l'endpoint Formspree renvoyait une erreur 400 — **remplacé le jour-même par un routage Apps Script** (voir section « Correctif du 23/09/2026 » ci-dessus), plus fiable et sans dépendance à un compte tiers à créer |
 | `proposition-formateur.html` | « Rémunération... défrayée » ; « Aucune donnée transmise à des tiers » (faux, Formspree est un tiers) | Texte rémunération corrigé (MUSIVA rémunère, pas de bénévolat) ; mention RGPD honnête sur Formspree ; champs statut/SIRET/déclaration d'activité/CV/charte ajoutés |
 | — | Inscription par `mailto:` simple, sans trace structurée | `inscription-academie.html` (nouvelle page) : formulaire complet, préremplissable par `?module=A1`, questionnaire de positionnement (3 questions par module), CGV formation, RGPD |
 | `apps-script.gs` | — | Nouvelle action `INSCRIPTION_ACADEMIE` / fonction `traiterInscriptionAcademie` (calquée sur `traiterContact` existante — aucune écriture dans le Sheet des réservations, donc **aucun risque sur son schéma**). **Inactive tant que Samir n'a pas collé le fichier dans l'éditeur Apps Script et créé une nouvelle version du déploiement** |
