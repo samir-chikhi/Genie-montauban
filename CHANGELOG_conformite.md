@@ -59,16 +59,20 @@ formulaire d'inscription académie.**
 
 ---
 
-## Tous les `[À COMPLÉTER]` à remplir avant publication définitive
+## Complétés le 23/09/2026 (fournis par Samir en conversation)
+
+| Placeholder | Valeur | Où |
+|---|---|---|
+| `EMAIL_MUSIVA` | contact@musiva.fr | academie.html, cgv-formation.html, reglement-interieur-formation.html, confidentialite.html, mentions_legales.html |
+| `REF_PEDAGO`, `REF_HANDICAP`, `REF_SIGNALEMENT` | Samir CHIKHI (contact@musiva.fr) — une seule personne couvre les trois rôles, à confirmer que c'est bien voulu à terme | academie.html, cgv-formation.html, reglement-interieur-formation.html |
+| `RNA_GENIE` | W822009896 | mentions_legales.html |
+| `SIRET_GENIE` | Remplacé par **SIREN : 100 178 730** — Samir a donné le SIREN (9 chiffres), pas le SIRET (14 chiffres, SIREN + code établissement) ; à corriger en SIRET si besoin | mentions_legales.html |
+
+## Reste à remplir avant publication définitive
 
 | Placeholder | Où | Contenu attendu |
 |---|---|---|
-| `EMAIL_MUSIVA` | academie.html, cgv-formation.html, reglement-interieur-formation.html, confidentialite.html | Adresse de contact formation MUSIVA |
-| `REF_PEDAGO` | academie.html, reglement-interieur-formation.html | Nom + email du référent pédagogique |
-| `REF_HANDICAP` | academie.html, cgv-formation.html (implicite), reglement-interieur-formation.html | Nom + email du référent handicap |
-| `REF_SIGNALEMENT` | academie.html, reglement-interieur-formation.html | Nom + email du référent violences/harcèlement/discriminations |
-| `CATEGORIE_QUALIOPI` | academie.html | Catégorie du certificat Qualiopi (a priori « actions de formation ») |
-| `RNA_GENIE` / `SIRET_GENIE` | mentions_legales.html | Identifiants de l'association |
+| `CATEGORIE_QUALIOPI` | academie.html, cgv-formation.html | Catégorie du certificat Qualiopi (a priori « actions de formation ») |
 | `MEDIATEUR_CONSO` | cgv-formation.html | Médiateur de la consommation désigné par MUSIVA |
 | `ACCES_PMR` (détail sanitaires) | academie.html | Détail accessibilité au-delà de la salle Maria Montessori |
 | `FINANCEMENTS_ACQUIS` | academie.html | Financements réellement obtenus (Département 82, mécénat…) |
@@ -77,10 +81,12 @@ formulaire d'inscription académie.**
 | Conditions de remboursement stagiaire | cgv-formation.html | Politique d'annulation MUSIVA |
 | TVA / exonération | cgv-formation.html | Régime applicable à MUSIVA |
 | Articulation rétractation 10j/14j pour un module de 3h | cgv-formation.html | Validation juridique |
+| Durée de conservation des données Académie | confidentialite.html | Ex. 5 ans (preuves de formation) — actuellement laissé en placeholder |
 | Date de lancement des premières sessions | academie.html (section Nos résultats) | Date réelle |
 | Effectif par module (min/max) | academie.html (`DEFAULTS.effectif`) | Actuellement 6–12 par défaut pour tous les modules |
 | Méthodes pédagogiques par module | academie.html (`DEFAULTS.methodes`) | Actuellement un texte générique commun à tous les modules — à affiner module par module par chaque formateur |
 | Hébergement local des polices (14 pages restantes) | mentions_legales.html + follow-up | Voir section « Non traité » ci-dessus |
 
-Chaque `[À COMPLÉTER]` est visible en jaune sur le site (classe `.todo`,
-définie dans `assets/css/footer.css`) pour que Samir les repère facilement.
+Chaque `[À COMPLÉTER]` restant est visible en jaune sur le site (classe
+`.todo`, définie dans `assets/css/footer.css`) pour que Samir les repère
+facilement.
