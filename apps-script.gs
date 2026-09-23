@@ -310,8 +310,12 @@ function urgenceCouperFuite() {
       .setSharing(DriveApp.Access.PRIVATE, DriveApp.Permission.NONE);
     rapport.push('OK  — Classeur repassé en privé (plus d\'accès « avec le lien »).');
   } catch (err) {
-    rapport.push('ECHEC — Partage NON modifié (' + err.message + '). '
-      + 'À faire à la main : ouvrir le classeur → Partager → Accès général → Restreint.');
+    // Cas courant : le manifeste du projet fige la liste des autorisations et
+    // n'inclut pas Drive, donc Apps Script refuse DriveApp même après
+    // réautorisation. Remède dans SECURITE-URGENCE-2026-09.md, §3.6.
+    rapport.push('ECHEC — Partage NON modifié (' + err.message + ').');
+    rapport.push('       → À FAIRE À LA MAIN, c\'est l\'action qui compte :');
+    rapport.push('         ouvrir le classeur → Partager → Accès général → « Restreint ».');
   }
 
   // 2. Purger les liens magiques : ceux en circulation ont pu être recopiés.
@@ -347,18 +351,28 @@ function urgenceCouperFuite() {
     rapport.push('ECHEC — Mot de passe admin : ' + err.message);
   }
 
-  var corps = 'Remédiation exécutée le ' + new Date().toLocaleString('fr-FR') + '\n\n'
-    + rapport.join('\n')
-    + (mdp ? '\n\nNOUVEAU MOT DE PASSE ADMIN :\n' + mdp
-           + '\n\nÀ ranger dans un gestionnaire de mots de passe, puis supprimer cet e-mail.' : '')
-    + '\n\nÀ vérifier ensuite à la main :\n'
+  var suite = '\n\nÀ vérifier ensuite à la main :\n'
     + '- Classeur → Partager → Accès général doit afficher « Restreint ».\n'
     + '- Fichier → Historique des versions : repérer d\'éventuelles consultations anormales.\n'
     + '- Les adhérents devront redemander un lien de connexion (les anciens sont invalidés).';
 
+  // Le mot de passe part UNIQUEMENT par e-mail. Ni le journal d'exécution ni la
+  // valeur de retour ne le contiennent : ces deux-là finissent régulièrement
+  // copiés-collés dans une conversation ou un ticket.
+  var corps = 'Remédiation exécutée le ' + new Date().toLocaleString('fr-FR') + '\n\n'
+    + rapport.join('\n')
+    + (mdp ? '\n\nNOUVEAU MOT DE PASSE ADMIN :\n' + mdp
+           + '\n\nÀ ranger dans un gestionnaire de mots de passe, puis supprimer cet e-mail.\n'
+           + 'Ne jamais le recopier ailleurs (conversation, ticket, note partagée).' : '');
   try { MailApp.sendEmail(CONFIG.EMAIL_ADMIN, 'Génie — Remédiation sécurité exécutée', corps); } catch (e) {}
-  Logger.log(corps);
-  return corps;
+
+  var journal = 'Remédiation exécutée le ' + new Date().toLocaleString('fr-FR') + '\n\n'
+    + rapport.join('\n')
+    + (mdp ? '\n\nLe nouveau mot de passe admin a été envoyé à ' + CONFIG.EMAIL_ADMIN
+           + '\n(volontairement absent de ce journal : il est souvent recopié tel quel).' : '')
+    + suite;
+  Logger.log(journal);
+  return journal;
 }
 
 // Vérification rapide, sans rien modifier : le classeur est-il encore public ?
@@ -2434,7 +2448,13 @@ function reinitMotDePasse() {
   var pwd = genererMotDePasseAdmin();
   rangerMotDePasseAdmin(pwd, SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID));
   ecrireSessions({});   // toute session admin ouverte est coupée
-  Logger.log('🔑 NOUVEAU MOT DE PASSE ADMIN : ' + pwd);
+  Logger.log('🔑 Nouveau mot de passe admin envoyé par e-mail à ' + CONFIG.EMAIL_ADMIN
+    + ' (absent de ce journal à dessein).');
+  try {
+    MailApp.sendEmail(CONFIG.EMAIL_ADMIN, 'Génie — Nouveau mot de passe admin',
+      'Nouveau mot de passe de l\'interface admin :\n\n' + pwd
+      + '\n\nÀ ranger dans un gestionnaire de mots de passe, puis supprimer cet e-mail.');
+  } catch (e) { Logger.log('Envoi impossible — mot de passe : ' + pwd); }
   return pwd;
 }
 
