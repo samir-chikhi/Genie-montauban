@@ -325,15 +325,11 @@
     <h2>Formulaire d'organisation d'une session</h2>
     <p class="form-subtitle">Tous les champs marqués <span style="color:#e53e3e">*</span> sont obligatoires. Nous vous répondons sous 5 jours ouvrés.</p>
 
-    <!-- ⚠️ P1-2 : ce endpoint Formspree utilise l'ancien format (adresse email).
-         Formspree attend désormais un identifiant de formulaire (/f/xxxxxxx) —
-         testé le 23/09/2026 : réponse 400 "Bad form post request". Le formulaire
-         NE PARVIENT DONC PAS à Génie tant que Samir n'a pas créé un formulaire
-         sur https://formspree.io et remplacé l'URL ci-dessous par
-         https://formspree.io/f/VOTRE_ID. Le JS gère déjà l'échec proprement
-         (voir plus bas) : en attendant, l'internaute est redirigé vers le
-         secours email. -->
-    <form id="propositionForm" action="https://formspree.io/f/contact@genie-montauban.fr" method="POST" novalidate>
+    <!-- Formulaire routé vers Apps Script (action PROPOSITION_FORMATEUR), pas
+         Formspree : l'ancien endpoint Formspree (format email obsolète)
+         renvoyait une erreur 400 et ne délivrait aucune proposition (testé le
+         23/09/2026). Voir apps-script.gs::traiterPropositionFormateur. -->
+    <form id="propositionForm" novalidate>
       <div class="form-grid">
 
         <div class="form-section-title">Vos coordonnées</div>
@@ -473,7 +469,7 @@
         <div class="consent-block">
           <label>
             <input type="checkbox" name="consentement" required />
-            <span>J'accepte que les informations saisies soient utilisées par l'équipe du Génie pour traiter ma demande et me recontacter. Responsable du traitement : Association Génie. Finalité : évaluer une candidature d'intervenant·e. Base légale : mesures précontractuelles à ma demande. Durée de conservation : 2 ans. Ces données sont transmises à notre prestataire de formulaire, Formspree (États-Unis), pour l'acheminement de ce message uniquement — jamais à d'autres tiers à des fins commerciales. <a href="confidentialite.html" target="_blank" rel="noopener" style="color:var(--primary)">Politique de confidentialité complète</a></span>
+            <span>J'accepte que les informations saisies soient utilisées par l'équipe du Génie pour traiter ma demande et me recontacter. Responsable du traitement : Association Génie. Finalité : évaluer une candidature d'intervenant·e. Base légale : mesures précontractuelles à ma demande. Durée de conservation : 2 ans. Ces données transitent par Google Apps Script (Google Workspace) — jamais transmises à d'autres tiers à des fins commerciales. <a href="confidentialite.html" target="_blank" rel="noopener" style="color:var(--primary)">Politique de confidentialité complète</a></span>
           </label>
         </div>
 
@@ -579,9 +575,12 @@
     });
   });
 
-  /* Form submission : envoi réel via fetch (Formspree), avec repli email en cas d'échec.
-     Avant ce correctif (P1-2), le formulaire affichait toujours "Merci !" sans
-     jamais envoyer les données — voir commentaire au-dessus du <form>. */
+  /* Form submission : envoi réel via fetch vers Apps Script (action
+     PROPOSITION_FORMATEUR), avec repli email en cas d'échec. Avant ce
+     correctif (P1-2), le formulaire affichait toujours "Merci !" sans
+     jamais envoyer les données (endpoint Formspree cassé, jamais appelé) —
+     voir commentaire au-dessus du <form>. */
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyJ-Dk-yZZNdfxFigchP953rNyjSLJv4oOVUbxzuAbX4kuBfwTFBJvnnLuJMLWRnd9c4w/exec';
   const form = document.getElementById('propositionForm');
   const submitBtn = form.querySelector('.btn-submit');
   form.addEventListener('submit', async e => {
@@ -599,15 +598,44 @@
     });
     if (!valid) return;
 
+    const formatChecked = Array.from(form.querySelectorAll('[name=format]:checked')).map(c => c.value);
+    const payload = {
+      action: 'PROPOSITION_FORMATEUR',
+      prenom: document.getElementById('prenom').value,
+      nom: document.getElementById('nom').value,
+      email: document.getElementById('email').value,
+      telephone: document.getElementById('telephone').value,
+      organisation: document.getElementById('organisation').value,
+      statut: document.getElementById('statut').value,
+      siret: document.getElementById('siret').value,
+      numDeclaration: document.getElementById('numDeclaration').value,
+      cv: document.getElementById('cv').value,
+      charteIntervenants: form.querySelector('[name=charteIntervenants]').checked,
+      titre: document.getElementById('titre').value,
+      domaine: document.getElementById('domaine').value,
+      description: document.getElementById('description').value,
+      public: document.getElementById('public').value,
+      niveau: document.getElementById('niveau').value,
+      duree: document.getElementById('duree').value,
+      participants: document.getElementById('participants').value,
+      format: formatChecked,
+      dates: document.getElementById('dates').value,
+      materiel: document.getElementById('materiel').value,
+      commentaires: document.getElementById('commentaires').value,
+      consentement: form.querySelector('[name=consentement]').checked
+    };
+
     submitBtn.disabled = true;
     submitBtn.textContent = 'Envoi en cours…';
     try {
-      const res = await fetch(form.action, {
+      const res = await fetch(APPS_SCRIPT_URL, {
         method: 'POST',
-        body: new FormData(form),
-        headers: { 'Accept': 'application/json' }
+        headers: { 'Content-Type': 'text/plain' },
+        redirect: 'follow',
+        body: JSON.stringify(payload)
       });
-      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      if (!data || !data.success) throw new Error((data && data.message) || 'Erreur serveur');
       document.getElementById('successMsg').style.display = 'block';
       form.style.display = 'none';
       document.getElementById('successMsg').scrollIntoView({behavior: 'smooth'});

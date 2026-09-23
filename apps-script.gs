@@ -275,6 +275,7 @@ function doPost(e) {
       case 'ADHERER':                 return ok(creerAdhesion(data));
       case 'CONTACT':                 return ok(traiterContact(data));
       case 'INSCRIPTION_ACADEMIE':    return ok(traiterInscriptionAcademie(data));
+      case 'PROPOSITION_FORMATEUR':   return ok(traiterPropositionFormateur(data));
       // ── Actions admin : session vérifiée côté serveur ──
       case 'addResa':                 return ok(requireAdmin(data) || adminAddResa(data.resa));
       case 'updateResa':              return ok(requireAdmin(data) || adminUpdateResa(data.resa));
@@ -315,6 +316,7 @@ function doGet(e) {
         case 'ADHERER':             return ok(creerAdhesion(data));
         case 'CONTACT':             return ok(traiterContact(data));
         case 'INSCRIPTION_ACADEMIE': return ok(traiterInscriptionAcademie(data));
+        case 'PROPOSITION_FORMATEUR': return ok(traiterPropositionFormateur(data));
         // ── Actions admin : session vérifiée côté serveur ──
         case 'addResa':             return ok(requireAdmin(data) || adminAddResa(data.resa));
         case 'updateResa':          return ok(requireAdmin(data) || adminUpdateResa(data.resa));
@@ -987,6 +989,54 @@ function traiterInscriptionAcademie(data) {
     return { success: true, message: 'Inscription envoyée.' };
   } catch (err) {
     logErreur('traiterInscriptionAcademie', err);
+    return { success: false, error: 'ERREUR_SERVEUR', message: err.message };
+  }
+}
+
+// ============================================================
+// PROPOSITION FORMATEUR — Académie
+// Remplace l'ancien formulaire Formspree (contact@genie-montauban.fr),
+// dont l'URL au format email est obsolète : Formspree exige désormais un
+// identifiant de formulaire (/f/xxxxxxx), et le test du 23/09/2026 a
+// confirmé une erreur 400 côté Formspree — aucune proposition n'arrivait.
+// Calquée sur traiterContact()/traiterInscriptionAcademie() : un email
+// à l'admin, un accusé de réception au formateur, aucune écriture Sheet.
+// ============================================================
+function traiterPropositionFormateur(data) {
+  if (!data.email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(data.email))
+    return { success: false, error: 'EMAIL_INVALIDE', message: 'Format email invalide.' };
+  if (!data.prenom || !data.nom || !data.titre || !data.description)
+    return { success: false, error: 'CHAMPS_MANQUANTS', message: 'Prénom, nom, titre et description du module sont obligatoires.' };
+  if (!rateLimitOk('proposition_formateur_' + data.email))
+    return { success: false, error: 'TROP_DE_REQUETES', message: 'Trop de tentatives. Réessayez dans une heure.' };
+  try {
+    const formats = Array.isArray(data.format) ? data.format.join(', ') : sanit(data.format);
+    const corpsAdmin =
+      'De : ' + sanit(data.prenom) + ' ' + sanit(data.nom) + ' <' + data.email + '>\n' +
+      'Téléphone : ' + sanit(data.telephone) + '\nStructure : ' + sanit(data.organisation) + '\n' +
+      'Statut : ' + sanit(data.statut) + '\nSIRET : ' + sanit(data.siret) +
+      '\nN° déclaration d\'activité : ' + sanit(data.numDeclaration) +
+      '\nCV/portfolio : ' + sanit(data.cv) + '\n\n' +
+      'Module : ' + sanit(data.titre) + '\nDomaine : ' + sanit(data.domaine) +
+      '\nPublic cible : ' + sanit(data.public) + '\nNiveau : ' + sanit(data.niveau) + '\n' +
+      'Description :\n' + sanit(data.description) + '\n\n' +
+      'Durée souhaitée : ' + sanit(data.duree) + '\nParticipants : ' + sanit(data.participants) +
+      '\nFormat : ' + formats + '\nDates souhaitées : ' + sanit(data.dates) +
+      '\nMatériel : ' + sanit(data.materiel) + '\n\n' +
+      'Charte des intervenants prise de connaissance : ' + (data.charteIntervenants ? 'oui' : 'non') +
+      '\nCommentaires :\n' + sanit(data.commentaires || '(aucun)');
+    envoyerEmailSafe(CONFIG.EMAIL_ADMIN,
+      '🧠 Académie — proposition de module : ' + sanit(data.titre) + ' (' + sanit(data.prenom) + ' ' + sanit(data.nom) + ')',
+      corpsAdmin, { replyTo: data.email });
+    envoyerEmailSafe(data.email,
+      '🧠 Votre proposition de module — ' + sanit(data.titre),
+      'Bonjour ' + data.prenom + ',\n\nNous avons bien reçu votre proposition de module « ' +
+      sanit(data.titre) + ' » pour l\'Académie des Compétences et de la Connaissance.\n\n' +
+      'Nous revenons vers vous sous 5 jours ouvrés pour co-construire la session avec vous.\n\n' +
+      CONFIG.NOM_LIEU + ' · ' + CONFIG.ADRESSE + ' · ' + CONFIG.TEL);
+    return { success: true, message: 'Proposition envoyée.' };
+  } catch (err) {
+    logErreur('traiterPropositionFormateur', err);
     return { success: false, error: 'ERREUR_SERVEUR', message: err.message };
   }
 }
