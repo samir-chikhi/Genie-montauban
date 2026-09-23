@@ -66,7 +66,7 @@ formulaire d'inscription académie.**
 | `EMAIL_MUSIVA` | contact@musiva.fr | academie.html, cgv-formation.html, reglement-interieur-formation.html, confidentialite.html, mentions_legales.html |
 | `REF_PEDAGO`, `REF_HANDICAP`, `REF_SIGNALEMENT` | Samir CHIKHI (contact@musiva.fr) — une seule personne couvre les trois rôles, à confirmer que c'est bien voulu à terme | academie.html, cgv-formation.html, reglement-interieur-formation.html |
 | `RNA_GENIE` | W822009896 | mentions_legales.html |
-| `SIRET_GENIE` | Remplacé par **SIREN : 100 178 730** — Samir a donné le SIREN (9 chiffres), pas le SIRET (14 chiffres, SIREN + code établissement) ; à corriger en SIRET si besoin | mentions_legales.html |
+| `SIRET_GENIE` | 100 178 730 00014 | mentions_legales.html |
 
 ## Reste à remplir avant publication définitive
 
