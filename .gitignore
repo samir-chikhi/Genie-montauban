@@ -13,3 +13,6 @@ MUSIVA-seo-update.zip
 skills-lock.json
 
 # Config MCP : ne doit jamais reporter de clé en clair (dépôt public)
+
+# Dossier RGPD : document interne, jamais publié (dépôt public + GitHub Pages)
+RGPD-VIOLATION-2026-09.md
