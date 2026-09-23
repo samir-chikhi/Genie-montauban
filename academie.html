@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com; frame-src https://www.google.com; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https:; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com; frame-src https://www.google.com; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>Académie des Compétences et de la Connaissance — Génie Montauban</title>
   <meta name="description" content="Micro-formations de 3h à Montauban, animées par des experts locaux et dispensées par MUSIVA, organisme certifié Qualiopi. Empowerment, Tech & Numérique, Gestion & Impact. De 45 à 65 €, 3 modules gratuits." />
@@ -15,10 +15,8 @@
   <link rel="canonical" href="https://genie-montauban.fr/academie.html" />
   <link rel="icon" type="image/png" href="favicon.png" />
 
-  <!-- Google Fonts : Playfair Display + DM Sans -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <!-- Playfair Display + DM Sans hébergées localement (P1-6, plus de requête vers Google avant consentement) -->
+  <link rel="stylesheet" href="assets/css/fonts.css" />
 
   <style>
     /* ─── Variables ─── */
@@ -682,8 +680,9 @@
   <!-- ══ PASS CTA ══ -->
   <div class="pass-section reveal">
     <h3>📩 Inscrivez-vous dès maintenant</h3>
-    <p>Toutes les inscriptions se font par email ou par téléphone. Indiquez le module souhaité, votre nom et votre structure — nous vous confirmons votre place sous 24h.</p>
-    <a href="mailto:contact@genie-montauban.fr?subject=Inscription Académie des Compétences" class="btn-emerald">Je m'inscris →</a>
+    <p>Choisissez votre module ci-dessus puis inscrivez-vous en ligne — ou par email/téléphone si vous préférez. Nous vous confirmons votre place sous 24h.</p>
+    <a href="inscription-academie.html" class="btn-emerald">Je m'inscris →</a>
+    <p style="margin-top:1rem;font-size:.85rem;color:var(--slate-400)">Ou par email : <a href="mailto:contact@genie-montauban.fr?subject=Inscription Académie des Compétences" style="color:var(--emerald-l)">contact@genie-montauban.fr</a> · 📞 06 51 50 97 18</p>
   </div>
 
   <!-- ══ PROPOSER UN MODULE ══ -->
@@ -725,6 +724,17 @@
       Déclaration d'activité enregistrée sous le n° 76 82 01423 82 auprès du préfet de la région Occitanie. Cet enregistrement ne vaut pas agrément de l'État.<br>
       La certification qualité a été délivrée au titre de la catégorie d'action suivante : <span class="todo">[À COMPLÉTER — CATEGORIE_QUALIOPI, a priori « actions de formation »]</span>.<br>
       Contact formation : <span class="todo">[À COMPLÉTER — EMAIL_MUSIVA]</span> · <a href="cgv-formation.html">CGV formation</a> · <a href="reglement-interieur-formation.html">Règlement intérieur formation</a>
+    </p>
+  </div>
+
+  <!-- ══ CONTACTS QUALITÉ (indicateurs 12, 26, 31) ══ -->
+  <div class="social-banner reveal" style="margin-top:2rem">
+    <h3>📋 Contacts qualité</h3>
+    <p style="max-width:640px">
+      Référent pédagogique : <span class="todo">[À COMPLÉTER — REF_PEDAGO]</span><br>
+      Référent handicap : <span class="todo">[À COMPLÉTER — REF_HANDICAP]</span><br>
+      Signalement des violences, harcèlement et discriminations : <span class="todo">[À COMPLÉTER — REF_SIGNALEMENT]</span><br>
+      Réclamations : <span class="todo">[À COMPLÉTER — EMAIL_MUSIVA]</span>
     </p>
   </div>
 
@@ -786,7 +796,6 @@
       <a href="reglement-interieur-genie.html">Règlement intérieur</a>
       <a href="reglement-interieur-formation.html">Règlement formation</a>
       <a href="confidentialite.html#cookies" class="footer-cookie-link">Gérer les cookies</a>
-      <a href="admin.html" rel="nofollow" style="opacity:.55;font-size:11px;" title="Administration">Admin</a>
       <a href="espace-membres.html" rel="nofollow" style="opacity:.55;font-size:11px;" title="Espace membres">Espace membres</a>
     </div>
   </div>
@@ -1110,9 +1119,9 @@ function openModal(code) {
       </div>
     </div>
     <div class="modal-footer">
-      <a href="mailto:contact@genie-montauban.fr?subject=Inscription ${m.code} - ${m.titre}" class="btn-inscrire">Je m'inscris à ce module →</a>
+      <a href="inscription-academie.html?module=${m.code}" class="btn-inscrire">Je m'inscris à ce module →</a>
       <button type="button" class="btn-print" onclick="window.print()" style="background:none;border:1px solid rgba(255,255,255,.2);color:var(--slate-300);font-size:.78rem;padding:.5rem 1rem;border-radius:50px;cursor:pointer;font-family:'DM Sans',sans-serif;">🖨️ Imprimer la fiche</button>
-      <span class="modal-footer-note">📞 06 51 50 97 18 · Confirmation sous 24h</span>
+      <span class="modal-footer-note">📞 06 51 50 97 18 · ou par email : <a href="mailto:contact@genie-montauban.fr?subject=Inscription ${m.code} - ${m.titre}" style="color:var(--emerald-l)">contact@genie-montauban.fr</a></span>
     </div>`;
 
   document.getElementById('modalOverlay').classList.add('open');
@@ -1179,6 +1188,36 @@ const revealObserver = new IntersectionObserver((entries) => {
 }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
 
 document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+/* ── JSON-LD Course par module (P1-4) — généré depuis les données modules,
+   pour ne jamais diverger du contenu affiché ── */
+(function() {
+  const courses = Object.keys(modules).map(code => {
+    const m = {...DEFAULTS, ...modules[code]};
+    return {
+      "@type": "Course",
+      "name": m.titre,
+      "description": m.tagline,
+      "provider": { "@type": "Organization", "name": "MUSIVA", "url": "https://musiva.fr/" },
+      "educationalCredentialAwarded": m.reconnaissance,
+      "hasCourseInstance": {
+        "@type": "CourseInstance",
+        "courseMode": "Onsite",
+        "duration": "PT3H",
+        "location": {
+          "@type": "Place",
+          "name": "Tiers-lieu Génie",
+          "address": { "@type": "PostalAddress", "streetAddress": "12 rue du Génie", "addressLocality": "Montauban", "postalCode": "82000", "addressCountry": "FR" }
+        }
+      },
+      "offers": { "@type": "Offer", "price": m.prix.replace(/[^\d]/g, '') || "0", "priceCurrency": "EUR" }
+    };
+  });
+  const script = document.createElement('script');
+  script.type = 'application/ld+json';
+  script.textContent = JSON.stringify({ "@context": "https://schema.org", "@graph": courses });
+  document.head.appendChild(script);
+})();
 </script>
 
 </body>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com; frame-src https://www.google.com; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https:; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com; frame-src https://www.google.com; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>Proposer un module de formation | Académie du Génie</title>
   <meta name="description" content="Proposez votre module de formation à l'Académie des Compétences et de la Connaissance du Génie Montauban. Formulaire de contact pour les intervenants." />
@@ -19,9 +19,7 @@
   <meta name="twitter:description" content="Formateurs, experts, artisans : proposez votre micro-formation de 3h à l'Académie des Compétences et de la Connaissance du tiers-lieu Génie à Montauban." />
   <meta name="twitter:image" content="https://genie-montauban.fr/og-image.jpg" />
 <link rel="icon" type="image/png" href="favicon.png" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/fonts.css" />
   <style>
     :root {
       --primary:   #2D6A4F;
@@ -319,7 +317,7 @@
     <p style="margin-bottom:1rem;font-size:.92rem;"><strong>Empowerment &amp; Leadership</strong> — prendre la parole, négocier, affirmer son leadership, se lancer dans l'ESS. <strong>Tech &amp; Numérique</strong> — IA au quotidien, réseaux sociaux, cybersécurité, automatisation, blockchain. <strong>Gestion &amp; Impact</strong> — demande de subvention, comptabilité associative, RGPD, tarification, mécénat. Un module qui prolonge ou complète l'une de ces filières nous intéresse tout autant qu'une idée neuve.</p>
     <p style="margin-bottom:1rem;font-size:.92rem;"><strong>Le format.</strong> Un module type dure 3 heures, en présentiel au tiers-lieu, 12 rue du Génie. On travaille en petit groupe — d'une dizaine à une vingtaine de personnes — pour que chacun reparte avec un livrable utilisable dès le lendemain : un plan d'action, un document, un outil configuré. Les sessions se tiennent en soirée ou le samedi matin. D'autres formats (atelier express d'1h30, journée complète) restent possibles si le contenu le justifie.</p>
     <p style="margin-bottom:1rem;font-size:.92rem;"><strong>Qui peut proposer.</strong> Des praticien·nes et expert·es du bassin montalbanais : indépendant·es, artisans, salarié·es, dirigeant·es d'association, agents de collectivité. Ce qui compte, c'est une expertise réelle et l'envie de la transmettre simplement, sans jargon. Une expérience d'animation est un plus, pas une condition.</p>
-    <p style="margin-bottom:1rem;font-size:.92rem;"><strong>Rémunération et conditions.</strong> L'intervention est défrayée ou rémunérée selon le format et le public — on en discute ensemble, en toute transparence, au moment de caler la session. Génie prend en charge la communication, la salle, les inscriptions et toute la logistique : vous vous concentrez sur le contenu.</p>
+    <p style="margin-bottom:1rem;font-size:.92rem;"><strong>Rémunération et conditions.</strong> L'intervention est rémunérée par MUSIVA, organisme de formation certifié Qualiopi qui dispense les modules de l'Académie, selon votre statut : facture si vous êtes indépendant·e et déclaré·e comme organisme de formation, bulletin de paie en formateur occasionnel, ou convention avec votre employeur si vous intervenez dans ce cadre. Le bénévolat n'est pas proposé pour ces interventions, MUSIVA étant une société commerciale. Génie prend en charge la communication, la salle, les inscriptions et toute la logistique : vous vous concentrez sur le contenu.</p>
     <p style="margin-bottom:0;font-size:.92rem;"><strong>Après l'envoi du formulaire.</strong> Nous lisons chaque proposition et revenons vers vous sous 5 jours ouvrés, en général par téléphone, pour préciser le déroulé, choisir une date et co-construire la fiche du module avec vous. Une proposition qui ne colle pas au calendrier immédiat n'est jamais perdue : elle rejoint la réserve de modules à programmer.</p>
   </div>
 
@@ -327,6 +325,14 @@
     <h2>Formulaire d'organisation d'une session</h2>
     <p class="form-subtitle">Tous les champs marqués <span style="color:#e53e3e">*</span> sont obligatoires. Nous vous répondons sous 5 jours ouvrés.</p>
 
+    <!-- ⚠️ P1-2 : ce endpoint Formspree utilise l'ancien format (adresse email).
+         Formspree attend désormais un identifiant de formulaire (/f/xxxxxxx) —
+         testé le 23/09/2026 : réponse 400 "Bad form post request". Le formulaire
+         NE PARVIENT DONC PAS à Génie tant que Samir n'a pas créé un formulaire
+         sur https://formspree.io et remplacé l'URL ci-dessous par
+         https://formspree.io/f/VOTRE_ID. Le JS gère déjà l'échec proprement
+         (voir plus bas) : en attendant, l'internaute est redirigé vers le
+         secours email. -->
     <form id="propositionForm" action="https://formspree.io/f/contact@genie-montauban.fr" method="POST" novalidate>
       <div class="form-grid">
 
@@ -351,6 +357,37 @@
         <div class="form-group full">
           <label for="organisation">Structure / Organisation (si applicable)</label>
           <input type="text" id="organisation" name="organisation" placeholder="Association, entreprise, indépendant…" />
+        </div>
+        <div class="form-group">
+          <label for="statut">Votre statut <span class="req">*</span></label>
+          <select id="statut" name="statut" required>
+            <option value="" disabled selected>Choisissez votre statut</option>
+            <option value="Indépendant, déclaré organisme de formation">Indépendant·e, déclaré·e organisme de formation</option>
+            <option value="Portage salarial">Portage salarial</option>
+            <option value="Salarié mis à disposition par son employeur">Salarié·e mis·e à disposition par son employeur</option>
+            <option value="Formateur occasionnel">Formateur·rice occasionnel·le</option>
+            <option value="Agent public">Agent public</option>
+            <option value="Autre">Autre</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="siret">SIRET (si indépendant·e ou société)</label>
+          <input type="text" id="siret" name="siret" placeholder="14 chiffres" />
+        </div>
+        <div class="form-group">
+          <label for="numDeclaration">N° de déclaration d'activité (si organisme de formation)</label>
+          <input type="text" id="numDeclaration" name="numDeclaration" placeholder="Ex. : 76 82 0XXXX 82" />
+        </div>
+        <div class="form-group">
+          <label for="cv">Lien vers votre CV ou portfolio</label>
+          <input type="url" id="cv" name="cv" placeholder="https://…" />
+        </div>
+        <div class="form-group full">
+          <label class="checkbox-label" style="display:inline-flex;width:auto;">
+            <input type="checkbox" name="charteIntervenants" required />
+            <span>J'ai pris connaissance de la charte des intervenants <span class="req">*</span></span>
+          </label>
+          <p class="form-note" style="margin-top:.4rem">Canevas de fiche module et charte des intervenants pas encore disponibles au téléchargement en ligne : <a href="mailto:contact@genie-montauban.fr?subject=Demande canevas et charte formateur" style="color:var(--primary)">demandez-les par email</a>, nous vous les envoyons directement.</p>
         </div>
 
         <div class="form-section-title">Votre module</div>
@@ -436,7 +473,7 @@
         <div class="consent-block">
           <label>
             <input type="checkbox" name="consentement" required />
-            <span>J'accepte que les informations saisies soient utilisées par l'équipe du Génie pour traiter ma demande et me recontacter. Aucune donnée ne sera transmise à des tiers. <a href="confidentialite.html" target="_blank" rel="noopener" style="color:var(--primary)">Politique de confidentialité</a></span>
+            <span>J'accepte que les informations saisies soient utilisées par l'équipe du Génie pour traiter ma demande et me recontacter. Responsable du traitement : Association Génie. Finalité : évaluer une candidature d'intervenant·e. Base légale : mesures précontractuelles à ma demande. Durée de conservation : 2 ans. Ces données sont transmises à notre prestataire de formulaire, Formspree (États-Unis), pour l'acheminement de ce message uniquement — jamais à d'autres tiers à des fins commerciales. <a href="confidentialite.html" target="_blank" rel="noopener" style="color:var(--primary)">Politique de confidentialité complète</a></span>
           </label>
         </div>
 
@@ -452,6 +489,10 @@
     <div class="success-msg" id="successMsg">
       <h3>Merci pour votre proposition !</h3>
       <p>L'équipe du Génie a bien reçu votre message. Nous vous répondons sous 5 jours ouvrés pour co-construire votre session avec vous.</p>
+    </div>
+    <div class="success-msg" id="errorMsg" style="background:linear-gradient(135deg,#FEE2E2,#FECACA);border-color:rgba(220,38,38,.4)">
+      <h3 style="color:#991B1B">Envoi impossible pour le moment</h3>
+      <p style="color:#7F1D1D">Le formulaire en ligne rencontre un problème technique. Merci de nous écrire directement à <a href="mailto:contact@genie-montauban.fr?subject=Proposition de module Académie" style="color:#991B1B;font-weight:600">contact@genie-montauban.fr</a> en décrivant votre proposition — nous vous répondons sous 5 jours ouvrés.</p>
     </div>
   </div>
 
@@ -512,7 +553,6 @@
       <a href="reglement-interieur-genie.html">Règlement intérieur</a>
       <a href="reglement-interieur-formation.html">Règlement formation</a>
       <a href="confidentialite.html#cookies" class="footer-cookie-link">Gérer les cookies</a>
-      <a href="admin.html" rel="nofollow" style="opacity:.55;font-size:11px;" title="Administration">Admin</a>
       <a href="espace-membres.html" rel="nofollow" style="opacity:.55;font-size:11px;" title="Espace membres">Espace membres</a>
     </div>
   </div>
@@ -539,27 +579,44 @@
     });
   });
 
-  /* Form submission feedback */
+  /* Form submission : envoi réel via fetch (Formspree), avec repli email en cas d'échec.
+     Avant ce correctif (P1-2), le formulaire affichait toujours "Merci !" sans
+     jamais envoyer les données — voir commentaire au-dessus du <form>. */
   const form = document.getElementById('propositionForm');
-  form.addEventListener('submit', e => {
+  const submitBtn = form.querySelector('.btn-submit');
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
     const required = form.querySelectorAll('[required]');
     let valid = true;
     required.forEach(el => {
-      if (!el.value.trim()) {
+      const filled = el.type === 'checkbox' ? el.checked : el.value.trim();
+      if (!filled) {
         el.style.borderColor = '#e53e3e';
         valid = false;
       } else {
         el.style.borderColor = '';
       }
     });
-    if (!valid) {
-      e.preventDefault();
-      return;
+    if (!valid) return;
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Envoi en cours…';
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      document.getElementById('successMsg').style.display = 'block';
+      form.style.display = 'none';
+      document.getElementById('successMsg').scrollIntoView({behavior: 'smooth'});
+    } catch (err) {
+      document.getElementById('errorMsg').style.display = 'block';
+      document.getElementById('errorMsg').scrollIntoView({behavior: 'smooth'});
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Envoyer ma proposition →';
     }
-    e.preventDefault();
-    document.getElementById('successMsg').style.display = 'block';
-    form.style.display = 'none';
-    document.getElementById('successMsg').scrollIntoView({behavior: 'smooth'});
   });
 </script>
 

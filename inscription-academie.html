@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https:; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com; frame-src https://www.google.com; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>Inscription à un module — Académie du Génie Montauban</title>
+  <meta name="description" content="Formulaire d'inscription aux modules de l'Académie des Compétences et de la Connaissance, dispensés par MUSIVA, organisme de formation certifié Qualiopi." />
+  <link rel="canonical" href="https://genie-montauban.fr/inscription-academie.html" />
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="stylesheet" href="assets/css/fonts.css" />
+  <style>
+    :root {
+      --bg-950:#0F172A; --bg-900:#1E293B; --bg-800:#293548;
+      --emerald:#10B981; --emerald-d:#059669; --emerald-l:#34D399;
+      --slate-400:#94A3B8; --slate-300:#CBD5E1; --white:#F8FAFC;
+      --glass-border: rgba(255,255,255,0.09);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'DM Sans',sans-serif;background:var(--bg-950);color:var(--white);line-height:1.65}
+    nav{position:sticky;top:0;z-index:100;background:rgba(15,23,42,.85);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.06);padding:0 clamp(1rem,4vw,3rem);display:flex;align-items:center;justify-content:space-between;height:64px}
+    .nav-logo{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--emerald-l);text-decoration:none;font-weight:700}
+    .hero{padding:clamp(2.5rem,6vw,4rem) clamp(1rem,6vw,4rem) 2rem;text-align:center}
+    .hero-label{display:inline-block;background:rgba(16,185,129,.12);color:var(--emerald-l);font-size:.75rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;padding:.35rem 1rem;border-radius:50px;border:1px solid rgba(16,185,129,.25);margin-bottom:1.2rem}
+    .hero h1{font-family:'Playfair Display',serif;font-size:clamp(1.7rem,4vw,2.6rem);margin-bottom:.6rem}
+    .hero h1 em{font-style:italic;color:var(--emerald-l)}
+    .hero p{color:var(--slate-300);max-width:640px;margin:0 auto}
+    main{max-width:760px;margin:0 auto;padding:1rem clamp(1rem,4vw,2rem) 5rem}
+    .module-recap{background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.25);border-radius:12px;padding:1.2rem 1.5rem;margin-bottom:2rem;font-size:.92rem}
+    .module-recap strong{color:var(--emerald-l)}
+    .form-card{background:rgba(30,41,59,.6);border:1px solid var(--glass-border);border-radius:16px;padding:2rem clamp(1.2rem,4vw,2.5rem);backdrop-filter:blur(12px)}
+    .form-section-title{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--slate-400);margin:1.8rem 0 1rem;padding-bottom:.5rem;border-bottom:1px solid var(--glass-border)}
+    .form-section-title:first-child{margin-top:0}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem}
+    .form-group{display:flex;flex-direction:column;gap:.4rem}
+    .form-group.full{grid-column:1/-1}
+    label{font-size:.82rem;font-weight:600;color:var(--slate-300)}
+    label .req{color:#F87171;margin-left:2px}
+    input,select,textarea{font-family:'DM Sans',sans-serif;font-size:.9rem;padding:.65rem .9rem;border:1.5px solid var(--glass-border);border-radius:8px;background:rgba(255,255,255,.04);color:var(--white);outline:none;width:100%}
+    input:focus,select:focus,textarea:focus{border-color:var(--emerald)}
+    textarea{resize:vertical;min-height:70px}
+    .consent-block{background:rgba(255,255,255,.03);border:1px solid var(--glass-border);border-radius:8px;padding:1rem 1.2rem;margin-top:1.2rem;grid-column:1/-1}
+    .consent-block label{display:flex;align-items:flex-start;gap:.7rem;font-size:.8rem;font-weight:400;color:var(--slate-400);cursor:pointer}
+    .consent-block input{width:17px;height:17px;margin-top:1px;flex-shrink:0;accent-color:var(--emerald)}
+    .form-submit{margin-top:1.8rem;display:flex;justify-content:flex-end;align-items:center;gap:1rem;flex-wrap:wrap}
+    .btn-submit{background:var(--emerald);color:#000;font-size:.95rem;font-weight:700;padding:.8rem 2.2rem;border-radius:50px;border:none;cursor:pointer}
+    .btn-submit:hover{background:var(--emerald-l)}
+    .btn-submit:disabled{opacity:.6;cursor:not-allowed}
+    .form-note{font-size:.78rem;color:var(--slate-400)}
+    .status-msg{display:none;border-radius:12px;padding:1.5rem;text-align:center;margin-top:1.5rem}
+    .status-msg h3{font-family:'Playfair Display',serif;font-size:1.2rem;margin-bottom:.5rem}
+    .status-msg.success{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.3)}
+    .status-msg.success h3{color:var(--emerald-l)}
+    .status-msg.error{background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.3)}
+    .status-msg.error h3{color:#F87171}
+    .status-msg a{color:var(--emerald-l)}
+    footer{background:rgba(9,14,26,.9);color:var(--slate-400);text-align:center;padding:2rem;font-size:.82rem;border-top:1px solid rgba(255,255,255,.06);margin-top:3rem}
+    footer a{color:var(--emerald-l);text-decoration:none}
+    @media (max-width:640px){.form-grid{grid-template-columns:1fr}}
+  </style>
+  <style>.skip-link{position:absolute;left:-9999px;top:0;z-index:10000;background:#111;color:#fff;padding:10px 18px;border-radius:0 0 8px 0;font:600 15px/1.2 system-ui,sans-serif;text-decoration:none}.skip-link:focus{left:0}:focus-visible{outline:3px solid #2563eb;outline-offset:2px}</style>
+  <link rel="stylesheet" href="responsive-fixes.css">
+  <link rel="stylesheet" href="assets/css/footer.css">
+</head>
+<body>
+<a class="skip-link" href="#contenu">Aller au contenu</a>
+<nav>
+  <a href="index.html" class="nav-logo">Génie</a>
+</nav>
+<section class="hero">
+  <div class="hero-label">Académie des Compétences et de la Connaissance</div>
+  <h1>M'<em>inscrire</em> à un module</h1>
+  <p>Formation dispensée par MUSIVA, organisme certifié Qualiopi. Confirmation sous 24h ouvrées.</p>
+</section>
+<main id="contenu">
+  <div class="module-recap" id="moduleRecap">
+    Module non présélectionné — <a href="academie.html" style="color:var(--emerald-l)">choisissez un module dans le catalogue</a>, ou précisez-le ci-dessous.
+  </div>
+
+  <form id="inscriptionForm" novalidate>
+    <div class="form-card">
+      <div class="form-section-title">Le module</div>
+      <div class="form-grid">
+        <div class="form-group full">
+          <label for="module">Module souhaité <span class="req">*</span></label>
+          <select id="module" name="module" required></select>
+        </div>
+      </div>
+
+      <div class="form-section-title">Vos coordonnées</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="prenom">Prénom <span class="req">*</span></label>
+          <input type="text" id="prenom" name="prenom" required autocomplete="given-name" />
+        </div>
+        <div class="form-group">
+          <label for="nom">Nom <span class="req">*</span></label>
+          <input type="text" id="nom" name="nom" required autocomplete="family-name" />
+        </div>
+        <div class="form-group">
+          <label for="email">Email <span class="req">*</span></label>
+          <input type="email" id="email" name="email" required autocomplete="email" />
+        </div>
+        <div class="form-group">
+          <label for="telephone">Téléphone</label>
+          <input type="tel" id="telephone" name="telephone" autocomplete="tel" />
+        </div>
+        <div class="form-group full">
+          <label for="structure">Structure (si applicable)</label>
+          <input type="text" id="structure" name="structure" placeholder="Association, entreprise…" />
+        </div>
+        <div class="form-group full">
+          <label for="statut">Votre statut <span class="req">*</span></label>
+          <select id="statut" name="statut" required>
+            <option value="" disabled selected>Choisissez votre statut</option>
+            <option value="Particulier (autofinancement)">Particulier (autofinancement)</option>
+            <option value="Salarié avec prise en charge employeur ou OPCO">Salarié·e avec prise en charge employeur ou OPCO</option>
+            <option value="Demandeur d'emploi">Demandeur·se d'emploi</option>
+            <option value="Bénévole associatif">Bénévole associatif</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label for="adaptation">Besoin d'adaptation (accessibilité, handicap…)</label>
+          <textarea id="adaptation" name="adaptation" placeholder="Facultatif — transmis au référent handicap si vous le précisez"></textarea>
+        </div>
+      </div>
+
+      <div class="form-section-title">Questionnaire de positionnement</div>
+      <p class="form-note" style="margin-bottom:.8rem">Ces 3 questions nous aident à adapter la session à votre niveau et à vos attentes (indicateur qualité Qualiopi).</p>
+      <div class="form-grid" id="positionnementFields"></div>
+
+      <div class="form-grid">
+        <div class="consent-block">
+          <label>
+            <input type="checkbox" name="cgv" required />
+            <span>J'accepte les <a href="cgv-formation.html" target="_blank" rel="noopener" style="color:var(--emerald-l)">CGV formation</a> de MUSIVA <span class="req">*</span></span>
+          </label>
+        </div>
+        <div class="consent-block">
+          <label>
+            <input type="checkbox" name="consentement" required />
+            <span>J'accepte que ces informations soient utilisées par MUSIVA (organisme de formation) et l'équipe du Génie pour traiter mon inscription. Voir la <a href="confidentialite.html" target="_blank" rel="noopener" style="color:var(--emerald-l)">politique de confidentialité</a>. <span class="req">*</span></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-submit">
+        <span class="form-note">Confirmation sous 24h ouvrées</span>
+        <button type="submit" class="btn-submit">Envoyer mon inscription →</button>
+      </div>
+    </div>
+
+    <div class="status-msg success" id="successMsg">
+      <h3>Inscription envoyée !</h3>
+      <p>Nous vous confirmons votre place sous 24h ouvrées par email.</p>
+    </div>
+    <div class="status-msg error" id="errorMsg">
+      <h3>Envoi impossible pour le moment</h3>
+      <p>Merci de nous écrire directement à <a href="mailto:contact@genie-montauban.fr">contact@genie-montauban.fr</a> en indiquant le module souhaité — nous confirmons votre place sous 24h.</p>
+    </div>
+  </form>
+</main>
+
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand-name">Génie</div>
+      <div class="footer-brand-sub">Tiers-lieu d'éducation populaire · Montauban</div>
+      <p class="footer-brand-desc">Tiers-lieu d'éducation populaire et d'économie sociale et solidaire à Montauban.</p>
+    </div>
+    <div>
+      <div class="footer-col-title">Pratique</div>
+      <ul class="footer-links">
+        <li><a href="academie.html">Académie des Compétences</a></li>
+        <li><a href="cgv-formation.html">CGV formation</a></li>
+        <li><a href="tel:+33651509718">06 51 50 97 18</a></li>
+        <li><a href="mailto:contact@genie-montauban.fr">contact@genie-montauban.fr</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Association Génie Montauban — association loi 1901 relevant de l'ESS</span>
+    <div class="footer-legal">
+      <a href="mentions_legales.html">Mentions légales</a>
+      <a href="confidentialite.html">Confidentialité</a>
+      <a href="cgv-formation.html">CGV formation</a>
+      <a href="confidentialite.html#cookies" class="footer-cookie-link">Gérer les cookies</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* Catalogue léger dupliqué depuis academie.html (pas de build partagé sur ce
+   site statique) : code, titre et 3 questions de positionnement par module.
+   Si un module change de titre dans academie.html, mettre à jour ici aussi. */
+const MODULES_INFO = {
+  A1: { titre:'A1 — Prise de parole en public', positionnement:[
+    'Décrivez une situation récente où prendre la parole vous a mis mal à l\'aise.',
+    'Sur une échelle de 1 à 5, comment évaluez-vous votre aisance à l\'oral aujourd\'hui ?',
+    'Quel est l\'objectif concret que vous voulez atteindre à l\'issue de la session ?'] },
+  A2: { titre:'A2 — Négocier autrement', positionnement:[
+    'Décrivez une négociation récente qui s\'est mal passée.',
+    'Quel type de négociation rencontrez-vous le plus souvent (achat, salaire, partenariat…) ?',
+    'Qu\'attendez-vous concrètement de cette session ?'] },
+  A3: { titre:'A3 — Créer son activité ESS', positionnement:[
+    'Où en êtes-vous dans votre projet (idée, étude, lancement) ?',
+    'Quelle forme juridique envisagez-vous, si vous en avez déjà une idée ?',
+    'Quelle est votre principale question ou blocage aujourd\'hui ?'] },
+  A4: { titre:'A4 — Leadership au féminin', positionnement:[
+    'Décrivez une situation où vous avez hésité à affirmer votre position.',
+    'Avez-vous déjà un réseau professionnel actif ? Décrivez-le brièvement.',
+    'Quel est votre objectif pour cette session ?'] },
+  A5: { titre:'A5 — Énergie & priorités', positionnement:[
+    'Combien de « casquettes » (rôles) jonglez-vous actuellement ?',
+    'Quel est votre principal « voleur de temps » identifié ?',
+    'Qu\'aimeriez-vous repartir avec, concrètement ?'] },
+  A6: { titre:'A6 — Pitch ton projet', positionnement:[
+    'Avez-vous déjà un pitch écrit pour votre projet ? Si oui, résumez-le en une phrase.',
+    'Devant qui allez-vous bientôt pitcher (financeur, client, jury…) ?',
+    'Quel est le principal obstacle dans votre pitch actuel ?'] },
+  B1: { titre:'B1 — IA au quotidien', positionnement:[
+    'Avez-vous déjà utilisé un outil d\'IA générative (ChatGPT, Claude…) ? À quelle fréquence ?',
+    'Quelle tâche de votre métier aimeriez-vous automatiser ou accélérer avec l\'IA ?',
+    'Quelle est votre principale crainte ou question sur l\'IA ?'] },
+  B2: { titre:'B2 — Canva Pro', positionnement:[
+    'Avez-vous déjà un compte Canva ? Avez-vous déjà créé un visuel dessus ?',
+    'Quel visuel précis voulez-vous produire pendant la session ?',
+    'Avez-vous un logo ou une charte graphique existante ?'] },
+  B3: { titre:'B3 — Instagram & LinkedIn Pro', positionnement:[
+    'Quels réseaux utilisez-vous déjà pour votre activité, et à quel rythme publiez-vous ?',
+    'Quel est votre principal objectif (visibilité, prospection, recrutement…) ?',
+    'Quel frein rencontrez-vous le plus dans votre communication actuelle ?'] },
+  B4: { titre:'B4 — Crypto & Blockchain', positionnement:[
+    'Quel est votre niveau de connaissance actuel de la blockchain (débutant, notions, déjà investi) ?',
+    'Avez-vous déjà un portefeuille ou un compte sur une plateforme d\'échange ?',
+    'Quelle est votre principale question ou crainte sur le sujet ?'] },
+  B5: { titre:'B5 — Cybersécurité pour non-techs', positionnement:[
+    'Utilisez-vous déjà un gestionnaire de mots de passe ?',
+    'Avez-vous déjà été confronté à un email suspect ou une tentative de piratage ?',
+    'Quelles données sensibles gérez-vous pour votre structure (adhérents, clients, salariés) ?'] },
+  B6: { titre:'B6 — Automatiser ses tâches', positionnement:[
+    'Avez-vous déjà utilisé un outil no-code (Zapier, Make…) ?',
+    'Quelle tâche répétitive aimeriez-vous automatiser en priorité ?',
+    'Quels outils utilisez-vous au quotidien (Sheets, formulaires, CRM…) ?'] },
+  C1: { titre:'C1 — Demande de subvention', positionnement:[
+    'Avez-vous déjà déposé une demande de subvention ? Avec quel résultat ?',
+    'Quel projet précis souhaitez-vous financer ?',
+    'Avez-vous déjà identifié un ou plusieurs financeurs potentiels ?'] },
+  C2: { titre:'C2 — Comptabilité pour les assos', positionnement:[
+    'Qui tient actuellement la comptabilité de votre association ?',
+    'Utilisez-vous déjà un tableur ou un logiciel de suivi budgétaire ?',
+    'Quelle est votre principale difficulté en gestion financière ?'] },
+  C3: { titre:'C3 — RGPD pour TPE et assos', positionnement:[
+    'Votre structure collecte-t-elle des données personnelles (adhérents, clients) ? Lesquelles ?',
+    'Avez-vous déjà un registre de traitement ou des mentions légales RGPD ?',
+    'Quelle est votre principale question sur le RGPD ?'] },
+  C4: { titre:'C4 — Excel de A à Z', positionnement:[
+    'Quel est votre niveau actuel sur Excel/LibreOffice Calc (débutant, intermédiaire, avancé) ?',
+    'Utilisez-vous déjà des formules comme RECHERCHEV ou des tableaux croisés dynamiques ?',
+    'Avez-vous un jeu de données réel à apporter pour travailler pendant la session ?'] },
+  C5: { titre:'C5 — Créer son offre et son tarif', positionnement:[
+    'Avez-vous déjà une offre et des tarifs définis ? Depuis quand ?',
+    'Comment fixez-vous vos prix aujourd\'hui (au feeling, benchmark, calcul) ?',
+    'Quelle est votre principale hésitation sur votre tarification actuelle ?'] },
+  C6: { titre:'C6 — Mécénat & levée de fonds locale', positionnement:[
+    'Avez-vous déjà sollicité une entreprise pour du mécénat ? Avec quel résultat ?',
+    'Avez-vous identifié des entreprises locales à approcher ?',
+    'Quel est le projet pour lequel vous cherchez du mécénat ?'] }
+};
+
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyJ-Dk-yZZNdfxFigchP953rNyjSLJv4oOVUbxzuAbX4kuBfwTFBJvnnLuJMLWRnd9c4w/exec';
+
+const params = new URLSearchParams(window.location.search);
+const preselected = params.get('module');
+
+const select = document.getElementById('module');
+Object.keys(MODULES_INFO).forEach(code => {
+  const opt = document.createElement('option');
+  opt.value = code;
+  opt.textContent = MODULES_INFO[code].titre;
+  select.appendChild(opt);
+});
+
+function renderPositionnement(code) {
+  const container = document.getElementById('positionnementFields');
+  container.innerHTML = '';
+  const questions = (MODULES_INFO[code] && MODULES_INFO[code].positionnement) || [];
+  questions.forEach((q, i) => {
+    const group = document.createElement('div');
+    group.className = 'form-group full';
+    const label = document.createElement('label');
+    label.textContent = q;
+    const textarea = document.createElement('textarea');
+    textarea.name = 'positionnement_' + (i + 1);
+    textarea.rows = 2;
+    group.appendChild(label);
+    group.appendChild(textarea);
+    container.appendChild(group);
+  });
+}
+
+function updateRecap(code) {
+  const recap = document.getElementById('moduleRecap');
+  const info = MODULES_INFO[code];
+  if (info) {
+    recap.innerHTML = 'Module sélectionné : <strong>' + info.titre + '</strong> — <a href="academie.html" style="color:var(--emerald-l)">changer de module</a>';
+  } else {
+    recap.innerHTML = 'Module non présélectionné — <a href="academie.html" style="color:var(--emerald-l)">choisissez un module dans le catalogue</a>, ou précisez-le ci-dessous.';
+  }
+}
+
+if (preselected && MODULES_INFO[preselected]) {
+  select.value = preselected;
+}
+renderPositionnement(select.value);
+updateRecap(select.value);
+select.addEventListener('change', () => {
+  renderPositionnement(select.value);
+  updateRecap(select.value);
+});
+
+const form = document.getElementById('inscriptionForm');
+const submitBtn = form.querySelector('.btn-submit');
+form.addEventListener('submit', async e => {
+  e.preventDefault();
+  const required = form.querySelectorAll('[required]');
+  let valid = true;
+  required.forEach(el => {
+    const filled = el.type === 'checkbox' ? el.checked : el.value.trim();
+    if (!filled) { el.style.borderColor = '#F87171'; valid = false; }
+    else { el.style.borderColor = ''; }
+  });
+  if (!valid) return;
+
+  const code = select.value;
+  const positionnement = Array.from(document.querySelectorAll('#positionnementFields textarea')).map(t => t.value);
+  const payload = {
+    action: 'INSCRIPTION_ACADEMIE',
+    module: code,
+    moduleTitre: (MODULES_INFO[code] && MODULES_INFO[code].titre) || code,
+    prenom: document.getElementById('prenom').value,
+    nom: document.getElementById('nom').value,
+    email: document.getElementById('email').value,
+    telephone: document.getElementById('telephone').value,
+    structure: document.getElementById('structure').value,
+    statut: document.getElementById('statut').value,
+    adaptation: document.getElementById('adaptation').value,
+    positionnement: positionnement,
+    cgv: form.querySelector('[name=cgv]').checked,
+    consentement: form.querySelector('[name=consentement]').checked
+  };
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Envoi en cours…';
+  try {
+    const res = await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      redirect: 'follow',
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (!data || !data.success) throw new Error((data && data.message) || 'Erreur serveur');
+    document.getElementById('successMsg').style.display = 'block';
+    form.style.display = 'none';
+    document.getElementById('successMsg').scrollIntoView({behavior:'smooth'});
+  } catch (err) {
+    document.getElementById('errorMsg').style.display = 'block';
+    document.getElementById('errorMsg').scrollIntoView({behavior:'smooth'});
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Envoyer mon inscription →';
+  }
+});
+</script>
+</body>
+</html>
