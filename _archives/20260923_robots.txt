@@ -1,0 +1,15 @@
+# robots.txt — Génie, Tiers-Lieu de Montauban
+# https://genie-montauban.fr
+# Tous les robots sont les bienvenus, y compris les crawlers IA
+# (GPTBot, ClaudeBot, PerplexityBot, Google-Extended, Applebot-Extended, etc.)
+# Résumé structuré du site pour les IA : https://genie-montauban.fr/llms.txt
+#
+# Les pages privées (admin, espace membre, sessions, comptes-rendus internes)
+# ne sont pas listées ici : chacune porte déjà <meta name="robots"
+# content="noindex,nofollow">. Les lister dans ce fichier public revenait à
+# publier leurs URLs sans en bloquer l'accès.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://genie-montauban.fr/sitemap.xml
