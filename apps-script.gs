@@ -137,6 +137,44 @@ function hashSha256(txt) {
     .map(function(b) { return ('0' + (b & 0xFF).toString(16)).slice(-2); }).join('');
 }
 
+// Comparaison à durée constante : ne révèle pas, par son temps d'exécution,
+// combien de caractères d'un hash proposé sont corrects.
+function comparaisonConstante(a, b) {
+  a = String(a); b = String(b);
+  if (a.length !== b.length) return false;
+  var diff = 0;
+  for (var i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return diff === 0;
+}
+
+// Le hash du mot de passe admin vivait dans l'onglet « Config », c'est-à-dire
+// DANS le classeur : toute fuite du classeur emportait le hash. Il vit
+// désormais dans les Propriétés du script (jamais exportées, jamais partagées),
+// salé et itéré pour qu'un hash volé ne se casse pas hors ligne.
+var ADMIN_HASH_ITERATIONS = 10000;
+
+function hashMotDePasseAdmin(mdp, sel) {
+  var h = String(sel) + '|' + String(mdp);
+  for (var i = 0; i < ADMIN_HASH_ITERATIONS; i++) h = hashSha256(h);
+  return h;
+}
+
+// Range le mot de passe dans les Propriétés du script et efface le hash
+// resté dans la feuille Config.
+function rangerMotDePasseAdmin(mdp, ss) {
+  var sel = Utilities.getUuid() + Utilities.getUuid();
+  PropertiesService.getScriptProperties().setProperty('ADMIN_PASSWORD_SALT', sel);
+  PropertiesService.getScriptProperties().setProperty('ADMIN_PASSWORD_HASH', hashMotDePasseAdmin(mdp, sel));
+  try {
+    var cfg = (ss || SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID)).getSheetByName('Config');
+    if (!cfg) return;
+    var rows = cfg.getDataRange().getValues();
+    for (var i = rows.length - 1; i >= 0; i--) {
+      if (rows[i][0] === 'ADMIN_PASSWORD_HASH') cfg.deleteRow(i + 1);
+    }
+  } catch (err) { logErreur('rangerMotDePasseAdmin', err); }
+}
+
 function lireSessions() {
   try {
     return JSON.parse(PropertiesService.getScriptProperties().getProperty('ADMIN_SESSIONS') || '{}');
@@ -227,19 +265,21 @@ function requireClient(data) {
 // de passe admin : génère un mot de passe fort, stocke son hash dans
 // l'onglet Config, invalide les sessions et envoie le mot de passe
 // par email à CONFIG.EMAIL_ADMIN. À relancer pour changer de mot de passe.
-function definirMotDePasseAdmin() {
+function genererMotDePasseAdmin() {
+  // Math.random() n'est pas un générateur cryptographique : on tire les
+  // caractères d'un condensé d'UUID (aléatoire fourni par la plateforme).
   var alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789!#%*+';
+  var octets = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,
+    Utilities.getUuid() + Utilities.getUuid() + Utilities.getUuid() + Date.now());
   var mdp = '';
-  for (var i = 0; i < 16; i++) mdp += alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+  for (var i = 0; i < 20; i++) mdp += alphabet.charAt((octets[i] & 0xFF) % alphabet.length);
+  return mdp;
+}
+
+function definirMotDePasseAdmin() {
+  var mdp = genererMotDePasseAdmin();
   var ss  = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
-  var cfg = ss.getSheetByName('Config') || ss.insertSheet('Config');
-  var rows = cfg.getDataRange().getValues();
-  var hash = hashSha256(mdp);
-  var trouve = false;
-  for (var j = 0; j < rows.length; j++) {
-    if (rows[j][0] === 'ADMIN_PASSWORD_HASH') { cfg.getRange(j + 1, 2).setValue(hash); trouve = true; break; }
-  }
-  if (!trouve) cfg.appendRow(['ADMIN_PASSWORD_HASH', hash]);
+  rangerMotDePasseAdmin(mdp, ss);
   ecrireSessions({});
   MailApp.sendEmail(CONFIG.EMAIL_ADMIN, '🔐 Génie — Nouveau mot de passe admin',
     'Nouveau mot de passe de l\'interface admin (' + CONFIG.URL_SITE + '/admin.html) :\n\n' + mdp +
@@ -247,6 +287,92 @@ function definirMotDePasseAdmin() {
     'Pour le changer : relancer definirMotDePasseAdmin() dans l\'éditeur Apps Script.\n' +
     'Toutes les sessions admin en cours ont été déconnectées.');
   Logger.log('✅ Mot de passe régénéré et envoyé à ' + CONFIG.EMAIL_ADMIN);
+}
+
+// ============================================================
+// REMÉDIATION D'URGENCE — À LANCER DEPUIS L'ÉDITEUR APPS SCRIPT
+// ============================================================
+// Le classeur a été partagé en « Tous les utilisateurs disposant du lien —
+// Lecteur » et son identifiant était en clair dans la page d'accueil :
+// n'importe qui pouvait lire Clients, Reservations, Adhesions, Tokens et
+// Config. Cette fonction coupe la fuite et invalide tout ce qui a pu être
+// recopié pendant l'exposition. Elle n'est volontairement PAS exposée par
+// doGet/doPost : elle ne se lance qu'à la main, depuis l'éditeur.
+//
+// Au premier lancement, Google demandera une autorisation supplémentaire
+// (accès Drive, nécessaire pour retirer le partage) : accepter.
+function urgenceCouperFuite() {
+  var rapport = [];
+
+  // 1. Retirer le partage public du classeur.
+  try {
+    DriveApp.getFileById(CONFIG.SPREADSHEET_ID)
+      .setSharing(DriveApp.Access.PRIVATE, DriveApp.Permission.NONE);
+    rapport.push('OK  — Classeur repassé en privé (plus d\'accès « avec le lien »).');
+  } catch (err) {
+    rapport.push('ECHEC — Partage NON modifié (' + err.message + '). '
+      + 'À faire à la main : ouvrir le classeur → Partager → Accès général → Restreint.');
+  }
+
+  // 2. Purger les liens magiques : ceux en circulation ont pu être recopiés.
+  try {
+    var ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+    var tk = ss.getSheetByName('Tokens');
+    var supprimes = 0;
+    if (tk && tk.getLastRow() > 1) {
+      supprimes = tk.getLastRow() - 1;
+      tk.deleteRows(2, supprimes);
+    }
+    rapport.push('OK  — ' + supprimes + ' lien(s) magique(s) invalidé(s).');
+  } catch (err) {
+    rapport.push('ECHEC — Purge des jetons : ' + err.message);
+  }
+
+  // 3. Couper toutes les sessions ouvertes (admin et « Mon compte »).
+  try {
+    ecrireSessions({});
+    ecrireSessionsClient({});
+    rapport.push('OK  — Toutes les sessions admin et adhérents ont été fermées.');
+  } catch (err) {
+    rapport.push('ECHEC — Sessions : ' + err.message);
+  }
+
+  // 4. Nouveau mot de passe admin, rangé hors du classeur.
+  var mdp = '';
+  try {
+    mdp = genererMotDePasseAdmin();
+    rangerMotDePasseAdmin(mdp, SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID));
+    rapport.push('OK  — Nouveau mot de passe admin généré (voir plus bas).');
+  } catch (err) {
+    rapport.push('ECHEC — Mot de passe admin : ' + err.message);
+  }
+
+  var corps = 'Remédiation exécutée le ' + new Date().toLocaleString('fr-FR') + '\n\n'
+    + rapport.join('\n')
+    + (mdp ? '\n\nNOUVEAU MOT DE PASSE ADMIN :\n' + mdp
+           + '\n\nÀ ranger dans un gestionnaire de mots de passe, puis supprimer cet e-mail.' : '')
+    + '\n\nÀ vérifier ensuite à la main :\n'
+    + '- Classeur → Partager → Accès général doit afficher « Restreint ».\n'
+    + '- Fichier → Historique des versions : repérer d\'éventuelles consultations anormales.\n'
+    + '- Les adhérents devront redemander un lien de connexion (les anciens sont invalidés).';
+
+  try { MailApp.sendEmail(CONFIG.EMAIL_ADMIN, 'Génie — Remédiation sécurité exécutée', corps); } catch (e) {}
+  Logger.log(corps);
+  return corps;
+}
+
+// Vérification rapide, sans rien modifier : le classeur est-il encore public ?
+function verifierPartageClasseur() {
+  try {
+    var f = DriveApp.getFileById(CONFIG.SPREADSHEET_ID);
+    var acces = String(f.getSharingAccess());
+    var ouvert = (acces === 'ANYONE' || acces === 'ANYONE_WITH_LINK');
+    Logger.log((ouvert ? 'DANGER — classeur PUBLIC (' : 'OK — classeur restreint (') + acces + ')');
+    return !ouvert;
+  } catch (err) {
+    Logger.log('Impossible de vérifier le partage : ' + err.message);
+    return null;
+  }
 }
 
 // À exécuter DEPUIS L'ÉDITEUR uniquement (tests/maintenance) :
@@ -298,6 +424,7 @@ function doGet(e) {
     if (a === 'GET_DISPO')         return ok(getDisponibilites(e.parameter));
     if (a === 'GET_RESERVATIONS')  return ok(getReservations(e.parameter));
     if (a === 'VALIDER_TOKEN')     return ok(validerToken(e.parameter));
+    if (a === 'GET_AVIS')          return ok(getAvis());
     // ── Lectures admin : session vérifiée côté serveur ──
     if (a === 'getAll' || a === 'ADMIN_GET_ALL')
       return ok(requireAdmin(e.parameter) || adminGetAll());
@@ -455,7 +582,9 @@ function demanderLienMagique(data) {
       .map(function(b) { return ('0' + (b & 0xFF).toString(16)).slice(-2); }).join('');
     const now = new Date();
     const exp = new Date(now.getTime() + CONFIG.TOKEN_EXPIRY_MIN * 60000);
-    ss.getSheetByName('Tokens').appendRow([token, data.email.toLowerCase(), now.toISOString(), exp.toISOString(), false]);
+    // Seule l'empreinte du jeton est écrite : une copie du classeur ne permet
+    // plus de rejouer un lien magique en cours de validité.
+    ss.getSheetByName('Tokens').appendRow([hashSha256(token), data.email.toLowerCase(), now.toISOString(), exp.toISOString(), false]);
     const lien = CONFIG.URL_MON_COMPTE + '?token=' + token;
     envoyerEmailSafe(data.email, '🔑 Votre lien de connexion — Génie Montauban',
       'Bonjour ' + prenom + ',\n\nVoici votre lien de connexion (valable 1h) :\n' + lien +
@@ -476,8 +605,9 @@ function validerToken(params) {
     const sheet = ss.getSheetByName('Tokens');
     const rows = sheet.getDataRange().getValues();
     const now = new Date();
+    const empreinte = hashSha256(String(params.token || ''));
     for (let i = 1; i < rows.length; i++) {
-      if (rows[i][0] === params.token) {
+      if (params.token && comparaisonConstante(rows[i][0], empreinte)) {
         if (rows[i][4] === true) return { success: false, error: 'TOKEN_UTILISE' };
         if (new Date(rows[i][3]) < now) return { success: false, error: 'TOKEN_EXPIRE' };
         sheet.getRange(i + 1, 5).setValue(true);
@@ -869,6 +999,52 @@ function getDisponibilites(params) {
 }
 
 function getReservations(params) { return getDisponibilites(params); }
+
+// ============================================================
+// AVIS PUBLICS — remplace la lecture directe du classeur (/gviz/tq)
+// ============================================================
+// La page d'accueil lisait l'onglet Avis_Qualite en direct, ce qui obligeait
+// à partager le classeur en « lecture pour tous » : toutes les feuilles
+// (Clients, Reservations, Adhesions, Tokens, Config) devenaient alors
+// publiques. Cet endpoint ne renvoie que les témoignages approuvés, réduits
+// aux champs affichés : ni email, ni horodatage, ni remarques internes.
+function getAvis() {
+  try {
+    var cache = CacheService.getScriptCache();
+    var enCache = cache.get('avis_publics');
+    if (enCache) return JSON.parse(enCache);
+
+    var ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+    var sheet = ss.getSheetByName('Avis_Qualite');
+    if (!sheet) return { success: true, avis: [] };
+    var rows = sheet.getDataRange().getValues();
+    // Colonnes du formulaire : A=0 Horodatage, B=1 Note, C=2 Services,
+    // D=3 Ce qui a plu, E=4 À améliorer (INTERNE), F=5 Recommande,
+    // G=6 Prénom, H=7 Consentement, I=8 Approuvé.
+    var avis = [];
+    for (var i = 1; i < rows.length; i++) {
+      var r = rows[i];
+      if (String(r[8] || '').toLowerCase().trim() !== 'oui') continue;
+      var note = parseInt(r[1], 10) || 0;
+      if (note < 4) continue;
+      // Un seul mot : si l'auteur a saisi « Prénom Nom », le nom ne sort pas.
+      var prenom = String(r[6] || '').trim().split(/\s+/)[0] || 'Anonyme';
+      avis.push({
+        prenom:     prenom,
+        note:       note,
+        services:   String(r[2] || '').trim(),
+        temoignage: String(r[3] || '').trim(),
+        recommande: String(r[5] || '').trim()
+      });
+    }
+    var reponse = { success: true, avis: avis };
+    cache.put('avis_publics', JSON.stringify(reponse), 300);   // 5 min
+    return reponse;
+  } catch (err) {
+    logErreur('getAvis', err);
+    return { success: false, error: 'ERREUR_SERVEUR' };
+  }
+}
 
 // ============================================================
 // ADHÉSION — identique v4.2
@@ -1412,7 +1588,10 @@ function adminGetAll() {
     }
 
     const cfg = lireConfig(ss);
-    return { success: true, reservations: reservations, adhesions: adhesions, config: cfg };
+    // L'URL du classeur n'est plus écrite en dur dans admin.html (page servie
+    // publiquement) : elle ne descend qu'avec une session admin valide.
+    return { success: true, reservations: reservations, adhesions: adhesions, config: cfg,
+             sheetUrl: 'https://docs.google.com/spreadsheets/d/' + CONFIG.SPREADSHEET_ID + '/edit' };
   } catch (err) {
     logErreur('adminGetAll', err);
     return { success: false, error: 'ERREUR_SERVEUR', message: err.message };
@@ -1631,19 +1810,33 @@ function adminSaveConfig(config) {
 // ============================================================
 function adminLogin(data) {
   try {
+    // Rate limiting anti force brute (5 essais/heure), avant toute lecture.
+    if (!rateLimitOk('adminlogin'))
+      return { success: false, error: 'TROP_DE_REQUETES', message: 'Trop de tentatives. Réessayez dans une heure.' };
+    const mdp   = String(data.password || '');
+    const props = PropertiesService.getScriptProperties();
+    const hash  = props.getProperty('ADMIN_PASSWORD_HASH');
+    const sel   = props.getProperty('ADMIN_PASSWORD_SALT');
+
+    if (hash && sel) {
+      if (!comparaisonConstante(hashMotDePasseAdmin(mdp, sel), hash)) return { success: false };
+      // Session serveur : token aléatoire, jamais dérivé du mot de passe
+      return { success: true, token: creerSessionAdmin(), expireDansH: CONFIG.SESSION_ADMIN_H };
+    }
+
+    // ── Repli le temps de la bascule : ancien hash non salé, resté dans la
+    // feuille Config. À la première connexion réussie, on le déplace dans les
+    // Propriétés du script et on efface la ligne du classeur.
     const ss  = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
     const cfg = ss.getSheetByName('Config');
-    if (!cfg) return { success: false };
+    if (!cfg) return { success: false, error: 'MDP_NON_INITIALISE',
+      message: 'Exécuter definirMotDePasseAdmin() dans l\'éditeur Apps Script.' };
     const rows    = cfg.getDataRange().getValues();
     const hashRow = rows.find(function(r) { return r[0] === 'ADMIN_PASSWORD_HASH'; });
     if (!hashRow) return { success: false, error: 'MDP_NON_INITIALISE',
       message: 'Exécuter definirMotDePasseAdmin() dans l\'éditeur Apps Script.' };
-    // Rate limiting anti force brute (5 essais/heure)
-    if (!rateLimitOk('adminlogin'))
-      return { success: false, error: 'TROP_DE_REQUETES', message: 'Trop de tentatives. Réessayez dans une heure.' };
-    const inputHash = hashSha256(String(data.password || ''));
-    if (inputHash !== hashRow[1]) return { success: false };
-    // Session serveur : token aléatoire, jamais dérivé du mot de passe
+    if (!comparaisonConstante(hashSha256(mdp), String(hashRow[1]))) return { success: false };
+    rangerMotDePasseAdmin(mdp, ss);
     return { success: true, token: creerSessionAdmin(), expireDansH: CONFIG.SESSION_ADMIN_H };
   } catch (err) {
     logErreur('adminLogin', err);
@@ -2054,9 +2247,16 @@ function testSysteme() {
       var s = ss.getSheetByName(nom);
       Logger.log(s ? '✅ "' + nom + '" (' + Math.max(0,s.getLastRow()-1) + ' lignes)' : '❌ "' + nom + '" MANQUANT');
     });
-    var cfg     = ss.getSheetByName('Config');
-    var hashRow = cfg ? cfg.getDataRange().getValues().find(function(r){return r[0]==='ADMIN_PASSWORD_HASH';}) : null;
-    Logger.log(hashRow ? '✅ Hash admin OK' : '❌ Hash admin MANQUANT');
+    var props = PropertiesService.getScriptProperties();
+    Logger.log(props.getProperty('ADMIN_PASSWORD_HASH') && props.getProperty('ADMIN_PASSWORD_SALT')
+      ? '✅ Hash admin OK (Propriétés du script, salé)'
+      : '❌ Hash admin MANQUANT — lancer definirMotDePasseAdmin()');
+    var cfg = ss.getSheetByName('Config');
+    var resteDansClasseur = cfg && cfg.getDataRange().getValues()
+      .some(function(r){ return r[0] === 'ADMIN_PASSWORD_HASH'; });
+    Logger.log(resteDansClasseur
+      ? '⚠️ Un hash admin traîne encore dans la feuille Config — lancer definirMotDePasseAdmin()'
+      : '✅ Aucun secret dans la feuille Config');
     Logger.log('=== FIN TEST ===');
   } catch (err) {
     Logger.log('❌ ERREUR : ' + err.message);
@@ -2220,12 +2420,10 @@ function setupComplet() {
   var cfg = ss.getSheetByName('Config');
   if (!cfg) {
     cfg = ss.insertSheet('Config');
-    var charset = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%';
-    var pwd = '';
-    for (var i = 0; i < 16; i++) pwd += charset.charAt(Math.floor(Math.random() * charset.length));
-    var hash = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, pwd)
-      .map(function(b){return ('0'+(b&0xFF).toString(16)).slice(-2);}).join('');
-    cfg.getRange(1,1,2,2).setValues([['ADMIN_PASSWORD_HASH',hash],['CALENDAR_ID',CONFIG.CALENDAR_ID]]);
+    // Le secret ne descend plus dans le classeur : seul CALENDAR_ID y reste.
+    cfg.getRange(1,1,1,2).setValues([['CALENDAR_ID',CONFIG.CALENDAR_ID]]);
+    var pwd = genererMotDePasseAdmin();
+    rangerMotDePasseAdmin(pwd, ss);
     Logger.log('🔑 MOT DE PASSE ADMIN : ' + pwd);
   }
   Logger.log('✅ Setup terminé — lancer setupDeclencheurs()');
@@ -2233,20 +2431,9 @@ function setupComplet() {
 }
 
 function reinitMotDePasse() {
-  var charset = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%';
-  var pwd = '';
-  for (var i = 0; i < 16; i++) pwd += charset.charAt(Math.floor(Math.random() * charset.length));
-  var hash = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, pwd)
-    .map(function(b){return ('0'+(b&0xFF).toString(16)).slice(-2);}).join('');
-  PropertiesService.getScriptProperties().setProperty('ADMIN_PASSWORD_HASH', hash);
-  var ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
-  var sheet = ss.getSheetByName('Config');
-  if (sheet) {
-    var rows = sheet.getDataRange().getValues();
-    for (var i = 0; i < rows.length; i++) {
-      if (rows[i][0] === 'ADMIN_PASSWORD_HASH') { sheet.getRange(i+1,2).setValue(hash); break; }
-    }
-  }
+  var pwd = genererMotDePasseAdmin();
+  rangerMotDePasseAdmin(pwd, SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID));
+  ecrireSessions({});   // toute session admin ouverte est coupée
   Logger.log('🔑 NOUVEAU MOT DE PASSE ADMIN : ' + pwd);
   return pwd;
 }

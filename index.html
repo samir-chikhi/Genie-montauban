@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://docs.google.com; frame-src https://www.google.com; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com; frame-src https://www.google.com; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>Génie — Tiers-lieu & coworking à Montauban · éducation populaire, ESS</title>
   <meta name="description" content="Génie, le tiers-lieu de Montauban : espace de coworking et salles de réunion à 200 m de la gare, ateliers d'éducation populaire, université populaire et accompagnement de projets (association ESS).">
@@ -1182,33 +1182,18 @@
 
 <script>
 (function() {
-  var SHEET_ID  = "1mf3D2YGnpWpzufGOaLLaomxAkuzp0AiJY7RzcbpIq2w";
-  var SHEET_TAB = "Avis_Qualite";
-  var NOTE_MIN  = 4;
-  // Indices colonnes (0-based) — ajuste si tes colonnes Forms diffèrent
-  // A=0 Horodatage, B=1 Note, C=2 Services, D=3 Ce qui a plu,
-  // E=4 À améliorer, F=5 Recommande, G=6 Prénom, H=7 Consentement, I=8 Approuvé
-  var COL = { NOTE:1, SERVICES:2, PLU:3, RECOMMANDE:5, PRENOM:6, APPROUVE:8 };
+  // Les avis sont servis par l'API Apps Script (action GET_AVIS), qui ne
+  // renvoie que les témoignages approuvés et réduits au strict nécessaire.
+  // Auparavant cette page lisait directement le Google Sheet via /gviz/tq :
+  // cela imposait de partager le classeur en « lecture pour tous », donc de
+  // rendre publiques TOUTES ses feuilles (Clients, Reservations, Adhesions,
+  // Tokens, Config). Ne jamais réintroduire d'appel direct au classeur ici.
+  var AVIS_URL = 'https://script.google.com/macros/s/AKfycbyJ-Dk-yZZNdfxFigchP953rNyjSLJv4oOVUbxzuAbX4kuBfwTFBJvnnLuJMLWRnd9c4w/exec?action=GET_AVIS';
 
-  var url = "https://docs.google.com/spreadsheets/d/" + SHEET_ID
-          + "/gviz/tq?tqx=out:csv&sheet=" + encodeURIComponent(SHEET_TAB);
-
-  function parseCSV(text) {
-    var rows = [], lines = text.split(/\r?\n/);
-    for (var i = 1; i < lines.length; i++) {
-      var line = lines[i].trim();
-      if (!line) continue;
-      var cols = [], cur = '', inQ = false;
-      for (var j = 0; j < line.length; j++) {
-        var c = line[j];
-        if (c === '"') { inQ = !inQ; }
-        else if (c === ',' && !inQ) { cols.push(cur.trim()); cur = ''; }
-        else { cur += c; }
-      }
-      cols.push(cur.trim());
-      rows.push(cols);
-    }
-    return rows;
+  function esc(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
   }
 
   function stars(n) {
@@ -1223,31 +1208,26 @@
     return p.split(' ').map(function(w){ return w[0]||''; }).join('').toUpperCase().slice(0,2);
   }
 
-  function render(rows) {
-    var valid = rows.filter(function(r) {
-      return (r[COL.APPROUVE]||'').toLowerCase().trim() === 'oui'
-          && (parseInt(r[COL.NOTE])||0) >= NOTE_MIN;
-    });
-
+  function render(avis) {
     document.getElementById('gav-loading').style.display = 'none';
 
-    if (!valid.length) {
+    if (!avis.length) {
       document.getElementById('gav-grid').innerHTML =
         '<p style="text-align:center;color:#6B7A8A;font-style:italic;grid-column:1/-1;">Les premiers avis arrivent bientôt…</p>';
       return;
     }
 
     // Stats
-    var notes   = valid.map(function(r){ return parseInt(r[COL.NOTE])||0; });
+    var notes   = avis.map(function(a){ return a.note || 0; });
     var avg     = (notes.reduce(function(a,b){return a+b;},0)/notes.length).toFixed(1);
-    var pctReco = Math.round(valid.filter(function(r){
-      var v = (r[COL.RECOMMANDE]||'').toLowerCase();
+    var pctReco = Math.round(avis.filter(function(a){
+      var v = (a.recommande||'').toLowerCase();
       return v.indexOf('oui')!==-1||v.indexOf('sans')!==-1||v.indexOf('probablement')!==-1;
-    }).length / valid.length * 100);
+    }).length / avis.length * 100);
 
     var statsRow = document.getElementById('gav-stats-row');
     statsRow.innerHTML = [
-      ['<span style="font-size:1.5rem;font-weight:700;color:#1C2B3A">'+valid.length+'</span>', 'avis publiés'],
+      ['<span style="font-size:1.5rem;font-weight:700;color:#1C2B3A">'+avis.length+'</span>', 'avis publiés'],
       ['<span style="font-size:1.5rem;font-weight:700;color:#C9993E">'+avg+' / 5</span>', '<span style="color:#C9993E">'+stars(Math.round(avg))+'</span>'],
       ['<span style="font-size:1.5rem;font-weight:700;color:#4A7C6F">'+pctReco+'%</span>', 'recommandent']
     ].map(function(s){
@@ -1258,23 +1238,26 @@
 
     // Filtres
     var cats = ['Tous'];
-    valid.forEach(function(r){
-      (r[COL.SERVICES]||'').split(/[,;\/]+/).forEach(function(s){
+    avis.forEach(function(a){
+      (a.services||'').split(/[,;\/]+/).forEach(function(s){
         s = s.trim(); if (s && cats.indexOf(s) === -1) cats.push(s);
       });
     });
     var filtersEl = document.getElementById('gav-filters');
-    filtersEl.innerHTML = cats.map(function(c, i){
-      return '<button onclick="gavFilter(this,\''+c.replace(/'/g,"\\'")+'\')" '
-        +'style="padding:5px 16px;border-radius:20px;border:1px solid '+(i===0?'#C9993E':'#ddd')+';'
+    filtersEl.innerHTML = '';
+    cats.forEach(function(c, i){
+      var btn = document.createElement('button');
+      btn.textContent = c;
+      btn.setAttribute('style', 'padding:5px 16px;border-radius:20px;border:1px solid '+(i===0?'#C9993E':'#ddd')+';'
         +'background:'+(i===0?'#C9993E':'white')+';color:'+(i===0?'white':'#555')+';'
-        +'font-size:13px;cursor:pointer;font-weight:'+(i===0?'700':'400')+';">'
-        + c + '</button>';
-    }).join('');
+        +'font-size:13px;cursor:pointer;font-weight:'+(i===0?'700':'400')+';');
+      btn.addEventListener('click', function(){ gavFilter(btn, c); });
+      filtersEl.appendChild(btn);
+    });
     filtersEl.style.display = 'flex';
 
-    window._gavAll = valid;
-    window.gavFilter = function(btn, cat) {
+    window._gavAll = avis;
+    function gavFilter(btn, cat) {
       document.querySelectorAll('#gav-filters button').forEach(function(b){
         b.style.background='white'; b.style.color='#555';
         b.style.borderColor='#ddd'; b.style.fontWeight='400';
@@ -1282,14 +1265,14 @@
       btn.style.background='#C9993E'; btn.style.color='white';
       btn.style.borderColor='#C9993E'; btn.style.fontWeight='700';
       renderCards(cat);
-    };
+    }
 
     renderCards('Tous');
   }
 
   function renderCards(cat) {
-    var data = cat === 'Tous' ? window._gavAll : window._gavAll.filter(function(r){
-      return (r[COL.SERVICES]||'').indexOf(cat) !== -1;
+    var data = cat === 'Tous' ? window._gavAll : window._gavAll.filter(function(a){
+      return (a.services||'').indexOf(cat) !== -1;
     });
     var accents = ['#C9993E','#4A7C6F','#1C2B3A'];
     var grid = document.getElementById('gav-grid');
@@ -1297,29 +1280,32 @@
       grid.innerHTML = '<p style="text-align:center;color:#6B7A8A;font-style:italic;grid-column:1/-1;">Aucun avis pour cette catégorie.</p>';
       return;
     }
-    grid.innerHTML = data.map(function(r, i){
-      var prenom  = (r[COL.PRENOM]||'').trim() || 'Anonyme';
-      var note    = parseInt(r[COL.NOTE])||0;
-      var quote   = (r[COL.PLU]||'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-      var svc     = (r[COL.SERVICES]||'').split(/[,;\/]/)[0].trim();
+    grid.innerHTML = data.map(function(a, i){
+      var prenom  = (a.prenom||'').trim() || 'Anonyme';
+      var note    = a.note || 0;
+      var quote   = esc(a.temoignage);
+      var svc     = (a.services||'').split(/[,;\/]/)[0].trim();
       var accent  = accents[i % accents.length];
       var ini     = initials(prenom);
       return '<div style="background:white;border-radius:12px;padding:24px;border-left:4px solid '+accent+';box-shadow:0 2px 16px rgba(28,43,58,.07);">'
         +'<div style="color:#C9993E;font-size:14px;margin-bottom:8px;">'+stars(note)+'</div>'
         +'<p style="font-size:14px;line-height:1.7;color:#1C2B3A;font-style:italic;margin-bottom:16px;">« '+quote+' »</p>'
         +'<div style="display:flex;align-items:center;gap:10px;">'
-          +'<div style="width:32px;height:32px;border-radius:50%;background:'+accent+'22;color:'+accent+';font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">'+ini+'</div>'
-          +'<div><div style="font-weight:700;font-size:13px;color:#1C2B3A;">'+prenom.replace(/</g,'&lt;')+'</div>'
-          +(svc?'<div style="font-size:11px;color:#6B7A8A;">'+svc.replace(/</g,'&lt;')+'</div>':'')
+          +'<div style="width:32px;height:32px;border-radius:50%;background:'+accent+'22;color:'+accent+';font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">'+esc(ini)+'</div>'
+          +'<div><div style="font-weight:700;font-size:13px;color:#1C2B3A;">'+esc(prenom)+'</div>'
+          +(svc?'<div style="font-size:11px;color:#6B7A8A;">'+esc(svc)+'</div>':'')
           +'</div>'
         +'</div>'
       +'</div>';
     }).join('');
   }
 
-  fetch(url)
-    .then(function(r){ return r.text(); })
-    .then(function(t){ render(parseCSV(t)); })
+  fetch(AVIS_URL, { redirect: 'follow' })
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if (!d || !d.success || !Array.isArray(d.avis)) throw new Error('réponse inattendue');
+      render(d.avis);
+    })
     .catch(function(){
       document.getElementById('gav-loading').innerHTML =
         '<span style="color:#6B7A8A;font-style:italic;font-size:14px;">Les avis ne sont pas disponibles pour le moment.</span>';
