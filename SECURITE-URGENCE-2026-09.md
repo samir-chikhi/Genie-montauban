@@ -228,8 +228,10 @@ la fuite comportait un mécanisme de prise de contrôle de compte (les jetons), 
 il est **impossible de démontrer que personne n'y a accédé** — or c'est à toi
 qu'il reviendrait de le démontrer.
 → Formulaire en ligne : https://notifications.cnil.fr
-→ **Dossier complet prêt à déposer : `RGPD-VIOLATION-2026-09.md`** (registre,
-  notification CNIL et message aux adhérents).
+→ **Dossier complet prêt à déposer** (registre des violations, contenu de la
+  notification CNIL, message aux adhérents) : transmis à Samir hors dépôt.
+  Ce document est interne à l'association et n'a pas sa place dans un dépôt
+  public servi par GitHub Pages — le ranger dans le Drive de l'association.
 → Le délai court depuis aujourd'hui. Une notification tardive se justifie
 (art. 33.1), une notification incomplète se complète ensuite (art. 33.4) :
 **mieux vaut notifier dans les temps avec ce qu'on sait que d'attendre**.
