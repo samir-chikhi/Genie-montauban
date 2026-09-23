@@ -159,7 +159,7 @@ Si tu as lancé `urgenceCouperFuite()`, il est déjà dans ta boîte mail : rang
 dans ton gestionnaire de mots de passe **puis supprime l'e-mail**. Sinon, lance
 `definirMotDePasseAdmin()` depuis l'éditeur.
 
-### 3.4 — Révoquer la clé API 21st.dev
+### 3.4 — Révoquer la clé API 21st.dev ✅ fait le 23/09/2026 (clé régénérée)
 
 Le dépôt GitHub est **public**, et le fichier `.mcp.json` y contenait une clé
 API en clair (`21st_sk_0166…`). Je l'ai retirée du fichier, **mais elle reste
@@ -228,6 +228,8 @@ la fuite comportait un mécanisme de prise de contrôle de compte (les jetons), 
 il est **impossible de démontrer que personne n'y a accédé** — or c'est à toi
 qu'il reviendrait de le démontrer.
 → Formulaire en ligne : https://notifications.cnil.fr
+→ **Dossier complet prêt à déposer : `RGPD-VIOLATION-2026-09.md`** (registre,
+  notification CNIL et message aux adhérents).
 → Le délai court depuis aujourd'hui. Une notification tardive se justifie
 (art. 33.1), une notification incomplète se complète ensuite (art. 33.4) :
 **mieux vaut notifier dans les temps avec ce qu'on sait que d'attendre**.
