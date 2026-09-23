@@ -22,17 +22,12 @@
   <meta name="twitter:description" content="Association loi 1901 relevant de l'ESS : ateliers, Veillées du Génie (université populaire), accompagnement de projets à impact. Nos espaces de coworking et de réunion financent la mission.">
   <meta name="twitter:image" content="https://genie-montauban.fr/og-image.jpg">
   <link rel="canonical" href="https://genie-montauban.fr/">
-  <!-- Google Analytics n'est chargé qu'après consentement (RGPD / CNIL) — voir
-       la bannière cookies et le script de consentement en bas de page. -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-774PRH98LY"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
-    gtag('consent', 'default', {
-      analytics_storage: 'denied',
-      ad_storage: 'denied',
-      ad_user_data: 'denied',
-      ad_personalization: 'denied'
-    });
+    gtag('js', new Date());
+    gtag('config', 'G-774PRH98LY');
   </script>
   <script type="application/ld+json">
   {
@@ -730,8 +725,9 @@
       <ul>
         <li>18 modules de 3 h, animés par des experts du bassin montalbanais</li>
         <li>3 filières : Empowerment &amp; Leadership · Tech &amp; Numérique · Gestion &amp; Impact</li>
-        <li>De <strong>45 à 65 €</strong> · prise en charge possible par votre employeur ou votre OPCO : les formations sont dispensées par MUSIVA, organisme certifié Qualiopi</li>
+        <li>À partir de <strong>45 €</strong> · finançable OPCO (opérateur de compétences) et France Travail</li>
         <li>3 modules <strong>gratuits</strong></li>
+        <li>Passerelle vers des certifications professionnelles via MUSIVA</li>
       </ul>
       <span class="app-badge badge-gold">Formation courte · 3 h par module</span>
       <a href="academie.html" class="btn-primary" style="align-self:flex-start;padding:12px 24px;font-size:14px">Voir les 18 modules →</a>
@@ -1445,11 +1441,8 @@
     <div class="footer-legal">
       <a href="mentions_legales.html">Mentions légales</a>
       <a href="confidentialite.html">Confidentialité</a>
-      <a href="cgv.html">CGV espaces</a>
-      <a href="cgv-formation.html">CGV formation</a>
+      <a href="cgv.html">CGV</a>
       <a href="reglement-interieur-genie.html">Règlement intérieur</a>
-      <a href="reglement-interieur-formation.html">Règlement formation</a>
-      <a href="confidentialite.html#cookies" class="footer-cookie-link">Gérer les cookies</a>
       <a href="admin.html" rel="nofollow" style="opacity:.55;font-size:11px;" title="Administration">Admin</a>
       <a href="espace-membres.html" rel="nofollow" style="opacity:.55;font-size:11px;" title="Espace membres">Espace membres</a>
     </div>
@@ -1458,7 +1451,7 @@
 
 <!-- ═══ COOKIE BANNER ═══ -->
 <div id="cookie-banner">
-  <p>🍪 Ce site fonctionne sans cookie de mesure d'audience. Avec votre accord, nous utilisons Google Analytics (dépôt d'un cookie, données transmises à Google) pour mieux comprendre la fréquentation du site. Vous pouvez accepter ou refuser librement — voir notre <a href="confidentialite.html#cookies" style="color:var(--gold-l)">politique de confidentialité</a>.</p>
+  <p>🍪 Ce site utilise des cookies fonctionnels pour améliorer votre expérience. En continuant, vous acceptez notre <a href="confidentialite.html" style="color:var(--gold-l)">politique de confidentialité</a>.</p>
   <div class="cookie-btns">
     <button class="cookie-accept" onclick="acceptCookies()">Accepter</button>
     <button class="cookie-refuse" onclick="refuseCookies()">Refuser</button>
@@ -1474,37 +1467,16 @@
 // ── URL UNIQUE Apps Script (même que admin.html + reservation.html) ──
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyJ-Dk-yZZNdfxFigchP953rNyjSLJv4oOVUbxzuAbX4kuBfwTFBJvnnLuJMLWRnd9c4w/exec';
 
-// ── COOKIE BANNER + CONSENTEMENT GOOGLE ANALYTICS (RGPD / CNIL) ──
-// GA4 n'est jamais chargé tant que l'internaute n'a pas explicitement accepté :
-// aucune requête vers googletagmanager.com/google-analytics.com avant clic sur « Accepter ».
-var GA_MEASUREMENT_ID = 'G-774PRH98LY';
-var __gaLoaded = false;
-function loadGoogleAnalytics() {
-  if (__gaLoaded) return;
-  __gaLoaded = true;
-  gtag('consent', 'update', { analytics_storage: 'granted' });
-  gtag('js', new Date());
-  gtag('config', GA_MEASUREMENT_ID);
-  var s = document.createElement('script');
-  s.async = true;
-  s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_MEASUREMENT_ID;
-  document.head.appendChild(s);
-}
+// ── COOKIE BANNER ──
 function acceptCookies() {
   localStorage.setItem('cookie_consent', 'accepted');
   localStorage.setItem('cookie_consent_date', new Date().toISOString());
-  loadGoogleAnalytics();
   document.getElementById('cookie-banner').classList.remove('show');
 }
 function refuseCookies() {
   localStorage.setItem('cookie_consent', 'refused');
   localStorage.setItem('cookie_consent_date', new Date().toISOString());
-  gtag('consent', 'update', { analytics_storage: 'denied' });
   document.getElementById('cookie-banner').classList.remove('show');
-}
-function openCookieBanner() {
-  var b = document.getElementById('cookie-banner');
-  if (b) b.classList.add('show');
 }
 (function() {
   var consent = localStorage.getItem('cookie_consent');
@@ -1512,19 +1484,14 @@ function openCookieBanner() {
   var expired = false;
   if (consentDate) {
     var months = (new Date() - new Date(consentDate)) / (1000 * 60 * 60 * 24 * 30);
-    if (months > 6) expired = true; // choix mémorisé 6 mois (P0-6)
+    if (months > 13) expired = true;
   }
-  if (consent === 'accepted' && !expired) {
-    loadGoogleAnalytics();
-  } else if (!consent || expired) {
+  if (!consent || expired) {
     setTimeout(function() {
       var b = document.getElementById('cookie-banner');
       if (b) b.classList.add('show');
     }, 1500);
   }
-  document.querySelectorAll('.footer-cookie-link').forEach(function(a) {
-    a.addEventListener('click', function(e) { e.preventDefault(); openCookieBanner(); });
-  });
 })();
 
 // ── NAV SCROLL ──
