@@ -1,8 +1,11 @@
 # Fuite du classeur de réservations — constat, correctifs, procédure
 
 **Date du constat :** 22 septembre 2026
-**Statut :** faille identifiée et confirmée. Correctifs de code prêts.
-**Il reste 4 actions à faire à la main** (§3) — elles seules referment la fuite.
+**Statut au 23/09/2026 08h55 : LA FUITE EST FERMÉE.** Le partage public du
+classeur a été retiré (vérifié sur les permissions Drive : plus aucune entrée
+`type: anyone`). Les correctifs de code sont déployés en production.
+**Reste à traiter :** le volet RGPD (§4), la révocation de la clé API (§3.4), et
+la rotation du mot de passe admin s'il a été recopié quelque part (§3.3).
 
 ---
 
@@ -167,6 +170,28 @@ elle a déjà pu être moissonnée.
 mets-la dans une variable d'environnement `MAGIC_21ST_API_KEY` (le fichier
 pointe maintenant dessus) plutôt que dans le fichier.
 
+### 3.5 bis — Si `urgenceCouperFuite()` dit « Partage NON modifié »
+
+Message rencontré le 23/09/2026 :
+`Specified permissions are not sufficient to call DriveApp.getFileById`
+
+Ce n'est pas un bug du script. Apps Script déduit les autorisations dont un
+projet a besoin en lisant le code — sauf quand le **manifeste** du projet
+(`appsscript.json`) fige explicitement la liste. C'est le cas ici : Drive n'y
+figure pas, donc l'autorisation n'est jamais demandée, même en réautorisant.
+
+**Le partage se ferme alors à la main** (20 secondes, §3.1) — c'est l'action qui
+compte, le reste de la fonction s'est bien exécuté.
+
+Pour que `urgenceCouperFuite()` et `verifierPartageClasseur()` fonctionnent
+ensuite (utile pour la vérification trimestrielle, non urgent) :
+
+1. Dans l'éditeur Apps Script : **Paramètres du projet** (roue dentée à gauche)
+2. Cocher **« Afficher le fichier manifeste appsscript.json dans l'éditeur »**
+3. Ouvrir `appsscript.json`, ajouter dans la liste `oauthScopes` :
+   `"https://www.googleapis.com/auth/drive"`
+4. Enregistrer, relancer la fonction, **accepter la nouvelle autorisation**
+
 ### 3.5 — Vérifier que c'est bien refermé
 
 Dans l'éditeur Apps Script, lance **`verifierPartageClasseur()`** : le journal
@@ -228,6 +253,13 @@ confidentialité décrit les mesures de sécurité.
 
 ## 5. Pour la suite — règles à ne pas enfreindre
 
+0. **Un secret ne se colle jamais dans une conversation**, un ticket ou une note
+   partagée — y compris avec moi. Quand tu me transmets un journal d'exécution,
+   retire la ligne du mot de passe. Un secret qui a transité par un canal de
+   discussion doit être considéré comme usé : on le régénère.
+   (Arrivé le 23/09/2026 ; les fonctions ont été corrigées pour ne plus faire
+   apparaître le mot de passe dans le journal d'exécution — il ne part plus que
+   par e-mail.)
 1. **Ne jamais faire lire un Google Sheet directement par le navigateur.**
    C'est exactement ce qui a créé cette fuite. Toute donnée affichée sur le site
    passe par l'API Apps Script, qui filtre. Cette règle est aussi inscrite en
