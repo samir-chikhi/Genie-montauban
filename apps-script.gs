@@ -274,6 +274,7 @@ function doPost(e) {
       case 'GET_RESERVATIONS_CLIENT': return ok(getReservationsClient(data));
       case 'ADHERER':                 return ok(creerAdhesion(data));
       case 'CONTACT':                 return ok(traiterContact(data));
+      case 'INSCRIPTION_ACADEMIE':    return ok(traiterInscriptionAcademie(data));
       // ── Actions admin : session vérifiée côté serveur ──
       case 'addResa':                 return ok(requireAdmin(data) || adminAddResa(data.resa));
       case 'updateResa':              return ok(requireAdmin(data) || adminUpdateResa(data.resa));
@@ -313,6 +314,7 @@ function doGet(e) {
         case 'INSCRIRE':            return ok(inscrireClient(data));
         case 'ADHERER':             return ok(creerAdhesion(data));
         case 'CONTACT':             return ok(traiterContact(data));
+        case 'INSCRIPTION_ACADEMIE': return ok(traiterInscriptionAcademie(data));
         // ── Actions admin : session vérifiée côté serveur ──
         case 'addResa':             return ok(requireAdmin(data) || adminAddResa(data.resa));
         case 'updateResa':          return ok(requireAdmin(data) || adminUpdateResa(data.resa));
@@ -938,6 +940,53 @@ function traiterContact(data) {
     return { success: true };
   } catch (err) {
     logErreur('traiterContact', err);
+    return { success: false, error: 'ERREUR_SERVEUR', message: err.message };
+  }
+}
+
+// ============================================================
+// INSCRIPTION ACADÉMIE — P1-3 mémo conformité 23/09/2026
+// Formulaire inscription-academie.html. Volontairement calqué sur
+// traiterContact() : pas d'écriture dans le Sheet des réservations pour ne
+// prendre aucun risque sur son schéma existant (24 colonnes, voir plus
+// bas) ; MUSIVA reste responsable du traitement, l'admin Génie sert de
+// relais (locaux, planning). Si un suivi structuré en Sheet est souhaité
+// plus tard, prévoir un nouvel onglet dédié "Inscriptions_Academie".
+// ============================================================
+function traiterInscriptionAcademie(data) {
+  if (!data.email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(data.email))
+    return { success: false, error: 'EMAIL_INVALIDE', message: 'Format email invalide.' };
+  if (!data.prenom || !data.nom || !data.module)
+    return { success: false, error: 'CHAMPS_MANQUANTS', message: 'Prénom, nom et module sont obligatoires.' };
+  if (!data.cgv)
+    return { success: false, error: 'CGV_NON_ACCEPTEES', message: 'L\'acceptation des CGV formation est obligatoire.' };
+  if (!rateLimitOk('inscription_academie_' + data.email))
+    return { success: false, error: 'TROP_DE_REQUETES', message: 'Trop de tentatives. Réessayez dans une heure.' };
+  try {
+    const positionnement = Array.isArray(data.positionnement)
+      ? data.positionnement.map(function(r, i) { return (i + 1) + '. ' + sanit(r); }).join('\n')
+      : '';
+    const corpsAdmin =
+      'Module : ' + sanit(data.module) + ' — ' + sanit(data.moduleTitre || '') + '\n' +
+      'Nom : ' + sanit(data.prenom) + ' ' + sanit(data.nom) + '\n' +
+      'Email : ' + data.email + '\nTéléphone : ' + sanit(data.telephone) + '\n' +
+      'Structure : ' + sanit(data.structure) + '\nStatut : ' + sanit(data.statut) + '\n' +
+      'Besoin d\'adaptation (référent handicap) : ' + sanit(data.adaptation || 'aucun signalé') + '\n\n' +
+      'Réponses de positionnement :\n' + (positionnement || '(aucune)') + '\n\n' +
+      'CGV formation acceptées : oui · Consentement RGPD : ' + (data.consentement ? 'oui' : 'non');
+    envoyerEmailSafe(CONFIG.EMAIL_ADMIN,
+      '🎓 Académie — inscription ' + sanit(data.module) + ' — ' + sanit(data.prenom) + ' ' + sanit(data.nom),
+      corpsAdmin, { replyTo: data.email });
+    envoyerEmailSafe(data.email,
+      '🎓 Votre inscription à l\'Académie — ' + sanit(data.moduleTitre || data.module),
+      'Bonjour ' + data.prenom + ',\n\nNous avons bien reçu votre inscription au module ' +
+      sanit(data.moduleTitre || data.module) + '.\n\n' +
+      'La formation est dispensée par MUSIVA, organisme de formation certifié Qualiopi. ' +
+      'Nous confirmons votre place sous 24h ouvrées par retour d\'email.\n\n' +
+      CONFIG.NOM_LIEU + ' · ' + CONFIG.ADRESSE + ' · ' + CONFIG.TEL);
+    return { success: true, message: 'Inscription envoyée.' };
+  } catch (err) {
+    logErreur('traiterInscriptionAcademie', err);
     return { success: false, error: 'ERREUR_SERVEUR', message: err.message };
   }
 }
