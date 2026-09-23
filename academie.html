@@ -387,11 +387,11 @@
 
 <!-- ══════════ FILTRES ══════════ -->
 <div class="filters-bar">
-  <span class="filter-label">Filière :</span>
-  <button class="filter-btn active" data-filter="all">Toutes les filières</button>
-  <button class="filter-btn filA" data-filter="A">🟣 Empowerment</button>
-  <button class="filter-btn filB" data-filter="B">🔵 Tech &amp; Numérique</button>
-  <button class="filter-btn filC" data-filter="C">🟢 Gestion &amp; Impact</button>
+  <span class="filter-label" id="filterLabel">Filière :</span>
+  <button class="filter-btn active" data-filter="all" aria-pressed="true" aria-describedby="filterLabel">Toutes les filières</button>
+  <button class="filter-btn filA" data-filter="A" aria-pressed="false" aria-describedby="filterLabel">🟣 Empowerment</button>
+  <button class="filter-btn filB" data-filter="B" aria-pressed="false" aria-describedby="filterLabel">🔵 Tech &amp; Numérique</button>
+  <button class="filter-btn filC" data-filter="C" aria-pressed="false" aria-describedby="filterLabel">🟢 Gestion &amp; Impact</button>
 </div>
 
 <!-- ══════════ CONTENU PRINCIPAL ══════════ -->
@@ -512,10 +512,10 @@
         <span class="module-price-badge paid">50 €</span>
       </div>
       <div class="module-card-body">
-        <div class="module-tagline">De zéro à un kit graphique pro : 3 visuels finalisés et prêts à publier ce matin</div>
+        <div class="module-tagline">De zéro à un kit graphique pro : objectif 3 visuels finalisés pendant la session</div>
         <div class="module-meta"><span class="module-meta-tag">⏱ 3h</span><span class="module-meta-tag">☀️ Samedi matin</span><span class="module-meta-tag">🎨 Kit de marque</span></div>
       </div>
-      <div class="module-card-footer"><span class="module-format">🖼️ 3 visuels prêts à publier</span><button class="btn-detail" onclick="openModal('B2');event.stopPropagation()">Voir la fiche →</button></div>
+      <div class="module-card-footer"><span class="module-format">🖼️ Objectif : 3 visuels finalisés</span><button class="btn-detail" onclick="openModal('B2');event.stopPropagation()">Voir la fiche →</button></div>
     </div>
     <div class="module-card B reveal reveal-delay-3" data-filiere="B" onclick="openModal('B3')">
       <div class="module-card-header">
@@ -556,10 +556,10 @@
         <span class="module-price-badge paid">65 €</span>
       </div>
       <div class="module-card-body">
-        <div class="module-tagline">Zapier, Make, Google Sheets avancé : créer 1 automatisation fonctionnelle ce soir</div>
+        <div class="module-tagline">Zapier, Make, Google Sheets avancé : vous travaillez à créer une automatisation fonctionnelle pendant la session</div>
         <div class="module-meta"><span class="module-meta-tag">⏱ 3h</span><span class="module-meta-tag">🌙 Soirée</span><span class="module-meta-tag">⚙️ Niveau intermédiaire</span></div>
       </div>
-      <div class="module-card-footer"><span class="module-format">🤖 Automatisation en prod</span><button class="btn-detail" onclick="openModal('B6');event.stopPropagation()">Voir la fiche →</button></div>
+      <div class="module-card-footer"><span class="module-format">🤖 Objectif : 1 automatisation fonctionnelle</span><button class="btn-detail" onclick="openModal('B6');event.stopPropagation()">Voir la fiche →</button></div>
     </div>
   </div><!-- /modules-grid B -->
 
@@ -738,6 +738,16 @@
     </p>
   </div>
 
+  <!-- ══ ACCUEIL PMR (indicateur 26) ══ -->
+  <div class="social-banner reveal" style="margin-top:2rem">
+    <h3>♿ Accueil des personnes en situation de handicap</h3>
+    <p style="max-width:640px">
+      Le tiers-lieu Génie, 12 rue du Génie à Montauban, est accessible aux personnes à mobilité réduite ; la salle Maria Montessori est spécifiquement équipée PMR (4 personnes). Sanitaires accessibles : <span class="todo">[À COMPLÉTER — ACCES_PMR, détail sanitaires]</span>. Pour tout besoin d'adaptation (auditif, visuel, cognitif ou autre), contactez le référent handicap avant votre inscription : <span class="todo">[À COMPLÉTER — REF_HANDICAP]</span> — nous étudions ensemble les adaptations possibles.
+    </p>
+  </div>
+
+  <p class="reveal" style="text-align:center;margin-top:2.5rem;font-size:.8rem;color:var(--slate-400)">Catalogue mis à jour le 23 septembre 2026.</p>
+
 </main>
 
 <!-- ══════════ FOOTER ══════════ -->
@@ -803,7 +813,7 @@
 
 <!-- ══════════ MODAL ══════════ -->
 <div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOverlay(event)">
-  <div class="modal" id="modal"></div>
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"></div>
 </div>
 
 <!-- ══════════ JS ══════════ -->
@@ -960,7 +970,7 @@ const modules = {
   B2: {
     filiere:'B', code:'B2', prix:'50 €', format:'Présentiel · Samedi matin',
     titre:'Canva Pro',
-    tagline:'De zéro à un kit graphique pro : 3 visuels finalisés et prêts à publier ce matin',
+    tagline:'De zéro à un kit graphique pro : objectif 3 visuels finalisés pendant la session',
     objectifs:['Utiliser les fonctionnalités essentielles de Canva (gabarits, calques, kit de marque) pour produire un visuel','Créer une charte graphique cohérente (couleurs, polices, éléments)','Concevoir des visuels pour les réseaux sociaux (posts, stories, couvertures)','Réaliser un flyer ou une affiche professionnelle','Organiser ses créations dans des dossiers réutilisables'],
     programme:[{label:'Temps 1 · Les bases de Canva (45 min)', items:['Navigation dans l\'interface : templates, éléments, texte, couleurs','Créer sa palette de couleurs et ses polices de marque','Les formats essentiels : post carré, story, A4, bannière']},{label:'Temps 2 · Créer ses premiers visuels (75 min)', items:['Création d\'un post Instagram à partir d\'un template','Conception d\'un flyer événementiel professionnel','Astuces : suppression de fond, cadres, effets photos']},{label:'Temps 3 · Kit graphique et organisation (60 min)', items:['Créer son Kit de marque (couleurs, logo, polices sauvegardées)','Dupliquer et adapter des templates pour gagner du temps','Exporter aux bons formats (PNG, PDF, MP4)']}],
     cadeau:'3 visuels finalisés prêts à publier : 1 post réseau social, 1 flyer, 1 couverture Facebook/LinkedIn',
@@ -1000,7 +1010,7 @@ const modules = {
   B6: {
     filiere:'B', code:'B6', prix:'65 €', format:'Présentiel · Soirée — niveau intermédiaire',
     titre:'Automatiser ses tâches',
-    tagline:'Zapier, Make, Google Sheets avancé : créer 1 automatisation fonctionnelle ce soir',
+    tagline:'Zapier, Make, Google Sheets avancé : vous travaillez à créer une automatisation fonctionnelle pendant la session',
     objectifs:['Décrire le principe déclencheur–action d\'une automatisation no-code et l\'appliquer à un cas concret','Créer un scénario fonctionnel avec Zapier ou Make','Automatiser une tâche Google Sheets avec des formules avancées','Connecter 2 outils métier entre eux sans code','Évaluer le temps gagné et la fiabilité de son automatisation'],
     programme:[{label:'Temps 1 · Logique des automatisations (40 min)', items:['Qu\'est-ce que le no-code ? Différence Zapier / Make / n8n','Identifier ses tâches automatisables : critères et exemples','Connexion aux APIs sans code : le concept en 10 minutes']},{label:'Temps 2 · Zapier / Make en pratique (80 min)', items:['Création d\'un compte et navigation dans l\'interface','Atelier : créer un Zap (formulaire → Sheets → email de confirmation)','Gestion des erreurs et débogage d\'une automatisation']},{label:'Temps 3 · Google Sheets avancé (60 min)', items:['Formules dynamiques : IMPORTRANGE, QUERY, ARRAYFORMULA','Automatiser un tableau de bord avec actualisation automatique','Chaque participant termine avec son automatisation personnelle']}],
     cadeau:'Une automatisation fonctionnelle en production + la documentation de son scénario pour la maintenir',
@@ -1088,7 +1098,7 @@ function openModal(code) {
     <div class="modal-header ${fil}">
       <button class="modal-close" onclick="closeModal()">✕</button>
       <span class="modal-code">${m.code}</span>
-      <div class="modal-title">${m.titre}</div>
+      <div class="modal-title" id="modalTitle">${m.titre}</div>
       <div class="modal-tagline">${m.tagline}</div>
       <div class="modal-infos">
         <span class="modal-info-tag">⏱ ${m.duree} · ${m.modalite || 'Présentiel'}</span>
@@ -1126,27 +1136,49 @@ function openModal(code) {
 
   document.getElementById('modalOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
+  lastFocusedBeforeModal = document.activeElement;
+  document.getElementById('modal').querySelector('.modal-close').focus();
 }
 
 function closeModal() {
   document.getElementById('modalOverlay').classList.remove('open');
   document.body.style.overflow = '';
+  if (lastFocusedBeforeModal && typeof lastFocusedBeforeModal.focus === 'function') {
+    lastFocusedBeforeModal.focus();
+  }
 }
 
 function closeModalOnOverlay(e) {
   if (e.target === document.getElementById('modalOverlay')) closeModal();
 }
 
+/* ── Accessibilité modale : focus renvoyé au déclencheur, focus piégé dans la fenêtre (P2-5) ── */
+let lastFocusedBeforeModal = null;
+
 document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') closeModal();
+  const overlay = document.getElementById('modalOverlay');
+  if (!overlay.classList.contains('open')) return;
+  if (e.key === 'Escape') { closeModal(); return; }
+  if (e.key === 'Tab') {
+    const focusable = document.getElementById('modal').querySelectorAll('a[href], button:not([disabled])');
+    if (!focusable.length) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault(); last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault(); first.focus();
+    }
+  }
 });
 
 /* ── Filtre filières ── */
 const filterBtns = document.querySelectorAll('.filter-btn');
 filterBtns.forEach(btn => {
   btn.addEventListener('click', () => {
-    filterBtns.forEach(b => b.classList.remove('active'));
+    filterBtns.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed', 'false'); });
     btn.classList.add('active');
+    btn.setAttribute('aria-pressed', 'true');
     const f = btn.dataset.filter;
     document.querySelectorAll('[data-filiere]').forEach(el => {
       if (f === 'all' || el.dataset.filiere === f) {
