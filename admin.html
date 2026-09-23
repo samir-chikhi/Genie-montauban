@@ -445,7 +445,10 @@ textarea{resize:vertical;min-height:65px}
               <div style="background:var(--cream);border-radius:8px;padding:9px 12px;font-size:11px;word-break:break-all;color:var(--muted);margin-bottom:12px" id="url-display">—</div>
               <div style="display:flex;gap:8px;flex-wrap:wrap">
                 <button class="btn btn-secondary btn-sm" onclick="showSetup()">✏️ Modifier URL</button>
-                <a id="sheet-link" href="https://docs.google.com/spreadsheets/d/1mf3D2YGnpWpzufGOaLLaomxAkuzp0AiJY7RzcbpIq2w/edit" target="_blank" rel="noopener" class="btn btn-sage btn-sm">📋 Google Sheets</a>
+                <!-- L'URL du classeur arrive avec les données admin (session vérifiée
+                     côté serveur) : admin.html est servie publiquement par GitHub
+                     Pages, tout ce qui y est écrit en dur est lisible par tous. -->
+                <a id="sheet-link" href="#" target="_blank" rel="noopener" class="btn btn-sage btn-sm" style="display:none">📋 Google Sheets</a>
                 <a href="https://calendar.google.com/calendar/r?authuser=contact@genie-montauban.fr" target="_blank" rel="noopener" class="btn btn-cal btn-sm">📅 Google Calendar</a>
               </div>
             </div>
@@ -652,7 +655,7 @@ const APPS_SCRIPT_URL_DEFAULT = 'https://script.google.com/macros/s/AKfycbyJ-Dk-
 // Forcer l'URL et effacer tout cache d'ancienne URL
 localStorage.setItem('genie_script_url', APPS_SCRIPT_URL_DEFAULT);
 let SCRIPT_URL = APPS_SCRIPT_URL_DEFAULT;
-const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1mf3D2YGnpWpzufGOaLLaomxAkuzp0AiJY7RzcbpIq2w/edit';
+// SHEET_URL : plus de constante en dur — fournie par l'API après connexion.
 
 // ─────────────────────────────────────────────────────────
 // DONNÉES DE RÉFÉRENCE
@@ -754,10 +757,26 @@ async function checkLogin() {
   const err = document.getElementById('login-err');
   if (!pwd) return;
   try {
-    const url = new URL(APPS_SCRIPT_URL_DEFAULT);
-    url.searchParams.set('payload', JSON.stringify({ action: 'ADMIN_LOGIN', password: pwd }));
-    const r = await fetch(url.toString(), { redirect: 'follow' });
-    const data = await r.json();
+    // Le mot de passe voyageait dans l'URL (?payload=…) : il atterrissait dans
+    // l'historique du navigateur et dans les journaux d'exécution Apps Script.
+    // Il part maintenant dans le corps de la requête. Content-Type text/plain
+    // pour éviter le pré-vol CORS, qu'Apps Script ne sait pas traiter.
+    let data = null;
+    try {
+      const r = await fetch(APPS_SCRIPT_URL_DEFAULT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ action: 'ADMIN_LOGIN', password: pwd }),
+        redirect: 'follow'
+      });
+      data = await r.json();
+    } catch (ePost) {
+      // Repli sur l'ancien appel si le POST échoue (déploiement non à jour).
+      const url = new URL(APPS_SCRIPT_URL_DEFAULT);
+      url.searchParams.set('payload', JSON.stringify({ action: 'ADMIN_LOGIN', password: pwd }));
+      const r2 = await fetch(url.toString(), { redirect: 'follow' });
+      data = await r2.json();
+    }
     if (data && data.success && data.token) {
       ADMIN_TOKEN = data.token;
       sessionStorage.setItem('genie_admin_token', ADMIN_TOKEN);
@@ -870,6 +889,8 @@ async function loadData(manual=false) {
   setSyncState('loading','Chargement…');
   try {
     const data = await apiGet({action:'getAll'});
+    const sheetLink = document.getElementById('sheet-link');
+    if (sheetLink && data.sheetUrl) { sheetLink.href = data.sheetUrl; sheetLink.style.display = ''; }
     DB.reservations = (data.reservations||[]).map(r => ({
       ...r,
       montant     : parseFloat(r.montant)||0,

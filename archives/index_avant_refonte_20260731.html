@@ -639,7 +639,9 @@
 
 <script>
 (function() {
-  var SHEET_ID  = "1mf3D2YGnpWpzufGOaLLaomxAkuzp0AiJY7RzcbpIq2w";
+  // Identifiant du classeur retiré (2026-09-22) : cette archive est servie
+  // publiquement par GitHub Pages et exposait l'ID du Google Sheet.
+  var SHEET_ID  = "";
   var SHEET_TAB = "Avis_Qualite";
   var NOTE_MIN  = 4;
   // Indices colonnes (0-based) — ajuste si tes colonnes Forms diffèrent
@@ -774,13 +776,9 @@
     }).join('');
   }
 
-  fetch(url)
-    .then(function(r){ return r.text(); })
-    .then(function(t){ render(parseCSV(t)); })
-    .catch(function(){
-      document.getElementById('gav-loading').innerHTML =
-        '<span style="color:#6B7A8A;font-style:italic;font-size:14px;">Les avis ne sont pas disponibles pour le moment.</span>';
-    });
+  // Archive : plus aucune lecture du classeur depuis le navigateur.
+  document.getElementById('gav-loading').innerHTML =
+    '<span style="color:#6B7A8A;font-style:italic;font-size:14px;">Archive — les avis à jour sont sur la page d\'accueil.</span>';
 })();
 </script>
 

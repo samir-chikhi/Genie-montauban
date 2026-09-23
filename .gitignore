@@ -11,3 +11,5 @@ MUSIVA-seo-update.zip
 .agents/
 .claude/skills/unlazy/
 skills-lock.json
+
+# Config MCP : ne doit jamais reporter de clé en clair (dépôt public)
