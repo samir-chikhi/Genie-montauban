@@ -27,7 +27,7 @@ Génie est le **tiers-lieu de Montauban** où l'on apprend, où l'on se rencontr
 
 piliers : apprendre, entreprendre, se rencontrer, décider
 
-22
+33
 
 modules de formation courte, à partir de 45 €
 
@@ -337,7 +337,7 @@ Apprendre, entreprendre, se rencontrer, décider ensemble. C'est ce que disent n
 
 ### ApprendreÉducation populaire
 
-Ateliers, débats, veillées du Génie, alphabétisation numérique. Et l'Académie des Compétences : 22 modules de 3 h pour monter en compétences sans y passer six mois. Ce qui est payant finance ce qui est gratuit.
+Ateliers, débats, veillées du Génie, alphabétisation numérique. Et l'Académie des Compétences : 33 modules de 3 h pour monter en compétences sans y passer six mois. Ce qui est payant finance ce qui est gratuit.
 
 [Voir les ateliers et les modules →](#apprendre)
 
@@ -377,13 +377,13 @@ Entrée libre · Contribution au chapeau
 
 ### L'Académie des Compétences
 
-- 22 modules de 3 h, animés par des experts du bassin montalbanais
+- 33 modules de 3 h, animés par des experts du bassin montalbanais
 - 4 filières : Empowerment & Leadership · Tech & Numérique · Gestion & Impact · Intelligence collective & Associations
 - De **45 à 65 €** · prise en charge possible par votre employeur ou votre OPCO : les formations sont dispensées par MUSIVA, organisme certifié Qualiopi
-- 3 modules **gratuits**
+- 4 modules **gratuits**
 
 Formation courte · 3 h par module
-[Voir les 22 modules →](academie.html)
+[Voir les 33 modules →](academie.html)
 
 **Comment ça tient debout :** les modules payants et la location des espaces financent les ateliers gratuits. Nos statuts fixent un objectif clair — au moins 30 % de nos heures d'ouverture en accès gratuit ou solidaire — et nous obligent à publier chaque année où nous en sommes. C'est écrit, et c'est vérifiable.
 

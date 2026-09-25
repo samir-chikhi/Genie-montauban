@@ -1,6 +1,6 @@
 ---
 title: Académie des Compétences et de la Connaissance — Génie Montauban
-description: Micro-formations de 3h à Montauban, animées par des experts locaux et dispensées par MUSIVA, organisme certifié Qualiopi. Empowerment, Tech & Numérique, Gestion & Impact. De 45 à 65 €, 3 modules gratuits.
+description: Micro-formations de 3h à Montauban, animées par des experts locaux et dispensées par MUSIVA, organisme certifié Qualiopi. Empowerment, Tech & Numérique, Gestion & Impact, Intelligence collective. De 45 à 65 €, 4 modules gratuits.
 url: https://genie-montauban.fr/academie.html
 last_updated: 2026-09-25
 source: miroir markdown — version texte pour moteurs IA
@@ -84,6 +84,18 @@ Convaincre en 3 minutes : financeurs, partenaires, clients — en scène ouverte
 
 📝 Pitch écrit finaliséVoir la fiche →
 
+A7
+
+Réussir Son Projet Associatif
+
+45 €
+
+Passer de l'idée au projet associatif solide : objectifs, faisabilité, premiers pas concrets
+
+⏱ 3h☀️ Samedi matin🧭 Coaching collectif
+
+📝 Canevas projet rempliVoir la fiche →
+
 ## 🔵 Filière B · Tech & Numérique
 
 ### Tech & Numérique
@@ -161,6 +173,30 @@ Zapier, Make, Google Sheets avancé : vous travaillez à créer une automatisati
 ⏱ 3h🌙 Soirée⚙️ Niveau intermédiaire
 
 🤖 Objectif : 1 automatisation fonctionnelleVoir la fiche →
+
+B7
+
+Rendre Son Asso Visible
+
+50 €
+
+Construire une stratégie de communication associative simple et efficace, en ligne et hors ligne
+
+⏱ 3h🌙 Soirée📣 Stratégie, pas exécution
+
+📣 Plan de communication à 3 moisVoir la fiche →
+
+B8
+
+Les Bons Réflexes Numériques
+
+50 €
+
+Choisir et utiliser les bons outils numériques gratuits ou accessibles pour gagner du temps au quotidien
+
+⏱ 3h🌙 Soirée🧰 Niveau débutant
+
+🧰 Kit d'outils recommandésVoir la fiche →
 
 ## 🟢 Filière C · Gestion & Impact
 
@@ -240,6 +276,54 @@ Approcher des entreprises locales, construire un dossier de mécénat, contractu
 
 📁 Dossier mécénat + scriptsVoir la fiche →
 
+C7
+
+Association Mode d'Emploi
+
+GRATUIT
+
+Poser les bases juridiques et pratiques pour créer, déclarer et faire vivre une association loi 1901 — sans jargon
+
+⏱ 3h☀️ Samedi matin📋 Kit de démarrage remis
+
+📋 Checklist création + déclarationVoir la fiche →
+
+C8
+
+Gouvernance Sans Risque
+
+55 €
+
+Comprendre la responsabilité civile et pénale d'un dirigeant associatif, et sécuriser ses statuts
+
+⏱ 3h🌙 Soirée⚖️ Revue de statuts
+
+📝 Grille d'auto-diagnosticVoir la fiche →
+
+C9
+
+Finances Associatives Claires
+
+55 €
+
+Lire et comprendre un budget associatif sans être trésorier — pour décider en connaissance de cause en bureau ou en CA
+
+⏱ 3h☀️ Samedi matin📖 Pour non-trésoriers
+
+📖 Grille de lecture en 10 questionsVoir la fiche →
+
+C10
+
+Devenir Employeur Associatif
+
+60 €
+
+Ce qui change le jour où l'association recrute — contrat, obligations, paie, et alternatives au salariat
+
+⏱ 3h🌙 Soirée💼 Première embauche
+
+✅ Checklist première embaucheVoir la fiche →
+
 ## 🟠 Filière D · Intelligence collective & Associations
 
 ### Parcours « Faire avec » : les fondamentaux de l'intelligence collective
@@ -293,6 +377,54 @@ Transformer une idée collective en actions prioritaires, attribuées et suivies
 ⏱ 3h☀️ Samedi · 🌙 Soirée🚤 Speedboat · QQOQCCP
 
 📅 Feuille de route 30/60/90 jVoir la fiche →
+
+D5
+
+Mobiliser Son Équipe
+
+50 €
+
+Recruter, fidéliser et motiver bénévoles et salariés dans une dynamique associative saine
+
+⏱ 3h🌙 Soirée🧭 Plan à 3 mois
+
+🧭 Plan de mobilisation à 3 moisVoir la fiche →
+
+D6
+
+Conflits & Cohésion d'Équipe
+
+55 €
+
+Désamorcer les tensions dans une équipe bénévole ou salariée et construire une dynamique de groupe durable
+
+⏱ 3h☀️ Samedi matin🧩 Outils de médiation
+
+🧩 Boîte à outils en 5 étapesVoir la fiche →
+
+D7
+
+Tisser Des Partenariats Locaux
+
+50 €
+
+Identifier, approcher et construire des partenariats utiles avec les acteurs du territoire
+
+⏱ 3h🌙 Soirée🗺️ Cartographie d'acteurs
+
+🗺️ Carte de partenaires + trame de contactVoir la fiche →
+
+D8
+
+Verdir Son Association
+
+45 €
+
+Des gestes simples aux choix structurants pour réduire l'empreinte environnementale de son activité associative
+
+⏱ 3h☀️ Samedi matin🌱 Budget zéro/faible
+
+🌱 Plan d'action transition écologiqueVoir la fiche →
 
 ### 💶 Financements disponibles
 
