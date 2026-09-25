@@ -86,6 +86,31 @@ footer .footer-legal a:hover {
   color: #E8C06A;
 }
 
+footer .footer-cookie-link {
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, .6);
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 0;
+}
+footer .footer-cookie-link:hover {
+  color: #E8C06A;
+}
+
+/* .todo — chantier conformité académie 2026-09 : signale un texte que Samir
+   doit encore compléter (voir CHANGELOG_conformite.md). Ne pas laisser en
+   prod une fois les champs remplis. */
+.todo {
+  background: #FEF08A;
+  color: #713F12;
+  padding: .05em .4em;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
 @media (max-width: 1024px) {
   footer .footer-grid { grid-template-columns: 1fr 1fr; }
 }

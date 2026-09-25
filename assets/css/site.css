@@ -532,8 +532,10 @@
     #cookie-banner.show { transform: translateY(0); }
     #cookie-banner p { font-size: 13.5px; color: rgba(255,255,255,.85); flex: 1; min-width: 200px; }
     .cookie-btns { display: flex; gap: 10px; flex-shrink: 0; }
-    .cookie-accept { background: var(--gold); color: var(--white); padding: 8px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; }
-    .cookie-refuse { background: rgba(255,255,255,.1); color: rgba(255,255,255,.85); padding: 8px 18px; border-radius: 8px; font-size: 13px; border: 1px solid rgba(255,255,255,.2); cursor: pointer; }
+    /* Accepter / Refuser : même gabarit, même poids visuel (exigence CNIL — pas de dark pattern) */
+    .cookie-accept, .cookie-refuse { padding: 8px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid var(--gold); }
+    .cookie-accept { background: var(--gold); color: var(--navy); }
+    .cookie-refuse { background: transparent; color: var(--white); }
 
     /* ── RESPONSIVE ── */
     @media (max-width: 1024px) {
