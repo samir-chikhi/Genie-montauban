@@ -9,7 +9,7 @@
   <meta name="description" content="Micro-formations de 3h à Montauban, animées par des experts locaux et dispensées par MUSIVA, organisme certifié Qualiopi. Empowerment, Tech & Numérique, Gestion & Impact. De 45 à 65 €, 3 modules gratuits." />
   <meta name="keywords" content="formation montauban, académie compétences, micro-formation, empowerment, leadership, IA, numérique, gestion, ESS, tiers-lieu" />
   <meta property="og:title" content="Académie des Compétences et de la Connaissance — Le Génie Montauban" />
-  <meta property="og:description" content="18 modules de 3h, animés par des experts locaux et dispensés par MUSIVA, organisme certifié Qualiopi. Leadership, Tech, Gestion. De 45 à 65 €, 3 modules gratuits." />
+  <meta property="og:description" content="22 modules de 3h, animés par des experts locaux et dispensés par MUSIVA, organisme certifié Qualiopi. Leadership, Tech, Gestion, Intelligence collective. De 45 à 65 €, 3 modules gratuits." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://genie-montauban.fr/academie.html" />
   <link rel="canonical" href="https://genie-montauban.fr/academie.html" />
@@ -37,6 +37,7 @@
       --filiere-A:  #8B5CF6;
       --filiere-B:  #3B82F6;
       --filiere-C:  #10B981;
+      --filiere-D:  #F97316;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -101,6 +102,7 @@
     .filter-btn.filA.active { background:var(--filiere-A); border-color:var(--filiere-A); color:#fff; }
     .filter-btn.filB.active { background:var(--filiere-B); border-color:var(--filiere-B); color:#fff; }
     .filter-btn.filC.active { background:var(--filiere-C); border-color:var(--filiere-C); color:#000; }
+    .filter-btn.filD.active { background:var(--filiere-D); border-color:var(--filiere-D); color:#000; }
 
     /* ─── MAIN ─── */
     main { max-width:1240px; margin:0 auto; padding:3rem clamp(1rem,4vw,2rem) 6rem; }
@@ -116,10 +118,12 @@
     .A .filiere-intro-dot { background:var(--filiere-A); box-shadow:0 0 8px rgba(139,92,246,.6); }
     .B .filiere-intro-dot { background:var(--filiere-B); box-shadow:0 0 8px rgba(59,130,246,.6); }
     .C .filiere-intro-dot { background:var(--filiere-C); box-shadow:0 0 8px rgba(16,185,129,.6); }
+    .D .filiere-intro-dot { background:var(--filiere-D); box-shadow:0 0 8px rgba(249,115,22,.6); }
     .filiere-intro h3 { font-family:'Playfair Display',serif; font-size:1.1rem; margin-bottom:.3rem; }
     .A .filiere-intro h3 { color:#A78BFA; }
     .B .filiere-intro h3 { color:#60A5FA; }
     .C .filiere-intro h3 { color:var(--emerald-l); }
+    .D .filiere-intro h3 { color:#FB923C; }
     .filiere-intro p { font-size:.87rem; color:var(--slate-400); }
 
     /* ─── MODULE CARDS ─── */
@@ -133,12 +137,14 @@
     .module-card.A:hover { box-shadow:0 16px 48px rgba(139,92,246,.18); }
     .module-card.B:hover { box-shadow:0 16px 48px rgba(59,130,246,.18); }
     .module-card.C:hover { box-shadow:0 16px 48px rgba(16,185,129,.18); }
+    .module-card.D:hover { box-shadow:0 16px 48px rgba(249,115,22,.18); }
     .module-card:hover::before { opacity:1; }
     .module-card-header { padding:1.2rem 1.4rem; display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; background:rgba(255,255,255,.02); border-bottom:1px solid rgba(255,255,255,.06); }
     .module-code { font-size:.7rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; padding:.25rem .65rem; border-radius:50px; }
     .A .module-code { background:rgba(139,92,246,.15); color:#A78BFA; border:1px solid rgba(139,92,246,.25); }
     .B .module-code { background:rgba(59,130,246,.15); color:#60A5FA; border:1px solid rgba(59,130,246,.25); }
     .C .module-code { background:rgba(16,185,129,.15); color:var(--emerald-l); border:1px solid rgba(16,185,129,.25); }
+    .D .module-code { background:rgba(249,115,22,.15); color:#FB923C; border:1px solid rgba(249,115,22,.25); }
     .module-price-badge { font-size:.8rem; font-weight:700; padding:.25rem .7rem; border-radius:50px; }
     .module-price-badge.free { background:rgba(16,185,129,.15); color:var(--emerald-l); border:1px solid rgba(16,185,129,.3); }
     .module-price-badge.paid { background:rgba(251,191,36,.12); color:#FCD34D; border:1px solid rgba(251,191,36,.25); }
@@ -154,6 +160,8 @@
     .A .btn-detail:hover { background:var(--filiere-A); color:#fff; border-color:var(--filiere-A); }
     .B .btn-detail { color:#60A5FA; border-color:rgba(59,130,246,.3); background:rgba(59,130,246,.08); }
     .B .btn-detail:hover { background:var(--filiere-B); color:#fff; border-color:var(--filiere-B); }
+    .D .btn-detail { color:#FB923C; border-color:rgba(249,115,22,.3); background:rgba(249,115,22,.08); }
+    .D .btn-detail:hover { background:var(--filiere-D); color:#000; border-color:var(--filiere-D); }
     .module-format { font-size:.75rem; color:var(--slate-400); }
 
     /* ─── MODAL ─── */
@@ -165,12 +173,14 @@
     .modal-header.A { background:linear-gradient(135deg,rgba(139,92,246,.1),rgba(139,92,246,.04)); }
     .modal-header.B { background:linear-gradient(135deg,rgba(59,130,246,.1),rgba(59,130,246,.04)); }
     .modal-header.C { background:linear-gradient(135deg,rgba(16,185,129,.1),rgba(16,185,129,.04)); }
+    .modal-header.D { background:linear-gradient(135deg,rgba(249,115,22,.1),rgba(249,115,22,.04)); }
     .modal-close { position:absolute; top:1rem; right:1rem; background:rgba(255,255,255,.08); border:none; width:34px; height:34px; border-radius:50%; cursor:pointer; font-size:1rem; display:flex; align-items:center; justify-content:center; color:var(--slate-300); transition:background .2s; }
     .modal-close:hover { background:rgba(255,255,255,.18); }
     .modal-code { font-size:.7rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; padding:.2rem .6rem; border-radius:50px; margin-bottom:.6rem; display:inline-block; }
     .modal-header.A .modal-code { background:rgba(139,92,246,.2); color:#A78BFA; }
     .modal-header.B .modal-code { background:rgba(59,130,246,.2); color:#60A5FA; }
     .modal-header.C .modal-code { background:rgba(16,185,129,.2); color:var(--emerald-l); }
+    .modal-header.D .modal-code { background:rgba(249,115,22,.2); color:#FB923C; }
     .modal-title { font-family:'Playfair Display',serif; font-size:1.5rem; color:var(--white); margin-bottom:.4rem; }
     .modal-tagline { font-size:.9rem; color:var(--slate-400); font-style:italic; margin-bottom:1.2rem; }
     .modal-infos { display:flex; flex-wrap:wrap; gap:.6rem; }
@@ -184,10 +194,12 @@
     .modal-header.A ~ .modal-body .modal-section ul li::before { color:#A78BFA; }
     .modal-header.B ~ .modal-body .modal-section ul li::before { color:#60A5FA; }
     .modal-header.C ~ .modal-body .modal-section ul li::before { color:var(--emerald-l); }
+    .modal-header.D ~ .modal-body .modal-section ul li::before { color:#FB923C; }
     .programme-temps { background:rgba(255,255,255,.03); border-radius:10px; padding:.9rem 1.1rem; margin-bottom:.6rem; border-left:3px solid rgba(255,255,255,.1); }
     .A-border .programme-temps { border-left-color:var(--filiere-A); }
     .B-border .programme-temps { border-left-color:var(--filiere-B); }
     .C-border .programme-temps { border-left-color:var(--filiere-C); }
+    .D-border .programme-temps { border-left-color:var(--filiere-D); }
     .programme-temps strong { font-size:.8rem; font-weight:700; color:var(--white); display:block; margin-bottom:.4rem; }
     .programme-temps ul li { font-size:.82rem; color:var(--slate-400); }
     .modal-gift { background:rgba(16,185,129,.08); border:1px solid rgba(16,185,129,.2); border-radius:12px; padding:1.1rem 1.3rem; font-size:.87rem; color:var(--slate-300); }
@@ -282,7 +294,7 @@
   </style>
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Académie des Compétences et de la Connaissance — Génie Montauban" />
-  <meta name="twitter:description" content="18 modules de 3h animés par des experts locaux et dispensés par MUSIVA, organisme certifié Qualiopi. Leadership, Tech & Numérique, Gestion & Impact. De 45 à 65 €, 3 modules gratuits." />
+  <meta name="twitter:description" content="22 modules de 3h animés par des experts locaux et dispensés par MUSIVA, organisme certifié Qualiopi. Leadership, Tech & Numérique, Gestion & Impact, Intelligence collective. De 45 à 65 €, 3 modules gratuits." />
   <meta name="twitter:image" content="https://genie-montauban.fr/og-image.jpg" />
   <meta property="og:image" content="https://genie-montauban.fr/og-image.jpg" />
   <script type="application/ld+json">
@@ -291,7 +303,7 @@
     "@type": "EducationalOrganization",
     "name": "Académie des Compétences et de la Connaissance — Génie Montauban",
     "url": "https://genie-montauban.fr/academie.html",
-    "description": "Micro-formations de 3 heures animées par des experts locaux et dispensées par MUSIVA (organisme de formation certifié Qualiopi) au tiers-lieu Génie de Montauban : empowerment, tech et numérique, gestion et impact.",
+    "description": "Micro-formations de 3 heures animées par des experts locaux et dispensées par MUSIVA (organisme de formation certifié Qualiopi) au tiers-lieu Génie de Montauban : empowerment, tech et numérique, gestion et impact, intelligence collective.",
     "provider": {
       "@type": "Organization",
       "name": "MUSIVA",
@@ -316,7 +328,7 @@
       "lowPrice": "45",
       "highPrice": "65",
       "priceCurrency": "EUR",
-      "offerCount": "18",
+      "offerCount": "22",
       "availability": "https://schema.org/InStock"
     }
   }
@@ -362,7 +374,7 @@
   <h1>L'<em>Académie</em> des Compétences<br><em>et de la Connaissance</em></h1>
   <p>Montez en compétences en 3 heures, animé par quelqu'un que vous pouvez croiser au marché le samedi matin.</p>
   <div class="hero-stats">
-    <div class="hero-stat"><strong>18</strong><span>modules</span></div>
+    <div class="hero-stat"><strong>22</strong><span>modules</span></div>
     <div class="hero-stat"><strong>3h</strong><span>par session</span></div>
     <div class="hero-stat"><strong>45–65€</strong><span>3 modules gratuits</span></div>
     <div class="hero-stat"><strong>Qualiopi</strong><span>via MUSIVA</span></div>
@@ -372,6 +384,7 @@
     <span class="badge">🟣 Empowerment &amp; Leadership</span>
     <span class="badge">🔵 Tech &amp; Numérique</span>
     <span class="badge">🟢 Gestion &amp; Impact</span>
+    <span class="badge">🟠 Intelligence collective &amp; Associations</span>
     <span class="badge">📍 12 rue du Génie, Montauban</span>
   </div>
 </section>
@@ -392,6 +405,7 @@
   <button class="filter-btn filA" data-filter="A" aria-pressed="false" aria-describedby="filterLabel">🟣 Empowerment</button>
   <button class="filter-btn filB" data-filter="B" aria-pressed="false" aria-describedby="filterLabel">🔵 Tech &amp; Numérique</button>
   <button class="filter-btn filC" data-filter="C" aria-pressed="false" aria-describedby="filterLabel">🟢 Gestion &amp; Impact</button>
+  <button class="filter-btn filD" data-filter="D" aria-pressed="false" aria-describedby="filterLabel">🟠 Intelligence collective</button>
 </div>
 
 <!-- ══════════ CONTENU PRINCIPAL ══════════ -->
@@ -645,6 +659,67 @@
       <div class="module-card-footer"><span class="module-format">📁 Dossier mécénat + scripts</span><button class="btn-detail" onclick="openModal('C6');event.stopPropagation()">Voir la fiche →</button></div>
     </div>
   </div><!-- /modules-grid C -->
+
+  <!-- ══ FILIÈRE D ══ -->
+  <div class="section-header reveal" data-filiere="D">
+    <h2 style="color:#FB923C">🟠 Filière D · Intelligence collective &amp; Associations</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="filiere-intro D reveal reveal-delay-1" data-filiere="D">
+    <div class="filiere-intro-dot"></div>
+    <div>
+      <h3>Parcours « Faire avec » : les fondamentaux de l'intelligence collective</h3>
+      <p>Quatre ateliers pratiques de 3 h, le samedi ou en soirée, pour faire travailler un collectif ensemble : animer une réunion, faire émerger des idées, construire une stratégie partagée puis passer à l'action. Public : bénévoles et dirigeants associatifs, animateurs d'équipe, porteurs de projets collectifs. Chaque atelier se suit seul ; les quatre forment un parcours complet.</p>
+    </div>
+  </div>
+
+  <div class="modules-grid">
+    <div class="module-card D reveal reveal-delay-1" data-filiere="D" onclick="openModal('D1')">
+      <div class="module-card-header">
+        <div><span class="module-code">D1</span><div class="module-title" style="margin-top:.5rem">Animer autrement</div></div>
+        <span class="module-price-badge paid">45 €</span>
+      </div>
+      <div class="module-card-body">
+        <div class="module-tagline">Préparer une réunion participative, faciliter les échanges et repartir avec un conducteur prêt à utiliser</div>
+        <div class="module-meta"><span class="module-meta-tag">⏱ 3h</span><span class="module-meta-tag">☀️ Samedi · 🌙 Soirée</span><span class="module-meta-tag">🗣️ Lean Café · 1-2-4-Tous</span></div>
+      </div>
+      <div class="module-card-footer"><span class="module-format">📋 Conducteur de réunion</span><button class="btn-detail" onclick="openModal('D1');event.stopPropagation()">Voir la fiche →</button></div>
+    </div>
+    <div class="module-card D reveal reveal-delay-2" data-filiere="D" onclick="openModal('D2')">
+      <div class="module-card-header">
+        <div><span class="module-code">D2</span><div class="module-title" style="margin-top:.5rem">Faire émerger et choisir des idées</div></div>
+        <span class="module-price-badge paid">45 €</span>
+      </div>
+      <div class="module-card-body">
+        <div class="module-tagline">Animer un groupe pour produire, enrichir et choisir des idées à l'aide de critères explicites</div>
+        <div class="module-meta"><span class="module-meta-tag">⏱ 3h</span><span class="module-meta-tag">☀️ Samedi · 🌙 Soirée</span><span class="module-meta-tag">💡 Brainwriting · SCAMPER</span></div>
+      </div>
+      <div class="module-card-footer"><span class="module-format">📄 Fiche-solution testable</span><button class="btn-detail" onclick="openModal('D2');event.stopPropagation()">Voir la fiche →</button></div>
+    </div>
+    <div class="module-card D reveal reveal-delay-3" data-filiere="D" onclick="openModal('D3')">
+      <div class="module-card-header">
+        <div><span class="module-code">D3</span><div class="module-title" style="margin-top:.5rem">Construire une stratégie partagée</div></div>
+        <span class="module-price-badge paid">45 €</span>
+      </div>
+      <div class="module-card-body">
+        <div class="module-tagline">Passer d'un diagnostic collectif à quelques choix stratégiques partagés, formulés sur une page</div>
+        <div class="module-meta"><span class="module-meta-tag">⏱ 3h</span><span class="module-meta-tag">☀️ Samedi · 🌙 Soirée</span><span class="module-meta-tag">🧭 Arbre à problèmes · SWOT</span></div>
+      </div>
+      <div class="module-card-footer"><span class="module-format">🗺️ Stratégie en une page</span><button class="btn-detail" onclick="openModal('D3');event.stopPropagation()">Voir la fiche →</button></div>
+    </div>
+    <div class="module-card D reveal reveal-delay-4" data-filiere="D" onclick="openModal('D4')">
+      <div class="module-card-header">
+        <div><span class="module-code">D4</span><div class="module-title" style="margin-top:.5rem">Passer de l'idée à l'action</div></div>
+        <span class="module-price-badge paid">45 €</span>
+      </div>
+      <div class="module-card-body">
+        <div class="module-tagline">Transformer une idée collective en actions prioritaires, attribuées et suivies dans le temps</div>
+        <div class="module-meta"><span class="module-meta-tag">⏱ 3h</span><span class="module-meta-tag">☀️ Samedi · 🌙 Soirée</span><span class="module-meta-tag">🚤 Speedboat · QQOQCCP</span></div>
+      </div>
+      <div class="module-card-footer"><span class="module-format">📅 Feuille de route 30/60/90 j</span><button class="btn-detail" onclick="openModal('D4');event.stopPropagation()">Voir la fiche →</button></div>
+    </div>
+  </div><!-- /modules-grid D -->
 
   <!-- ══ FINANCEMENT ══ -->
   <div class="financement-section reveal">
@@ -1079,6 +1154,58 @@ const modules = {
     public:'Responsables d\'associations, porteurs de projets culturels ou solidaires, trésoriers, chefs de projet ESS',
     prerequis:'Avoir un projet associatif ou solidaire concret · Être en capacité de représenter sa structure officiellement — financement mécénat local',
     financements:'Gratuit* sous réserve de financement (mécénat local) — nous consulter.'
+  },
+  D1: {
+    filiere:'D', code:'D1', prix:'45 €', format:'Présentiel · Samedi ou soirée',
+    titre:'Animer autrement',
+    tagline:'Préparer une réunion participative, faciliter les échanges et repartir avec un conducteur prêt à utiliser',
+    objectifs:['Distinguer information, consultation, co-construction et décision','Formuler un objectif et un livrable précis pour une réunion','Poser un cadre et distribuer la parole en posture de facilitateur','Mettre en œuvre les méthodes 1-2-4-Tous et Lean Café','Rédiger un conducteur de réunion de 60 à 90 minutes'],
+    programme:[{label:'Temps 1 · Cadrer et faciliter (60 min)', items:['Inclusion et niveaux de participation','Diagnostic des réunions avec 1-2-4-Tous','Posture du facilitateur et cinq questions de cadrage']},{label:'Temps 2 · Tester une méthode (60 min)', items:['Cadrage individuel de sa propre réunion','Lean Café : expérimentation en groupe et premiers retours','Pause de 10 min']},{label:'Temps 3 · Concevoir sa réunion (60 min)', items:['Débriefing méthodologique du Lean Café','Rédaction de son conducteur en binôme','Galerie, retours entre pairs, ROTI et engagement']}],
+    cadeau:'Votre conducteur de réunion, les fiches de cadrage, inclusion, 1-2-4-Tous et ROTI, une grille de posture du facilitateur et votre engagement personnel',
+    public:'Personnes amenées à animer des réunions ou des ateliers en association, en équipe ou dans un projet collectif',
+    prerequis:'Aucun prérequis · Venir avec un exemple de réunion à animer ou à améliorer',
+    niveau:'Débutant', effectif:{min:8,max:12},
+    methodes:['Apports courts avec fiches mémo','Exercices sur les cas réels des participants','Travail en sous-groupes','Expérimentation du Lean Café','Jeux de rôle'],
+    evaluation:['Positionnement en début de séance (situation et attentes)','Exercices observés et retours pendant la séance','Conducteur final vérifié au regard des objectifs','Questionnaire de satisfaction à chaud']
+  },
+  D2: {
+    filiere:'D', code:'D2', prix:'45 €', format:'Présentiel · Samedi ou soirée',
+    titre:'Faire émerger et choisir des idées',
+    tagline:'Animer un groupe pour produire, enrichir et choisir des idées à l\'aide de critères explicites',
+    objectifs:['Formuler une question de créativité précise et ouverte','Animer une production d\'idées par brainwriting','Enrichir des idées à l\'aide du scénario catastrophe et de SCAMPER','Regrouper et sélectionner des idées selon des critères explicites avec une matrice impact/effort','Formaliser une idée retenue dans une fiche-solution testable'],
+    programme:[{label:'Temps 1 · Ouvrir la recherche d\'idées (1 h 25)', items:['Distinguer divergence et convergence','Formuler une question de créativité','Produire des idées par brainwriting','Explorer d\'autres pistes avec le scénario catastrophe']},{label:'Temps 2 · Enrichir et choisir (1 h 25)', items:['Transformer les idées avec SCAMPER, puis les regrouper','Choisir avec la matrice impact/effort','Rédiger une fiche-solution et recueillir des retours','Évaluer la séance et définir une action à tester']}],
+    cadeau:'Les fiches-outils Divergence / Convergence, Brainwriting, SCAMPER, Scénario catastrophe et Matrice impact/effort, un canevas de fiche-solution et votre fiche « Ce que je testerai avec mon collectif »',
+    public:'Personnes amenées à animer un groupe pour résoudre un problème, améliorer un service ou faire avancer un projet collectif',
+    prerequis:'Aucun prérequis · Venir avec une situation réelle sur laquelle faire émerger des idées avec un groupe',
+    niveau:'Initiation', effectif:{min:8,max:12},
+    methodes:['Apports courts et démonstrations','Réflexion individuelle','Exercices en binômes et en sous-groupes','Mise en commun et retours entre participants'],
+    evaluation:['Observation des productions : question de créativité, idées produites et enrichies, matrice impact/effort, fiche-solution','Retour final ROTI et formulation d\'une action à tester','Questionnaire de satisfaction à chaud']
+  },
+  D3: {
+    filiere:'D', code:'D3', prix:'45 €', format:'Présentiel · Samedi ou soirée',
+    titre:'Construire une stratégie partagée',
+    tagline:'Passer d\'un diagnostic collectif à quelques choix stratégiques partagés, formulés sur une page',
+    objectifs:['Distinguer diagnostic, ambition, stratégie et action','Construire un diagnostic collectif en identifiant les causes d\'un problème et les évolutions de son environnement','Formuler une ambition à partir du diagnostic','Définir et prioriser des orientations stratégiques en explicitant les renoncements associés','Formaliser une stratégie sur une page avec des indicateurs simples'],
+    programme:[{label:'Temps 1 · Comprendre ensemble (1 h 30)', items:['Faire apparaître les différentes perceptions d\'une situation','Distinguer diagnostic, ambition, stratégie et action','Analyser un problème avec l\'arbre à problèmes et l\'environnement avec un PESTEL allégé','Formuler un diagnostic partagé']},{label:'Temps 2 · Choisir où aller et sur quoi agir (1 h 20)', items:['Transformer le problème en ambition','Faire émerger des orientations avec une SWOT créative','Prioriser trois orientations et expliciter les renoncements','Renseigner la carte stratégique, puis évaluer la séance']}],
+    cadeau:'Les fiches Diagnostic / Ambition / Stratégie / Action, Arbre à problèmes, PESTEL allégé, SWOT créative et « Choisir une orientation stratégique », le canevas « Notre stratégie en une page » et la carte stratégique produite pendant l\'atelier',
+    public:'Personnes amenées à accompagner un collectif, une association, une équipe ou un projet dans une réflexion sur son avenir',
+    prerequis:'Aucun prérequis · Venir avec l\'exemple d\'un collectif ou d\'un projet qui doit réfléchir à son avenir, et une question stratégique qu\'il pourrait se poser',
+    niveau:'Initiation', effectif:{min:8,max:10},
+    methodes:['Étude d\'un cas fil rouge','Apports courts','Réflexion individuelle','Travail en binômes et en sous-groupes','Méthode 1-2-4-Tous','Mise en commun et priorisation collective'],
+    evaluation:['Observation des productions : arbre à problèmes, diagnostic partagé, ambition, orientations priorisées et carte stratégique','Tour de table final et engagement personnel','Évaluation ROTI et questionnaire de satisfaction à chaud']
+  },
+  D4: {
+    filiere:'D', code:'D4', prix:'45 €', format:'Présentiel · Samedi ou soirée',
+    titre:'Passer de l\'idée à l\'action',
+    tagline:'Transformer une idée collective en actions prioritaires, attribuées et suivies dans le temps',
+    objectifs:['Distinguer intention, objectif, action et résultat attendu','Identifier les ressources, freins et risques d\'un projet, puis proposer des réponses aux risques repérés','Formuler et prioriser des actions concrètes à l\'aide du QQOQCCP','Attribuer un pilote et une échéance à chaque action prioritaire','Construire une feuille de route à 30, 60 et 90 jours avec des indicateurs et un rituel de suivi'],
+    programme:[{label:'Temps 1 · Passer de l\'idée aux actions (1 h 30)', items:['Distinguer intention, objectif, action et premier pas','Repérer ressources, freins et risques avec le Speedboat','Examiner une idée et envisager des adaptations avec le PPCO','Produire une première liste d\'actions par brainwriting']},{label:'Temps 2 · Planifier et suivre la mise en œuvre (1 h 20)', items:['Préciser les actions avec le QQOQCCP et les prioriser','Désigner un pilote et une échéance pour chaque action retenue','Construire une feuille de route à 30, 60 et 90 jours','Définir des indicateurs, un rituel de suivi et un premier pas personnel']}],
+    cadeau:'Les fiches Idée / Objectif / Action / Résultat, Speedboat, PPCO, QQOQCCP, priorisation et « Qui fait quoi ? », un canevas de feuille de route à 30, 60 et 90 jours, la fiche « Notre rituel de suivi » et votre fiche « Mon prochain petit pas »',
+    public:'Personnes qui souhaitent concrétiser une idée, une décision ou une orientation au sein d\'un collectif, d\'une association, d\'une équipe ou d\'un projet',
+    prerequis:'Aucun prérequis · Venir avec une idée, une décision ou une orientation collective à mettre en œuvre, avec quelques notes sur le résultat souhaité, l\'existant et les freins',
+    niveau:'Initiation', effectif:{min:8,max:10},
+    methodes:['Étude d\'un cas fil rouge','Apports courts','Réflexion individuelle et brainwriting','Exercices en sous-groupes','Mise en commun et priorisation collective','Outils Speedboat, PPCO et QQOQCCP'],
+    evaluation:['Observation des productions : freins et risques, actions priorisées, responsabilités, feuille de route 30/60/90 jours','En clôture, chaque participant énonce un premier pas à réaliser sous sept jours','Évaluation ROTI et questionnaire de satisfaction à chaud']
   }
 };
 
@@ -1119,7 +1246,7 @@ function openModal(code) {
         <p style="font-size:.87rem;color:var(--slate-400)"><strong>Prérequis :</strong> ${m.prerequis}</p>
       </div>
       <div class="modal-section ${fil}-border">
-        <h4>Programme (3 temps)</h4>
+        <h4>Programme (${m.programme.length} temps)</h4>
         ${progHtml}
       </div>
       ${blocsQualiopi(m)}
