@@ -4,6 +4,40 @@ Chantier réalisé le 23/09/2026 sur la branche `conformite-academie-2026`,
 à partir de `20260923_memo_corrections-site-academie_v1.md`. Trois commits
 (P0, P1, P2), une archive de chaque page réécrite dans `_archives/`.
 
+---
+
+## Ajout du 25/09/2026 — Filière D « Intelligence collective & Associations »
+
+Partie 1 du mémo du 25/09/2026 (commit `d84ad95`). `academie.html` ayant
+déjà été modifié par les lots P0-P2 ci-dessous, le correctif fourni (basé
+sur une version antérieure du fichier, 1063 lignes) a été appliqué **à la
+main**, en retrouvant les mêmes ancres dans le fichier actuel plutôt que
+via `git apply`.
+
+| Fichier | Avant | Après |
+|---|---|---|
+| `academie.html` | 3 filières (A, B, C), 18 modules | + filière D (D1 à D4, parcours « Faire avec » de Karine, 45 € chacun), palette orange `#F97316`/`#FB923C`, filtre dédié, compteur 22 modules, meta OG/Twitter/JSON-LD mis à jour |
+| `academie.html` | `<h4>Programme (3 temps)</h4>` codé en dur | `Programme (${m.programme.length} temps)` — dynamique, D1 affiche 3 temps, D2-D4 affichent 2 temps ; aucun changement d'affichage pour les modules existants (tous à 3 temps) |
+| `index.html` | « 18 modules » à 4 endroits (lignes citées par le mémo) | « 22 modules » — rien d'autre modifié sur cette page, conformément à la règle « ne toucher qu'aux lignes explicitement citées » |
+
+**Non traité, à faire en suivi** : la ligne `index.html` « 3 filières :
+Empowerment & Leadership · Tech & Numérique · Gestion & Impact » (liste des
+filières de l'Académie) n'a pas été mise à jour pour inclure la filière D —
+cette ligne n'était pas citée par le mémo, qui interdit explicitement de
+toucher à `index.html` en dehors des lignes listées. À corriger dans un
+prochain lot si Samir le souhaite.
+
+Les modules D1-D4 reprennent les champs `niveau`, `effectif`, `methodes`
+et `evaluation` fournis par les fiches de Karine (pas de valeurs par
+défaut génériques) ; ils bénéficient automatiquement du bloc Qualiopi
+complet (`blocsQualiopi`) ajouté en P0-4 ci-dessous — pas de doublon avec
+l'encart provisoire du correctif d'origine.
+
+Testé dans le navigateur : filtre « Intelligence collective » (4 cartes
+D1-D4 uniquement), fenêtres D1 (3 temps) à D4 (2 temps) avec l'encart
+Méthodes & évaluation, fenêtre A1 strictement inchangée, aucune erreur
+console, rendu correct à 375 px.
+
 **Avant de publier quoi que ce soit sur ce chantier : remplir tous les
 `[À COMPLÉTER]` listés en fin de document (surlignés en jaune sur le site),
 faire relire `cgv-formation.html` et `reglement-interieur-formation.html`
