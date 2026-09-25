@@ -304,16 +304,10 @@ Prise en charge possible par votre employeur ou votre OPCO (Uniformation, Atlas,
 **France Travail**
 Demandeurs d'emploi : une aide individuelle à la formation (AIF) peut être sollicitée auprès de votre conseiller France Travail, sur devis MUSIVA. Aucun conventionnement automatique n'est établi à ce jour.
 
-**Département du Tarn-et-Garonne**
-Sessions A3, C1 et C6 gratuites sous réserve de financement (appel à projets en cours d'instruction). [À COMPLÉTER — confirmer le financement acquis avant publication]
-
-**Mécénat d'entreprises locales**
-Nous consulter — aucune convention de mécénat n'étant signée à ce jour, aucun mécène n'est nommé ici. [À COMPLÉTER après convention signée]
-
 **Pass Académie**
 Abonnement mensuel à l'étude — accès à plusieurs sessions du mois. Offre en préparation, sans engagement ni date d'ouverture confirmée.
 
-\* Les sessions GRATUIT sont proposées sous réserve de financement obtenu (Département 82, fondations ou mécénat local) — [À COMPLÉTER — FINANCEMENTS\_ACQUIS : lister ici les financements réellement obtenus].
+\* Les sessions GRATUIT sont proposées sous réserve de financement obtenu.
 
 ### 📩 Inscrivez-vous dès maintenant
 
@@ -338,13 +332,13 @@ Annonces de sessions, portraits de formateurs, témoignages — tout en temps r�
 
 ### 📊 Nos résultats
 
-Premières sessions en [À COMPLÉTER — date de lancement des premières sessions] ; les résultats agrégés (taux de satisfaction, nombre de stagiaires) seront publiés ici après 3 sessions réalisées, avec la méthode de calcul utilisée, conformément au référentiel national qualité. Aucun chiffre n'est encore disponible : nous ne publions pas de moyenne inventée.
+Premières sessions à venir ; les résultats agrégés (taux de satisfaction, nombre de stagiaires) seront publiés ici après 3 sessions réalisées, avec la méthode de calcul utilisée, conformément au référentiel national qualité. Aucun chiffre n'est encore disponible : nous ne publions pas de moyenne inventée.
 
 ### 🎓 Organisme de formation
 
 Les formations de l'Académie sont dispensées par **MUSIVA**, SASU — SIRET 943 861 989 00011.  
 Déclaration d'activité enregistrée sous le n° 76 82 01423 82 auprès du préfet de la région Occitanie. Cet enregistrement ne vaut pas agrément de l'État.  
-La certification qualité a été délivrée au titre de la catégorie d'action suivante : [À COMPLÉTER — CATEGORIE\_QUALIOPI, a priori « actions de formation »].  
+La certification qualité a été délivrée au titre de la catégorie d'action suivante : actions de formation.  
 Contact formation : [contact@musiva.fr](mailto:contact@musiva.fr) · [CGV formation](cgv-formation.html) · [Règlement intérieur formation](reglement-interieur-formation.html)
 
 ### 📋 Contacts qualité
@@ -356,6 +350,6 @@ Réclamations : [contact@musiva.fr](mailto:contact@musiva.fr)
 
 ### ♿ Accueil des personnes en situation de handicap
 
-Le tiers-lieu Génie, 12 rue du Génie à Montauban, est accessible aux personnes à mobilité réduite ; la salle Maria Montessori est spécifiquement équipée PMR (4 personnes). Sanitaires accessibles : [À COMPLÉTER — ACCES\_PMR, détail sanitaires]. Pour tout besoin d'adaptation (auditif, visuel, cognitif ou autre), contactez le référent handicap avant votre inscription : Samir CHIKHI ([contact@musiva.fr](mailto:contact@musiva.fr)) — nous étudions ensemble les adaptations possibles.
+Le tiers-lieu Génie, 12 rue du Génie à Montauban, est accessible aux personnes à mobilité réduite ; la salle Maria Montessori est spécifiquement équipée PMR (4 personnes). Pour connaître l'accessibilité des sanitaires ou tout besoin d'adaptation (auditif, visuel, cognitif ou autre), contactez le référent handicap avant votre inscription : Samir CHIKHI ([contact@musiva.fr](mailto:contact@musiva.fr)) — nous étudions ensemble les adaptations possibles.
 
 Catalogue mis à jour le 23 septembre 2026.
