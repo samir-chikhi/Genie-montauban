@@ -3,20 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https:; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com; frame-src https://www.google.com; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com; frame-src https://www.google.com; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>Académie des Compétences et de la Connaissance — Génie Montauban</title>
-  <meta name="description" content="Micro-formations de 3h à Montauban, animées par des experts locaux et dispensées par MUSIVA, organisme certifié Qualiopi. Empowerment, Tech & Numérique, Gestion & Impact. De 45 à 65 €, 3 modules gratuits." />
+  <meta name="description" content="L'Académie des Compétences et de la Connaissance du Génie : micro-formations de 3h animées par des experts locaux. Empowerment, Tech & Numérique, Gestion & Impact. À partir de 45 € — financement OPCO possible." />
   <meta name="keywords" content="formation montauban, académie compétences, micro-formation, empowerment, leadership, IA, numérique, gestion, ESS, tiers-lieu" />
   <meta property="og:title" content="Académie des Compétences et de la Connaissance — Le Génie Montauban" />
-  <meta property="og:description" content="22 modules de 3h, animés par des experts locaux et dispensés par MUSIVA, organisme certifié Qualiopi. Leadership, Tech, Gestion, Intelligence collective. De 45 à 65 €, 3 modules gratuits." />
+  <meta property="og:description" content="18 modules de 3h, animés par des experts locaux. Leadership, Tech, Gestion. À partir de 45 €, financement OPCO possible." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://genie-montauban.fr/academie.html" />
   <link rel="canonical" href="https://genie-montauban.fr/academie.html" />
   <link rel="icon" type="image/png" href="favicon.png" />
 
-  <!-- Playfair Display + DM Sans hébergées localement (P1-6, plus de requête vers Google avant consentement) -->
-  <link rel="stylesheet" href="assets/css/fonts.css" />
+  <!-- Google Fonts : Playfair Display + DM Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
   <style>
     /* ─── Variables ─── */
@@ -37,7 +39,6 @@
       --filiere-A:  #8B5CF6;
       --filiere-B:  #3B82F6;
       --filiere-C:  #10B981;
-      --filiere-D:  #F97316;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -102,7 +103,6 @@
     .filter-btn.filA.active { background:var(--filiere-A); border-color:var(--filiere-A); color:#fff; }
     .filter-btn.filB.active { background:var(--filiere-B); border-color:var(--filiere-B); color:#fff; }
     .filter-btn.filC.active { background:var(--filiere-C); border-color:var(--filiere-C); color:#000; }
-    .filter-btn.filD.active { background:var(--filiere-D); border-color:var(--filiere-D); color:#000; }
 
     /* ─── MAIN ─── */
     main { max-width:1240px; margin:0 auto; padding:3rem clamp(1rem,4vw,2rem) 6rem; }
@@ -118,12 +118,10 @@
     .A .filiere-intro-dot { background:var(--filiere-A); box-shadow:0 0 8px rgba(139,92,246,.6); }
     .B .filiere-intro-dot { background:var(--filiere-B); box-shadow:0 0 8px rgba(59,130,246,.6); }
     .C .filiere-intro-dot { background:var(--filiere-C); box-shadow:0 0 8px rgba(16,185,129,.6); }
-    .D .filiere-intro-dot { background:var(--filiere-D); box-shadow:0 0 8px rgba(249,115,22,.6); }
     .filiere-intro h3 { font-family:'Playfair Display',serif; font-size:1.1rem; margin-bottom:.3rem; }
     .A .filiere-intro h3 { color:#A78BFA; }
     .B .filiere-intro h3 { color:#60A5FA; }
     .C .filiere-intro h3 { color:var(--emerald-l); }
-    .D .filiere-intro h3 { color:#FB923C; }
     .filiere-intro p { font-size:.87rem; color:var(--slate-400); }
 
     /* ─── MODULE CARDS ─── */
@@ -137,14 +135,12 @@
     .module-card.A:hover { box-shadow:0 16px 48px rgba(139,92,246,.18); }
     .module-card.B:hover { box-shadow:0 16px 48px rgba(59,130,246,.18); }
     .module-card.C:hover { box-shadow:0 16px 48px rgba(16,185,129,.18); }
-    .module-card.D:hover { box-shadow:0 16px 48px rgba(249,115,22,.18); }
     .module-card:hover::before { opacity:1; }
     .module-card-header { padding:1.2rem 1.4rem; display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; background:rgba(255,255,255,.02); border-bottom:1px solid rgba(255,255,255,.06); }
     .module-code { font-size:.7rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; padding:.25rem .65rem; border-radius:50px; }
     .A .module-code { background:rgba(139,92,246,.15); color:#A78BFA; border:1px solid rgba(139,92,246,.25); }
     .B .module-code { background:rgba(59,130,246,.15); color:#60A5FA; border:1px solid rgba(59,130,246,.25); }
     .C .module-code { background:rgba(16,185,129,.15); color:var(--emerald-l); border:1px solid rgba(16,185,129,.25); }
-    .D .module-code { background:rgba(249,115,22,.15); color:#FB923C; border:1px solid rgba(249,115,22,.25); }
     .module-price-badge { font-size:.8rem; font-weight:700; padding:.25rem .7rem; border-radius:50px; }
     .module-price-badge.free { background:rgba(16,185,129,.15); color:var(--emerald-l); border:1px solid rgba(16,185,129,.3); }
     .module-price-badge.paid { background:rgba(251,191,36,.12); color:#FCD34D; border:1px solid rgba(251,191,36,.25); }
@@ -160,8 +156,6 @@
     .A .btn-detail:hover { background:var(--filiere-A); color:#fff; border-color:var(--filiere-A); }
     .B .btn-detail { color:#60A5FA; border-color:rgba(59,130,246,.3); background:rgba(59,130,246,.08); }
     .B .btn-detail:hover { background:var(--filiere-B); color:#fff; border-color:var(--filiere-B); }
-    .D .btn-detail { color:#FB923C; border-color:rgba(249,115,22,.3); background:rgba(249,115,22,.08); }
-    .D .btn-detail:hover { background:var(--filiere-D); color:#000; border-color:var(--filiere-D); }
     .module-format { font-size:.75rem; color:var(--slate-400); }
 
     /* ─── MODAL ─── */
@@ -173,14 +167,12 @@
     .modal-header.A { background:linear-gradient(135deg,rgba(139,92,246,.1),rgba(139,92,246,.04)); }
     .modal-header.B { background:linear-gradient(135deg,rgba(59,130,246,.1),rgba(59,130,246,.04)); }
     .modal-header.C { background:linear-gradient(135deg,rgba(16,185,129,.1),rgba(16,185,129,.04)); }
-    .modal-header.D { background:linear-gradient(135deg,rgba(249,115,22,.1),rgba(249,115,22,.04)); }
     .modal-close { position:absolute; top:1rem; right:1rem; background:rgba(255,255,255,.08); border:none; width:34px; height:34px; border-radius:50%; cursor:pointer; font-size:1rem; display:flex; align-items:center; justify-content:center; color:var(--slate-300); transition:background .2s; }
     .modal-close:hover { background:rgba(255,255,255,.18); }
     .modal-code { font-size:.7rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; padding:.2rem .6rem; border-radius:50px; margin-bottom:.6rem; display:inline-block; }
     .modal-header.A .modal-code { background:rgba(139,92,246,.2); color:#A78BFA; }
     .modal-header.B .modal-code { background:rgba(59,130,246,.2); color:#60A5FA; }
     .modal-header.C .modal-code { background:rgba(16,185,129,.2); color:var(--emerald-l); }
-    .modal-header.D .modal-code { background:rgba(249,115,22,.2); color:#FB923C; }
     .modal-title { font-family:'Playfair Display',serif; font-size:1.5rem; color:var(--white); margin-bottom:.4rem; }
     .modal-tagline { font-size:.9rem; color:var(--slate-400); font-style:italic; margin-bottom:1.2rem; }
     .modal-infos { display:flex; flex-wrap:wrap; gap:.6rem; }
@@ -194,12 +186,10 @@
     .modal-header.A ~ .modal-body .modal-section ul li::before { color:#A78BFA; }
     .modal-header.B ~ .modal-body .modal-section ul li::before { color:#60A5FA; }
     .modal-header.C ~ .modal-body .modal-section ul li::before { color:var(--emerald-l); }
-    .modal-header.D ~ .modal-body .modal-section ul li::before { color:#FB923C; }
     .programme-temps { background:rgba(255,255,255,.03); border-radius:10px; padding:.9rem 1.1rem; margin-bottom:.6rem; border-left:3px solid rgba(255,255,255,.1); }
     .A-border .programme-temps { border-left-color:var(--filiere-A); }
     .B-border .programme-temps { border-left-color:var(--filiere-B); }
     .C-border .programme-temps { border-left-color:var(--filiere-C); }
-    .D-border .programme-temps { border-left-color:var(--filiere-D); }
     .programme-temps strong { font-size:.8rem; font-weight:700; color:var(--white); display:block; margin-bottom:.4rem; }
     .programme-temps ul li { font-size:.82rem; color:var(--slate-400); }
     .modal-gift { background:rgba(16,185,129,.08); border:1px solid rgba(16,185,129,.2); border-radius:12px; padding:1.1rem 1.3rem; font-size:.87rem; color:var(--slate-300); }
@@ -281,20 +271,10 @@
       .hero-stat strong { font-size: 1.4rem; }
       .financement-grid { grid-template-columns: 1fr; }
     }
-
-    /* ─── IMPRESSION FICHE MODULE ─── */
-    @media print {
-      body > *:not(.modal-overlay) { display:none !important; }
-      .modal-overlay { position:static !important; background:none !important; backdrop-filter:none !important; display:block !important; padding:0 !important; }
-      .modal { max-width:100% !important; max-height:none !important; box-shadow:none !important; border:none !important; background:#fff !important; color:#000 !important; }
-      .modal-close, .btn-print, .modal-footer-note, .btn-inscrire { display:none !important; }
-      .modal * { color:#000 !important; background:transparent !important; }
-      .modal-header { background:#fff !important; }
-    }
   </style>
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Académie des Compétences et de la Connaissance — Génie Montauban" />
-  <meta name="twitter:description" content="22 modules de 3h animés par des experts locaux et dispensés par MUSIVA, organisme certifié Qualiopi. Leadership, Tech & Numérique, Gestion & Impact, Intelligence collective. De 45 à 65 €, 3 modules gratuits." />
+  <meta name="twitter:description" content="18 modules de 3h animés par des experts locaux. Leadership, Tech & Numérique, Gestion & Impact. À partir de 45 €." />
   <meta name="twitter:image" content="https://genie-montauban.fr/og-image.jpg" />
   <meta property="og:image" content="https://genie-montauban.fr/og-image.jpg" />
   <script type="application/ld+json">
@@ -303,32 +283,25 @@
     "@type": "EducationalOrganization",
     "name": "Académie des Compétences et de la Connaissance — Génie Montauban",
     "url": "https://genie-montauban.fr/academie.html",
-    "description": "Micro-formations de 3 heures animées par des experts locaux et dispensées par MUSIVA (organisme de formation certifié Qualiopi) au tiers-lieu Génie de Montauban : empowerment, tech et numérique, gestion et impact, intelligence collective.",
-    "provider": {
-      "@type": "Organization",
-      "name": "MUSIVA",
-      "url": "https://musiva.fr/"
-    },
-    "location": {
+    "description": "Micro-formations de 3 heures animées par des experts locaux au tiers-lieu Génie de Montauban : empowerment, tech et numérique, gestion et impact. Financement OPCO possible.",
+    "parentOrganization": {
       "@type": "Organization",
       "name": "Association Génie Montauban",
-      "url": "https://genie-montauban.fr/",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "12 rue du Génie",
-        "addressLocality": "Montauban",
-        "addressRegion": "Occitanie",
-        "postalCode": "82000",
-        "addressCountry": "FR"
-      }
+      "url": "https://genie-montauban.fr/"
+    },
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "12 rue du Génie",
+      "addressLocality": "Montauban",
+      "addressRegion": "Occitanie",
+      "postalCode": "82000",
+      "addressCountry": "FR"
     },
     "offers": {
-      "@type": "AggregateOffer",
+      "@type": "Offer",
       "name": "Micro-formation 3h",
-      "lowPrice": "45",
-      "highPrice": "65",
+      "price": "45",
       "priceCurrency": "EUR",
-      "offerCount": "22",
       "availability": "https://schema.org/InStock"
     }
   }
@@ -374,17 +347,16 @@
   <h1>L'<em>Académie</em> des Compétences<br><em>et de la Connaissance</em></h1>
   <p>Montez en compétences en 3 heures, animé par quelqu'un que vous pouvez croiser au marché le samedi matin.</p>
   <div class="hero-stats">
-    <div class="hero-stat"><strong>22</strong><span>modules</span></div>
+    <div class="hero-stat"><strong>18</strong><span>modules</span></div>
     <div class="hero-stat"><strong>3h</strong><span>par session</span></div>
-    <div class="hero-stat"><strong>45–65€</strong><span>3 modules gratuits</span></div>
-    <div class="hero-stat"><strong>Qualiopi</strong><span>via MUSIVA</span></div>
+    <div class="hero-stat"><strong>45€</strong><span>à partir de</span></div>
+    <div class="hero-stat"><strong>OPCO</strong><span>finançable</span></div>
     <div class="hero-stat"><strong>100%</strong><span>local</span></div>
   </div>
   <div class="hero-badges">
     <span class="badge">🟣 Empowerment &amp; Leadership</span>
     <span class="badge">🔵 Tech &amp; Numérique</span>
     <span class="badge">🟢 Gestion &amp; Impact</span>
-    <span class="badge">🟠 Intelligence collective &amp; Associations</span>
     <span class="badge">📍 12 rue du Génie, Montauban</span>
   </div>
 </section>
@@ -393,19 +365,18 @@
 <div class="principes-bar">
   <div class="principe-item"><div class="ico">📍</div><span><strong>Local</strong> — formateurs du bassin 82</span></div>
   <div class="principe-item"><div class="ico">🛠️</div><span><strong>Pratique</strong> — livrable concret en sortie</span></div>
-  <div class="principe-item"><div class="ico">💶</div><span><strong>Accessible</strong> — 45 à 65 € · OPCO via MUSIVA possible</span></div>
+  <div class="principe-item"><div class="ico">💶</div><span><strong>Accessible</strong> — &lt; 60 € · OPCO possible</span></div>
   <div class="principe-item"><div class="ico">📈</div><span><strong>Progressif</strong> — parcours modulable</span></div>
   <div class="principe-item"><div class="ico">🤝</div><span><strong>Communautaire</strong> — réseau Génie inclus</span></div>
 </div>
 
 <!-- ══════════ FILTRES ══════════ -->
 <div class="filters-bar">
-  <span class="filter-label" id="filterLabel">Filière :</span>
-  <button class="filter-btn active" data-filter="all" aria-pressed="true" aria-describedby="filterLabel">Toutes les filières</button>
-  <button class="filter-btn filA" data-filter="A" aria-pressed="false" aria-describedby="filterLabel">🟣 Empowerment</button>
-  <button class="filter-btn filB" data-filter="B" aria-pressed="false" aria-describedby="filterLabel">🔵 Tech &amp; Numérique</button>
-  <button class="filter-btn filC" data-filter="C" aria-pressed="false" aria-describedby="filterLabel">🟢 Gestion &amp; Impact</button>
-  <button class="filter-btn filD" data-filter="D" aria-pressed="false" aria-describedby="filterLabel">🟠 Intelligence collective</button>
+  <span class="filter-label">Filière :</span>
+  <button class="filter-btn active" data-filter="all">Toutes les filières</button>
+  <button class="filter-btn filA" data-filter="A">🟣 Empowerment</button>
+  <button class="filter-btn filB" data-filter="B">🔵 Tech &amp; Numérique</button>
+  <button class="filter-btn filC" data-filter="C">🟢 Gestion &amp; Impact</button>
 </div>
 
 <!-- ══════════ CONTENU PRINCIPAL ══════════ -->
@@ -433,7 +404,7 @@
       </div>
       <div class="module-card-body">
         <div class="module-tagline">Prendre la parole sans stress, avec impact — en 3h de pratique intensive</div>
-        <div class="module-meta"><span class="module-meta-tag">⏱ 3h</span><span class="module-meta-tag">🌙 Soirée</span><span class="module-meta-tag">💶 Autofinancement · OPCO via MUSIVA</span></div>
+        <div class="module-meta"><span class="module-meta-tag">⏱ 3h</span><span class="module-meta-tag">🌙 Soirée</span><span class="module-meta-tag">💶 OPCO / Autofinancement</span></div>
       </div>
       <div class="module-card-footer"><span class="module-format">📹 Mise en situation filmée</span><button class="btn-detail" onclick="openModal('A1');event.stopPropagation()">Voir la fiche →</button></div>
     </div>
@@ -455,7 +426,7 @@
       </div>
       <div class="module-card-body">
         <div class="module-tagline">Du projet à la structure juridique : association, SCOP, micro-entreprise — sans se perdre</div>
-        <div class="module-meta"><span class="module-meta-tag">⏱ 3h</span><span class="module-meta-tag">☀️ Samedi matin</span><span class="module-meta-tag">🏛️ Sous réserve de financement</span></div>
+        <div class="module-meta"><span class="module-meta-tag">⏱ 3h</span><span class="module-meta-tag">☀️ Samedi matin</span><span class="module-meta-tag">🏛️ Département 82</span></div>
       </div>
       <div class="module-card-footer"><span class="module-format">📋 Feuille de route remise</span><button class="btn-detail" onclick="openModal('A3');event.stopPropagation()">Voir la fiche →</button></div>
     </div>
@@ -526,10 +497,10 @@
         <span class="module-price-badge paid">50 €</span>
       </div>
       <div class="module-card-body">
-        <div class="module-tagline">De zéro à un kit graphique pro : objectif 3 visuels finalisés pendant la session</div>
+        <div class="module-tagline">De zéro à un kit graphique pro : 3 visuels finalisés et prêts à publier ce matin</div>
         <div class="module-meta"><span class="module-meta-tag">⏱ 3h</span><span class="module-meta-tag">☀️ Samedi matin</span><span class="module-meta-tag">🎨 Kit de marque</span></div>
       </div>
-      <div class="module-card-footer"><span class="module-format">🖼️ Objectif : 3 visuels finalisés</span><button class="btn-detail" onclick="openModal('B2');event.stopPropagation()">Voir la fiche →</button></div>
+      <div class="module-card-footer"><span class="module-format">🖼️ 3 visuels prêts à publier</span><button class="btn-detail" onclick="openModal('B2');event.stopPropagation()">Voir la fiche →</button></div>
     </div>
     <div class="module-card B reveal reveal-delay-3" data-filiere="B" onclick="openModal('B3')">
       <div class="module-card-header">
@@ -570,10 +541,10 @@
         <span class="module-price-badge paid">65 €</span>
       </div>
       <div class="module-card-body">
-        <div class="module-tagline">Zapier, Make, Google Sheets avancé : vous travaillez à créer une automatisation fonctionnelle pendant la session</div>
+        <div class="module-tagline">Zapier, Make, Google Sheets avancé : créer 1 automatisation fonctionnelle ce soir</div>
         <div class="module-meta"><span class="module-meta-tag">⏱ 3h</span><span class="module-meta-tag">🌙 Soirée</span><span class="module-meta-tag">⚙️ Niveau intermédiaire</span></div>
       </div>
-      <div class="module-card-footer"><span class="module-format">🤖 Objectif : 1 automatisation fonctionnelle</span><button class="btn-detail" onclick="openModal('B6');event.stopPropagation()">Voir la fiche →</button></div>
+      <div class="module-card-footer"><span class="module-format">🤖 Automatisation en prod</span><button class="btn-detail" onclick="openModal('B6');event.stopPropagation()">Voir la fiche →</button></div>
     </div>
   </div><!-- /modules-grid B -->
 
@@ -587,7 +558,7 @@
     <div class="filiere-intro-dot"></div>
     <div>
       <h3>Gestion &amp; Impact</h3>
-      <p>La filière la plus finançable (prise en charge employeur/OPCO via MUSIVA, France Travail, subventions associatives). Public : chefs de projet associatifs, indépendants, TPE. Gérez, financez, conformez-vous — simplement.</p>
+      <p>La filière la plus finançable (OPCO, France Travail, subventions associatives). Public : chefs de projet associatifs, indépendants, TPE. Gérez, financez, conformez-vous — simplement.</p>
     </div>
   </div>
 
@@ -599,7 +570,7 @@
       </div>
       <div class="module-card-body">
         <div class="module-tagline">Structure, pièges à éviter, budget prévisionnel : ébaucher sa propre demande ce matin</div>
-        <div class="module-meta"><span class="module-meta-tag">⏱ 3h</span><span class="module-meta-tag">☀️ Samedi matin</span><span class="module-meta-tag">🏛️ Sous réserve de financement</span></div>
+        <div class="module-meta"><span class="module-meta-tag">⏱ 3h</span><span class="module-meta-tag">☀️ Samedi matin</span><span class="module-meta-tag">🏛️ Département 82</span></div>
       </div>
       <div class="module-card-footer"><span class="module-format">📄 Trame dossier + 5 contacts</span><button class="btn-detail" onclick="openModal('C1');event.stopPropagation()">Voir la fiche →</button></div>
     </div>
@@ -660,104 +631,43 @@
     </div>
   </div><!-- /modules-grid C -->
 
-  <!-- ══ FILIÈRE D ══ -->
-  <div class="section-header reveal" data-filiere="D">
-    <h2 style="color:#FB923C">🟠 Filière D · Intelligence collective &amp; Associations</h2>
-    <div class="line"></div>
-  </div>
-
-  <div class="filiere-intro D reveal reveal-delay-1" data-filiere="D">
-    <div class="filiere-intro-dot"></div>
-    <div>
-      <h3>Parcours « Faire avec » : les fondamentaux de l'intelligence collective</h3>
-      <p>Quatre ateliers pratiques de 3 h, le samedi ou en soirée, pour faire travailler un collectif ensemble : animer une réunion, faire émerger des idées, construire une stratégie partagée puis passer à l'action. Public : bénévoles et dirigeants associatifs, animateurs d'équipe, porteurs de projets collectifs. Chaque atelier se suit seul ; les quatre forment un parcours complet.</p>
-    </div>
-  </div>
-
-  <div class="modules-grid">
-    <div class="module-card D reveal reveal-delay-1" data-filiere="D" onclick="openModal('D1')">
-      <div class="module-card-header">
-        <div><span class="module-code">D1</span><div class="module-title" style="margin-top:.5rem">Animer autrement</div></div>
-        <span class="module-price-badge paid">45 €</span>
-      </div>
-      <div class="module-card-body">
-        <div class="module-tagline">Préparer une réunion participative, faciliter les échanges et repartir avec un conducteur prêt à utiliser</div>
-        <div class="module-meta"><span class="module-meta-tag">⏱ 3h</span><span class="module-meta-tag">☀️ Samedi · 🌙 Soirée</span><span class="module-meta-tag">🗣️ Lean Café · 1-2-4-Tous</span></div>
-      </div>
-      <div class="module-card-footer"><span class="module-format">📋 Conducteur de réunion</span><button class="btn-detail" onclick="openModal('D1');event.stopPropagation()">Voir la fiche →</button></div>
-    </div>
-    <div class="module-card D reveal reveal-delay-2" data-filiere="D" onclick="openModal('D2')">
-      <div class="module-card-header">
-        <div><span class="module-code">D2</span><div class="module-title" style="margin-top:.5rem">Faire émerger et choisir des idées</div></div>
-        <span class="module-price-badge paid">45 €</span>
-      </div>
-      <div class="module-card-body">
-        <div class="module-tagline">Animer un groupe pour produire, enrichir et choisir des idées à l'aide de critères explicites</div>
-        <div class="module-meta"><span class="module-meta-tag">⏱ 3h</span><span class="module-meta-tag">☀️ Samedi · 🌙 Soirée</span><span class="module-meta-tag">💡 Brainwriting · SCAMPER</span></div>
-      </div>
-      <div class="module-card-footer"><span class="module-format">📄 Fiche-solution testable</span><button class="btn-detail" onclick="openModal('D2');event.stopPropagation()">Voir la fiche →</button></div>
-    </div>
-    <div class="module-card D reveal reveal-delay-3" data-filiere="D" onclick="openModal('D3')">
-      <div class="module-card-header">
-        <div><span class="module-code">D3</span><div class="module-title" style="margin-top:.5rem">Construire une stratégie partagée</div></div>
-        <span class="module-price-badge paid">45 €</span>
-      </div>
-      <div class="module-card-body">
-        <div class="module-tagline">Passer d'un diagnostic collectif à quelques choix stratégiques partagés, formulés sur une page</div>
-        <div class="module-meta"><span class="module-meta-tag">⏱ 3h</span><span class="module-meta-tag">☀️ Samedi · 🌙 Soirée</span><span class="module-meta-tag">🧭 Arbre à problèmes · SWOT</span></div>
-      </div>
-      <div class="module-card-footer"><span class="module-format">🗺️ Stratégie en une page</span><button class="btn-detail" onclick="openModal('D3');event.stopPropagation()">Voir la fiche →</button></div>
-    </div>
-    <div class="module-card D reveal reveal-delay-4" data-filiere="D" onclick="openModal('D4')">
-      <div class="module-card-header">
-        <div><span class="module-code">D4</span><div class="module-title" style="margin-top:.5rem">Passer de l'idée à l'action</div></div>
-        <span class="module-price-badge paid">45 €</span>
-      </div>
-      <div class="module-card-body">
-        <div class="module-tagline">Transformer une idée collective en actions prioritaires, attribuées et suivies dans le temps</div>
-        <div class="module-meta"><span class="module-meta-tag">⏱ 3h</span><span class="module-meta-tag">☀️ Samedi · 🌙 Soirée</span><span class="module-meta-tag">🚤 Speedboat · QQOQCCP</span></div>
-      </div>
-      <div class="module-card-footer"><span class="module-format">📅 Feuille de route 30/60/90 j</span><button class="btn-detail" onclick="openModal('D4');event.stopPropagation()">Voir la fiche →</button></div>
-    </div>
-  </div><!-- /modules-grid D -->
-
   <!-- ══ FINANCEMENT ══ -->
   <div class="financement-section reveal">
     <h3>💶 Financements disponibles</h3>
-    <p style="font-size:.87rem;color:var(--slate-300);margin-bottom:1.5rem;max-width:760px">
-      Les formations de l'Académie sont dispensées par <strong>MUSIVA</strong>, organisme de formation certifié Qualiopi. Deux grilles de prix coexistent : le <strong>tarif individuel</strong> (45 à 65 € TTC, autofinancement) et le <strong>tarif avec prise en charge employeur ou OPCO</strong> (200 à 600 € HT par session, sur devis MUSIVA) — l'écart correspond à la différence entre un règlement personnel et une facturation professionnelle avec devis, convention et justificatifs, pas à une incohérence.
-    </p>
     <div class="financement-grid">
       <div class="financement-card reveal reveal-delay-1">
-        <strong>Employeur / OPCO</strong>
-        <span>Prise en charge possible par votre employeur ou votre OPCO (Uniformation, Atlas, AKTO…) : les formations sont dispensées par MUSIVA, organisme certifié Qualiopi. Devis sur demande à <a href="mailto:contact@musiva.fr">contact@musiva.fr</a>.</span>
+        <strong>OPCO (Uniformation / Atlas / AKTO)</strong>
+        <span>Prise en charge pour salariés et associations. Tarification 200–600 €/session avec certification Qualiopi à venir.</span>
       </div>
       <div class="financement-card reveal reveal-delay-2">
-        <strong>France Travail</strong>
-        <span>Demandeurs d'emploi : une aide individuelle à la formation (AIF) peut être sollicitée auprès de votre conseiller France Travail, sur devis MUSIVA. Aucun conventionnement automatique n'est établi à ce jour.</span>
+        <strong>France Travail Montauban</strong>
+        <span>Conventionnement AIF pour demandeurs d'emploi. Sessions gratuites rémunérées. Contact : Direction Territoriale 82.</span>
       </div>
       <div class="financement-card reveal reveal-delay-3">
         <strong>Département du Tarn-et-Garonne</strong>
-        <span>Sessions A3, C1 et C6 gratuites sous réserve de financement (appel à projets en cours d'instruction). <span class="todo">[À COMPLÉTER — confirmer le financement acquis avant publication]</span></span>
+        <span>Financement sessions gratuites A3, C1, C6 via appel à projets « Cohésion sociale et insertion ».</span>
       </div>
       <div class="financement-card reveal reveal-delay-4">
-        <strong>Mécénat d'entreprises locales</strong>
-        <span>Nous consulter — aucune convention de mécénat n'étant signée à ce jour, aucun mécène n'est nommé ici. <span class="todo">[À COMPLÉTER après convention signée]</span></span>
+        <strong>Région Occitanie</strong>
+        <span>« Occitanie Formations » — soutien à la formation professionnelle dans les territoires peu dotés.</span>
       </div>
       <div class="financement-card reveal reveal-delay-5">
+        <strong>Mécénat local</strong>
+        <span>BNP Paribas 82, Crédit Agricole NMP, Caisse d'Épargne — mécénat compétences ou financier.</span>
+      </div>
+      <div class="financement-card reveal reveal-delay-1">
         <strong>Pass Académie</strong>
-        <span>Abonnement mensuel à l'étude — accès à plusieurs sessions du mois. Offre en préparation, sans engagement ni date d'ouverture confirmée.</span>
+        <span>Abonnement mensuel à 80 € — accès illimité à toutes les sessions du mois. Bientôt disponible.</span>
       </div>
     </div>
-    <p style="margin-top:1rem;font-size:.8rem;color:var(--slate-400)">* Les sessions GRATUIT sont proposées sous réserve de financement obtenu (Département 82, fondations ou mécénat local) — <span class="todo">[À COMPLÉTER — FINANCEMENTS_ACQUIS : lister ici les financements réellement obtenus]</span>.</p>
+    <p style="margin-top:1rem;font-size:.8rem;color:var(--slate-400)">* Les sessions GRATUIT sont financées par le Département 82, des fondations ou le mécénat local.</p>
   </div>
 
   <!-- ══ PASS CTA ══ -->
   <div class="pass-section reveal">
     <h3>📩 Inscrivez-vous dès maintenant</h3>
-    <p>Choisissez votre module ci-dessus puis inscrivez-vous en ligne — ou par email/téléphone si vous préférez. Nous vous confirmons votre place sous 24h.</p>
-    <a href="inscription-academie.html" class="btn-emerald">Je m'inscris →</a>
-    <p style="margin-top:1rem;font-size:.85rem;color:var(--slate-400)">Ou par email : <a href="mailto:contact@genie-montauban.fr?subject=Inscription Académie des Compétences" style="color:var(--emerald-l)">contact@genie-montauban.fr</a> · 📞 06 51 50 97 18</p>
+    <p>Toutes les inscriptions se font par email ou par téléphone. Indiquez le module souhaité, votre nom et votre structure — nous vous confirmons votre place sous 24h.</p>
+    <a href="mailto:contact@genie-montauban.fr?subject=Inscription Académie des Compétences" class="btn-emerald">Je m'inscris →</a>
   </div>
 
   <!-- ══ PROPOSER UN MODULE ══ -->
@@ -782,46 +692,6 @@
       </a>
     </div>
   </div>
-
-  <!-- ══ NOS RÉSULTATS (indicateurs 1 et 2 Qualiopi) ══ -->
-  <div class="financement-section reveal" style="margin-top:2rem">
-    <h3>📊 Nos résultats</h3>
-    <p style="font-size:.87rem;color:var(--slate-300);max-width:760px">
-      Premières sessions en <span class="todo">[À COMPLÉTER — date de lancement des premières sessions]</span> ; les résultats agrégés (taux de satisfaction, nombre de stagiaires) seront publiés ici après 3 sessions réalisées, avec la méthode de calcul utilisée, conformément au référentiel national qualité. Aucun chiffre n'est encore disponible : nous ne publions pas de moyenne inventée.
-    </p>
-  </div>
-
-  <!-- ══ ORGANISME DE FORMATION ══ -->
-  <div class="formateur-banner reveal" style="margin-top:2rem;text-align:left">
-    <h3 style="text-align:center">🎓 Organisme de formation</h3>
-    <p style="text-align:center;max-width:640px;margin:0 auto">
-      Les formations de l'Académie sont dispensées par <strong>MUSIVA</strong>, SASU — SIRET 943 861 989 00011.<br>
-      Déclaration d'activité enregistrée sous le n° 76 82 01423 82 auprès du préfet de la région Occitanie. Cet enregistrement ne vaut pas agrément de l'État.<br>
-      La certification qualité a été délivrée au titre de la catégorie d'action suivante : <span class="todo">[À COMPLÉTER — CATEGORIE_QUALIOPI, a priori « actions de formation »]</span>.<br>
-      Contact formation : <a href="mailto:contact@musiva.fr">contact@musiva.fr</a> · <a href="cgv-formation.html">CGV formation</a> · <a href="reglement-interieur-formation.html">Règlement intérieur formation</a>
-    </p>
-  </div>
-
-  <!-- ══ CONTACTS QUALITÉ (indicateurs 12, 26, 31) ══ -->
-  <div class="social-banner reveal" style="margin-top:2rem">
-    <h3>📋 Contacts qualité</h3>
-    <p style="max-width:640px">
-      Référent pédagogique : Samir CHIKHI (<a href="mailto:contact@musiva.fr">contact@musiva.fr</a>)<br>
-      Référent handicap : Samir CHIKHI (<a href="mailto:contact@musiva.fr">contact@musiva.fr</a>)<br>
-      Signalement des violences, harcèlement et discriminations : Samir CHIKHI (<a href="mailto:contact@musiva.fr">contact@musiva.fr</a>)<br>
-      Réclamations : <a href="mailto:contact@musiva.fr">contact@musiva.fr</a>
-    </p>
-  </div>
-
-  <!-- ══ ACCUEIL PMR (indicateur 26) ══ -->
-  <div class="social-banner reveal" style="margin-top:2rem">
-    <h3>♿ Accueil des personnes en situation de handicap</h3>
-    <p style="max-width:640px">
-      Le tiers-lieu Génie, 12 rue du Génie à Montauban, est accessible aux personnes à mobilité réduite ; la salle Maria Montessori est spécifiquement équipée PMR (4 personnes). Sanitaires accessibles : <span class="todo">[À COMPLÉTER — ACCES_PMR, détail sanitaires]</span>. Pour tout besoin d'adaptation (auditif, visuel, cognitif ou autre), contactez le référent handicap avant votre inscription : Samir CHIKHI (<a href="mailto:contact@musiva.fr">contact@musiva.fr</a>) — nous étudions ensemble les adaptations possibles.
-    </p>
-  </div>
-
-  <p class="reveal" style="text-align:center;margin-top:2.5rem;font-size:.8rem;color:var(--slate-400)">Catalogue mis à jour le 23 septembre 2026.</p>
 
 </main>
 
@@ -876,11 +746,9 @@
     <div class="footer-legal">
       <a href="mentions_legales.html">Mentions légales</a>
       <a href="confidentialite.html">Confidentialité</a>
-      <a href="cgv.html">CGV espaces</a>
-      <a href="cgv-formation.html">CGV formation</a>
+      <a href="cgv.html">CGV</a>
       <a href="reglement-interieur-genie.html">Règlement intérieur</a>
-      <a href="reglement-interieur-formation.html">Règlement formation</a>
-      <a href="confidentialite.html#cookies" class="footer-cookie-link">Gérer les cookies</a>
+      <a href="admin.html" rel="nofollow" style="opacity:.55;font-size:11px;" title="Administration">Admin</a>
       <a href="espace-membres.html" rel="nofollow" style="opacity:.55;font-size:11px;" title="Espace membres">Espace membres</a>
     </div>
   </div>
@@ -888,94 +756,18 @@
 
 <!-- ══════════ MODAL ══════════ -->
 <div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOverlay(event)">
-  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"></div>
+  <div class="modal" id="modal"></div>
 </div>
 
 <!-- ══════════ JS ══════════ -->
 <script>
-/* ── Contacts qualité (indicateurs 12, 26, 31 du référentiel Qualiopi) ──
-   À compléter par Samir / MUSIVA avant le prochain audit. */
-const CONTACTS = {
-  emailMusiva: '<a href="mailto:contact@musiva.fr">contact@musiva.fr</a>',
-  refPedago: 'Samir CHIKHI (<a href="mailto:contact@musiva.fr">contact@musiva.fr</a>)',
-  refHandicap: 'Samir CHIKHI (<a href="mailto:contact@musiva.fr">contact@musiva.fr</a>)',
-  refSignalement: 'Samir CHIKHI (<a href="mailto:contact@musiva.fr">contact@musiva.fr</a>)',
-  categorieQualiopi: '<span class="todo">[À COMPLÉTER — CATEGORIE_QUALIOPI, a priori « actions de formation »]</span>'
-};
-
-/* ── Valeurs par défaut des fiches module (indicateurs 1 et 2 Qualiopi) ──
-   Fusionnées avec chaque module via {...DEFAULTS, ...modules[code]}. */
-const DEFAULTS = {
-  duree: '3 h',
-  niveau: 'Tous niveaux',
-  effectif: { min: 6, max: 12 }, /* [À COMPLÉTER par module] valeur par défaut à confirmer */
-  methodes: ['Apports théoriques courts', 'Exercices pratiques individuels ou en binôme', 'Mise en situation ou étude de cas réels', 'Débriefing collectif'], /* [À VALIDER par le formateur] à affiner par module */
-  materiel: 'Se munir d\'un ordinateur ou smartphone si mentionné dans les prérequis du module. Aucun matériel spécifique sinon.',
-  financements: 'Autofinancement (45 à 65 € TTC) ou prise en charge employeur/OPCO sur devis (200 à 600 € HT/session) — formations dispensées par MUSIVA, organisme certifié Qualiopi.',
-  reconnaissance: 'Attestation de fin de formation',
-  acces: 'Inscription jusqu\'à 48 h avant la session, dans la limite des places. Confirmation sous 24 h ouvrées. Session maintenue à partir de 6 inscrits.',
-  accessibilite: 'Salle Maria Montessori accessible aux personnes à mobilité réduite. Pour tout autre besoin d\'adaptation, contactez le référent handicap avant votre inscription.',
-  evaluation: ['Questionnaire de positionnement à l\'inscription', 'Évaluation des acquis en fin de séance', 'Questionnaire de satisfaction à chaud'],
-  intervenant: null,
-  resultats: { nouveau: true, texteNouveau: 'Nouveau module : résultats publiés après 3 sessions.' },
-  majLe: '2026-09-23',
-  version: 'V1'
-};
-
-/* ── Bloc Qualiopi inséré dans chaque fenêtre de module (P0-4) ── */
-function blocsQualiopi(m) {
-  const evalHtml = m.evaluation.map(e => `<li>${e}</li>`).join('');
-  const methodesHtml = m.methodes.map(e => `<li>${e}</li>`).join('');
-  const intervenantHtml = m.intervenant ? `
-      <div class="modal-section">
-        <h4>Votre intervenant·e</h4>
-        <p style="font-size:.87rem;color:var(--slate-300)">${m.intervenant}</p>
-      </div>` : '';
-  return `
-      <div class="modal-section">
-        <h4>Méthodes &amp; évaluation</h4>
-        <p style="font-size:.87rem;margin-bottom:.5rem;color:var(--slate-300)"><strong>Méthodes pédagogiques :</strong></p>
-        <ul>${methodesHtml}</ul>
-        <p style="font-size:.87rem;margin:.8rem 0 .5rem;color:var(--slate-300)"><strong>Modalités d'évaluation :</strong></p>
-        <ul>${evalHtml}</ul>
-      </div>
-      <div class="modal-section">
-        <h4>Infos pratiques</h4>
-        <p style="font-size:.87rem;color:var(--slate-300)">
-          <strong>Durée :</strong> ${m.duree} &nbsp;·&nbsp; <strong>Niveau :</strong> ${m.niveau} &nbsp;·&nbsp; <strong>Groupe :</strong> ${m.effectif.min} à ${m.effectif.max} personnes<br>
-          <strong>Délais d'accès :</strong> ${m.acces}<br>
-          <strong>Reconnaissance :</strong> ${m.reconnaissance}<br>
-          <strong>Matériel :</strong> ${m.materiel}<br>
-          <strong>Financement :</strong> ${m.financements}
-        </p>
-      </div>
-      <div class="modal-section">
-        <h4>Accessibilité</h4>
-        <p style="font-size:.87rem;color:var(--slate-300)">${m.accessibilite}</p>
-      </div>${intervenantHtml}
-      <div class="modal-section">
-        <h4>Résultats</h4>
-        <p style="font-size:.87rem;color:var(--slate-300)">${m.resultats.texteNouveau}</p>
-      </div>
-      <div class="modal-section">
-        <h4>Contacts &amp; organisme de formation</h4>
-        <p style="font-size:.87rem;color:var(--slate-300)">
-          Formation dispensée par <strong>MUSIVA</strong>, SASU — SIRET 943 861 989 00011, déclaration d'activité n° 76 82 01423 82 (Occitanie), catégorie ${CONTACTS.categorieQualiopi}.<br>
-          Contact formation : ${CONTACTS.emailMusiva} &nbsp;·&nbsp; Référent pédagogique : ${CONTACTS.refPedago}<br>
-          Référent handicap : ${CONTACTS.refHandicap} &nbsp;·&nbsp; Signalement violences/harcèlement/discriminations : ${CONTACTS.refSignalement}<br>
-          <a href="cgv-formation.html">CGV formation</a> &nbsp;·&nbsp; <a href="reglement-interieur-formation.html">Règlement intérieur formation</a>
-        </p>
-        <p style="font-size:.75rem;color:var(--slate-400);margin-top:.6rem">Fiche mise à jour le ${m.majLe} · ${m.version}</p>
-      </div>`;
-}
-
 /* ── Données modules ── */
 const modules = {
   A1: {
     filiere:'A', code:'A1', prix:'50 €', format:'Présentiel · Soirée',
     titre:'Prise de parole en public',
     tagline:'Prendre la parole sans stress, avec impact — en 3 heures de pratique intensive',
-    objectifs:['Appliquer au moins deux techniques de régulation du stress avant une intervention.','Structurer un message de 2 minutes selon la méthode PEPS.','Ajuster sa voix, son débit et sa posture à partir d\'un retour filmé.','Identifier trois axes de progression et les formaliser dans un plan d\'action.'],
+    objectifs:['Identifier et gérer son stress avant et pendant une prise de parole','Maîtriser les techniques de communication verbale (voix, débit, articulation)','Utiliser le langage non-verbal de façon consciente (posture, regard, gestuelle)','Structurer un message clair et mémorable en 2 minutes','Débriefing personnalisé sur sa propre prise de parole filmée'],
     programme:[{label:'Temps 1 · Comprendre sa communication (45 min)', items:['Diagnostic individuel : mon profil de communicant','Physiologie du stress et techniques de régulation rapide','Les 3 canaux : verbal, para-verbal, non-verbal']},{label:'Temps 2 · Construire et structurer son message (45 min)', items:['La structure PEPS (Problème–Empathie–Proposition–Solution)','L\'accroche, le corps, la conclusion mémorable','Exercice : rédiger son pitch de 2 minutes']},{label:'Temps 3 · Mise en situation filmée et débriefing (90 min)', items:['Tour de table : chaque participant passe devant le groupe','Feedback bienveillant du groupe et du formateur','Deuxième passage : mesurer la progression','Plan d\'action individuel personnalisé']}],
     cadeau:'Une vidéo de votre prise de parole + un plan d\'action personnalisé sur 3 points à travailler',
     public:'Professionnels souhaitant gagner en aisance orale, managers, porteurs de projet, toute personne intimidée par la prise de parole',
@@ -995,12 +787,11 @@ const modules = {
     filiere:'A', code:'A3', prix:'GRATUIT*', format:'Présentiel · Samedi matin',
     titre:'Créer son activité ESS',
     tagline:'Du projet à la structure juridique : association, SCOP, micro-entreprise — sans se perdre',
-    objectifs:['Distinguer les formes juridiques ESS : association loi 1901, SCOP, SCIC, micro-entreprise','Choisir la structure adaptée à son projet et ses objectifs','Identifier les démarches clés de création','Lister trois sources de financement mobilisables pour un projet ESS','Éviter les 5 erreurs classiques des créateurs de structures ESS'],
+    objectifs:['Distinguer les formes juridiques ESS : association loi 1901, SCOP, SCIC, micro-entreprise','Choisir la structure adaptée à son projet et ses objectifs','Identifier les démarches clés de création','Connaître les sources de financement spécifiques à l\'ESS','Éviter les 5 erreurs classiques des créateurs de structures ESS'],
     programme:[{label:'Temps 1 · Cartographie des structures ESS (50 min)', items:['L\'ESS en France et dans le Tarn-et-Garonne','Association, SCOP, SCIC, CAE : fonctionnement et différences','Micro-entreprise et portage salarial comme alternatives']},{label:'Temps 2 · Choisir sa structure (40 min)', items:['Matrice de décision : 5 questions pour trouver la bonne forme','Cas pratiques : 3 projets, 3 structures différentes','Les démarches administratives pas à pas']},{label:'Temps 3 · Financer et se lancer (50 min)', items:['Subventions, OPCA, crowdfunding solidaire, mécénat local','Les ressources du territoire : CRESS 82, BGE, France Travail','Ébauche de sa feuille de route de création']}],
     cadeau:'Feuille de route personnalisée avec la structure recommandée, les 3 premières démarches et les contacts locaux',
     public:'Porteurs de projet ESS, bénévoles créant une association, salariés en reconversion, demandeurs d\'emploi',
-    prerequis:'Avoir un projet ou une idée, même floue · Aucun prérequis juridique — financement Département 82',
-    financements:'Gratuit* sous réserve de financement (Département 82) — nous consulter.'
+    prerequis:'Avoir un projet ou une idée, même floue · Aucun prérequis juridique — financement Département 82'
   },
   A4: {
     filiere:'A', code:'A4', prix:'45 €', format:'Présentiel · Soirée',
@@ -1026,7 +817,7 @@ const modules = {
     filiere:'A', code:'A6', prix:'50 €', format:'Présentiel · Soirée (scène ouverte)',
     titre:'Pitch ton projet',
     tagline:'Convaincre en 3 minutes : financeurs, partenaires, clients — en scène ouverte',
-    objectifs:['Structurer un pitch de 3 minutes selon la trame Problème–Solution–Traction–Appel','Adapter son message à son audience (investisseur, partenaire, client, jury)','Gérer les questions difficiles et les objections','Utiliser le storytelling pour rendre son projet mémorable','Pitcher en conditions réelles devant le groupe et des invités'],
+    objectifs:['Maîtriser la structure du pitch en 3 minutes (Problème–Solution–Traction–Appel)','Adapter son message à son audience (investisseur, partenaire, client, jury)','Gérer les questions difficiles et les objections','Utiliser le storytelling pour rendre son projet mémorable','Pitcher en conditions réelles devant le groupe et des invités'],
     programme:[{label:'Temps 1 · Anatomie d\'un pitch gagnant (45 min)', items:['Les 4 questions auxquelles tout pitch doit répondre','Erreurs classiques : trop technique, trop long, pas d\'appel à l\'action','Exemples de pitchs locaux analysés en groupe']},{label:'Temps 2 · Construction de son pitch (60 min)', items:['Rédaction de son accroche en 10 secondes','Structure du problème/solution avec données et storytelling','Formulation de son appel à l\'action spécifique']},{label:'Temps 3 · Scène ouverte et débriefing (75 min)', items:['Chaque participant pitche devant le groupe (3 min)','Panel de feedback : formateur + 2 invités externes','Deuxième passage intégrant les retours reçus']}],
     cadeau:'Pitch écrit en version finale + slides si souhaité + contacts des invités du panel',
     public:'Porteurs de projet, entrepreneurs, associations cherchant des financements, professionnels défendant un projet en interne',
@@ -1036,7 +827,7 @@ const modules = {
     filiere:'B', code:'B1', prix:'55 €', format:'Présentiel · Soirée',
     titre:'IA au quotidien',
     tagline:'ChatGPT, Claude, Gemini : 5 prompts personnalisés à votre métier, en repartant ce soir',
-    objectifs:['Distinguer trois cas d\'usage pertinents de l\'IA générative et deux de ses limites concrètes','Utiliser ChatGPT, Claude et Gemini pour des cas d\'usage concrets','Rédiger des prompts efficaces avec la méthode RACI','Automatiser 3 tâches récurrentes grâce à l\'IA','Rédiger 5 prompts opérationnels adaptés à son propre métier'],
+    objectifs:['Comprendre ce qu\'est l\'IA générative et ses limites réelles','Utiliser ChatGPT, Claude et Gemini pour des cas d\'usage concrets','Rédiger des prompts efficaces avec la méthode RACI','Automatiser 3 tâches récurrentes grâce à l\'IA','Repartir avec 5 prompts personnalisés à son propre métier'],
     programme:[{label:'Temps 1 · Comprendre l\'IA sans jargon (40 min)', items:['Comment fonctionne un LLM ? Explication accessible','Ce que l\'IA fait bien, invente, ne sait pas faire','Panorama des outils : ChatGPT, Claude, Gemini, Copilot']},{label:'Temps 2 · Maîtriser le prompting (60 min)', items:['La méthode RACI : Rôle, Action, Contexte, Indicateurs','Prompts pour rédiger, résumer, traduire, reformuler, analyser','Exercice collectif : améliorer un prompt en 3 itérations']},{label:'Temps 3 · Cas d\'usage par métier (80 min)', items:['Atelier par profil : commerçant, asso, indépendant, manager, créatif','Chaque participant crée ses 5 prompts pendant la session','Démonstration live : traiter une vraie tâche en moins de 5 min']}],
     cadeau:'Une bibliothèque personnelle de 5 prompts prêts à l\'emploi, testés et validés pendant la session',
     public:'Professionnels curieux de l\'IA, dirigeants TPE/PME, responsables associatifs, salariés voulant intégrer l\'IA',
@@ -1045,8 +836,8 @@ const modules = {
   B2: {
     filiere:'B', code:'B2', prix:'50 €', format:'Présentiel · Samedi matin',
     titre:'Canva Pro',
-    tagline:'De zéro à un kit graphique pro : objectif 3 visuels finalisés pendant la session',
-    objectifs:['Utiliser les fonctionnalités essentielles de Canva (gabarits, calques, kit de marque) pour produire un visuel','Créer une charte graphique cohérente (couleurs, polices, éléments)','Concevoir des visuels pour les réseaux sociaux (posts, stories, couvertures)','Réaliser un flyer ou une affiche professionnelle','Organiser ses créations dans des dossiers réutilisables'],
+    tagline:'De zéro à un kit graphique pro : 3 visuels finalisés et prêts à publier ce matin',
+    objectifs:['Maîtriser l\'interface Canva et ses fonctionnalités essentielles','Créer une charte graphique cohérente (couleurs, polices, éléments)','Concevoir des visuels pour les réseaux sociaux (posts, stories, couvertures)','Réaliser un flyer ou une affiche professionnelle','Organiser ses créations dans des dossiers réutilisables'],
     programme:[{label:'Temps 1 · Les bases de Canva (45 min)', items:['Navigation dans l\'interface : templates, éléments, texte, couleurs','Créer sa palette de couleurs et ses polices de marque','Les formats essentiels : post carré, story, A4, bannière']},{label:'Temps 2 · Créer ses premiers visuels (75 min)', items:['Création d\'un post Instagram à partir d\'un template','Conception d\'un flyer événementiel professionnel','Astuces : suppression de fond, cadres, effets photos']},{label:'Temps 3 · Kit graphique et organisation (60 min)', items:['Créer son Kit de marque (couleurs, logo, polices sauvegardées)','Dupliquer et adapter des templates pour gagner du temps','Exporter aux bons formats (PNG, PDF, MP4)']}],
     cadeau:'3 visuels finalisés prêts à publier : 1 post réseau social, 1 flyer, 1 couverture Facebook/LinkedIn',
     public:'Responsables communication d\'associations, entrepreneurs, community managers débutants',
@@ -1056,7 +847,7 @@ const modules = {
     filiere:'B', code:'B3', prix:'55 €', format:'Présentiel · Soirée',
     titre:'Instagram & LinkedIn Pro',
     tagline:'Stratégie, algorithmes, calendrier éditorial : créer sa première série de posts ce soir',
-    objectifs:['Citer les critères de classement actuels des algorithmes Instagram et LinkedIn','Définir sa stratégie de contenu en 3 piliers éditoriaux','Rédiger des légendes et accroches qui génèrent de l\'engagement','Construire un calendrier éditorial sur 4 semaines','Créer sa première série de 3 posts pendant la session'],
+    objectifs:['Comprendre les algorithmes Instagram et LinkedIn en 2026','Définir sa stratégie de contenu en 3 piliers éditoriaux','Rédiger des légendes et accroches qui génèrent de l\'engagement','Construire un calendrier éditorial sur 4 semaines','Créer sa première série de 3 posts pendant la session'],
     programme:[{label:'Temps 1 · Décoder les algorithmes (45 min)', items:['Comment Instagram choisit qui voit vos publications en 2026','LinkedIn : les 3 indicateurs qui boostent votre portée organique','Formats qui performent : carrousel, Reel, vidéo courte, texte long']},{label:'Temps 2 · Stratégie de contenu (45 min)', items:['Définir ses 3 piliers éditoriaux (éduquer, inspirer, vendre)','La règle 80/20 : contenu de valeur vs contenu commercial','Trouver ses idées de posts avec des outils gratuits']},{label:'Temps 3 · Création en session (90 min)', items:['Rédaction de 3 accroches percutantes pour ses posts','Mise en page sur Canva ou application native','Construction du calendrier éditorial des 4 prochaines semaines']}],
     cadeau:'3 posts finalisés prêts à publier + un calendrier éditorial de 4 semaines personnalisé',
     public:'Entrepreneurs, indépendants, responsables communication, community managers autodidactes',
@@ -1076,7 +867,7 @@ const modules = {
     filiere:'B', code:'B5', prix:'50 €', format:'Présentiel · Samedi matin',
     titre:'Cybersécurité pour non-techs',
     tagline:'Protéger ses données, ses comptes, son asso ou sa TPE — checklist personnalisée en sortie',
-    objectifs:['Identifier un email de phishing et citer les trois menaces cyber les plus courantes pour une TPE ou une association','Sécuriser ses mots de passe avec un gestionnaire','Activer l\'authentification à deux facteurs (2FA) sur ses comptes clés','Protéger les données de son asso ou TPE (obligations RGPD basiques)','Réagir efficacement en cas d\'incident de sécurité'],
+    objectifs:['Comprendre les menaces cyber réelles : phishing, ransomware, vol de données','Sécuriser ses mots de passe avec un gestionnaire','Activer l\'authentification à deux facteurs (2FA) sur ses comptes clés','Protéger les données de son asso ou TPE (obligations RGPD basiques)','Réagir efficacement en cas d\'incident de sécurité'],
     programme:[{label:'Temps 1 · Menaces réelles et mécanismes d\'attaque (50 min)', items:['Les 5 attaques les plus courantes en 2026','Phishing : reconnaître un email frauduleux en 30 secondes','Démonstration live : ce qu\'un pirate peut voir de vous en 5 min']},{label:'Temps 2 · Sécuriser ses outils (60 min)', items:['Mots de passe robustes : installation et configuration de Bitwarden','2FA : activation sur Gmail, Facebook, LinkedIn, HelloAsso','Wi-Fi public, VPN, mises à jour : les bons réflexes']},{label:'Temps 3 · Protection de sa structure (50 min)', items:['Cartographie des risques pour son asso ou TPE','Plan de sauvegarde simple en 3 niveaux','Que faire si on a cliqué sur un lien suspect : procédure d\'urgence']}],
     cadeau:'Checklist cybersécurité personnalisée à 15 points + les outils installés et configurés',
     public:'Dirigeants de TPE, responsables associatifs, salariés manipulant des données sensibles',
@@ -1085,24 +876,22 @@ const modules = {
   B6: {
     filiere:'B', code:'B6', prix:'65 €', format:'Présentiel · Soirée — niveau intermédiaire',
     titre:'Automatiser ses tâches',
-    tagline:'Zapier, Make, Google Sheets avancé : vous travaillez à créer une automatisation fonctionnelle pendant la session',
-    objectifs:['Décrire le principe déclencheur–action d\'une automatisation no-code et l\'appliquer à un cas concret','Créer un scénario fonctionnel avec Zapier ou Make','Automatiser une tâche Google Sheets avec des formules avancées','Connecter 2 outils métier entre eux sans code','Évaluer le temps gagné et la fiabilité de son automatisation'],
+    tagline:'Zapier, Make, Google Sheets avancé : créer 1 automatisation fonctionnelle ce soir',
+    objectifs:['Comprendre le principe des automatisations "no-code" (déclencheur–action)','Créer un scénario fonctionnel avec Zapier ou Make','Automatiser une tâche Google Sheets avec des formules avancées','Connecter 2 outils métier entre eux sans code','Évaluer le temps gagné et la fiabilité de son automatisation'],
     programme:[{label:'Temps 1 · Logique des automatisations (40 min)', items:['Qu\'est-ce que le no-code ? Différence Zapier / Make / n8n','Identifier ses tâches automatisables : critères et exemples','Connexion aux APIs sans code : le concept en 10 minutes']},{label:'Temps 2 · Zapier / Make en pratique (80 min)', items:['Création d\'un compte et navigation dans l\'interface','Atelier : créer un Zap (formulaire → Sheets → email de confirmation)','Gestion des erreurs et débogage d\'une automatisation']},{label:'Temps 3 · Google Sheets avancé (60 min)', items:['Formules dynamiques : IMPORTRANGE, QUERY, ARRAYFORMULA','Automatiser un tableau de bord avec actualisation automatique','Chaque participant termine avec son automatisation personnelle']}],
     cadeau:'Une automatisation fonctionnelle en production + la documentation de son scénario pour la maintenir',
     public:'Professionnels avec bases en outils numériques, entrepreneurs, community managers, responsables administratifs',
-    prerequis:'Maîtrise basique de Google Sheets ou Excel · Compte Google actif · Apporter son ordinateur · Avoir identifié une tâche répétitive',
-    niveau:'Intermédiaire'
+    prerequis:'Maîtrise basique de Google Sheets ou Excel · Compte Google actif · Apporter son ordinateur · Avoir identifié une tâche répétitive'
   },
   C1: {
     filiere:'C', code:'C1', prix:'GRATUIT*', format:'Présentiel · Samedi matin',
     titre:'Demande de subvention',
     tagline:'Structure, pièges à éviter, budget prévisionnel : ébaucher sa propre demande ce matin',
-    objectifs:['Identifier les financeurs pertinents selon son projet (Département, Région, Europe, fondations)','Vérifier l\'éligibilité de son projet à au moins deux dispositifs de subvention identifiés en session','Structurer une demande de subvention convaincante en 7 parties','Construire un budget prévisionnel équilibré et crédible','Éviter les 5 erreurs qui font rejeter un dossier'],
+    objectifs:['Identifier les financeurs pertinents selon son projet (Département, Région, Europe, fondations)','Comprendre les critères d\'éligibilité et de sélection des jurys','Structurer une demande de subvention convaincante en 7 parties','Construire un budget prévisionnel équilibré et crédible','Éviter les 5 erreurs qui font rejeter un dossier'],
     programme:[{label:'Temps 1 · Cartographie des financeurs (50 min)', items:['Les financeurs publics locaux : Département 82, Région Occitanie, DDETS','Les fondations et mécènes : critères, calendriers, montants','L\'Europe (FEDER, FSE, LEADER) : pour qui, comment ?']},{label:'Temps 2 · Structurer sa demande (50 min)', items:['Les 7 parties d\'un dossier de subvention gagnant','Rédiger un résumé exécutif percutant (la 1ère page qui fait tout)','Les indicateurs d\'impact : ce que les jurys veulent voir']},{label:'Temps 3 · Budget et mise en pratique (60 min)', items:['Construire un budget prévisionnel réaliste : charges, produits, équilibre','Les erreurs budgétaires éliminatoires','Chaque participant ébauche la trame de sa propre demande']}],
     cadeau:'La trame de sa demande de subvention avec les 7 parties remplies en ébauche + une liste de 5 financeurs pertinents',
     public:'Responsables et bénévoles d\'associations, porteurs de projet ESS, chefs de projets d\'utilité sociale',
-    prerequis:'Avoir un projet associatif ou social à financer · Apporter les documents de son association si disponibles — financement Département 82',
-    financements:'Gratuit* sous réserve de financement (Département 82) — nous consulter.'
+    prerequis:'Avoir un projet associatif ou social à financer · Apporter les documents de son association si disponibles — financement Département 82'
   },
   C2: {
     filiere:'C', code:'C2', prix:'45 €', format:'Présentiel · Samedi matin',
@@ -1118,7 +907,7 @@ const modules = {
     filiere:'C', code:'C3', prix:'50 €', format:'Présentiel · Soirée',
     titre:'RGPD pour TPE et assos',
     tagline:'Ce que la loi exige réellement — registre de traitement créé pendant la session',
-    objectifs:['Citer les 6 principes fondamentaux du RGPD et les appliquer à un cas de sa structure','Identifier les données à risque dans sa propre structure','Créer et tenir un registre des activités de traitement','Rédiger une mention légale conforme pour son site web ou formulaire','Décrire la procédure à suivre en cas de violation de données, y compris la notification à la CNIL sous 72h'],
+    objectifs:['Comprendre les 6 principes fondamentaux du RGPD (sans juriste)','Identifier les données à risque dans sa propre structure','Créer et tenir un registre des activités de traitement','Rédiger une mention légale conforme pour son site web ou formulaire','Savoir quoi faire en cas de violation de données'],
     programme:[{label:'Temps 1 · RGPD démystifié (50 min)', items:['Ce que le RGPD exige vraiment pour une petite structure','Les 6 principes RGPD en langage courant','Sanctions réelles : quand la CNIL sanctionne-t-elle ?']},{label:'Temps 2 · Identifier ses traitements (50 min)', items:['Qu\'est-ce qu\'une "donnée personnelle" ? Exemples concrets','Cartographier les données de sa structure : adhérents, clients, salariés','Bases légales : consentement, contrat, intérêt légitime']},{label:'Temps 3 · Mise en conformité pratique (60 min)', items:['Créer son registre des traitements (outil CNIL, modèle simplifié)','Rédiger une mention d\'information RGPD pour son formulaire','Chaque participant repart avec son registre ébauché']}],
     cadeau:'Registre de traitement des données ébauché + mention légale RGPD rédigée pour son site ou formulaire',
     public:'Dirigeants de TPE, responsables d\'associations, webmasters gérant un site avec formulaire de contact',
@@ -1128,7 +917,7 @@ const modules = {
     filiere:'C', code:'C4', prix:'55 €', format:'Présentiel · Samedi matin',
     titre:'Excel de A à Z',
     tagline:'Formules, tableaux croisés dynamiques, mise en forme conditionnelle — sur vos données réelles',
-    objectifs:['Construire une formule combinant SI, RECHERCHEV et SOMME.SI sur un jeu de données réel','Créer un tableau croisé dynamique (TCD) et l\'analyser','Appliquer la mise en forme conditionnelle pour visualiser les données','Protéger et sécuriser ses feuilles de calcul','Construire un tableau de bord visuel et dynamique'],
+    objectifs:['Maîtriser les formules essentielles : SOMME.SI, NB.SI, RECHERCHEV, SI imbriqués','Créer un tableau croisé dynamique (TCD) et l\'analyser','Appliquer la mise en forme conditionnelle pour visualiser les données','Protéger et sécuriser ses feuilles de calcul','Construire un tableau de bord visuel et dynamique'],
     programme:[{label:'Temps 1 · Formules indispensables (60 min)', items:['SOMME, MOYENNE, NB, MIN, MAX : les incontournables','SI imbriqués, ET, OU : conditions logiques','RECHERCHEV et INDEX/EQUIV : trouver et relier des données']},{label:'Temps 2 · Tableaux croisés dynamiques (60 min)', items:['Créer un TCD en 5 étapes','Filtres, segments, calculs automatiques','Transformer un TCD en graphique dynamique']},{label:'Temps 3 · Mise en forme et tableau de bord (60 min)', items:['Mise en forme conditionnelle : codes couleurs, barres, icônes','Verrouiller des cellules et protéger son classeur','Construire son tableau de bord personnalisé en 30 minutes']}],
     cadeau:'Tableau de bord Excel finalisé basé sur ses propres données + fichier modèle avec toutes les formules commentées',
     public:'Professionnels utilisant Excel mais de façon limitée, gestionnaires associatifs, indépendants, salariés',
@@ -1152,68 +941,14 @@ const modules = {
     programme:[{label:'Temps 1 · Comprendre le mécénat (50 min)', items:['Mécénat vs sponsoring : différences juridiques et fiscales','Avantages pour l\'entreprise mécène : déduction fiscale 60% (loi Aillagon)','Panorama des mécènes locaux : BNP 82, Crédit Agricole NMP, Caisse d\'Épargne']},{label:'Temps 2 · Construire son dossier de mécénat (60 min)', items:['Les 6 parties d\'un dossier de mécénat qui convainc','Comment valoriser la contrepartie pour l\'entreprise (visibilité, impact RSE)','Cibler le bon interlocuteur dans l\'entreprise']},{label:'Temps 3 · Le premier contact et la convention (50 min)', items:['Script de premier contact (email + appel téléphonique)','Conduire l\'entretien de sollicitation : les 5 étapes','Convention de mécénat et reçu fiscal Cerfa 11580 : remplissage guidé']}],
     cadeau:'Dossier de mécénat en ébauche + liste de 5 entreprises locales à contacter + script d\'email de premier contact',
     public:'Responsables d\'associations, porteurs de projets culturels ou solidaires, trésoriers, chefs de projet ESS',
-    prerequis:'Avoir un projet associatif ou solidaire concret · Être en capacité de représenter sa structure officiellement — financement mécénat local',
-    financements:'Gratuit* sous réserve de financement (mécénat local) — nous consulter.'
-  },
-  D1: {
-    filiere:'D', code:'D1', prix:'45 €', format:'Présentiel · Samedi ou soirée',
-    titre:'Animer autrement',
-    tagline:'Préparer une réunion participative, faciliter les échanges et repartir avec un conducteur prêt à utiliser',
-    objectifs:['Distinguer information, consultation, co-construction et décision','Formuler un objectif et un livrable précis pour une réunion','Poser un cadre et distribuer la parole en posture de facilitateur','Mettre en œuvre les méthodes 1-2-4-Tous et Lean Café','Rédiger un conducteur de réunion de 60 à 90 minutes'],
-    programme:[{label:'Temps 1 · Cadrer et faciliter (60 min)', items:['Inclusion et niveaux de participation','Diagnostic des réunions avec 1-2-4-Tous','Posture du facilitateur et cinq questions de cadrage']},{label:'Temps 2 · Tester une méthode (60 min)', items:['Cadrage individuel de sa propre réunion','Lean Café : expérimentation en groupe et premiers retours','Pause de 10 min']},{label:'Temps 3 · Concevoir sa réunion (60 min)', items:['Débriefing méthodologique du Lean Café','Rédaction de son conducteur en binôme','Galerie, retours entre pairs, ROTI et engagement']}],
-    cadeau:'Votre conducteur de réunion, les fiches de cadrage, inclusion, 1-2-4-Tous et ROTI, une grille de posture du facilitateur et votre engagement personnel',
-    public:'Personnes amenées à animer des réunions ou des ateliers en association, en équipe ou dans un projet collectif',
-    prerequis:'Aucun prérequis · Venir avec un exemple de réunion à animer ou à améliorer',
-    niveau:'Débutant', effectif:{min:8,max:12},
-    methodes:['Apports courts avec fiches mémo','Exercices sur les cas réels des participants','Travail en sous-groupes','Expérimentation du Lean Café','Jeux de rôle'],
-    evaluation:['Positionnement en début de séance (situation et attentes)','Exercices observés et retours pendant la séance','Conducteur final vérifié au regard des objectifs','Questionnaire de satisfaction à chaud']
-  },
-  D2: {
-    filiere:'D', code:'D2', prix:'45 €', format:'Présentiel · Samedi ou soirée',
-    titre:'Faire émerger et choisir des idées',
-    tagline:'Animer un groupe pour produire, enrichir et choisir des idées à l\'aide de critères explicites',
-    objectifs:['Formuler une question de créativité précise et ouverte','Animer une production d\'idées par brainwriting','Enrichir des idées à l\'aide du scénario catastrophe et de SCAMPER','Regrouper et sélectionner des idées selon des critères explicites avec une matrice impact/effort','Formaliser une idée retenue dans une fiche-solution testable'],
-    programme:[{label:'Temps 1 · Ouvrir la recherche d\'idées (1 h 25)', items:['Distinguer divergence et convergence','Formuler une question de créativité','Produire des idées par brainwriting','Explorer d\'autres pistes avec le scénario catastrophe']},{label:'Temps 2 · Enrichir et choisir (1 h 25)', items:['Transformer les idées avec SCAMPER, puis les regrouper','Choisir avec la matrice impact/effort','Rédiger une fiche-solution et recueillir des retours','Évaluer la séance et définir une action à tester']}],
-    cadeau:'Les fiches-outils Divergence / Convergence, Brainwriting, SCAMPER, Scénario catastrophe et Matrice impact/effort, un canevas de fiche-solution et votre fiche « Ce que je testerai avec mon collectif »',
-    public:'Personnes amenées à animer un groupe pour résoudre un problème, améliorer un service ou faire avancer un projet collectif',
-    prerequis:'Aucun prérequis · Venir avec une situation réelle sur laquelle faire émerger des idées avec un groupe',
-    niveau:'Initiation', effectif:{min:8,max:12},
-    methodes:['Apports courts et démonstrations','Réflexion individuelle','Exercices en binômes et en sous-groupes','Mise en commun et retours entre participants'],
-    evaluation:['Observation des productions : question de créativité, idées produites et enrichies, matrice impact/effort, fiche-solution','Retour final ROTI et formulation d\'une action à tester','Questionnaire de satisfaction à chaud']
-  },
-  D3: {
-    filiere:'D', code:'D3', prix:'45 €', format:'Présentiel · Samedi ou soirée',
-    titre:'Construire une stratégie partagée',
-    tagline:'Passer d\'un diagnostic collectif à quelques choix stratégiques partagés, formulés sur une page',
-    objectifs:['Distinguer diagnostic, ambition, stratégie et action','Construire un diagnostic collectif en identifiant les causes d\'un problème et les évolutions de son environnement','Formuler une ambition à partir du diagnostic','Définir et prioriser des orientations stratégiques en explicitant les renoncements associés','Formaliser une stratégie sur une page avec des indicateurs simples'],
-    programme:[{label:'Temps 1 · Comprendre ensemble (1 h 30)', items:['Faire apparaître les différentes perceptions d\'une situation','Distinguer diagnostic, ambition, stratégie et action','Analyser un problème avec l\'arbre à problèmes et l\'environnement avec un PESTEL allégé','Formuler un diagnostic partagé']},{label:'Temps 2 · Choisir où aller et sur quoi agir (1 h 20)', items:['Transformer le problème en ambition','Faire émerger des orientations avec une SWOT créative','Prioriser trois orientations et expliciter les renoncements','Renseigner la carte stratégique, puis évaluer la séance']}],
-    cadeau:'Les fiches Diagnostic / Ambition / Stratégie / Action, Arbre à problèmes, PESTEL allégé, SWOT créative et « Choisir une orientation stratégique », le canevas « Notre stratégie en une page » et la carte stratégique produite pendant l\'atelier',
-    public:'Personnes amenées à accompagner un collectif, une association, une équipe ou un projet dans une réflexion sur son avenir',
-    prerequis:'Aucun prérequis · Venir avec l\'exemple d\'un collectif ou d\'un projet qui doit réfléchir à son avenir, et une question stratégique qu\'il pourrait se poser',
-    niveau:'Initiation', effectif:{min:8,max:10},
-    methodes:['Étude d\'un cas fil rouge','Apports courts','Réflexion individuelle','Travail en binômes et en sous-groupes','Méthode 1-2-4-Tous','Mise en commun et priorisation collective'],
-    evaluation:['Observation des productions : arbre à problèmes, diagnostic partagé, ambition, orientations priorisées et carte stratégique','Tour de table final et engagement personnel','Évaluation ROTI et questionnaire de satisfaction à chaud']
-  },
-  D4: {
-    filiere:'D', code:'D4', prix:'45 €', format:'Présentiel · Samedi ou soirée',
-    titre:'Passer de l\'idée à l\'action',
-    tagline:'Transformer une idée collective en actions prioritaires, attribuées et suivies dans le temps',
-    objectifs:['Distinguer intention, objectif, action et résultat attendu','Identifier les ressources, freins et risques d\'un projet, puis proposer des réponses aux risques repérés','Formuler et prioriser des actions concrètes à l\'aide du QQOQCCP','Attribuer un pilote et une échéance à chaque action prioritaire','Construire une feuille de route à 30, 60 et 90 jours avec des indicateurs et un rituel de suivi'],
-    programme:[{label:'Temps 1 · Passer de l\'idée aux actions (1 h 30)', items:['Distinguer intention, objectif, action et premier pas','Repérer ressources, freins et risques avec le Speedboat','Examiner une idée et envisager des adaptations avec le PPCO','Produire une première liste d\'actions par brainwriting']},{label:'Temps 2 · Planifier et suivre la mise en œuvre (1 h 20)', items:['Préciser les actions avec le QQOQCCP et les prioriser','Désigner un pilote et une échéance pour chaque action retenue','Construire une feuille de route à 30, 60 et 90 jours','Définir des indicateurs, un rituel de suivi et un premier pas personnel']}],
-    cadeau:'Les fiches Idée / Objectif / Action / Résultat, Speedboat, PPCO, QQOQCCP, priorisation et « Qui fait quoi ? », un canevas de feuille de route à 30, 60 et 90 jours, la fiche « Notre rituel de suivi » et votre fiche « Mon prochain petit pas »',
-    public:'Personnes qui souhaitent concrétiser une idée, une décision ou une orientation au sein d\'un collectif, d\'une association, d\'une équipe ou d\'un projet',
-    prerequis:'Aucun prérequis · Venir avec une idée, une décision ou une orientation collective à mettre en œuvre, avec quelques notes sur le résultat souhaité, l\'existant et les freins',
-    niveau:'Initiation', effectif:{min:8,max:10},
-    methodes:['Étude d\'un cas fil rouge','Apports courts','Réflexion individuelle et brainwriting','Exercices en sous-groupes','Mise en commun et priorisation collective','Outils Speedboat, PPCO et QQOQCCP'],
-    evaluation:['Observation des productions : freins et risques, actions priorisées, responsabilités, feuille de route 30/60/90 jours','En clôture, chaque participant énonce un premier pas à réaliser sous sept jours','Évaluation ROTI et questionnaire de satisfaction à chaud']
+    prerequis:'Avoir un projet associatif ou solidaire concret · Être en capacité de représenter sa structure officiellement — financement mécénat local'
   }
 };
 
 /* ── Ouvrir la modale ── */
 function openModal(code) {
-  const raw = modules[code];
-  if (!raw) return;
-  const m = {...DEFAULTS, ...raw};
+  const m = modules[code];
+  if (!m) return;
   const fil = m.filiere;
   const progHtml = m.programme.map(t => `
     <div class="programme-temps">
@@ -1225,19 +960,18 @@ function openModal(code) {
     <div class="modal-header ${fil}">
       <button class="modal-close" onclick="closeModal()">✕</button>
       <span class="modal-code">${m.code}</span>
-      <div class="modal-title" id="modalTitle">${m.titre}</div>
+      <div class="modal-title">${m.titre}</div>
       <div class="modal-tagline">${m.tagline}</div>
       <div class="modal-infos">
-        <span class="modal-info-tag">⏱ ${m.duree} · ${m.modalite || 'Présentiel'}</span>
+        <span class="modal-info-tag">⏱ 3h · Présentiel</span>
         <span class="modal-info-tag">📅 ${m.format}</span>
         <span class="modal-info-tag">💶 ${m.prix}</span>
-        <span class="modal-info-tag">🎓 Qualiopi via MUSIVA</span>
+        <span class="modal-info-tag">💳 OPCO · Autofinancement</span>
       </div>
     </div>
     <div class="modal-body">
       <div class="modal-section">
         <h4>Objectifs pédagogiques</h4>
-        <p style="font-size:.85rem;color:var(--slate-400);margin-bottom:.6rem">À l'issue du module, le participant sera capable de :</p>
         <ul>${m.objectifs.map(o=>`<li>${o}</li>`).join('')}</ul>
       </div>
       <div class="modal-section">
@@ -1246,66 +980,42 @@ function openModal(code) {
         <p style="font-size:.87rem;color:var(--slate-400)"><strong>Prérequis :</strong> ${m.prerequis}</p>
       </div>
       <div class="modal-section ${fil}-border">
-        <h4>Programme (${m.programme.length} temps)</h4>
+        <h4>Programme (3 temps)</h4>
         ${progHtml}
       </div>
-      ${blocsQualiopi(m)}
       <div class="modal-gift">
         <strong>🎁 Vous repartez avec</strong>
         ${m.cadeau}
       </div>
     </div>
     <div class="modal-footer">
-      <a href="inscription-academie.html?module=${m.code}" class="btn-inscrire">Je m'inscris à ce module →</a>
-      <button type="button" class="btn-print" onclick="window.print()" style="background:none;border:1px solid rgba(255,255,255,.2);color:var(--slate-300);font-size:.78rem;padding:.5rem 1rem;border-radius:50px;cursor:pointer;font-family:'DM Sans',sans-serif;">🖨️ Imprimer la fiche</button>
-      <span class="modal-footer-note">📞 06 51 50 97 18 · ou par email : <a href="mailto:contact@genie-montauban.fr?subject=Inscription ${m.code} - ${m.titre}" style="color:var(--emerald-l)">contact@genie-montauban.fr</a></span>
+      <a href="mailto:contact@genie-montauban.fr?subject=Inscription ${m.code} - ${m.titre}" class="btn-inscrire">Je m'inscris à ce module →</a>
+      <span class="modal-footer-note">📞 06 51 50 97 18 · Confirmation sous 24h</span>
     </div>`;
 
   document.getElementById('modalOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
-  lastFocusedBeforeModal = document.activeElement;
-  document.getElementById('modal').querySelector('.modal-close').focus();
 }
 
 function closeModal() {
   document.getElementById('modalOverlay').classList.remove('open');
   document.body.style.overflow = '';
-  if (lastFocusedBeforeModal && typeof lastFocusedBeforeModal.focus === 'function') {
-    lastFocusedBeforeModal.focus();
-  }
 }
 
 function closeModalOnOverlay(e) {
   if (e.target === document.getElementById('modalOverlay')) closeModal();
 }
 
-/* ── Accessibilité modale : focus renvoyé au déclencheur, focus piégé dans la fenêtre (P2-5) ── */
-let lastFocusedBeforeModal = null;
-
 document.addEventListener('keydown', function(e) {
-  const overlay = document.getElementById('modalOverlay');
-  if (!overlay.classList.contains('open')) return;
-  if (e.key === 'Escape') { closeModal(); return; }
-  if (e.key === 'Tab') {
-    const focusable = document.getElementById('modal').querySelectorAll('a[href], button:not([disabled])');
-    if (!focusable.length) return;
-    const first = focusable[0];
-    const last = focusable[focusable.length - 1];
-    if (e.shiftKey && document.activeElement === first) {
-      e.preventDefault(); last.focus();
-    } else if (!e.shiftKey && document.activeElement === last) {
-      e.preventDefault(); first.focus();
-    }
-  }
+  if (e.key === 'Escape') closeModal();
 });
 
 /* ── Filtre filières ── */
 const filterBtns = document.querySelectorAll('.filter-btn');
 filterBtns.forEach(btn => {
   btn.addEventListener('click', () => {
-    filterBtns.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed', 'false'); });
+    filterBtns.forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    btn.setAttribute('aria-pressed', 'true');
     const f = btn.dataset.filter;
     document.querySelectorAll('[data-filiere]').forEach(el => {
       if (f === 'all' || el.dataset.filiere === f) {
@@ -1347,36 +1057,6 @@ const revealObserver = new IntersectionObserver((entries) => {
 }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
 
 document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
-
-/* ── JSON-LD Course par module (P1-4) — généré depuis les données modules,
-   pour ne jamais diverger du contenu affiché ── */
-(function() {
-  const courses = Object.keys(modules).map(code => {
-    const m = {...DEFAULTS, ...modules[code]};
-    return {
-      "@type": "Course",
-      "name": m.titre,
-      "description": m.tagline,
-      "provider": { "@type": "Organization", "name": "MUSIVA", "url": "https://musiva.fr/" },
-      "educationalCredentialAwarded": m.reconnaissance,
-      "hasCourseInstance": {
-        "@type": "CourseInstance",
-        "courseMode": "Onsite",
-        "duration": "PT3H",
-        "location": {
-          "@type": "Place",
-          "name": "Tiers-lieu Génie",
-          "address": { "@type": "PostalAddress", "streetAddress": "12 rue du Génie", "addressLocality": "Montauban", "postalCode": "82000", "addressCountry": "FR" }
-        }
-      },
-      "offers": { "@type": "Offer", "price": m.prix.replace(/[^\d]/g, '') || "0", "priceCurrency": "EUR" }
-    };
-  });
-  const script = document.createElement('script');
-  script.type = 'application/ld+json';
-  script.textContent = JSON.stringify({ "@context": "https://schema.org", "@graph": courses });
-  document.head.appendChild(script);
-})();
 </script>
 
 </body>
