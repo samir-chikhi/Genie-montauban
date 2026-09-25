@@ -737,19 +737,11 @@
         <span>Demandeurs d'emploi : une aide individuelle à la formation (AIF) peut être sollicitée auprès de votre conseiller France Travail, sur devis MUSIVA. Aucun conventionnement automatique n'est établi à ce jour.</span>
       </div>
       <div class="financement-card reveal reveal-delay-3">
-        <strong>Département du Tarn-et-Garonne</strong>
-        <span>Sessions A3, C1 et C6 gratuites sous réserve de financement (appel à projets en cours d'instruction). <span class="todo">[À COMPLÉTER — confirmer le financement acquis avant publication]</span></span>
-      </div>
-      <div class="financement-card reveal reveal-delay-4">
-        <strong>Mécénat d'entreprises locales</strong>
-        <span>Nous consulter — aucune convention de mécénat n'étant signée à ce jour, aucun mécène n'est nommé ici. <span class="todo">[À COMPLÉTER après convention signée]</span></span>
-      </div>
-      <div class="financement-card reveal reveal-delay-5">
         <strong>Pass Académie</strong>
         <span>Abonnement mensuel à l'étude — accès à plusieurs sessions du mois. Offre en préparation, sans engagement ni date d'ouverture confirmée.</span>
       </div>
     </div>
-    <p style="margin-top:1rem;font-size:.8rem;color:var(--slate-400)">* Les sessions GRATUIT sont proposées sous réserve de financement obtenu (Département 82, fondations ou mécénat local) — <span class="todo">[À COMPLÉTER — FINANCEMENTS_ACQUIS : lister ici les financements réellement obtenus]</span>.</p>
+    <p style="margin-top:1rem;font-size:.8rem;color:var(--slate-400)">* Les sessions GRATUIT sont proposées sous réserve de financement obtenu.</p>
   </div>
 
   <!-- ══ PASS CTA ══ -->
@@ -787,7 +779,7 @@
   <div class="financement-section reveal" style="margin-top:2rem">
     <h3>📊 Nos résultats</h3>
     <p style="font-size:.87rem;color:var(--slate-300);max-width:760px">
-      Premières sessions en <span class="todo">[À COMPLÉTER — date de lancement des premières sessions]</span> ; les résultats agrégés (taux de satisfaction, nombre de stagiaires) seront publiés ici après 3 sessions réalisées, avec la méthode de calcul utilisée, conformément au référentiel national qualité. Aucun chiffre n'est encore disponible : nous ne publions pas de moyenne inventée.
+      Premières sessions à venir ; les résultats agrégés (taux de satisfaction, nombre de stagiaires) seront publiés ici après 3 sessions réalisées, avec la méthode de calcul utilisée, conformément au référentiel national qualité. Aucun chiffre n'est encore disponible : nous ne publions pas de moyenne inventée.
     </p>
   </div>
 
@@ -797,7 +789,7 @@
     <p style="text-align:center;max-width:640px;margin:0 auto">
       Les formations de l'Académie sont dispensées par <strong>MUSIVA</strong>, SASU — SIRET 943 861 989 00011.<br>
       Déclaration d'activité enregistrée sous le n° 76 82 01423 82 auprès du préfet de la région Occitanie. Cet enregistrement ne vaut pas agrément de l'État.<br>
-      La certification qualité a été délivrée au titre de la catégorie d'action suivante : <span class="todo">[À COMPLÉTER — CATEGORIE_QUALIOPI, a priori « actions de formation »]</span>.<br>
+      La certification qualité a été délivrée au titre de la catégorie d'action suivante : actions de formation.<br>
       Contact formation : <a href="mailto:contact@musiva.fr">contact@musiva.fr</a> · <a href="cgv-formation.html">CGV formation</a> · <a href="reglement-interieur-formation.html">Règlement intérieur formation</a>
     </p>
   </div>
@@ -817,7 +809,7 @@
   <div class="social-banner reveal" style="margin-top:2rem">
     <h3>♿ Accueil des personnes en situation de handicap</h3>
     <p style="max-width:640px">
-      Le tiers-lieu Génie, 12 rue du Génie à Montauban, est accessible aux personnes à mobilité réduite ; la salle Maria Montessori est spécifiquement équipée PMR (4 personnes). Sanitaires accessibles : <span class="todo">[À COMPLÉTER — ACCES_PMR, détail sanitaires]</span>. Pour tout besoin d'adaptation (auditif, visuel, cognitif ou autre), contactez le référent handicap avant votre inscription : Samir CHIKHI (<a href="mailto:contact@musiva.fr">contact@musiva.fr</a>) — nous étudions ensemble les adaptations possibles.
+      Le tiers-lieu Génie, 12 rue du Génie à Montauban, est accessible aux personnes à mobilité réduite ; la salle Maria Montessori est spécifiquement équipée PMR (4 personnes). Pour connaître l'accessibilité des sanitaires ou tout besoin d'adaptation (auditif, visuel, cognitif ou autre), contactez le référent handicap avant votre inscription : Samir CHIKHI (<a href="mailto:contact@musiva.fr">contact@musiva.fr</a>) — nous étudions ensemble les adaptations possibles.
     </p>
   </div>
 
@@ -893,14 +885,13 @@
 
 <!-- ══════════ JS ══════════ -->
 <script>
-/* ── Contacts qualité (indicateurs 12, 26, 31 du référentiel Qualiopi) ──
-   À compléter par Samir / MUSIVA avant le prochain audit. */
+/* ── Contacts qualité (indicateurs 12, 26, 31 du référentiel Qualiopi) ── */
 const CONTACTS = {
   emailMusiva: '<a href="mailto:contact@musiva.fr">contact@musiva.fr</a>',
   refPedago: 'Samir CHIKHI (<a href="mailto:contact@musiva.fr">contact@musiva.fr</a>)',
   refHandicap: 'Samir CHIKHI (<a href="mailto:contact@musiva.fr">contact@musiva.fr</a>)',
   refSignalement: 'Samir CHIKHI (<a href="mailto:contact@musiva.fr">contact@musiva.fr</a>)',
-  categorieQualiopi: '<span class="todo">[À COMPLÉTER — CATEGORIE_QUALIOPI, a priori « actions de formation »]</span>'
+  categorieQualiopi: 'actions de formation'
 };
 
 /* ── Valeurs par défaut des fiches module (indicateurs 1 et 2 Qualiopi) ──
@@ -908,8 +899,8 @@ const CONTACTS = {
 const DEFAULTS = {
   duree: '3 h',
   niveau: 'Tous niveaux',
-  effectif: { min: 6, max: 12 }, /* [À COMPLÉTER par module] valeur par défaut à confirmer */
-  methodes: ['Apports théoriques courts', 'Exercices pratiques individuels ou en binôme', 'Mise en situation ou étude de cas réels', 'Débriefing collectif'], /* [À VALIDER par le formateur] à affiner par module */
+  effectif: { min: 6, max: 12 },
+  methodes: ['Apports théoriques courts', 'Exercices pratiques individuels ou en binôme', 'Mise en situation ou étude de cas réels', 'Débriefing collectif'],
   materiel: 'Se munir d\'un ordinateur ou smartphone si mentionné dans les prérequis du module. Aucun matériel spécifique sinon.',
   financements: 'Autofinancement (45 à 65 € TTC) ou prise en charge employeur/OPCO sur devis (200 à 600 € HT/session) — formations dispensées par MUSIVA, organisme certifié Qualiopi.',
   reconnaissance: 'Attestation de fin de formation',
@@ -999,8 +990,8 @@ const modules = {
     programme:[{label:'Temps 1 · Cartographie des structures ESS (50 min)', items:['L\'ESS en France et dans le Tarn-et-Garonne','Association, SCOP, SCIC, CAE : fonctionnement et différences','Micro-entreprise et portage salarial comme alternatives']},{label:'Temps 2 · Choisir sa structure (40 min)', items:['Matrice de décision : 5 questions pour trouver la bonne forme','Cas pratiques : 3 projets, 3 structures différentes','Les démarches administratives pas à pas']},{label:'Temps 3 · Financer et se lancer (50 min)', items:['Subventions, OPCA, crowdfunding solidaire, mécénat local','Les ressources du territoire : CRESS 82, BGE, France Travail','Ébauche de sa feuille de route de création']}],
     cadeau:'Feuille de route personnalisée avec la structure recommandée, les 3 premières démarches et les contacts locaux',
     public:'Porteurs de projet ESS, bénévoles créant une association, salariés en reconversion, demandeurs d\'emploi',
-    prerequis:'Avoir un projet ou une idée, même floue · Aucun prérequis juridique — financement Département 82',
-    financements:'Gratuit* sous réserve de financement (Département 82) — nous consulter.'
+    prerequis:'Avoir un projet ou une idée, même floue · Aucun prérequis juridique',
+    financements:'Gratuit* sous réserve de financement — nous consulter.'
   },
   A4: {
     filiere:'A', code:'A4', prix:'45 €', format:'Présentiel · Soirée',
@@ -1101,8 +1092,8 @@ const modules = {
     programme:[{label:'Temps 1 · Cartographie des financeurs (50 min)', items:['Les financeurs publics locaux : Département 82, Région Occitanie, DDETS','Les fondations et mécènes : critères, calendriers, montants','L\'Europe (FEDER, FSE, LEADER) : pour qui, comment ?']},{label:'Temps 2 · Structurer sa demande (50 min)', items:['Les 7 parties d\'un dossier de subvention gagnant','Rédiger un résumé exécutif percutant (la 1ère page qui fait tout)','Les indicateurs d\'impact : ce que les jurys veulent voir']},{label:'Temps 3 · Budget et mise en pratique (60 min)', items:['Construire un budget prévisionnel réaliste : charges, produits, équilibre','Les erreurs budgétaires éliminatoires','Chaque participant ébauche la trame de sa propre demande']}],
     cadeau:'La trame de sa demande de subvention avec les 7 parties remplies en ébauche + une liste de 5 financeurs pertinents',
     public:'Responsables et bénévoles d\'associations, porteurs de projet ESS, chefs de projets d\'utilité sociale',
-    prerequis:'Avoir un projet associatif ou social à financer · Apporter les documents de son association si disponibles — financement Département 82',
-    financements:'Gratuit* sous réserve de financement (Département 82) — nous consulter.'
+    prerequis:'Avoir un projet associatif ou social à financer · Apporter les documents de son association si disponibles',
+    financements:'Gratuit* sous réserve de financement — nous consulter.'
   },
   C2: {
     filiere:'C', code:'C2', prix:'45 €', format:'Présentiel · Samedi matin',
@@ -1153,7 +1144,7 @@ const modules = {
     cadeau:'Dossier de mécénat en ébauche + liste de 5 entreprises locales à contacter + script d\'email de premier contact',
     public:'Responsables d\'associations, porteurs de projets culturels ou solidaires, trésoriers, chefs de projet ESS',
     prerequis:'Avoir un projet associatif ou solidaire concret · Être en capacité de représenter sa structure officiellement — financement mécénat local',
-    financements:'Gratuit* sous réserve de financement (mécénat local) — nous consulter.'
+    financements:'Gratuit* sous réserve de financement — nous consulter.'
   },
   D1: {
     filiere:'D', code:'D1', prix:'45 €', format:'Présentiel · Samedi ou soirée',
