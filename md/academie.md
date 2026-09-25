@@ -1,8 +1,8 @@
 ---
 title: Académie des Compétences et de la Connaissance — Génie Montauban
-description: L'Académie des Compétences et de la Connaissance du Génie : micro-formations de 3h animées par des experts locaux. Empowerment, Tech & Numérique, Gestion & Impact. À partir de 45 € — financement OPCO possible.
+description: Micro-formations de 3h à Montauban, animées par des experts locaux et dispensées par MUSIVA, organisme certifié Qualiopi. Empowerment, Tech & Numérique, Gestion & Impact. De 45 à 65 €, 3 modules gratuits.
 url: https://genie-montauban.fr/academie.html
-last_updated: 2026-09-17
+last_updated: 2026-09-25
 source: miroir markdown — version texte pour moteurs IA
 ---
 
@@ -20,7 +20,7 @@ Prise de parole en public
 
 Prendre la parole sans stress, avec impact — en 3h de pratique intensive
 
-⏱ 3h🌙 Soirée💶 OPCO / Autofinancement
+⏱ 3h🌙 Soirée💶 Autofinancement · OPCO via MUSIVA
 
 📹 Mise en situation filméeVoir la fiche →
 
@@ -44,7 +44,7 @@ GRATUIT\*
 
 Du projet à la structure juridique : association, SCOP, micro-entreprise — sans se perdre
 
-⏱ 3h☀️ Samedi matin🏛️ Département 82
+⏱ 3h☀️ Samedi matin🏛️ Sous réserve de financement
 
 📋 Feuille de route remiseVoir la fiche →
 
@@ -108,11 +108,11 @@ Canva Pro
 
 50 €
 
-De zéro à un kit graphique pro : 3 visuels finalisés et prêts à publier ce matin
+De zéro à un kit graphique pro : objectif 3 visuels finalisés pendant la session
 
 ⏱ 3h☀️ Samedi matin🎨 Kit de marque
 
-🖼️ 3 visuels prêts à publierVoir la fiche →
+🖼️ Objectif : 3 visuels finalisésVoir la fiche →
 
 B3
 
@@ -156,17 +156,17 @@ Automatiser ses tâches
 
 65 €
 
-Zapier, Make, Google Sheets avancé : créer 1 automatisation fonctionnelle ce soir
+Zapier, Make, Google Sheets avancé : vous travaillez à créer une automatisation fonctionnelle pendant la session
 
 ⏱ 3h🌙 Soirée⚙️ Niveau intermédiaire
 
-🤖 Automatisation en prodVoir la fiche →
+🤖 Objectif : 1 automatisation fonctionnelleVoir la fiche →
 
 ## 🟢 Filière C · Gestion & Impact
 
 ### Gestion & Impact
 
-La filière la plus finançable (OPCO, France Travail, subventions associatives). Public : chefs de projet associatifs, indépendants, TPE. Gérez, financez, conformez-vous — simplement.
+La filière la plus finançable (prise en charge employeur/OPCO via MUSIVA, France Travail, subventions associatives). Public : chefs de projet associatifs, indépendants, TPE. Gérez, financez, conformez-vous — simplement.
 
 C1
 
@@ -176,7 +176,7 @@ GRATUIT\*
 
 Structure, pièges à éviter, budget prévisionnel : ébaucher sa propre demande ce matin
 
-⏱ 3h☀️ Samedi matin🏛️ Département 82
+⏱ 3h☀️ Samedi matin🏛️ Sous réserve de financement
 
 📄 Trame dossier + 5 contactsVoir la fiche →
 
@@ -240,33 +240,88 @@ Approcher des entreprises locales, construire un dossier de mécénat, contractu
 
 📁 Dossier mécénat + scriptsVoir la fiche →
 
+## 🟠 Filière D · Intelligence collective & Associations
+
+### Parcours « Faire avec » : les fondamentaux de l'intelligence collective
+
+Quatre ateliers pratiques de 3 h, le samedi ou en soirée, pour faire travailler un collectif ensemble : animer une réunion, faire émerger des idées, construire une stratégie partagée puis passer à l'action. Public : bénévoles et dirigeants associatifs, animateurs d'équipe, porteurs de projets collectifs. Chaque atelier se suit seul ; les quatre forment un parcours complet.
+
+D1
+
+Animer autrement
+
+45 €
+
+Préparer une réunion participative, faciliter les échanges et repartir avec un conducteur prêt à utiliser
+
+⏱ 3h☀️ Samedi · 🌙 Soirée🗣️ Lean Café · 1-2-4-Tous
+
+📋 Conducteur de réunionVoir la fiche →
+
+D2
+
+Faire émerger et choisir des idées
+
+45 €
+
+Animer un groupe pour produire, enrichir et choisir des idées à l'aide de critères explicites
+
+⏱ 3h☀️ Samedi · 🌙 Soirée💡 Brainwriting · SCAMPER
+
+📄 Fiche-solution testableVoir la fiche →
+
+D3
+
+Construire une stratégie partagée
+
+45 €
+
+Passer d'un diagnostic collectif à quelques choix stratégiques partagés, formulés sur une page
+
+⏱ 3h☀️ Samedi · 🌙 Soirée🧭 Arbre à problèmes · SWOT
+
+🗺️ Stratégie en une pageVoir la fiche →
+
+D4
+
+Passer de l'idée à l'action
+
+45 €
+
+Transformer une idée collective en actions prioritaires, attribuées et suivies dans le temps
+
+⏱ 3h☀️ Samedi · 🌙 Soirée🚤 Speedboat · QQOQCCP
+
+📅 Feuille de route 30/60/90 jVoir la fiche →
+
 ### 💶 Financements disponibles
 
-**OPCO (Uniformation / Atlas / AKTO)**
-Prise en charge pour salariés et associations. Tarification 200–600 €/session avec certification Qualiopi à venir.
+Les formations de l'Académie sont dispensées par **MUSIVA**, organisme de formation certifié Qualiopi. Deux grilles de prix coexistent : le **tarif individuel** (45 à 65 € TTC, autofinancement) et le **tarif avec prise en charge employeur ou OPCO** (200 à 600 € HT par session, sur devis MUSIVA) — l'écart correspond à la différence entre un règlement personnel et une facturation professionnelle avec devis, convention et justificatifs, pas à une incohérence.
 
-**France Travail Montauban**
-Conventionnement AIF pour demandeurs d'emploi. Sessions gratuites rémunérées. Contact : Direction Territoriale 82.
+**Employeur / OPCO**
+Prise en charge possible par votre employeur ou votre OPCO (Uniformation, Atlas, AKTO…) : les formations sont dispensées par MUSIVA, organisme certifié Qualiopi. Devis sur demande à [contact@musiva.fr](mailto:contact@musiva.fr).
+
+**France Travail**
+Demandeurs d'emploi : une aide individuelle à la formation (AIF) peut être sollicitée auprès de votre conseiller France Travail, sur devis MUSIVA. Aucun conventionnement automatique n'est établi à ce jour.
 
 **Département du Tarn-et-Garonne**
-Financement sessions gratuites A3, C1, C6 via appel à projets « Cohésion sociale et insertion ».
+Sessions A3, C1 et C6 gratuites sous réserve de financement (appel à projets en cours d'instruction). [À COMPLÉTER — confirmer le financement acquis avant publication]
 
-**Région Occitanie**
-« Occitanie Formations » — soutien à la formation professionnelle dans les territoires peu dotés.
-
-**Mécénat local**
-BNP Paribas 82, Crédit Agricole NMP, Caisse d'Épargne — mécénat compétences ou financier.
+**Mécénat d'entreprises locales**
+Nous consulter — aucune convention de mécénat n'étant signée à ce jour, aucun mécène n'est nommé ici. [À COMPLÉTER après convention signée]
 
 **Pass Académie**
-Abonnement mensuel à 80 € — accès illimité à toutes les sessions du mois. Bientôt disponible.
+Abonnement mensuel à l'étude — accès à plusieurs sessions du mois. Offre en préparation, sans engagement ni date d'ouverture confirmée.
 
-\* Les sessions GRATUIT sont financées par le Département 82, des fondations ou le mécénat local.
+\* Les sessions GRATUIT sont proposées sous réserve de financement obtenu (Département 82, fondations ou mécénat local) — [À COMPLÉTER — FINANCEMENTS\_ACQUIS : lister ici les financements réellement obtenus].
 
 ### 📩 Inscrivez-vous dès maintenant
 
-Toutes les inscriptions se font par email ou par téléphone. Indiquez le module souhaité, votre nom et votre structure — nous vous confirmons votre place sous 24h.
+Choisissez votre module ci-dessus puis inscrivez-vous en ligne — ou par email/téléphone si vous préférez. Nous vous confirmons votre place sous 24h.
 
-[Je m'inscris →](mailto:contact@genie-montauban.fr?subject=Inscription Académie des Compétences)
+[Je m'inscris →](inscription-academie.html)
+
+Ou par email : [contact@genie-montauban.fr](mailto:contact@genie-montauban.fr?subject=Inscription Académie des Compétences) · 📞 06 51 50 97 18
 
 ### Vous êtes expert·e local·e ?
 
@@ -280,3 +335,27 @@ Annonces de sessions, portraits de formateurs, témoignages — tout en temps r�
 
 [LinkedIn](https://www.linkedin.com/company/g%C3%A9nie-montauban-tiers-lieu/)
 [Facebook](https://www.facebook.com/profile.php?id=61585419075483)
+
+### 📊 Nos résultats
+
+Premières sessions en [À COMPLÉTER — date de lancement des premières sessions] ; les résultats agrégés (taux de satisfaction, nombre de stagiaires) seront publiés ici après 3 sessions réalisées, avec la méthode de calcul utilisée, conformément au référentiel national qualité. Aucun chiffre n'est encore disponible : nous ne publions pas de moyenne inventée.
+
+### 🎓 Organisme de formation
+
+Les formations de l'Académie sont dispensées par **MUSIVA**, SASU — SIRET 943 861 989 00011.  
+Déclaration d'activité enregistrée sous le n° 76 82 01423 82 auprès du préfet de la région Occitanie. Cet enregistrement ne vaut pas agrément de l'État.  
+La certification qualité a été délivrée au titre de la catégorie d'action suivante : [À COMPLÉTER — CATEGORIE\_QUALIOPI, a priori « actions de formation »].  
+Contact formation : [contact@musiva.fr](mailto:contact@musiva.fr) · [CGV formation](cgv-formation.html) · [Règlement intérieur formation](reglement-interieur-formation.html)
+
+### 📋 Contacts qualité
+
+Référent pédagogique : Samir CHIKHI ([contact@musiva.fr](mailto:contact@musiva.fr))  
+Référent handicap : Samir CHIKHI ([contact@musiva.fr](mailto:contact@musiva.fr))  
+Signalement des violences, harcèlement et discriminations : Samir CHIKHI ([contact@musiva.fr](mailto:contact@musiva.fr))  
+Réclamations : [contact@musiva.fr](mailto:contact@musiva.fr)
+
+### ♿ Accueil des personnes en situation de handicap
+
+Le tiers-lieu Génie, 12 rue du Génie à Montauban, est accessible aux personnes à mobilité réduite ; la salle Maria Montessori est spécifiquement équipée PMR (4 personnes). Sanitaires accessibles : [À COMPLÉTER — ACCES\_PMR, détail sanitaires]. Pour tout besoin d'adaptation (auditif, visuel, cognitif ou autre), contactez le référent handicap avant votre inscription : Samir CHIKHI ([contact@musiva.fr](mailto:contact@musiva.fr)) — nous étudions ensemble les adaptations possibles.
+
+Catalogue mis à jour le 23 septembre 2026.

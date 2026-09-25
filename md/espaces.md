@@ -2,7 +2,7 @@
 title: Bureaux privatifs, coworking et salles de réunion à Montauban — Génie
 description: Les douze espaces du tiers-lieu Génie à Montauban : salles de réunion dès 20 €/h, coworking à la carte dès 4 €/h, bureaux en bail. Devis pour institutions et entreprises. 200 m de la gare, accès PMR.
 url: https://genie-montauban.fr/espaces.html
-last_updated: 2026-09-17
+last_updated: 2026-09-23
 source: miroir markdown — version texte pour moteurs IA
 ---
 
@@ -246,9 +246,9 @@ Café, WiFi fibre et imprimante compris.
 
 ### Former
 
-L'Académie des Compétences propose 18 modules de 3 heures à partir de 45 €, sur trois filières —
-Empowerment & Leadership, Tech & Numérique, Gestion & Impact. Finançables par votre OPCO
-(Uniformation, Atlas, AKTO). Les sessions se tiennent dans nos salles.
+L'Académie des Compétences propose 18 modules de 3 heures de 45 à 65 € (3 gratuits), sur trois filières —
+Empowerment & Leadership, Tech & Numérique, Gestion & Impact. Dispensés par MUSIVA, organisme
+certifié Qualiopi ; prise en charge employeur/OPCO possible sur devis. Les sessions se tiennent dans nos salles.
 
 [Voir le catalogue →](academie.html)
 
