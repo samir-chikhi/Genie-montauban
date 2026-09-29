@@ -80,12 +80,12 @@ Médecin et pédagogue, 1870–1952
 
 [Visiter](#visite)[À l'heure](reservation.html?espace=montessori)
 
-Actuellement loués : Aristote (7 m²), Aimé Césaire (17 m²), Condorcet (17 m²), Baden Powell (16 m²). [Être prévenu quand l'un se libère](#visite)
+Actuellement loués : Aristote (7 m²), Aimé Césaire (17 m²), Condorcet (17 m²), Baden Powell (16 m²) et Maryse Condé (partagé par MUSIVA, Génie, Topogramme et Myself). [Être prévenu quand l'un se libère](#visite)
 
 ## Ce qui est compris
 
 - Bureau meublé, wifi fibre
-- Imprimante, café, terrasse sur le toit
+- Tisanerie Jean Macé, imprimante, café, terrasse sur le toit
 - Salles de réunion au tarif locataire
 - Badge d'accès 24 h/24, 7 j/7 en option (5 €/mois)
 - Pas de bail 3/6/9 obligatoire : on peut commencer au mois
