@@ -313,7 +313,7 @@ Génie accompagne les créateurs d'associations et projets à impact local : esp
 Continu
 📣 Info pratique
 
-### Réservez vos salles en ligne, 7j/7, 24h/24
+### Réservez vos salles en ligne, à toute heure
 
 Notre système de réservation est actif. Sélectionnez votre salle, votre créneau et confirmez en quelques clics depuis n'importe quel appareil.
 

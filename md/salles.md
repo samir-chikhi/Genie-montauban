@@ -18,7 +18,7 @@ Quatre salles
 
 ## Choisissez selon le nombre de personnes
 
-Tarif plein et tarif adhérent. Les associations de Villebourbon et les syndicats de salariés ne paient pas.
+Prix TTC, tout compris. Tarif plein et tarif adhérent. Les associations de Villebourbon et les syndicats de salariés ne paient pas.
 
 40pers.RDC  
 terrasse
@@ -51,7 +51,7 @@ Salle modulable avec paperboard. Ateliers, réunions d'équipe.
 
 [Réserver](reservation.html?espace=freinet)
 
-20pers.1er étage
+10–15pers.1er étage
 
 ### Olympe de Gouges
 

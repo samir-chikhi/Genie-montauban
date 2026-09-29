@@ -16,9 +16,9 @@ Bureaux meublés de 12 à 24 m², au mois, à l'année ou en bail 3/6/9. Plus vo
 
 Disponibles maintenant
 
-## Trois bureaux libres
+## Quatre bureaux libres
 
-Loyers mensuels hors charges. Chaque bureau porte le nom d'une figure de l'éducation et de l'émancipation.
+Loyers mensuels hors charges (charges : loyer + 23 %, pour l'électricité, la fibre, l'eau et le ménage). Chaque bureau porte le nom d'une figure de l'éducation et de l'émancipation.
 
 15m²Bureau 0-01  
 Rez-de-chaussée
@@ -47,6 +47,21 @@ Pédagogue, né en 1949
 - Bail mensuel**432 €**
 - Bail 1 an**408 €**
 - Bail 3/6/9**360 €**
+
+[Visiter](#visite)
+
+19m²Bureau 0-04  
+Rez-de-chaussée
+
+Disponible
+
+### Antoine Lavoisier
+
+Chimiste, 1743–1794
+
+- Bail mensuel**342 €**
+- Bail 1 an**323 €**
+- Bail 3/6/9**285 €**
 
 [Visiter](#visite)
 
@@ -95,7 +110,7 @@ Téléphone
 
 Bureau qui vous intéresse
 Je ne sais pas encore
-Louise MichelPhilippe MeirieuMaria MontessoriListe d'attente
+Louise MichelPhilippe MeirieuAntoine LavoisierMaria MontessoriListe d'attente
 Pour quand ?
 
 Durée envisagée
