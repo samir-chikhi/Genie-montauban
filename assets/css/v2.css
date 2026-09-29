@@ -64,7 +64,7 @@ p { margin: 0 0 1em; }
 .door:hover { border-color: var(--gold); transform: translateY(-2px); }
 .door-ico { flex: 0 0 48px; height: 48px; border-radius: 12px; background: var(--cream); display: grid; place-items: center; font-size: 1.5rem; }
 .door b { display: block; font-size: 1.08rem; margin-bottom: 2px; }
-.door span { display: block; font-size: .93rem; color: var(--muted); line-height: 1.45; }
+.door span span { display: block; font-size: .93rem; color: var(--muted); line-height: 1.45; }
 .door em { display: inline-block; margin-top: 8px; font-style: normal; font-weight: 600; font-size: .9rem; color: var(--gold-d); }
 
 /* Cartes & grilles */
@@ -156,3 +156,5 @@ p { margin: 0 0 1em; }
   .hero .lead { font-size: 1rem; }
 }
 .grid > *, .doors > * { min-width: 0; }
+.door .door-ico { display: grid; place-items: center; font-size: 1.5rem; color: inherit; }
+.door b { color: var(--ink); }
