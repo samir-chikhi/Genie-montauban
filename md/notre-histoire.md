@@ -8,6 +8,8 @@ source: miroir markdown — version texte pour moteurs IA
 
 [Aller au contenu](#contenu)
 
+[Aller au contenu](#contenu)
+
 Un tiers-lieu, ce n'est ni un bureau classique ni un espace de coworking comme on en voit dans les métropoles : c'est un lieu partagé où des associations, des indépendants et des habitants se croisent, travaillent et organisent des activités ensemble. Le Génie, à Montauban, en est un. Voici comment il est né, qui s'y retrouve aujourd'hui, et surtout, comment on s'organise pour ne pas y perdre d'argent.
 
 ## Tout est parti d'une visite de bureau

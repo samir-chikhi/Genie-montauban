@@ -8,6 +8,8 @@ source: miroir markdown — version texte pour moteurs IA
 
 [Aller au contenu](#contenu)
 
+[Aller au contenu](#contenu)
+
 [Accueil](index.html) · Nos espaces
 
 Travailler ici
