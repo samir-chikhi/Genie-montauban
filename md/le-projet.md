@@ -51,7 +51,7 @@ Une personne, une voix. Assemblées ouvertes aux habitants. Écart de salaire pl
 
 ## Nos murs ont des noms
 
-Chaque salle porte le nom d'une personne qui a cru qu'on pouvait apprendre autrement, ou s'émanciper tout court : Célestin Freinet, Maria Montessori, Louise Michel, Olympe de Gouges, Aimé Césaire, Condorcet, Philippe Meirieu, Jean-Jacques Rousseau, Baden Powell, Aristote, Antoine Lavoisier, Maryse Condé, Jean Macé — et Antoine Bourdelle, sculpteur montalbanais. Quatorze espaces, quatorze noms.
+Chaque salle porte le nom d'une personne qui a cru qu'on pouvait apprendre autrement, ou s'émanciper tout court : Célestin Freinet, Maria Montessori, Louise Michel, Olympe de Gouges, Aimé Césaire, Condorcet, Philippe Meirieu, Jean-Jacques Rousseau, Baden Powell, Aristote, Antoine Lavoisier, Maryse Condé, Jean Macé (notre tisanerie) — et Antoine Bourdelle, sculpteur montalbanais. Quatorze espaces, quatorze noms.
 
 [Notre histoire, sans filtre](notre-histoire.html)
 
