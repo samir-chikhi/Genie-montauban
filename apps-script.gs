@@ -72,7 +72,7 @@ const TARIFS = {
   montessori : { type:'salle',  capacite:1,  plein:{heure:20,demi:60,journee:100},  adherent:{heure:15,demi:45,journee:80},  locataire:{heure:10,demi:30,journee:70},  asso:{heure:0,demi:0,journee:0} },
   aristote   : { type:'nomade', capacite:1,  plein:{demi:18,journee:33,semaine:130,mois:280}, adherent:{demi:12,journee:22,semaine:90,mois:200}, locataire:{demi:12,journee:22,semaine:90,mois:200}, asso:{demi:0,journee:0,semaine:0,mois:0} },
   rousseau   : { type:'nomade', capacite:20, plein:{demi:15,journee:26,semaine:90,mois:250},  adherent:{demi:10,journee:17,semaine:60,mois:180}, locataire:{demi:10,journee:17,semaine:60,mois:180}, asso:{demi:0,journee:0,semaine:0,mois:0} },
-  michel     : { type:'nomade', capacite:1,  plein:{demi:12,journee:22,semaine:90,mois:200},  adherent:{demi:12,journee:22,semaine:90,mois:200}, locataire:{demi:12,journee:22,semaine:90,mois:200}, asso:{demi:0,journee:0,semaine:0,mois:0} },
+  michel     : { type:'salle',  capacite:1,  plein:{heure:10}, adherent:{heure:10}, locataire:{heure:10}, asso:{heure:0} },
 };
 
 // Retrouve la clé tarifaire d'un espace depuis son nom libre
