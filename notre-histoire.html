@@ -21,13 +21,7 @@
   <meta name="twitter:description" content="Le récit complet du tiers-lieu Génie : naissance, gouvernance, locataires et modèle économique. Chiffres compris.">
   <meta name="twitter:image" content="https://genie-montauban.fr/og-image.jpg">
   <link rel="canonical" href="https://genie-montauban.fr/notre-histoire.html">
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-774PRH98LY"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-774PRH98LY');
-  </script>
+  <!-- Google Analytics : chargé par assets/js/v2.js seulement après consentement (CNIL). -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -235,29 +229,30 @@
   <style>.skip-link{position:absolute;left:-9999px;top:0;z-index:10000;background:#111;color:#fff;padding:10px 18px;border-radius:0 0 8px 0;font:600 15px/1.2 system-ui,sans-serif;text-decoration:none}.skip-link:focus{left:0}:focus-visible{outline:3px solid #2563eb;outline-offset:2px}</style>
   <link rel="stylesheet" href="responsive-fixes.css">
   <link rel="stylesheet" href="assets/css/footer.css">
+  <link rel="stylesheet" href="assets/css/v2-chrome.css">
 </head>
 <body>
 <a class="skip-link" href="#contenu">Aller au contenu</a>
 
 <!-- ═══ NAV ═══ -->
-<nav id="main-nav">
-  <a href="index.html" class="nav-logo">
-    <img src="logo.png" alt="Génie Montauban - Le Tiers Lieu" style="height:48px;width:auto" fetchpriority="high" width="315" height="200">
-  </a>
-  <ul class="nav-links" id="nav-links">
-    <li><a href="index.html#espaces">Espaces</a></li>
-    <li><a href="index.html#tarifs">Tarifs</a></li>
-    <li><a href="index.html#services">Services</a></li>
-    <li><a href="index.html#rejoindre">Adhésion</a></li>
-    <li><a href="notre-histoire.html" class="active">Notre histoire</a></li>
-    <li><a href="activites.html">Activités &amp; Actualités</a></li>
-    <li><a href="inscription.html">Mon compte</a></li>
-    <li><a href="reservation.html" class="nav-cta">Réserver</a></li>
-  </ul>
-  <button class="nav-burger" id="nav-burger" aria-label="Menu">
-    <span></span><span></span><span></span>
-  </button>
-</nav>
+<!-- g:header -->
+<a class="skip" href="#contenu">Aller au contenu</a>
+<header class="g-head">
+  <div class="g-wrap">
+    <a class="g-logo" href="index.html"><img src="favicon.png" alt="" width="38" height="38"><span>Génie<small>Tiers-lieu · Montauban</small></span></a>
+    <button class="g-burger" aria-label="Menu" aria-expanded="false" aria-controls="g-nav"><span></span><span></span><span></span></button>
+    <nav class="g-nav" id="g-nav" aria-label="Menu principal">
+      <a href="coworking-nomade.html">Coworking</a>
+      <a href="bureau-prive.html">Bureaux</a>
+      <a href="salles.html">Salles</a>
+      <a href="entreprendre.html">Entreprendre</a>
+      <a href="quartier.html">Quartier &amp; agenda</a>
+      <a href="associations.html">Associations</a>
+      <a class="g-cta" href="reserver.html">Réserver</a>
+    </nav>
+  </div>
+</header>
+<!-- /g:header -->
 
 <!-- ═══ HEADER ARTICLE ═══ -->
 <header id="contenu" class="article-hero">
@@ -373,79 +368,72 @@
 </div>
 
 <!-- ═══ FOOTER ═══ -->
-<footer>
-  <div class="footer-grid">
-    <div>
-      <div class="footer-brand-name">Génie</div>
-      <div class="footer-brand-sub">Tiers-lieu d'éducation populaire · Montauban</div>
-      <p class="footer-brand-desc">Tiers-lieu d'éducation populaire et d'économie sociale et solidaire à Montauban. On y apprend, on s'y rencontre, on y monte des projets utiles au territoire — et nos espaces de travail financent tout le reste.</p>
-      <div style="display:flex;gap:10px;margin-top:16px;">
-        <a href="https://www.linkedin.com/company/g%C3%A9nie-montauban-tiers-lieu/" target="_blank" rel="noopener" title="Génie sur LinkedIn" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;background:rgba(255,255,255,.1);border-radius:8px;text-decoration:none;font-size:16px;color:#fff;">in</a>
-        <a href="https://www.facebook.com/profile.php?id=61585419075483" target="_blank" rel="noopener" title="Génie sur Facebook" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;background:rgba(255,255,255,.1);border-radius:8px;text-decoration:none;font-size:16px;color:#fff;">f</a>
+<!-- g:footer -->
+<footer class="g-foot">
+  <div class="g-wrap">
+    <div class="g-foot-grid">
+      <div>
+        <div class="g-foot-brand">Génie</div>
+        <p>Tiers-lieu associatif (ESS, éducation populaire) au 12 rue du Génie, 82000 Montauban — à 200 m de la gare.</p>
+        <p><a href="tel:+33651509718">06 51 50 97 18</a><br><a href="mailto:contact@genie-montauban.fr">contact@genie-montauban.fr</a></p>
+        <p>Lun–ven 8h–19h · samedi sur réservation</p>
+      </div>
+      <div>
+        <h2>Travailler</h2>
+        <ul>
+          <li><a href="coworking-nomade.html">Coworking à l'heure</a></li>
+          <li><a href="bureau-prive.html">Bureau privé</a></li>
+          <li><a href="salles.html">Salles de réunion</a></li>
+          <li><a href="reserver.html">Réserver</a></li>
+          <li><a href="tarifs.html">Tous les tarifs</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2>Participer</h2>
+        <ul>
+          <li><a href="entreprendre.html">Être accompagné</a></li>
+          <li><a href="academie.html">Académie (formations)</a></li>
+          <li><a href="quartier.html">Quartier &amp; agenda</a></li>
+          <li><a href="associations.html">Associations</a></li>
+          <li><a href="adherer.html">Adhérer</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2>L'association</h2>
+        <ul>
+          <li><a href="le-projet.html">Le projet</a></li>
+          <li><a href="notre-histoire.html" aria-current="page">Notre histoire</a></li>
+          <li><a href="mon-compte.html" rel="nofollow">Mon compte</a></li>
+          <li><a href="https://www.linkedin.com/company/g%C3%A9nie-montauban-tiers-lieu/" rel="noopener" target="_blank">LinkedIn</a> · <a href="https://www.facebook.com/profile.php?id=61585419075483" rel="noopener" target="_blank">Facebook</a></li>
+        </ul>
       </div>
     </div>
-    <div>
-      <div class="footer-col-title">Le projet</div>
-      <ul class="footer-links">
-        <li><a href="index.html#manifeste">Le projet</a></li>
-        <li><a href="index.html#apprendre">Apprendre</a></li>
-        <li><a href="index.html#entreprendre">Entreprendre</a></li>
-        <li><a href="index.html#transparence">Transparence</a></li>
-        <li><a href="notre-histoire.html">Notre histoire</a></li>
-      </ul>
-    </div>
-    <div>
-      <div class="footer-col-title">Espaces &amp; tarifs</div>
-      <ul class="footer-links">
-        <li><a href="espaces.html">Nos espaces</a></li>
-        <li><a href="espaces.html#bureaux">Bureaux privatifs</a></li>
-        <li><a href="coworking-nomade.html">Espace de coworking</a></li>
-        <li><a href="espaces.html#reunion">Salles de réunion</a></li>
-        <li><a href="tarifs.html">Tarifs 2026</a></li>
-        <li><a href="reservation.html">Réserver en ligne</a></li>
-      </ul>
-    </div>
-    <div>
-      <div class="footer-col-title">Pratique</div>
-      <ul class="footer-links">
-        <li><a href="activites.html">Activités &amp; agenda</a></li>
-        <li><a href="academie.html">Académie des Compétences</a></li>
-        <li><a href="index.html#rejoindre">Adhérer à l'association</a></li>
-        <li><a href="inscription.html">Créer mon compte</a></li>
-        <li><a href="tel:+33651509718">06 51 50 97 18</a></li>
-        <li><a href="mailto:contact@genie-montauban.fr">contact@genie-montauban.fr</a></li>
-        <li><a href="index.html#contact">12 rue du Génie, 82000 Montauban</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <span>© 2026 Association Génie Montauban — association loi 1901 relevant de l'ESS</span>
-    <div class="footer-legal">
+    <div class="g-foot-bottom">
+      <span>© 2026 Association Génie — loi 1901, ESS</span>
       <a href="mentions_legales.html">Mentions légales</a>
       <a href="confidentialite.html">Confidentialité</a>
       <a href="cgv.html">CGV espaces</a>
       <a href="cgv-formation.html">CGV formation</a>
       <a href="reglement-interieur-genie.html">Règlement intérieur</a>
-      <a href="reglement-interieur-formation.html">Règlement formation</a>
-      <a href="confidentialite.html#cookies" class="footer-cookie-link">Gérer les cookies</a>
-      <a href="admin.html" rel="nofollow" style="opacity:.55;font-size:11px;" title="Administration">Admin</a>
-      <a href="espace-membres.html" rel="nofollow" style="opacity:.55;font-size:11px;" title="Espace membres">Espace membres</a>
+      <a class="discret" href="admin.html" rel="nofollow">Admin</a>
+      <a class="discret" href="espace-membres.html" rel="nofollow">Espace membres</a>
     </div>
   </div>
 </footer>
+<!-- /g:footer -->
 
 <script>
 'use strict';
 // ── NAV SCROLL ──
 window.addEventListener('scroll', function() {
-  document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 10);
+  document.getElementById('main-nav')?.classList.toggle('scrolled', window.scrollY > 10);
 });
 // ── NAV MOBILE ──
 var burger = document.getElementById('nav-burger');
 var navLinks = document.getElementById('nav-links');
-burger.addEventListener('click', function() {
+burger?.addEventListener('click', function() {
   navLinks.classList.toggle('open');
-  var spans = burger.querySelectorAll('span');
+  var spans = burger?.querySelectorAll('span');
   if (navLinks.classList.contains('open')) {
     spans[0].style.transform = 'rotate(45deg) translate(5px,5px)';
     spans[1].style.opacity   = '0';
@@ -454,13 +442,14 @@ burger.addEventListener('click', function() {
     spans.forEach(function(s) { s.style.transform = ''; s.style.opacity = ''; });
   }
 });
-navLinks.querySelectorAll('a').forEach(function(a) {
+navLinks?.querySelectorAll('a').forEach(function(a) {
   a.addEventListener('click', function() {
     navLinks.classList.remove('open');
-    burger.querySelectorAll('span').forEach(function(s) { s.style.transform = ''; s.style.opacity = ''; });
+    burger?.querySelectorAll('span').forEach(function(s) { s.style.transform = ''; s.style.opacity = ''; });
   });
 });
 </script>
 
+<script src="assets/js/v2.js" defer></script>
 </body>
 </html>

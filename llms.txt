@@ -44,7 +44,15 @@ Dernière mise à jour : 2026-09-29
 
 ## Pages principales
 
-- [Accueil](https://genie-montauban.fr/) : présentation du tiers-lieu, espaces, FAQ
+- [Accueil](https://genie-montauban.fr/) : le tiers-lieu en bref et les six portes d'entrée selon votre besoin
+- [Coworking](https://genie-montauban.fr/coworking-nomade.html) : place en open space à l'heure, demi-journée, journée ou carnet, paiement en ligne
+- [Bureau privé](https://genie-montauban.fr/bureau-prive.html) : bureaux fermés disponibles, loyers, demande de visite
+- [Salles de réunion](https://genie-montauban.fr/salles.html) : 4 salles de 4 à 40 personnes, tarifs, réservation, devis
+- [Entreprendre](https://genie-montauban.fr/entreprendre.html) : accompagnement des porteurs de projet (La Fabrique du Génie)
+- [Quartier & agenda](https://genie-montauban.fr/quartier.html) : rendez-vous gratuits pour les habitants, bénévolat
+- [Associations](https://genie-montauban.fr/associations.html) : proposer une activité, gratuité des salles
+- [Adhérer](https://genie-montauban.fr/adherer.html) : catégories et adhésion en ligne
+- [Le projet](https://genie-montauban.fr/le-projet.html) : missions, engagements, partenaires
 - [Nos espaces](https://genie-montauban.fr/espaces.html) : les douze espaces en détail, par famille — salles de réunion (#reunion), bureaux nomades (#nomade), coworking (#coworking), bureaux en bail (#bail), et une section devis pour institutions et entreprises (#entreprises)
 - [Réservation](https://genie-montauban.fr/reservation.html) : réservation en ligne des espaces
 - [Tarifs](https://genie-montauban.fr/tarifs.html) : grille tarifaire complète
@@ -57,6 +65,12 @@ Dernière mise à jour : 2026-09-29
 ## Miroirs Markdown (version texte propre pour IA)
 
 - https://genie-montauban.fr/md/index.md
+- https://genie-montauban.fr/md/bureau-prive.md
+- https://genie-montauban.fr/md/salles.md
+- https://genie-montauban.fr/md/entreprendre.md
+- https://genie-montauban.fr/md/quartier.md
+- https://genie-montauban.fr/md/associations.md
+- https://genie-montauban.fr/md/coworking-nomade.md
 - https://genie-montauban.fr/md/reservation.md
 - https://genie-montauban.fr/md/tarifs.md
 - https://genie-montauban.fr/md/activites.md

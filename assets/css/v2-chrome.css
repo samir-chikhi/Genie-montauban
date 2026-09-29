@@ -1,0 +1,57 @@
+/* v2-chrome.css — en-tête, pied de page et bandeau de consentement communs
+   à TOUTES les pages (nouvelles et anciennes). Sélecteurs préfixés g- et
+   volontairement plus spécifiques que les règles génériques (nav, footer,
+   header…) des anciennes pages, pour ne pas en hériter.
+   Le contenu HTML vient de _partials/ (voir tools/sync-partials.js). */
+:root { --g-navy: #1C2B3A; --g-navy-2: #26394C; --g-gold: #C9993E; --g-gold-l: #E8C06A; --g-cream: #F7F3ED; --g-light: #EDE8E1; --g-muted: #50606E; --g-border: rgba(28,43,58,.13); }
+
+.skip { position: absolute; left: -999px; top: 8px; background: var(--g-gold); color: var(--g-navy); padding: 8px 14px; border-radius: 8px; z-index: 100; }
+.skip:focus { left: 8px; }
+:focus-visible { outline: 3px solid var(--g-gold); outline-offset: 2px; }
+
+/* ── En-tête ── */
+header.g-head { position: sticky; top: 0; left: auto; right: auto; z-index: 50; height: auto; margin: 0; padding: 0; background: rgba(255,255,255,.97); backdrop-filter: blur(8px); border-bottom: 1px solid var(--g-border); box-shadow: none; font-family: 'DM Sans', system-ui, sans-serif; }
+.g-head .g-wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px; display: flex; align-items: center; gap: 16px; height: 64px; }
+@media (min-width: 720px) { .g-head .g-wrap { padding: 0 32px; } }
+.g-head a.g-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; font: 700 1.35rem/1.1 'Playfair Display', Georgia, serif; color: var(--g-navy); background: none; padding: 0; }
+.g-head .g-logo img { width: 38px; height: 38px; object-fit: contain; display: block; }
+.g-head .g-logo small { display: block; font: 500 .68rem/1.3 'DM Sans', system-ui, sans-serif; color: var(--g-muted); letter-spacing: .04em; }
+.g-head nav.g-nav { position: static; margin: 0 0 0 auto; padding: 0; height: auto; width: auto; background: none; border: 0; box-shadow: none; display: flex; flex-direction: row; align-items: center; gap: 4px; transform: none; }
+.g-head .g-nav a { display: block; text-decoration: none; font: 500 .95rem/1.2 'DM Sans', system-ui, sans-serif; padding: 8px 12px; border-radius: 8px; color: var(--g-navy); background: none; border: 0; letter-spacing: 0; text-transform: none; opacity: 1; }
+.g-head .g-nav a:hover, .g-head .g-nav a[aria-current="page"] { background: var(--g-cream); color: var(--g-navy); }
+.g-head .g-nav a.g-cta { background: var(--g-gold); color: var(--g-navy); font-weight: 600; margin-left: 6px; }
+.g-head .g-nav a.g-cta:hover { background: var(--g-gold-l); }
+.g-head button.g-burger { display: none; margin-left: auto; background: none; border: 0; padding: 10px; cursor: pointer; }
+.g-head .g-burger span { display: block; width: 24px; height: 2px; background: var(--g-navy); margin: 5px 0; }
+@media (max-width: 960px) {
+  .g-head button.g-burger { display: block; }
+  .g-head nav.g-nav { display: none; position: absolute; top: 64px; left: 0; right: 0; flex-direction: column; align-items: stretch; background: #fff; border-bottom: 1px solid var(--g-border); padding: 8px 16px 16px; box-shadow: 0 8px 24px rgba(28,43,58,.1); }
+  .g-head nav.g-nav.open { display: flex; }
+  .g-head .g-nav a { padding: 14px 12px; font-size: 1.05rem; border-bottom: 1px solid var(--g-light); border-radius: 0; }
+  .g-head .g-nav a.g-cta { margin: 10px 0 0; text-align: center; border-radius: 10px; border: 0; }
+}
+
+/* ── Pied de page ── */
+footer.g-foot { display: block; background: var(--g-navy); color: rgba(255,255,255,.78); padding: 48px 0 24px; margin: 0; font: 400 .93rem/1.6 'DM Sans', system-ui, sans-serif; text-align: left; }
+.g-foot .g-wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
+@media (min-width: 720px) { .g-foot .g-wrap { padding: 0 32px; } }
+.g-foot a { color: rgba(255,255,255,.85); text-decoration: none; }
+.g-foot a:hover { color: var(--g-gold-l); text-decoration: underline; }
+.g-foot .g-foot-grid { display: grid; gap: 28px; grid-template-columns: 1fr; }
+@media (min-width: 720px) { .g-foot .g-foot-grid { grid-template-columns: 1.4fr 1fr 1fr 1fr; } }
+.g-foot h2 { font: 600 .8rem/1.3 'DM Sans', system-ui, sans-serif; letter-spacing: .1em; text-transform: uppercase; color: var(--g-gold-l); margin: 0 0 12px; }
+.g-foot p { margin: 0 0 1em; color: rgba(255,255,255,.78); }
+.g-foot ul { list-style: none; padding: 0; margin: 0; }
+.g-foot li { margin: 0 0 8px; padding: 0; }
+.g-foot .g-foot-brand { font: 700 1.5rem/1.2 'Playfair Display', Georgia, serif; color: #fff; margin-bottom: 6px; }
+.g-foot .g-foot-bottom { margin-top: 36px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,.12); display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: .82rem; }
+.g-foot .discret { opacity: .55; font-size: .75rem; }
+
+/* ── Bandeau de consentement (mesure d'audience) ── */
+.g-consent { position: fixed; left: 12px; right: 12px; bottom: 12px; z-index: 60; max-width: 520px; margin: 0 auto; background: var(--g-navy); color: #fff; padding: 16px; border-radius: 14px; box-shadow: 0 8px 30px rgba(0,0,0,.25); font: 400 .9rem/1.5 'DM Sans', system-ui, sans-serif; }
+.g-consent a { color: var(--g-gold-l); }
+.g-consent div { display: flex; gap: 8px; margin-top: 12px; }
+.g-consent button { flex: 1; min-height: 40px; border-radius: 10px; font: 600 .95rem 'DM Sans', system-ui, sans-serif; cursor: pointer; border: 2px solid var(--g-gold); }
+.g-consent .btn-gold { background: var(--g-gold); color: var(--g-navy); }
+.g-consent .btn-ghost { background: transparent; color: #fff; border-color: #fff; }
+@media (max-width: 720px) { body.has-sticky .g-consent { bottom: 84px; } }
