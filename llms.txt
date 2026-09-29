@@ -10,7 +10,7 @@ Dernière mise à jour : 2026-09-29
 - Téléphone : 06 51 50 97 18 (+33 6 51 50 97 18)
 - Email : contact@genie-montauban.fr
 - Site : https://genie-montauban.fr
-- Horaires : lun–ven 8h–19h, sam 9h–17h — accès badge 24h/24 et 7j/7 pour les résidents
+- Horaires : lun–ven 8h–19h, samedi sur réservation — badge 24h/24 en option pour les locataires (5 €/mois)
 - Coordonnées GPS : 44.0181° N, 1.3559° E
 - À 200 m à pied de la gare SNCF de Montauban, parkings publics à proximité
 - Accessible PMR : entrée dédiée, salle de réunion au rez-de-chaussée
@@ -31,7 +31,7 @@ Dernière mise à jour : 2026-09-29
 ### Bureaux privatifs
 - De 12 à 24 m², de 15 à 18 €/m²/mois hors charges selon l'engagement
 - Exemples : 12 m² dès 180 €/mois, 24 m² dès 360 €/mois (bail 1 an)
-- Accès badge 24h/24, internet fibre inclus
+- Badge 24h/24 en option (5 €/mois), internet fibre inclus
 
 ### Adhésion à l'association
 - Individuelle : 15 €/an — Association : 50 €/an — Structure ESS : 150 €/an
@@ -53,7 +53,7 @@ Dernière mise à jour : 2026-09-29
 - [Associations](https://genie-montauban.fr/associations.html) : proposer une activité, gratuité des salles
 - [Adhérer](https://genie-montauban.fr/adherer.html) : catégories et adhésion en ligne
 - [Le projet](https://genie-montauban.fr/le-projet.html) : missions, engagements, partenaires
-- [Nos espaces](https://genie-montauban.fr/espaces.html) : les douze espaces en détail, par famille — salles de réunion (#reunion), bureaux nomades (#nomade), coworking (#coworking), bureaux en bail (#bail), et une section devis pour institutions et entreprises (#entreprises)
+- [Nos espaces](https://genie-montauban.fr/espaces.html) : les quatorze espaces en détail, par famille — salles de réunion (#reunion), bureaux nomades (#nomade), coworking (#coworking), bureaux en bail (#bail), et une section devis pour institutions et entreprises (#entreprises)
 - [Réservation](https://genie-montauban.fr/reservation.html) : réservation en ligne des espaces
 - [Tarifs](https://genie-montauban.fr/tarifs.html) : grille tarifaire complète
 - [Activités & agenda](https://genie-montauban.fr/activites.html) : événements et actualités
