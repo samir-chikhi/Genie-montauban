@@ -17,6 +17,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="preload" href="assets/fonts/dm-sans-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/bricolage-grotesque-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="assets/css/v2.css">
   <link rel="stylesheet" href="assets/css/v2-chrome.css">
   <script type="application/ld+json">
@@ -142,6 +143,24 @@
 <body class="has-sticky">
 <!-- g:header -->
 <a class="skip" href="#contenu">Aller au contenu</a>
+<svg class="g-sprite" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden">
+  <defs>
+    <symbol id="g-i-poste" viewBox="0 0 24 24"><rect x="4" y="4.5" width="16" height="10.5" rx="1.5"/><path d="M2.5 19h19"/><path d="M9.5 15v4M14.5 15v4"/></symbol>
+    <symbol id="g-i-cle" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4.5"/><path d="M11.2 11.8 20 3"/><path d="m16.5 6.5 2.5 2.5"/><path d="m14 9 2 2"/></symbol>
+    <symbol id="g-i-table" viewBox="0 0 24 24"><path d="M3 11h18"/><path d="M6 11v8M18 11v8"/><circle cx="7" cy="5.5" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="17" cy="5.5" r="2"/></symbol>
+    <symbol id="g-i-pousse" viewBox="0 0 24 24"><path d="M12 21v-8"/><path d="M12 13c0-4 2.5-6.5 7-6.5 0 4.2-2.6 6.5-7 6.5Z"/><path d="M12 15.5c0-3.3-2-5.5-6.5-5.5 0 3.5 2.3 5.5 6.5 5.5Z"/><path d="M7 21h10"/></symbol>
+    <symbol id="g-i-rue" viewBox="0 0 24 24"><path d="M3 21V9.5L8 6l5 3.5V21"/><path d="M13 21V4.5L21 3v18"/><path d="M2 21h20"/><path d="M6.5 13.5h3M6.5 17h3M16 8h2M16 12h2M16 16h2"/></symbol>
+    <symbol id="g-i-voix" viewBox="0 0 24 24"><path d="M4 10v4a1 1 0 0 0 1 1h2l6 4V5L7 9H5a1 1 0 0 0-1 1Z"/><path d="M16.5 9a4 4 0 0 1 0 6"/><path d="M19 6.5a7.5 7.5 0 0 1 0 11"/></symbol>
+    <symbol id="g-i-train" viewBox="0 0 24 24"><rect x="5.5" y="3" width="13" height="13" rx="3"/><path d="M5.5 10h13"/><path d="M9 19.5 7.5 21M15 19.5l1.5 1.5"/><path d="M9 13h.01M15 13h.01"/></symbol>
+    <symbol id="g-i-horloge" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="g-i-pmr" viewBox="0 0 24 24"><circle cx="11" cy="4.5" r="1.5"/><path d="M11 7.5v6h5l2.5 5"/><path d="M11 10.5h4"/><path d="M8 11.5a5 5 0 1 0 6.8 6.3"/></symbol>
+    <symbol id="g-i-wifi" viewBox="0 0 24 24"><path d="M2.5 9a14 14 0 0 1 19 0"/><path d="M5.5 12.5a9.5 9.5 0 0 1 13 0"/><path d="M8.7 16a5 5 0 0 1 6.6 0"/><path d="M12 19.5h.01"/></symbol>
+    <symbol id="g-i-tel" viewBox="0 0 24 24"><path d="M6.5 3h3l1.5 4.5-2 1.5a11 11 0 0 0 6 6l1.5-2 4.5 1.5v3a2 2 0 0 1-2 2A16 16 0 0 1 4.5 5a2 2 0 0 1 2-2Z"/></symbol>
+    <symbol id="g-i-fleche" viewBox="0 0 24 24"><path d="M4 12h15"/><path d="m13 6 6 6-6 6"/></symbol>
+    <symbol id="g-i-coche" viewBox="0 0 24 24"><path d="m4.5 12.5 5 5 10-11"/></symbol>
+    <symbol id="g-i-carte" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></symbol>
+  </defs>
+</svg>
 <header class="g-head">
   <div class="g-wrap">
     <a class="g-logo" href="index.html" aria-current="page"><img src="favicon.png" alt="" width="38" height="38"><span>Génie<small>Tiers-lieu · Montauban</small></span></a>
@@ -159,63 +178,77 @@
 </header>
 <!-- /g:header -->
 <main id="contenu">
-<section class="hero" style="background-image:url('assets/img/facade-1600.webp')">
+<section class="hero">
   <div class="wrap">
-    <p class="kicker">Tiers-lieu associatif · 200 m de la gare de Montauban</p>
-    <h1>Coworking, bureaux et salles à Montauban — et un lieu ouvert au quartier.</h1>
-    <p class="lead">Venez travailler une heure, louer un bureau, réunir votre équipe, lancer votre projet ou simplement passer. Ce que vous payez ici finance les ateliers gratuits.</p>
-    <h2 style="font-size:1.25rem;margin:28px 0 0">Vous venez pour…</h2>
-    <div class="doors">
-      <a class="door" href="coworking-nomade.html"><span class="door-ico" aria-hidden="true">💻</span><span><b>Travailler quelques heures</b><span>Une place en open space, sans abonnement. Wifi fibre, café.</span><em>Dès 4 €/h →</em></span></a>
-      <a class="door" href="bureau-prive.html"><span class="door-ico" aria-hidden="true">🔑</span><span><b>Un bureau fermé rien qu'à moi</b><span>Au mois ou à l'année, meublé, badge 24/7 en option.</span><em>Voir les bureaux libres →</em></span></a>
-      <a class="door" href="salles.html"><span class="door-ico" aria-hidden="true">🤝</span><span><b>Une salle de réunion ou de formation</b><span>De 4 à 40 personnes, à l'heure ou à la journée.</span><em>Dès 20 €/h →</em></span></a>
-      <a class="door" href="entreprendre.html"><span class="door-ico" aria-hidden="true">🚀</span><span><b>Être accompagné sur mon projet</b><span>Association, coopérative, activité indépendante : premier rendez-vous gratuit.</span><em>Demander un rendez-vous →</em></span></a>
-      <a class="door" href="quartier.html"><span class="door-ico" aria-hidden="true">🏘️</span><span><b>J'habite le quartier</b><span>Repair Café, veillées, ateliers : gratuit ou au chapeau.</span><em>Ce qui se passe ici →</em></span></a>
-      <a class="door" href="associations.html"><span class="door-ico" aria-hidden="true">🎭</span><span><b>Mon association veut proposer une activité</b><span>Salles gratuites pour les assos de Villebourbon. Proposez en 2 minutes.</span><em>Proposer une activité →</em></span></a>
+    <div class="hero-txt">
+      <p class="kicker">12 rue du Génie · 200 m de la gare de Montauban</p>
+      <h1>Travailler, se réunir, lancer un projet. <em>Sous le même toit.</em></h1>
+      <p class="lead">Un tiers-lieu associatif dans une maison de brique du quartier Villebourbon. La location des bureaux et des salles finance les ateliers gratuits du quartier.</p>
+      <div class="btn-row"><a class="btn btn-gold" href="#portes">Ce que vous cherchez <svg class="ico ico-fl"><use href="#g-i-fleche"/></svg></a><a class="btn btn-ghost" href="tel:+33651509718"><svg class="ico"><use href="#g-i-tel"/></svg> 06 51 50 97 18</a></div>
+    </div>
+    <figure class="hero-photo"><img src="assets/img/facade-1600.webp" srcset="assets/img/facade-1600.webp 1298w" sizes="(min-width: 900px) 40vw, 100vw" alt="La façade de brique du Génie, fenêtres en arc et balcon en fer forgé" width="1298" height="1214" fetchpriority="high"></figure>
+  </div>
+</section>
+
+<section class="portes-sec" id="portes">
+  <div class="wrap">
+    <div class="portes-titre"><h2>Vous venez pour…</h2><p>Une porte par besoin. Deux clics jusqu'à la bonne personne.</p></div>
+    <div class="portes">
+      <a class="porte" href="coworking-nomade.html"><div class="porte-baie"><svg class="ico"><use href="#g-i-poste"/></svg></div><div class="porte-corps"><h3>Travailler quelques heures</h3><p>Une place en open space, sans abonnement. Wifi fibre, café compris.</p><span class="lien">Dès 4 €/h <svg class="ico"><use href="#g-i-fleche"/></svg></span></div></a>
+      <a class="porte" href="bureau-prive.html"><div class="porte-baie"><svg class="ico"><use href="#g-i-cle"/></svg></div><div class="porte-corps"><h3>Un bureau fermé, à moi</h3><p>Meublé, au mois ou à l'année. Badge 24 h/24 en option.</p><span class="lien">Voir les bureaux libres <svg class="ico"><use href="#g-i-fleche"/></svg></span></div></a>
+      <a class="porte" href="salles.html"><div class="porte-baie"><svg class="ico"><use href="#g-i-table"/></svg></div><div class="porte-corps"><h3>Une salle de réunion</h3><p>De 4 à 40 personnes, à l'heure, à la demi-journée ou à la journée.</p><span class="lien">Dès 20 €/h <svg class="ico"><use href="#g-i-fleche"/></svg></span></div></a>
+      <a class="porte" href="entreprendre.html"><div class="porte-baie"><svg class="ico"><use href="#g-i-pousse"/></svg></div><div class="porte-corps"><h3>Lancer mon projet</h3><p>Association, coopérative, indépendant : un premier rendez-vous gratuit.</p><span class="lien">Demander un rendez-vous <svg class="ico"><use href="#g-i-fleche"/></svg></span></div></a>
+      <a class="porte" href="quartier.html"><div class="porte-baie"><svg class="ico"><use href="#g-i-rue"/></svg></div><div class="porte-corps"><h3>J'habite le quartier</h3><p>Repair Café, veillées, ateliers numériques. Gratuit ou au chapeau.</p><span class="lien">Les prochains rendez-vous <svg class="ico"><use href="#g-i-fleche"/></svg></span></div></a>
+      <a class="porte" href="associations.html"><div class="porte-baie"><svg class="ico"><use href="#g-i-voix"/></svg></div><div class="porte-corps"><h3>Proposer une activité</h3><p>Pour les associations. Salles gratuites pour celles de Villebourbon.</p><span class="lien">Proposer en 2 minutes <svg class="ico"><use href="#g-i-fleche"/></svg></span></div></a>
     </div>
   </div>
 </section>
 
-<section class="sec">
+<section class="sec" style="padding-top:8px">
   <div class="wrap">
-    <div class="facts">
-      <div class="fact"><b>200 m</b>de la gare SNCF, bus ligne 1</div>
-      <div class="fact"><b>Lun–ven 8h–19h</b>badge 24/7 pour les locataires</div>
-      <div class="fact"><b>Accès PMR</b>salle Montessori de plain-pied</div>
-      <div class="fact"><b>Fibre, café, imprimante</b>compris partout</div>
+    <div class="reperes">
+      <div class="repere"><svg class="ico"><use href="#g-i-train"/></svg><span><b>200 m de la gare</b>Bus ligne 1, arrêt Gare</span></div>
+      <div class="repere"><svg class="ico"><use href="#g-i-horloge"/></svg><span><b>Lun–ven, 8h–19h</b>Badge 24 h/24 pour les locataires</span></div>
+      <div class="repere"><svg class="ico"><use href="#g-i-pmr"/></svg><span><b>Accès PMR</b>Salle Montessori de plain-pied</span></div>
+      <div class="repere"><svg class="ico"><use href="#g-i-wifi"/></svg><span><b>Fibre, café, imprimante</b>Compris dans chaque espace</span></div>
     </div>
   </div>
 </section>
 
-<section class="sec sec-cream">
-  <div class="wrap grid grid-2" style="align-items:center">
+<section class="sec sec-pierre">
+  <div class="wrap grid grid-2" style="align-items:center;gap:48px">
+    <figure class="baie-photo"><picture><source srcset="assets/img/coworking3-800.webp" type="image/webp"><img src="coworking3.jpg" alt="L'espace de coworking du Génie, tables partagées et lumière naturelle" width="800" height="600" loading="lazy"></picture></figure>
     <div>
-      <p class="kicker">Pourquoi ici plutôt qu'ailleurs</p>
-      <h2>Un lieu de travail qui finance un lieu de vie.</h2>
-      <p>Génie est une association loi 1901 de l'économie sociale et solidaire. La location des espaces paie les ateliers gratuits, l'accompagnement des porteurs de projet et la gratuité des salles pour les associations du quartier.</p>
+      <p class="kicker">Pourquoi ici</p>
+      <h2>Un lieu de travail qui fait vivre un lieu de quartier.</h2>
+      <p>Génie est une association loi 1901 de l'économie sociale et solidaire. Ce que paient les locataires finance les ateliers gratuits, l'accompagnement des porteurs de projet et les salles offertes aux associations du quartier.</p>
       <ul class="ticks">
         <li>Une personne, une voix : les adhérents décident ensemble.</li>
         <li>Au moins 30 % des heures d'ouverture en accès gratuit ou solidaire.</li>
-        <li>Des voisins de bureau qui font des choses utiles : formation, conseil, associations.</li>
+        <li>Des voisins de bureau utiles à connaître : formation, conseil, associations.</li>
       </ul>
-      <a class="btn btn-ghost" href="le-projet.html">Le projet en 2 minutes</a>
+      <a class="lien" href="le-projet.html">Le projet en deux minutes <svg class="ico"><use href="#g-i-fleche"/></svg></a>
     </div>
-    <picture><source srcset="assets/img/coworking3-800.webp" type="image/webp"><img src="coworking3.jpg" alt="L'espace de coworking du Génie, tables partagées et lumière naturelle" width="800" height="533" loading="lazy" style="border-radius:var(--r)"></picture>
   </div>
 </section>
 
 <section class="sec">
-  <div class="wrap">
-    <p class="kicker">Agenda</p>
-    <h2>Les rendez-vous réguliers</h2>
-    <div class="ev"><div class="ev-date"><b>1er</b>samedi<br>du mois</div><div><h3>Repair Café</h3><p>On répare ensemble grille-pain, lampes et vélos plutôt que de jeter. Entrée libre.</p></div></div>
-    <div class="ev"><div class="ev-date"><b>1 soir</b>par mois</div><div><h3>Les Veillées du Génie</h3><p>Un sujet, un intervenant, un vrai débat. Entrée libre, participation au chapeau.</p></div></div>
-    <div class="btn-row"><a class="btn btn-navy" href="activites.html">Tout l'agenda</a><a class="btn btn-ghost" href="quartier.html">Le Génie pour les habitants</a></div>
+  <div class="wrap grid grid-2" style="gap:48px">
+    <div>
+      <p class="kicker">Agenda</p>
+      <h2>Les rendez-vous qui reviennent</h2>
+      <p class="lead">Ouverts à tous, adhérents ou non.</p>
+      <div class="btn-row"><a class="btn btn-navy" href="activites.html">Tout l'agenda <svg class="ico ico-fl"><use href="#g-i-fleche"/></svg></a></div>
+    </div>
+    <div>
+      <div class="ev"><div class="ev-date"><b>1er</b>samedi du mois</div><div><h3>Repair Café</h3><p>On répare ensemble grille-pain, lampes et vélos plutôt que de jeter. Entrée libre.</p></div></div>
+      <div class="ev"><div class="ev-date"><b>1 soir</b>par mois</div><div><h3>Les Veillées du Génie</h3><p>Un sujet, un intervenant, un vrai débat. Participation au chapeau.</p></div></div>
+    </div>
   </div>
 </section>
 
-<section class="sec sec-cream">
-  <div class="wrap">
+<section class="sec sec-pierre">
+  <div class="wrap" style="max-width:900px">
     <h2>Questions fréquentes</h2>
     <div class="faq">
       <details><summary>Faut-il être adhérent pour venir ?</summary><p>Non. Tout le monde peut réserver un espace ou venir à un atelier. L'adhésion (à partir de 15 €/an) donne une voix en assemblée et des tarifs réduits sur les salles.</p></details>
@@ -227,24 +260,27 @@
 </section>
 
 <section class="sec" id="contact">
-  <div class="wrap grid grid-2">
+  <div class="wrap grid grid-2" style="gap:48px">
     <div>
       <p class="kicker">Nous trouver</p>
       <h2>12 rue du Génie, Montauban</h2>
-      <p>Lundi–vendredi 8h–19h · samedi sur réservation<br>
-      <a href="tel:+33651509718">06 51 50 97 18</a> · <a href="mailto:contact@genie-montauban.fr">contact@genie-montauban.fr</a></p>
-      <p class="note">À 200 m de la gare SNCF · bus ligne 1, arrêt Gare.</p>
-      <a class="btn btn-ghost" href="https://www.google.com/maps/search/?api=1&amp;query=12+rue+du+G%C3%A9nie+82000+Montauban" target="_blank" rel="noopener">Itinéraire Google Maps</a>
+      <p>Lundi–vendredi 8h–19h · samedi sur réservation</p>
+      <ul class="prix" style="max-width:420px">
+        <li><span>Téléphone</span><b><a href="tel:+33651509718" style="text-decoration:none">06 51 50 97 18</a></b></li>
+        <li><span>Email</span><b style="font-family:var(--texte);font-size:.95rem"><a href="mailto:contact@genie-montauban.fr">contact@genie-montauban.fr</a></b></li>
+        <li><span>Accès</span><b style="font-family:var(--texte);font-size:.95rem">Gare SNCF à 200 m</b></li>
+      </ul>
+      <div class="btn-row"><a class="btn btn-ghost" href="https://www.google.com/maps/search/?api=1&amp;query=12+rue+du+G%C3%A9nie+82000+Montauban" target="_blank" rel="noopener"><svg class="ico"><use href="#g-i-carte"/></svg> Itinéraire</a></div>
     </div>
     <form class="form" data-demande="Contact" data-merci="On vous répond sous 48 h ouvrées.">
-      <h3 class="mt0">Une question ?</h3>
+      <h3>Une question ?</h3>
       <div class="row row-2">
         <label>Prénom<input name="prenom" data-label="Prénom" autocomplete="given-name"></label>
         <label>Email *<input name="email" type="email" required data-label="Email" autocomplete="email"></label>
       </div>
       <label>Votre message *<textarea name="message" required data-label="Message"></textarea></label>
       <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
-      <button class="btn btn-gold" type="submit">Envoyer</button>
+      <button class="btn btn-gold" type="submit">Envoyer le message</button>
       <div class="form-msg" role="status"></div>
     </form>
   </div>
@@ -303,7 +339,7 @@
   </div>
 </footer>
 <!-- /g:footer -->
-<div class="g-sticky"><a class="btn btn-ghost" href="tel:+33651509718">📞 Appeler</a><a class="btn btn-gold" href="reserver.html">Réserver</a></div>
+<div class="g-sticky"><a class="btn btn-ghost" href="tel:+33651509718"><svg class="ico"><use href="#g-i-tel"/></svg> Appeler</a><a class="btn btn-navy" href="reserver.html">Réserver</a></div>
 <script src="assets/js/v2.js" defer></script>
 </body>
 </html>
