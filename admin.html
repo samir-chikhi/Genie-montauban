@@ -1151,10 +1151,10 @@ function calcModalPrix() {
 }
 
 function openModal(id) {
-  if (id==='mresa') resetForm();
+  if (id==='mresa' && !editId) resetForm();
   document.getElementById(id).classList.add('open');
 }
-function closeModal(id) { document.getElementById(id).classList.remove('open'); editId=null; }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); if (id==='mresa') editId=null; }
 
 document.addEventListener('click', e => {
   if (e.target.classList.contains('overlay')) { e.target.classList.remove('open'); editId=null; }
@@ -1166,7 +1166,7 @@ function resetForm() {
   ['r-prenom','r-nom','r-email','r-tel','r-orga','r-objet'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
   gvSet('r-espace',''); gvSet('r-usage','reunion'); gvSet('r-profil','locataire');
   gvSet('r-duree','heure'); gvSet('r-hdebut','09:00'); gvSet('r-nbh','2');
-  gvSet('r-statut','confirmed'); gvSet('r-part','1');
+  gvSet('r-statut','confirmed'); gvSet('r-part','1'); gvSet('r-montant-perso',''); gvSet('r-reglement','Virement');
   // Admin : pas de limite de date (peut réserver dans le passé)
   document.getElementById('r-date').removeAttribute('min');
   document.getElementById('r-date').value = new Date().toISOString().split('T')[0];
@@ -1203,7 +1203,19 @@ function editResa(id) {
   document.getElementById('r-badge').checked    = opts.includes('Badge');
   document.getElementById('r-adhesion').checked = opts.includes('Adhésion');
   updateModalUsage();
-  closeModal('mdetail'); openModal('mresa');
+  // updateModalUsage/Durees peuvent réinitialiser ces champs : on les remet.
+  gvSet('r-duree',r.typeDuree||'heure'); gvSet('r-hdebut',r.heureDebut||'09:00'); gvSet('r-nbh',r.nbHeures||'2');
+  const mr = /Règlement : ([^,]+)/.exec(opts);
+  if (mr) gvSet('r-reglement', mr[1].trim());
+  // Montant négocié : pré-rempli seulement s'il s'écarte du tarif grille,
+  // sinon le champ reste vide et le tarif suit la grille si on change la durée.
+  const grille = calcMontant(r.espace, r.usage||'reunion', r.profil||'locataire', r.typeDuree||'heure', parseInt(r.nbHeures)||1)
+                 + (opts.includes('Badge')?25:0) + (opts.includes('Adhésion')?50:0);
+  gvSet('r-montant-perso', Number(r.montant)!==grille ? String(r.montant) : '');
+  document.getElementById('mdetail').classList.remove('open');
+  document.getElementById('mresa-title').textContent='Modifier';
+  calcModalPrix();
+  openModal('mresa');
 }
 
 // ─────────────────────────────────────────────────────────
