@@ -602,7 +602,7 @@ textarea{resize:vertical;min-height:65px}
           <label>Options supplémentaires</label>
           <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:4px">
             <label style="text-transform:none;letter-spacing:0;font-size:13px;font-weight:500;display:flex;align-items:center;gap:6px;cursor:pointer">
-              <input type="checkbox" id="r-badge"> Accès badge 24h/7j (+25€/mois)
+              <input type="checkbox" id="r-badge"> Accès badge 24h/7j (+5€/mois)
             </label>
             <label style="text-transform:none;letter-spacing:0;font-size:13px;font-weight:500;display:flex;align-items:center;gap:6px;cursor:pointer">
               <input type="checkbox" id="r-adhesion"> Adhésion Génie (+50€/an)
@@ -958,7 +958,7 @@ async function saveResa(silent) {
   // Un montant saisi par l'admin prime sur la grille : c'est le cas des
   // remises negociees (formation sur plusieurs seances, partenariat…).
   const total = perso !== '' ? parseFloat(perso.replace(',','.')) || 0
-                              : m + (badge?25:0) + (adhesion?50:0);
+                              : m + (badge?5:0) + (adhesion?50:0);
   const now   = new Date().toISOString();
 
   const resa = {
@@ -1156,7 +1156,7 @@ function calcModalPrix() {
   const badge=gvb('r-badge'), adhesion=gvb('r-adhesion');
   if (!espace) return;
   const base  = calcMontant(espace, usage, profil, duree, nbH);
-  const total = base + (badge?25:0) + (adhesion?50:0);
+  const total = base + (badge?5:0) + (adhesion?50:0);
   const hd=gv('r-hdebut'), hf=heureFin(hd,duree,nbH);
   const px = document.getElementById('modal-prix');
   px.style.display='block';
@@ -1226,7 +1226,7 @@ function editResa(id) {
   // Montant négocié : pré-rempli seulement s'il s'écarte du tarif grille,
   // sinon le champ reste vide et le tarif suit la grille si on change la durée.
   const grille = calcMontant(r.espace, r.usage||'reunion', r.profil||'locataire', r.typeDuree||'heure', parseInt(r.nbHeures)||1)
-                 + (opts.includes('Badge')?25:0) + (opts.includes('Adhésion')?50:0);
+                 + (opts.includes('Badge')?5:0) + (opts.includes('Adhésion')?50:0);
   majHdebutVisible();
   gvSet('r-montant-perso', Number(r.montant)!==grille ? String(r.montant) : '');
   document.getElementById('mdetail').classList.remove('open');
