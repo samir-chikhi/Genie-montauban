@@ -10,7 +10,7 @@ source: miroir markdown — version texte pour moteurs IA
 
 Vous cherchez un **espace de coworking à Montauban** pour une journée de télétravail, un rendez-vous au calme ou quelques heures entre deux trains ? L'Escale du Génie accueille indépendant·es, télétravailleur·ses, personnes de passage et étudiant·es dans un grand plateau partagé de 28 m², au premier étage du tiers-lieu, **rue du Génie**, à 200 mètres de la gare.
 
-Ce qui change ici : pas d'abonnement, pas d'engagement, des tarifs parmi les plus bas de Montauban (**dès 4 € l'heure**), et un lieu porté par une association d'éducation populaire — ce que vous payez finance aussi les ateliers gratuits du quartier. Wifi fibre, café, imprimante, accès PMR et ouverture le samedi.
+Ce qui change ici : pas d'abonnement, pas d'engagement, des tarifs parmi les plus bas de Montauban (**dès 4 € l'heure**), et un lieu porté par une association d'éducation populaire — ce que vous payez finance aussi les ateliers gratuits du quartier. Wifi fibre, café, imprimante, accès PMR, et le samedi sur réservation.
 
 ## L'offre, en trois lignes
 

@@ -51,7 +51,7 @@ Non-adhérent · tarif standard
 | Célestin Freinet (1-11)Salle de réunion · 20 pers. | À l'heure | 30 € | 20 € | 15 € | Gratuit\* |
 | Demi-journée (4h) | 100 € | 60 € | 45 € | Gratuit\* |
 | Journée (8h) | 180 € | 100 € | 80 € | Gratuit\* |
-| Olympe de Gouges (1-12)Salle de réunion · 20 pers. | À l'heure | 30 € | 20 € | 15 € | Gratuit\* |
+| Olympe de Gouges (1-12)Salle de réunion · 10-15 pers. | À l'heure | 30 € | 20 € | 15 € | Gratuit\* |
 | Demi-journée (4h) | 100 € | 60 € | 45 € | Gratuit\* |
 | Journée (8h) | 180 € | 100 € | 80 € | Gratuit\* |
 | Louise Michel (0-01)Bureau privatif · 15 m² | À l'heure | 30 € | 20 € | 15 € | Gratuit\* |
@@ -73,7 +73,7 @@ Tarifs HC (hors charges). L'adhésion à l'association Génie est requise pour l
 
 🔑 Bureaux privatifs en bail — jusqu'à 20% d'économie
 
-Charges comprises (eau, électricité, internet fibre). TVA applicable selon statut. 7 bureaux disponibles de 18 à 50 m².
+Loyers des bureaux à l'année : hors charges (charges = loyer + 23 % : électricité, fibre, eau, ménage). Tarifs à l'heure, à la demi-journée et à la journée : TTC, tout compris.
 
 #### Tarifs au m² HC · toutes surfaces
 
@@ -108,7 +108,7 @@ Flexibilité maximale
 | Condorcet (1-08) Loué | 17 m² | Actuellement loué — écrivez-nous pour être prévenu d'une disponibilité | | |
 | Baden Powell (1-09) Loué | 16 m² | Actuellement loué — écrivez-nous pour être prévenu d'une disponibilité | | |
 | Célestin Freinet (1-11) | 24 m² | 432 €/mois HC | 408 €/mois HC | 360 €/mois HC |
-| Maria Montessori (−1-14) | 12 m² | 216 €/mois HC | 204 €/mois HC | 180 €/mois HC |
+| Maria Montessori (−1-14) | 12 m² | 216 €/mois HC adhérent · 300 €/mois HC non adhérent | | |
 
 🤝 Adhésion à l'association Génie
 
@@ -141,4 +141,4 @@ Légende des profils
 
 **Asso Villebourbon / syndicat d'employés et d'ouvriers\* Gratuit** : adhésion Génie (50€/an) + réservation 72h avant + sous réserve disponibilité. La gratuité ne s'applique ni aux associations extérieures au quartier Villebourbon, ni aux syndicats patronaux ou professionnels.
 
-Prix HC (hors charges) sauf mention contraire. Tarifs en vigueur au 1er mai 2026 — modifiables par décision du Conseil d'Administration de l'Association Génie. Contact : contact@genie-montauban.fr · 06 51 50 97 18
+Loyers des bureaux à l'année : hors charges (charges = loyer + 23 % : électricité, fibre, eau, ménage). Tarifs à l'heure, à la demi-journée et à la journée : TTC, tout compris. Tarifs en vigueur au 1er mai 2026 — modifiables par décision du Conseil d'Administration de l'Association Génie. Contact : contact@genie-montauban.fr · 06 51 50 97 18

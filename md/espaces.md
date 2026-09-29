@@ -1,6 +1,6 @@
 ---
 title: Bureaux privatifs, coworking et salles de réunion à Montauban — Génie
-description: Les douze espaces du tiers-lieu Génie à Montauban : salles de réunion dès 20 €/h, coworking à la carte dès 4 €/h, bureaux en bail. Devis pour institutions et entreprises. 200 m de la gare, accès PMR.
+description: Les quatorze espaces du tiers-lieu Génie à Montauban : salles de réunion dès 20 €/h, coworking à la carte dès 4 €/h, bureaux en bail. Devis pour institutions et entreprises. 200 m de la gare, accès PMR.
 url: https://genie-montauban.fr/espaces.html
 last_updated: 2026-09-29
 source: miroir markdown — version texte pour moteurs IA
@@ -14,15 +14,15 @@ source: miroir markdown — version texte pour moteurs IA
 
 Travailler ici
 
-# Douze espaces. *Et une bonne raison de les louer.*
+# Quatorze espaces. *Et une bonne raison de les louer.*
 
-Salles de réunion, bureaux nomades, coworking et bureaux privatifs en bail. Accès badge 7j/7, fibre, imprimante, café, terrasse sur le rooftop, accessibilité PMR complète. À 200 m de la gare — on peut venir en train depuis Toulouse ou Bordeaux.
+Salles de réunion, bureaux nomades, coworking et bureaux privatifs en bail. Badge 24 h/24 en option pour les locataires, fibre, imprimante, café, terrasse sur le rooftop, accessibilité PMR complète. À 200 m de la gare — on peut venir en train depuis Toulouse ou Bordeaux.
 
 **Et surtout :** ce que vous payez ici finance les ateliers gratuits, l'accompagnement des porteurs de projet et la gratuité des salles pour les associations du quartier. Louer un bureau au Génie, c'est déjà participer.
 
 Coworking à la carte dès 4 €/h
 Salle de réunion dès 20 €/h
-Bureau privatif dès 180 €/mois
+Bureau privatif dès 216 €/mois
 *Salles gratuites pour les assos de Villebourbon et les syndicats de salariés et d'ouvriers*
 
 [Grille tarifaire complète →](tarifs.html)
@@ -144,7 +144,7 @@ Tarif non-adhérent, hors charges. **Adhérent : 60 €/semaine, 180 €/mois** 
 
 Un bureau privatif à Montauban, loué à l'année et sans bail 3-6-9 obligatoire. Plus l'engagement est long, plus le loyer baisse. Trois bureaux sont actuellement occupés — on peut vous prévenir s'ils se libèrent.
 
-Nos six bureaux privatifs font de 12 à 24 m² et se louent meublés, charges comprises : fibre, électricité, eau et ménage. Comptez de 15 à 18 €/m²/mois hors charges selon la durée d'engagement — du bail mensuel sans engagement au bail 3/6/9, en passant par le bail 1 an ; le détail est dans la [grille tarifaire complète](tarifs.html). Le plus petit bureau démarre à 180 €/mois, le plus grand tourne autour de 432 €/mois. L'accès badge 24h/7j est disponible en option (+5 €/mois), et vous partagez avec le reste du tiers-lieu l'imprimante, le café, la terrasse du rooftop et les salles de réunion à tarif locataire — celles-ci se [réservent en ligne](reservation.html). On est à 200 m de la gare de Montauban, accès PMR complet. Pour visiter un bureau ou demander un devis, écrivez-nous à [contact@genie-montauban.fr](mailto:contact@genie-montauban.fr).
+Nos six bureaux privatifs font de 12 à 24 m² et se louent meublés. Comptez de 15 à 18 €/m²/mois hors charges (charges : loyer + 23 %, pour l'électricité, la fibre, l'eau et le ménage) selon la durée d'engagement — du bail mensuel sans engagement au bail 3/6/9, en passant par le bail 1 an ; le détail est dans la [grille tarifaire complète](tarifs.html). Le plus petit bureau démarre à 216 €/mois, le plus grand tourne autour de 432 €/mois. L'accès badge 24h/7j est disponible en option (+5 €/mois), et vous partagez avec le reste du tiers-lieu l'imprimante, le café, la terrasse du rooftop et les salles de réunion à tarif locataire — celles-ci se [réservent en ligne](reservation.html). On est à 200 m de la gare de Montauban, accès PMR complet. Pour visiter un bureau ou demander un devis, écrivez-nous à [contact@genie-montauban.fr](mailto:contact@genie-montauban.fr).
 
 15 m²
 
@@ -218,9 +218,8 @@ Bureau -1-14 · Rez-de-jardin
 
 Maria Montessori
 
-- Bail mensuel216 €/mois
-- Bail 1 an204 €/mois
-- Bail 3/6/9180 €/mois
+- Mois, adhérent216 €/mois
+- Mois, non adhérent300 €/mois
 
 Hors charges. Plus l'engagement est long, plus le loyer baisse.
 
@@ -251,7 +250,7 @@ Café, WiFi fibre et imprimante compris.
 
 ### Former
 
-L'Académie des Compétences propose 18 modules de 3 heures de 45 à 65 € (3 gratuits), sur trois filières —
+L'Académie des Compétences propose 33 modules de 3 heures de 45 à 65 € (4 gratuits), sur trois filières —
 Empowerment & Leadership, Tech & Numérique, Gestion & Impact. Dispensés par MUSIVA, organisme
 certifié Qualiopi ; prise en charge employeur/OPCO possible sur devis. Les sessions se tiennent dans nos salles.
 
@@ -336,7 +335,7 @@ Membres
 
 Réservation en ligne
 
-Système de réservation intégré — choisissez votre créneau, votre espace et confirmez instantanément.
+Coworking à l'heure (L'Escale) : réservation et paiement immédiats. Salles et bureaux fermés : demande en ligne, confirmation par email sous 24 h.
 
 24h/24
 
