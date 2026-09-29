@@ -538,7 +538,7 @@ textarea{resize:vertical;min-height:65px}
         </div>
         <div class="fg">
           <label>Durée</label>
-          <select id="r-duree" onchange="calcModalPrix()">
+          <select id="r-duree" onchange="majHdebutVisible(); calcModalPrix()">
             <option value="heure">À l'heure</option>
             <option value="demi">½ journée (4h)</option>
             <option value="journee">Journée (8h)</option>
@@ -549,6 +549,10 @@ textarea{resize:vertical;min-height:65px}
           <select id="r-hdebut" onchange="calcModalPrix()">
             <option selected>09:00</option>
           </select>
+          <div id="r-creneau" style="display:none;gap:6px;margin-top:6px">
+            <button type="button" class="btn btn-sm btn-ghost" onclick="gvSet('r-hdebut','09:00');calcModalPrix()">☀️ Matin 09:00–13:00</button>
+            <button type="button" class="btn btn-sm btn-ghost" onclick="gvSet('r-hdebut','14:00');calcModalPrix()">🌇 Après-midi 14:00–18:00</button>
+          </div>
         </div>
         <div class="fg" id="r-nbh-fg">
           <label>Nb heures</label>
@@ -1131,7 +1135,17 @@ function updateModalDurees() {
     durSel.innerHTML = "<option value='demi'>½ journée</option><option value='journee'>Journée</option><option value='semaine'>Semaine</option><option value='mois'>Mois</option>";
     hdFg.style.display='none'; nbhFg.style.display='none';
   }
+  majHdebutVisible();
   calcModalPrix();
+}
+
+// L'heure de début reste masquée pour le coworking (semaine, mois, journée),
+// mais s'affiche pour une ½ journée afin de choisir matin ou après-midi.
+function majHdebutVisible() {
+  const usage = gv('r-usage'), duree = gv('r-duree');
+  const demi = duree === 'demi';
+  document.getElementById('r-hdebut-fg').style.display = (usage==='reunion' || demi) ? '' : 'none';
+  document.getElementById('r-creneau').style.display = demi ? 'flex' : 'none';
 }
 
 function calcModalPrix() {
@@ -1173,7 +1187,7 @@ function resetForm() {
   document.getElementById('r-badge').checked=false;
   document.getElementById('r-adhesion').checked=false;
   document.getElementById('modal-prix').style.display='none';
-  document.getElementById('r-usage-fg').style.display='none';
+  document.getElementById('r-usage-fg').style.display='none'; majHdebutVisible();
   document.getElementById('r-profil-fg').style.display='';
 
   // Remplir le select des heures (24h/24, pas 30 min)
@@ -1211,6 +1225,7 @@ function editResa(id) {
   // sinon le champ reste vide et le tarif suit la grille si on change la durée.
   const grille = calcMontant(r.espace, r.usage||'reunion', r.profil||'locataire', r.typeDuree||'heure', parseInt(r.nbHeures)||1)
                  + (opts.includes('Badge')?25:0) + (opts.includes('Adhésion')?50:0);
+  majHdebutVisible();
   gvSet('r-montant-perso', Number(r.montant)!==grille ? String(r.montant) : '');
   document.getElementById('mdetail').classList.remove('open');
   document.getElementById('mresa-title').textContent='Modifier';
