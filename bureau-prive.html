@@ -17,12 +17,31 @@
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="preload" href="assets/fonts/dm-sans-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/bricolage-grotesque-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="assets/css/v2.css">
   <link rel="stylesheet" href="assets/css/v2-chrome.css">
 </head>
 <body class="has-sticky">
 <!-- g:header -->
 <a class="skip" href="#contenu">Aller au contenu</a>
+<svg class="g-sprite" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden">
+  <defs>
+    <symbol id="g-i-poste" viewBox="0 0 24 24"><rect x="4" y="4.5" width="16" height="10.5" rx="1.5"/><path d="M2.5 19h19"/><path d="M9.5 15v4M14.5 15v4"/></symbol>
+    <symbol id="g-i-cle" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4.5"/><path d="M11.2 11.8 20 3"/><path d="m16.5 6.5 2.5 2.5"/><path d="m14 9 2 2"/></symbol>
+    <symbol id="g-i-table" viewBox="0 0 24 24"><path d="M3 11h18"/><path d="M6 11v8M18 11v8"/><circle cx="7" cy="5.5" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="17" cy="5.5" r="2"/></symbol>
+    <symbol id="g-i-pousse" viewBox="0 0 24 24"><path d="M12 21v-8"/><path d="M12 13c0-4 2.5-6.5 7-6.5 0 4.2-2.6 6.5-7 6.5Z"/><path d="M12 15.5c0-3.3-2-5.5-6.5-5.5 0 3.5 2.3 5.5 6.5 5.5Z"/><path d="M7 21h10"/></symbol>
+    <symbol id="g-i-rue" viewBox="0 0 24 24"><path d="M3 21V9.5L8 6l5 3.5V21"/><path d="M13 21V4.5L21 3v18"/><path d="M2 21h20"/><path d="M6.5 13.5h3M6.5 17h3M16 8h2M16 12h2M16 16h2"/></symbol>
+    <symbol id="g-i-voix" viewBox="0 0 24 24"><path d="M4 10v4a1 1 0 0 0 1 1h2l6 4V5L7 9H5a1 1 0 0 0-1 1Z"/><path d="M16.5 9a4 4 0 0 1 0 6"/><path d="M19 6.5a7.5 7.5 0 0 1 0 11"/></symbol>
+    <symbol id="g-i-train" viewBox="0 0 24 24"><rect x="5.5" y="3" width="13" height="13" rx="3"/><path d="M5.5 10h13"/><path d="M9 19.5 7.5 21M15 19.5l1.5 1.5"/><path d="M9 13h.01M15 13h.01"/></symbol>
+    <symbol id="g-i-horloge" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="g-i-pmr" viewBox="0 0 24 24"><circle cx="11" cy="4.5" r="1.5"/><path d="M11 7.5v6h5l2.5 5"/><path d="M11 10.5h4"/><path d="M8 11.5a5 5 0 1 0 6.8 6.3"/></symbol>
+    <symbol id="g-i-wifi" viewBox="0 0 24 24"><path d="M2.5 9a14 14 0 0 1 19 0"/><path d="M5.5 12.5a9.5 9.5 0 0 1 13 0"/><path d="M8.7 16a5 5 0 0 1 6.6 0"/><path d="M12 19.5h.01"/></symbol>
+    <symbol id="g-i-tel" viewBox="0 0 24 24"><path d="M6.5 3h3l1.5 4.5-2 1.5a11 11 0 0 0 6 6l1.5-2 4.5 1.5v3a2 2 0 0 1-2 2A16 16 0 0 1 4.5 5a2 2 0 0 1 2-2Z"/></symbol>
+    <symbol id="g-i-fleche" viewBox="0 0 24 24"><path d="M4 12h15"/><path d="m13 6 6 6-6 6"/></symbol>
+    <symbol id="g-i-coche" viewBox="0 0 24 24"><path d="m4.5 12.5 5 5 10-11"/></symbol>
+    <symbol id="g-i-carte" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></symbol>
+  </defs>
+</svg>
 <header class="g-head">
   <div class="g-wrap">
     <a class="g-logo" href="index.html"><img src="favicon.png" alt="" width="38" height="38"><span>Génie<small>Tiers-lieu · Montauban</small></span></a>
@@ -40,54 +59,67 @@
 </header>
 <!-- /g:header -->
 <main id="contenu">
-<section class="hero hero-sm" style="background-image:url('assets/img/bureau-cheminee-1600.webp')">
+<section class="hero hero-sm">
   <div class="wrap">
-    <p class="crumbs"><a href="index.html">Accueil</a> › Bureau privé</p>
-    <h1>Un bureau fermé à vous, à 200 m de la gare de Montauban</h1>
-    <p class="lead">Bureaux meublés de 12 à 24 m², au mois, à l'année ou en bail 3/6/9. Plus vous vous engagez longtemps, plus le loyer baisse.</p>
-    <div class="btn-row"><a class="btn btn-gold" href="#visite">Demander une visite</a><a class="btn btn-ghost" href="tel:+33651509718">06 51 50 97 18</a></div>
+    <div class="hero-txt">
+      <p class="crumbs"><a href="index.html">Accueil</a> › Bureau privé</p>
+      <h1>Un bureau fermé à vous, à 200 m de la gare.</h1>
+      <p class="lead">Bureaux meublés de 12 à 24 m², au mois, à l'année ou en bail 3/6/9. Plus vous vous engagez longtemps, plus le loyer baisse.</p>
+      <div class="btn-row"><a class="btn btn-gold" href="#visite">Demander une visite <svg class="ico ico-fl"><use href="#g-i-fleche"/></svg></a><a class="btn btn-ghost" href="tel:+33651509718"><svg class="ico"><use href="#g-i-tel"/></svg> 06 51 50 97 18</a></div>
+    </div>
+    <figure class="hero-photo"><img src="assets/img/bureau-cheminee-1600.webp" alt="Un bureau du Génie avec cheminée d'époque" width="1600" height="1067"></figure>
   </div>
 </section>
 
 <section class="sec">
   <div class="wrap">
-    <h2>Les bureaux disponibles</h2>
-    <p class="lead">Loyers mensuels hors charges. Un bureau peut aussi se louer à l'heure ou à la journée pour essayer.</p>
-    <div class="grid grid-3" style="margin-top:24px">
-      <article class="card">
-        <span class="tag tag-ok">Disponible</span><span class="tag">15 m² · RDC</span>
-        <h3>Louise Michel</h3>
-        <p class="price">225 € <small>/mois en bail 3/6/9</small></p>
-        <table class="ptable"><tr><td>Bail mensuel</td><td>270 €</td></tr><tr><td>Bail 1 an</td><td>255 €</td></tr><tr><td>Bail 3/6/9</td><td>225 €</td></tr></table>
-        <div class="btn-row"><a class="btn btn-navy" href="#visite" data-bureau="Louise Michel">Visiter</a><a class="btn btn-ghost" href="reservation.html?espace=michel">L'essayer à l'heure</a></div>
+    <p class="kicker">Disponibles maintenant</p>
+    <h2>Trois bureaux libres</h2>
+    <p class="lead">Loyers mensuels hors charges. Chaque bureau porte le nom d'une figure de l'éducation et de l'émancipation.</p>
+    <div class="grid grid-3" style="margin-top:32px">
+      <article class="fiche">
+        <div class="fiche-tete"><span class="fiche-mesure">15<small>m²</small></span><span class="fiche-lieu">Bureau 0-01<br>Rez-de-chaussée</span></div>
+        <div class="fiche-corps">
+          <span class="etat">Disponible</span>
+          <h3>Louise Michel</h3>
+          <p class="qui">Institutrice et communarde, 1830–1905</p>
+          <ul class="prix"><li><span>Bail mensuel</span><b>270 €</b></li><li><span>Bail 1 an</span><b>255 €</b></li><li class="fort"><span>Bail 3/6/9</span><b>225 €</b></li></ul>
+          <div class="btn-row"><a class="btn btn-navy" href="#visite" data-bureau="Louise Michel">Visiter</a><a class="btn btn-ghost" href="reservation.html?espace=michel">Essayer à l'heure</a></div>
+        </div>
       </article>
-      <article class="card">
-        <span class="tag tag-ok">Disponible</span><span class="tag">24 m² · RDC</span>
-        <h3>Philippe Meirieu</h3>
-        <p class="price">360 € <small>/mois en bail 3/6/9</small></p>
-        <table class="ptable"><tr><td>Bail mensuel</td><td>432 €</td></tr><tr><td>Bail 1 an</td><td>408 €</td></tr><tr><td>Bail 3/6/9</td><td>360 €</td></tr></table>
-        <div class="btn-row"><a class="btn btn-navy" href="#visite" data-bureau="Philippe Meirieu">Visiter</a></div>
+      <article class="fiche">
+        <div class="fiche-tete"><span class="fiche-mesure">24<small>m²</small></span><span class="fiche-lieu">Bureau 0-03<br>Rez-de-chaussée</span></div>
+        <div class="fiche-corps">
+          <span class="etat">Disponible</span>
+          <h3>Philippe Meirieu</h3>
+          <p class="qui">Pédagogue, né en 1949</p>
+          <ul class="prix"><li><span>Bail mensuel</span><b>432 €</b></li><li><span>Bail 1 an</span><b>408 €</b></li><li class="fort"><span>Bail 3/6/9</span><b>360 €</b></li></ul>
+          <div class="btn-row"><a class="btn btn-navy" href="#visite" data-bureau="Philippe Meirieu">Visiter</a></div>
+        </div>
       </article>
-      <article class="card">
-        <span class="tag tag-ok">Disponible</span><span class="tag">12 m² · accès PMR</span>
-        <h3>Maria Montessori</h3>
-        <p class="price">216 € <small>/mois adhérent</small></p>
-        <table class="ptable"><tr><td>Mois, non-adhérent</td><td>300 €</td></tr><tr><td>Mois, adhérent</td><td>216 €</td></tr><tr><td>Semaine</td><td>100–145 €</td></tr></table>
-        <div class="btn-row"><a class="btn btn-navy" href="#visite" data-bureau="Maria Montessori">Visiter</a><a class="btn btn-ghost" href="reservation.html?espace=montessori">À l'heure</a></div>
+      <article class="fiche">
+        <div class="fiche-tete"><span class="fiche-mesure">12<small>m²</small></span><span class="fiche-lieu">Bureau -1-14<br>Rez-de-jardin · PMR</span></div>
+        <div class="fiche-corps">
+          <span class="etat">Disponible</span>
+          <h3>Maria Montessori</h3>
+          <p class="qui">Médecin et pédagogue, 1870–1952</p>
+          <ul class="prix"><li><span>Mois, non adhérent</span><b>300 €</b></li><li class="fort"><span>Mois, adhérent</span><b>216 €</b></li><li><span>Semaine</span><b>100–145 €</b></li></ul>
+          <div class="btn-row"><a class="btn btn-navy" href="#visite" data-bureau="Maria Montessori">Visiter</a><a class="btn btn-ghost" href="reservation.html?espace=montessori">À l'heure</a></div>
+        </div>
       </article>
     </div>
-    <p class="note" style="margin-top:18px">Actuellement loués : Aristote (7 m²), Aimé Césaire (17 m²), Condorcet (17 m²), Baden Powell (16 m²). <a href="#visite" data-bureau="Liste d'attente">Être prévenu quand l'un se libère</a>.</p>
+    <p class="note" style="margin-top:22px">Actuellement loués : Aristote (7 m²), Aimé Césaire (17 m²), Condorcet (17 m²), Baden Powell (16 m²). <a class="lien" href="#visite" data-bureau="Liste d'attente">Être prévenu quand l'un se libère</a></p>
   </div>
 </section>
 
-<section class="sec sec-cream">
-  <div class="wrap grid grid-2">
+<section class="sec sec-pierre">
+  <div class="wrap grid grid-2" style="gap:56px">
     <div>
       <h2>Ce qui est compris</h2>
       <ul class="ticks">
         <li>Bureau meublé, wifi fibre</li>
         <li>Imprimante, café, terrasse sur le toit</li>
-        <li>Salles de réunion au tarif locataire (jusqu'à −50 %)</li>
+        <li>Salles de réunion au tarif locataire</li>
         <li>Badge d'accès 24 h/24, 7 j/7 en option (5 €/mois)</li>
         <li>Pas de bail 3/6/9 obligatoire : on peut commencer au mois</li>
         <li>Domiciliation possible pour votre structure</li>
@@ -95,19 +127,20 @@
     </div>
     <div>
       <h2>Comment ça se passe</h2>
-      <div class="steps" style="grid-template-columns:1fr">
-        <div class="step"><b>Vous demandez une visite</b><span>Formulaire ci-dessous ou 06 51 50 97 18. Réponse sous 48 h.</span></div>
-        <div class="step"><b>On visite ensemble</b><span>20 minutes, en semaine. Vous voyez le bureau, les salles, les voisins.</span></div>
-        <div class="step"><b>On signe, vous emménagez</b><span>Contrat simple, état des lieux, remise des clés et du badge.</span></div>
+      <div class="etapes col">
+        <div class="etape"><b>Vous demandez une visite</b><span>Formulaire ci-dessous ou 06 51 50 97 18. Réponse sous 48 h.</span></div>
+        <div class="etape"><b>On visite ensemble</b><span>20 minutes en semaine : le bureau, les salles, les voisins.</span></div>
+        <div class="etape"><b>On signe, vous emménagez</b><span>Contrat simple, état des lieux, remise des clés et du badge.</span></div>
       </div>
     </div>
   </div>
 </section>
 
 <section class="sec" id="visite">
-  <div class="wrap" style="max-width:760px">
-    <h2>Demander une visite ou un devis</h2>
-    <form class="form" data-demande="Bureau privé" data-merci="On vous rappelle sous 48 h ouvrées pour caler la visite.">
+  <div class="wrap" style="max-width:820px">
+    <p class="kicker">Visite ou devis</p>
+    <h2>Demander une visite</h2>
+    <form class="form" data-demande="Bureau privé" data-merci="On vous rappelle sous 48 h ouvrées pour fixer la visite.">
       <div class="row row-2">
         <label>Prénom *<input name="prenom" required data-label="Prénom" autocomplete="given-name"></label>
         <label>Nom *<input name="nom" required data-label="Nom" autocomplete="family-name"></label>
@@ -132,7 +165,7 @@
   </div>
 </section>
 <script>
-  // « Visiter » sur une carte → pré-remplit le bureau dans le formulaire
+  // « Visiter » sur une fiche → pré-remplit le bureau dans le formulaire
   document.querySelectorAll('[data-bureau]').forEach(function (a) {
     a.addEventListener('click', function () { var s = document.getElementById('f-bureau'); if (s) s.value = a.getAttribute('data-bureau'); });
   });
@@ -191,7 +224,7 @@
   </div>
 </footer>
 <!-- /g:footer -->
-<div class="g-sticky"><a class="btn btn-ghost" href="tel:+33651509718">📞 Appeler</a><a class="btn btn-gold" href="reserver.html">Réserver</a></div>
+<div class="g-sticky"><a class="btn btn-ghost" href="tel:+33651509718"><svg class="ico"><use href="#g-i-tel"/></svg> Appeler</a><a class="btn btn-navy" href="reserver.html">Réserver</a></div>
 <script src="assets/js/v2.js" defer></script>
 </body>
 </html>
