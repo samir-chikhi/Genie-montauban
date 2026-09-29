@@ -16,8 +16,9 @@ procédures pas-à-pas quand une action lui revient.
   de contrôle d'application sur cette machine) ; laisser le workflow le faire.
 - **Cron** : le même workflow tourne aussi chaque jour à 5h17 UTC. Le bot
   committe sur `main` → **toujours `git fetch` + rebase avant un push**.
-- Le workflow « pages build and deployment » affiche une croix rouge à chaque
-  push : **c'est attendu**, le vrai déploiement (`Déploiement GitHub Pages`) passe.
+- Pages est en mode **GitHub Actions** (depuis le 29/09/2026, avant : « deploy from branch » qui publiait TOUT le dépôt). Le workflow ne publie que la liste blanche de l'étape « Préparer le dossier publié » : **nouvelle page ou nouveau dossier public → l'y ajouter**, sinon 404.
+- Menu et pied de page : modifier `_partials/header.html` / `footer.html` (sprite d'icônes inclus), puis `node tools/sync-partials.js` (le workflow le relance aussi). Ne pas éditer les menus page par page.
+- Styles : `assets/css/v2.css` (pages refonte), `assets/css/v2-chrome.css` (menu/pied, chargé partout). Signature visuelle : arc surbaissé de la façade, icônes SVG au trait, titres Bricolage Grotesque.
 - **Backend** = `apps-script.gs`, un projet Google Apps Script séparé.
   L'éditer dans le repo ne change **rien** en prod tant que Samir (ou moi via
   navigateur, compte `genie.montauban@gmail.com`) n'a pas collé le fichier dans
