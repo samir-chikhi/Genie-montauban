@@ -135,9 +135,9 @@ Mon message tiendra en deux phrases. N'attendez pas le moment parfait, ni les pa
 
 Trois façons simples de donner suite — un message qui part directement, ou une visite à réserver en ligne.
 
-[✉️ Nous écrire](mailto:contact@genie-montauban.fr?subject=Je%20d%C3%A9couvre%20le%20G%C3%A9nie&body=Bonjour%2C%0A%0AJ'ai%20lu%20votre%20article%20sur%20le%20tiers-lieu%20et%20j'aimerais%20en%20savoir%20plus%20sur%20%3A%0A%0A)
-[📅 Réserver une visite](reservation.html)
-[📞 06 51 50 97 18](tel:+33651509718)
+[Nous écrire](mailto:contact@genie-montauban.fr?subject=Je%20d%C3%A9couvre%20le%20G%C3%A9nie&body=Bonjour%2C%0A%0AJ'ai%20lu%20votre%20article%20sur%20le%20tiers-lieu%20et%20j'aimerais%20en%20savoir%20plus%20sur%20%3A%0A%0A)
+ [Réserver une visite](https://calendly.com/samir-chikhi)
+ [06 51 50 97 18](tel:+33651509718)
 
 Vous préférez un formulaire complet ? [Page Contact du Génie →](index.html#contact)
 
