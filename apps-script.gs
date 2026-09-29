@@ -909,10 +909,10 @@ function creerReservation(data) {
     const tarifNegocie   = tarifHoraireNegocie(email, cleEspace(data.espace), data.date, ss);
     const montantServeur = calculerMontantServeur(data.espace, nbH, profilFacture, tarifNegocie);
     const montantClient  = parseFloat(data.montantEstime) || 0;
-    // Options facturées côté client : badge 25 €, adhésion 50 €
+    // Options facturées côté client : badge 5 €/mois, adhésion 50 €
     let montantOptions = 0;
     const opts = String(data.options || '');
-    if (opts.indexOf('Badge') !== -1)    montantOptions += 25;
+    if (opts.indexOf('Badge') !== -1)    montantOptions += 5;
     if (opts.indexOf('Adhésion') !== -1) montantOptions += 50;
     const montantAttendu = montantServeur === null ? null : montantServeur + montantOptions;
     const ecart = montantAttendu === null ? 0 : Math.abs(montantClient - montantAttendu);

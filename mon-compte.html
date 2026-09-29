@@ -287,7 +287,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--fond);color:var(--texte);
         <div class="card" id="card-creneaux" style="display:none">
           <div class="card-title">3️⃣ Horaire et durée</div>
           <div class="info-box blue" id="info-nuit" style="display:none">
-            <span>🌙</span><span>Créneau hors horaires (avant 8h ou après 20h). Badge 24h/7j requis (+25€/mois).</span>
+            <span>🌙</span><span>Créneau hors horaires (avant 8h ou après 20h). Badge 24h/7j requis (+5€/mois).</span>
           </div>
           <div id="creneaux-grid" class="creneaux-grid"></div>
           <div style="margin-top:12px">
@@ -650,7 +650,7 @@ function majRecap() {
 
   const profil = CLIENT?.profilTarifaire || 'plein';
   const tarif = S.espace && TARIFS[S.espace] ? (TARIFS[S.espace][profil] || TARIFS[S.espace].plein) : 0;
-  const badge = document.getElementById('opt-badge')?.checked ? 25 : 0;
+  const badge = document.getElementById('opt-badge')?.checked ? 5 : 0;
   const total = Math.round(tarif * S.duree + badge);
   document.getElementById('r-total').textContent = total + ' €';
 
@@ -676,7 +676,7 @@ async function soumettre() {
   const equips = [...document.querySelectorAll('#card-options input[type=checkbox]:not(#opt-badge):checked')].map(c => c.closest('label').textContent.trim()).join(', ');
   const profil = CLIENT?.profilTarifaire || 'plein';
   const tarif = S.espace && TARIFS[S.espace] ? (TARIFS[S.espace][profil] || TARIFS[S.espace].plein) : 0;
-  const badge = document.getElementById('opt-badge')?.checked ? 25 : 0;
+  const badge = document.getElementById('opt-badge')?.checked ? 5 : 0;
 
   const payload = {
     action: 'RESERVER',

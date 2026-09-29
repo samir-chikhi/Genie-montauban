@@ -796,7 +796,7 @@ function getPrix() {
 function updateRecap() {
   const esp   = espaceId ? ESPACES.find(e => e.id === espaceId) : null;
   const prix  = getPrix();
-  const badge = document.getElementById('fBadge')?.checked ? 25 : 0;
+  const badge = document.getElementById('fBadge')?.checked ? 5 : 0;
   const adhes = document.getElementById('fAdhesion')?.checked ? 50 : 0;
   const total = prix + badge + adhes;
   const isAsso = profil === 'asso';
@@ -931,7 +931,7 @@ async function envoyerReservation() {
   const prix   = getPrix();
   const badge  = document.getElementById('fBadge').checked;
   const adhes  = document.getElementById('fAdhesion').checked;
-  const total  = prix + (badge?25:0) + (adhes?50:0);
+  const total  = prix + (badge?5:0) + (adhes?50:0);
   const ref    = 'GEN-' + Date.now().toString(36).toUpperCase();
   const now    = new Date().toISOString();
   // Deux champs distincts : plus de decoupage au premier espace, qui
