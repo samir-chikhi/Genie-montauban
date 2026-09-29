@@ -700,10 +700,10 @@ const ESPACES_DEF = {
   // technique mais ne doivent plus être proposées en pratique.
   // Tarifs demi/journée proposés par Samir — quelques mois de recul si besoin
   // d'ajustement, mécanisme non testé sur un vrai flux de réservation.
-  // 29/09/2026 : Louise Michel se réserve à l'heure, 10 €/h pour tous les
-  // profils (asso gratuit sous conditions). Les baux restent sur devis.
+  // 29/09/2026 : Louise Michel se réserve comme une salle, même grille que
+  // Célestin Freinet. Les baux restent sur devis.
   michel    : { nom:'Louise Michel',         ref:'0-01',  type:'reunion', capacite:4,   icon:'🚪',
-    tarifs_reunion:{ MUSIVA:{heure:10,demi:40,journee:80}, adherent:{heure:10,demi:40,journee:80}, locataire:{heure:10,demi:40,journee:80}, asso:{heure:0,demi:0,journee:0} } },
+    tarifs_reunion:{ MUSIVA:{heure:30,demi:100,journee:180}, adherent:{heure:20,demi:60,journee:100}, locataire:{heure:15,demi:45,journee:80}, asso:{heure:0,demi:0,journee:0} } },
   // Rousseau : le ponctuel (demi-journée / journée) est désormais vendu via
   // "L'Escale du Génie" (Stripe : 4€/h, 9€/demi-j, 15€/j, 140€/carnet 10j) —
   // voir DEPLOIEMENT-PHASE-2-STRIPE.md. Valeurs demi/journée alignées le
