@@ -153,6 +153,23 @@ t('la colonne interne « à améliorer » n\'est jamais renvoyée',
   JSON.stringify(avis.avis).indexOf('RIEN-INTERNE') === -1);
 t('aucun horodatage ni consentement dans la réponse',
   JSON.stringify(avis.avis).indexOf('2026-01-01') === -1);
+// Format réel du formulaire (29/09/2026) : colonne « Email Address » en B.
+const lignesFormulaire = [
+  ['Timestamp', 'Email Address', 'Note Globale', 'Services utilisés', 'Ce qui vous a satisfait',
+   'Ce que nous pourrions améliorer', 'Recommanderiez-vous le Génie ?', 'Prénom', "Consentement d'affichage", 'Approuvé'],
+  ['2026-05-06', 'anais@example.org', 5, 'Coworking', 'Bureau propre', 'RIEN-INTERNE', 'Oui, sans hésiter', 'anais', "Je consens", 'Oui'],
+  ['2026-05-06', 'x@example.org',     5, 'Salle',     'Bien',          'RIEN-INTERNE', 'Oui',               'Paul',  '',            'Oui'],
+];
+sandbox.SpreadsheetApp.openById = () => ({
+  getSheetByName: nom => nom === 'Avis_Qualite'
+    ? { getDataRange: () => ({ getValues: () => lignesFormulaire }) } : null,
+});
+delete cache['avis_publics'];
+const avis2 = sandbox.getAvis();
+t('les colonnes sont retrouvées par leur titre (colonne Email insérée)',
+  avis2.success === true && avis2.avis.length === 1 && avis2.avis[0].note === 5 && avis2.avis[0].temoignage === 'Bureau propre');
+t('sans consentement, l\'avis n\'est pas publié', avis2.avis.every(a => a.prenom !== 'Paul'));
+t('l\'email de l\'auteur n\'est jamais renvoyé', JSON.stringify(avis2.avis).indexOf('@') === -1);
 sandbox.SpreadsheetApp.openById = ancienSS;
 
 console.log('\n--- Liens magiques ---');

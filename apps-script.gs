@@ -1074,23 +1074,37 @@ function getAvis() {
     var sheet = ss.getSheetByName('Avis_Qualite');
     if (!sheet) return { success: true, avis: [] };
     var rows = sheet.getDataRange().getValues();
-    // Colonnes du formulaire : A=0 Horodatage, B=1 Note, C=2 Services,
-    // D=3 Ce qui a plu, E=4 À améliorer (INTERNE), F=5 Recommande,
-    // G=6 Prénom, H=7 Consentement, I=8 Approuvé.
+    // Colonnes repérées par leur TITRE : le formulaire Google a déjà inséré
+    // une colonne « Email Address » en B, ce qui décalait tout et vidait les
+    // avis (constaté le 29/09/2026). Repli sur l'ancien ordre si un titre
+    // manque : Horodatage, Note, Services, Ce qui a plu, À améliorer
+    // (INTERNE), Recommande, Prénom, Consentement, Approuvé.
+    var titres = (rows[0] || []).map(function(t) {
+      return String(t || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+    });
+    var col = function(motCle, defaut) {
+      for (var k = 0; k < titres.length; k++) if (titres[k].indexOf(motCle) !== -1) return k;
+      return defaut;
+    };
+    var cNote = col('note', 1), cServ = col('service', 2), cTexte = col('satisf', 3),
+        cReco = col('recommand', 5), cPrenom = col('prenom', 6),
+        cConsent = col('consentement', 7), cOk = col('approuv', 8);
     var avis = [];
     for (var i = 1; i < rows.length; i++) {
       var r = rows[i];
-      if (String(r[8] || '').toLowerCase().trim() !== 'oui') continue;
-      var note = parseInt(r[1], 10) || 0;
+      if (String(r[cOk] || '').toLowerCase().trim() !== 'oui') continue;
+      if (!String(r[cConsent] || '').trim()) continue;   // pas de consentement, pas de publication
+      var note = parseInt(r[cNote], 10) || 0;
       if (note < 4) continue;
       // Un seul mot : si l'auteur a saisi « Prénom Nom », le nom ne sort pas.
-      var prenom = String(r[6] || '').trim().split(/\s+/)[0] || 'Anonyme';
+      var prenom = String(r[cPrenom] || '').trim().split(/\s+/)[0] || 'Anonyme';
+      prenom = prenom.charAt(0).toUpperCase() + prenom.slice(1);
       avis.push({
         prenom:     prenom,
         note:       note,
-        services:   String(r[2] || '').trim(),
-        temoignage: String(r[3] || '').trim(),
-        recommande: String(r[5] || '').trim()
+        services:   String(r[cServ] || '').trim(),
+        temoignage: String(r[cTexte] || '').trim(),
+        recommande: String(r[cReco] || '').trim()
       });
     }
     var reponse = { success: true, avis: avis };
