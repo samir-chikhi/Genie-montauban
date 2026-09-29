@@ -237,3 +237,14 @@ p { margin: 0 0 1em; }
 .etapes.col .etape::before { position: absolute; margin: 0; }
 .tag { display: inline-block; font-size: .76rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--brique); margin: 0 12px 10px 0; }
 .tag-ok { color: #2F6B57; }
+
+/* Avis clients (accueil) */
+.avis { margin: 0; background: var(--pierre); border-radius: 50% 50% 12px 12px / 30px 30px 12px 12px; padding: 34px 24px 24px; display: flex; flex-direction: column; }
+.avis blockquote { margin: 14px 0 18px; font: 600 1.12rem/1.45 var(--display); letter-spacing: -.01em; color: var(--encre); }
+.avis blockquote::before { content: "« "; color: var(--brique); }
+.avis blockquote::after { content: " »"; color: var(--brique); }
+.avis figcaption { margin-top: auto; font-size: .9rem; color: var(--gris); }
+.avis figcaption b { color: var(--encre); }
+.avis-note { display: flex; gap: 5px; }
+.avis-note i { width: 12px; height: 12px; border-radius: 50% 50% 2px 2px / 6px 6px 2px 2px; background: var(--or); }
+.avis-note i.vide { background: var(--filet); }

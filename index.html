@@ -232,6 +232,30 @@
   </div>
 </section>
 
+<section class="sec" id="avis" hidden>
+  <div class="wrap">
+    <div class="portes-titre"><div><p class="kicker">Ils sont venus</p><h2 style="margin:0">Ce qu'ils en disent</h2></div><a class="lien" href="https://forms.gle/9qtVCMTJbaiJSQVw7" target="_blank" rel="noopener">Donner mon avis <svg class="ico"><use href="#g-i-fleche"/></svg></a></div>
+    <div class="grid grid-3" id="avis-liste"></div>
+  </div>
+</section>
+<script>
+(function () {
+  // Avis approuvés, servis par l'API (jamais de lecture directe du classeur).
+  var URL_AVIS = "https://script.google.com/macros/s/AKfycbyJ-Dk-yZZNdfxFigchP953rNyjSLJv4oOVUbxzuAbX4kuBfwTFBJvnnLuJMLWRnd9c4w/exec?action=GET_AVIS";
+  var esc = function (t) { var d = document.createElement("div"); d.textContent = t; return d.innerHTML; };
+  fetch(URL_AVIS).then(function (r) { return r.json(); }).then(function (d) {
+    var liste = (d && d.avis || []).filter(function (a) { return a.temoignage && a.temoignage.length > 12; });
+    if (!liste.length) return;
+    liste.sort(function (a, b) { return b.temoignage.length - a.temoignage.length; });
+    document.getElementById("avis-liste").innerHTML = liste.slice(0, 3).map(function (a) {
+      return "<figure class=\"avis\"><div class=\"avis-note\" aria-label=\"" + a.note + " sur 5\">" + "<i></i>".repeat(a.note) + "<i class=\"vide\"></i>".repeat(5 - a.note) + "</div>" +
+        "<blockquote>" + esc(a.temoignage) + "</blockquote><figcaption><b>" + esc(a.prenom) + "</b>" + (a.services ? " · " + esc(a.services) : "") + "</figcaption></figure>";
+    }).join("");
+    document.getElementById("avis").hidden = false;
+  }).catch(function () {});
+})();
+</script>
+
 <section class="sec">
   <div class="wrap grid grid-2" style="gap:48px">
     <div>
