@@ -150,7 +150,7 @@ function stripeWebhook(evt, params) {
         'l\'espace ouvert, servez-vous un thé, installez-vous.\n\n' +
         'Première venue ? Pensez à régler l\'adhésion à l\'association\n' +
         '(elle couvre l\'assurance, se prend une fois pour l\'année) :\n' +
-        CONFIG.URL_SITE + '/index.html#rejoindre\n\n' +
+        CONFIG.URL_SITE + '/adherer.html\n\n' +
         'Annulation possible jusqu\'à 48 h avant → avoir valable un an.\n' +
         'Une question ? ' + CONFIG.TEL + '\n\n' +
         CONFIG.NOM_LIEU + ' · ' + CONFIG.ADRESSE);

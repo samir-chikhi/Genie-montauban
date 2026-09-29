@@ -41,7 +41,7 @@ const sandbox = {
   console,
 };
 vm.createContext(sandbox);
-vm.runInContext(fs.readFileSync('/home/user/Genie-montauban/apps-script.gs', 'utf8'), sandbox);
+vm.runInContext(fs.readFileSync(require('path').join(__dirname, '..', 'apps-script.gs'), 'utf8'), sandbox);
 
 let ko = 0;
 const t = (nom, condition) => {
@@ -125,7 +125,7 @@ r = sandbox.adminLogin({ password: 'mauvais' });
 t('connexion admin refusée avec un mauvais mot de passe', r.success === false);
 t('le hash admin ne descend plus dans le classeur',
   !/getSheetByName\('Config'\)[\s\S]{0,400}ADMIN_PASSWORD_HASH',\s*hash/.test(
-    fs.readFileSync('/home/user/Genie-montauban/apps-script.gs', 'utf8')));
+    fs.readFileSync(require('path').join(__dirname, '..', 'apps-script.gs'), 'utf8')));
 
 for (let i = 0; i < 10; i++) sandbox.adminLogin({ password: 'x' });
 r = sandbox.adminLogin({ password: mdpTest });
@@ -158,23 +158,29 @@ sandbox.SpreadsheetApp.openById = ancienSS;
 console.log('\n--- Liens magiques ---');
 t('le jeton est stocké haché, jamais en clair',
   /appendRow\(\[hashSha256\(token\)/.test(
-    fs.readFileSync('/home/user/Genie-montauban/apps-script.gs', 'utf8')));
+    fs.readFileSync(require('path').join(__dirname, '..', 'apps-script.gs'), 'utf8')));
 
 console.log('\n--- Le classeur n\'est plus lu depuis le navigateur ---');
-const accueil = fs.readFileSync('/home/user/Genie-montauban/index.html', 'utf8');
+const accueil = fs.readFileSync(require('path').join(__dirname, '..', 'index.html'), 'utf8');
 t('la page d\'accueil ne contient plus l\'identifiant du classeur',
   accueil.indexOf('1mf3D2YGnpWpzufGOaLLaomxAkuzp0AiJY7RzcbpIq2w') === -1);
 t('la page d\'accueil ne construit plus d\'URL vers un classeur',
   accueil.indexOf('docs.google.com/spreadsheets') === -1);
 t('docs.google.com est retiré de la CSP de la page d\'accueil',
   accueil.split('\n')[5].indexOf('docs.google.com') === -1);
-const pageAdmin = fs.readFileSync('/home/user/Genie-montauban/admin.html', 'utf8');
+const pageAdmin = fs.readFileSync(require('path').join(__dirname, '..', 'admin.html'), 'utf8');
 t('admin.html ne contient plus l\'identifiant du classeur',
   pageAdmin.indexOf('1mf3D2YGnpWpzufGOaLLaomxAkuzp0AiJY7RzcbpIq2w') === -1);
 t('le mot de passe admin ne part plus dans l\'URL en temps normal',
   /method: 'POST'/.test(pageAdmin));
-const conf = fs.readFileSync('/home/user/Genie-montauban/.mcp.json', 'utf8');
+const conf = fs.readFileSync(require('path').join(__dirname, '..', '.mcp.json'), 'utf8');
 t('aucune clé API en clair dans .mcp.json', conf.indexOf('21st_sk_') === -1);
+
+console.log('\n--- Identifiants de salles ---');
+t('« olympe » (ancien identifiant) est reconnu comme la salle gouges', sandbox.cleEspace('olympe') === 'gouges');
+t('« Olympe de Gouges » est reconnu comme la salle gouges', sandbox.cleEspace('Olympe de Gouges') === 'gouges');
+t('« Antoine Bourdelle » reste reconnu', sandbox.cleEspace('Antoine Bourdelle') === 'bourdelle');
+t('un espace inconnu reste inconnu', sandbox.cleEspace('salle imaginaire') === null);
 
 console.log(`\n${ko === 0 ? 'TOUS LES TESTS PASSENT' : ko + ' TEST(S) EN ÉCHEC'}`);
 process.exit(ko === 0 ? 0 : 1);
