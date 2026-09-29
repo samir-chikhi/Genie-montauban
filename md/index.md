@@ -69,6 +69,12 @@ Génie est une association loi 1901 de l'économie sociale et solidaire. Ce que 
 
 [Le projet en deux minutes](le-projet.html)
 
+Ils sont venus
+
+## Ce qu'ils en disent
+
+[Donner mon avis](https://forms.gle/9qtVCMTJbaiJSQVw7)
+
 Agenda
 
 ## Les rendez-vous qui reviennent
