@@ -89,13 +89,41 @@ function cleEspace(nom) {
 // Clé espace d'une ligne de réservation. La colonne 6 (espace) porte le nom
 // réel de la salle ('Antoine Bourdelle') ; la colonne 7 peut contenir le type
 // ('salle'/'nomade'). On résout donc col6 en priorité, puis col7 en secours.
+// Tarif horaire negocie pour un client : feuille Locataires_Genie
+// (Email | Espace | Tarif horaire | Valable jusqu'au | Note). L'espace vide
+// vaut "tous". Ne s'applique que si la date RESERVEE est avant la fin de
+// validite (inclusive) ; ensuite le client retombe sur son profil habituel.
+function tarifHoraireNegocie(email, cle, dateResa, ss) {
+  try {
+    var sh = ss.getSheetByName('Locataires_Genie');
+    if (!sh || sh.getLastRow() < 2 || !email || !cle) return 0;
+    var mail = String(email).toLowerCase().trim();
+    var jour = String(dateResa || '').slice(0, 10);
+    var rows = sh.getDataRange().getValues();
+    for (var i = 1; i < rows.length; i++) {
+      if (String(rows[i][0]).toLowerCase().trim() !== mail) continue;
+      var esp = String(rows[i][1] || '').trim();
+      if (esp && cleEspace(esp) !== cle) continue;
+      var prix = parseFloat(String(rows[i][2]).replace(',', '.'));
+      if (!(prix > 0)) continue;
+      var fin = rows[i][3];
+      if (fin) {
+        var f = fin instanceof Date ? Utilities.formatDate(fin, 'Europe/Paris', 'yyyy-MM-dd') : String(fin).slice(0, 10);
+        if (jour && f < jour) continue;
+      }
+      return prix;
+    }
+  } catch (e) { logErreur('tarifHoraireNegocie', e); }
+  return 0;
+}
+
 function cleEspaceRow(row) {
   return cleEspace(row[6]) || cleEspace(row[7]);
 }
 
 // Meilleur prix serveur pour nbH heures (hors options badge/adhésion).
 // null si l'espace est inconnu de la grille.
-function calculerMontantServeur(espaceNom, nbH, profil) {
+function calculerMontantServeur(espaceNom, nbH, profil, tarifNegocie) {
   var cle = cleEspace(espaceNom);
   if (!cle) return null;
   var p = ['plein', 'adherent', 'locataire', 'asso'].indexOf(String(profil)) !== -1 ? profil : 'plein';
@@ -104,6 +132,8 @@ function calculerMontantServeur(espaceNom, nbH, profil) {
   if (t.heure !== undefined) candidats.push(t.heure * Math.ceil(nbH));
   if (t.demi !== undefined && nbH <= 4) candidats.push(t.demi);
   if (t.journee !== undefined && nbH <= 8) candidats.push(t.journee);
+  // Tarif horaire negocie (feuille Locataires_Genie) : jamais au-dessus de la grille.
+  if (tarifNegocie > 0) candidats.push(tarifNegocie * Math.ceil(nbH));
   if (!candidats.length) candidats.push(t.journee !== undefined ? t.journee : (t.demi || 0));
   return Math.min.apply(null, candidats);
 }
@@ -871,7 +901,8 @@ function creerReservation(data) {
     // d'annoncer "locataire" pour obtenir -50 %.
     const nbH = parseFloat(data.duree);
     const profilFacture  = profilServeur(email, ss);
-    const montantServeur = calculerMontantServeur(data.espace, nbH, profilFacture);
+    const tarifNegocie   = tarifHoraireNegocie(email, cleEspace(data.espace), data.date, ss);
+    const montantServeur = calculerMontantServeur(data.espace, nbH, profilFacture, tarifNegocie);
     const montantClient  = parseFloat(data.montantEstime) || 0;
     // Options facturées côté client : badge 25 €, adhésion 50 €
     let montantOptions = 0;
@@ -915,7 +946,7 @@ function creerReservation(data) {
       + '📋 Référence : ' + id + '\n📍 Espace : ' + data.espace + '\n'
       + '📅 Date : ' + formaterDate(data.date) + '\n'
       + '⏰ Horaire : ' + data.heureDebut + ' → ' + hFin + '\n'
-      + '💰 Estimation : ' + (data.montantEstime || '?') + ' €\n\n'
+      + '💰 Montant : ' + (montantAttendu !== null ? montantAttendu : (data.montantEstime || '?')) + ' €\n\n'
       + 'L\'équipe confirme sous 24h ouvrées.\n📞 ' + CONFIG.TEL
       + '\n\n' + CONFIG.NOM_LIEU + ' · ' + CONFIG.ADRESSE;
     envoyerEmailSafe(data.email, '⏳ Demande reçue — ' + data.espace + ' le ' + formaterDate(data.date), corps);
@@ -2529,6 +2560,7 @@ function setupComplet() {
   creerFeuille('Tokens',['Token','Email','Date création','Expiration','Utilisé'],'#2D3748');
   creerFeuille('Reservations',['id','prenom','nom','email','tel','orga','espace','nomEspace','usage','profil','date','typeDuree','nbHeures','heureDebut','heureFin','montant','montantBase','options','statut','participants','objet','createdAt','updatedAt','calendarEventId'],'#1E4A6E');
   creerFeuille('Adhesions',['ID','Statut','Date demande',"Type d'adhésion",'Montant (€)','Mode paiement','Prénom','Nom / Structure','Email','Téléphone','Adresse','Notes'],'#27AE60');
+  creerFeuille('Locataires_Genie',['Email','Espace','Tarif horaire (€)',"Valable jusqu'au",'Note'],'#8E44AD');
   creerFeuille('Logs',['Timestamp','Contexte','Erreur','Stack'],'#C0392B');
   var cfg = ss.getSheetByName('Config');
   if (!cfg) {
