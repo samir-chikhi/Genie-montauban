@@ -150,12 +150,14 @@ Bureau 0-01 · Rez-de-chaussée
 
 Louise Michel
 
-- À l'heure10 €/h
+- 1 heure30 €
+- ½ journée100 €
+- Journée180 €
 - Bail mensuel270 €/mois
 - Bail 1 an255 €/mois
 - Bail 3/6/9225 €/mois
 
-Baux hors charges : plus l'engagement est long, plus le loyer baisse. [Nous contacter pour un bail](mailto:contact@genie-montauban.fr?subject=Location bureau Louise Michel).
+Tarif plein. Adhérent dès 20 €/h · Locataire dès 15 €/h. Baux mensuels hors charges : plus l'engagement est long, plus le loyer baisse. [Nous contacter pour un bail](mailto:contact@genie-montauban.fr?subject=Location bureau Louise Michel).
 
 [Réserver à l'heure →](reservation.html?espace=michel)
 

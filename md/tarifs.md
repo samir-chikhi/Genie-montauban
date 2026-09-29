@@ -52,7 +52,7 @@ Non-adhérent · tarif standard
 | Olympe de Gouges (1-12)Salle de réunion · 20 pers. | À l'heure | 30 € | 20 € | 15 € | Gratuit\* |
 | Demi-journée (4h) | 100 € | 60 € | 45 € | Gratuit\* |
 | Journée (8h) | 180 € | 100 € | 80 € | Gratuit\* |
-| Louise Michel (0-01)Bureau privatif · 15 m² | À l'heure | 10 € | 10 € | 10 € | Gratuit\* |
+| Louise Michel (0-01)Bureau privatif · 15 m² | À l'heure | 30 € | 20 € | 15 € | Gratuit\* |
 | Maria Montessori (−1-14)PMR ♿ · 4 pers. | À l'heure | 20 € | 15 € | 10 € | Gratuit\* |
 | Demi-journée (4h) | 60 € | 45 € | 30 € | Gratuit\* |
 | Journée (8h) | 100 € | 80 € | 70 € | Gratuit\* |
