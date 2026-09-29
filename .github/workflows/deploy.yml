@@ -41,6 +41,9 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Propager le menu et le pied de page communs (_partials/)
+        run: node tools/sync-partials.js
+
       - name: Régénérer les fichiers SEO (sitemap, llms.txt, miroirs md)
         run: |
           pip install --quiet beautifulsoup4 markdownify
@@ -53,7 +56,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add sitemap.xml llms.txt md/
+          git add sitemap.xml llms.txt md/ *.html
           if ! git diff --cached --quiet; then
             git commit -m "chore(seo): régénération automatique (sitemap, llms.txt, miroirs md)"
             git push
@@ -74,10 +77,33 @@ jobs:
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
+      # Avant : tout le dépôt était publié (path: '.'), y compris le budget,
+      # les notes internes, le code Apps Script, les archives… N'importe qui
+      # pouvait les télécharger sur genie-montauban.fr. On ne publie plus
+      # que ce qui est listé ici. Nouvelle page ou nouveau dossier public ?
+      # L'ajouter à cette liste.
+      - name: Préparer le dossier publié (fichiers publics uniquement)
+        run: |
+          mkdir -p _site
+          cp *.html CNAME robots.txt sitemap.xml llms.txt favicon.png logo.png og-image.jpg \
+             responsive-fixes.css Fiche_Adhesion_GENIE_2026.pdf _site/
+          cp *.jpg _site/ 2>/dev/null || true
+          cp "qr code avis google - génie.png" _site/ 2>/dev/null || true
+          cp -r assets md _site/
+          # Documents liés depuis les pages (statuts, PV, grille, règlement…)
+          # Volontairement EXCLUS : 04_Perspectives_Strategie (budget),
+          # 00_Synthese_Reunion, 06_Archives/Audit*, contrats .docx internes.
+          mkdir -p _site/00_Preambule_Documents_Constitutifs _site/03_Site_Web_Tarifs _site/06_Archives
+          cp 00_Preambule_Documents_Constitutifs/*.pdf _site/00_Preambule_Documents_Constitutifs/
+          cp 03_Site_Web_Tarifs/*.pdf _site/03_Site_Web_Tarifs/
+          cp 06_Archives/Savoir_vivre_au_Genie.pdf _site/06_Archives/
+          touch _site/.nojekyll
+          echo "Fichiers publiés : $(find _site -type f | wc -l)"
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
+          path: '_site'
 
       - name: Deploy to GitHub Pages
         id: deployment

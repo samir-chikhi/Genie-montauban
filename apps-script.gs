@@ -83,6 +83,11 @@ function cleEspace(nom) {
   for (var i = 0; i < cles.length; i++) {
     if (s.indexOf(cles[i]) !== -1) return cles[i];
   }
+  // Anciennes lignes saisies avec l'identifiant « olympe » (au lieu de
+  // « gouges ») : sans cet alias, elles n'étaient comptées ni dans les
+  // disponibilités ni dans la détection de chevauchement → double réservation
+  // possible de la salle Olympe de Gouges (constaté le 29/09/2026).
+  if (s.indexOf('olympe') !== -1) return 'gouges';
   return null;
 }
 
@@ -1027,7 +1032,9 @@ function getDisponibilites(params) {
       // Nouveau schéma : statut col18, espace col6, date col10, hdebut col13, hfin col14
       const statut = String(row[18] || '');
       if (statut === 'ANNULE' || statut === 'cancelled') continue;
-      const esp = String(row[6] || '');
+      // Clé normalisée ('Olympe de Gouges', 'olympe' → 'gouges') : c'est la
+      // clé qu'attend reservation.html, et la même que compterChevauchements.
+      const esp = cleEspaceRow(row) || String(row[6] || '');
       const dat = dateISO(row[10]);  // robuste (cellule Date ou texte)
       if (espace && esp !== espace) continue;
       if (dat < dateDebut || dat > dateFin) continue;
@@ -1149,6 +1156,28 @@ function creerAdhesion(data) {
 // ============================================================
 // CONTACT — identique v4.2
 // ============================================================
+// Refonte 2026 : chaque formulaire du site (bureau privé, salle-devis,
+// accompagnement, quartier, activité association, contact) passe par
+// CONTACT avec un objet « [Type] Nom — résumé ». En plus du mail, on garde
+// une ligne dans l'onglet « Demandes » : une vue unique de ce qui arrive et
+// de ce qui a été traité (colonne Statut à tenir à la main). Best-effort :
+// un échec d'écriture ne bloque jamais l'envoi du mail.
+function journaliserDemande(data) {
+  try {
+    var ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+    var sh = ss.getSheetByName('Demandes');
+    if (!sh) {
+      sh = ss.insertSheet('Demandes');
+      sh.appendRow(['Date', 'Type', 'Nom', 'Email', 'Objet', 'Message', 'Statut', 'Suivi']);
+      sh.setFrozenRows(1);
+    }
+    var m = String(data.sujet || '').match(/^\[([^\]]+)\]/);
+    sh.appendRow([new Date(), m ? m[1] : 'Contact',
+      sanit((data.prenom || '') + ' ' + (data.nom || '')), sanit(data.email),
+      sanit(data.sujet), sanit(String(data.message || '').slice(0, 5000)), 'NOUVEAU', '']);
+  } catch (e) { logErreur('journaliserDemande', e); }
+}
+
 function traiterContact(data) {
   if (!data.email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(data.email))
     return { success: false, error: 'EMAIL_INVALIDE' };
@@ -1160,6 +1189,7 @@ function traiterContact(data) {
       'De : ' + (data.prenom || '') + ' ' + (data.nom || '') + ' <' + data.email + '>\n' +
       'Sujet : ' + (data.sujet || '') + '\n\n' + data.message,
       { replyTo: data.email });
+    journaliserDemande(data);
     return { success: true };
   } catch (err) {
     logErreur('traiterContact', err);
