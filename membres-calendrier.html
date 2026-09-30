@@ -45,7 +45,7 @@
     </div>
     <button class="gm-btn gm-btn-primary" id="gm-btn-send" style="width:100%;justify-content:center">Recevoir mon lien de connexion</button>
     <div class="gm-alert" id="gm-alert"></div>
-    <p style="font-size:12px;color:var(--muted);margin-top:16px">Pas encore invité·e ? Écrivez à l'équipe du Génie — <a href="mailto:contact@genie-montauban.fr">contact@genie-montauban.fr</a>.</p>
+    <p style="font-size:12px;color:var(--muted);margin-top:16px">Pas encore d'accès ? <a href="mailto:contact@genie-montauban.fr?subject=Acc%C3%A8s%20%C3%A0%20l%27espace%20membres&amp;body=Bonjour%2C%0A%0AJe%20souhaite%20acc%C3%A9der%20%C3%A0%20l%27espace%20membres%20du%20G%C3%A9nie.%0APr%C3%A9nom%20et%20nom%20%3A%20%0AE-mail%20%C3%A0%20inviter%20%3A%20%0A%0AMerci%20!">Demander un accès en un clic</a> : l'équipe vous ajoute, puis vous revenez ici saisir votre e-mail.</p>
   </div>
 </div>
 
@@ -53,7 +53,8 @@
   <div class="gm-shell">
     <span class="gm-eyebrow">Coin cuisine</span>
     <h1 class="gm-h1">Qui mange au Génie ?</h1>
-    <p class="gm-lede">Cliquez sur un jour pour indiquer que vous mangez au Génie (avec un petit mot si besoin : "je cuisine", "je commande", "je viens avec 2 collègues"…).</p>
+    <p class="gm-lede">Cliquez sur un jour pour voir qui mange au Génie et vous inscrire, avec un petit mot si besoin : « je cuisine », « je commande », « je viens avec 2 collègues »…</p>
+    <div class="gm-alert" id="gm-cal-alert"></div>
 
     <div class="gm-grid-2">
       <div class="gm-card">
@@ -66,11 +67,29 @@
         <div class="gm-cal-grid" id="gm-cal-grid" style="margin-top:6px"></div>
       </div>
       <div class="gm-card">
-        <div class="gm-card-title">🍽️ Cette semaine</div>
+        <div class="gm-card-title">🍽️ Les 7 prochains jours</div>
         <ul class="gm-recap-list" id="gm-week-recap"><li class="gm-empty" style="border:none">Chargement…</li></ul>
       </div>
     </div>
   </div>
+
+  <dialog class="gm-dialog" id="gm-day-dialog" aria-labelledby="gm-day-title">
+    <form method="dialog" class="gm-dialog-close-form"><button class="gm-dialog-x" aria-label="Fermer">×</button></form>
+    <h3 id="gm-day-title"></h3>
+    <ul class="gm-day-list" id="gm-day-list"></ul>
+    <div id="gm-day-form">
+      <div class="gm-field">
+        <label for="gm-day-comment">Mon petit mot (facultatif)</label>
+        <input class="gm-input" type="text" id="gm-day-comment" maxlength="200" placeholder="je cuisine, je commande, je viens avec 2 collègues…">
+      </div>
+      <div class="gm-dialog-actions">
+        <button class="gm-btn gm-btn-primary" id="gm-day-save"></button>
+        <button class="gm-btn gm-btn-ghost" id="gm-day-remove" style="display:none">Je ne mange plus ici</button>
+      </div>
+    </div>
+    <p class="gm-empty" id="gm-day-past" style="display:none;border:none;padding:0">Ce jour est passé : inscription fermée.</p>
+    <div class="gm-alert" id="gm-day-alert"></div>
+  </dialog>
 
   <footer>
     <div class="footer-grid">
@@ -115,25 +134,49 @@ if (window.GenieAuth.notConfigured) {
     if (!email) return;
     const err = await window.GenieAuth.sendMagicLink(email);
     alertEl.classList.remove('ok', 'err');
-    if (err) { alertEl.textContent = "Cette adresse n'est pas encore invitée. Contactez l'équipe du Génie."; alertEl.classList.add('show', 'err'); }
+    if (err) { alertEl.textContent = (err.status === 429 || /rate limit/i.test(err.message || '')) ? "Trop de liens envoyés récemment. Réessayez dans une heure, ou utilisez le dernier lien reçu par e-mail." : "Cette adresse n'est pas encore invitée. Demandez un accès avec le lien ci-dessous."; alertEl.classList.add('show', 'err'); }
     else { alertEl.textContent = "Lien envoyé ! Vérifiez votre boîte mail (et les spams)."; alertEl.classList.add('show', 'ok'); }
   });
   document.getElementById('gm-btn-out').addEventListener('click', () => window.GenieAuth.signOut());
 
-  let currentUser = null, currentName = '', viewDate = new Date(), mealsByDate = {};
+  const U = window.GenieUtils;
+  const iso = U.isoLocal; // date locale (et non UTC, qui décalait les inscriptions d'un jour)
+  const now = new Date();
+  // Toujours le 1er du mois : setMonth() sur un 31 sautait un mois.
+  let currentUser = null, currentName = '', viewDate = new Date(now.getFullYear(), now.getMonth(), 1), mealsByDate = {}, openDate = null;
   const DOW = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
 
-  function iso(d) { return d.toISOString().slice(0, 10); }
+  function showAlert(el, msg, ok) {
+    el.textContent = msg;
+    el.classList.remove('ok', 'err');
+    el.classList.toggle('show', !!msg);
+    if (msg) el.classList.add(ok ? 'ok' : 'err');
+  }
+  function todayIso() { return iso(new Date()); }
 
+  // Charge le mois affiché ET les 7 prochains jours (qui peuvent déborder sur le mois suivant).
   async function loadMonth() {
     const db = window.genieDb;
     const first = new Date(viewDate.getFullYear(), viewDate.getMonth(), 1);
     const last = new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 0);
-    const { data } = await db.from('meals').select('*').gte('meal_date', iso(first)).lte('meal_date', iso(last));
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const in6 = new Date(today); in6.setDate(in6.getDate() + 6);
+    const from = iso(first) < iso(today) ? iso(first) : iso(today);
+    const to = iso(last) > iso(in6) ? iso(last) : iso(in6);
+    const { data, error } = await db.from('meals').select('*').gte('meal_date', from).lte('meal_date', to).order('created_at');
+    if (error) {
+      showAlert(document.getElementById('gm-cal-alert'), 'Impossible de charger le calendrier (' + error.message + '). Rechargez la page ; si ça persiste, déconnectez-vous puis reconnectez-vous.');
+      return;
+    }
+    showAlert(document.getElementById('gm-cal-alert'), '');
     mealsByDate = {};
     (data || []).forEach(m => { (mealsByDate[m.meal_date] ||= []).push(m); });
     renderCalendar();
     renderWeek();
+  }
+
+  function commentHtml(e) {
+    return e.comment ? ` <em class="gm-meal-comment">« ${U.escapeHtml(e.comment)} »</em>` : '';
   }
 
   function renderCalendar() {
@@ -144,43 +187,102 @@ if (window.GenieAuth.notConfigured) {
     const first = new Date(viewDate.getFullYear(), viewDate.getMonth(), 1);
     const startOffset = (first.getDay() + 6) % 7; // lundi = 0
     const daysInMonth = new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 0).getDate();
-    const todayIso = iso(new Date());
+    const tIso = todayIso();
 
     let cells = '';
     for (let i = 0; i < startOffset; i++) cells += '<div class="gm-cal-day empty"></div>';
     for (let d = 1; d <= daysInMonth; d++) {
-      const dateObj = new Date(viewDate.getFullYear(), viewDate.getMonth(), d);
-      const dateIso = iso(dateObj);
+      const dateIso = iso(new Date(viewDate.getFullYear(), viewDate.getMonth(), d));
       const entries = mealsByDate[dateIso] || [];
       const mine = currentUser && entries.some(e => e.user_id === currentUser.id);
-      const isToday = dateIso === todayIso;
-      const avatars = entries.slice(0, 6).map(e => `<span class="gm-cal-avatar" title="${window.GenieUtils.escapeHtml(e.user_name)}${e.comment ? ' — ' + window.GenieUtils.escapeHtml(e.comment) : ''}">${(e.user_name || '?').slice(0, 1).toUpperCase()}</span>`).join('');
-      cells += `<div class="gm-cal-day${mine ? ' mine' : ''}${isToday ? ' today' : ''}" data-date="${dateIso}">
-        <div class="gm-cal-daynum">${d}</div>
-        <div class="gm-cal-avatars">${avatars}</div>
-      </div>`;
+      const avatars = entries.slice(0, 5).map(e => `<span class="gm-cal-avatar" title="${U.escapeHtml(e.user_name)}">${U.escapeHtml((e.user_name || '?').slice(0, 1).toUpperCase())}</span>`).join('')
+        + (entries.length > 5 ? `<span class="gm-cal-more">+${entries.length - 5}</span>` : '');
+      const label = `${U.formatDayShort(dateIso)} : ${entries.length ? entries.length + ' inscrit·e(s)' : 'personne'}${mine ? ', dont vous' : ''}`;
+      cells += `<button type="button" class="gm-cal-day${mine ? ' mine' : ''}${dateIso === tIso ? ' today' : ''}${dateIso < tIso ? ' past' : ''}" data-date="${dateIso}" aria-label="${label}">
+        <span class="gm-cal-daynum">${d}</span>
+        <span class="gm-cal-avatars">${avatars}</span>
+      </button>`;
     }
     document.getElementById('gm-cal-grid').innerHTML = cells;
     document.querySelectorAll('.gm-cal-day[data-date]').forEach(cell => {
-      cell.addEventListener('click', () => toggleDay(cell.dataset.date));
+      cell.addEventListener('click', () => openDay(cell.dataset.date));
     });
   }
 
-  async function toggleDay(dateIso) {
-    const db = window.genieDb;
-    const entries = mealsByDate[dateIso] || [];
-    const mine = entries.find(e => e.user_id === currentUser.id);
-    if (mine) {
-      await db.from('meals').delete().eq('id', mine.id);
-    } else {
-      const comment = window.prompt('Un petit mot pour ce repas (facultatif) : "je cuisine", "je commande"…', '') || null;
-      await db.from('meals').insert({ user_id: currentUser.id, user_name: currentName, meal_date: dateIso, comment });
-    }
-    await loadMonth();
+  // Fenêtre d'un jour : qui mange (avec les petits mots), et mon inscription.
+  // Remplace l'ancien window.prompt() : il était bloqué par certains navigateurs
+  // mobiles, et recliquer sur un jour déjà coché supprimait l'inscription.
+  const dlg = document.getElementById('gm-day-dialog');
+  function openDay(dateIso) {
+    openDate = dateIso;
+    showAlert(document.getElementById('gm-day-alert'), '');
+    renderDay();
+    const input = document.getElementById('gm-day-comment');
+    const mine = (mealsByDate[dateIso] || []).find(e => e.user_id === currentUser.id);
+    input.value = mine && mine.comment ? mine.comment : '';
+    if (typeof dlg.showModal === 'function') dlg.showModal(); else dlg.setAttribute('open', '');
+    if (dateIso >= todayIso()) input.focus();
   }
 
+  function renderDay() {
+    const entries = mealsByDate[openDate] || [];
+    const mine = entries.find(e => e.user_id === currentUser.id);
+    const past = openDate < todayIso();
+    document.getElementById('gm-day-title').textContent = new Date(openDate + 'T00:00:00').toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
+    document.getElementById('gm-day-list').innerHTML = entries.length
+      ? entries.map(e => `<li><strong>${U.escapeHtml(e.user_name)}</strong>${commentHtml(e)}</li>`).join('')
+      : '<li class="gm-empty" style="border:none;padding:0">Personne d\'inscrit pour l\'instant.</li>';
+    document.getElementById('gm-day-form').style.display = past ? 'none' : '';
+    document.getElementById('gm-day-past').style.display = past ? '' : 'none';
+    document.getElementById('gm-day-save').textContent = mine ? 'Enregistrer mon mot' : 'Je mange au Génie ce jour-là';
+    document.getElementById('gm-day-remove').style.display = mine ? '' : 'none';
+  }
+
+  function busy(on) {
+    document.getElementById('gm-day-save').disabled = on;
+    document.getElementById('gm-day-remove').disabled = on;
+  }
+
+  async function saveDay() {
+    const db = window.genieDb;
+    const alertEl = document.getElementById('gm-day-alert');
+    const comment = document.getElementById('gm-day-comment').value.trim() || null;
+    const mine = (mealsByDate[openDate] || []).find(e => e.user_id === currentUser.id);
+    busy(true);
+    // Pas de droit « modifier » dans la base : pour changer son mot, on remplace l'inscription.
+    if (mine) {
+      const { error } = await db.from('meals').delete().eq('id', mine.id);
+      if (error) { busy(false); return showAlert(alertEl, 'Échec de l\'enregistrement : ' + error.message); }
+    }
+    const { error } = await db.from('meals').insert({ user_id: currentUser.id, user_name: currentName, meal_date: openDate, comment });
+    busy(false);
+    await loadMonth();
+    renderDay();
+    if (error) return showAlert(alertEl, 'Échec de l\'enregistrement : ' + error.message);
+    showAlert(alertEl, mine ? 'Votre mot est enregistré.' : 'C\'est noté, bon appétit !', true);
+  }
+
+  async function removeDay() {
+    const db = window.genieDb;
+    const alertEl = document.getElementById('gm-day-alert');
+    const mine = (mealsByDate[openDate] || []).find(e => e.user_id === currentUser.id);
+    if (!mine) return;
+    busy(true);
+    const { error } = await db.from('meals').delete().eq('id', mine.id);
+    busy(false);
+    await loadMonth();
+    renderDay();
+    if (error) return showAlert(alertEl, 'Échec de la désinscription : ' + error.message);
+    document.getElementById('gm-day-comment').value = '';
+    showAlert(alertEl, 'Désinscription faite.', true);
+  }
+
+  document.getElementById('gm-day-save').addEventListener('click', saveDay);
+  document.getElementById('gm-day-remove').addEventListener('click', removeDay);
+  document.getElementById('gm-day-comment').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); saveDay(); } });
+  dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); }); // clic hors de la fenêtre
+
   function renderWeek() {
-    const U = window.GenieUtils;
     const today = new Date(); today.setHours(0, 0, 0, 0);
     const list = document.getElementById('gm-week-recap');
     const items = [];
@@ -188,10 +290,10 @@ if (window.GenieAuth.notConfigured) {
       const d = new Date(today); d.setDate(d.getDate() + i);
       const dIso = iso(d);
       const entries = mealsByDate[dIso];
-      if (viewDate.getMonth() !== d.getMonth()) continue; // n'affiche que si on regarde le bon mois
-      if (entries && entries.length) items.push(`<li><span>${U.formatDayShort(dIso)}</span><span>${entries.map(e => U.escapeHtml(e.user_name)).join(', ')}</span></li>`);
+      if (entries && entries.length) items.push(`<li data-date="${dIso}"><span>${U.formatDayShort(dIso)}</span><span>${entries.map(e => U.escapeHtml(e.user_name) + commentHtml(e)).join(', ')}</span></li>`);
     }
-    list.innerHTML = items.length ? items.join('') : '<li class="gm-empty" style="border:none">Personne d\'inscrit cette semaine (ou changez de mois pour voir).</li>';
+    list.innerHTML = items.length ? items.join('') : '<li class="gm-empty" style="border:none">Personne d\'inscrit ces 7 prochains jours.</li>';
+    list.querySelectorAll('li[data-date]').forEach(li => li.addEventListener('click', () => openDay(li.dataset.date)));
   }
 
   document.getElementById('gm-cal-prev').addEventListener('click', () => { viewDate.setMonth(viewDate.getMonth() - 1); loadMonth(); });

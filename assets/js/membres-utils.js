@@ -24,8 +24,12 @@
   function formatDayShort(isoDate) {
     return new Date(isoDate + 'T00:00:00').toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' });
   }
+  // Date du jour au format AAAA-MM-JJ, en heure de Montauban (toISOString() donne l'heure UTC : décalage d'un jour).
+  function isoLocal(d) {
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
   function categoryLabel(c) { return CATEGORY_LABELS[c] || c; }
   function channelLabel(c) { return CHANNEL_LABELS[c] || c; }
 
-  window.GenieUtils = { escapeHtml, formatDate, formatDayShort, categoryLabel, channelLabel, CATEGORY_LABELS, CHANNEL_LABELS };
+  window.GenieUtils = { escapeHtml, formatDate, isoLocal, formatDayShort, categoryLabel, channelLabel, CATEGORY_LABELS, CHANNEL_LABELS };
 })();

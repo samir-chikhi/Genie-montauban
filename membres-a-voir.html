@@ -45,7 +45,7 @@
     </div>
     <button class="gm-btn gm-btn-primary" id="gm-btn-send" style="width:100%;justify-content:center">Recevoir mon lien de connexion</button>
     <div class="gm-alert" id="gm-alert"></div>
-    <p style="font-size:12px;color:var(--muted);margin-top:16px">Pas encore invité·e ? Écrivez à l'équipe du Génie — <a href="mailto:contact@genie-montauban.fr">contact@genie-montauban.fr</a>.</p>
+    <p style="font-size:12px;color:var(--muted);margin-top:16px">Pas encore d'accès ? <a href="mailto:contact@genie-montauban.fr?subject=Acc%C3%A8s%20%C3%A0%20l%27espace%20membres&amp;body=Bonjour%2C%0A%0AJe%20souhaite%20acc%C3%A9der%20%C3%A0%20l%27espace%20membres%20du%20G%C3%A9nie.%0APr%C3%A9nom%20et%20nom%20%3A%20%0AE-mail%20%C3%A0%20inviter%20%3A%20%0A%0AMerci%20!">Demander un accès en un clic</a> : l'équipe vous ajoute, puis vous revenez ici saisir votre e-mail.</p>
   </div>
 </div>
 
@@ -144,7 +144,7 @@ if (window.GenieAuth.notConfigured) {
     if (!email) return;
     const err = await window.GenieAuth.sendMagicLink(email);
     alertEl.classList.remove('ok', 'err');
-    if (err) { alertEl.textContent = "Cette adresse n'est pas encore invitée. Contactez l'équipe du Génie."; alertEl.classList.add('show', 'err'); }
+    if (err) { alertEl.textContent = (err.status === 429 || /rate limit/i.test(err.message || '')) ? "Trop de liens envoyés récemment. Réessayez dans une heure, ou utilisez le dernier lien reçu par e-mail." : "Cette adresse n'est pas encore invitée. Demandez un accès avec le lien ci-dessous."; alertEl.classList.add('show', 'err'); }
     else { alertEl.textContent = "Lien envoyé ! Vérifiez votre boîte mail (et les spams)."; alertEl.classList.add('show', 'ok'); }
   });
   document.getElementById('gm-btn-out').addEventListener('click', () => window.GenieAuth.signOut());
@@ -168,7 +168,7 @@ if (window.GenieAuth.notConfigured) {
         </div>`).join('');
   }
 
-  function isoDate(d) { return d.toISOString().slice(0, 10); }
+  function isoDate(d) { return window.GenieUtils.isoLocal(d); }
 
   function renderAgenda() {
     const U = window.GenieUtils;
