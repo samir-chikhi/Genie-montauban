@@ -83,6 +83,31 @@
   </div>
 </section>
 
+<section class="sec sec-pierre" id="agenda-facebook">
+  <div class="wrap">
+    <h2>Prochainement au Génie</h2>
+    <p class="lead">Les événements publiés sur notre page Facebook. Les dates passées disparaissent toutes seules.</p>
+    <div id="fb-agenda">
+      <div class="ev" data-fin="2026-10-01"><div class="ev-date"><b>1er</b>oct.<br>10h–12h30</div><div><h3>Fresque de la mobilité</h3><p>Atelier collaboratif et ludique pour comprendre les enjeux de nos déplacements et leurs impacts.</p><a class="lien" href="https://www.facebook.com/events/969649839515733/" target="_blank" rel="noopener">Voir sur Facebook <svg class="ico"><use href="#g-i-fleche"/></svg></a></div></div>
+      <div class="ev" data-fin="2026-10-01"><div class="ev-date"><b>1er</b>oct.<br>18h30</div><div><h3>Soirée de présentation du groupe local du Pacte du pouvoir de vivre</h3><p>Avec France Nature Environnement 82 : les 90 propositions portées par 65 organisations de la société civile, et la naissance d'un groupe local.</p><a class="lien" href="https://www.facebook.com/events/1465644245439602/" target="_blank" rel="noopener">Voir sur Facebook <svg class="ico"><use href="#g-i-fleche"/></svg></a></div></div>
+      <div class="ev" data-fin="2027-06-30"><div class="ev-date"><b>Mer.</b>chaque semaine<br>20h–21h30</div><div><h3>Chorale des Ateliers de Dhélia</h3><p>Chorale ouverte dès 15 ans, tous les mercredis soir jusqu'au 30 juin 2027.</p><a class="lien" href="https://www.facebook.com/events/4538630216349929/" target="_blank" rel="noopener">Voir sur Facebook <svg class="ico"><use href="#g-i-fleche"/></svg></a></div></div>
+    </div>
+    <p id="fb-agenda-vide" hidden>Pas d'événement annoncé pour le moment : jetez un œil à notre page Facebook.</p>
+    <div class="btn-row"><a class="btn btn-ghost" href="https://www.facebook.com/profile.php?id=61585419075483&amp;sk=events" target="_blank" rel="noopener">Tous nos événements sur Facebook</a></div>
+  </div>
+</section>
+<script>
+// Masque les événements terminés (data-fin = dernier jour, en heure locale).
+(function () {
+  var d = new Date(), today = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  var left = 0;
+  document.querySelectorAll('#fb-agenda [data-fin]').forEach(function (el) {
+    if (el.dataset.fin < today) el.remove(); else left++; // remove() : .ev impose display:grid, plus fort que [hidden]
+  });
+  if (!left) document.getElementById('fb-agenda-vide').hidden = false;
+})();
+</script>
+
 <section class="sec sec-pierre">
   <div class="wrap grid grid-3">
     <div class="card"><h3>Venir</h3><p>12 rue du Génie, à 200 m de la gare. Lundi–vendredi 8h–19h ; les soirées et samedis selon l'agenda.</p></div>
