@@ -51,7 +51,7 @@ Fresque du climat, fresque du bénévolat, ateliers zéro déchet.
 
 ## Prochainement au Génie
 
-Les événements publiés sur notre page Facebook. Les dates passées disparaissent toutes seules.
+Les rendez-vous annoncés au Génie et sur notre page Facebook. Les dates passées disparaissent toutes seules.
 
 **1er**oct.  
 10h–12h30
@@ -70,6 +70,22 @@ Atelier collaboratif et ludique pour comprendre les enjeux de nos déplacements 
 Avec France Nature Environnement 82 : les 90 propositions portées par 65 organisations de la société civile, et la naissance d'un groupe local.
 
 [Voir sur Facebook](https://www.facebook.com/events/1465644245439602/)
+
+**2e**jeudi du mois  
+19h–22h
+
+### La Turbine : café politique et poétique
+
+Café citoyen de l'association La Turbine, chaque 2e jeudi du mois, salle Bourdelle.
+
+**15**oct.  
+20h
+
+### 3 histoires & 1 clown
+
+Avec la compagnie Tôpos : un conteur et un clown, pour un moment de partage entre récits, rires et surprises.
+
+[Voir sur Facebook](https://www.facebook.com/photo/?fbid=1882673732703784&set=a.536339777337193)
 
 **Mer.**chaque semaine  
 20h–21h30
