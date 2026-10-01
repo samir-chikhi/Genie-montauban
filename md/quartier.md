@@ -59,6 +59,16 @@ Avec la compagnie Tôpos : un conteur et un clown, pour un moment de partage ent
 
 [Voir sur Facebook](https://www.facebook.com/photo/?fbid=1882673732703784&set=a.536339777337193)
 
+**Mar.**chaque  
+semaine  
+18h30–20h30
+
+### Atelier de théâtre d'improvisation
+
+Avec Salomé, comédienne et formatrice au Grand i Théâtre : chaque mardi soir, toute la saison 2026–2027. Inscription à l'année, il reste quelques places : legranditheatre@gmail.com.
+
+[Voir sur Facebook](https://www.facebook.com/photo/?fbid=122140031451180635&set=pb.61585419075483.-2207520000)
+
 **Mer.**chaque  
 semaine  
 20h–21h30
