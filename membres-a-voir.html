@@ -92,9 +92,13 @@
           </div>
           <div class="gm-cal-grid" id="gm-agenda-dow"></div>
           <div class="gm-cal-grid" id="gm-agenda-grid" style="margin-top:6px"></div>
+          <p class="gm-agenda-legend"><span class="gm-cal-avatar">2</span> nombre de sorties ce jour-là. Cliquez sur un jour pour le détail.</p>
+          <div id="gm-agenda-day"></div>
           <div style="margin-top:18px">
-            <div class="gm-card-title" style="margin-bottom:10px">📅 Prochaines dates</div>
-            <ul class="gm-recap-list" id="gm-agenda-upcoming"></ul>
+            <div class="gm-card-title" style="margin-bottom:10px">📅 Prochaines dates à Montauban et dans le 82</div>
+            <ul class="gm-agenda-list" id="gm-agenda-upcoming"></ul>
+            <button class="gm-btn gm-btn-ghost" id="gm-agenda-more" style="display:none;margin-top:10px">Tout afficher</button>
+            <p class="gm-agenda-legend" id="gm-agenda-src"></p>
           </div>
         </div>
       </div>
@@ -149,7 +153,7 @@ if (window.GenieAuth.notConfigured) {
   });
   document.getElementById('gm-btn-out').addEventListener('click', () => window.GenieAuth.signOut());
 
-  let currentUser = null, currentName = '', activitiesData = [], agendaViewDate = new Date();
+  let currentUser = null, currentName = '', activitiesData = [], agendaViewDate = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
 
   function render(activities) {
     const U = window.GenieUtils;
@@ -170,6 +174,61 @@ if (window.GenieAuth.notConfigured) {
 
   function isoDate(d) { return window.GenieUtils.isoLocal(d); }
 
+  // Agenda = sorties datées proposées par les membres + événements repérés par le Génie
+  // (assets/data/agenda-82.json, mis à jour à la main).
+  let localEvents = [], agendaSource = null, showAll = false, selectedDay = null;
+  const LONG_SPAN = 14; // au-delà (expositions de plusieurs mois), on ne remplit pas chaque case du calendrier
+
+  function daysBetween(a, b) {
+    const out = [], d = new Date(a + 'T00:00:00'), end = new Date(b + 'T00:00:00');
+    while (d <= end && out.length < 400) { out.push(isoDate(d)); d.setDate(d.getDate() + 1); }
+    return out;
+  }
+
+  async function loadLocalEvents() {
+    try {
+      const res = await fetch('assets/data/agenda-82.json', { cache: 'no-cache' });
+      if (!res.ok) return;
+      const json = await res.json();
+      agendaSource = json;
+      localEvents = (json.evenements || []).map(e => {
+        const start = e.dates ? e.dates[0] : e.debut;
+        const end = e.dates ? e.dates[e.dates.length - 1] : (e.fin || e.debut);
+        const all = e.dates || daysBetween(start, end);
+        return {
+          title: e.titre, desc: e.description || '', link: e.lien || null, hour: e.heure || '',
+          where: [e.lieu, e.ville].filter(Boolean).join(', '), cat: e.categorie || '',
+          start, end, recurring: !!e.dates,
+          days: (e.dates || all.length <= LONG_SPAN) ? all : [], by: null
+        };
+      });
+    } catch (e) { /* agenda local indisponible : on affiche quand même les propositions des membres */ }
+  }
+
+  function agendaItems() {
+    const members = activitiesData.filter(a => a.event_date).map(a => ({
+      title: a.title, desc: a.description, link: a.link, hour: '', where: '', cat: '',
+      start: a.event_date, end: a.event_date, days: [a.event_date], by: a.author_name
+    }));
+    return members.concat(localEvents);
+  }
+
+  function whenLabel(it, U) {
+    if (it.recurring) return 'Plusieurs dates, du ' + U.formatDayShort(it.start) + ' au ' + U.formatDayShort(it.end);
+    if (it.end !== it.start) return 'Du ' + U.formatDayShort(it.start) + ' au ' + U.formatDayShort(it.end);
+    return U.formatDayShort(it.start) + (it.hour ? ' · ' + it.hour : '');
+  }
+
+  function itemHtml(it, U) {
+    return `<li class="gm-agenda-item">
+      <div class="gm-agenda-when">${U.escapeHtml(whenLabel(it, U))}${it.cat ? ` <span class="gm-agenda-cat">${U.escapeHtml(it.cat)}</span>` : ''}</div>
+      <div class="gm-agenda-title">${it.link ? `<a href="${U.escapeHtml(it.link)}" target="_blank" rel="noopener noreferrer">${U.escapeHtml(it.title)}</a>` : U.escapeHtml(it.title)}</div>
+      ${it.where ? `<div class="gm-agenda-where">📍 ${U.escapeHtml(it.where)}</div>` : ''}
+      ${it.desc ? `<div class="gm-agenda-desc">${U.escapeHtml(it.desc)}</div>` : ''}
+      ${it.by ? `<div class="gm-agenda-where">Proposé par ${U.escapeHtml(it.by)}</div>` : ''}
+    </li>`;
+  }
+
   function renderAgenda() {
     const U = window.GenieUtils;
     const DOW = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
@@ -180,40 +239,61 @@ if (window.GenieAuth.notConfigured) {
     const startOffset = (first.getDay() + 6) % 7;
     const daysInMonth = new Date(agendaViewDate.getFullYear(), agendaViewDate.getMonth() + 1, 0).getDate();
     const todayIso = isoDate(new Date());
+    const items = agendaItems();
 
     const byDay = {};
-    activitiesData.forEach(a => { if (a.event_date) (byDay[a.event_date] ||= []).push(a); });
+    items.forEach(it => it.days.forEach(d => (byDay[d] ||= []).push(it)));
 
     let cells = '';
     for (let i = 0; i < startOffset; i++) cells += '<div class="gm-cal-day empty"></div>';
     for (let d = 1; d <= daysInMonth; d++) {
       const dateIso = isoDate(new Date(agendaViewDate.getFullYear(), agendaViewDate.getMonth(), d));
-      const items = byDay[dateIso] || [];
-      const isToday = dateIso === todayIso;
-      const titleAttr = items.map(i => U.escapeHtml(i.title)).join(', ');
-      cells += `<div class="gm-cal-day${items.length ? ' mine' : ''}${isToday ? ' today' : ''}" title="${titleAttr}">
-        <div class="gm-cal-daynum">${d}</div>
-        ${items.length ? `<div class="gm-cal-avatars"><span class="gm-cal-avatar">${items.length}</span></div>` : ''}
-      </div>`;
+      const n = (byDay[dateIso] || []).length;
+      cells += `<button type="button" class="gm-cal-day${n ? ' mine' : ''}${dateIso === todayIso ? ' today' : ''}${dateIso === selectedDay ? ' selected' : ''}" data-date="${dateIso}" aria-label="${U.formatDayShort(dateIso)} : ${n} sortie(s)">
+        <span class="gm-cal-daynum">${d}</span>
+        ${n ? `<span class="gm-cal-avatars"><span class="gm-cal-avatar">${n}</span></span>` : ''}
+      </button>`;
     }
-    document.getElementById('gm-agenda-grid').innerHTML = cells;
+    const grid = document.getElementById('gm-agenda-grid');
+    grid.innerHTML = cells;
+    grid.querySelectorAll('[data-date]').forEach(c => c.addEventListener('click', () => {
+      selectedDay = selectedDay === c.dataset.date ? null : c.dataset.date;
+      renderAgenda();
+    }));
 
-    const upcoming = activitiesData
-      .filter(a => a.event_date && a.event_date >= todayIso)
-      .sort((a, b) => a.event_date.localeCompare(b.event_date))
-      .slice(0, 5);
-    const list = document.getElementById('gm-agenda-upcoming');
-    list.innerHTML = !upcoming.length
+    // Détail du jour cliqué (y compris les longues expositions en cours ce jour-là)
+    const dayEl = document.getElementById('gm-agenda-day');
+    if (selectedDay) {
+      const that = items.filter(it => it.days.includes(selectedDay) || (!it.recurring && !it.days.length && it.start <= selectedDay && it.end >= selectedDay));
+      dayEl.innerHTML = `<div class="gm-card-title" style="margin:14px 0 8px">${U.escapeHtml(new Date(selectedDay + 'T00:00:00').toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' }))}</div>
+        <ul class="gm-agenda-list">${that.length ? that.map(it => itemHtml(it, U)).join('') : '<li class="gm-empty" style="border:none">Rien de repéré ce jour-là.</li>'}</ul>`;
+    } else dayEl.innerHTML = '';
+
+    // Prochaines dates : tout ce qui n'est pas terminé, trié par prochaine date
+    const nextDate = it => (it.start >= todayIso ? it.start : (it.days.find(d => d >= todayIso) || todayIso));
+    const upcoming = items.filter(it => it.end >= todayIso).sort((a, b) => nextDate(a).localeCompare(nextDate(b)) || a.title.localeCompare(b.title));
+    const shown = showAll ? upcoming : upcoming.slice(0, 10);
+    document.getElementById('gm-agenda-upcoming').innerHTML = !upcoming.length
       ? '<li class="gm-empty" style="border:none">Rien de daté à venir.</li>'
-      : upcoming.map(a => `<li><span>${U.formatDayShort(a.event_date)}</span><span>${U.escapeHtml(a.title)}</span></li>`).join('');
+      : shown.map(it => itemHtml(it, U)).join('');
+    const more = document.getElementById('gm-agenda-more');
+    more.style.display = upcoming.length > 10 ? '' : 'none';
+    more.textContent = showAll ? 'Réduire' : `Tout afficher (${upcoming.length})`;
+    document.getElementById('gm-agenda-src').textContent = agendaSource
+      ? `Événements repérés par le Génie (mise à jour du ${U.formatDayShort(agendaSource.maj)}) d'après les agendas de l'office de tourisme, du département, JDS et Fest. Vérifiez les horaires sur le lien avant de vous déplacer.`
+      : '';
   }
 
+  document.getElementById('gm-agenda-more').addEventListener('click', () => { showAll = !showAll; renderAgenda(); });
   document.getElementById('gm-agenda-prev').addEventListener('click', () => { agendaViewDate.setMonth(agendaViewDate.getMonth() - 1); renderAgenda(); });
   document.getElementById('gm-agenda-next').addEventListener('click', () => { agendaViewDate.setMonth(agendaViewDate.getMonth() + 1); renderAgenda(); });
 
   async function loadActivities() {
     const db = window.genieDb;
-    const { data } = await db.from('activities').select('*').order('created_at', { ascending: false });
+    const [{ data }] = await Promise.all([
+      db.from('activities').select('*').order('created_at', { ascending: false }),
+      localEvents.length ? null : loadLocalEvents()
+    ]);
     activitiesData = data || [];
     render(activitiesData);
     renderAgenda();
