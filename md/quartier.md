@@ -14,6 +14,58 @@ Pas besoin d'être adhérent ni de travailler ici. Les rendez-vous ci-dessous so
 
 [Voir l'agenda complet](activites.html) [Proposer une idée](#idee)
 
+## Prochainement au Génie
+
+Les rendez-vous annoncés au Génie et sur notre page Facebook. Les dates passées disparaissent toutes seules.
+
+**1er**oct.  
+10h–12h30
+
+### Fresque de la mobilité
+
+Atelier collaboratif et ludique pour comprendre les enjeux de nos déplacements et leurs impacts.
+
+[Voir sur Facebook](https://www.facebook.com/events/969649839515733/)
+
+**1er**oct.  
+18h30
+
+### Présentation du groupe local du Pacte du pouvoir de vivre
+
+Avec France Nature Environnement 82 : les 90 propositions portées par 65 organisations de la société civile, et la naissance d'un groupe local.
+
+[Voir sur Facebook](https://www.facebook.com/events/1465644245439602/)
+
+**2e**jeudi  
+19h–22h
+
+### La Turbine : café politique et poétique
+
+Café citoyen de l'association La Turbine, chaque 2e jeudi du mois, salle Bourdelle.
+
+**15**oct.  
+20h
+
+### 3 histoires & 1 clown
+
+Avec la compagnie Tôpos : un conteur et un clown, pour un moment de partage entre récits, rires et surprises.
+
+[Voir sur Facebook](https://www.facebook.com/photo/?fbid=1882673732703784&set=a.536339777337193)
+
+**Mer.**chaque  
+semaine  
+20h–21h30
+
+### Chorale des Ateliers de Dhélia
+
+Chorale ouverte dès 15 ans, tous les mercredis soir jusqu'au 30 juin 2027.
+
+[Voir sur Facebook](https://www.facebook.com/events/4538630216349929/)
+
+Pas d'événement annoncé pour le moment : jetez un œil à notre page Facebook.
+
+[Tous nos événements sur Facebook](https://www.facebook.com/profile.php?id=61585419075483&sk=events)
+
 ## Les rendez-vous ouverts à tous
 
 **1er**samedi  
@@ -48,57 +100,6 @@ Café IA, initiation, sécurité en ligne : pour ne plus subir son téléphone.
 Fresque du climat, fresque du bénévolat, ateliers zéro déchet.
 
 [Dates et inscriptions](activites.html)
-
-## Prochainement au Génie
-
-Les rendez-vous annoncés au Génie et sur notre page Facebook. Les dates passées disparaissent toutes seules.
-
-**1er**oct.  
-10h–12h30
-
-### Fresque de la mobilité
-
-Atelier collaboratif et ludique pour comprendre les enjeux de nos déplacements et leurs impacts.
-
-[Voir sur Facebook](https://www.facebook.com/events/969649839515733/)
-
-**1er**oct.  
-18h30
-
-### Soirée de présentation du groupe local du Pacte du pouvoir de vivre
-
-Avec France Nature Environnement 82 : les 90 propositions portées par 65 organisations de la société civile, et la naissance d'un groupe local.
-
-[Voir sur Facebook](https://www.facebook.com/events/1465644245439602/)
-
-**2e**jeudi du mois  
-19h–22h
-
-### La Turbine : café politique et poétique
-
-Café citoyen de l'association La Turbine, chaque 2e jeudi du mois, salle Bourdelle.
-
-**15**oct.  
-20h
-
-### 3 histoires & 1 clown
-
-Avec la compagnie Tôpos : un conteur et un clown, pour un moment de partage entre récits, rires et surprises.
-
-[Voir sur Facebook](https://www.facebook.com/photo/?fbid=1882673732703784&set=a.536339777337193)
-
-**Mer.**chaque semaine  
-20h–21h30
-
-### Chorale des Ateliers de Dhélia
-
-Chorale ouverte dès 15 ans, tous les mercredis soir jusqu'au 30 juin 2027.
-
-[Voir sur Facebook](https://www.facebook.com/events/4538630216349929/)
-
-Pas d'événement annoncé pour le moment : jetez un œil à notre page Facebook.
-
-[Tous nos événements sur Facebook](https://www.facebook.com/profile.php?id=61585419075483&sk=events)
 
 ### Venir
 
