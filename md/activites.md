@@ -120,6 +120,12 @@ Chaque mercredi
 
 Chorale de Dhélia
 
+🎭
+
+Chaque mardi
+
+Théâtre d'impro
+
 🔬
 
 1ère semaine
@@ -161,6 +167,12 @@ La Turbine, café politique
 Chaque mercredi
 
 Chorale de Dhélia
+
+🎭
+
+Chaque mardi
+
+Théâtre d'impro
 
 🌱
 
@@ -204,6 +216,12 @@ Chaque mercredi
 
 Chorale de Dhélia
 
+🎭
+
+Chaque mardi
+
+Théâtre d'impro
+
 ❤️
 
 1er week-end
@@ -246,6 +264,12 @@ Chaque mercredi
 
 Chorale de Dhélia
 
+🎭
+
+Chaque mardi
+
+Théâtre d'impro
+
 👑
 
 Début janvier
@@ -287,6 +311,12 @@ La Turbine, café politique
 Chaque mercredi
 
 Chorale de Dhélia
+
+🎭
+
+Chaque mardi
+
+Théâtre d'impro
 
 🥞
 
