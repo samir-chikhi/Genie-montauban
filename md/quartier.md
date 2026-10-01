@@ -36,8 +36,15 @@ Avec France Nature Environnement 82 : les 90 propositions portées par 65 organi
 
 [Voir sur Facebook](https://www.facebook.com/events/1465644245439602/)
 
+**8**oct.  
+19h–21h30
+
+### La Turbine : « Sommes-nous encore capables de débattre ensemble ? »
+
+Premier rendez-vous des cafés politiques et poétiques de La Turbine, avec pour invité le délégué départemental du Défenseur des droits. Pas besoin d'être d'accord : venez avec vos idées, et surtout avec vos oreilles. Entrée libre.
+
 **2e**jeudi  
-19h–22h
+19h–21h30
 
 ### La Turbine : café politique et poétique
 
