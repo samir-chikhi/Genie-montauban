@@ -2,7 +2,7 @@
 title: Activités & Actualités — Génie Montauban
 description: Petits-déjeuners thématiques, afterworks, conférences, ateliers… Découvrez toutes les activités et actualités du tiers-lieu Génie à Montauban.
 url: https://genie-montauban.fr/activites.html
-last_updated: 2026-09-29
+last_updated: 2026-10-01
 source: miroir markdown — version texte pour moteurs IA
 ---
 
@@ -108,6 +108,18 @@ Oct
 
 Octobre
 
+☕
+
+2e jeudi
+
+La Turbine, café politique
+
+🎶
+
+Chaque mercredi
+
+Chorale de Dhélia
+
 🔬
 
 1ère semaine
@@ -137,6 +149,18 @@ Nov
 2026
 
 Novembre
+
+☕
+
+2e jeudi
+
+La Turbine, café politique
+
+🎶
+
+Chaque mercredi
+
+Chorale de Dhélia
 
 🌱
 
@@ -168,6 +192,18 @@ Déc
 
 Décembre
 
+☕
+
+2e jeudi
+
+La Turbine, café politique
+
+🎶
+
+Chaque mercredi
+
+Chorale de Dhélia
+
 ❤️
 
 1er week-end
@@ -198,6 +234,18 @@ Jan
 
 Janvier
 
+☕
+
+2e jeudi
+
+La Turbine, café politique
+
+🎶
+
+Chaque mercredi
+
+Chorale de Dhélia
+
 👑
 
 Début janvier
@@ -227,6 +275,18 @@ Fév
 2027
 
 Février
+
+☕
+
+2e jeudi
+
+La Turbine, café politique
+
+🎶
+
+Chaque mercredi
+
+Chorale de Dhélia
 
 🥞
 
