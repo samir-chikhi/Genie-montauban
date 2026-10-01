@@ -398,6 +398,8 @@
       height: 3px;
       background: linear-gradient(90deg, var(--emerald), var(--violet));
     }
+    .tag-tbc { background: rgba(148,163,184,.15); color: var(--slate-300); border: 1px dashed rgba(148,163,184,.5); }
+    .event-tbc .event-card-header { filter: saturate(.6); }
     .event-card-header.has-img { height: 210px; }
     .event-card-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
     .event-featured-visual.has-img { padding: 1.25rem; }
@@ -1051,6 +1053,7 @@
   /* ══════════════════════════════════════════════
      DONNÉES — tous les événements
      date:null = sans date fixe (toujours affiché dans "À venir")
+     aConfirmer:true = idée au programme, date/contenu pas encore confirmés (badge « À confirmer »)
   ══════════════════════════════════════════════ */
   const EVENTS = [
     // ── PASSÉS ──
@@ -1086,30 +1089,30 @@
     { date:'2026-10-15', prio:1, img:'assets/img/agenda/3-histoires-1-clown.jpg', icon:'🤡', cat:'soiree', tag:'🎭 Spectacle', title:'3 histoires & 1 clown', desc:'Avec la compagnie Tôpos : à l\'orée, à la lisière, au bord du spectacle… un conteur et un clown vous donnent rendez-vous pour un moment de partage, entre récits, rires et surprises.', time:'🕗 20h00', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#f8fafc,#a3e635)', link:'https://www.facebook.com/photo/?fbid=1882673732703784&set=a.536339777337193' },
     { weekly:3, until:'2027-06-30', prio:1, img:'assets/img/agenda/chorale-dhelia.jpg', icon:'🎶', cat:'atelier', tag:'🎶 Chorale', title:'Chorale des Ateliers de Dhélia', desc:'Chorale ouverte à toutes et tous dès 15 ans, chaque mercredi soir jusqu\'au 30 juin 2027.', time:'🕗 20h00 → 21h30', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#4c1d95,#a855f7)', link:'https://www.facebook.com/events/4538630216349929/', recurLabel:'chaque mercredi' },
     // ── IDÉES DU CALENDRIER ANNUEL ──
-    { date:'2026-10-01', dateLabel:"1ère semaine d'oct.", icon:'🔬', cat:'atelier', tag:'🔬 Science',    title:'Fête de la Science',                          desc:'Ateliers expériences en famille ! Venez explorer les sciences avec vos enfants dans une ambiance ludique et interactive.', time:'⏰ Programme à venir', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#0c4a6e,#0284c7)' },
-    { date:'2026-10-01', dateLabel:'Tout le mois',        icon:'🎀', cat:'conf',    tag:'🎀 Solidarité', title:'Octobre Rose',                                desc:'Sensibilisation au dépistage du cancer du sein. Stand info + marche collective au départ du Génie.', time:'📅 Tout le mois', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#831843,#ec4899)' },
-    { date:'2026-10-03', dateLabel:'1ers samedis du mois',icon:'🔧', cat:'atelier', tag:'🔧 Repair Café',title:'Repair Café',                                 desc:'Réparons ensemble au lieu de le casser ! Apportez vos objets en panne, repartez avec des objets réparés et de nouvelles compétences.', time:'🕘 9h00 → 12h00', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#14532d,#16a34a)' },
-    { date:'2026-10-31', icon:'🎃', cat:'soiree',  tag:'🎃 Halloween',  title:'Halloween — Soirée déguisée',                desc:'Soirée déguisée + chasse au(x) bonbons enfants/ados. Venez costumés pour une soirée frissons et sucreries !', time:'🕗 18h00', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#431407,#ea580c)' },
+    { aConfirmer:true, date:'2026-10-01', dateLabel:"1ère semaine d'oct.", icon:'🔬', cat:'atelier', tag:'🔬 Science',    title:'Fête de la Science',                          desc:'Ateliers expériences en famille ! Venez explorer les sciences avec vos enfants dans une ambiance ludique et interactive.', time:'⏰ Programme à venir', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#0c4a6e,#0284c7)' },
+    { aConfirmer:true, date:'2026-10-01', dateLabel:'Tout le mois',        icon:'🎀', cat:'conf',    tag:'🎀 Solidarité', title:'Octobre Rose',                                desc:'Sensibilisation au dépistage du cancer du sein. Stand info + marche collective au départ du Génie.', time:'📅 Tout le mois', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#831843,#ec4899)' },
+    { aConfirmer:true, date:'2026-10-03', dateLabel:'1ers samedis du mois',icon:'🔧', cat:'atelier', tag:'🔧 Repair Café',title:'Repair Café',                                 desc:'Réparons ensemble au lieu de le casser ! Apportez vos objets en panne, repartez avec des objets réparés et de nouvelles compétences.', time:'🕘 9h00 → 12h00', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#14532d,#16a34a)' },
+    { aConfirmer:true, date:'2026-10-31', icon:'🎃', cat:'soiree',  tag:'🎃 Halloween',  title:'Halloween — Soirée déguisée',                desc:'Soirée déguisée + chasse au(x) bonbons enfants/ados. Venez costumés pour une soirée frissons et sucreries !', time:'🕗 18h00', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#431407,#ea580c)' },
     // NOVEMBRE 2026
-    { date:'2026-11-01', dateLabel:'Tout le mois', icon:'🌱', cat:'conf',    tag:'🌱 ESS',         title:"Mois de l'Économie Sociale et Solidaire",     desc:'Conférences portes ouvertes sur l\'ESS, ses acteurs et ses enjeux à Montauban et en Tarn-et-Garonne.', time:'📅 Programme à venir', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#14532d,#065f46)' },
-    { date:'2026-11-19', icon:'🍷', cat:'soiree',  tag:'🍷 Soirée',      title:'Beaujolais Nouveau',                          desc:'Projection + débat autour du Beaujolais Nouveau. Soirée conviviale pour célébrer ensemble ce rendez-vous de novembre.', time:'🕗 18h30', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#4a0f1a,#9b1c3d)', mailto:'contact@genie-montauban.fr?subject=Beaujolais Nouveau 2026' },
-    { date:'2026-11-25', icon:'💜', cat:'conf',    tag:'💜 Engagement',  title:'Journée contre les violences faites aux femmes',desc:'Projection + débat. Soirée de sensibilisation et de solidarité au Génie.', time:'🕗 18h30', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#3b0764,#7c3aed)' },
-    { date:'2026-11-27', icon:'♻️', cat:'atelier', tag:'♻️ Green Friday',title:'Green Friday + Répar Café',                   desc:'Spécial vêtements + jouets de société. Alternative au Black Friday : donnez, échangez, réparez !', time:'🕗 9h00 → 18h00', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#14532d,#22c55e)' },
+    { aConfirmer:true, date:'2026-11-01', dateLabel:'Tout le mois', icon:'🌱', cat:'conf',    tag:'🌱 ESS',         title:"Mois de l'Économie Sociale et Solidaire",     desc:'Conférences portes ouvertes sur l\'ESS, ses acteurs et ses enjeux à Montauban et en Tarn-et-Garonne.', time:'📅 Programme à venir', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#14532d,#065f46)' },
+    { aConfirmer:true, date:'2026-11-19', icon:'🍷', cat:'soiree',  tag:'🍷 Soirée',      title:'Beaujolais Nouveau',                          desc:'Projection + débat autour du Beaujolais Nouveau. Soirée conviviale pour célébrer ensemble ce rendez-vous de novembre.', time:'🕗 18h30', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#4a0f1a,#9b1c3d)', mailto:'contact@genie-montauban.fr?subject=Beaujolais Nouveau 2026' },
+    { aConfirmer:true, date:'2026-11-25', icon:'💜', cat:'conf',    tag:'💜 Engagement',  title:'Journée contre les violences faites aux femmes',desc:'Projection + débat. Soirée de sensibilisation et de solidarité au Génie.', time:'🕗 18h30', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#3b0764,#7c3aed)' },
+    { aConfirmer:true, date:'2026-11-27', icon:'♻️', cat:'atelier', tag:'♻️ Green Friday',title:'Green Friday + Répar Café',                   desc:'Spécial vêtements + jouets de société. Alternative au Black Friday : donnez, échangez, réparez !', time:'🕗 9h00 → 18h00', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#14532d,#22c55e)' },
     // DÉCEMBRE 2026
-    { date:'2026-12-05', dateLabel:'1er week-end', icon:'❤️', cat:'conf',    tag:'❤️ Téléthon',    title:'Téléthon',                                       desc:'Mobilisons-nous pour le Téléthon ! Animations, collecte et solidarité au Génie tout le week-end.', time:'📅 5–6 décembre', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#7f1d1d,#ef4444)' },
-    { date:'2026-12-12', dateLabel:'Mi-décembre',  icon:'🎄', cat:'soiree',  tag:'🎄 Marché',      title:'Marché de Noël',                                 desc:'Artisans & créateurs locaux. Découvrez les créations de nos membres et partenaires pour les fêtes.', time:'📅 Mi-décembre', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#14532d,#c2410c)' },
-    { date:'2026-12-21', icon:'🌙', cat:'soiree',  tag:'🌙 Solstice',    title:"Solstice d'hiver",                            desc:"Soirée contes autour du coin du feu. Venez célébrer la nuit la plus longue de l'année avec des histoires et de la chaleur humaine.", time:'🕗 18h00', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#0f172a,#312e81)' },
-    { date:'2026-12-23', dateLabel:'Fin décembre', icon:'🎅', cat:'atelier', tag:'🎅 Enfants',     title:'Goûter de Noël',                                 desc:'Jeux & ateliers pour enfants. Un après-midi magique pour les petits et leurs familles avant les fêtes.', time:'🕐 14h00 → 17h00', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#7f1d1d,#16a34a)' },
+    { aConfirmer:true, date:'2026-12-05', dateLabel:'1er week-end', icon:'❤️', cat:'conf',    tag:'❤️ Téléthon',    title:'Téléthon',                                       desc:'Mobilisons-nous pour le Téléthon ! Animations, collecte et solidarité au Génie tout le week-end.', time:'📅 5–6 décembre', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#7f1d1d,#ef4444)' },
+    { aConfirmer:true, date:'2026-12-12', dateLabel:'Mi-décembre',  icon:'🎄', cat:'soiree',  tag:'🎄 Marché',      title:'Marché de Noël',                                 desc:'Artisans & créateurs locaux. Découvrez les créations de nos membres et partenaires pour les fêtes.', time:'📅 Mi-décembre', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#14532d,#c2410c)' },
+    { aConfirmer:true, date:'2026-12-21', icon:'🌙', cat:'soiree',  tag:'🌙 Solstice',    title:"Solstice d'hiver",                            desc:"Soirée contes autour du coin du feu. Venez célébrer la nuit la plus longue de l'année avec des histoires et de la chaleur humaine.", time:'🕗 18h00', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#0f172a,#312e81)' },
+    { aConfirmer:true, date:'2026-12-23', dateLabel:'Fin décembre', icon:'🎅', cat:'atelier', tag:'🎅 Enfants',     title:'Goûter de Noël',                                 desc:'Jeux & ateliers pour enfants. Un après-midi magique pour les petits et leurs familles avant les fêtes.', time:'🕐 14h00 → 17h00', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#7f1d1d,#16a34a)' },
     // JANVIER 2027
-    { date:'2027-01-06', dateLabel:'Début janvier', icon:'👑', cat:'soiree',  tag:'👑 Tradition',  title:'Galette des Rois',                               desc:"Partageons la galette ! Le rendez-vous de début d'année pour se retrouver et commencer 2027 ensemble.", time:'🕗 17h00', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#78350f,#d97706)', mailto:'contact@genie-montauban.fr?subject=Galette des Rois 2027' },
-    { date:'2027-01-01', dateLabel:'Tout le mois', icon:'♻️', cat:'atelier', tag:'♻️ Éco',        title:'Janvier Zéro Déchet',                            desc:'Ateliers & défis éco-responsables tout le mois. Rejoignez le défi collectif pour adopter de nouveaux réflexes durables.', time:'📅 Tout le mois', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#14532d,#059669)' },
-    { date:'2027-01-17', dateLabel:'3ème samedi',  icon:'🤖', cat:'atelier', tag:'🤖 Café IA',    title:'Café IA',                                        desc:"Découvrir, comprendre, échanger autour de l'intelligence artificielle. Pour tous, sans prérequis techniques.", time:'🕘 9h30 → 11h30', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#1e1b4b,#4f46e5)' },
-    { date:'2027-01-25', dateLabel:'Fin janvier',  icon:'🎲', cat:'soiree',  tag:'🎲 Jeux',       title:'Soirée Jeux de Société',                         desc:'Apporte ton jeu et découvres-en de nouveaux ! Soirée détente et convivialité pour la communauté Génie.', time:'🕗 18h00 → 22h00', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#312e81,#6d28d9)' },
+    { aConfirmer:true, date:'2027-01-06', dateLabel:'Début janvier', icon:'👑', cat:'soiree',  tag:'👑 Tradition',  title:'Galette des Rois',                               desc:"Partageons la galette ! Le rendez-vous de début d'année pour se retrouver et commencer 2027 ensemble.", time:'🕗 17h00', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#78350f,#d97706)', mailto:'contact@genie-montauban.fr?subject=Galette des Rois 2027' },
+    { aConfirmer:true, date:'2027-01-01', dateLabel:'Tout le mois', icon:'♻️', cat:'atelier', tag:'♻️ Éco',        title:'Janvier Zéro Déchet',                            desc:'Ateliers & défis éco-responsables tout le mois. Rejoignez le défi collectif pour adopter de nouveaux réflexes durables.', time:'📅 Tout le mois', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#14532d,#059669)' },
+    { aConfirmer:true, date:'2027-01-17', dateLabel:'3ème samedi',  icon:'🤖', cat:'atelier', tag:'🤖 Café IA',    title:'Café IA',                                        desc:"Découvrir, comprendre, échanger autour de l'intelligence artificielle. Pour tous, sans prérequis techniques.", time:'🕘 9h30 → 11h30', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#1e1b4b,#4f46e5)' },
+    { aConfirmer:true, date:'2027-01-25', dateLabel:'Fin janvier',  icon:'🎲', cat:'soiree',  tag:'🎲 Jeux',       title:'Soirée Jeux de Société',                         desc:'Apporte ton jeu et découvres-en de nouveaux ! Soirée détente et convivialité pour la communauté Génie.', time:'🕗 18h00 → 22h00', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#312e81,#6d28d9)' },
     // FÉVRIER 2027
-    { date:'2027-02-02', icon:'🥞', cat:'soiree',  tag:'🥞 Chandeleur',  title:'Chandeleur — Crêpes Party',                   desc:'La Chandeleur au Génie ! Venez partager des crêpes et célébrer ensemble cette tradition gourmande.', time:'🕛 12h00', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#78350f,#f59e0b)', mailto:'contact@genie-montauban.fr?subject=Chandeleur 2027' },
-    { date:'2027-02-01', dateLabel:'Tout le mois', icon:'🧠', cat:'conf',    tag:'🧠 Santé',      title:'Mois de la Santé Mentale',                       desc:'Conférences, ateliers et ressources sur la santé mentale. Brisons les tabous et parlons-en ensemble.', time:'📅 Programme à venir', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#1e3a5f,#2563eb)' },
-    { date:'2027-02-14', dateLabel:"Vacances d'hiver", icon:'🎨', cat:'atelier', tag:'🎨 Créatif',title:'Ateliers Créatifs Enfants & Ados',               desc:'Pendant les vacances scolaires d\'hiver, des ateliers créatifs pour les 6–17 ans. Peinture, collage, fabrication…', time:"📅 Vacances d'hiver", lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#4a044e,#a855f7)' },
-    { date:'2027-02-21', dateLabel:'Fin février',  icon:'🎭', cat:'soiree',  tag:'🎭 Carnaval',   title:'Carnaval',                                       desc:'Venez déguisés pour fêter le Carnaval au Génie ! Animations, défilé et bonne humeur pour toute la famille.', time:'🕐 14h00', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#4c1d95,#ec4899)' },
+    { aConfirmer:true, date:'2027-02-02', icon:'🥞', cat:'soiree',  tag:'🥞 Chandeleur',  title:'Chandeleur — Crêpes Party',                   desc:'La Chandeleur au Génie ! Venez partager des crêpes et célébrer ensemble cette tradition gourmande.', time:'🕛 12h00', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#78350f,#f59e0b)', mailto:'contact@genie-montauban.fr?subject=Chandeleur 2027' },
+    { aConfirmer:true, date:'2027-02-01', dateLabel:'Tout le mois', icon:'🧠', cat:'conf',    tag:'🧠 Santé',      title:'Mois de la Santé Mentale',                       desc:'Conférences, ateliers et ressources sur la santé mentale. Brisons les tabous et parlons-en ensemble.', time:'📅 Programme à venir', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#1e3a5f,#2563eb)' },
+    { aConfirmer:true, date:'2027-02-14', dateLabel:"Vacances d'hiver", icon:'🎨', cat:'atelier', tag:'🎨 Créatif',title:'Ateliers Créatifs Enfants & Ados',               desc:'Pendant les vacances scolaires d\'hiver, des ateliers créatifs pour les 6–17 ans. Peinture, collage, fabrication…', time:"📅 Vacances d'hiver", lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#4a044e,#a855f7)' },
+    { aConfirmer:true, date:'2027-02-21', dateLabel:'Fin février',  icon:'🎭', cat:'soiree',  tag:'🎭 Carnaval',   title:'Carnaval',                                       desc:'Venez déguisés pour fêter le Carnaval au Génie ! Animations, défilé et bonne humeur pour toute la famille.', time:'🕐 14h00', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#4c1d95,#ec4899)' },
     // ── SANS DATE (toujours dans "À venir") ──
     { date:null, icon:'₿',  cat:'atelier', tag:'🛠️ Atelier',    title:'Atelier Crypto : démystifier les cryptomonnaies',   desc:'Bitcoin, Ethereum, blockchain… Comprenez les fondamentaux et les risques sans jargon. Accessible à tous, débutants bienvenus.', time:'🕘 9h00 → 12h00', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#0f2027,#2c5364)' },
     { date:null, icon:'♻️', cat:'atelier', tag:'🛠️ Atelier',    title:'Atelier Anti-gaspi : consommer mieux, jeter moins', desc:'Astuces pratiques pour réduire le gaspillage alimentaire et quotidien. Un atelier engagé pour adopter des réflexes éco-responsables.', time:'🕘 10h00 → 12h00', lieu:'12 rue du Génie', grad:'linear-gradient(135deg,#064e3b,#059669)' },
@@ -1171,18 +1174,19 @@
       </div>`;
     }
     const mailto = e.mailto || 'contact@genie-montauban.fr';
-    const btnLabel = e.date ? 'Je viens !' : 'S\'inscrire';
-    return `<div class="event-card reveal reveal-delay-${delay}" data-cat="${e.cat}">
+    const btnLabel = e.aConfirmer ? 'Être prévenu' : (e.date ? 'Je viens !' : 'S\'inscrire');
+    const confirmMailto = e.aConfirmer ? 'contact@genie-montauban.fr?subject=' + encodeURIComponent('Prévenez-moi : ' + e.title) : null;
+    return `<div class="event-card${e.aConfirmer ? ' event-tbc' : ''} reveal reveal-delay-${delay}" data-cat="${e.cat}">
       <div class="event-card-header${e.img ? ' has-img' : ''}" style="background:${e.grad}">
         ${visual(e, 'event-card-img')}<span class="event-card-date">${dateDisplay}</span>
       </div>
       <div class="event-card-body">
-        <span class="event-tag tag-${e.cat}">${e.tag}</span>
+        <span class="event-tag tag-${e.cat}">${e.tag}</span>${e.aConfirmer ? ' <span class="event-tag tag-tbc">⏳ À confirmer</span>' : ''}
         <h3>${e.title}</h3><p>${e.desc}</p>
       </div>
       <div class="event-card-footer">
         <span class="time">${e.time} · ${e.lieu}</span>
-        ${e.link ? `<a href="${e.link}" target="_blank" rel="noopener" class="btn-sm">Détails →</a>` : `<a href="mailto:${mailto}" class="btn-sm">${btnLabel}</a>`}
+        ${e.link ? `<a href="${e.link}" target="_blank" rel="noopener" class="btn-sm">Détails →</a>` : `<a href="mailto:${confirmMailto || mailto}" class="btn-sm">${btnLabel}</a>`}
       </div>
     </div>`;
   }
@@ -1196,7 +1200,7 @@
                            .sort((a,b) => a.date > b.date ? -1 : 1);
 
     // Événement vedette
-    const feat = upcoming[0];
+    const feat = upcoming.find(e => e.date && !e.aConfirmer) || upcoming[0];
     const featEl = document.getElementById('prochaine-vedette');
     if (feat && featEl) {
       const dateLbl = feat.date ? fmtDate(feat.date, feat.dateLabel) : 'À venir';
@@ -1220,7 +1224,7 @@
 
     // Grille à venir (sans le premier)
     const avenirEl = document.getElementById('evenements-avenir');
-    if (avenirEl) avenirEl.innerHTML = upcoming.slice(1).map((e,i) => cardHtml(e,i,false)).join('');
+    if (avenirEl) avenirEl.innerHTML = upcoming.filter(e => e !== feat).map((e,i) => cardHtml(e,i,false)).join('');
 
     // Grille passés
     const passesEl = document.getElementById('evenements-passes');
