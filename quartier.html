@@ -84,8 +84,13 @@
         <div class="ag-media ag-affiche"><img src="assets/img/agenda/pacte-pouvoir-de-vivre.jpg" alt="Logo du Pacte du pouvoir de vivre Tarn-et-Garonne et de ses organisations membres" width="768" height="151" loading="lazy"><div class="ev-date ag-date"><b>1er</b>oct.<br>18h30</div></div>
         <div class="ag-body"><h3>Présentation du groupe local du Pacte du pouvoir de vivre</h3><p>Avec France Nature Environnement 82 : les 90 propositions portées par 65 organisations de la société civile, et la naissance d'un groupe local.</p><a class="lien" href="https://www.facebook.com/events/1465644245439602/" target="_blank" rel="noopener">Voir sur Facebook <svg class="ico"><use href="#g-i-fleche"/></svg></a></div>
       </article>
-      <article class="ag-card" data-mensuel="4,2">
-        <div class="ag-media"><img src="assets/img/agenda/../bourdelle-1-800.webp" alt="La salle Bourdelle du Génie" width="800" height="600" loading="lazy"><div class="ev-date ag-date"><b class="js-jour">2e</b><span class="js-mois">jeudi</span><br>19h–22h</div></div>
+      <article class="ag-card" data-fin="2026-10-08">
+        <div class="ag-media ag-affiche"><img src="assets/img/agenda/la-turbine-2026-10-08.jpg" alt="Affiche de La Turbine, cafés politiques et poétiques : « Sommes-nous encore capables de débattre ensemble ? », jeudi 8 octobre 2026, 19h à 21h30, entrée libre" width="800" height="1000" loading="lazy"><div class="ev-date ag-date"><b>8</b>oct.<br>19h–21h30</div></div>
+        <div class="ag-body"><h3>La Turbine : « Sommes-nous encore capables de débattre ensemble ? »</h3><p>Premier rendez-vous des cafés politiques et poétiques de La Turbine, avec pour invité le délégué départemental du Défenseur des droits. Pas besoin d'être d'accord : venez avec vos idées, et surtout avec vos oreilles. Entrée libre.</p></div>
+      </article>
+      <!-- Carte permanente de La Turbine : apparaît le lendemain du 1er rendez-vous (data-debut). -->
+      <article class="ag-card" data-mensuel="4,2" data-debut="2026-10-09">
+        <div class="ag-media"><img src="assets/img/agenda/../bourdelle-1-800.webp" alt="La salle Bourdelle du Génie" width="800" height="600" loading="lazy"><div class="ev-date ag-date"><b class="js-jour">2e</b><span class="js-mois">jeudi</span><br>19h–21h30</div></div>
         <div class="ag-body"><h3>La Turbine : café politique et poétique</h3><p>Café citoyen de l'association La Turbine, chaque 2e jeudi du mois, salle Bourdelle. <span class="js-suite"></span></p></div>
       </article>
       <article class="ag-card" data-fin="2026-10-15">
@@ -110,6 +115,9 @@
   var left = 0;
   document.querySelectorAll('#fb-agenda [data-fin]').forEach(function (el) {
     if (el.dataset.fin < today) el.remove(); else left++;
+  });
+  document.querySelectorAll('#fb-agenda [data-debut]').forEach(function (el) {
+    if (el.dataset.debut > today) el.remove(); // pas encore d'actualité
   });
   document.querySelectorAll('#fb-agenda [data-mensuel]').forEach(function (el) {
     var p = el.dataset.mensuel.split(','), wd = +p[0], nth = +p[1];
