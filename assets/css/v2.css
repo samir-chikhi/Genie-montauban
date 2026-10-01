@@ -193,6 +193,17 @@ p { margin: 0 0 1em; }
 .faq details p { color: var(--gris); max-width: 720px; }
 
 /* Agenda : la date dans une petite baie */
+/* Cartes « Prochainement au Génie » (quartier.html) : visuel + date en pastille */
+.ag-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 24px; margin: 28px 0 8px; }
+.ag-card { background: var(--blanc); border: 1px solid var(--filet); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; }
+.ag-media { position: relative; aspect-ratio: 4 / 3; background: var(--pierre); }
+.ag-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.ag-media.ag-affiche img { object-fit: contain; background: var(--blanc); }
+.ag-date { position: absolute; left: 14px; bottom: -22px; width: 84px; box-shadow: 0 6px 16px rgba(0,0,0,.18); }
+.ag-body { padding: 34px 20px 20px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.ag-body h3 { font-size: 1.12rem; margin: 0; }
+.ag-body p { margin: 0; color: var(--gris); }
+.ag-body .lien { margin-top: auto; padding-top: 6px; }
 .ev { display: grid; grid-template-columns: 84px 1fr; gap: 20px; align-items: start; padding: 22px 0; border-bottom: 1px solid var(--filet); }
 .ev-date { border-radius: 50% 50% 6px 6px / 18px 18px 6px 6px; background: var(--nuit); color: rgba(255,255,255,.85); text-align: center; padding: 16px 6px 12px; font-size: .76rem; line-height: 1.25; }
 .ev-date b { display: block; font: 800 1.3rem/1 var(--display); color: var(--or); margin-bottom: 4px; }
