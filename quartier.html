@@ -71,6 +71,67 @@
   </div>
 </section>
 
+<section class="sec sec-pierre" id="agenda-facebook">
+  <div class="wrap">
+    <h2>Prochainement au Génie</h2>
+    <p class="lead">Les rendez-vous annoncés au Génie et sur notre page Facebook. Les dates passées disparaissent toutes seules.</p>
+    <div class="ag-grid" id="fb-agenda">
+      <article class="ag-card" data-fin="2026-10-01">
+        <div class="ag-media"><img src="assets/img/agenda/fresque-mobilite.jpg" alt="Cartes du jeu de la Fresque de la mobilité" width="800" height="636" loading="lazy"><div class="ev-date ag-date"><b>1er</b>oct.<br>10h–12h30</div></div>
+        <div class="ag-body"><h3>Fresque de la mobilité</h3><p>Atelier collaboratif et ludique pour comprendre les enjeux de nos déplacements et leurs impacts.</p><a class="lien" href="https://www.facebook.com/events/969649839515733/" target="_blank" rel="noopener">Voir sur Facebook <svg class="ico"><use href="#g-i-fleche"/></svg></a></div>
+      </article>
+      <article class="ag-card" data-fin="2026-10-01">
+        <div class="ag-media ag-affiche"><img src="assets/img/agenda/pacte-pouvoir-de-vivre.jpg" alt="Logo du Pacte du pouvoir de vivre Tarn-et-Garonne et de ses organisations membres" width="768" height="151" loading="lazy"><div class="ev-date ag-date"><b>1er</b>oct.<br>18h30</div></div>
+        <div class="ag-body"><h3>Présentation du groupe local du Pacte du pouvoir de vivre</h3><p>Avec France Nature Environnement 82 : les 90 propositions portées par 65 organisations de la société civile, et la naissance d'un groupe local.</p><a class="lien" href="https://www.facebook.com/events/1465644245439602/" target="_blank" rel="noopener">Voir sur Facebook <svg class="ico"><use href="#g-i-fleche"/></svg></a></div>
+      </article>
+      <article class="ag-card" data-mensuel="4,2">
+        <div class="ag-media"><img src="assets/img/agenda/../bourdelle-1-800.webp" alt="La salle Bourdelle du Génie" width="800" height="600" loading="lazy"><div class="ev-date ag-date"><b class="js-jour">2e</b><span class="js-mois">jeudi</span><br>19h–22h</div></div>
+        <div class="ag-body"><h3>La Turbine : café politique et poétique</h3><p>Café citoyen de l'association La Turbine, chaque 2e jeudi du mois, salle Bourdelle. <span class="js-suite"></span></p></div>
+      </article>
+      <article class="ag-card" data-fin="2026-10-15">
+        <div class="ag-media ag-affiche"><img src="assets/img/agenda/3-histoires-1-clown.jpg" alt="Affiche de « 3 histoires & 1 clown », 15 octobre 2026 à 20h" width="800" height="1131" loading="lazy"><div class="ev-date ag-date"><b>15</b>oct.<br>20h</div></div>
+        <div class="ag-body"><h3>3 histoires &amp; 1 clown</h3><p>Avec la compagnie Tôpos : un conteur et un clown, pour un moment de partage entre récits, rires et surprises.</p><a class="lien" href="https://www.facebook.com/photo/?fbid=1882673732703784&amp;set=a.536339777337193" target="_blank" rel="noopener">Voir sur Facebook <svg class="ico"><use href="#g-i-fleche"/></svg></a></div>
+      </article>
+      <article class="ag-card" data-fin="2027-06-30">
+        <div class="ag-media"><img src="assets/img/agenda/chorale-dhelia.jpg" alt="La façade de brique du Génie, 12 rue du Génie" width="800" height="748" loading="lazy"><div class="ev-date ag-date"><b>Mer.</b>chaque<br>semaine<br>20h–21h30</div></div>
+        <div class="ag-body"><h3>Chorale des Ateliers de Dhélia</h3><p>Chorale ouverte dès 15 ans, tous les mercredis soir jusqu'au 30 juin 2027.</p><a class="lien" href="https://www.facebook.com/events/4538630216349929/" target="_blank" rel="noopener">Voir sur Facebook <svg class="ico"><use href="#g-i-fleche"/></svg></a></div>
+      </article>
+    </div>
+    <p id="fb-agenda-vide" hidden>Pas d'événement annoncé pour le moment : jetez un œil à notre page Facebook.</p>
+    <div class="btn-row"><a class="btn btn-ghost" href="https://www.facebook.com/profile.php?id=61585419075483&amp;sk=events" target="_blank" rel="noopener">Tous nos événements sur Facebook</a></div>
+  </div>
+</section>
+<script>
+// Retire les événements terminés (data-fin = dernier jour, heure locale) et calcule
+// la prochaine date des rendez-vous mensuels (data-mensuel="jourSemaine,rang" : "4,2" = 2e jeudi).
+(function () {
+  var d = new Date(), today = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  var MOIS = ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.'];
+  var left = 0;
+  document.querySelectorAll('#fb-agenda [data-fin]').forEach(function (el) {
+    if (el.dataset.fin < today) el.remove(); else left++;
+  });
+  document.querySelectorAll('#fb-agenda [data-mensuel]').forEach(function (el) {
+    var p = el.dataset.mensuel.split(','), wd = +p[0], nth = +p[1];
+    var t = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    for (var m = 0; m < 3; m++) {
+      var x = new Date(t.getFullYear(), t.getMonth() + m, 1);
+      x.setDate(1 + (wd - x.getDay() + 7) % 7 + (nth - 1) * 7);
+      if (x >= t) {
+        var txt = x.getDate() + ' ' + MOIS[x.getMonth()];
+        el.querySelector('.js-jour').textContent = x.getDate();
+        el.querySelector('.js-mois').textContent = MOIS[x.getMonth()];
+        el.querySelector('.js-suite').textContent = 'Prochaine séance : jeudi ' + txt.replace(/\.$/, '') + '.';
+        break;
+      }
+    }
+    left++;
+  });
+  if (!left) document.getElementById('fb-agenda-vide').hidden = false;
+})();
+</script>
+
+
 <section class="sec">
   <div class="wrap">
     <h2>Les rendez-vous ouverts à tous</h2>
@@ -83,49 +144,6 @@
   </div>
 </section>
 
-<section class="sec sec-pierre" id="agenda-facebook">
-  <div class="wrap">
-    <h2>Prochainement au Génie</h2>
-    <p class="lead">Les rendez-vous annoncés au Génie et sur notre page Facebook. Les dates passées disparaissent toutes seules.</p>
-    <div id="fb-agenda">
-      <div class="ev" data-fin="2026-10-01"><div class="ev-date"><b>1er</b>oct.<br>10h–12h30</div><div><h3>Fresque de la mobilité</h3><p>Atelier collaboratif et ludique pour comprendre les enjeux de nos déplacements et leurs impacts.</p><a class="lien" href="https://www.facebook.com/events/969649839515733/" target="_blank" rel="noopener">Voir sur Facebook <svg class="ico"><use href="#g-i-fleche"/></svg></a></div></div>
-      <div class="ev" data-fin="2026-10-01"><div class="ev-date"><b>1er</b>oct.<br>18h30</div><div><h3>Soirée de présentation du groupe local du Pacte du pouvoir de vivre</h3><p>Avec France Nature Environnement 82 : les 90 propositions portées par 65 organisations de la société civile, et la naissance d'un groupe local.</p><a class="lien" href="https://www.facebook.com/events/1465644245439602/" target="_blank" rel="noopener">Voir sur Facebook <svg class="ico"><use href="#g-i-fleche"/></svg></a></div></div>
-      <div class="ev" data-mensuel="4,2"><div class="ev-date"><b class="js-jour">2e</b><span class="js-mois">jeudi du mois</span><br>19h–22h</div><div><h3>La Turbine : café politique et poétique</h3><p>Café citoyen de l'association La Turbine, chaque 2e jeudi du mois, salle Bourdelle. <span class="js-suite"></span></p></div></div>
-      <div class="ev" data-fin="2026-10-15"><div class="ev-date"><b>15</b>oct.<br>20h</div><div><h3>3 histoires &amp; 1 clown</h3><p>Avec la compagnie Tôpos : un conteur et un clown, pour un moment de partage entre récits, rires et surprises.</p><a class="lien" href="https://www.facebook.com/photo/?fbid=1882673732703784&amp;set=a.536339777337193" target="_blank" rel="noopener">Voir sur Facebook <svg class="ico"><use href="#g-i-fleche"/></svg></a></div></div>
-      <div class="ev" data-fin="2027-06-30"><div class="ev-date"><b>Mer.</b>chaque semaine<br>20h–21h30</div><div><h3>Chorale des Ateliers de Dhélia</h3><p>Chorale ouverte dès 15 ans, tous les mercredis soir jusqu'au 30 juin 2027.</p><a class="lien" href="https://www.facebook.com/events/4538630216349929/" target="_blank" rel="noopener">Voir sur Facebook <svg class="ico"><use href="#g-i-fleche"/></svg></a></div></div>
-    </div>
-    <p id="fb-agenda-vide" hidden>Pas d'événement annoncé pour le moment : jetez un œil à notre page Facebook.</p>
-    <div class="btn-row"><a class="btn btn-ghost" href="https://www.facebook.com/profile.php?id=61585419075483&amp;sk=events" target="_blank" rel="noopener">Tous nos événements sur Facebook</a></div>
-  </div>
-</section>
-<script>
-// Masque les événements terminés (data-fin = dernier jour, en heure locale).
-(function () {
-  var d = new Date(), today = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
-  var left = 0;
-  document.querySelectorAll('#fb-agenda [data-fin]').forEach(function (el) {
-    if (el.dataset.fin < today) el.remove(); else left++; // remove() : .ev impose display:grid, plus fort que [hidden]
-  });
-  // Rendez-vous mensuels (data-mensuel="jourSemaine,rang", ex. "4,2" = 2e jeudi) : affiche la prochaine date.
-  var MOIS = ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.'];
-  document.querySelectorAll('#fb-agenda [data-mensuel]').forEach(function (el) {
-    var p = el.dataset.mensuel.split(','), wd = +p[0], nth = +p[1];
-    var t = new Date(d.getFullYear(), d.getMonth(), d.getDate());
-    for (var m = 0; m < 3; m++) {
-      var x = new Date(t.getFullYear(), t.getMonth() + m, 1);
-      x.setDate(1 + (wd - x.getDay() + 7) % 7 + (nth - 1) * 7);
-      if (x >= t) {
-        el.querySelector('.js-jour').textContent = x.getDate();
-        el.querySelector('.js-mois').textContent = MOIS[x.getMonth()];
-        el.querySelector('.js-suite').textContent = 'Prochaine séance : jeudi ' + x.getDate() + ' ' + MOIS[x.getMonth()] + '.';
-        break;
-      }
-    }
-    left++;
-  });
-  if (!left) document.getElementById('fb-agenda-vide').hidden = false;
-})();
-</script>
 
 <section class="sec sec-pierre">
   <div class="wrap grid grid-3">
