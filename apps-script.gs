@@ -431,6 +431,63 @@ function genererSessionAdminDepuisEditeur() {
 }
 
 // ============================================================
+// ESPACE MEMBRES — invitation depuis l'admin (sans passer par l'e-mail de Supabase)
+// Demande une propriété du script : SUPABASE_SERVICE_KEY (clé « secret » du projet
+// Supabase thlppdjdepvgkislacel). Jamais dans le dépôt. Le lien est généré côté
+// Supabase puis envoyé depuis la boîte du Génie (MailApp) : pas de limite de 2 mails/h.
+// ============================================================
+var SUPABASE_URL_MEMBRES = 'https://thlppdjdepvgkislacel.supabase.co';
+
+function adminInviterMembres(data) {
+  var cle = PropertiesService.getScriptProperties().getProperty('SUPABASE_SERVICE_KEY');
+  if (!cle) return { success: false, error: 'SUPABASE_SERVICE_KEY manquante dans les Propriétés du script.' };
+  var brut = String((data && data.emails) || '');
+  var emails = brut.split(/[\s,;]+/).filter(function (x) { return x; });
+  var vus = {}; emails = emails.filter(function (x) { x = x.toLowerCase(); if (vus[x]) return false; vus[x] = 1; return true; });
+  if (!emails.length) return { success: false, error: 'Aucune adresse e-mail.' };
+  if (emails.length > 30) return { success: false, error: '30 adresses maximum par envoi.' };
+
+  var resultats = emails.map(function (email) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return { email: email, ok: false, message: 'Adresse invalide' };
+    try {
+      var lien = genererLienMembre_(email, 'invite', cle);
+      if (lien.deja) lien = genererLienMembre_(email, 'magiclink', cle);
+      if (!lien.url) return { email: email, ok: false, message: lien.erreur || 'Lien non généré' };
+      var html = '<div style="font-family:Arial,sans-serif;max-width:520px;color:#1C2B3A;line-height:1.55">' +
+        '<h2 style="margin:0 0 12px">Bienvenue dans l\'espace membres du Génie 👋</h2>' +
+        '<p>Résidents et adhérents du Génie ont leur petit coin en ligne : qui déjeune là, annonces, bons plans, discussion.</p>' +
+        '<p style="margin:24px 0"><a href="' + lien.url + '" style="background:#C9993E;color:#1C2B3A;padding:13px 22px;border-radius:8px;text-decoration:none;font-weight:bold">Entrer dans l\'espace membres</a></p>' +
+        '<p style="font-size:13px;color:#57626D">Ce bouton est personnel et valable un temps limité. S\'il a expiré, rendez-vous sur ' +
+        '<a href="' + CONFIG.URL_SITE + '/espace-membres.html">' + CONFIG.URL_SITE + '/espace-membres.html</a> et saisissez cette adresse e-mail : vous recevrez un nouveau lien. Pas de mot de passe.</p>' +
+        '<p style="font-size:13px;color:#57626D">À bientôt au Génie !<br>' + CONFIG.NOM_LIEU + '</p></div>';
+      var envoye = envoyerEmailSafe(email, 'Votre accès à l\'espace membres du Génie',
+        'Bienvenue dans l\'espace membres du Génie. Ouvrez ce lien pour entrer : ' + lien.url,
+        { htmlBody: html, name: CONFIG.NOM_LIEU, replyTo: CONFIG.EMAIL_ADMIN });
+      return { email: email, ok: envoye, message: envoye ? 'Invitation envoyée' : 'Envoi impossible (quota ?)' };
+    } catch (err) {
+      return { email: email, ok: false, message: 'Erreur : ' + err.message };
+    }
+  });
+  return { success: true, resultats: resultats };
+}
+
+function genererLienMembre_(email, type, cle) {
+  var rep = UrlFetchApp.fetch(SUPABASE_URL_MEMBRES + '/auth/v1/admin/generate_link', {
+    method: 'post',
+    contentType: 'application/json',
+    headers: { apikey: cle, Authorization: 'Bearer ' + cle },
+    payload: JSON.stringify({ type: type, email: email, redirect_to: CONFIG.URL_SITE + '/espace-membres.html' }),
+    muteHttpExceptions: true
+  });
+  var code = rep.getResponseCode();
+  var corps = {};
+  try { corps = JSON.parse(rep.getContentText()); } catch (e) {}
+  if (code >= 200 && code < 300) return { url: corps.action_link || (corps.properties && corps.properties.action_link) };
+  if (type === 'invite' && (code === 422 || /already|registered|exists/i.test(rep.getContentText()))) return { deja: true };
+  return { erreur: corps.msg || corps.message || corps.error_description || ('Supabase HTTP ' + code) };
+}
+
+// ============================================================
 // POINT D'ENTRÉE POST
 // ============================================================
 function doPost(e) {
@@ -458,6 +515,7 @@ function doPost(e) {
       case 'saveConfig':              return ok(requireAdmin(data) || adminSaveConfig(data.config));
       case 'ADMIN_LOGIN':             return ok(adminLogin(data));
       case 'ADMIN_UPDATE_STATUS':     return ok(requireAdmin(data) || adminUpdateStatus(data));
+      case 'INVITER_MEMBRES':         return ok(requireAdmin(data) || adminInviterMembres(data));
       default: return ok({ success: false, error: 'Action inconnue: ' + data.action });
     }
   } catch (err) {
@@ -499,6 +557,7 @@ function doGet(e) {
         case 'deleteResa':          return ok(requireAdmin(data) || adminDeleteResa(data.id));
         case 'ADMIN_LOGIN':         return ok(adminLogin(data));
         case 'ADMIN_UPDATE_STATUS': return ok(requireAdmin(data) || adminUpdateStatus(data));
+        case 'INVITER_MEMBRES':     return ok(requireAdmin(data) || adminInviterMembres(data));
         case 'saveConfig':          return ok(requireAdmin(data) || adminSaveConfig(data.config));
         case 'GET_RESERVATIONS_CLIENT': return ok(getReservationsClient(data));
         case 'GET_PROFIL':          return ok(getProfil(data));
