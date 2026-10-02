@@ -2,7 +2,7 @@
 title: Académie des Compétences et de la Connaissance — Génie Montauban
 description: Micro-formations de 3h à Montauban, animées par des experts locaux et dispensées par MUSIVA, organisme certifié Qualiopi. Empowerment, Tech & Numérique, Gestion & Impact, Intelligence collective. De 45 à 65 €, 4 modules gratuits.
 url: https://genie-montauban.fr/academie.html
-last_updated: 2026-09-29
+last_updated: 2026-10-02
 source: miroir markdown — version texte pour moteurs IA
 ---
 

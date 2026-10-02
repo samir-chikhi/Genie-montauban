@@ -69,6 +69,21 @@ Génie est une association loi 1901 de l'économie sociale et solidaire. Ce que 
 
 [Le projet en deux minutes](le-projet.html)
 
+Résidents & adhérents
+
+## La machine à café du Génie, en ligne.
+
+Qui déjeune ici demain, un covoiturage, un bon plan, une annonce à partager : l'espace membres réunit les voisins de bureau. Un lien reçu par e-mail, pas de mot de passe.
+
+[Entrer dans l'espace membres](espace-membres.html)
+
+Sur invitation : pas encore d'accès ? [Demandez-le-nous](mailto:contact@genie-montauban.fr?subject=Acc%C3%A8s%20%C3%A0%20l%27espace%20membres).
+
+- Dites que vous déjeunez sur place, voyez qui sera là.
+- Partagez conseils, contacts pro et fournisseurs.
+- Repérez les sorties et adresses du quartier.
+- Discutez avec les autres membres, depuis votre téléphone.
+
 Ils sont venus
 
 ## Ce qu'ils en disent
