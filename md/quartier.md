@@ -1,8 +1,8 @@
 ---
-title: Ateliers gratuits et agenda du quartier Villebourbon — Génie Montauban
-description: Repair Café, veillées, cafés-débats, ateliers numériques : les rendez-vous gratuits ou au chapeau du tiers-lieu Génie, ouverts à tous les habitants de Montauban.
+title: Éducation populaire à Montauban : ateliers gratuits, veillées, repair café — Génie
+description: Éducation populaire à Montauban : repair café, veillées-université populaire, cafés-débats et ateliers numériques, gratuits ou au chapeau, au tiers-lieu Génie (Villebourbon).
 url: https://genie-montauban.fr/quartier.html
-last_updated: 2026-10-01
+last_updated: 2026-10-02
 source: miroir markdown — version texte pour moteurs IA
 ---
 
@@ -10,7 +10,7 @@ source: miroir markdown — version texte pour moteurs IA
 
 # Vous habitez Villebourbon ou Montauban ? Le Génie, c'est aussi chez vous.
 
-Pas besoin d'être adhérent ni de travailler ici. Les rendez-vous ci-dessous sont gratuits ou au chapeau.
+Pas besoin d'être adhérent ni de travailler ici. Les rendez-vous ci-dessous, de l'éducation populaire en Tarn-et-Garonne, sont gratuits ou au chapeau.
 
 [Voir l'agenda complet](activites.html) [Proposer une idée](#idee)
 

@@ -1,8 +1,8 @@
 ---
-title: Le projet — un tiers-lieu associatif et ESS à Montauban | Génie
-description: Génie est un tiers-lieu associatif de l'économie sociale et solidaire à Montauban : apprendre, entreprendre, se rencontrer et décider ensemble. Nos engagements vérifiables.
+title: Tiers-lieu ESS et éducation populaire à Montauban | Génie
+description: Génie est un tiers-lieu associatif de l'économie sociale et solidaire (ESS) et d'éducation populaire à Montauban, en Tarn-et-Garonne (Occitanie) : apprendre, entreprendre, se rencontrer et décider ensemble. Nos engagements vérifiables.
 url: https://genie-montauban.fr/le-projet.html
-last_updated: 2026-09-29
+last_updated: 2026-10-02
 source: miroir markdown — version texte pour moteurs IA
 ---
 
