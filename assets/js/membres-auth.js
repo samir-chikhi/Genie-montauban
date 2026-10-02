@@ -31,11 +31,30 @@
     window.location.reload();
   }
 
+  // Première visite : petite fenêtre d'accueil (à la place du prompt() du navigateur).
+  function askName(suggestion) {
+    return new Promise((resolve) => {
+      if (typeof HTMLDialogElement === 'undefined') return resolve(window.prompt("Bienvenue ! Quel prénom ou pseudo afficher aux autres membres ?", suggestion));
+      const d = document.createElement('dialog');
+      d.className = 'gm-dialog';
+      d.innerHTML = '<h3>Bienvenue au Génie 👋</h3>' +
+        '<p style="margin:0 0 14px;font-size:14px;color:var(--muted)">Quel prénom (ou pseudo) voulez-vous afficher aux autres membres ? Vous pourrez le garder tel quel.</p>' +
+        '<form method="dialog"><div class="gm-field"><input class="gm-input" id="gm-name-in" maxlength="40" autocomplete="given-name"></div>' +
+        '<div class="gm-dialog-actions"><button class="gm-btn gm-btn-primary" value="ok">C\'est parti</button></div></form>';
+      document.body.appendChild(d);
+      const input = d.querySelector('#gm-name-in');
+      input.value = suggestion;
+      d.addEventListener('close', () => { const v = input.value; d.remove(); resolve(v); });
+      d.showModal();
+      input.select();
+    });
+  }
+
   async function ensureProfile(user) {
     const { data } = await client.from('profiles').select('display_name').eq('id', user.id).maybeSingle();
     if (data && data.display_name) return data.display_name;
     let name = (user.email || 'membre').split('@')[0];
-    const chosen = window.prompt("Bienvenue ! Quel prénom ou pseudo veux-tu afficher aux autres membres ?", name);
+    const chosen = await askName(name);
     if (chosen && chosen.trim()) name = chosen.trim();
     await client.from('profiles').upsert({ id: user.id, display_name: name });
     return name;
