@@ -40,8 +40,6 @@ PAGES = [
     ("activites.html",              "0.8", "weekly"),
     ("academie.html",               "0.8", "monthly"),
     ("notre-histoire.html",         "0.7", "yearly"),
-    ("inscription.html",            "0.6", "monthly"),
-    ("inscription-academie.html",   "0.6", "monthly"),
     ("proposition-formateur.html",  "0.5", "monthly"),
     ("reglement-interieur-genie.html", "0.4", "yearly"),
     ("cgv.html",                    "0.3", "yearly"),
