@@ -62,3 +62,5 @@ footer.g-foot { display: block; background: var(--g-navy); color: rgba(255,255,2
 .g-consent .btn-gold { background: var(--g-gold); color: var(--g-navy); }
 .g-consent .btn-ghost { background: transparent; color: #fff; border-color: #fff; }
 @media (max-width: 720px) { body.has-sticky .g-consent { bottom: 84px; } }
+.g-head .g-nav a { white-space: nowrap; }
+@media (min-width: 901px) and (max-width: 1180px) { .g-head .g-nav a { padding-left: 8px; padding-right: 8px; font-size: .9rem; } }

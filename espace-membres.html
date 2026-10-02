@@ -8,17 +8,27 @@
 <meta name="robots" content="noindex,nofollow">
 <title>Espace membres — Génie Montauban</title>
 <link rel="icon" type="image/png" href="favicon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preload" href="assets/fonts/dm-sans-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/bricolage-grotesque-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/css/membres.css">
 <link rel="stylesheet" href="assets/css/footer.css">
 </head>
 <body class="gm-body">
 
+<svg aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden">
+  <defs>
+    <symbol id="m-table" viewBox="0 0 24 24"><path d="M3 11h18"/><path d="M6 11v8M18 11v8"/><circle cx="7" cy="5.5" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="17" cy="5.5" r="2"/></symbol>
+    <symbol id="m-voix" viewBox="0 0 24 24"><path d="M4 10v4a1 1 0 0 0 1 1h2l6 4V5L7 9H5a1 1 0 0 0-1 1Z"/><path d="M16.5 9a4 4 0 0 1 0 6"/><path d="M19 6.5a7.5 7.5 0 0 1 0 11"/></symbol>
+    <symbol id="m-carte" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></symbol>
+    <symbol id="m-chat" viewBox="0 0 24 24"><path d="M5 4h14a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-8l-5 4v-4H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Z"/><path d="M8 9h8M8 12h5"/></symbol>
+    <symbol id="m-journal" viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5z"/><path d="M8 11h8M8 15h6"/></symbol>
+    <symbol id="m-fleche" viewBox="0 0 24 24"><path d="M4 12h15"/><path d="m13 6 6 6-6 6"/></symbol>
+  </defs>
+</svg>
+
 <header class="gm-header">
   <a href="espace-membres.html" class="gm-brand">
-    <img src="logo.png" alt="Génie Montauban" style="height:32px;width:auto">
+    <img src="logo.png" alt="" style="height:32px;width:auto">
     <span><span class="gm-brand-name">Génie</span><span class="gm-brand-sub">Espace membres</span></span>
   </a>
   <button class="gm-burger" id="gm-burger" aria-label="Menu">☰</button>
@@ -28,6 +38,7 @@
     <a href="membres-calendrier.html">Qui mange au Génie ?</a>
     <a href="membres-a-voir.html">À voir, à faire</a>
     <a href="membres-chat.html">Discussion</a>
+    <a href="index.html">← Site du Génie</a>
   </nav>
   <div class="gm-user" id="gm-user-box" style="display:none">
     <span class="gm-user-name" id="gm-user-name"></span>
@@ -35,44 +46,106 @@
   </div>
 </header>
 
+<!-- ───── Accueil visiteur : présentation + connexion en un clic ───── -->
 <div id="gm-login" class="gm-login-wrap" style="display:none">
-  <div class="gm-login-box">
-    <h2>Espace membres</h2>
-    <p>Réservé aux membres et locataires du Génie. Entrez votre e-mail : vous recevrez un lien de connexion, pas de mot de passe à retenir.</p>
-    <div class="gm-field">
-      <label for="gm-email">Adresse e-mail</label>
-      <input class="gm-input" type="email" id="gm-email" placeholder="prenom@exemple.fr" autocomplete="email">
+  <section class="gm-hero">
+    <div class="gm-hero-in">
+      <div class="gm-hero-txt">
+        <span class="gm-eyebrow">Résidents &amp; adhérents</span>
+        <h1>La machine à café du Génie, <em>même quand vous n'y êtes pas.</em></h1>
+        <p class="gm-hero-lede">Savoir qui déjeune là demain, trouver un covoiturage, partager un bon plan avec vos voisins de bureau. Un lien reçu par e-mail, et vous êtes dedans : pas de mot de passe.</p>
+        <ul class="gm-hero-pills">
+          <li><svg class="gm-ico"><use href="#m-table"/></svg>Déjeuners</li>
+          <li><svg class="gm-ico"><use href="#m-voix"/></svg>Annonces</li>
+          <li><svg class="gm-ico"><use href="#m-chat"/></svg>Discussion</li>
+          <li><svg class="gm-ico"><use href="#m-carte"/></svg>Bons plans</li>
+        </ul>
+      </div>
+      <div class="gm-door">
+        <h2>Entrez chez vous</h2>
+        <p class="gm-door-sub">Saisissez l'e-mail avec lequel vous avez été invité·e.</p>
+        <form id="gm-login-form" novalidate>
+          <div class="gm-field">
+            <label for="gm-email">Adresse e-mail</label>
+            <input class="gm-input" type="email" id="gm-email" placeholder="prenom@exemple.fr" autocomplete="email" inputmode="email" required>
+          </div>
+          <button class="gm-btn gm-btn-primary" id="gm-btn-send" type="submit">Recevoir mon lien d'entrée</button>
+        </form>
+        <div class="gm-alert" id="gm-alert" role="status" aria-live="polite"></div>
+        <p class="gm-door-help">Pas encore d'accès ? <a href="mailto:contact@genie-montauban.fr?subject=Acc%C3%A8s%20%C3%A0%20l%27espace%20membres&amp;body=Bonjour%2C%0A%0AJe%20souhaite%20acc%C3%A9der%20%C3%A0%20l%27espace%20membres%20du%20G%C3%A9nie.%0APr%C3%A9nom%20et%20nom%20%3A%20%0AE-mail%20%C3%A0%20inviter%20%3A%20%0A%0AMerci%20!">Demandez-le en un clic</a>, on vous ajoute vite.</p>
+      </div>
     </div>
-    <button class="gm-btn gm-btn-primary" id="gm-btn-send" style="width:100%;justify-content:center">Recevoir mon lien de connexion</button>
-    <div class="gm-alert" id="gm-alert"></div>
-    <p style="font-size:12px;color:var(--muted);margin-top:16px">Pas encore d'accès ? <a href="mailto:contact@genie-montauban.fr?subject=Acc%C3%A8s%20%C3%A0%20l%27espace%20membres&amp;body=Bonjour%2C%0A%0AJe%20souhaite%20acc%C3%A9der%20%C3%A0%20l%27espace%20membres%20du%20G%C3%A9nie.%0APr%C3%A9nom%20et%20nom%20%3A%20%0AE-mail%20%C3%A0%20inviter%20%3A%20%0A%0AMerci%20!">Demander un accès en un clic</a> : l'équipe vous ajoute, puis vous revenez ici saisir votre e-mail.</p>
-  </div>
+  </section>
+
+  <section class="gm-section">
+    <span class="gm-eyebrow">Comment ça marche</span>
+    <h2>Trois gestes, dix secondes.</h2>
+    <ol class="gm-steps">
+      <li><div><b>Tapez votre e-mail</b><span>Celui de votre invitation, ci-dessus.</span></div></li>
+      <li><div><b>Ouvrez le message</b><span>Il arrive en une minute. Pensez aux spams.</span></div></li>
+      <li><div><b>Cliquez sur le lien</b><span>Vous voilà chez vous, sur ordinateur comme sur téléphone.</span></div></li>
+    </ol>
+  </section>
+
+  <section class="gm-section">
+    <span class="gm-eyebrow">Ce qui vous attend</span>
+    <h2>Un petit coin entre voisins.</h2>
+    <ul class="gm-tiles">
+      <li class="gm-tile"><div class="gm-tile-baie"><svg class="gm-ico"><use href="#m-table"/></svg></div><h3>Qui mange au Génie ?</h3><p>Dites que vous déjeunez sur place, voyez qui sera là. Idéal pour ne pas manger seul·e.</p></li>
+      <li class="gm-tile"><div class="gm-tile-baie"><svg class="gm-ico"><use href="#m-journal"/></svg></div><h3>Annonces &amp; conseils</h3><p>Une offre, un contact pro, un fournisseur de confiance : partagez-le en deux minutes.</p></li>
+      <li class="gm-tile"><div class="gm-tile-baie"><svg class="gm-ico"><use href="#m-carte"/></svg></div><h3>À voir, à faire</h3><p>Les sorties, événements et adresses du quartier, repérés par les membres.</p></li>
+      <li class="gm-tile"><div class="gm-tile-baie"><svg class="gm-ico"><use href="#m-chat"/></svg></div><h3>Discussion</h3><p>Covoiturage, bons plans, coups de main : une question ? Quelqu'un a la réponse.</p></li>
+    </ul>
+  </section>
+
+  <section class="gm-faq">
+    <details>
+      <summary>Je n'ai pas reçu le message</summary>
+      <p>Regardez dans vos courriers indésirables, et vérifiez que vous utilisez l'adresse de votre invitation. Si le lien tarde, patientez quelques minutes avant de redemander (le nombre d'envois est limité à l'heure).</p>
+    </details>
+    <details>
+      <summary>Qui peut venir ici ?</summary>
+      <p>Les locataires et les adhérents du Génie, sur invitation. Si ce n'est pas encore fait, <a href="adherer.html">adhérez</a> ou <a href="mailto:contact@genie-montauban.fr?subject=Acc%C3%A8s%20%C3%A0%20l%27espace%20membres">écrivez-nous</a>.</p>
+    </details>
+    <details>
+      <summary>Mes données sont-elles visibles de tous ?</summary>
+      <p>Seuls les autres membres voient votre prénom (ou pseudo) et ce que vous publiez. Rien n'est public sur internet. Détails dans la <a href="confidentialite.html">politique de confidentialité</a>.</p>
+    </details>
+  </section>
 </div>
 
+<!-- ───── Accueil membre connecté ───── -->
 <div id="gm-app" style="display:none">
   <div class="gm-shell">
     <span class="gm-eyebrow">Open space virtuel</span>
     <h1 class="gm-h1">Salut <span id="gm-hello-name"></span> 👋</h1>
-    <p class="gm-lede">La machine à café du Génie, en version numérique : les dernières annonces des membres, qui mange ici cette semaine, et la discussion en direct.</p>
+    <p class="gm-lede">La machine à café du Génie, en version numérique : les annonces des membres, qui mange ici cette semaine, et la discussion en direct.</p>
+    <p class="gm-today" id="gm-today"><svg class="gm-ico"><use href="#m-table"/></svg><span id="gm-today-txt">Chargement…</span></p>
+
+    <nav class="gm-quick" aria-label="Raccourcis">
+      <a href="membres-calendrier.html"><span class="gm-q-ico"><svg class="gm-ico"><use href="#m-table"/></svg></span><span><b>Je déjeune au Génie</b><small>Ajouter mon nom au calendrier</small></span></a>
+      <a href="membres-articles.html"><span class="gm-q-ico"><svg class="gm-ico"><use href="#m-voix"/></svg></span><span><b>Publier une annonce</b><small>Un conseil, un contact, une offre</small></span></a>
+      <a href="membres-chat.html"><span class="gm-q-ico"><svg class="gm-ico"><use href="#m-chat"/></svg></span><span><b>Dire bonjour</b><small>Lancer ou rejoindre une discussion</small></span></a>
+    </nav>
 
     <div class="gm-dash-grid">
       <div>
         <div class="gm-card">
-          <div class="gm-card-title">📰 Derniers articles <a href="membres-articles.html" class="gm-btn gm-btn-ghost" style="padding:6px 14px;font-size:12.5px">Tout voir →</a></div>
+          <div class="gm-card-title"><span><svg class="gm-ico"><use href="#m-journal"/></svg>Derniers articles</span> <a href="membres-articles.html" class="gm-btn gm-btn-ghost" style="padding:6px 14px;font-size:12.5px">Tout voir →</a></div>
           <div id="gm-articles-preview"><p class="gm-empty">Chargement…</p></div>
         </div>
         <div class="gm-card">
-          <div class="gm-card-title">💬 Discussion <a href="membres-chat.html" class="gm-btn gm-btn-ghost" style="padding:6px 14px;font-size:12.5px">Ouvrir →</a></div>
-          <p style="font-size:13.5px;color:var(--muted)">Canaux : Général, Covoiturage, Bons plans, Annonces pro. Tout le monde peut lancer une discussion.</p>
+          <div class="gm-card-title"><span><svg class="gm-ico"><use href="#m-chat"/></svg>Discussion</span> <a href="membres-chat.html" class="gm-btn gm-btn-ghost" style="padding:6px 14px;font-size:12.5px">Ouvrir →</a></div>
+          <p style="font-size:13.5px;color:var(--muted);margin:0">Canaux : Général, Covoiturage, Bons plans, Annonces pro. Tout le monde peut lancer une discussion.</p>
         </div>
       </div>
       <div>
         <div class="gm-card">
-          <div class="gm-card-title">🍽️ Cette semaine <a href="membres-calendrier.html" class="gm-btn gm-btn-ghost" style="padding:6px 14px;font-size:12.5px">Calendrier →</a></div>
+          <div class="gm-card-title"><span><svg class="gm-ico"><use href="#m-table"/></svg>Cette semaine</span> <a href="membres-calendrier.html" class="gm-btn gm-btn-ghost" style="padding:6px 14px;font-size:12.5px">Calendrier →</a></div>
           <ul class="gm-recap-list" id="gm-week-preview"><li class="gm-empty" style="border:none">Chargement…</li></ul>
         </div>
         <div class="gm-card">
-          <div class="gm-card-title">🗺️ À voir, à faire <a href="membres-a-voir.html" class="gm-btn gm-btn-ghost" style="padding:6px 14px;font-size:12.5px">Tout voir →</a></div>
+          <div class="gm-card-title"><span><svg class="gm-ico"><use href="#m-carte"/></svg>À voir, à faire</span> <a href="membres-a-voir.html" class="gm-btn gm-btn-ghost" style="padding:6px 14px;font-size:12.5px">Tout voir →</a></div>
           <div id="gm-activities-preview"><p class="gm-empty">Chargement…</p></div>
         </div>
       </div>
@@ -125,16 +198,20 @@ document.getElementById('gm-burger').addEventListener('click', () => document.ge
 if (window.GenieAuth.notConfigured) {
   const el = document.getElementById('gm-login');
   el.style.display = 'flex';
-  el.innerHTML = '<div class="gm-login-box"><h2>Configuration en attente</h2><p>L\'espace membres n\'est pas encore relié à sa base de données (assets/js/membres-config.js à compléter). Contactez l\'administrateur du site.</p></div>';
+  el.innerHTML = '<div class="gm-section"><div class="gm-login-box" style="margin:0 auto"><h2>Configuration en attente</h2><p>L\'espace membres n\'est pas encore relié à sa base de données (assets/js/membres-config.js à compléter). Contactez l\'administrateur du site.</p></div></div>';
 } else {
-  document.getElementById('gm-btn-send').addEventListener('click', async () => {
+  document.getElementById('gm-login-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
     const email = document.getElementById('gm-email').value.trim();
     const alertEl = document.getElementById('gm-alert');
-    if (!email) return;
+    const btn = document.getElementById('gm-btn-send');
+    if (!email) { document.getElementById('gm-email').focus(); return; }
+    btn.disabled = true; btn.textContent = 'Envoi en cours…';
     const err = await window.GenieAuth.sendMagicLink(email);
+    btn.disabled = false; btn.textContent = "Recevoir mon lien d'entrée";
     alertEl.classList.remove('ok', 'err');
     if (err) { alertEl.textContent = (err.status === 429 || /rate limit/i.test(err.message || '')) ? "Trop de liens envoyés récemment. Réessayez dans une heure, ou utilisez le dernier lien reçu par e-mail." : "Cette adresse n'est pas encore invitée. Demandez un accès avec le lien ci-dessous."; alertEl.classList.add('show', 'err'); }
-    else { alertEl.textContent = "Lien envoyé ! Vérifiez votre boîte mail (et les spams)."; alertEl.classList.add('show', 'ok'); }
+    else { alertEl.textContent = "C'est parti ! Ouvrez le message que vous venez de recevoir et cliquez sur le lien (pensez aux spams)."; alertEl.classList.add('show', 'ok'); }
   });
   document.getElementById('gm-btn-out').addEventListener('click', () => window.GenieAuth.signOut());
 
@@ -161,8 +238,13 @@ if (window.GenieAuth.notConfigured) {
     const days = Object.keys(byDay).sort();
     const list = document.getElementById('gm-week-preview');
     list.innerHTML = !days.length
-      ? '<li class="gm-empty" style="border:none">Personne d\'inscrit pour l\'instant.</li>'
+      ? '<li class="gm-empty" style="border:none">Personne d\'inscrit pour l\'instant. <a href="membres-calendrier.html">Lancez le mouvement !</a></li>'
       : days.map(d => `<li><span>${U.formatDayShort(d)}</span><span>${byDay[d].map(U.escapeHtml).join(', ')}</span></li>`).join('');
+
+    const todayWho = byDay[U.isoLocal(today)] || [];
+    document.getElementById('gm-today-txt').textContent = todayWho.length
+      ? (todayWho.length === 1 ? `Aujourd'hui, ${todayWho[0]} déjeune au Génie.` : `Aujourd'hui, ${todayWho.length} personnes déjeunent au Génie.`)
+      : "Personne n'a encore dit déjeuner ici aujourd'hui : et si c'était vous ?";
 
     const { data: activities } = await db.from('activities').select('*').order('created_at', { ascending: false }).limit(3);
     const actWrap = document.getElementById('gm-activities-preview');
