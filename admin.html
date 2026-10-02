@@ -248,6 +248,7 @@ textarea{resize:vertical;min-height:65px}
       <div class="nav-s">Gestion</div>
       <div class="nav-item" onclick="go('adhesions')">🤝 Adhésions <span id="nav-adh-badge" class="nav-count" hidden></span></div>
       <div class="nav-item" onclick="go('clients')">👥 Clients</div>
+      <div class="nav-item" onclick="go('membres')">💌 Inviter des membres</div>
       <div class="nav-item" onclick="go('espaces')">🏢 Espaces & Tarifs</div>
       <div class="nav-s">Outils</div>
       <div class="nav-item" onclick="go('donnees')">💾 Données & Config</div>
@@ -426,6 +427,18 @@ textarea{resize:vertical;min-height:65px}
               <tbody id="client-body"></tbody>
             </table>
           </div>
+        </div>
+      </div>
+
+      <!-- ════════════════ PAGE INVITER DES MEMBRES ════════════════ -->
+      <div id="page-membres" class="page">
+        <div class="info-bar">ℹ️ Chaque adresse reçoit un e-mail du Génie avec un bouton « Entrer dans l'espace membres ». Vous pouvez aussi inviter à nouveau quelqu'un qui n'a pas reçu son lien.</div>
+        <div class="card" style="padding:20px">
+          <label for="inv-emails" style="font-weight:600;display:block;margin-bottom:6px">Adresses e-mail à inviter</label>
+          <textarea id="inv-emails" rows="6" placeholder="prenom@exemple.fr&#10;autre@exemple.fr" style="width:100%;padding:10px;border:1.5px solid var(--border,#ddd);border-radius:8px;font:inherit"></textarea>
+          <p style="font-size:12.5px;color:#666;margin:6px 0 14px">Une adresse par ligne (ou séparées par des virgules). 30 maximum à la fois.</p>
+          <button class="btn btn-primary" id="inv-btn" onclick="inviterMembres()">💌 Envoyer les invitations</button>
+          <ul id="inv-result" style="list-style:none;padding:0;margin:16px 0 0;font-size:14px"></ul>
         </div>
       </div>
 
@@ -1337,6 +1350,7 @@ const PAGE_T = {
   reservations: 'Réservations',
   adhesions   : 'Adhésions',
   clients     : 'Clients',
+  membres     : 'Inviter des membres',
   espaces     : 'Espaces & Tarifs 2026',
   donnees     : 'Données & Configuration'
 };
@@ -1352,6 +1366,23 @@ function closeSidebarMobile() {
   }
 }
 
+async function inviterMembres() {
+  const btn = document.getElementById('inv-btn');
+  const out = document.getElementById('inv-result');
+  const emails = document.getElementById('inv-emails').value;
+  if (!emails.trim()) return;
+  btn.disabled = true; btn.textContent = 'Envoi en cours…'; out.innerHTML = '';
+  try {
+    const r = await apiPost({ action: 'INVITER_MEMBRES', emails });
+    if (!r.success) throw new Error(r.error || 'Échec');
+    const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    out.innerHTML = r.resultats.map(x => `<li style="padding:4px 0">${x.ok ? '✅' : '❌'} <b>${esc(x.email)}</b> — ${esc(x.message)}</li>`).join('');
+  } catch (e) {
+    out.innerHTML = `<li style="color:#b00">❌ ${String(e.message).replace(/</g,'&lt;')}</li>`;
+  }
+  btn.disabled = false; btn.textContent = '💌 Envoyer les invitations';
+}
+
 function go(name) {
   closeSidebarMobile();
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -1363,7 +1394,7 @@ function go(name) {
   document.getElementById('ptitle').textContent = PAGE_T[name];
   document.getElementById('topbar-actions').innerHTML =
     `<button class="btn btn-ghost btn-sm" onclick="loadData(true)">🔄 Actualiser</button>` +
-    (!['espaces','donnees','adhesions'].includes(name) ? `<button class="btn btn-primary" onclick="openModal('mresa')">➕ Nouvelle réservation</button>` : '');
+    (!['espaces','donnees','adhesions','membres'].includes(name) ? `<button class="btn btn-primary" onclick="openModal('mresa')">➕ Nouvelle réservation</button>` : '');
   refreshPage(name);
 }
 
