@@ -2,7 +2,7 @@
 title: Accompagnement de porteurs de projet à Montauban — La Fabrique du Génie
 description: Vous lancez une association, une coopérative ou une activité indépendante à Montauban, en Tarn-et-Garonne ? Premier rendez-vous gratuit, puis parcours à prix solidaire : tester, structurer, lancer.
 url: https://genie-montauban.fr/entreprendre.html
-last_updated: 2026-10-02
+last_updated: 2026-10-05
 source: miroir markdown — version texte pour moteurs IA
 ---
 
@@ -12,7 +12,19 @@ source: miroir markdown — version texte pour moteurs IA
 
 Association, coopérative, activité indépendante : un premier rendez-vous gratuit pour y voir clair, puis un parcours à prix solidaire si vous voulez aller plus loin.
 
-[Demander un rendez-vous gratuit](#rdv)
+[Demander un rendez-vous gratuit](#rdv)  [Ouvrir La Fabrique](https://lafabrique.genie-montauban.fr/)
+
+Nouveau · La Fabrique du Génie
+
+## Votre espace d'accompagnement en ligne
+
+Suivez votre parcours, retrouvez vos ressources et avancez sur votre projet à votre rythme, de la première idée au lancement.
+
+[Accéder à La Fabrique  (s'ouvre dans un nouvel onglet)](https://lafabrique.genie-montauban.fr/)
+
+- Un parcours en 4 étapes
+- Des outils pour structurer votre projet
+- Un accompagnement à prix solidaire
 
 La Fabrique du Génie · lancement octobre 2026
 
