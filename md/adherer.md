@@ -2,7 +2,7 @@
 title: Adhérer à l'association Génie — tiers-lieu de Montauban
 description: Adhérez au tiers-lieu Génie à Montauban : 10 €/an pour soutenir le lieu, dès 15 €/an pour voter en assemblée et payer moins cher les salles. En ligne par carte, chèque, virement ou espèces.
 url: https://genie-montauban.fr/adherer.html
-last_updated: 2026-10-02
+last_updated: 2026-10-06
 source: miroir markdown — version texte pour moteurs IA
 ---
 
