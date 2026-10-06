@@ -52,6 +52,10 @@ footer.g-foot { display: block; background: var(--g-navy); color: rgba(255,255,2
 .g-foot li { margin: 0 0 8px; padding: 0; }
 .g-foot .g-foot-brand { font: 800 1.6rem/1.1 "Bricolage Grotesque", system-ui, sans-serif; letter-spacing: -.02em; color: #fff; margin-bottom: 6px; }
 .g-foot .g-foot-bottom { margin-top: 36px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,.12); display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: .82rem; }
+.g-foot h2 + .g-social, .g-foot ul + h2 { margin-top: 18px; }
+.g-foot .g-social { display: flex; flex-wrap: wrap; gap: 6px; }
+.g-foot .g-social a { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(255,255,255,.25); color: #fff; transition: background .15s, border-color .15s, color .15s; }
+.g-foot .g-social a:hover, .g-foot .g-social a:focus-visible { background: var(--g-gold-l); border-color: var(--g-gold-l); color: var(--g-navy); text-decoration: none; }
 .g-foot .discret { opacity: .55; font-size: .75rem; }
 
 /* ── Bandeau de consentement (mesure d'audience) ── */
