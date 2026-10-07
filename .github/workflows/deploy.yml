@@ -88,6 +88,8 @@ jobs:
           cp *.html CNAME robots.txt sitemap.xml llms.txt favicon.png logo.png og-image.jpg \
              responsive-fixes.css Fiche_Adhesion_GENIE_2026.pdf _site/
           cp *.jpg _site/ 2>/dev/null || true
+          # Clé IndexNow (publique par conception : prouve la propriété du site à Bing)
+          cp 0b6e039c3c61e47127a598d2ef45fa5b.txt _site/
           cp "qr code avis google - génie.png" _site/ 2>/dev/null || true
           cp -r assets md _site/
           # Documents liés depuis les pages (statuts, PV, grille, règlement…)
@@ -108,3 +110,15 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Prévenir Bing, Yahoo, Yandex… via IndexNow
+        # Après un vrai déploiement (push ou lancement manuel, pas le cron
+        # quotidien). La clé est publique : elle est servie à la racine du site.
+        if: github.event_name != 'schedule'
+        continue-on-error: true
+        run: |
+          KEY=0b6e039c3c61e47127a598d2ef45fa5b
+          URLS=$(grep -oP '(?<=<loc>)[^<]+' sitemap.xml | sed 's/.*/"&"/' | paste -sd, -)
+          curl -s -o /dev/null -w "IndexNow: HTTP %{http_code}\n" -X POST "https://api.indexnow.org/indexnow" \
+            -H "Content-Type: application/json; charset=utf-8" \
+            -d "{\"host\":\"genie-montauban.fr\",\"key\":\"$KEY\",\"keyLocation\":\"https://genie-montauban.fr/$KEY.txt\",\"urlList\":[$URLS]}"
