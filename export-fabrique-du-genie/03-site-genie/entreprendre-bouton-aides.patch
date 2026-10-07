@@ -1,0 +1,13 @@
+diff --git a/entreprendre.html b/entreprendre.html
+index b7d69f7..b6e1532 100644
+--- a/entreprendre.html
++++ b/entreprendre.html
+@@ -82,7 +82,7 @@
+       <p class="kicker">Nouveau · La Fabrique du Génie</p>
+       <h2 id="fabrique-titre">Votre espace d'accompagnement en ligne</h2>
+       <p>Suivez votre parcours, retrouvez vos ressources et avancez sur votre projet à votre rythme, de la première idée au lancement.</p>
+-      <div class="btn-row"><a class="btn btn-gold" href="https://lafabrique.genie-montauban.fr/" target="_blank" rel="noopener">Accéder à La Fabrique <svg class="ico ico-fl"><use href="#g-i-fleche"/></svg><span class="sr-only"> (s'ouvre dans un nouvel onglet)</span></a></div>
++      <div class="btn-row"><a class="btn btn-gold" href="https://lafabrique.genie-montauban.fr/" target="_blank" rel="noopener">Accéder à La Fabrique <svg class="ico ico-fl"><use href="#g-i-fleche"/></svg><span class="sr-only"> (s'ouvre dans un nouvel onglet)</span></a> <a class="btn btn-ghost" href="https://aides.genie-montauban.fr/" target="_blank" rel="noopener">Trouver des aides <svg class="ico ico-fl"><use href="#g-i-fleche"/></svg><span class="sr-only"> (s'ouvre dans un nouvel onglet)</span></a></div>
+     </div>
+     <ul class="fabrique-pts">
+       <li>Un parcours en 4 étapes</li>

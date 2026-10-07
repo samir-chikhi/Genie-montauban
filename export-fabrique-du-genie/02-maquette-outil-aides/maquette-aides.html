@@ -1,0 +1,247 @@
+<title>La Fabrique du Génie – Aides</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=DM+Sans:wght@400;500;600&display=swap">
+<style>
+/* Direction : la façade du Génie. Nuit + brique + pierre, or réservé aux actions, arc surbaissé en signature. Une seule ambiance (charte du site), volontairement sans mode sombre. */
+:root{
+  color-scheme:light;
+  --nuit:#1C2B3A; --nuit-2:#2A3D50; --brique:#B4532F; --brique-l:#E7B9A5;
+  --or:#C9993E; --or-h:#D8AB54; --pierre:#F3EEEA; --blanc:#FFFFFF;
+  --gris:#57626D; --filet:rgba(28,43,58,.14); --ok:#2F6B4F; --warn:#9A5B12;
+  --display:"Bricolage Grotesque","DM Sans",system-ui,sans-serif;
+  --texte:"DM Sans",system-ui,-apple-system,sans-serif;
+  --arc:50% 50% 0 0 / 34px 34px 0 0;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--blanc);color:var(--nuit);font:400 1.0625rem/1.6 var(--texte);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,h3{font-family:var(--display);font-weight:800;letter-spacing:-.025em;line-height:1.05;margin:0 0 .45em;text-wrap:balance}
+h1{font-size:clamp(2.2rem,5.4vw,3.8rem)} h2{font-size:clamp(1.6rem,3.4vw,2.3rem)} h3{font-size:1.2rem;letter-spacing:-.015em;line-height:1.15}
+p{margin:0 0 1em}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--or);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+@media(min-width:760px){.wrap{padding:0 40px}}
+.ico{width:1.25em;height:1.25em;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.kicker{display:flex;align-items:center;gap:10px;font:600 .8rem/1.3 var(--texte);letter-spacing:.14em;text-transform:uppercase;color:var(--brique);margin-bottom:14px}
+.kicker::before{content:"";width:22px;height:2px;background:currentColor;flex:none}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:50px;padding:12px 22px;border-radius:8px;font:600 1rem var(--texte);text-decoration:none;border:2px solid transparent;cursor:pointer}
+.btn-gold{background:var(--or);color:var(--nuit)} .btn-gold:hover{background:var(--or-h)}
+.btn-ghost{border-color:currentColor;background:transparent;color:inherit} .btn-ghost:hover{background:rgba(127,127,127,.12)}
+
+/* bandeau de maquette */
+.maq{background:var(--or);color:var(--nuit);font:600 .85rem/1.3 var(--texte);text-align:center;padding:8px 16px}
+
+/* en-tête */
+.top{background:var(--nuit);color:var(--blanc);border-bottom:1px solid rgba(255,255,255,.12)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:68px;flex-wrap:wrap;padding-block:10px}
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none;font:800 1.35rem var(--display);letter-spacing:-.02em}
+.logo i{width:30px;height:36px;border:3px solid var(--brique-l);border-bottom:0;border-radius:50% 50% 0 0/16px 16px 0 0;display:block}
+.logo small{display:block;font:500 .7rem var(--texte);letter-spacing:.14em;text-transform:uppercase;color:var(--brique-l)}
+.nav{display:flex;gap:22px;flex-wrap:wrap;font-weight:500;font-size:.98rem}
+.nav a{text-decoration:none;color:rgba(255,255,255,.82)} .nav a:hover,.nav a[aria-current]{color:var(--blanc);text-decoration:underline;text-underline-offset:6px;text-decoration-color:var(--brique)}
+
+/* héros */
+.hero{background:var(--nuit);color:var(--blanc);overflow:hidden}
+.hero .wrap{display:grid;gap:36px;align-items:end;padding-top:56px}
+@media(min-width:900px){.hero .wrap{grid-template-columns:1.2fr .8fr;gap:56px;padding-top:76px}}
+.hero-txt{padding-bottom:56px}
+.hero .kicker{color:var(--brique-l)}
+.hero h1 em{font-style:normal;color:var(--or)}
+.hero .lead{font-size:1.15rem;color:rgba(255,255,255,.8);max-width:560px}
+.btn-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}
+@media(max-width:520px){.btn-row .btn{flex:1 1 100%}}
+.facade{align-self:stretch;min-height:300px;border:10px solid var(--nuit-2);border-bottom:0;border-radius:50% 50% 0 0/60px 60px 0 0;background:var(--nuit-2);position:relative;overflow:hidden}
+.facade .in{position:absolute;inset:0;border-radius:50% 50% 0 0/52px 52px 0 0;background:
+  repeating-linear-gradient(0deg,transparent 0 23px,rgba(0,0,0,.18) 23px 25px),
+  repeating-linear-gradient(90deg,transparent 0 47px,rgba(0,0,0,.14) 47px 49px),var(--brique);
+  display:flex;align-items:flex-end;justify-content:center;padding:24px}
+.facade .carte{background:var(--blanc);color:var(--nuit);border-radius:var(--arc);padding:30px 22px 18px;width:min(100%,300px);box-shadow:0 18px 40px rgba(0,0,0,.28)}
+.carte b{font:800 2.4rem var(--display);display:block;line-height:1}
+.carte span{font-size:.92rem;color:var(--gris)}
+@media(max-width:899px){.facade{min-height:230px;border-width:7px}}
+
+/* outil */
+.sec{padding:64px 0}
+.sec-pierre{background:var(--pierre)}
+.outil{display:grid;gap:28px;align-items:start}
+@media(min-width:960px){.outil{grid-template-columns:360px 1fr;gap:40px}}
+.form{background:var(--blanc);border:1px solid var(--filet);border-radius:var(--arc);padding:44px 24px 24px}
+@media(min-width:960px){.form{position:sticky;top:16px}}
+.form h2{font-size:1.5rem}
+fieldset{border:0;padding:0;margin:0 0 18px;min-width:0}
+legend,.lbl{font:600 .8rem var(--texte);letter-spacing:.1em;text-transform:uppercase;color:var(--brique);padding:0;margin-bottom:8px;display:block}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip input{position:absolute;opacity:0;pointer-events:none}
+.chip span{display:inline-flex;align-items:center;gap:6px;min-height:42px;padding:8px 14px;border:1.5px solid var(--filet);border-radius:999px;font-weight:500;font-size:.96rem;cursor:pointer;background:var(--blanc)}
+.chip input:checked+span{background:var(--nuit);color:var(--blanc);border-color:var(--nuit)}
+.chip input:focus-visible+span{outline:3px solid var(--or);outline-offset:2px}
+.chip span:hover{border-color:var(--brique)}
+select{width:100%;min-height:46px;border:1.5px solid var(--filet);border-radius:8px;padding:8px 12px;font:500 1rem var(--texte);color:var(--nuit);background:var(--blanc)}
+.form .note{font-size:.88rem;color:var(--gris);margin:0}
+
+.res-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:12px;margin-bottom:20px}
+.res-head h2{margin:0}
+.cnt{font:600 .95rem var(--texte);color:var(--gris)}
+.liste{display:grid;gap:18px;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr))}
+.fiche{background:var(--blanc);border:1px solid var(--filet);border-radius:var(--arc);padding:48px 22px 22px;display:flex;flex-direction:column;gap:10px;position:relative;min-width:0}
+.fiche::before{content:"";position:absolute;left:50%;top:14px;width:46px;height:5px;margin-left:-23px;background:var(--brique);border-radius:3px}
+.type{display:flex;align-items:center;gap:8px;font:600 .78rem var(--texte);letter-spacing:.1em;text-transform:uppercase;color:var(--brique)}
+.fiche h3{margin:0}
+.fiche p{margin:0;font-size:.98rem;color:var(--gris)}
+.mesure{display:flex;align-items:center;gap:10px;font-weight:600;font-size:.9rem}
+.barre{flex:1;height:8px;background:var(--pierre);border-radius:4px;overflow:hidden;min-width:0}
+.barre i{display:block;height:100%;background:var(--brique)}
+.pil{display:inline-flex;align-items:center;gap:6px;font:600 .82rem var(--texte);padding:3px 10px;border-radius:999px}
+.pil.ok{background:#E3F0E9;color:var(--ok)} .pil.warn{background:#F8EBD3;color:var(--warn)}
+.pied{margin-top:auto;padding-top:12px;border-top:1px solid var(--filet);display:flex;flex-direction:column;gap:6px;font-size:.88rem;color:var(--gris)}
+.pied a{color:var(--brique);font-weight:600}
+.pil.gris{background:var(--pierre);color:var(--gris)}
+.meta{font-size:.92rem!important}
+details{font-size:.9rem;color:var(--gris)} summary{cursor:pointer;font-weight:600;color:var(--warn)} details ul{margin:6px 0 0;padding-left:18px}
+.srcs{list-style:none;margin:20px 0 0;padding:0;display:grid;gap:10px 28px;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr))}
+.srcs li{display:flex;flex-direction:column;border-top:1px solid rgba(255,255,255,.18);padding-top:10px;min-width:0}
+.srcs a{color:var(--brique-l);font-weight:600} .srcs span{font-size:.85rem;color:rgba(255,255,255,.7)}
+.vide{padding:32px;border:1.5px dashed var(--filet);border-radius:12px;color:var(--gris);text-align:center}
+
+/* méthode */
+.nuit{background:var(--nuit);color:var(--blanc);padding:60px 0;border-radius:0 0 50% 50%/0 0 36px 36px}
+.nuit .kicker{color:var(--brique-l)}
+.trois{display:grid;gap:22px;margin-top:26px}
+@media(min-width:800px){.trois{grid-template-columns:repeat(3,1fr)}}
+.trois div{border-top:2px solid var(--brique);padding-top:16px}
+.trois .ico{width:2em;height:2em;color:var(--or);margin-bottom:8px}
+.trois p{color:rgba(255,255,255,.78);margin:0;font-size:.98rem}
+.rdv{background:var(--pierre);padding:56px 0 40px;text-align:left}
+.rdv .wrap{display:grid;gap:20px}
+@media(min-width:800px){.rdv .wrap{grid-template-columns:1.4fr 1fr;align-items:center}}
+footer{background:var(--nuit);color:rgba(255,255,255,.75);padding:36px 0;font-size:.92rem}
+footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-between}
+footer a{color:var(--brique-l)}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-fleche" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-pousse" viewBox="0 0 24 24"><path d="M12 21v-9M12 12c0-4 3-6 7-6 0 4-3 6-7 6zM12 15c0-3-2-5-6-5 0 3 2 5 6 5z"/></symbol>
+  <symbol id="i-piece" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v8M9.5 10.5c0-1 1-1.5 2.5-1.5s2.5.6 2.5 1.7-1 1.5-2.5 1.8-2.5.7-2.5 1.8 1 1.7 2.5 1.7 2.5-.5 2.5-1.5"/></symbol>
+  <symbol id="i-main" viewBox="0 0 24 24"><path d="M3 12l5-4 4 2 4-2 5 4-5 6h-3l-2-2-3 2z"/></symbol>
+  <symbol id="i-loupe" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/></symbol>
+  <symbol id="i-coche" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-alerte" viewBox="0 0 24 24"><path d="M12 4l9 16H3z"/><path d="M12 10v4M12 17v.5"/></symbol>
+  <symbol id="i-livre" viewBox="0 0 24 24"><path d="M4 5.5C7 4.5 10 5 12 7c2-2 5-2.500 8-1.500V19c-3-1-6-.5-8 1.500C10 18.500 7 18 4 19z"/><path d="M12 7v13.500"/></symbol>
+  <symbol id="i-cle" viewBox="0 0 24 24"><circle cx="8" cy="12" r="4"/><path d="M12 12h9M18 12v3M21 12v2"/></symbol>
+</svg>
+
+<div class="maq">Maquette de travail · données réelles du dépôt aide-entreprises (8 fiches initiales, vérifiées le 2 septembre 2026)</div>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#"><i aria-hidden="true"></i><span>Génie<small>La Fabrique</small></span></a>
+    <nav class="nav" aria-label="Menu principal">
+      <a href="#">Le projet</a><a href="#">Espaces</a><a href="#">Activités</a><a href="#" aria-current="page">Entreprendre</a><a href="#">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-txt">
+      <p class="kicker">La Fabrique du Génie · Outil gratuit</p>
+      <h1>Trouvez les aides qui <em>correspondent</em> à votre projet.</h1>
+      <p class="lead">Répondez à quelques questions. L'outil classe les subventions, prêts d'honneur et garanties du Tarn-et-Garonne, dit pourquoi chacune vous concerne et ce qu'il reste à vérifier.</p>
+      <div class="btn-row">
+        <a class="btn btn-gold" href="#outil">Lancer la recherche <svg class="ico"><use href="#i-fleche"/></svg></a>
+        <a class="btn btn-ghost" href="#rdv">Être accompagné au Génie</a>
+      </div>
+    </div>
+    <div class="facade" aria-hidden="true">
+      <div class="in"><div class="carte"><b id="nb-total">8</b><span>dispositifs, chacun avec sa page officielle et sa date de vérification, et <b id="nb-src" style="display:inline;font:700 1em var(--texte)">15</b> sources suivies</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec sec-pierre" id="outil">
+  <div class="wrap outil">
+    <form class="form" id="f" aria-label="Décrire votre projet" onsubmit="return false">
+      <p class="kicker">Votre projet</p><h2>Quelques questions</h2>
+      <fieldset><legend>Territoire</legend><label class="lbl" for="territoire" style="position:absolute;left:-9999px">territoire</label><select id="territoire" name="territoire"><option value="Tarn-et-Garonne">Tarn-et-Garonne (Montauban)</option><option value="Occitanie">Occitanie</option><option value="France">France entière</option></select></fieldset>
+      <fieldset><legend>Où en êtes-vous ?</legend><div class="chips"><label class="chip"><input type="radio" name="stade" value="Création" checked><span>Création</span></label><label class="chip"><input type="radio" name="stade" value="Reprise"><span>Reprise</span></label><label class="chip"><input type="radio" name="stade" value="Développement"><span>Développement</span></label></div></fieldset>
+      <fieldset><legend>Forme juridique</legend><label class="lbl" for="forme" style="position:absolute;left:-9999px">forme</label><select id="forme" name="forme"><option value="EI">Entreprise individuelle</option><option value="Micro-entreprise">Micro-entreprise</option><option value="Société">Société (SAS, SARL…)</option><option value="Association">Association</option></select></fieldset>
+      <fieldset><legend>Secteur</legend><label class="lbl" for="secteur" style="position:absolute;left:-9999px">secteur</label><select id="secteur" name="secteur"><option value="Tous secteurs">Tous secteurs</option><option value="Commerce">Commerce</option><option value="Tourisme">Tourisme</option><option value="Industrie">Industrie</option><option value="Innovation">Innovation</option><option value="Transition">Transition écologique</option><option value="Impact social">Impact social</option></select></fieldset>
+      <fieldset><legend>Type d'aide</legend><label class="lbl" for="type" style="position:absolute;left:-9999px">type</label><select id="type" name="type"><option value="Tous types">Tous types</option><option value="Aide / capital">Aide / capital</option><option value="Exonération / allègement">Exonération / allègement</option><option value="Garantie / financement">Garantie / financement</option><option value="Prêt d’honneur">Prêt d’honneur</option><option value="Référentiel / orientation">Référentiel / orientation</option><option value="Subvention / appel à projets">Subvention / appel à projets</option><option value="Subvention territoriale">Subvention territoriale</option></select></fieldset>
+      <p class="note">Rien n'est enregistré. Les résultats se recalculent à chaque réponse.</p>
+    </form>
+
+    <div>
+      <div class="res-head">
+        <div><p class="kicker">Résultats</p><h2>Vos pistes, par ordre de pertinence</h2></div>
+        <span class="cnt" id="cnt" role="status" aria-live="polite"></span>
+      </div>
+      <div class="liste" id="liste"></div>
+    </div>
+  </div>
+</section>
+
+<section class="nuit">
+  <div class="wrap">
+    <p class="kicker">Notre méthode</p>
+    <h2>Un outil qui explique, il ne décide pas.</h2>
+    <div class="trois">
+      <div><svg class="ico"><use href="#i-loupe"/></svg><h3>Critères visibles</h3><p>Chaque résultat indique ce qui correspond à votre projet et ce que vous devez encore confirmer.</p></div>
+      <div><svg class="ico"><use href="#i-livre"/></svg><h3>Sources datées</h3><p>Chaque fiche renvoie vers la page officielle du financeur, avec la date de dernière vérification.</p></div>
+      <div><svg class="ico"><use href="#i-main"/></svg><h3>Un humain au bout</h3><p>Un conseiller du Génie relit votre sélection avec vous avant tout dépôt de dossier.</p></div>
+    </div>
+    <h3 style="margin-top:36px">Les sources suivies</h3>
+    <ul class="srcs" id="src"></ul>
+  </div>
+</section>
+
+<section class="rdv" id="rdv">
+  <div class="wrap">
+    <div><p class="kicker">Accompagnement</p><h2>Passez de la liste au dossier.</h2><p>Rendez-vous gratuit au 12 rue du Génie pour valider votre sélection et préparer vos demandes.</p></div>
+    <div class="btn-row" style="margin:0"><a class="btn btn-gold" href="#">Demander un rendez-vous <svg class="ico"><use href="#i-fleche"/></svg></a></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>Génie · Tiers-lieu · 12 rue du Génie, 82000 Montauban</span>
+    <span><a href="#">Mentions légales</a> · <a href="#">Confidentialité</a></span>
+  </div>
+</footer>
+
+<script>
+/* Données : client/src/pages/Home.tsx (seedAids) et shared/sourceRegistry.ts du dépôt aide-entreprises, extraites telles quelles. */
+var AIDES=[{"id": 1, "n": "ACRE — exonération de début d’activité", "t": "Exonération / allègement", "te": "France", "st": ["Création", "Reprise"], "fo": ["EI", "Micro-entreprise", "Société"], "se": ["Tous secteurs"], "au": ["Demandeur d’emploi", "Jeune", "Bénéficiaire RSA"], "am": "Exonération partielle de cotisations selon situation", "dl": "À la création", "s": "À demander", "u": "immediate", "o": "https://www.urssaf.fr/accueil/independant/creer-entreprise/accre.html", "v": "02/09/2026", "p": "Urssaf", "un": ["Éligibilité personnelle à confirmer auprès de l’Urssaf", "Règles à vérifier selon la date de création"]}, {"id": 2, "n": "ARCE — versement en capital des droits chômage", "t": "Aide / capital", "te": "France", "st": ["Création", "Reprise"], "fo": ["EI", "Micro-entreprise", "Société"], "se": ["Tous secteurs"], "au": ["Demandeur d’emploi indemnisé"], "am": "Une partie des droits ARE restants versée en capital", "dl": "Après obtention de l’ACRE", "s": "À demander", "u": "immediate", "o": "https://www.francetravail.fr/candidat/je-creereprends-une-entreprise/les-aides-financieres-creation-d.html", "v": "02/09/2026", "p": "France Travail", "un": ["Montant exact dépend des droits individuels", "Choix ARCE ou maintien ARE à simuler"]}, {"id": 3, "n": "Prêt d’honneur Création-Reprise", "t": "Prêt d’honneur", "te": "France", "st": ["Création", "Reprise"], "fo": ["EI", "Société"], "se": ["Tous secteurs"], "au": ["Porteur de projet"], "am": "Prêt personnel à taux zéro, sans garantie selon dispositif", "dl": "Dépôt avant financement bancaire", "s": "À préparer", "u": "upcoming", "o": "https://bpifrance-creation.fr/encyclopedie/financements/financement-fonds-propres/pret-dhonneur-creation-reprise", "v": "02/09/2026", "p": "Bpifrance Création / réseaux Cap Créa", "un": ["Montant et réseau compétent à confirmer", "Instruction sur dossier et comité"]}, {"id": 4, "n": "Aides et appels à projets de la Région Occitanie", "t": "Subvention / appel à projets", "te": "Occitanie", "st": ["Création", "Développement"], "fo": ["EI", "Société", "Association"], "se": ["Innovation", "Industrie", "Transition", "Commerce"], "au": ["Entreprise régionale"], "am": "Variable selon dispositif et dépenses éligibles", "dl": "Selon calendrier de l’appel", "s": "À préparer", "u": "upcoming", "o": "https://www.laregion.fr/Les-aides-et-appels-a-projets", "v": "02/09/2026", "p": "Région Occitanie", "un": ["Dispositif à sélectionner selon activité et commune", "Calendrier propre à chaque appel"]}, {"id": 5, "n": "Aides-entreprises.fr — base nationale", "t": "Référentiel / orientation", "te": "France", "st": ["Tous stades"], "fo": ["Toutes formes"], "se": ["Tous secteurs"], "au": ["Entreprise"], "am": "Variable", "dl": "Variable", "s": "À vérifier", "u": "watch", "o": "https://les-aides.fr/", "v": "02/09/2026", "p": "Bpifrance / partenaires publics", "un": ["La fiche finale doit être vérifiée auprès du financeur", "Les résultats dépendent des critères saisis"]}, {"id": 6, "n": "France Active — garanties et financements", "t": "Garantie / financement", "te": "France", "st": ["Création", "Développement"], "fo": ["EI", "Société", "Association"], "se": ["Tous secteurs", "Impact social"], "au": ["Projet à impact", "Public éloigné du financement"], "am": "Garantie et financement selon parcours", "dl": "Sur rendez-vous", "s": "À préparer", "u": "upcoming", "o": "https://www.franceactive.org/", "v": "02/09/2026", "p": "France Active", "un": ["Interlocuteur local à identifier", "Conditions selon fonds mobilisé"]}, {"id": 7, "n": "Initiative France — prêt d’honneur et accompagnement", "t": "Prêt d’honneur", "te": "France", "st": ["Création", "Reprise", "Développement"], "fo": ["EI", "Société"], "se": ["Tous secteurs"], "au": ["Porteur de projet"], "am": "Montant décidé par le comité local", "dl": "Sur calendrier local", "s": "À préparer", "u": "upcoming", "o": "https://www.initiative-france.fr/", "v": "02/09/2026", "p": "Initiative France", "un": ["Montant et critères propres à la plateforme locale", "Passage en comité"]}, {"id": 8, "n": "Tarn-et-Garonne — démarches et subventions", "t": "Subvention territoriale", "te": "Tarn-et-Garonne", "st": ["Création", "Développement"], "fo": ["EI", "Société", "Association"], "se": ["Tous secteurs", "Commerce", "Tourisme"], "au": ["Structure locale"], "am": "Selon dispositif départemental", "dl": "Selon campagne", "s": "À vérifier", "u": "watch", "o": "https://www.tarnetgaronne.fr/demarches-et-subventions", "v": "02/09/2026", "p": "Département de Tarn-et-Garonne", "un": ["Aide dépendante de la collectivité compétente", "Calendrier à contrôler avant dépôt"]}];
+var SOURCES=[{"id": "aides-entreprises-api", "n": "Aides-Entreprises", "k": "api", "a": "connected", "u": "https://data.aides-entreprises.fr/api", "c": "France · aides aux entreprises", "d": "2026-09-02"}, {"id": "aides-entreprises-open-data", "n": "Aides-Entreprises — export open data", "k": "export", "a": "open", "u": "https://www.data.gouv.fr/datasets/base-de-donnees-des-aides-aux-entreprises", "c": "France · aides publiques aux entreprises", "d": "2026-09-02"}, {"id": "aides-territoires", "n": "Aides Territoires", "k": "api", "a": "requires_account", "u": "https://aides-territoires.beta.gouv.fr/api", "c": "Territoires · aides financières et ingénierie", "d": "2026-09-02"}, {"id": "associations-gouv-appels", "n": "Associations.gouv.fr — appels à projets", "k": "portal", "a": "open", "u": "https://associations.gouv.fr/appels-projets", "c": "France · associations · FDVA, appels à projets et AMI", "d": "2026-09-02"}, {"id": "service-public", "n": "Service-Public.fr", "k": "portal", "a": "open", "u": "https://www.service-public.gouv.fr", "c": "France · particuliers, entreprises et démarches", "d": "2026-09-02"}, {"id": "anah-france-renov", "n": "Anah / France Rénov’", "k": "portal", "a": "open", "u": "https://www.anah.gouv.fr", "c": "France · rénovation, adaptation, habitat privé", "d": "2026-09-02"}, {"id": "justice-aide-juridictionnelle", "n": "Justice.fr — aide juridictionnelle", "k": "portal", "a": "open", "u": "https://www.justice.fr/simulateurs/aide-juridictionnelle", "c": "France · particuliers · frais de justice", "d": "2026-09-02"}, {"id": "ecologie-aides-mobilite", "n": "Écologie — aides à la mobilité électrique", "k": "portal", "a": "open", "u": "https://www.ecologie.gouv.fr/presse/plan-delectrification-aides-lacquisition-vehicules-electriques-taxis-disponibles-1er", "c": "France · véhicules électriques · taxis/VTC et mobilité", "d": "2026-09-02"}, {"id": "data-subvention", "n": "Data.Subvention", "k": "api", "a": "requires_account", "u": "https://datasubvention.beta.gouv.fr/api/", "c": "Associations · données administratives et demandes de subvention", "d": "2026-09-02"}, {"id": "fondation-de-france", "n": "Fondation de France", "k": "foundation", "a": "open", "u": "https://www.fondationdefrance.org/fr/appels-a-projets", "c": "France · appels à projets, AMI, recherche, solidarité, environnement", "d": "2026-09-02"}, {"id": "admical", "n": "Admical", "k": "foundation", "a": "open", "u": "https://admical.org/categories-articles/les-appels-projets", "c": "France · mécénat d’entreprise et appels à projets", "d": "2026-09-02"}, {"id": "appel-a-projets-org", "n": "Appel à projets", "k": "foundation", "a": "open", "u": "https://www.appelaprojets.org/", "c": "France · appels à projets, AMI, concours, mécénat", "d": "2026-09-02"}, {"id": "concours-talents", "n": "Concours Talents", "k": "network", "a": "open", "u": "https://www.concours-talents.com/", "c": "France · concours de création et reprise d’entreprise", "d": "2026-09-02"}, {"id": "drac-occitanie-mecenat", "n": "DRAC Occitanie — mécénat", "k": "foundation", "a": "open", "u": "https://www.culture.gouv.fr/regions/drac-occitanie/demandes-de-subventions-a-la-drac-occitanie/le-mecenat-a-la-drac-occitanie", "c": "Occitanie · projets culturels et intérêt général", "d": "2026-09-02"}, {"id": "occitanie-angels", "n": "Occitanie Angels", "k": "network", "a": "open", "u": "https://occitanie-angels.fr/", "c": "Occitanie · business angels et entreprises innovantes", "d": "2026-09-02"}];
+var F=document.getElementById('f'),L=document.getElementById('liste');
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function inc(arr,v,tous){return arr.indexOf(v)>-1||arr.indexOf(tous)>-1}
+/* même barème que shared/aides.ts : scoreAid */
+function score(a,f){var s=0,ok=[];
+  if(a.te===f.territoire||a.te==='France'||(f.territoire==='Tarn-et-Garonne'&&a.te==='Occitanie')){s+=30;ok.push('territoire')}
+  if(inc(a.st,f.stade,'Tous stades')){s+=22;ok.push('stade')}
+  if(inc(a.fo,f.forme,'Toutes formes')){s+=18;ok.push('forme juridique')}
+  if(inc(a.se,f.secteur,'Tous secteurs')||f.secteur==='Tous secteurs'){s+=15;ok.push('secteur')}
+  if(f.type==='Tous types'||a.t===f.type){s+=10;ok.push('type')}
+  if(a.s==='À demander')s+=5;
+  if(a.u==='immediate')s+=8;else if(a.u==='upcoming')s+=4;
+  return{s:s,ok:ok}}
+function calc(){
+  var f={territoire:F.territoire.value,stade:F.querySelector('[name=stade]:checked').value,forme:F.forme.value,secteur:F.secteur.value,type:F.type.value};
+  var r=AIDES.map(function(a){var x=score(a,f);return{a:a,s:x.s,ok:x.ok}}).filter(function(x){return x.s>=40}).sort(function(x,y){return y.s-x.s});
+  document.getElementById('cnt').textContent=r.length+(r.length>1?' pistes':' piste')+' sur '+AIDES.length;
+  if(!r.length){L.innerHTML='<div class="vide">Aucune piste ne correspond. Élargissez le territoire ou le type d\'aide, ou prenez rendez-vous avec un conseiller.</div>';return}
+  L.innerHTML=r.map(function(x){var a=x.a,p=Math.min(100,x.s);
+    var urg=a.u==='immediate'?'<span class="pil ok">À demander maintenant</span> ':a.u==='upcoming'?'<span class="pil warn">À préparer</span> ':'<span class="pil gris">À surveiller</span> ';
+    return '<article class="fiche"><div class="type"><svg class="ico"><use href="#i-pousse"/></svg>'+esc(a.t)+'</div>'
+    +'<h3>'+esc(a.n)+'</h3><p>'+esc(a.am)+'</p>'
+    +'<p class="meta"><b>Pour :</b> '+esc(a.au.join(', '))+'<br><b>Quand :</b> '+esc(a.dl)+'</p>'
+    +'<div class="mesure"><span>Pertinence</span><span class="barre" aria-hidden="true"><i style="width:'+p+'%"></i></span><span>'+p+' %</span></div>'
+    +'<div>'+urg+'</div>'
+    +'<details><summary>À confirmer ('+a.un.length+')</summary><ul>'+a.un.map(function(u){return'<li>'+esc(u)+'</li>'}).join('')+'</ul></details>'
+    +'<div class="pied"><span>Partenaire : '+esc(a.p)+' · vérifié le '+esc(a.v)+'</span><a href="'+esc(a.o)+'" target="_blank" rel="noopener">Page officielle</a></div></article>'}).join('')}
+F.addEventListener('change',calc);calc();
+document.getElementById('nb-total').textContent=AIDES.length;
+document.getElementById('nb-src').textContent=SOURCES.length;
+document.getElementById('src').innerHTML=SOURCES.map(function(s){return '<li><a href="'+esc(s.u)+'" target="_blank" rel="noopener">'+esc(s.n)+'</a><span>'+esc(s.c)+' · vérifié le '+esc(s.d)+'</span></li>'}).join('');
+</script>
