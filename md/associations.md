@@ -1,5 +1,5 @@
 ---
-title: Associations : activités et salles gratuites — Génie Montauban
+title: Associations à Montauban : salles gratuites et activités — Génie
 description: Associations de Montauban et du Tarn-et-Garonne : proposez vos ateliers et permanences au Génie. Salles gratuites pour les associations de Villebourbon et les syndicats, tarif adhérent pour les autres.
 url: https://genie-montauban.fr/associations.html
 last_updated: 2026-10-07
