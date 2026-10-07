@@ -2,11 +2,11 @@
 title: Éducation populaire à Montauban : ateliers gratuits, veillées, repair café — Génie
 description: Éducation populaire à Montauban : repair café, veillées-université populaire, cafés-débats et ateliers numériques, gratuits ou au chapeau, au tiers-lieu Génie (Villebourbon).
 url: https://genie-montauban.fr/quartier.html
-last_updated: 2026-10-06
+last_updated: 2026-10-07
 source: miroir markdown — version texte pour moteurs IA
 ---
 
-[Accueil](index.html) › Quartier & agenda
+[Accueil](/) › Quartier & agenda
 
 # Vous habitez Villebourbon ou Montauban ? Le Génie, c'est aussi chez vous.
 

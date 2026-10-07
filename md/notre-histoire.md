@@ -2,7 +2,7 @@
 title: Notre histoire — un tiers-lieu ESS viable | Génie Montauban
 description: Comment est né le Génie, qui s'y retrouve, et comment ce tiers-lieu ESS de Montauban s'organise pour atteindre l'équilibre financier. Le récit complet, chiffres compris.
 url: https://genie-montauban.fr/notre-histoire.html
-last_updated: 2026-10-06
+last_updated: 2026-10-07
 source: miroir markdown — version texte pour moteurs IA
 ---
 
@@ -139,6 +139,6 @@ Trois façons simples de donner suite — un message qui part directement, ou un
  [Réserver une visite](https://calendly.com/samir-chikhi)
  [06 51 50 97 18](tel:+33651509718)
 
-Vous préférez un formulaire complet ? [Page Contact du Génie →](index.html#contact)
+Vous préférez un formulaire complet ? [Page Contact du Génie →](/#contact)
 
 [← Retour aux activités & actualités](activites.html)

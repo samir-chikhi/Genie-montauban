@@ -2,11 +2,11 @@
 title: Location de salle de réunion à Montauban, 4 à 40 personnes — Génie
 description: Salles de réunion et de formation à louer à Montauban (Tarn-et-Garonne), près de la gare : de 4 à 40 personnes, à l'heure dès 20 €, à la demi-journée ou à la journée. Réservation en ligne.
 url: https://genie-montauban.fr/salles.html
-last_updated: 2026-10-06
+last_updated: 2026-10-07
 source: miroir markdown — version texte pour moteurs IA
 ---
 
-[Accueil](index.html) › Salles
+[Accueil](/) › Salles
 
 # Salles de réunion et de formation à Montauban.
 
