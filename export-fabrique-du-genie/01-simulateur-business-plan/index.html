@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Simulateur de business plan · La Fabrique du Génie</title>
+<meta name="description" content="Simulateur gratuit de business plan en 12 étapes : prévisionnel sur 3 ans, trésorerie, seuil de rentabilité, scénarios et suivi plan/réel. La Fabrique du Génie, Montauban.">
+<link rel="icon" href="https://genie-montauban.fr/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=DM+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/css/simulateur.css">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-fleche" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-retour" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
+  <symbol id="i-alerte" viewBox="0 0 24 24"><path d="M12 4l9 16H3z"/><path d="M12 10v4M12 17v.5"/></symbol>
+  <symbol id="i-coche" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-doc" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></symbol>
+</svg>
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="https://genie-montauban.fr/"><i aria-hidden="true"></i><span>Génie<small>La Fabrique</small></span></a>
+    <nav class="nav" aria-label="Menu principal"><a href="https://genie-montauban.fr/le-projet.html">Le projet</a><a href="https://genie-montauban.fr/espaces.html">Espaces</a><a href="https://genie-montauban.fr/activites.html">Activités</a><a href="https://genie-montauban.fr/entreprendre.html" aria-current="page">Entreprendre</a><a href="https://genie-montauban.fr/entreprendre.html#rdv">Contact</a></nav>
+  </div>
+</header>
+
+<section class="intro">
+  <div class="wrap">
+    <p class="kicker">La Fabrique du Génie · Simulateur de business plan</p>
+    <h1>De l'idée au <em>prévisionnel</em>, en 12 étapes.</h1>
+    <p>Chaque chiffre est une hypothèse que vous pouvez modifier. Le calcul est visible, les scénarios se comparent, et un conseiller relit avant l'envoi.</p>
+  </div>
+</section>
+
+<main class="wrap app">
+  <nav class="parcours" aria-label="Parcours en 12 étapes"><ol id="pas"></ol></nav>
+  <section class="etape" id="etape" aria-live="polite"></section>
+  <aside class="direct" aria-label="Prévisionnel en direct">
+    <p class="kicker">En direct</p>
+    <h2 id="d-nom">Votre prévisionnel</h2>
+    <div class="kpis" id="kpis"></div>
+    <div class="score"><b id="d-score">0</b><span id="d-score-txt"></span></div>
+    <p class="note">Exemple pré-rempli : atelier de réparation de vélos à Montauban. Remplacez chaque valeur par la vôtre. Vos saisies restent dans ce navigateur.</p><button class="reset" id="b-reset" type="button">Repartir de l'exemple</button>
+  </aside>
+</main>
+
+<footer><div class="wrap"><span>Génie · Tiers-lieu · 12 rue du Génie, 82000 Montauban</span><span><a href="https://genie-montauban.fr/mentions_legales.html" style="color:inherit">Mentions légales</a> · <a href="https://genie-montauban.fr/confidentialite.html" style="color:inherit">Confidentialité</a></span></div></footer>
+
+<div id="dossier" aria-hidden="true"></div>
+<script src="assets/js/engine.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>
