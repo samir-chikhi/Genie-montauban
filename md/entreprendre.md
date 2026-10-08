@@ -2,7 +2,7 @@
 title: Accompagnement de porteurs de projet à Montauban — La Fabrique
 description: Vous lancez une association, une coopérative ou une activité indépendante à Montauban, en Tarn-et-Garonne ? Premier rendez-vous gratuit, puis parcours à prix solidaire : tester, structurer, lancer.
 url: https://genie-montauban.fr/entreprendre.html
-last_updated: 2026-10-07
+last_updated: 2026-10-08
 source: miroir markdown — version texte pour moteurs IA
 ---
 

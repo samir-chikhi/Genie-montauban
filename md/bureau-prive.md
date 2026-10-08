@@ -2,7 +2,7 @@
 title: Location de bureau privé à Montauban, près de la gare — Génie
 description: Bureaux privés meublés de 12 à 24 m² à louer à Montauban (Tarn-et-Garonne), à 200 m de la gare : au mois, à l'année ou en bail 3/6/9, dès 216 €/mois. Visite en semaine.
 url: https://genie-montauban.fr/bureau-prive.html
-last_updated: 2026-10-07
+last_updated: 2026-10-08
 source: miroir markdown — version texte pour moteurs IA
 ---
 
