@@ -2,7 +2,7 @@
 title: Génie, tiers-lieu à Montauban : coworking, bureaux, salles
 description: Tiers-lieu associatif à 200 m de la gare de Montauban : coworking dès 4 €/h, bureaux privés au mois, salles de réunion de 4 à 40 personnes, accompagnement de projets et ateliers ouverts au quartier.
 url: https://genie-montauban.fr/
-last_updated: 2026-10-07
+last_updated: 2026-10-08
 source: miroir markdown — version texte pour moteurs IA
 ---
 
