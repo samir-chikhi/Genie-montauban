@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https:; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com; frame-src https://www.google.com; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>Génie Montauban : le tiers-lieu en un coup d'œil</title>
+  <meta name="description" content="Bureaux, coworking, salles, formations, accompagnement de projets et vie de quartier : tout le Génie, tiers-lieu associatif à 200 m de la gare de Montauban, en quelques clics.">
+  <!-- Page d'accueil « salon » : atteinte par le QR code, volontairement hors moteurs de recherche (la vraie page d'accueil reste index.html). -->
+  <meta name="robots" content="noindex,follow">
+  <meta name="theme-color" content="#1C2B3A">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="fr_FR">
+  <meta property="og:title" content="Génie Montauban : le tiers-lieu en un coup d'œil">
+  <meta property="og:description" content="Ici, on ne loue pas des bureaux. On fabrique du pouvoir d'agir. Bureaux, salles, formations, accompagnement de projets, à 200 m de la gare.">
+  <meta property="og:url" content="https://genie-montauban.fr/index-salon.html">
+  <meta property="og:image" content="https://genie-montauban.fr/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="preload" href="assets/fonts/dm-sans-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/bricolage-grotesque-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" as="image" href="assets/img/facade-1600.webp" fetchpriority="high">
+  <link rel="stylesheet" href="assets/css/salon.css">
+  <link rel="stylesheet" href="assets/css/v2-chrome.css">
+</head>
+<body class="salon has-sticky">
+<!-- g:header -->
+<a class="skip" href="#contenu">Aller au contenu</a>
+<svg class="g-sprite" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden">
+  <defs>
+    <symbol id="g-i-poste" viewBox="0 0 24 24"><rect x="4" y="4.5" width="16" height="10.5" rx="1.5"/><path d="M2.5 19h19"/><path d="M9.5 15v4M14.5 15v4"/></symbol>
+    <symbol id="g-i-cle" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4.5"/><path d="M11.2 11.8 20 3"/><path d="m16.5 6.5 2.5 2.5"/><path d="m14 9 2 2"/></symbol>
+    <symbol id="g-i-table" viewBox="0 0 24 24"><path d="M3 11h18"/><path d="M6 11v8M18 11v8"/><circle cx="7" cy="5.5" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="17" cy="5.5" r="2"/></symbol>
+    <symbol id="g-i-pousse" viewBox="0 0 24 24"><path d="M12 21v-8"/><path d="M12 13c0-4 2.5-6.5 7-6.5 0 4.2-2.6 6.5-7 6.5Z"/><path d="M12 15.5c0-3.3-2-5.5-6.5-5.5 0 3.5 2.3 5.5 6.5 5.5Z"/><path d="M7 21h10"/></symbol>
+    <symbol id="g-i-rue" viewBox="0 0 24 24"><path d="M3 21V9.5L8 6l5 3.5V21"/><path d="M13 21V4.5L21 3v18"/><path d="M2 21h20"/><path d="M6.5 13.5h3M6.5 17h3M16 8h2M16 12h2M16 16h2"/></symbol>
+    <symbol id="g-i-voix" viewBox="0 0 24 24"><path d="M4 10v4a1 1 0 0 0 1 1h2l6 4V5L7 9H5a1 1 0 0 0-1 1Z"/><path d="M16.5 9a4 4 0 0 1 0 6"/><path d="M19 6.5a7.5 7.5 0 0 1 0 11"/></symbol>
+    <symbol id="g-i-train" viewBox="0 0 24 24"><rect x="5.5" y="3" width="13" height="13" rx="3"/><path d="M5.5 10h13"/><path d="M9 19.5 7.5 21M15 19.5l1.5 1.5"/><path d="M9 13h.01M15 13h.01"/></symbol>
+    <symbol id="g-i-horloge" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="g-i-pmr" viewBox="0 0 24 24"><circle cx="11" cy="4.5" r="1.5"/><path d="M11 7.5v6h5l2.5 5"/><path d="M11 10.5h4"/><path d="M8 11.5a5 5 0 1 0 6.8 6.3"/></symbol>
+    <symbol id="g-i-wifi" viewBox="0 0 24 24"><path d="M2.5 9a14 14 0 0 1 19 0"/><path d="M5.5 12.5a9.5 9.5 0 0 1 13 0"/><path d="M8.7 16a5 5 0 0 1 6.6 0"/><path d="M12 19.5h.01"/></symbol>
+    <symbol id="g-i-tel" viewBox="0 0 24 24"><path d="M6.5 3h3l1.5 4.5-2 1.5a11 11 0 0 0 6 6l1.5-2 4.5 1.5v3a2 2 0 0 1-2 2A16 16 0 0 1 4.5 5a2 2 0 0 1 2-2Z"/></symbol>
+    <symbol id="g-i-fleche" viewBox="0 0 24 24"><path d="M4 12h15"/><path d="m13 6 6 6-6 6"/></symbol>
+    <symbol id="g-i-coche" viewBox="0 0 24 24"><path d="m4.5 12.5 5 5 10-11"/></symbol>
+    <symbol id="g-i-carte" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></symbol>
+  </defs>
+</svg>
+<header class="g-head">
+  <div class="g-wrap">
+    <a class="g-logo" href="/"><img src="favicon.png" alt="" width="38" height="38"><span>Génie<small>Tiers-lieu · Montauban</small></span></a>
+    <button class="g-burger" aria-label="Menu" aria-expanded="false" aria-controls="g-nav"><span></span><span></span><span></span></button>
+    <nav class="g-nav" id="g-nav" aria-label="Menu principal">
+      <a href="coworking-nomade.html">Coworking</a>
+      <a href="bureau-prive.html">Bureaux</a>
+      <a href="salles.html">Salles</a>
+      <a href="entreprendre.html">Entreprendre</a>
+      <a href="academie.html">Académie</a>
+      <a href="quartier.html">Quartier &amp; agenda</a>
+      <a href="associations.html">Associations</a>
+      <a href="espace-membres.html">Espace membres</a>
+      <a class="g-cta" href="reserver.html">Réserver</a>
+    </nav>
+  </div>
+</header>
+<!-- /g:header -->
+
+<main id="contenu">
+
+  <!-- ═════════ Héros ═════════ -->
+  <section class="s-hero" aria-labelledby="titre">
+    <div class="wrap">
+      <div class="s-hero-txt">
+        <p class="kicker s-rise" style="--i:0">Tiers-lieu associatif · Montauban · Tarn-et-Garonne</p>
+        <h1 id="titre" class="s-rise" style="--i:1">Ici, on ne loue pas des bureaux. On fabrique du <span class="s-em">pouvoir d'agir.</span></h1>
+        <p class="lead s-rise" style="--i:2">Une association de l'économie sociale et solidaire, dans un immeuble de brique du quartier Villebourbon, à 200 mètres de la gare. On y travaille, on y apprend, on y lance des projets, on s'y retrouve.</p>
+        <div class="btn-row s-rise" style="--i:3">
+          <a class="btn btn-gold" href="reserver.html">Réserver une place ou une salle <svg class="ico ico-fl" aria-hidden="true"><use href="#g-i-fleche"/></svg></a>
+          <a class="btn btn-ghost" href="tel:+33651509718"><svg class="ico" aria-hidden="true"><use href="#g-i-tel"/></svg> 06 51 50 97 18</a>
+        </div>
+      </div>
+      <figure class="s-hero-photo s-rise" style="--i:2">
+        <img src="assets/img/facade-1600.webp" alt="La façade en brique rouge du Génie, 12 rue du Génie à Montauban, avec son balcon en fer forgé" width="1298" height="1214" fetchpriority="high">
+      </figure>
+    </div>
+    <div class="s-chiffres">
+      <ul>
+        <li><b>293 m²</b><span>sur trois niveaux, terrasse et café</span></li>
+        <li><b>12</b><span>espaces, de 4 à 40 places</span></li>
+        <li><b>200 m</b><span>de la gare SNCF</span></li>
+        <li><b>2026</b><span>ouvert depuis février</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ═════════ Portes d'entrée ═════════ -->
+  <section class="s-acces" aria-labelledby="portes">
+    <div class="wrap">
+      <p class="kicker">Trouvez votre porte d'entrée</p>
+      <h2 id="portes">Chacun arrive au Génie par une porte différente</h2>
+      <p class="sous">Touchez celle qui vous ressemble : tout est expliqué en un écran.</p>
+      <ul class="s-portes">
+        <li><a class="s-porte" style="--tc:#9A6619" href="#bureaux" data-tab="bureaux"><svg class="ico" aria-hidden="true"><use href="#g-i-poste"/></svg><strong>Je cherche un bureau</strong><small>Coworking dès 4 € l'heure, bureaux privés</small></a></li>
+        <li><a class="s-porte" style="--tc:#3F7A6B" href="#salles" data-tab="salles"><svg class="ico" aria-hidden="true"><use href="#g-i-table"/></svg><strong>Je réunis ou je forme</strong><small>4 salles de 4 à 40 places</small></a></li>
+        <li><a class="s-porte" style="--tc:#8C3B2B" href="#academie" data-tab="academie"><svg class="ico" aria-hidden="true"><use href="#g-i-cle"/></svg><strong>Je veux me former</strong><small>18 modules de 3 h, un livrable à chaque séance</small></a></li>
+        <li><a class="s-porte" style="--tc:#2F4C6B" href="#fabrique" data-tab="fabrique"><svg class="ico" aria-hidden="true"><use href="#g-i-pousse"/></svg><strong>J'ai un projet</strong><small>Premier rendez-vous gratuit de 2 h</small></a></li>
+        <li><a class="s-porte" style="--tc:#8B5E34" href="#assos" data-tab="assos"><svg class="ico" aria-hidden="true"><use href="#g-i-rue"/></svg><strong>J'anime une association</strong><small>Salles gratuites dans le quartier</small></a></li>
+        <li><a class="s-porte" style="--tc:#4F7F55" href="#rendez-vous" data-tab="rendez-vous"><svg class="ico" aria-hidden="true"><use href="#g-i-voix"/></svg><strong>J'habite Montauban</strong><small>Rendez-vous gratuits ou à prix libre</small></a></li>
+      </ul>
+      <div class="s-raccourcis" aria-label="Accès rapides">
+        <a class="plein" href="reserver.html"><svg class="ico" aria-hidden="true"><use href="#g-i-horloge"/></svg>Réserver</a>
+        <a href="#tarifs" data-tab="tarifs"><svg class="ico" aria-hidden="true"><use href="#g-i-coche"/></svg>Voir les tarifs</a>
+        <a href="quartier.html"><svg class="ico" aria-hidden="true"><use href="#g-i-voix"/></svg>Agenda du quartier</a>
+        <a href="adherer.html"><svg class="ico" aria-hidden="true"><use href="#g-i-cle"/></svg>Adhérer</a>
+        <a href="espace-membres.html"><svg class="ico" aria-hidden="true"><use href="#g-i-poste"/></svg>Espace membres</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═════════ Onglets ═════════ -->
+  <section class="s-onglets" id="onglets" aria-label="Le Génie en détail">
+    <div class="s-bar">
+      <div class="s-bar-in">
+        <div class="s-tablist" role="tablist" aria-label="Rubriques du Génie">
+          <button class="s-tab" role="tab" id="t-genie" data-id="genie" aria-controls="p-genie" aria-selected="true" style="--tc:#1C2B3A"><i>01</i>Le Génie</button>
+          <button class="s-tab" role="tab" id="t-bureaux" data-id="bureaux" aria-controls="p-bureaux" aria-selected="false" tabindex="-1" style="--tc:#9A6619"><i>02</i>Bureaux</button>
+          <button class="s-tab" role="tab" id="t-salles" data-id="salles" aria-controls="p-salles" aria-selected="false" tabindex="-1" style="--tc:#3F7A6B"><i>03</i>Salles</button>
+          <button class="s-tab" role="tab" id="t-academie" data-id="academie" aria-controls="p-academie" aria-selected="false" tabindex="-1" style="--tc:#8C3B2B"><i>04</i>Académie</button>
+          <button class="s-tab" role="tab" id="t-fabrique" data-id="fabrique" aria-controls="p-fabrique" aria-selected="false" tabindex="-1" style="--tc:#2F4C6B"><i>05</i>Fabrique</button>
+          <button class="s-tab" role="tab" id="t-assos" data-id="assos" aria-controls="p-assos" aria-selected="false" tabindex="-1" style="--tc:#8B5E34"><i>06</i>Assos</button>
+          <button class="s-tab" role="tab" id="t-rendez-vous" data-id="rendez-vous" aria-controls="p-rendez-vous" aria-selected="false" tabindex="-1" style="--tc:#4F7F55"><i>07</i>Rendez-vous</button>
+          <button class="s-tab" role="tab" id="t-tarifs" data-id="tarifs" aria-controls="p-tarifs" aria-selected="false" tabindex="-1" style="--tc:#4A5C6E"><i>08</i>Tarifs</button>
+          <button class="s-tab" role="tab" id="t-venir" data-id="venir" aria-controls="p-venir" aria-selected="false" tabindex="-1" style="--tc:#6B3F5E"><i>09</i>Nous trouver</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="wrap">
+
+      <!-- 01 · GÉNIE -->
+      <section class="s-panel" id="p-genie" role="tabpanel" aria-labelledby="t-genie" style="--tc:#1C2B3A">
+        <div class="s-head avec-photo">
+          <div>
+            <span class="s-num" aria-hidden="true">01</span>
+            <h2>Un lieu de travail qui sert aussi à <span class="s-em" style="color:var(--brique)">autre chose</span></h2>
+            <p class="s-phrase">Génie est née à l'automne 2025 d'un constat simple : à Montauban, les associations, les indépendants et les porteurs de projet manquent d'un endroit où se réunir, se former et se croiser sans que cela coûte une fortune.</p>
+          </div>
+          <figure class="s-photo"><img src="assets/img/bourdelle-1-800.webp" alt="La salle Antoine Bourdelle, 40 places, en configuration formation" width="800" height="600" loading="lazy"></figure>
+        </div>
+        <div class="s-body">
+          <div class="s-card teinte">
+            <span class="s-k">Concrètement</span>
+            <p><strong>Quand vous louez une salle au Génie, vous payez aussi la salle prêtée gratuitement à une association du quartier le lendemain.</strong> En 2026, 11 mises à disposition gratuites ont déjà été accordées, soit 1 520 € au tarif public. Nos statuts fixent l'ordre des priorités : d'abord l'éducation populaire, l'inclusion économique, le lien social, la transition écologique ; les activités économiques existent pour les financer.</p>
+          </div>
+          <div class="s-grid g4">
+            <div class="s-card s-pilier"><span class="n">01</span><h3>Apprendre</h3><p>L'Académie : 18 formations courtes de 3 heures. Et des rendez-vous gratuits : Veillées, cafés numériques, ateliers CV.</p></div>
+            <div class="s-card s-pilier"><span class="n">02</span><h3>Entreprendre</h3><p>La Fabrique du Génie reçoit les porteurs de projet : 2 heures gratuites, compte rendu écrit sous 48 h.</p></div>
+            <div class="s-card s-pilier"><span class="n">03</span><h3>Se rencontrer</h3><p>Petits-déjeuners, afterworks, repair cafés, fresques du climat, soirées ouvertes au quartier.</p></div>
+            <div class="s-card s-pilier"><span class="n">04</span><h3>Décider ensemble</h3><p>Une personne, une voix. Les usagers réguliers peuvent devenir membres, siéger en assemblée et au conseil des locataires.</p></div>
+          </div>
+          <div class="s-grid g2">
+            <div class="s-card">
+              <span class="s-k">Ils travaillent déjà ici</span>
+              <p>France Nature Environnement 82, la coopérative Mobicoop, le studio OVNI-Graphics, l'association L'Antre-Connaissance, une praticienne indépendante un jour par semaine. Des associations et des syndicats se réunissent chaque mois dans nos salles.</p>
+            </div>
+            <div class="s-card">
+              <span class="s-k">Comment fonctionne l'association</span>
+              <ul class="s-liste">
+                <li>Association loi 1901, déclarée en janvier 2026</li>
+                <li>Une voix en assemblée, quel que soit le montant de la cotisation</li>
+                <li>Administrateurs bénévoles, écart de salaire plafonné de 1 à 5</li>
+                <li>20 % des sièges du conseil réservés aux 16-30 ans</li>
+              </ul>
+            </div>
+          </div>
+          <div class="s-actions">
+            <a class="btn btn-tc" href="adherer.html">Devenir membre dès 10 € par an <svg class="ico ico-fl" aria-hidden="true"><use href="#g-i-fleche"/></svg></a>
+            <a class="btn btn-line" href="le-projet.html">Lire le projet</a>
+            <a class="btn btn-line" href="notre-histoire.html">Notre histoire</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- 02 · BUREAUX -->
+      <section class="s-panel" id="p-bureaux" role="tabpanel" aria-labelledby="t-bureaux" style="--tc:#9A6619">
+        <div class="s-head avec-photo">
+          <div>
+            <span class="s-num" aria-hidden="true">02</span>
+            <h2>Un bureau à deux pas de la gare, et des voisins qui font avancer les choses</h2>
+            <p class="s-pour"><b>Pour qui</b> Indépendants, TPE, structures de l'ESS</p>
+            <p class="s-phrase">Au coworking pour une matinée, dans un bureau fermé pour un mois, ou en bail pour trois ans : vous choisissez la formule, l'association s'occupe du reste.</p>
+          </div>
+          <figure class="s-photo"><img src="assets/img/bureau-cheminee-800.webp" alt="Bureau nomade avec cheminée en marbre, au rez-de-chaussée" width="800" height="1200" loading="lazy" style="object-position:50% 60%"></figure>
+        </div>
+        <div class="s-body">
+          <div class="s-grid g3">
+            <div class="s-card">
+              <span class="s-k">À l'heure ou à la journée</span>
+              <h3>L'Escale du Génie</h3>
+              <div class="s-prix">4 € <small>/ heure</small></div>
+              <p>Une place dans l'open space Jean-Jacques Rousseau (28 m², 1<sup>er</sup> étage), réservée en ligne. 9 € la demi-journée, 15 € la journée, carnet de 10 journées à 140 €. Adhésion requise, pour l'assurance.</p>
+            </div>
+            <div class="s-card">
+              <span class="s-k">Demi-journée, semaine, mois</span>
+              <h3>Bureau nomade</h3>
+              <div class="s-prix">dès 12 € <small>/ demi-journée, adhérent</small></div>
+              <p>Un bureau fermé rien que pour vous : Aristote (7 m², 1 à 3 personnes) ou Maria Montessori (12 m², accessible PMR). Sans engagement.</p>
+            </div>
+            <div class="s-card">
+              <span class="s-k">Mois, an ou 3/6/9</span>
+              <h3>Bureau privatif</h3>
+              <div class="s-prix">dès 15 € <small>/ m² / mois</small></div>
+              <p>Huit bureaux de 12 à 24 m² sur trois niveaux. Plus le bail est long, plus le prix baisse. Formule « un jour par semaine » pour tester avant de s'installer.</p>
+            </div>
+          </div>
+          <div class="s-card teinte">
+            <span class="s-k">Inclus partout</span>
+            <ul class="s-liste" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+              <li>Fibre professionnelle et wifi</li>
+              <li>Café et terrasse sur le toit</li>
+              <li>Accès 24 h/24 par badge</li>
+              <li>Domiciliation possible</li>
+            </ul>
+          </div>
+          <div class="s-actions">
+            <a class="btn btn-tc" href="reserver.html">Réserver <svg class="ico ico-fl" aria-hidden="true"><use href="#g-i-fleche"/></svg></a>
+            <a class="btn btn-line" href="coworking-nomade.html">Coworking et nomade</a>
+            <a class="btn btn-line" href="bureau-prive.html">Bureaux privés</a>
+            <a class="btn btn-line" href="#tarifs" data-tab="tarifs">Tous les tarifs</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- 03 · SALLES -->
+      <section class="s-panel" id="p-salles" role="tabpanel" aria-labelledby="t-salles" style="--tc:#3F7A6B">
+        <div class="s-head avec-photo">
+          <div>
+            <span class="s-num" aria-hidden="true">03</span>
+            <h2>Former, réunir, animer. À 200 m de la gare.</h2>
+            <p class="s-pour"><b>Pour qui</b> Organismes de formation, entreprises, collectifs</p>
+            <p class="s-phrase">Quatre salles de 4 à 40 places, réservables à l'heure, à la demi-journée ou à la journée. Vos stagiaires arrivent en train et trouvent sur place le café et une terrasse pour les pauses.</p>
+          </div>
+          <figure class="s-photo"><img src="assets/img/bourdelle-1-800.webp" alt="Salle Antoine Bourdelle, 40 places, lumineuse, avec grandes portes-fenêtres" width="800" height="600" loading="lazy"></figure>
+        </div>
+        <div class="s-body">
+          <div class="s-grid g4">
+            <div class="s-card"><span class="s-chiffre">40</span><span><strong>Antoine Bourdelle</strong><br>Formation en îlots, conférence, AG, séminaire. Rez-de-chaussée.</span><p class="s-prix" style="margin-top:10px;font-size:1.3rem">45 € <small>/ h · 30 € adhérent</small></p></div>
+            <div class="s-card"><span class="s-chiffre">20</span><span><strong>Célestin Freinet</strong><br>Formation, atelier, réunion d'équipe. 1<sup>er</sup> étage, 24 m².</span><p class="s-prix" style="margin-top:10px;font-size:1.3rem">30 € <small>/ h · 20 € adhérent</small></p></div>
+            <div class="s-card"><span class="s-chiffre">20</span><span><strong>Olympe de Gouges</strong><br>Formation du soir, atelier, réunion. 1<sup>er</sup> étage.</span><p class="s-prix" style="margin-top:10px;font-size:1.3rem">30 € <small>/ h · 20 € adhérent</small></p></div>
+            <div class="s-card"><span class="s-chiffre">4</span><span><strong>Maria Montessori</strong><br>Entretien, jury, rendez-vous confidentiel. Rez-de-jardin, <strong>accessible PMR</strong>.</span><p class="s-prix" style="margin-top:10px;font-size:1.3rem">20 € <small>/ h · 15 € adhérent</small></p></div>
+          </div>
+          <div class="s-grid g2">
+            <div class="s-card">
+              <span class="s-k">Équipements</span>
+              <ul class="s-liste">
+                <li>Visioconférence, vidéoprojecteur, sonorisation mobile</li>
+                <li>Paperboard, tables modulables, photocopieur partagé</li>
+                <li>Accès en autonomie par serrure électronique</li>
+                <li>Créneaux possibles en soirée et le week-end</li>
+              </ul>
+            </div>
+            <div class="s-card teinte">
+              <span class="s-k">Gratuit pour les associations du quartier</span>
+              <p>Les associations de Villebourbon et les syndicats d'employés et d'ouvriers disposent gratuitement des salles, sur réservation et selon les disponibilités. C'est l'un des engagements inscrits dans nos statuts.</p>
+              <p>Un usage régulier ? Nous signons une <strong>convention d'usage</strong> à tarif négocié (une journée par mois, une soirée par semaine).</p>
+            </div>
+          </div>
+          <p class="note">Prix à l'heure, plein tarif puis tarif adhérent (environ 20 % de moins) ; les salles se réservent en ligne, avec confirmation par courriel et code d'accès. Détail dans l'onglet Tarifs.</p>
+          <div class="s-actions">
+            <a class="btn btn-tc" href="reserver.html">Réserver une salle <svg class="ico ico-fl" aria-hidden="true"><use href="#g-i-fleche"/></svg></a>
+            <a class="btn btn-line" href="salles.html">Voir les salles en détail</a>
+            <a class="btn btn-line" href="#tarifs" data-tab="tarifs">Grille des tarifs</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- 04 · ACADÉMIE -->
+      <section class="s-panel" id="p-academie" role="tabpanel" aria-labelledby="t-academie" style="--tc:#8C3B2B">
+        <div class="s-head">
+          <div>
+            <span class="s-num" aria-hidden="true">04</span>
+            <h2>Trois heures pour apprendre. Un livrable pour repartir.</h2>
+            <p class="s-pour"><b>Pour qui</b> Salariés, bénévoles, indépendants, demandeurs d'emploi</p>
+            <p class="s-phrase">18 formations courtes, en petit groupe, animées par des professionnels du bassin montalbanais. Chaque séance se termine par un document ou un outil que vous utilisez dès le lendemain.</p>
+          </div>
+        </div>
+        <div class="s-body">
+          <div class="s-grid g4">
+            <div class="s-card"><span class="s-chiffre">18</span><span>modules répartis en trois filières</span></div>
+            <div class="s-card"><span class="s-chiffre">3 h</span><span>par séance, en soirée ou le samedi matin</span></div>
+            <div class="s-card"><span class="s-chiffre">45–65 €</span><span>par module et par personne</span></div>
+            <div class="s-card"><span class="s-chiffre">3</span><span>modules gratuits*, sous réserve de financement</span></div>
+          </div>
+          <div class="s-grid g3">
+            <div class="s-card s-filiere">
+              <h3><b>A</b>Empowerment et leadership</h3>
+              <ul class="s-modules">
+                <li>Prise de parole en public<em>50 €</em></li>
+                <li>Négocier autrement<em>50 €</em></li>
+                <li>Créer son activité ESS<em>gratuit*</em></li>
+                <li>Leadership au féminin<em>45 €</em></li>
+                <li>Énergie et priorités<em>50 €</em></li>
+                <li>Pitch ton projet<em>50 €</em></li>
+              </ul>
+            </div>
+            <div class="s-card s-filiere">
+              <h3><b>B</b>Tech et numérique</h3>
+              <ul class="s-modules">
+                <li>L'IA au quotidien<em>55 €</em></li>
+                <li>Canva Pro<em>50 €</em></li>
+                <li>Instagram et LinkedIn pro<em>55 €</em></li>
+                <li>Crypto et blockchain<em>60 €</em></li>
+                <li>Cybersécurité pour non-techniciens<em>50 €</em></li>
+                <li>Automatiser ses tâches<em>65 €</em></li>
+              </ul>
+            </div>
+            <div class="s-card s-filiere">
+              <h3><b>C</b>Gestion et impact</h3>
+              <ul class="s-modules">
+                <li>Demande de subvention<em>gratuit*</em></li>
+                <li>Comptabilité pour les associations<em>45 €</em></li>
+                <li>RGPD pour TPE et associations<em>50 €</em></li>
+                <li>Excel de A à Z<em>55 €</em></li>
+                <li>Créer son offre et son tarif<em>55 €</em></li>
+                <li>Mécénat et levée de fonds locale<em>gratuit*</em></li>
+              </ul>
+            </div>
+          </div>
+          <div class="s-grid g2">
+            <div class="s-card">
+              <span class="s-k">Une séance type</span>
+              <ul class="s-liste">
+                <li><strong>15 min</strong> : accueil, attentes de chacun</li>
+                <li><strong>45 min</strong> : apports et démonstrations</li>
+                <li><strong>1 h 30</strong> : mise en pratique sur votre cas</li>
+                <li><strong>30 min</strong> : finalisation du livrable, bilan</li>
+              </ul>
+            </div>
+            <div class="s-card">
+              <span class="s-k">Financer sa formation</span>
+              <p>Salariés : prise en charge possible par l'employeur ou l'OPCO. Demandeurs d'emploi : aide individuelle à demander à France Travail. Associations et particuliers : paiement direct.</p>
+              <p class="note">Formations dispensées aujourd'hui par MUSIVA, organisme certifié Qualiopi. * Gratuit sous réserve d'un financement public.</p>
+            </div>
+          </div>
+          <div class="s-actions">
+            <a class="btn btn-tc" href="academie.html">Catalogue et dates <svg class="ico ico-fl" aria-hidden="true"><use href="#g-i-fleche"/></svg></a>
+            <a class="btn btn-line" href="inscription-academie.html">S'inscrire</a>
+            <a class="btn btn-line" href="proposition-formateur.html">Proposer un module</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- 05 · FABRIQUE -->
+      <section class="s-panel" id="p-fabrique" role="tabpanel" aria-labelledby="t-fabrique" style="--tc:#2F4C6B">
+        <div class="s-head avec-photo">
+          <div>
+            <span class="s-num" aria-hidden="true">05</span>
+            <h2>Vous avez une idée d'activité ? Commencez par deux heures pour la mettre au clair.</h2>
+            <p class="s-pour"><b>Pour qui</b> Porteurs de projet, sans sélection à l'entrée</p>
+            <p class="s-phrase">Création d'entreprise, projet associatif, activité de l'ESS, test d'une idée avant de se lancer : la Fabrique du Génie reçoit tous les projets.</p>
+          </div>
+          <figure class="s-photo"><img src="assets/img/coworking1-800.webp" alt="Bureau calme et lumineux pour les entretiens individuels" width="800" height="1200" loading="lazy" style="object-position:50% 70%"></figure>
+        </div>
+        <div class="s-body">
+          <div class="s-grid g3">
+            <div class="s-card"><span class="s-chiffre">2 h</span><span>d'entretien individuel, dans un bureau calme et accessible</span></div>
+            <div class="s-card"><span class="s-chiffre">48 h</span><span>pour recevoir un compte rendu écrit de 4 à 6 pages</span></div>
+            <div class="s-card"><span class="s-chiffre">0 €</span><span>pour le porteur : la première consultation est gratuite</span></div>
+          </div>
+          <ol class="s-etapes" style="margin-top:12px">
+            <li><b>Défricher</b><span>Consultation de 2 heures et compte rendu écrit.</span><br><em>Gratuit</em></li>
+            <li><b>Tester</b><span>Poste au coworking, salle pour un premier atelier, modules de l'Académie.</span><br><em>Tarif adhérent</em></li>
+            <li><b>Structurer</b><span>Statut, budget prévisionnel, dossier de financement, réseaux de l'ESS.</span><br><em>Sur devis</em></li>
+            <li><b>Lancer</b><span>Domiciliation, premier bureau, parrainage par un entrepreneur du lieu.</span><br><em>Tarif solidaire</em></li>
+          </ol>
+          <div class="s-grid g2">
+            <div class="s-card">
+              <span class="s-k">Ce que contient votre compte rendu</span>
+              <ul class="s-liste">
+                <li>Votre projet reformulé en une page</li>
+                <li>Un canevas complet de votre modèle</li>
+                <li>Les trois hypothèses à vérifier en priorité</li>
+                <li>Un plan d'action à 90 jours, avec des actions datées</li>
+                <li>Les bons interlocuteurs du département : BGE, ADIE, France Active, Initiative 82…</li>
+              </ul>
+            </div>
+            <div class="s-card teinte">
+              <span class="s-k">Notre engagement</span>
+              <p>Trois accompagnements au plus en même temps, pour que chacun soit bien suivi. Une orientation vers d'autres structures chaque fois qu'elles sont mieux placées que nous. La confidentialité de ce que vous nous confiez.</p>
+              <p class="note">La consultation ne rédige pas votre business plan ni votre dossier de financement : ce travail relève de l'accompagnement proposé ensuite, sur devis.</p>
+            </div>
+          </div>
+          <div class="s-actions">
+            <a class="btn btn-tc" href="entreprendre.html">Prendre rendez-vous <svg class="ico ico-fl" aria-hidden="true"><use href="#g-i-fleche"/></svg></a>
+            <a class="btn btn-line" href="mailto:contact@genie-montauban.fr?subject=La%20Fabrique%20du%20G%C3%A9nie%20%3A%20mon%20projet">Décrire mon projet par courriel</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- 06 · ASSOS -->
+      <section class="s-panel" id="p-assos" role="tabpanel" aria-labelledby="t-assos" style="--tc:#8B5E34">
+        <div class="s-head">
+          <div>
+            <span class="s-num" aria-hidden="true">06</span>
+            <h2>Votre association a besoin d'un coup de main ?</h2>
+            <p class="s-pour"><b>Pour qui</b> Associations et collectifs</p>
+            <p class="s-phrase">Génie est elle-même une association. Nos statuts nous engagent à héberger les associations qui démarrent et à prêter gratuitement nos salles aux associations de Villebourbon et aux syndicats d'employés et d'ouvriers.</p>
+          </div>
+        </div>
+        <div class="s-body">
+          <div class="s-grid g4">
+            <div class="s-card"><span class="s-k">Une salle</span><p>Bureau, CA, AG, permanence, atelier public. De 4 à 40 places. Gratuit dans le quartier, tarif adhérent sinon.</p></div>
+            <div class="s-card"><span class="s-k">Des compétences</span><p>Modules « Gestion et impact » de l'Académie : subvention, compta, RGPD, mécénat, sur vos propres documents.</p></div>
+            <div class="s-card"><span class="s-k">Un diagnostic</span><p>La Fabrique du Génie vous reçoit 2 heures, gratuitement, et vous remet un compte rendu écrit.</p></div>
+            <div class="s-card"><span class="s-k">Une adresse, un réseau</span><p>Domiciliation du siège, boîte aux lettres, et des voisins : fédération environnementale, coopérative, indépendants.</p></div>
+          </div>
+          <div class="s-card sombre">
+            <span class="s-k">En 2026</span>
+            <p style="font-size:1.1rem"><strong>11 mises à disposition gratuites</strong> déjà accordées à des associations culturelles et citoyennes et à des syndicats, pour <strong>1 520 €</strong> au tarif public. L'association finance ces gratuités avec les loyers de ses bureaux.</p>
+          </div>
+          <div class="s-grid g2">
+            <div class="s-card">
+              <span class="s-k">Salle gratuite : les conditions</span>
+              <ul class="s-liste">
+                <li>Siège ou activité dans le quartier Villebourbon, ou syndicat d'employés et d'ouvriers</li>
+                <li>Réservation obligatoire, selon les créneaux disponibles</li>
+                <li>Respect de la charte du savoir-vivre du conseil des locataires</li>
+              </ul>
+            </div>
+            <div class="s-card">
+              <span class="s-k">Quatre façons de coopérer</span>
+              <ul class="s-liste">
+                <li><strong>Utiliser le lieu</strong> : salle, convention d'usage</li>
+                <li><strong>Co-animer</strong> : atelier, soirée-débat, fresque du climat</li>
+                <li><strong>Orienter vos publics</strong> vers l'Académie, la Fabrique, les rendez-vous</li>
+                <li><strong>Entrer dans la gouvernance</strong> : adhérer (50 €/an), voter en AG</li>
+              </ul>
+            </div>
+          </div>
+          <div class="s-actions">
+            <a class="btn btn-tc" href="associations.html">Espace associations <svg class="ico ico-fl" aria-hidden="true"><use href="#g-i-fleche"/></svg></a>
+            <a class="btn btn-line" href="reserver.html">Réserver une salle</a>
+            <a class="btn btn-line" href="adherer.html">Adhérer</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- 07 · RENDEZ-VOUS -->
+      <section class="s-panel" id="p-rendez-vous" role="tabpanel" aria-labelledby="t-rendez-vous" style="--tc:#4F7F55">
+        <div class="s-head">
+          <div>
+            <span class="s-num" aria-hidden="true">07</span>
+            <h2>Au Génie, on se retrouve.</h2>
+            <p class="s-pour"><b>Pour qui</b> Habitants de Montauban, tous publics</p>
+            <p class="s-phrase">Chaque mois, des rendez-vous gratuits ou à prix libre pour apprendre, réparer, débattre et rencontrer ses voisins. <strong>Pas besoin d'être membre pour venir.</strong></p>
+          </div>
+        </div>
+        <div class="s-body">
+          <div class="s-rdv">
+            <div class="s-card"><svg class="ico" aria-hidden="true"><use href="#g-i-voix"/></svg><div><h3>Les Veillées du Génie</h3><p>Un soir par mois, un sujet, un débat. Entrée libre.</p></div></div>
+            <div class="s-card"><svg class="ico" aria-hidden="true"><use href="#g-i-table"/></svg><div><h3>La Turbine</h3><p>Le café politique et poétique : débattre d'une question de société, autour d'un verre.</p></div></div>
+            <div class="s-card"><svg class="ico" aria-hidden="true"><use href="#g-i-wifi"/></svg><div><h3>Cafés numériques</h3><p>Smartphone, démarches en ligne, sécurité : on vient avec ses questions. Adapté aux seniors.</p></div></div>
+            <div class="s-card"><svg class="ico" aria-hidden="true"><use href="#g-i-cle"/></svg><div><h3>Repair café et zéro déchet</h3><p>On répare au lieu de jeter. Fresques du climat, disco soupes, gratiferias.</p></div></div>
+            <div class="s-card"><svg class="ico" aria-hidden="true"><use href="#g-i-poste"/></svg><div><h3>Ateliers emploi</h3><p>Refaire son CV, s'entraîner à l'entretien avec des professionnels.</p></div></div>
+            <div class="s-card"><svg class="ico" aria-hidden="true"><use href="#g-i-pousse"/></svg><div><h3>Petits-déjeuners, afterworks, soirées</h3><p>Pour les indépendants, les curieux, les nouveaux arrivants. Match sur grand écran, éclipse sur la terrasse…</p></div></div>
+          </div>
+          <div class="s-card teinte">
+            <span class="s-k">Une idée d'atelier ?</span>
+            <p>Proposez-la : le lieu est aussi fait pour ça. Et pour soutenir l'association, l'adhésion démarre à 10 € par an.</p>
+          </div>
+          <div class="s-actions">
+            <a class="btn btn-tc" href="quartier.html">Voir l'agenda du mois <svg class="ico ico-fl" aria-hidden="true"><use href="#g-i-fleche"/></svg></a>
+            <a class="btn btn-line" href="activites.html">Toutes les activités</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- 08 · TARIFS -->
+      <section class="s-panel" id="p-tarifs" role="tabpanel" aria-labelledby="t-tarifs" style="--tc:#4A5C6E">
+        <div class="s-head">
+          <div>
+            <span class="s-num" aria-hidden="true">08</span>
+            <h2>Grille tarifaire 2026</h2>
+            <p class="s-phrase">Quatre profils : <strong>plein tarif</strong>, <strong>adhérent</strong> (environ 20 % de moins), <strong>résident</strong> titulaire d'un bail au Génie (environ 50 % de moins) et <strong>association du quartier</strong> (gratuit). Tarifs votés par le conseil d'administration.</p>
+          </div>
+        </div>
+        <div class="s-body">
+          <details class="s-det" open>
+            <summary>Salles de réunion et de formation</summary>
+            <div class="s-det-in">
+              <div class="s-legende"><span><b>3 prix :</b> plein tarif · adhérent · résident</span><span>Associations de Villebourbon : <b>gratuit</b>*</span></div>
+              <div class="s-scroll">
+                <table class="s-table">
+                  <thead><tr><th>Salle</th><th>À l'heure</th><th>Demi-journée (4 h)</th><th>Journée (8 h)</th></tr></thead>
+                  <tbody>
+                    <tr><td>Antoine Bourdelle<small>40 personnes</small></td><td class="num">45 · 30 · 20 €</td><td class="num">150 · 90 · 70 €</td><td class="num">250 · 150 · 120 €</td></tr>
+                    <tr><td>Célestin Freinet<small>20 personnes</small></td><td class="num">30 · 20 · 15 €</td><td class="num">100 · 60 · 45 €</td><td class="num">180 · 100 · 80 €</td></tr>
+                    <tr><td>Olympe de Gouges<small>20 personnes</small></td><td class="num">30 · 20 · 15 €</td><td class="num">100 · 60 · 45 €</td><td class="num">180 · 100 · 80 €</td></tr>
+                    <tr><td>Maria Montessori<small>4 personnes · accessible PMR</small></td><td class="num">20 · 15 · 10 €</td><td class="num">60 · 45 · 30 €</td><td class="num">100 · 80 · 70 €</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p class="note" style="margin:10px 0 0">* Sur réservation et selon les disponibilités. Convention d'usage possible pour un créneau régulier.</p>
+            </div>
+          </details>
+          <details class="s-det">
+            <summary>L'Escale du Génie · coworking à la carte</summary>
+            <div class="s-det-in">
+              <div class="s-scroll">
+                <table class="s-table">
+                  <thead><tr><th>Heure</th><th>Demi-journée</th><th>Journée</th><th>Carnet de 10 journées</th></tr></thead>
+                  <tbody><tr><td class="num"><strong>4 €</strong></td><td class="num"><strong>9 €</strong></td><td class="num"><strong>15 €</strong></td><td class="num"><strong>140 €</strong> <small>11<sup>e</sup> journée offerte</small></td></tr></tbody>
+                </table>
+              </div>
+              <p class="note" style="margin:10px 0 0">Place dans l'open space Jean-Jacques Rousseau. Adhésion à l'association requise, pour l'assurance.</p>
+            </div>
+          </details>
+          <details class="s-det">
+            <summary>Bureaux nomades · hors charges</summary>
+            <div class="s-det-in">
+              <div class="s-legende"><span><b>2 prix :</b> adhérent · non-adhérent</span></div>
+              <div class="s-scroll">
+                <table class="s-table">
+                  <thead><tr><th>Bureau</th><th>Demi-journée</th><th>Journée</th><th>Semaine</th><th>Mois</th></tr></thead>
+                  <tbody>
+                    <tr><td>Aristote<small>privé · 7 m²</small></td><td class="num">12 · 18 €</td><td class="num">22 · 33 €</td><td class="num">90 · 130 €</td><td class="num">200 · 280 €</td></tr>
+                    <tr><td>Maria Montessori<small>privé PMR · 12 m²</small></td><td class="num">15 · 22 €</td><td class="num">27 · 40 €</td><td class="num">100 · 145 €</td><td class="num">216 · 300 €</td></tr>
+                    <tr><td>Jean-Jacques Rousseau<small>open space · 28 m²</small></td><td class="num" colspan="2">voir L'Escale</td><td class="num">60 · 90 €</td><td class="num">180 · 250 €</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </details>
+          <details class="s-det">
+            <summary>Bureaux privatifs · loyer mensuel hors charges</summary>
+            <div class="s-det-in">
+              <div class="s-scroll">
+                <table class="s-table">
+                  <thead><tr><th>Durée d'engagement</th><th>Prix au m²</th><th>Exemple : 15 m²</th></tr></thead>
+                  <tbody>
+                    <tr><td>Bail mensuel</td><td class="num">18 € / m²</td><td class="num">270 € / mois</td></tr>
+                    <tr><td>Bail 1 an</td><td class="num">17 € / m²</td><td class="num">255 € / mois</td></tr>
+                    <tr><td>Bail 3/6/9</td><td class="num">15 € / m²</td><td class="num">225 € / mois</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p class="note" style="margin:10px 0 0">Huit bureaux de 12 à 24 m². Formule « un jour par semaine » possible pour tester.</p>
+            </div>
+          </details>
+          <details class="s-det">
+            <summary>Adhésion à l'association</summary>
+            <div class="s-det-in">
+              <ul class="s-liste">
+                <li><strong>Dès 10 € par an</strong> : soutenir l'association</li>
+                <li><strong>15 €</strong> (16-30 ans), <strong>30 €</strong> (particulier), <strong>50 €</strong> (association) : membre actif, une personne une voix en assemblée générale, tarifs adhérents</li>
+                <li>Adhésion de 10 à 150 € par an selon la formule : détail sur la page Adhérer</li>
+              </ul>
+            </div>
+          </details>
+          <p class="note">Les tarifs en vigueur font foi sur la page Tarifs du site.</p>
+          <div class="s-actions">
+            <a class="btn btn-tc" href="tarifs.html">Tarifs complets <svg class="ico ico-fl" aria-hidden="true"><use href="#g-i-fleche"/></svg></a>
+            <a class="btn btn-line" href="adherer.html">Adhérer</a>
+            <a class="btn btn-line" href="reserver.html">Réserver</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- 09 · NOUS TROUVER -->
+      <section class="s-panel" id="p-venir" role="tabpanel" aria-labelledby="t-venir" style="--tc:#6B3F5E">
+        <div class="s-head">
+          <div>
+            <span class="s-num" aria-hidden="true">09</span>
+            <h2>Une visite prend 30 minutes.</h2>
+            <p class="s-phrase">Appelez-nous ou écrivez-nous : nous vous montrons les espaces et répondons à vos questions sur place.</p>
+          </div>
+        </div>
+        <div class="s-body">
+          <div class="s-contact">
+            <div class="s-card">
+              <span class="s-k">Association Génie</span>
+              <ul class="s-coord">
+                <li><a href="tel:+33651509718"><svg class="ico" aria-hidden="true"><use href="#g-i-tel"/></svg><span><b>06 51 50 97 18</b><small>Appeler maintenant</small></span></a></li>
+                <li><a href="mailto:contact@genie-montauban.fr"><svg class="ico" aria-hidden="true"><use href="#g-i-fleche"/></svg><span><b>contact@genie-montauban.fr</b><small>Écrire à l'équipe</small></span></a></li>
+                <li><a href="https://www.google.com/maps/dir/?api=1&amp;destination=12+rue+du+G%C3%A9nie%2C+82000+Montauban" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#g-i-carte"/></svg><span><b>12 rue du Génie, 82000 Montauban</b><small>Quartier Villebourbon · lancer l'itinéraire</small></span></a></li>
+                <li><a href="reserver.html"><svg class="ico" aria-hidden="true"><use href="#g-i-horloge"/></svg><span><b>Lun–ven 8 h–19 h</b><small>Samedi sur réservation · réserver en ligne</small></span></a></li>
+                <li><a href="https://www.google.com/maps/dir/?api=1&amp;destination=12+rue+du+G%C3%A9nie%2C+82000+Montauban&amp;travelmode=walking" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#g-i-train"/></svg><span><b>À 200 m de la gare SNCF</b><small>Accessible en train depuis Toulouse</small></span></a></li>
+              </ul>
+            </div>
+            <div class="s-card sombre s-qr">
+              <span class="s-k">Gardez-nous dans votre poche</span>
+              <img src="assets/salon/qr-genie-salon.svg" alt="QR code vers genie-montauban.fr/index-salon.html" width="220" height="220" loading="lazy">
+              <p>Scannez pour retrouver cette page, ou partagez-la à un collègue.</p>
+              <p style="margin:0"><strong>genie-montauban.fr</strong></p>
+            </div>
+          </div>
+          <div class="s-grid g2">
+            <div class="s-card">
+              <span class="s-k">Accès</span>
+              <p>Quartier Villebourbon, à 200 m de la gare SNCF de Montauban. Accès aux espaces 24 h/24 pour les résidents, par badge. Une salle entièrement accessible aux personnes à mobilité réduite (rez-de-jardin).</p>
+            </div>
+            <div class="s-card">
+              <span class="s-k">Suivez le Génie</span>
+              <div class="s-reseaux">
+                <a href="https://www.instagram.com/geniemontauban/" rel="noopener" target="_blank" aria-label="Instagram"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><path d="M17.5 6.5h.01"/></svg></a>
+                <a href="https://www.linkedin.com/company/g%C3%A9nie-montauban-tiers-lieu/" rel="noopener" target="_blank" aria-label="LinkedIn"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+                <a href="https://www.facebook.com/profile.php?id=61585419075483" rel="noopener" target="_blank" aria-label="Facebook"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+                <a href="https://www.youtube.com/@G%C3%A9nieMontauban" rel="noopener" target="_blank" aria-label="YouTube"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><path d="M9.75 15.02 15.5 11.75 9.75 8.48z"/></svg></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <noscript><p class="noscript-msg">JavaScript est désactivé : toutes les rubriques sont affichées à la suite.</p></noscript>
+    </div>
+  </section>
+
+  <!-- ═════════ Bandeau final ═════════ -->
+  <section class="s-fin" aria-labelledby="fin">
+    <div class="wrap">
+      <h2 id="fin">Venez voir, ça se comprend mieux sur place.</h2>
+      <p>Une visite de 30 minutes suffit pour choisir. On vous montre les espaces et on répond à toutes vos questions.</p>
+      <div class="btn-row">
+        <a class="btn btn-gold" href="tel:+33651509718"><svg class="ico" aria-hidden="true"><use href="#g-i-tel"/></svg> Appeler le 06 51 50 97 18</a>
+        <a class="btn btn-ghost" href="reserver.html">Réserver en ligne</a>
+        <a class="btn btn-ghost" href="index.html">Découvrir tout le site</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- g:footer -->
+<footer class="g-foot">
+  <div class="g-wrap">
+    <div class="g-foot-grid">
+      <div>
+        <div class="g-foot-brand">Génie</div>
+        <p>Tiers-lieu associatif (ESS, éducation populaire) au 12 rue du Génie, 82000 Montauban — à 200 m de la gare.</p>
+        <p><a href="tel:+33651509718">06 51 50 97 18</a><br><a href="mailto:contact@genie-montauban.fr">contact@genie-montauban.fr</a></p>
+        <p>Lun–ven 8h–19h · samedi sur réservation</p>
+      </div>
+      <div>
+        <h2>Travailler</h2>
+        <ul>
+          <li><a href="coworking-nomade.html">Coworking à l'heure</a></li>
+          <li><a href="bureau-prive.html">Bureau privé</a></li>
+          <li><a href="salles.html">Salles de réunion</a></li>
+          <li><a href="reserver.html">Réserver</a></li>
+          <li><a href="tarifs.html">Tous les tarifs</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2>Participer</h2>
+        <ul>
+          <li><a href="entreprendre.html">Être accompagné</a></li>
+          <li><a href="academie.html">Académie (formations)</a></li>
+          <li><a href="quartier.html">Quartier &amp; agenda</a></li>
+          <li><a href="associations.html">Associations</a></li>
+          <li><a href="adherer.html">Adhérer</a></li>
+          <li><a href="espace-membres.html">Espace membres</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2>L'association</h2>
+        <ul>
+          <li><a href="le-projet.html">Le projet</a></li>
+          <li><a href="notre-histoire.html">Notre histoire</a></li>
+        </ul>
+        <h2>Suivez-nous</h2>
+        <div class="g-social">
+          <a href="https://www.linkedin.com/company/g%C3%A9nie-montauban-tiers-lieu/" rel="noopener" target="_blank" aria-label="LinkedIn" title="LinkedIn"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+          <a href="https://www.facebook.com/profile.php?id=61585419075483" rel="noopener" target="_blank" aria-label="Facebook" title="Facebook"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+          <a href="https://www.instagram.com/geniemontauban/" rel="noopener" target="_blank" aria-label="Instagram" title="Instagram"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><path d="M17.5 6.5h.01"/></svg></a>
+          <a href="https://www.tiktok.com/@gnie.montauban" rel="noopener" target="_blank" aria-label="TikTok" title="TikTok"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false" fill="currentColor"><path d="M12.53.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg></a>
+          <a href="https://www.youtube.com/@G%C3%A9nieMontauban" rel="noopener" target="_blank" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><path d="M9.75 15.02 15.5 11.75 9.75 8.48z"/></svg></a>
+        </div>
+      </div>
+    </div>
+    <div class="g-foot-bottom">
+      <span>© 2026 Association Génie — loi 1901, ESS</span>
+      <a href="mentions_legales.html">Mentions légales</a>
+      <a href="confidentialite.html">Confidentialité</a>
+      <a href="cgv.html">CGV espaces</a>
+      <a href="cgv-formation.html">CGV formation</a>
+      <a href="reglement-interieur-genie.html">Règlement intérieur</a>
+      <a class="discret" href="admin.html" rel="nofollow">Admin</a>
+    </div>
+  </div>
+</footer>
+<!-- /g:footer -->
+
+<nav class="s-barre" aria-label="Actions rapides">
+  <a href="tel:+33651509718"><svg class="ico" aria-hidden="true"><use href="#g-i-tel"/></svg>Appeler</a>
+  <a class="cta" href="reserver.html"><svg class="ico" aria-hidden="true"><use href="#g-i-horloge"/></svg>Réserver</a>
+  <a href="https://www.google.com/maps/dir/?api=1&amp;destination=12+rue+du+G%C3%A9nie%2C+82000+Montauban" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#g-i-carte"/></svg>Itinéraire</a>
+</nav>
+
+<script src="assets/js/v2.js" defer></script>
+<script src="assets/js/salon.js" defer></script>
+</body>
+</html>
