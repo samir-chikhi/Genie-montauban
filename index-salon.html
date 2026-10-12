@@ -107,7 +107,8 @@
         <li><a class="s-porte" style="--tc:#4F7F55" href="#rendez-vous" data-tab="rendez-vous"><svg class="ico" aria-hidden="true"><use href="#g-i-voix"/></svg><strong>J'habite Montauban</strong><small>Rendez-vous gratuits ou à prix libre</small></a></li>
       </ul>
       <div class="s-raccourcis" aria-label="Accès rapides">
-        <a class="plein" href="reserver.html"><svg class="ico" aria-hidden="true"><use href="#g-i-horloge"/></svg>Réserver</a>
+        <a class="plein" href="#rappel"><svg class="ico" aria-hidden="true"><use href="#g-i-tel"/></svg>Être rappelé</a>
+        <a href="reserver.html"><svg class="ico" aria-hidden="true"><use href="#g-i-horloge"/></svg>Réserver</a>
         <a href="#tarifs" data-tab="tarifs"><svg class="ico" aria-hidden="true"><use href="#g-i-coche"/></svg>Voir les tarifs</a>
         <a href="quartier.html"><svg class="ico" aria-hidden="true"><use href="#g-i-voix"/></svg>Agenda du quartier</a>
         <a href="adherer.html"><svg class="ico" aria-hidden="true"><use href="#g-i-cle"/></svg>Adhérer</a>
@@ -588,7 +589,7 @@
             </div>
             <div class="s-card sombre s-qr">
               <span class="s-k">Gardez-nous dans votre poche</span>
-              <img src="assets/salon/qr-genie-salon.svg" alt="QR code vers genie-montauban.fr/index-salon.html" width="220" height="220" loading="lazy">
+              <img src="assets/salon/qr-partage.svg" alt="QR code vers genie-montauban.fr/index-salon.html" width="220" height="220" loading="lazy">
               <p>Scannez pour retrouver cette page, ou partagez-la à un collègue.</p>
               <p style="margin:0"><strong>genie-montauban.fr</strong></p>
             </div>
@@ -615,6 +616,60 @@
     </div>
   </section>
 
+  <!-- ═════════ Être rappelé ═════════ -->
+  <section class="s-rappel" id="rappel" aria-labelledby="rappel-titre">
+    <div class="wrap">
+      <div class="s-rappel-txt">
+        <p class="kicker">Pas le temps maintenant ?</p>
+        <h2 id="rappel-titre">Laissez votre numéro, <span class="s-em" style="color:var(--brique)">on vous rappelle.</span></h2>
+        <p class="lead">Trente secondes à remplir. Nous vous rappelons au moment qui vous arrange pour répondre à vos questions ou caler une visite.</p>
+        <ul class="s-liste" style="--tc:var(--brique)">
+          <li>Sans engagement, sans démarchage</li>
+          <li>Vos coordonnées ne servent qu'à vous rappeler</li>
+          <li>Ou appelez directement le <a href="tel:+33651509718">06 51 50 97 18</a></li>
+        </ul>
+      </div>
+      <form class="s-form" id="form-rappel" novalidate>
+        <div class="s-champs">
+          <label class="s-champ"><span>Prénom <b aria-hidden="true">*</b></span><input name="prenom" autocomplete="given-name" required maxlength="60"></label>
+          <label class="s-champ"><span>Téléphone <b aria-hidden="true">*</b></span><input name="telephone" type="tel" inputmode="tel" autocomplete="tel" required maxlength="20" placeholder="06 12 34 56 78"></label>
+          <label class="s-champ s-large"><span>Email <i>(facultatif, pour recevoir une confirmation)</i></span><input name="email" type="email" inputmode="email" autocomplete="email" maxlength="120"></label>
+          <label class="s-champ s-large"><span>Ça concerne</span>
+            <select name="interet">
+              <option value="">Je ne sais pas encore</option>
+              <option>Bureaux et coworking</option>
+              <option>Salle de réunion ou de formation</option>
+              <option>Formations de l'Académie</option>
+              <option>Mon projet (Fabrique du Génie)</option>
+              <option>Mon association</option>
+              <option>Les rendez-vous du quartier</option>
+              <option>Adhérer à l'association</option>
+              <option>Devenir partenaire</option>
+            </select>
+          </label>
+          <fieldset class="s-champ s-large s-puces"><legend>Quand vous rappeler ?</legend>
+            <label><input type="radio" name="creneau" value="" checked><span>Peu importe</span></label>
+            <label><input type="radio" name="creneau" value="Le matin"><span>Le matin</span></label>
+            <label><input type="radio" name="creneau" value="Le midi"><span>Le midi</span></label>
+            <label><input type="radio" name="creneau" value="L'après-midi"><span>L'après-midi</span></label>
+            <label><input type="radio" name="creneau" value="En soirée"><span>En soirée</span></label>
+          </fieldset>
+          <label class="s-champ s-large"><span>Un mot sur votre besoin <i>(facultatif)</i></span><textarea name="message" rows="3" maxlength="1000" placeholder="Ex. : une salle pour 15 personnes un samedi par mois"></textarea></label>
+          <label class="s-piege" aria-hidden="true">Ne pas remplir <input name="site" tabindex="-1" autocomplete="off"></label>
+          <label class="s-accord s-large"><input type="checkbox" name="consentement" required><span>J'accepte que l'association Génie me recontacte à ce sujet. Mes coordonnées ne servent qu'à cela et sont effacées au plus tard 12 mois après. <a href="confidentialite.html">Confidentialité</a></span></label>
+        </div>
+        <p class="s-erreur" id="rappel-erreur" role="alert" hidden></p>
+        <button class="btn btn-gold s-envoyer" type="submit">Me faire rappeler <svg class="ico ico-fl" aria-hidden="true"><use href="#g-i-fleche"/></svg></button>
+      </form>
+      <div class="s-merci" id="rappel-merci" hidden tabindex="-1">
+        <svg class="ico" aria-hidden="true"><use href="#g-i-coche"/></svg>
+        <h3>Merci <span data-prenom></span>, c'est noté !</h3>
+        <p>Nous vous rappelons très vite<span data-creneau></span>. En attendant, continuez la visite :</p>
+        <div class="s-actions" style="justify-content:center"><a class="btn btn-navy" href="#onglets">Revoir les rubriques</a><a class="btn btn-ghost" href="quartier.html">L'agenda du mois</a></div>
+      </div>
+    </div>
+  </section>
+
   <!-- ═════════ Bandeau final ═════════ -->
   <section class="s-fin" aria-labelledby="fin">
     <div class="wrap">
@@ -622,7 +677,7 @@
       <p>Une visite de 30 minutes suffit pour choisir. On vous montre les espaces et on répond à toutes vos questions.</p>
       <div class="btn-row">
         <a class="btn btn-gold" href="tel:+33651509718"><svg class="ico" aria-hidden="true"><use href="#g-i-tel"/></svg> Appeler le 06 51 50 97 18</a>
-        <a class="btn btn-ghost" href="reserver.html">Réserver en ligne</a>
+        <a class="btn btn-ghost" href="#rappel">Être rappelé</a>
         <a class="btn btn-ghost" href="index.html">Découvrir tout le site</a>
       </div>
     </div>
@@ -691,8 +746,8 @@
 
 <nav class="s-barre" aria-label="Actions rapides">
   <a href="tel:+33651509718"><svg class="ico" aria-hidden="true"><use href="#g-i-tel"/></svg>Appeler</a>
-  <a class="cta" href="reserver.html"><svg class="ico" aria-hidden="true"><use href="#g-i-horloge"/></svg>Réserver</a>
-  <a href="https://www.google.com/maps/dir/?api=1&amp;destination=12+rue+du+G%C3%A9nie%2C+82000+Montauban" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#g-i-carte"/></svg>Itinéraire</a>
+  <a class="cta" href="#rappel"><svg class="ico" aria-hidden="true"><use href="#g-i-horloge"/></svg>Être rappelé</a>
+  <a href="reserver.html"><svg class="ico" aria-hidden="true"><use href="#g-i-table"/></svg>Réserver</a>
 </nav>
 
 <script src="assets/js/v2.js" defer></script>

@@ -508,6 +508,8 @@ function doPost(e) {
       case 'CONTACT':                 return ok(traiterContact(data));
       case 'INSCRIPTION_ACADEMIE':    return ok(traiterInscriptionAcademie(data));
       case 'PROPOSITION_FORMATEUR':   return ok(traiterPropositionFormateur(data));
+      case 'SALON_VISITE':            return ok(salonVisite(data));
+      case 'SALON_RAPPEL':            return ok(salonRappel(data));
       // ── Actions admin : session vérifiée côté serveur ──
       case 'addResa':                 return ok(requireAdmin(data) || adminAddResa(data.resa));
       case 'updateResa':              return ok(requireAdmin(data) || adminUpdateResa(data.resa));
@@ -2807,4 +2809,204 @@ function installerDeclencheurSyntheseMensuelle() {
   }
   ScriptApp.newTrigger('envoyerSyntheseMensuelle').timeBased().onMonthDay(1).atHour(8).create();
   Logger.log('Declencheur installe : envoyerSyntheseMensuelle() le 1er de chaque mois a 8h.');
+}
+
+// ============================================================
+// SALON — page index-salon.html, atteinte par QR codes
+// ------------------------------------------------------------
+// Chaque QR porte ?qr=<public> (salon, bureaux, salles…). La page envoie :
+//  - SALON_VISITE : une ligne anonyme par visite (ni IP, ni cookie, ni
+//    identifiant : seulement la date, le QR scanné et le type d'appareil) ;
+//  - SALON_RAPPEL : une demande « Être rappelé » (prénom, téléphone…).
+// Trois onglets se créent tout seuls au premier usage :
+//  Salon_Bilan (tableau de bord à formules), Salon_Rappels, Salon_Visites.
+// On peut aussi les créer d'avance : lancer salonInitialiser() une fois.
+// ============================================================
+var SALON_PUBLICS = {
+  salon:    'QR général (affiche)',
+  bureaux:  'Bureaux et coworking',
+  salles:   'Salles de réunion',
+  academie: 'Académie (formations)',
+  fabrique: 'Fabrique (porteurs de projet)',
+  assos:    'Associations',
+  quartier: 'Habitants, rendez-vous',
+  partage:  'QR affiché sur la page (partage)',
+  direct:   'Lien direct, sans QR'
+};
+var SALON_MAX_VISITES_HEURE = 1500;  // plafond anti-abus, très au-dessus d'un salon
+var SALON_MAX_RAPPELS_HEURE = 60;
+
+function salonEstDate(x) { return Object.prototype.toString.call(x) === '[object Date]' && !isNaN(x); }
+
+function salonSource(v) {
+  v = String(v || '').toLowerCase().replace(/[^a-z]/g, '').slice(0, 20);
+  if (!v) return 'direct';
+  return SALON_PUBLICS.hasOwnProperty(v) ? v : 'direct';
+}
+
+function salonCompteurOk(nom, max) {
+  try {
+    var cache = CacheService.getScriptCache();
+    var k = 'salon_' + nom + '_' + Math.floor(Date.now() / 3600000);
+    var n = parseInt(cache.get(k) || '0', 10);
+    if (n >= max) return false;
+    cache.put(k, String(n + 1), 3700);
+    return true;
+  } catch (e) { return true; }
+}
+
+function salonFeuille(ss, nom, entetes, largeurs) {
+  var sh = ss.getSheetByName(nom);
+  if (sh) return sh;
+  sh = ss.insertSheet(nom);
+  sh.appendRow(entetes);
+  sh.setFrozenRows(1);
+  sh.getRange(1, 1, 1, entetes.length).setFontWeight('bold').setBackground('#1C2B3A').setFontColor('#FFFFFF');
+  (largeurs || []).forEach(function (l, i) { if (l) sh.setColumnWidth(i + 1, l); });
+  return sh;
+}
+
+function salonFeuilles(ss) {
+  ss = ss || SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+  var rappels = salonFeuille(ss, 'Salon_Rappels',
+    ['Date', 'Statut', 'Prénom', 'Téléphone', 'Email', 'Intérêt', 'Quand rappeler', 'Message', 'QR scanné', 'Onglets consultés', 'Suivi (notes)'],
+    [140, 110, 120, 130, 200, 170, 140, 280, 150, 200, 260]);
+  var visites = salonFeuille(ss, 'Salon_Visites',
+    ['Date', 'QR scanné', 'Onglet ouvert', 'Appareil'], [160, 120, 120, 110]);
+  if (!ss.getSheetByName('Salon_Bilan')) salonCreerBilan(ss);
+  return { rappels: rappels, visites: visites };
+}
+
+// Tableau de bord : uniquement des formules, il se met à jour tout seul.
+function salonCreerBilan(ss) {
+  var sh = ss.insertSheet('Salon_Bilan', 0);
+  sh.getRange('A1').setValue('Bilan du salon — mis à jour automatiquement').setFontSize(16).setFontWeight('bold');
+  sh.getRange('A2').setValue('Scans = ouvertures de la page (une par visiteur et par visite). Les demandes de rappel détaillées sont dans l\'onglet Salon_Rappels.').setFontColor('#57626D');
+  var t = ['QR / public', 'Scans', 'Demandes de rappel', 'Taux de contact', 'Code'];
+  sh.getRange(4, 1, 1, t.length).setValues([t]).setFontWeight('bold').setBackground('#1C2B3A').setFontColor('#FFFFFF');
+  var cles = Object.keys(SALON_PUBLICS), r = 5;
+  cles.forEach(function (k) {
+    sh.getRange(r, 1).setValue(SALON_PUBLICS[k]);
+    sh.getRange(r, 5).setValue(k).setFontColor('#9AA3AB');
+    sh.getRange(r, 2).setFormula('=COUNTIF(Salon_Visites!B:B,E' + r + ')');
+    sh.getRange(r, 3).setFormula('=COUNTIF(Salon_Rappels!I:I,E' + r + ')');
+    sh.getRange(r, 4).setFormula('=IFERROR(C' + r + '/B' + r + ',0)');
+    r++;
+  });
+  sh.getRange(r, 1).setValue('TOTAL').setFontWeight('bold');
+  sh.getRange(r, 2).setFormula('=SUM(B5:B' + (r - 1) + ')').setFontWeight('bold');
+  sh.getRange(r, 3).setFormula('=SUM(C5:C' + (r - 1) + ')').setFontWeight('bold');
+  sh.getRange(r, 4).setFormula('=IFERROR(C' + r + '/B' + r + ',0)').setFontWeight('bold');
+  sh.getRange(5, 4, r - 4, 1).setNumberFormat('0%');
+  sh.getRange(r + 1, 1).setValue('Demandes encore à rappeler :').setFontWeight('bold');
+  sh.getRange(r + 1, 3).setFormula('=COUNTIF(Salon_Rappels!B:B,"À RAPPELER")').setFontWeight('bold').setFontColor('#B4532F');
+  sh.getRange('G4').setValue('Scans par jour').setFontWeight('bold');
+  sh.getRange('G5').setFormula('=IFERROR(QUERY(Salon_Visites!A2:B,"select toDate(A), count(B) where A is not null group by toDate(A) order by toDate(A) desc label toDate(A) \'Jour\', count(B) \'Scans\'",0),"(pas encore de scan)")');
+  sh.getRange('J4').setValue('Rappels par jour').setFontWeight('bold');
+  sh.getRange('J5').setFormula('=IFERROR(QUERY(Salon_Rappels!A2:C,"select toDate(A), count(C) where A is not null group by toDate(A) order by toDate(A) desc label toDate(A) \'Jour\', count(C) \'Demandes\'",0),"(pas encore de demande)")');
+  sh.getRange('G:G').setNumberFormat('dd/mm/yyyy'); sh.getRange('J:J').setNumberFormat('dd/mm/yyyy');
+  sh.setColumnWidth(1, 260); sh.setColumnWidth(3, 150); sh.setColumnWidth(4, 120); sh.setColumnWidth(7, 110); sh.setColumnWidth(10, 110);
+  return sh;
+}
+
+function salonVisite(data) {
+  if (!salonCompteurOk('visites', SALON_MAX_VISITES_HEURE)) return { success: false, error: 'TROP_DE_REQUETES' };
+  var onglet = String(data.onglet || '').toLowerCase().replace(/[^a-z-]/g, '').slice(0, 20);
+  var appareil = data.appareil === 'mobile' ? 'mobile' : 'ordinateur';
+  salonFeuilles().visites.appendRow([new Date(), salonSource(data.source), onglet, appareil]);
+  return { success: true };
+}
+
+function salonRappel(data) {
+  // Champ piège invisible : un robot le remplit, un humain non. On répond
+  // « OK » sans rien enregistrer pour ne pas lui apprendre la parade.
+  if (data.site) return { success: true };
+  var prenom = String(data.prenom || '').trim();
+  var tel = String(data.telephone || '').replace(/[^\d+]/g, '');
+  var email = String(data.email || '').trim();
+  if (!prenom) return { success: false, error: 'CHAMPS_MANQUANTS', message: 'Indiquez votre prénom.' };
+  if (tel.replace(/\D/g, '').length < 9 && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email))
+    return { success: false, error: 'CONTACT_MANQUANT', message: 'Indiquez un téléphone (ou un email) pour qu\'on puisse vous joindre.' };
+  if (email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email))
+    return { success: false, error: 'EMAIL_INVALIDE', message: 'Format email invalide.' };
+  if (!data.consentement) return { success: false, error: 'CONSENTEMENT', message: 'Merci de cocher la case d\'accord.' };
+  if (!salonCompteurOk('rappels', SALON_MAX_RAPPELS_HEURE) || !rateLimitOk('salon_' + (tel || email)))
+    return { success: false, error: 'TROP_DE_REQUETES', message: 'Trop de demandes. Réessayez dans une heure.' };
+
+  var source = salonSource(data.source);
+  var ligne = [new Date(), 'À RAPPELER', sanit(prenom.slice(0, 60)), sanit(tel.slice(0, 20)), sanit(email.slice(0, 120)),
+    sanit(String(data.interet || '').slice(0, 80)), sanit(String(data.creneau || '').slice(0, 40)),
+    sanit(String(data.message || '').slice(0, 1000)), source, sanit(String(data.onglets || '').slice(0, 200)), ''];
+  var fRappels = salonFeuilles().rappels;
+  fRappels.appendRow(ligne);
+  salonPurger(fRappels);
+
+  var telLisible = tel.replace(/^\+33/, '0').replace(/(\d{2})(?=\d)/g, '$1 ');
+  envoyerEmailSafe(CONFIG.EMAIL_ADMIN,
+    '📞 Salon — à rappeler : ' + prenom + (data.interet ? ' (' + String(data.interet).slice(0, 60) + ')' : ''),
+    'Nouvelle demande « Être rappelé » depuis la page salon.\n\n' +
+    'Prénom : ' + prenom + '\n' +
+    'Téléphone : ' + (tel ? telLisible + '   → appeler : tel:' + tel : '—') + '\n' +
+    'Email : ' + (email || '—') + '\n' +
+    'Intérêt : ' + (data.interet || '—') + '\n' +
+    'Quand rappeler : ' + (data.creneau || 'indifférent') + '\n' +
+    'Message : ' + (data.message || '—') + '\n\n' +
+    'QR scanné : ' + SALON_PUBLICS[source] + '\n' +
+    'Onglets consultés : ' + (data.onglets || '—') + '\n\n' +
+    'Toutes les demandes : onglet « Salon_Rappels » du classeur. Passez le statut à « RAPPELÉ » une fois fait.',
+    email ? { replyTo: email } : null);
+  if (email) {
+    envoyerEmailSafe(email, 'Génie Montauban — on vous rappelle très vite',
+      'Bonjour ' + prenom + ',\n\nMerci pour votre passage ! Nous avons bien reçu votre demande' +
+      (data.interet ? ' (' + data.interet + ')' : '') + ' et nous vous recontactons très vite' +
+      (data.creneau ? ', de préférence ' + String(data.creneau).toLowerCase() : '') + '.\n\n' +
+      'En attendant, tout le Génie est ici : ' + CONFIG.URL_SITE + '/index-salon.html\n\n' +
+      'À bientôt au 12 rue du Génie,\nL\'équipe du Génie\n' + CONFIG.TEL);
+  }
+  return { success: true };
+}
+
+// Engagement de la page confidentialité : demandes effacées après 12 mois.
+function salonPurger(sh) {
+  try {
+    var limite = new Date(); limite.setMonth(limite.getMonth() - 12);
+    var v = sh.getDataRange().getValues();
+    for (var i = v.length - 1; i >= 1; i--) {
+      if (salonEstDate(v[i][0]) && v[i][0] < limite) sh.deleteRow(i + 1);
+    }
+  } catch (e) { logErreur('salonPurger', e); }
+}
+
+// À lancer une fois à la main (facultatif) : crée les 3 onglets d'avance.
+function salonInitialiser() {
+  salonFeuilles();
+  Logger.log('Onglets Salon_Bilan, Salon_Rappels et Salon_Visites prêts.');
+}
+
+// Récapitulatif du jour par email (facultatif, voir installerBilanSalon).
+function envoyerBilanSalon() {
+  var ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+  var f = salonFeuilles(ss);
+  var debut = new Date(); debut.setHours(0, 0, 0, 0);
+  var parSource = {}, nbV = 0;
+  f.visites.getDataRange().getValues().slice(1).forEach(function (l) {
+    if (salonEstDate(l[0]) && l[0] >= debut) { nbV++; parSource[l[1]] = (parSource[l[1]] || 0) + 1; }
+  });
+  var rappels = f.rappels.getDataRange().getValues().slice(1).filter(function (l) { return salonEstDate(l[0]) && l[0] >= debut; });
+  if (!nbV && !rappels.length) return;
+  var corps = 'Bilan du jour de la page salon\n\nScans : ' + nbV + '\n';
+  Object.keys(parSource).forEach(function (k) { corps += '  · ' + (SALON_PUBLICS[k] || k) + ' : ' + parSource[k] + '\n'; });
+  corps += '\nDemandes de rappel : ' + rappels.length + '\n';
+  rappels.forEach(function (l) { corps += '  · ' + l[2] + ' — ' + (l[3] || l[4]) + ' — ' + (l[5] || '') + (l[6] ? ' (' + l[6] + ')' : '') + '\n'; });
+  corps += '\nTableau complet : onglet « Salon_Bilan » du classeur.';
+  envoyerEmailSafe(CONFIG.EMAIL_ADMIN, '📊 Salon — bilan du ' + Utilities.formatDate(new Date(), 'Europe/Paris', 'dd/MM'), corps);
+}
+
+// Facultatif : bilan par email chaque soir à 20 h (n'envoie rien les jours sans visite).
+function installerBilanSalon() {
+  ScriptApp.getProjectTriggers().forEach(function (t) {
+    if (t.getHandlerFunction() === 'envoyerBilanSalon') ScriptApp.deleteTrigger(t);
+  });
+  ScriptApp.newTrigger('envoyerBilanSalon').timeBased().everyDays(1).atHour(20).create();
+  Logger.log('Bilan salon : email chaque soir à 20 h.');
 }
