@@ -26,10 +26,11 @@ const sandbox = {
     DigestAlgorithm: { SHA_256: 'SHA_256' },
     computeDigest: (_a, txt) => Array.from(crypto.createHash('sha256').update(String(txt)).digest()),
     sleep: () => {},
+    formatDate: (d, _tz, f) => f.replace('yyyy', d.getFullYear()).replace('MM', String(d.getMonth() + 1).padStart(2, '0')).replace('dd', String(d.getDate()).padStart(2, '0')),
   },
   MailApp: { sendEmail: (...a) => mails.push(a), getRemainingDailyQuota: () => 100 },
   Logger: { log: m => journal.push(String(m)) },
-  Session: { getActiveUser: () => ({ getEmail: () => 'test@example.com' }) },
+  Session: { getScriptTimeZone: () => 'Europe/Paris', getActiveUser: () => ({ getEmail: () => 'test@example.com' }) },
   SpreadsheetApp: { openById: () => { throw new Error('feuille non simulée'); } },
   CalendarApp: { getCalendarById: () => null },
   ContentService: {
@@ -226,6 +227,14 @@ t('diagnostic : blocage Cloudflare (429) signalé', /^BLOQUE/.test(diag) && appe
 t('diagnostic : aucun secret dans le résultat', !/secret-test|id-test/.test(diag));
 delete props.HELLOASSO_CLIENT_ID; delete props.HELLOASSO_CLIENT_SECRET;
 sandbox.UrlFetchApp.fetch = fetchOrig;
+t("relance d'adhésion refusée sans email", sandbox.relancerPaiement({ id: 'ADH-1' }).error === 'CHAMPS_MANQUANTS');
+
+console.log('\n--- Dates et heures lisibles dans les e-mails ---');
+// Les Date doivent venir du bac à sable (instanceof Date entre deux contextes)
+const dSheets = vm.runInContext('new Date(2026, 9, 14)', sandbox), hSheets = vm.runInContext('new Date(1899, 11, 30, 11, 0)', sandbox);
+t('une date Sheets devient AAAA-MM-JJ', sandbox.dateISO(dSheets) === '2026-10-14');
+t('une heure Sheets devient HH:MM (plus de « 30 Dec 1899 »)', sandbox.formaterHeure(hSheets) === '11:00');
+t('une heure texte reste inchangée', sandbox.formaterHeure('14:30') === '14:30');
 t('relance de paiement refusée sans email',
   sandbox.relancerPaiement({ id: 'RSV-1' }).error === 'CHAMPS_MANQUANTS');
 
