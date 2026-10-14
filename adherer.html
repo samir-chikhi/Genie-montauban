@@ -109,8 +109,8 @@
             <option value="Collectivité">Collectivité (sur convention)</option>
           </select></label>
         <label>Montant (€) *<input id="mbr-montant" type="number" min="0" step="1" required></label>
-        <label>Prénom *<input id="mbr-prenom" required autocomplete="given-name"></label>
-        <label>Nom / structure *<input id="mbr-nom" required autocomplete="family-name"></label>
+        <label>Prénom *<input id="mbr-prenom" required minlength="2" autocomplete="given-name"></label>
+        <label>Nom / structure *<input id="mbr-nom" required minlength="2" autocomplete="family-name"></label>
         <label>Email *<input id="mbr-email" type="email" required autocomplete="email"></label>
         <label>Téléphone<input id="mbr-tel" type="tel" autocomplete="tel"></label>
       </div>
