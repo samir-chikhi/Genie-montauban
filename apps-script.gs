@@ -1230,7 +1230,7 @@ function creerAdhesion(data) {
         sheet.getRange(sheet.getLastRow(), 15).setValue('EN_ATTENTE_PAIEMENT');
       }
     }
-    return { success: true, id: id, paiementUrl: paiementUrl };
+    return { success: true, id: id, paiementUrl: paiementUrl, paiementIndisponible: mt > 0 && !paiementUrl };
   } catch (err) {
     logErreur('creerAdhesion', err);
     return { success: false, error: 'ERREUR_SERVEUR', message: err.message };
@@ -1509,14 +1509,15 @@ function haCheckout(o) {
 
   const libelle = String(o.libelle || o.id).slice(0, 250);
   const resa = o;
+  const page = o.type === 'adhesion' ? '/adherer.html' : '/reservation.html';
 
   const body = {
     totalAmount:      cents,
     initialAmount:    cents,
     itemName:         libelle,
-    backUrl:          CONFIG.URL_SITE + '/reservation.html',
-    errorUrl:         CONFIG.URL_SITE + '/reservation.html?paiement=erreur',
-    returnUrl:        CONFIG.URL_SITE + '/reservation.html?paiement=ok',
+    backUrl:          CONFIG.URL_SITE + page,
+    errorUrl:         CONFIG.URL_SITE + page + '?paiement=erreur',
+    returnUrl:        CONFIG.URL_SITE + page + '?paiement=ok',
     containsDonation: false,
     payer: {
       firstName: String(resa.prenom || '').slice(0, 255),
@@ -1557,6 +1558,7 @@ function relancerPaiement(data) {
   const lock = LockService.getScriptLock();
   lock.waitLock(20000);
   try {
+    if (/^ADH-/.test(id)) return relancerPaiementAdhesion(id, email);
     const sheet = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID).getSheetByName('Reservations');
     const rows  = sheet.getDataRange().getValues();
     for (let i = 1; i < rows.length; i++) {
@@ -1589,6 +1591,33 @@ function relancerPaiement(data) {
   } finally {
     lock.releaseLock();
   }
+}
+
+// Meme logique pour une adhesion (onglet Adhesions : email col I, montant
+// col E, lien col N, etat du paiement col O). Pas de delai de liberation.
+function relancerPaiementAdhesion(id, email) {
+  const sheet = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID).getSheetByName('Adhesions');
+  const rows  = sheet.getDataRange().getValues();
+  for (let i = 1; i < rows.length; i++) {
+    if (String(rows[i][0]) !== id) continue;
+    if (String(rows[i][8]).trim().toLowerCase() !== email) break;   // même réponse qu'un id inconnu
+    if (String(rows[i][14]) === 'PAYE')
+      return { success: false, error: 'DEJA_PAYE', message: 'Cette adhésion est déjà réglée.' };
+    if (String(rows[i][1]) !== 'EN_ATTENTE')
+      return { success: false, error: 'RESA_CLOSE', message: 'Cette demande n\'est plus en attente de paiement.' };
+    const montant = parseFloat(String(rows[i][4]).replace(',', '.')) || 0;
+    if (montant <= 0) return { success: false, error: 'GRATUIT', message: 'Aucun paiement n\'est dû.' };
+    const co = haCheckout({ id: id, type: 'adhesion', montant: montant,
+      libelle: 'Adhésion ' + CONFIG.NOM_LIEU + ' — ' + rows[i][3],
+      prenom: rows[i][6], nom: rows[i][7], email: email });
+    if (!co || !co.url)
+      return { success: false, error: 'PAIEMENT_INDISPONIBLE',
+               message: 'Le paiement en ligne est momentanément indisponible. Réessayez dans quelques minutes ou appelez le ' + CONFIG.TEL + '.' };
+    sheet.getRange(i + 1, 14).setValue(co.url);
+    sheet.getRange(i + 1, 15).setValue('EN_ATTENTE_PAIEMENT');
+    return { success: true, id: id, paiementUrl: co.url, montant: montant };
+  }
+  return { success: false, error: 'RESA_INCONNUE', message: 'Demande introuvable pour cet email.' };
 }
 
 function formaterDateCourte(d) {
@@ -1843,9 +1872,9 @@ function adminGetAll() {
         nomEspace   = String(r[3] || '');
         usage       = String(r[4] || 'reunion');
         profil      = String(r[5] || 'locataire');
-        date        = String(r[6] || '');
-        heureDebut  = String(r[7] || '');
-        heureFin    = String(r[8] || '');
+        date        = dateISO(r[6]);
+        heureDebut  = formaterHeure(r[7]);
+        heureFin    = formaterHeure(r[8]);
         nbH         = parseFloat(r[9]) || 1;
         participants= String(r[10] || 1);
         prenom      = String(r[11] || '');
@@ -1871,11 +1900,11 @@ function adminGetAll() {
         nomEspace   = String(r[7]  || r[6] || '');
         usage       = String(r[8]  || 'reunion');
         profil      = String(r[9]  || 'locataire');
-        date        = String(r[10] || '');
+        date        = dateISO(r[10]);
         typeDuree   = String(r[11] || 'heure');
         nbH         = parseFloat(r[12]) || 1;
-        heureDebut  = String(r[13] || '');
-        heureFin    = String(r[14] || '');
+        heureDebut  = formaterHeure(r[13]);
+        heureFin    = formaterHeure(r[14]);
         montant     = String(r[15] || 0);
         options     = String(r[17] || '');
         statut      = statutMap[String(r[18])] || 'pending';
@@ -2016,7 +2045,7 @@ function adminAddResa(resa) {
     // Email client + admin
     if (resa.email) {
       const dl = resa.typeDuree === 'heure'
-        ? (resa.nbHeures + 'h (' + resa.heureDebut + '→' + resa.heureFin + ')')
+        ? (resa.nbHeures + 'h (' + formaterHeure(resa.heureDebut) + '→' + formaterHeure(resa.heureFin) + ')')
         : ({demi:'½ journée',journee:'Journée',semaine:'Semaine',mois:'Mois'}[resa.typeDuree] || resa.typeDuree);
       const montantStr = (parseFloat(resa.montant)||0) === 0 ? 'Gratuit' : resa.montant + ' €';
       envoyerEmailSafe(resa.email,
@@ -2025,7 +2054,7 @@ function adminAddResa(resa) {
         + 'Votre demande a bien été enregistrée.\n\n'
         + '📋 Référence : ' + (resa.id||'') + '\n'
         + '📍 Espace    : ' + (resa.nomEspace||resa.espace||'') + '\n'
-        + '📅 Date      : ' + formaterDate(resa.date) + '\n'
+        + '📅 Date      : ' + formaterDate(dateISO(resa.date)) + '\n'
         + '⏰ Durée     : ' + dl + '\n'
         + '💰 Montant   : ' + montantStr + '\n'
         + (resa.options ? '➕ Options  : ' + resa.options + '\n' : '')
@@ -2034,7 +2063,7 @@ function adminAddResa(resa) {
       envoyerEmailSafe(CONFIG.EMAIL_ADMIN,
         '🔔 Réservation ' + (resa.id||'') + ' — ' + (resa.nomEspace||resa.espace||'') + ' — ' + (resa.prenom||'') + ' ' + (resa.nom||''),
         'Réf    : ' + (resa.id||'') + '\nEspace : ' + (resa.nomEspace||resa.espace||'')
-        + '\nDate   : ' + (resa.date||'') + ' ' + (resa.heureDebut||'') + '→' + (resa.heureFin||'')
+        + '\nDate   : ' + formaterDate(dateISO(resa.date)) + ' ' + formaterHeure(resa.heureDebut) + '→' + formaterHeure(resa.heureFin)
         + '\nClient : ' + (resa.prenom||'') + ' ' + (resa.nom||'')
         + '\nEmail  : ' + (resa.email||'')
         + '\nMontant: ' + (resa.montant||0) + ' €'
@@ -2105,8 +2134,8 @@ function adminUpdateResa(resa) {
             '✅ Réservation confirmée — ' + (resa.nomEspace||resa.espace) + ' — Génie Montauban',
             'Bonjour ' + (resa.prenom||resa.nom) + ',\n\nVotre réservation est confirmée !\n\n'
             + '• Espace    : ' + (resa.nomEspace||resa.espace) + '\n'
-            + '• Date      : ' + formaterDate(resa.date) + '\n'
-            + '• Horaire   : ' + resa.heureDebut + ' → ' + resa.heureFin + '\n'
+            + '• Date      : ' + formaterDate(dateISO(resa.date)) + '\n'
+            + '• Horaire   : ' + formaterHeure(resa.heureDebut) + ' → ' + formaterHeure(resa.heureFin) + '\n'
             + '• Référence : ' + resa.id + '\n\nÀ bientôt !\n' + CONFIG.NOM_LIEU);
           remplacerEvenementCalendrier(sheet, i + 1, rows[i][23],
             resa.nomEspace||resa.espace, resa.date, resa.heureDebut, resa.heureFin,
@@ -2592,7 +2621,7 @@ function alerterResasBloquees() {
           bloquees.push({ id: rows[i][0],
             client : String(rows[i][1]||rows[i][11]||'') + ' ' + String(rows[i][2]||rows[i][12]||''),
             espace : String(rows[i][7]||rows[i][3]||''),
-            date   : String(rows[i][10]||rows[i][6]||''),
+            date   : formaterDate(dateISO(rows[i][10]||rows[i][6]||'')),
             heures : Math.round(h) });
         }
       }
