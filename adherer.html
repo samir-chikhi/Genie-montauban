@@ -127,6 +127,43 @@
   var API = 'https://script.google.com/macros/s/AKfycbyJ-Dk-yZZNdfxFigchP953rNyjSLJv4oOVUbxzuAbX4kuBfwTFBJvnnLuJMLWRnd9c4w/exec';
   var f = document.getElementById('f-adh'), btn = document.getElementById('mbr-btn'), box = document.getElementById('mbr-msg');
   var v = function (id) { return document.getElementById(id).value.trim(); };
+  // Redemande un lien de paiement HelloAsso pour la demande qui vient d'être enregistrée
+  function afficherRelance(html) {
+    box.className = 'form-msg err';
+    box.innerHTML = html + ' <button type="button" class="btn btn-gold" id="mbr-relance" style="margin-top:10px">💳 Payer en ligne maintenant</button>';
+    document.getElementById('mbr-relance').addEventListener('click', relancer);
+  }
+  function relancer() {
+    var r = {};
+    try { r = JSON.parse(sessionStorage.getItem('genie_adh') || '{}'); } catch (e) {}
+    var b = document.getElementById('mbr-relance');
+    if (!r.id || !r.email) { box.className = 'form-msg err'; box.innerHTML = 'Référence introuvable. Appelez le <a href="tel:+33651509718">06 51 50 97 18</a>.'; return; }
+    b.disabled = true; b.textContent = '⏳ Préparation du paiement…';
+    fetch(API, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, redirect: 'follow',
+      body: JSON.stringify({ action: 'RELANCER_PAIEMENT', id: r.id, email: r.email }) })
+      .then(function (x) { return x.json(); })
+      .then(function (d) {
+        if (d && d.success && d.paiementUrl) { location.href = d.paiementUrl; return; }
+        b.disabled = false; b.textContent = '💳 Payer en ligne maintenant';
+        alert((d && d.message) || 'Paiement indisponible, réessayez dans quelques minutes.');
+      })
+      .catch(function () {
+        b.disabled = false; b.textContent = '💳 Payer en ligne maintenant';
+        alert('Erreur réseau. Appelez le 06 51 50 97 18.');
+      });
+  }
+
+  // Retour de HelloAsso : « ?paiement=ok » (réglé) ou « ?paiement=erreur » (échec)
+  var retour = String(new URLSearchParams(location.search).get('paiement') || '').split('?')[0];
+  if (retour === 'ok') {
+    box.className = 'form-msg ok';
+    box.innerHTML = '<strong>Paiement reçu, merci !</strong> Votre adhésion est enregistrée.';
+    btn.disabled = true; btn.textContent = 'Adhésion réglée ✓';
+    try { sessionStorage.removeItem('genie_adh'); } catch (e) {}
+  } else if (retour === 'erreur') {
+    afficherRelance('<strong>Le paiement n\'a pas abouti.</strong> Aucun montant n\'a été débité.');
+  }
+
   f.addEventListener('submit', function (e) {
     e.preventDefault();
     if (!f.reportValidity()) return;
@@ -138,9 +175,15 @@
       .then(function (r) { return r.json(); })
       .then(function (d) {
         if (!d || !d.success) throw new Error((d && (d.message || d.error)) || 'erreur');
+        try { sessionStorage.setItem('genie_adh', JSON.stringify({ id: d.id, email: v('mbr-email') })); } catch (e) {}
         if (d.paiementUrl) { location.href = d.paiementUrl; return; }
-        box.className = 'form-msg ok'; box.innerHTML = '<strong>Demande reçue.</strong> Un email de confirmation vient de partir ; on revient vers vous sous 48 h.';
         btn.textContent = 'Envoyé ✓';
+        if (d.paiementIndisponible) {
+          // Demande enregistrée, mais lien HelloAsso non créé : le dire et proposer de réessayer
+          afficherRelance('<strong>Demande reçue.</strong> Le paiement en ligne est momentanément indisponible : vous pouvez réessayer maintenant, ou régler selon le mode choisi (on vous contacte sous 48 h).');
+          return;
+        }
+        box.className = 'form-msg ok'; box.innerHTML = '<strong>Demande reçue.</strong> Un email de confirmation vient de partir ; on revient vers vous sous 48 h.';
       })
       .catch(function (err) {
         btn.disabled = false; btn.textContent = 'Envoyer ma demande d\'adhésion';
