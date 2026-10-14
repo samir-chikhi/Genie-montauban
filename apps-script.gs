@@ -1495,6 +1495,19 @@ function testerHelloAsso() {
   return resultat;
 }
 
+// Bloc « payeur » : HelloAsso refuse un nom ou un prenom de moins de 2
+// caracteres (400 « Votre nom est trop court »). On n'envoie donc chaque
+// champ que s'il est valable ; sans nom (avecNoms=false), seul l'e-mail part.
+function haPayer(resa, avecNoms) {
+  const propre = function (v) { return String(v || '').replace(/\s+/g, ' ').trim().slice(0, 255); };
+  const payer = { email: propre(resa.email) };
+  if (avecNoms) {
+    if (propre(resa.prenom).length >= 2) payer.firstName = propre(resa.prenom);
+    if (propre(resa.nom).length >= 2)    payer.lastName  = propre(resa.nom);
+  }
+  return payer;
+}
+
 // Cree une intention de paiement. Retourne { url, id } ou null.
 // Sert aux reservations comme aux adhesions : un seul tableau de bord
 // HelloAsso, un seul webhook, un seul rapprochement.
@@ -1519,19 +1532,25 @@ function haCheckout(o) {
     errorUrl:         CONFIG.URL_SITE + page + '?paiement=erreur',
     returnUrl:        CONFIG.URL_SITE + page + '?paiement=ok',
     containsDonation: false,
-    payer: {
-      firstName: String(resa.prenom || '').slice(0, 255),
-      lastName:  String(resa.nom    || '').slice(0, 255),
-      email:     String(resa.email  || '').slice(0, 255)
-    },
+    payer: haPayer(resa, true),
     metadata: { resaId: String(o.id), type: String(o.type || 'reservation') }
   };
 
-  const r = haFetch(
-    'https://api.helloasso.com/v5/organizations/' + CONFIG.HELLOASSO_SLUG + '/checkout-intents',
-    { method: 'post', contentType: 'application/json',
-      headers: { Authorization: 'Bearer ' + token },
-      payload: JSON.stringify(body) });
+  const urlCheckout = 'https://api.helloasso.com/v5/organizations/' + CONFIG.HELLOASSO_SLUG + '/checkout-intents';
+  const envoyer = function () {
+    return haFetch(urlCheckout, { method: 'post', contentType: 'application/json',
+      headers: { Authorization: 'Bearer ' + token }, payload: JSON.stringify(body) });
+  };
+  let r = envoyer();
+  if (r.getResponseCode() === 400) {
+    // Souvent un nom ou un prenom refuse par HelloAsso (« trop court »,
+    // caracteres inattendus) : le paiement ne doit pas en dependre. On
+    // retente avec la seule adresse e-mail ; le client saisit son identite
+    // sur la page HelloAsso.
+    logErreur('haCheckout', new Error('HTTP 400 ' + r.getContentText().slice(0, 300) + ' — nouvel essai sans nom'));
+    body.payer = haPayer(resa, false);
+    r = envoyer();
+  }
 
   const code = r.getResponseCode();
   if (code === 401) CacheService.getScriptCache().remove('ha_token');
