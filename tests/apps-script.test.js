@@ -199,5 +199,26 @@ t('« Olympe de Gouges » est reconnu comme la salle gouges', sandbox.cleEspace(
 t('« Antoine Bourdelle » reste reconnu', sandbox.cleEspace('Antoine Bourdelle') === 'bourdelle');
 t('un espace inconnu reste inconnu', sandbox.cleEspace('salle imaginaire') === null);
 
+console.log('\n--- Paiement HelloAsso ---');
+const fetchOrig = sandbox.UrlFetchApp.fetch;
+const reponses = (codes) => {
+  let n = 0;
+  sandbox.UrlFetchApp.fetch = () => { const c = codes[Math.min(n++, codes.length - 1)];
+    return { getResponseCode: () => c, getContentText: () => '{}' }; };
+  return () => n;
+};
+let appels = reponses([429, 200]);
+t('un 429 Cloudflare est retenté puis réussit',
+  sandbox.haFetch('https://x', {}).getResponseCode() === 200 && appels() === 2);
+appels = reponses([429]);
+t('les 429 répétés abandonnent après 3 essais',
+  sandbox.haFetch('https://x', {}).getResponseCode() === 429 && appels() === 3);
+appels = reponses([400]);
+t('une erreur 400 n\'est pas retentée',
+  sandbox.haFetch('https://x', {}).getResponseCode() === 400 && appels() === 1);
+sandbox.UrlFetchApp.fetch = fetchOrig;
+t('relance de paiement refusée sans email',
+  sandbox.relancerPaiement({ id: 'RSV-1' }).error === 'CHAMPS_MANQUANTS');
+
 console.log(`\n${ko === 0 ? 'TOUS LES TESTS PASSENT' : ko + ' TEST(S) EN ÉCHEC'}`);
 process.exit(ko === 0 ? 0 : 1);

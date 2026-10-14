@@ -436,6 +436,20 @@ input[type=radio],input[type=checkbox]{width:auto;height:auto;padding:0;border:n
   <a href="/" class="btn-modify">← Retour au site</a>
 </div>
 
+<!-- Paiement non abouti : lien non cree, paiement abandonne ou refuse -->
+<div class="success-card" id="payCard">
+  <div class="success-icon">💳</div>
+  <h2 id="payTitre">Paiement non finalisé</h2>
+  <p id="payTexte">Votre demande est enregistrée, mais le paiement n'a pas abouti. Le créneau vous est réservé pendant 30 minutes.</p>
+  <div class="success-ref" id="payRef">—</div>
+  <br><br>
+  <button class="btn-envoyer" id="btnRelancer" onclick="relancerPaiement()" style="max-width:360px">💳 Payer maintenant sur HelloAsso</button>
+  <p style="margin-top:14px;font-size:14px;color:#6B7A8A">Un souci ? Appelez le 06 51 50 97 18.</p>
+  <button class="btn-modify" onclick="sessionStorage.removeItem('genie_resa');location.href='reservation.html'">📅 Nouvelle réservation</button>
+  &nbsp;
+  <a href="/" class="btn-modify">← Retour au site</a>
+</div>
+
 <div class="toasts" id="toasts"></div>
 
 <!-- ═══ GUIDE UTILISATEUR ═══ -->
@@ -968,6 +982,14 @@ async function envoyerReservation() {
   document.getElementById('loadBanner').classList.add('visible');
   document.getElementById('btnEnvoyer').disabled = true;
 
+  // Recapitulatif garde pour l ecran de retour de HelloAsso : l URL de
+  // retour ne transporte que des identifiants techniques.
+  const recap = {
+    ref: ref, espace: esp.nom, date: date, heureDebut: heure, heureFin: heureFin_input,
+    montant: total, prenom: prenom, email: email
+  };
+
+  let data;
   try {
     // POST → doPost → creerReservation() : Sheets + email client + email admin + agenda
     const resp = await fetch(SCRIPT_URL, {
@@ -976,71 +998,112 @@ async function envoyerReservation() {
       body   : JSON.stringify(payload),
       redirect: 'follow'
     });
-    const text = await resp.text();
-    document.getElementById('loadBanner').classList.remove('visible');
-
-    let data = {};
-    try { data = JSON.parse(text); } catch(e) { data = { success: true }; }
-
-    if (data.success || !data.error) {
-      // Le serveur a verifie la disponibilite et calcule le montant : si un
-      // paiement est du, on envoie directement sur HelloAsso. Le creneau est
-      // tenu 30 min, puis libere automatiquement s il n est pas regle.
-      if (data.paiementUrl) {
-        // On garde le recapitulatif pour l afficher au retour de HelloAsso :
-        // l URL de retour ne transporte que des identifiants techniques.
-        try {
-          sessionStorage.setItem('genie_resa', JSON.stringify({
-            ref: data.id || ref, espace: esp.nom, date: date,
-            heureDebut: heure, heureFin: heureFin_input,
-            montant: data.montant != null ? data.montant : total,
-            prenom: prenom, email: email
-          }));
-        } catch (e) {}
-        document.getElementById('btnEnvoyer').textContent = '↪ Redirection vers le paiement…';
-        window.location.href = data.paiementUrl;
-        return;
-      }
-      document.getElementById('mainPage').style.display = 'none';
-      document.getElementById('successCard').classList.add('visible');
-      document.getElementById('successRef').textContent = data.id || ref;
-      updateSteps(4);
-      window.scrollTo({top:0, behavior:'smooth'});
-      return;
-    }
-    // Refus métier du serveur (créneau occupé, trop de demandes…) :
-    // afficher le message précis, sans retenter l'envoi
-    if (['CRENEAU_OCCUPE','ESPACE_INCONNU','TROP_DE_REQUETES','DATE_PASSEE','DATE_INVALIDE','HEURE_INVALIDE','DUREE_INVALIDE','EMAIL_INVALIDE','CHAMPS_MANQUANTS'].includes(data.error)) {
-      document.getElementById('btnEnvoyer').disabled = false;
-      toast(data.message || 'Réservation impossible : ' + data.error, 'err');
-      return;
-    }
-    throw new Error(data.error || 'Erreur serveur');
-  } catch(err) {
-    document.getElementById('loadBanner').classList.remove('visible');
-    document.getElementById('btnEnvoyer').disabled = false;
-    // Fallback GET+payload (doGet supporte aussi RESERVER via ?payload=)
+    data = await lireJson(resp);
+  } catch (err) {
+    // Le POST n a pas abouti du tout (reseau) : on retente en GET
+    // (doGet accepte aussi RESERVER via ?payload=). Jamais apres une
+    // reponse du serveur, sinon la reservation serait creee deux fois.
     try {
-      const url2 = SCRIPT_URL + '?payload=' + encodeURIComponent(JSON.stringify(payload));
-      const resp2 = await fetch(url2, { redirect: 'follow' });
-      const text2 = await resp2.text();
-      let data2 = {};
-      try { data2 = JSON.parse(text2); } catch(e) { data2 = { success: true }; }
-      if (data2.success || !data2.error) {
-        document.getElementById('mainPage').style.display = 'none';
-        document.getElementById('successCard').classList.add('visible');
-        document.getElementById('successRef').textContent = data2.id || ref;
-        updateSteps(4);
-        window.scrollTo({top:0, behavior:'smooth'});
-      } else if (data2.message) {
-        toast(data2.message, 'err');
-      } else {
-        throw new Error(data2.error || 'Erreur serveur');
-      }
-    } catch(e2) {
-      toast('Erreur réseau — Appelez le 06 51 50 97 18', 'err');
+      const resp2 = await fetch(SCRIPT_URL + '?payload=' + encodeURIComponent(JSON.stringify(payload)), { redirect: 'follow' });
+      data = await lireJson(resp2);
+    } catch (e2) {
+      data = null;
     }
   }
+  document.getElementById('loadBanner').classList.remove('visible');
+
+  if (!data) {
+    document.getElementById('btnEnvoyer').disabled = false;
+    toast('Erreur réseau — Appelez le 06 51 50 97 18', 'err');
+    return;
+  }
+  if (!data.success) {
+    // Refus metier (creneau occupe, trop de demandes…) ou erreur serveur :
+    // afficher le message precis, sans retenter l envoi
+    document.getElementById('btnEnvoyer').disabled = false;
+    toast(data.message || ('Réservation impossible : ' + (data.error || 'erreur serveur')), 'err');
+    return;
+  }
+
+  recap.ref = data.id || ref;
+  if (data.montant != null) recap.montant = data.montant;
+  try { sessionStorage.setItem('genie_resa', JSON.stringify(recap)); } catch (e) {}
+
+  // Le serveur a verifie la disponibilite et calcule le montant : si un
+  // paiement est du, on envoie directement sur HelloAsso. Le creneau est
+  // tenu 30 min, puis libere automatiquement s il n est pas regle.
+  if (data.paiementUrl) {
+    document.getElementById('btnEnvoyer').textContent = '↪ Redirection vers le paiement…';
+    window.location.href = data.paiementUrl;
+    return;
+  }
+  // Paiement du mais lien HelloAsso non cree : le dire, et proposer de
+  // le redemander au lieu d afficher un faux « c est bon ».
+  if (data.paiementIndisponible) {
+    afficherCartePaiement('indisponible', recap);
+    return;
+  }
+  try { sessionStorage.removeItem('genie_resa'); } catch (e) {}
+  document.getElementById('mainPage').style.display = 'none';
+  document.getElementById('successCard').classList.add('visible');
+  document.getElementById('successRef').textContent = recap.ref;
+  updateSteps(4);
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// Reponse Apps Script → objet. Une page HTML (erreur Google, connexion
+// demandee…) n est PAS un succes : on le traite comme une erreur.
+async function lireJson(resp) {
+  const text = await resp.text();
+  try { return JSON.parse(text); }
+  catch (e) { return { success: false, error: 'REPONSE_INVALIDE',
+    message: 'Réponse inattendue du serveur — Appelez le 06 51 50 97 18' }; }
+}
+
+// ─────────────────────────────────────────────────────────
+// PAIEMENT NON ABOUTI : redemander un lien HelloAsso
+// ─────────────────────────────────────────────────────────
+function afficherCartePaiement(cas, r) {
+  const textes = {
+    indisponible: ['Paiement en ligne momentanément indisponible',
+      'Votre demande est bien enregistrée et le créneau vous est réservé, mais le lien de paiement HelloAsso n' + String.fromCharCode(39) + 'a pas pu être créé. Réessayez dans quelques instants.'],
+    erreur: ['Le paiement n' + String.fromCharCode(39) + 'a pas abouti',
+      'Aucun montant n' + String.fromCharCode(39) + 'a été débité. Le créneau vous reste réservé 30 minutes : vous pouvez réessayer.'],
+    abandon: ['Paiement non finalisé',
+      'Votre demande est enregistrée. Le créneau vous reste réservé 30 minutes, le temps de régler.']
+  };
+  const t = textes[cas] || textes.abandon;
+  document.getElementById('payTitre').textContent = t[0];
+  document.getElementById('payTexte').textContent = t[1];
+  document.getElementById('payRef').textContent = r.ref || '—';
+  document.getElementById('mainPage').style.display = 'none';
+  document.getElementById('payCard').classList.add('visible');
+  window.scrollTo({ top: 0 });
+}
+
+async function relancerPaiement() {
+  let r = {};
+  try { r = JSON.parse(sessionStorage.getItem('genie_resa') || '{}'); } catch (e) {}
+  if (!r.ref || !r.email) { toast('Référence introuvable — Appelez le 06 51 50 97 18', 'err'); return; }
+  const btn = document.getElementById('btnRelancer');
+  btn.disabled = true;
+  btn.textContent = '⏳ Préparation du paiement…';
+  let data = null;
+  try {
+    const resp = await fetch(SCRIPT_URL, {
+      method: 'POST', headers: { 'Content-Type': 'text/plain' }, redirect: 'follow',
+      body: JSON.stringify({ action: 'RELANCER_PAIEMENT', id: r.ref, email: r.email })
+    });
+    data = await lireJson(resp);
+  } catch (e) {}
+  if (data && data.success && data.paiementUrl) {
+    btn.textContent = '↪ Redirection vers le paiement…';
+    window.location.href = data.paiementUrl;
+    return;
+  }
+  btn.disabled = false;
+  btn.textContent = '💳 Payer maintenant sur HelloAsso';
+  toast((data && data.message) || 'Erreur réseau — Appelez le 06 51 50 97 18', 'err');
 }
 
 // ─────────────────────────────────────────────────────────
@@ -1051,10 +1114,24 @@ async function envoyerReservation() {
 // vient de sessionStorage, pose juste avant la redirection.
 (function afficherRetourPaiement() {
   const q = new URLSearchParams(location.search);
-  if (q.get('paiement') !== 'ok') return;
-
   let r = {};
   try { r = JSON.parse(sessionStorage.getItem('genie_resa') || '{}'); } catch (e) {}
+
+  // Si returnUrl contient deja « ?paiement=ok », HelloAsso peut ajouter ses
+  // parametres avec un second « ? » : on accepte « ok?checkoutIntentId=… ».
+  const p    = String(q.get('paiement') || '').split('?')[0];
+  const code = q.get('code') || (String(q.get('paiement') || '').match(/code=([a-z]+)/i) || [])[1] || '';
+
+  // Retour par « errorUrl » ou bouton retour de HelloAsso (backUrl, sans
+  // parametre) alors qu une reservation attend son paiement.
+  if (p === 'erreur' || (p === 'ok' && code && code !== 'succeeded')) {
+    afficherCartePaiement('erreur', r);
+    return;
+  }
+  if (p !== 'ok') {
+    if (!p && r.ref && r.email) afficherCartePaiement('abandon', r);
+    return;
+  }
 
   const fDate = d => {
     if (!d) return null;
