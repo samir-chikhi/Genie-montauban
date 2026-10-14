@@ -217,6 +217,15 @@ appels = reponses([400]);
 t('une erreur 400 n\'est pas retentée',
   sandbox.haFetch('https://x', {}).getResponseCode() === 400 && appels() === 1);
 sandbox.UrlFetchApp.fetch = fetchOrig;
+appels = reponses([429]);
+let diag = sandbox.testerHelloAsso();
+t('diagnostic : identifiants absents signalés', /identifiants manquants/.test(diag));
+props.HELLOASSO_CLIENT_ID = 'id-test'; props.HELLOASSO_CLIENT_SECRET = 'secret-test';
+diag = sandbox.testerHelloAsso();
+t('diagnostic : blocage Cloudflare (429) signalé', /^BLOQUE/.test(diag) && appels() === 1);
+t('diagnostic : aucun secret dans le résultat', !/secret-test|id-test/.test(diag));
+delete props.HELLOASSO_CLIENT_ID; delete props.HELLOASSO_CLIENT_SECRET;
+sandbox.UrlFetchApp.fetch = fetchOrig;
 t('relance de paiement refusée sans email',
   sandbox.relancerPaiement({ id: 'RSV-1' }).error === 'CHAMPS_MANQUANTS');
 
