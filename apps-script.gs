@@ -504,6 +504,7 @@ function doPost(e) {
       case 'GET_PROFIL':              return ok(getProfil(data));
       case 'RESERVER':                return ok(creerReservation(data));
       case 'GET_RESERVATIONS_CLIENT': return ok(getReservationsClient(data));
+      case 'RELANCER_PAIEMENT':       return ok(relancerPaiement(data));
       case 'ADHERER':                 return ok(creerAdhesion(data));
       case 'CONTACT':                 return ok(traiterContact(data));
       case 'INSCRIPTION_ACADEMIE':    return ok(traiterInscriptionAcademie(data));
@@ -548,6 +549,7 @@ function doGet(e) {
       var data = JSON.parse(e.parameter.payload);
       switch (data.action) {
         case 'RESERVER':            return ok(creerReservation(data));
+        case 'RELANCER_PAIEMENT':   return ok(relancerPaiement(data));
         case 'INSCRIRE':            return ok(inscrireClient(data));
         case 'ADHERER':             return ok(creerAdhesion(data));
         case 'CONTACT':             return ok(traiterContact(data));
@@ -1043,7 +1045,14 @@ function creerReservation(data) {
         sheet.getRange(ligne, 27).setValue('EN_ATTENTE_PAIEMENT');
       }
     }
-    return { success: true, id: id, paiementUrl: paiementUrl, montant: montantFacture };
+    if (montantFacture > 0 && !paiementUrl) {
+      envoyerEmailSafe(CONFIG.EMAIL_ADMIN, '⚠️ Lien HelloAsso non créé — ' + id,
+        'La réservation ' + id + ' (' + montantFacture + ' €) est enregistrée, mais le lien de ' +
+        'paiement HelloAsso n\'a pas pu être créé (voir l\'onglet Logs).\n' +
+        'Le client peut réessayer depuis la page ; sinon, encaisser autrement.');
+    }
+    return { success: true, id: id, paiementUrl: paiementUrl, montant: montantFacture,
+             paiementIndisponible: montantFacture > 0 && !paiementUrl };
   } catch (err) {
     logErreur('creerReservation', err);
     return { success: false, error: 'ERREUR_SERVEUR', message: err.message };
@@ -1379,9 +1388,12 @@ function traiterPropositionFormateur(data) {
 // ============================================================
 // HELLOASSO — Checkout (paiement en ligne des reservations)
 // ============================================================
-// Flux retenu : la demande est enregistree EN_ATTENTE, l'admin la valide,
-// et c'est la validation qui genere le lien de paiement envoye par email.
-// Le webhook HelloAsso marque ensuite la reservation comme payee.
+// Flux retenu : la demande est enregistree EN_ATTENTE, un lien de paiement
+// est cree aussitot et le client y est redirige (creneau tenu 30 min, cf.
+// libererCreneauxExpires). Le webhook HelloAsso marque ensuite la
+// reservation comme payee. Si le lien n'a pas pu etre cree (HelloAsso
+// injoignable, limite de frequence), le client peut le redemander depuis
+// la page : action RELANCER_PAIEMENT.
 //
 // Les identifiants viennent des Proprietes du script, jamais du depot :
 //   HELLOASSO_CLIENT_ID / HELLOASSO_CLIENT_SECRET
@@ -1401,6 +1413,21 @@ function haConfigure() {
   return !!(c.id && c.secret);
 }
 
+// HelloAsso est derriere Cloudflare, qui renvoie parfois 429 « error code:
+// 1015 » aux adresses partagees de Google (constate le 31/08/2026) : le
+// lien de paiement n'etait alors pas cree et le client n'etait jamais
+// redirige. On retente donc brievement les 429 et 5xx avant d'abandonner.
+function haFetch(url, opts) {
+  opts.muteHttpExceptions = true;
+  var attentes = [1500, 4000];
+  for (var k = 0; ; k++) {
+    var r = UrlFetchApp.fetch(url, opts);
+    var c = r.getResponseCode();
+    if ((c !== 429 && c < 500) || k >= attentes.length) return r;
+    Utilities.sleep(attentes[k]);
+  }
+}
+
 // Token OAuth2 client_credentials, mis en cache (il expire en ~30 min).
 function haToken() {
   const cache  = CacheService.getScriptCache();
@@ -1410,11 +1437,10 @@ function haToken() {
   const c = haCreds();
   if (!c.id || !c.secret) return null;
 
-  const r = UrlFetchApp.fetch('https://api.helloasso.com/oauth2/token', {
+  const r = haFetch('https://api.helloasso.com/oauth2/token', {
     method: 'post',
     contentType: 'application/x-www-form-urlencoded',
-    payload: { client_id: c.id, client_secret: c.secret, grant_type: 'client_credentials' },
-    muteHttpExceptions: true
+    payload: { client_id: c.id, client_secret: c.secret, grant_type: 'client_credentials' }
   });
   if (r.getResponseCode() !== 200) {
     logErreur('haToken', new Error('HTTP ' + r.getResponseCode() + ' ' + r.getContentText().slice(0, 300)));
@@ -1457,13 +1483,14 @@ function haCheckout(o) {
     metadata: { resaId: String(o.id), type: String(o.type || 'reservation') }
   };
 
-  const r = UrlFetchApp.fetch(
+  const r = haFetch(
     'https://api.helloasso.com/v5/organizations/' + CONFIG.HELLOASSO_SLUG + '/checkout-intents',
     { method: 'post', contentType: 'application/json',
       headers: { Authorization: 'Bearer ' + token },
-      payload: JSON.stringify(body), muteHttpExceptions: true });
+      payload: JSON.stringify(body) });
 
   const code = r.getResponseCode();
+  if (code === 401) CacheService.getScriptCache().remove('ha_token');
   if (code !== 200 && code !== 201) {
     // 409 = association non verifiee cote HelloAsso
     logErreur('haCheckout', new Error('HTTP ' + code + ' ' + r.getContentText().slice(0, 400)));
@@ -1471,6 +1498,59 @@ function haCheckout(o) {
   }
   const j = JSON.parse(r.getContentText());
   return { url: j.redirectUrl, id: j.id };
+}
+
+// Recree un lien de paiement pour une reservation deja enregistree :
+// premier lien non cree (HelloAsso indisponible), paiement abandonne ou
+// lien expire. Le montant vient du tableur, jamais du navigateur, et
+// l'email doit correspondre a celui de la reservation.
+//   data = { id, email }
+function relancerPaiement(data) {
+  const id    = String(data.id || '').trim();
+  const email = String(data.email || '').trim().toLowerCase();
+  if (!id || !email) return { success: false, error: 'CHAMPS_MANQUANTS', message: 'Référence et email requis.' };
+  if (!rateLimitOk('relance_' + email))
+    return { success: false, error: 'TROP_DE_REQUETES', message: 'Trop de tentatives. Réessayez dans une heure ou appelez le ' + CONFIG.TEL + '.' };
+  const lock = LockService.getScriptLock();
+  lock.waitLock(20000);
+  try {
+    const sheet = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID).getSheetByName('Reservations');
+    const rows  = sheet.getDataRange().getValues();
+    for (let i = 1; i < rows.length; i++) {
+      if (String(rows[i][0]) !== id) continue;
+      if (String(rows[i][3]).trim().toLowerCase() !== email) break;   // même réponse qu'un id inconnu
+      if (String(rows[i][26]) === 'PAYE')
+        return { success: false, error: 'DEJA_PAYE', message: 'Cette réservation est déjà réglée.' };
+      if (String(rows[i][18]) !== 'EN_ATTENTE')
+        return { success: false, error: 'RESA_CLOSE',
+                 message: 'Ce créneau n\'est plus réservé (délai de paiement dépassé). Merci de refaire une demande.' };
+      const montant = parseFloat(rows[i][15]) || 0;
+      if (montant <= 0) return { success: false, error: 'GRATUIT', message: 'Aucun paiement n\'est dû.' };
+      const co = haCheckout({ id: id, type: 'reservation', montant: montant,
+        libelle: (rows[i][8] || rows[i][6]) + ' — ' + formaterDateCourte(rows[i][10]),
+        prenom: rows[i][1], nom: rows[i][2], email: email });
+      if (!co || !co.url)
+        return { success: false, error: 'PAIEMENT_INDISPONIBLE',
+                 message: 'Le paiement en ligne est momentanément indisponible. Réessayez dans quelques minutes ou appelez le ' + CONFIG.TEL + '.' };
+      // Le délai de 30 min repart de maintenant (cf. libererCreneauxExpires).
+      sheet.getRange(i + 1, 23).setValue(new Date().toISOString());
+      sheet.getRange(i + 1, 25).setValue(co.id);
+      sheet.getRange(i + 1, 26).setValue(co.url);
+      sheet.getRange(i + 1, 27).setValue('EN_ATTENTE_PAIEMENT');
+      return { success: true, id: id, paiementUrl: co.url, montant: montant };
+    }
+    return { success: false, error: 'RESA_INCONNUE', message: 'Réservation introuvable pour cet email.' };
+  } catch (err) {
+    logErreur('relancerPaiement', err);
+    return { success: false, error: 'ERREUR_SERVEUR', message: err.message };
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+function formaterDateCourte(d) {
+  if (d instanceof Date) return Utilities.formatDate(d, 'Europe/Paris', 'yyyy-MM-dd');
+  return String(d || '');
 }
 
 // Notification HelloAsso : paiement autorise sur un checkout.
@@ -1651,8 +1731,10 @@ function libererCreneauxExpires() {
     for (let i = 1; i < rows.length; i++) {
       if (String(rows[i][18]) !== 'EN_ATTENTE') continue;
       if (String(rows[i][26]) !== 'EN_ATTENTE_PAIEMENT') continue;  // jamais parti en paiement
-      const cree = new Date(rows[i][21]);
-      if (isNaN(cree.getTime()) || cree.getTime() > limite) continue;
+      // Le délai court depuis la création, ou depuis la dernière relance
+      // du paiement (updatedAt) si elle est plus récente.
+      const t0 = Math.max(new Date(rows[i][21]).getTime() || 0, new Date(rows[i][22]).getTime() || 0);
+      if (!t0 || t0 > limite) continue;
 
       sheet.getRange(i + 1, 19).setValue('ANNULE');
       sheet.getRange(i + 1, 19).setBackground('#F8D7DA').setFontColor('#721C24');
