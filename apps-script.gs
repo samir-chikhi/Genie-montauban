@@ -1452,6 +1452,49 @@ function haToken() {
   return j.access_token;
 }
 
+// DIAGNOSTIC — a lancer a la main depuis l'editeur (menu de fonctions →
+// testerHelloAsso → Executer). Ne cree AUCUN paiement : demande un jeton,
+// puis lit la fiche de l'association. Un seul essai par appel (sans
+// nouvel essai automatique) pour voir l'etat reel de HelloAsso. Le resultat
+// est ecrit dans l'onglet Logs (contexte « testerHelloAsso ») ; aucun
+// secret ni jeton n'y figure.
+function testerHelloAsso() {
+  var lignes = [];
+  var c = haCreds();
+  lignes.push('identifiants : ' + (c.id ? 'ID présent' : 'ID ABSENT') + ', ' +
+              (c.secret ? 'secret présent' : 'secret ABSENT'));
+  var verdict;
+  if (!c.id || !c.secret) {
+    verdict = 'ECHEC — identifiants manquants (Paramètres du projet → Propriétés du script)';
+  } else {
+    var r = UrlFetchApp.fetch('https://api.helloasso.com/oauth2/token', {
+      method: 'post', contentType: 'application/x-www-form-urlencoded',
+      payload: { client_id: c.id, client_secret: c.secret, grant_type: 'client_credentials' },
+      muteHttpExceptions: true });
+    var code = r.getResponseCode();
+    lignes.push('jeton : HTTP ' + code);
+    if (code === 429) {
+      verdict = 'BLOQUE — Cloudflare refuse l\'adresse de Google (429 / 1015). Réessayer plus tard ; si cela dure, contacter HelloAsso.';
+      lignes.push('réponse : ' + r.getContentText().slice(0, 120));
+    } else if (code !== 200) {
+      verdict = 'ECHEC — jeton refusé (HTTP ' + code + ') : vérifier HELLOASSO_CLIENT_ID / SECRET.';
+      lignes.push('réponse : ' + r.getContentText().slice(0, 200));
+    } else {
+      var jeton = JSON.parse(r.getContentText()).access_token;
+      var o = UrlFetchApp.fetch('https://api.helloasso.com/v5/organizations/' + CONFIG.HELLOASSO_SLUG, {
+        headers: { Authorization: 'Bearer ' + jeton }, muteHttpExceptions: true });
+      lignes.push('association « ' + CONFIG.HELLOASSO_SLUG + ' » : HTTP ' + o.getResponseCode());
+      verdict = o.getResponseCode() === 200
+        ? 'OK — HelloAsso répond, les paiements en ligne peuvent être créés.'
+        : 'ECHEC — jeton obtenu mais association inaccessible (HTTP ' + o.getResponseCode() + ') : vérifier le slug et le statut de l\'association.';
+    }
+  }
+  var resultat = verdict + ' | ' + lignes.join(' ; ');
+  Logger.log(resultat);
+  logErreur('testerHelloAsso', new Error(resultat));
+  return resultat;
+}
+
 // Cree une intention de paiement. Retourne { url, id } ou null.
 // Sert aux reservations comme aux adhesions : un seul tableau de bord
 // HelloAsso, un seul webhook, un seul rapprochement.
