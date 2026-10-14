@@ -227,6 +227,22 @@ t('diagnostic : blocage Cloudflare (429) signalé', /^BLOQUE/.test(diag) && appe
 t('diagnostic : aucun secret dans le résultat', !/secret-test|id-test/.test(diag));
 delete props.HELLOASSO_CLIENT_ID; delete props.HELLOASSO_CLIENT_SECRET;
 sandbox.UrlFetchApp.fetch = fetchOrig;
+// haCheckout : un nom trop court ne doit pas empêcher le paiement
+props.HELLOASSO_CLIENT_ID = 'i'; props.HELLOASSO_CLIENT_SECRET = 's';
+let corps = [];
+sandbox.UrlFetchApp.fetch = (url, o) => {
+  const rep = (c, b) => ({ getResponseCode: () => c, getContentText: () => b });
+  if (/oauth2/.test(url)) return rep(200, '{"access_token":"tk","expires_in":1800}');
+  const body = JSON.parse(o.payload); corps.push(body.payer);
+  return body.payer.lastName ? rep(400, '{"errors":[{"message":"Votre nom est trop court"}]}')
+                             : rep(200, '{"redirectUrl":"https://ha/pay","id":42}');
+};
+const co = sandbox.haCheckout({ id: 'R1', montant: 30, libelle: 'x', prenom: 'BIL', nom: 'B', email: 'a@b.fr' });
+t('nom d\'une lettre : le champ n\'est pas envoyé et le lien est créé', co && co.url === 'https://ha/pay' && corps.length === 1 && !corps[0].lastName && corps[0].firstName === 'BIL');
+corps = [];
+sandbox.haCheckout({ id: 'R2', montant: 30, libelle: 'x', prenom: 'Marie', nom: 'Dupont', email: 'a@b.fr' });
+t('un nom valable est bien transmis', corps[0].lastName === 'Dupont');
+sandbox.UrlFetchApp.fetch = fetchOrig; delete props.HELLOASSO_CLIENT_ID; delete props.HELLOASSO_CLIENT_SECRET;
 t("relance d'adhésion refusée sans email", sandbox.relancerPaiement({ id: 'ADH-1' }).error === 'CHAMPS_MANQUANTS');
 
 console.log('\n--- Dates et heures lisibles dans les e-mails ---');
