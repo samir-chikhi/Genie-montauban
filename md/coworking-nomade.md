@@ -2,7 +2,7 @@
 title: Coworking à Montauban dès 4 €/h, sans abonnement — Génie
 description: Espace de coworking à Montauban, à 200 m de la gare : une place à l'heure (4 €), en demi-journée (9 €) ou à la journée (15 €). Wifi fibre, café, accès PMR. Réservation en ligne, sans abonnement ni engagement.
 url: https://genie-montauban.fr/coworking-nomade.html
-last_updated: 2026-10-08
+last_updated: 2026-10-19
 source: miroir markdown — version texte pour moteurs IA
 ---
 
@@ -18,33 +18,57 @@ Ce qui change ici : pas d'abonnement, pas d'engagement, des tarifs parmi les pl
 minimum 1 h
 4 € / h
 Un rendez-vous, une visio au calme, deux heures entre deux trains.
-[Réserver & payer](https://buy.stripe.com/6oUaEXfuj3Hz4vC8GfbAs04)
+[Choisir mon créneau](#resa)
 
 Demi-journée
 4 heures
 9 €
 Une matinée ou un après-midi de travail concentré.
-[Réserver & payer](https://buy.stripe.com/00w5kDbe34LDfage0zbAs05)
+[Choisir mon créneau](#resa)
 
 Pass journée
 8h–19h (sam. 9h–17h), entrées/sorties libres
 15 €
 Une journée complète de télétravail, sans compter les heures.
-[Réserver & payer](https://buy.stripe.com/00wcN50zpba1fagaOnbAs06)
+[Choisir mon créneau](#resa)
 
 Carnet 10 journées
 la 11ᵉ offerte
 140 €
 Pour les habitué·es : 1 à 2 jours par semaine, sans y penser.
-[Prendre un carnet](https://buy.stripe.com/4gMfZh4PF5PH1jq1dNbAs07)
+[Prendre un carnet](https://buy.stripe.com/4gMfZh4PF5PH1jq1dNbAs07?client_reference_id=ESCALE-CARNET)
 
 **Adhésion obligatoire à l'association** — elle couvre l'assurance. Elle se prend en une seule fois, avec votre première réservation : ensuite vous n'y repensez plus de l'année.
 Ailleurs à Montauban, la journée nomade va de 16 € (équipements publics) à 25–36 € (espaces privés). Ici, ce que vous payez finance aussi les ateliers gratuits du tiers-lieu.
 
+## Choisir mon créneau
+
+Formule
+À l'heure — 4 €/h
+Demi-journée (4 h) — 9 €
+Journée — 15 €
+Date
+
+Arrivée
+Durée
+1 h2 h3 h
+
+Choisissez une date pour voir les places libres.
+
+Prénom 
+Nom
+
+E-mail 
+Téléphone (facultatif)
+
+Réserver ce créneau & payer →
+
+Votre créneau est mis de côté pendant 30 min, le temps de payer par carte sur la page sécurisée Stripe. La date et l'heure vous sont rappelées dans l'e-mail de confirmation.
+
 ## Comment ça marche ?
 
-1. **Je choisis ma formule.** Heure, demi-journée, journée ou carnet : je clique, je paie par carte sur une page sécurisée Stripe. Deux minutes.
-2. **Je reçois mes accès.** L'équipe m'envoie par e-mail, rapidement après le paiement, la confirmation et **les deux codes d'accès** (porte de rue + porte intérieure). Première venue ? On règle l'adhésion à ce moment-là.
+1. **Je choisis ma formule, ma date et mon heure.** Les places libres s'affichent en direct ; je paie ensuite par carte sur une page sécurisée Stripe. Deux minutes.
+2. **Je reçois mes accès.** Je reçois par e-mail, juste après le paiement, la confirmation (date et heure) et **les deux codes d'accès** (porte de rue + porte intérieure). Première venue ? On règle l'adhésion à ce moment-là.
 3. **Je m'installe.** J'arrive aux horaires d'ouverture, je compose les codes, je prends une place libre dans l'espace ouvert, je me sers un thé. C'est parti.
 
 ## Disponibilité
