@@ -498,11 +498,16 @@ function doPost(e) {
     // dans l'URL de notification, sans quoi n'importe qui pourrait déclarer
     // une réservation ou une adhésion payée.
     if (!data.action && data.eventType) return ok(haWebhook(data, e && e.parameter));
+    // Notification Stripe (L'Escale) : object==='event' + type. Voir apps-script-stripe-webhook.gs
+    if (!data.action && typeof data.type === 'string' && data.object === 'event') {
+      return ok(stripeWebhook(data, e && e.parameter));
+    }
     switch (data.action) {
       case 'INSCRIRE':                return ok(inscrireClient(data));
       case 'DEMANDER_LIEN':           return ok(demanderLienMagique(data));
       case 'GET_PROFIL':              return ok(getProfil(data));
       case 'RESERVER':                return ok(creerReservation(data));
+      case 'RESERVER_ESCALE':         return ok(creerReservationEscale(data));
       case 'GET_RESERVATIONS_CLIENT': return ok(getReservationsClient(data));
       case 'RELANCER_PAIEMENT':       return ok(relancerPaiement(data));
       case 'ADHERER':                 return ok(creerAdhesion(data));
@@ -1055,6 +1060,105 @@ function creerReservation(data) {
              paiementIndisponible: montantFacture > 0 && !paiementUrl };
   } catch (err) {
     logErreur('creerReservation', err);
+    return { success: false, error: 'ERREUR_SERVEUR', message: err.message };
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+// ============================================================
+// L'ESCALE DU GÉNIE — réservation d'un créneau AVANT paiement Stripe
+// ============================================================
+// Le site (coworking-nomade.html) appelle RESERVER_ESCALE avec la formule,
+// la date et l'heure choisies. On vérifie les horaires et les places libres
+// (Sheets + Google Agenda), on pose le créneau (EN_ATTENTE + événement ⏳),
+// puis le site envoie le client payer chez Stripe avec client_reference_id=<id>.
+// stripeWebhook() repère ensuite cette ligne, la passe en CONFIRME et envoie
+// au client la date, l'heure et les codes. Sans paiement, le créneau est
+// libéré par libererCreneauxExpires().
+const ESCALE_PLACES = 10;
+const ESCALE_PRIX_HEURE = 4, ESCALE_PRIX_DEMI = 9, ESCALE_PRIX_JOUR = 15;
+
+// Horaires d'ouverture (minutes depuis minuit) ; null = fermé
+function escaleHoraires(dateStr) {
+  var j = new Date(dateStr + 'T12:00:00').getDay();   // 0 = dimanche
+  if (j === 0) return null;
+  if (j === 6) return { ouv: 9 * 60, fer: 17 * 60 };
+  return { ouv: 8 * 60, fer: 19 * 60 };
+}
+
+function creerReservationEscale(data) {
+  var formule = String(data.formule || '');
+  if (['heure', 'demi', 'journee'].indexOf(formule) === -1)
+    return { success: false, error: 'FORMULE_INVALIDE' };
+  if (!data.date || !/^\d{4}-\d{2}-\d{2}$/.test(data.date))
+    return { success: false, error: 'DATE_INVALIDE' };
+  if (!data.prenom || !data.nom || !data.email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(data.email))
+    return { success: false, error: 'CHAMPS_MANQUANTS', message: 'Prénom, nom et e-mail valides sont nécessaires.' };
+  var aujourdhui = Utilities.formatDate(new Date(), 'Europe/Paris', 'yyyy-MM-dd');
+  if (data.date < aujourdhui)
+    return { success: false, error: 'DATE_PASSEE', message: 'La date est déjà passée.' };
+  var h = escaleHoraires(data.date);
+  if (!h) return { success: false, error: 'FERME', message: 'L\'espace est fermé le dimanche.' };
+  if (!rateLimitOk(data.email))
+    return { success: false, error: 'TROP_DE_REQUETES', message: 'Trop de demandes. Appelez le ' + CONFIG.TEL + '.' };
+
+  // Durée, début et prix, recalculés côté serveur
+  var debMin, nbH, montant;
+  if (formule === 'journee') {
+    debMin = h.ouv; nbH = (h.fer - h.ouv) / 60; montant = ESCALE_PRIX_JOUR;
+  } else {
+    if (!/^\d{1,2}:\d{2}$/.test(String(data.heureDebut || '')))
+      return { success: false, error: 'HEURE_INVALIDE', message: 'Choisissez une heure d\'arrivée.' };
+    debMin = hMin(data.heureDebut, -1);
+    nbH = formule === 'demi' ? 4 : Math.round(parseFloat(data.nbHeures));
+    if (!(nbH >= 1 && nbH <= 8)) return { success: false, error: 'DUREE_INVALIDE' };
+    montant = formule === 'demi' ? ESCALE_PRIX_DEMI : ESCALE_PRIX_HEURE * nbH;
+    if (debMin < h.ouv || debMin + nbH * 60 > h.fer)
+      return { success: false, error: 'HORS_HORAIRES',
+               message: 'Ce créneau dépasse les horaires d\'ouverture (' + pad(Math.floor(h.ouv / 60)) + 'h–' + pad(Math.floor(h.fer / 60)) + 'h).' };
+  }
+  var finMin = debMin + nbH * 60;
+  var hDeb = pad(Math.floor(debMin / 60)) + ':' + pad(debMin % 60);
+  var hFin = pad(Math.floor(finMin / 60)) + ':' + pad(finMin % 60);
+  if (data.date === aujourdhui) {
+    var maint = Utilities.formatDate(new Date(), 'Europe/Paris', 'HH:mm');
+    if (formule !== 'journee' && hMin(hDeb, 0) < hMin(maint, 0))
+      return { success: false, error: 'HEURE_PASSEE', message: 'Cette heure est déjà passée.' };
+  }
+
+  var lock = LockService.getScriptLock();
+  try { lock.waitLock(20000); }
+  catch (e) { return { success: false, error: 'SERVEUR_OCCUPE', message: 'Serveur occupé, merci de réessayer.' }; }
+  try {
+    var ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+    var sheet = ss.getSheetByName('Reservations');
+    if (!sheet) return { success: false, error: 'ERREUR_SERVEUR', message: 'Onglet Reservations introuvable' };
+    var rows  = sheet.getDataRange().getValues();
+    var email = String(data.email).toLowerCase();
+
+    if (compterChevauchements(rows, 'rousseau', data.date, debMin, finMin, email) >= ESCALE_PLACES)
+      return { success: false, error: 'CRENEAU_OCCUPE',
+               message: 'Il n\'y a plus de place sur ce créneau. Choisissez un autre horaire ou appelez le ' + CONFIG.TEL + '.' };
+
+    var libelle = formule === 'journee' ? 'Journée' : formule === 'demi' ? 'Demi-journée' : 'À l\'heure (' + nbH + ' h)';
+    var id  = 'ESC-' + Date.now();
+    var now = new Date().toISOString();
+    sheet.appendRow([id, sanit(data.prenom), sanit(data.nom), sanit(email), sanit(data.tel), '',
+      'rousseau', 'Jean-Jacques Rousseau', 'nomade', 'escale',
+      data.date, 'heure', nbH, hDeb, hFin, montant, montant,
+      'L\'Escale — ' + libelle, 'EN_ATTENTE', 1,
+      'L\'Escale du Génie — créneau en attente de paiement Stripe', now, now, '',
+      '', '', 'EN_ATTENTE_PAIEMENT', '']);
+    var ligne = sheet.getLastRow();
+    sheet.getRange(ligne, 29).setValue('Site web (Escale)');
+    var evId = ajouterAuCalendrier('L\'Escale (Rousseau)', data.date, hDeb, hFin,
+      data.prenom + ' ' + data.nom, id, email, false);
+    if (evId) sheet.getRange(ligne, 24).setValue(evId);
+    return { success: true, id: id, date: data.date, heureDebut: hDeb, heureFin: hFin,
+             nbHeures: nbH, montant: montant };
+  } catch (err) {
+    logErreur('creerReservationEscale', err);
     return { success: false, error: 'ERREUR_SERVEUR', message: err.message };
   } finally {
     lock.releaseLock();
