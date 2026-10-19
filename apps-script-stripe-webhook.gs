@@ -30,6 +30,8 @@
  *    ESCALE_CODE_PORTE_INT  code de la porte intérieure (ex. « 42A »).
  *
  * ────────────────────────────────────────────────────────────────────────
+ *  (19/10/2026 : le BRANCHEMENT ci-dessous est DÉJÀ fait dans apps-script.gs ;
+ *   il ne reste qu'à coller ce fichier comme 2e fichier du projet.)
  *  BRANCHEMENT — dans doPost(e), juste après la ligne
  *      const data = JSON.parse(e.postData.contents);
  *  insérer :
@@ -92,6 +94,68 @@ function stripeWebhook(evt, params) {
     var sheet = ss.getSheetByName('Reservations');
     if (!sheet) return { success: false, error: 'Onglet Reservations introuvable' };
     var rows = sheet.getDataRange().getValues();
+
+    // ── 4bis. Paiement lié à un créneau choisi sur le site ──────────────
+    // coworking-nomade.html réserve d'abord le créneau (RESERVER_ESCALE) puis
+    // envoie le client chez Stripe avec client_reference_id=ESC-xxxxx.
+    var refResa = String(session.client_reference_id || '');
+    if (/^ESC-\d+$/.test(refResa)) {
+      for (var k = 1; k < rows.length; k++) {
+        if (String(rows[k][0]) !== refResa) continue;
+        if (String(rows[k][26]) === 'PAYE') return { success: true, ignore: 'deja payee' };
+        var ligneR = k + 1;
+        var r = rows[k];
+        var dateR = dateISO(r[10]), hDebR = formaterHeure(r[13]), hFinR = formaterHeure(r[14]);
+        var attenduR = Number(r[15]) || 0;
+        var payeR = Number(session.amount_total || 0) / 100;
+        var emailR = String(r[3] || (session.customer_details || {}).email || '').trim();
+        var wasAnnule = String(r[18]) === 'ANNULE';
+        sheet.getRange(ligneR, 19).setValue('CONFIRME');
+        sheet.getRange(ligneR, 25).setValue(sessionId);
+        sheet.getRange(ligneR, 27).setValue('PAYE').setBackground('#D4EDDA').setFontColor('#155724');
+        sheet.getRange(ligneR, 28).setValue(String(session.receipt_url || ''));
+        sheet.getRange(ligneR, 23).setValue(new Date().toISOString());
+        remplacerEvenementCalendrier(sheet, ligneR, r[23], 'L\'Escale (Rousseau)', dateR, hDebR, hFinR,
+          r[1] + ' ' + r[2], refResa, emailR, true);
+
+        var props2 = PropertiesService.getScriptProperties();
+        var cRue = props2.getProperty('ESCALE_CODE_PORTE_RUE') || '(code porte de rue — à communiquer)';
+        var cInt = props2.getProperty('ESCALE_CODE_PORTE_INT') || '(code porte intérieure — à communiquer)';
+        if (emailR) {
+          envoyerEmailSafe(emailR,
+            '✅ L\'Escale du Génie — c\'est réservé le ' + formaterDate(dateR) + ' à ' + hDebR,
+            'Bonjour ' + (r[1] || '') + ',\n\n' +
+            'Votre paiement est bien reçu. Votre place à L\'Escale du Génie est confirmée.\n\n' +
+            '• Date      : ' + formaterDate(dateR) + '\n' +
+            '• Horaire   : ' + hDebR + ' → ' + hFinR + '\n' +
+            '• Formule   : ' + r[17] + '\n' +
+            '• Montant   : ' + payeR.toFixed(2) + ' EUR\n' +
+            '• Référence : ' + refResa + '\n\n' +
+            'ACCÈS (espace Jean-Jacques Rousseau, 1er étage) :\n' +
+            '   – Porte de rue     : ' + cRue + '\n' +
+            '   – Porte intérieure : ' + cInt + '\n\n' +
+            'Prenez une place libre dans l\'espace ouvert, servez-vous un thé, installez-vous.\n\n' +
+            'Première venue ? Pensez à régler l\'adhésion à l\'association\n' +
+            '(elle couvre l\'assurance, se prend une fois pour l\'année) :\n' +
+            CONFIG.URL_SITE + '/adherer.html\n\n' +
+            'Annulation possible jusqu\'à 48 h avant → avoir valable un an.\n' +
+            'Une question ? ' + CONFIG.TEL + '\n\n' +
+            CONFIG.NOM_LIEU + ' · ' + CONFIG.ADRESSE);
+        }
+        var alerte = (Math.abs(payeR - attenduR) > 0.5 ? '\n⚠️ MONTANT : payé ' + payeR.toFixed(2) + ' € pour ' + attenduR.toFixed(2) + ' € attendus (vérifier la quantité Stripe).' : '') +
+                     (wasAnnule ? '\n⚠️ Le créneau avait expiré avant le paiement : vérifier qu\'il est toujours libre.' : '');
+        envoyerEmailSafe(CONFIG.EMAIL_ADMIN,
+          '💳 L\'Escale — ' + formaterDate(dateR) + ' ' + hDebR + ' — ' + r[1] + ' ' + r[2],
+          'Paiement Stripe encaissé pour L\'Escale du Génie :\n\n' +
+          'Créneau  : ' + formaterDate(dateR) + ' ' + hDebR + ' → ' + hFinR + '\n' +
+          'Formule  : ' + r[17] + '\nMontant  : ' + payeR.toFixed(2) + ' EUR\n' +
+          'Client   : ' + r[1] + ' ' + r[2] + ' (' + (emailR || '—') + ')\n' +
+          'Référence: ' + refResa + '\n' + alerte);
+        return { success: true, ok: true, confirme: refResa };
+      }
+      // référence inconnue : on retombe sur l'enregistrement générique ci-dessous
+    }
+
     var idResa = 'STRIPE-' + sessionId;
     for (var i = 1; i < rows.length; i++) {
       if (String(rows[i][0]) === idResa) return { success: true, ignore: 'deja enregistree' };

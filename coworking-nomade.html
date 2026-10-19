@@ -145,6 +145,16 @@
     .esc-dispo { background: var(--cream); border-radius: 12px; padding: 18px 22px; font-size: .98rem; color: var(--ink); line-height: 1.7; }
     .esc-mini { font-size: .92rem; color: var(--muted); line-height: 1.75; }
     .esc-mini a { color: var(--gold-d); border-bottom: 1px solid var(--border); }
+    .esc-form { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 24px 22px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 14px; max-width: 720px; }
+    .esc-form .row { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+    .esc-form label { display: flex; flex-direction: column; gap: 6px; font-size: .88rem; font-weight: 600; color: var(--navy); }
+    .esc-form input, .esc-form select { font: inherit; font-weight: 400; padding: 11px 12px; border: 1px solid var(--border); border-radius: 9px; background: #fff; color: var(--ink); min-height: 44px; }
+    .esc-dispo-msg { font-size: .92rem; color: var(--muted); }
+    .esc-dispo-msg.ok { color: #1c6b3a; } .esc-dispo-msg.ko { color: #a12a2a; }
+    .esc-recap { font-size: .98rem; color: var(--ink); background: var(--cream); border-radius: 10px; padding: 12px 16px; }
+    .esc-recap:empty { display: none; }
+    .esc-err { color: #a12a2a; font-weight: 600; }
+    .esc-form .esc-cta[disabled] { opacity: .6; cursor: wait; }
     @media (max-width: 768px) { .esc-head { padding-top: 104px; } }
   </style>
   <style>.skip-link{position:absolute;left:-9999px;top:0;z-index:10000;background:#111;color:#fff;padding:10px 18px;border-radius:0 0 8px 0;font:600 15px/1.2 system-ui,sans-serif;text-decoration:none}.skip-link:focus{left:0}:focus-visible{outline:3px solid #2563eb;outline-offset:2px}</style>
@@ -246,28 +256,28 @@
         <span class="sub">minimum 1 h</span>
         <span class="prix">4 €<small> / h</small></span>
         <span class="use">Un rendez-vous, une visio au calme, deux heures entre deux trains.</span>
-        <a class="btn" href="https://buy.stripe.com/6oUaEXfuj3Hz4vC8GfbAs04" target="_blank" rel="noopener">Réserver &amp; payer</a>
+        <a class="btn" href="#resa" data-formule="heure">Choisir mon créneau</a>
       </div>
       <div class="esc-card">
         <span class="form">Demi-journée</span>
         <span class="sub">4 heures</span>
         <span class="prix">9 €</span>
         <span class="use">Une matinée ou un après-midi de travail concentré.</span>
-        <a class="btn" href="https://buy.stripe.com/00w5kDbe34LDfage0zbAs05" target="_blank" rel="noopener">Réserver &amp; payer</a>
+        <a class="btn" href="#resa" data-formule="demi">Choisir mon créneau</a>
       </div>
       <div class="esc-card">
         <span class="form">Pass journée</span>
         <span class="sub">8h–19h (sam. 9h–17h), entrées/sorties libres</span>
         <span class="prix">15 €</span>
         <span class="use">Une journée complète de télétravail, sans compter les heures.</span>
-        <a class="btn" href="https://buy.stripe.com/00wcN50zpba1fagaOnbAs06" target="_blank" rel="noopener">Réserver &amp; payer</a>
+        <a class="btn" href="#resa" data-formule="journee">Choisir mon créneau</a>
       </div>
       <div class="esc-card carnet">
         <span class="form">Carnet 10 journées</span>
         <span class="sub">la 11ᵉ offerte</span>
         <span class="prix">140 €</span>
         <span class="use">Pour les habitué·es : 1 à 2 jours par semaine, sans y penser.</span>
-        <a class="btn" href="https://buy.stripe.com/4gMfZh4PF5PH1jq1dNbAs07" target="_blank" rel="noopener">Prendre un carnet</a>
+        <a class="btn" href="https://buy.stripe.com/4gMfZh4PF5PH1jq1dNbAs07?client_reference_id=ESCALE-CARNET" target="_blank" rel="noopener">Prendre un carnet</a>
       </div>
     </div>
     <div class="esc-note">
@@ -276,11 +286,50 @@
     </div>
   </section>
 
+  <section class="esc-sec" id="resa">
+    <h2>Choisir mon créneau</h2>
+    <form class="esc-form" id="escForm" novalidate>
+      <div class="row">
+        <label>Formule
+          <select id="fFormule">
+            <option value="heure">À l'heure — 4 €/h</option>
+            <option value="demi">Demi-journée (4 h) — 9 €</option>
+            <option value="journee">Journée — 15 €</option>
+          </select>
+        </label>
+        <label>Date
+          <input type="date" id="fDate" required>
+        </label>
+      </div>
+      <div class="row">
+        <label id="lbHeure">Arrivée
+          <select id="fHeure"></select>
+        </label>
+        <label id="lbDuree">Durée
+          <select id="fDuree"><option value="1">1 h</option><option value="2">2 h</option><option value="3">3 h</option></select>
+        </label>
+      </div>
+      <p class="esc-dispo-msg" id="fDispo" aria-live="polite">Choisissez une date pour voir les places libres.</p>
+      <div class="row">
+        <label>Prénom <input type="text" id="fPrenom" autocomplete="given-name" required></label>
+        <label>Nom <input type="text" id="fNom" autocomplete="family-name" required></label>
+      </div>
+      <div class="row">
+        <label>E-mail <input type="email" id="fEmail" autocomplete="email" required></label>
+        <label>Téléphone (facultatif) <input type="tel" id="fTel" autocomplete="tel"></label>
+      </div>
+      <div class="esc-recap" id="fRecap" aria-live="polite"></div>
+      <p class="esc-err" id="fErr" role="alert" hidden></p>
+      <button type="submit" class="esc-cta" id="fBtn" style="border:0;cursor:pointer">Réserver ce créneau &amp; payer →</button>
+      <p class="esc-mini" style="margin-top:12px">Votre créneau est mis de côté pendant 30&nbsp;min, le temps de payer par carte sur la page sécurisée Stripe. La date et l'heure vous sont rappelées dans l'e-mail de confirmation.</p>
+    </form>
+  </section>
+
   <section class="esc-sec" id="comment">
     <h2>Comment ça marche&nbsp;?</h2>
     <ol class="esc-steps">
-      <li><strong>Je choisis ma formule.</strong> Heure, demi-journée, journée ou carnet&nbsp;: je clique, je paie par carte sur une page sécurisée Stripe. Deux minutes.</li>
-      <li><strong>Je reçois mes accès.</strong> L'équipe m'envoie par e-mail, rapidement après le paiement, la confirmation et <strong>les deux codes d'accès</strong> (porte de rue + porte intérieure). Première venue&nbsp;? On règle l'adhésion à ce moment-là.</li>
+      <li><strong>Je choisis ma formule, ma date et mon heure.</strong> Les places libres s'affichent en direct&nbsp;; je paie ensuite par carte sur une page sécurisée Stripe. Deux minutes.</li>
+      <li><strong>Je reçois mes accès.</strong> Je reçois par e-mail, juste après le paiement, la confirmation (date et heure) et <strong>les deux codes d'accès</strong> (porte de rue + porte intérieure). Première venue&nbsp;? On règle l'adhésion à ce moment-là.</li>
       <li><strong>Je m'installe.</strong> J'arrive aux horaires d'ouverture, je compose les codes, je prends une place libre dans l'espace ouvert, je me sers un thé. C'est parti.</li>
     </ol>
   </section>
@@ -384,5 +433,141 @@ document.querySelectorAll('#nav-links a').forEach(function (a) {
 </script>
 
 <script src="assets/js/v2.js" defer></script>
+<script>
+// Réservation L'Escale : créneau choisi → vérifié/posé dans l'agenda via Apps Script
+// (RESERVER_ESCALE) → paiement Stripe avec client_reference_id = référence du créneau.
+(function () {
+  var API = 'https://script.google.com/macros/s/AKfycbyJ-Dk-yZZNdfxFigchP953rNyjSLJv4oOVUbxzuAbX4kuBfwTFBJvnnLuJMLWRnd9c4w/exec';
+  var STRIPE = {
+    heure:   'https://buy.stripe.com/6oUaEXfuj3Hz4vC8GfbAs04',
+    demi:    'https://buy.stripe.com/00w5kDbe34LDfage0zbAs05',
+    journee: 'https://buy.stripe.com/00wcN50zpba1fagaOnbAs06'
+  };
+  var PLACES = 10;
+  var $ = function (id) { return document.getElementById(id); };
+  var fF = $('fFormule'), fD = $('fDate'), fH = $('fHeure'), fU = $('fDuree'),
+      dispo = $('fDispo'), recap = $('fRecap'), err = $('fErr'), btn = $('fBtn');
+  var occ = {};   // date -> { 'HH:MM': nb de réservations }
+
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  function hm(min) { return pad(Math.floor(min / 60)) + ':' + pad(min % 60); }
+  function iso(d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+  function horaires(ds) {
+    var j = new Date(ds + 'T12:00:00').getDay();
+    if (j === 0) return null;
+    return j === 6 ? { o: 540, f: 1020 } : { o: 480, f: 1140 };
+  }
+  function duree() {
+    return fF.value === 'journee' ? null : (fF.value === 'demi' ? 4 : parseInt(fU.value, 10));
+  }
+  function charge(ds) {
+    if (occ[ds]) return Promise.resolve(occ[ds]);
+    return fetch(API + '?action=GET_DISPO&espace=rousseau&dateDebut=' + ds + '&dateFin=' + ds, { redirect: 'follow' })
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        var m = {};
+        ((j.occupations && j.occupations.rousseau && j.occupations.rousseau[ds]) || []).forEach(function (s) { m[s] = (m[s] || 0) + 1; });
+        occ[ds] = m; return m;
+      });
+  }
+  function libre(m, deb, fin) {   // places minimales libres sur [deb, fin[
+    var min = PLACES;
+    for (var t = deb; t < fin; t += 30) min = Math.min(min, PLACES - (m[hm(t)] || 0));
+    return min;
+  }
+  function rafraichir() {
+    err.hidden = true; recap.textContent = '';
+    var f = fF.value, ds = fD.value;
+    $('lbHeure').style.display = f === 'journee' ? 'none' : '';
+    $('lbDuree').style.display = f === 'heure' ? '' : 'none';
+    fH.innerHTML = '';
+    if (!ds) { dispo.className = 'esc-dispo-msg'; dispo.textContent = 'Choisissez une date pour voir les places libres.'; return; }
+    var h = horaires(ds);
+    if (!h) { dispo.className = 'esc-dispo-msg ko'; dispo.textContent = 'L\'espace est fermé le dimanche. Choisissez un autre jour.'; return; }
+    dispo.className = 'esc-dispo-msg'; dispo.textContent = 'Vérification des places libres…';
+    charge(ds).then(function (m) {
+      var n = duree(), now = new Date(), auj = iso(now), minNow = now.getHours() * 60 + now.getMinutes();
+      if (f === 'journee') {
+        var l = libre(m, h.o, h.f);
+        if (ds === auj && minNow >= h.f) l = 0;
+        dispo.className = 'esc-dispo-msg ' + (l > 0 ? 'ok' : 'ko');
+        dispo.textContent = l > 0 ? 'Journée du ' + new Date(ds + 'T12:00:00').toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' }) + ' (' + hm(h.o) + '–' + hm(h.f) + ') : places disponibles.' : 'Plus de place ce jour-là. Choisissez une autre date.';
+        majRecap(l > 0, h.o, h.f);
+        return;
+      }
+      var nb = 0;
+      for (var t = h.o; t + n * 60 <= h.f; t += 30) {
+        if (ds === auj && t < minNow) continue;
+        var o = document.createElement('option');
+        o.value = hm(t);
+        var l2 = libre(m, t, t + n * 60);
+        if (l2 > 0) { o.textContent = hm(t) + ' → ' + hm(t + n * 60); nb++; }
+        else { o.textContent = hm(t) + ' (complet)'; o.disabled = true; }
+        fH.appendChild(o);
+      }
+      for (var i = 0; i < fH.options.length; i++) if (!fH.options[i].disabled) { fH.selectedIndex = i; break; }
+      dispo.className = 'esc-dispo-msg ' + (nb ? 'ok' : 'ko');
+      dispo.textContent = nb ? nb + ' horaire(s) disponible(s) ce jour-là.' : 'Aucun créneau disponible ce jour-là. Choisissez une autre date.';
+      majRecap(nb > 0);
+    }).catch(function () {
+      dispo.className = 'esc-dispo-msg'; dispo.textContent = 'Disponibilités indisponibles pour le moment : vous pouvez réserver, nous confirmerons le créneau.';
+      for (var t = h.o; t + (duree() || 0) * 60 <= h.f; t += 30) { var o = document.createElement('option'); o.value = hm(t); o.textContent = hm(t); fH.appendChild(o); }
+      majRecap(true);
+    });
+  }
+  function prix() { var f = fF.value; return f === 'journee' ? 15 : f === 'demi' ? 9 : 4 * duree(); }
+  function majRecap(ok, deb, fin) {
+    if (!ok || !fD.value) { recap.textContent = ''; return; }
+    var f = fF.value, h = horaires(fD.value);
+    var d = new Date(fD.value + 'T12:00:00').toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    var plage = f === 'journee' ? hm(h.o) + ' → ' + hm(h.f)
+      : (fH.value ? fH.value + ' → ' + hm(parseInt(fH.value, 10) * 60 + parseInt(fH.value.slice(3), 10) + duree() * 60) : '');
+    recap.innerHTML = '<strong>' + d + '</strong>, ' + plage + ' — <strong>' + prix() + ' €</strong>' +
+      (f === 'heure' && duree() > 1 ? '<br><small>Sur la page de paiement, indiquez la quantité&nbsp;: ' + duree() + '.</small>' : '');
+  }
+  [fF, fU].forEach(function (e) { e.addEventListener('change', rafraichir); });
+  fD.addEventListener('change', rafraichir);
+  fH.addEventListener('change', function () { majRecap(true); });
+
+  var auj = new Date(); fD.min = iso(auj);
+  var max = new Date(); max.setDate(max.getDate() + 90); fD.max = iso(max);
+
+  // Boutons des cartes : présélectionnent la formule
+  Array.prototype.forEach.call(document.querySelectorAll('a[data-formule]'), function (a) {
+    a.addEventListener('click', function () { fF.value = a.getAttribute('data-formule'); rafraichir(); });
+  });
+
+  function partir(ref) {
+    var u = STRIPE[fF.value] + '?client_reference_id=' + encodeURIComponent(ref) +
+            '&prefilled_email=' + encodeURIComponent($('fEmail').value.trim());
+    btn.textContent = '↪ Redirection vers le paiement…';
+    window.location.href = u;
+  }
+  function erreur(msg) { err.textContent = msg; err.hidden = false; btn.disabled = false; btn.textContent = 'Réserver ce créneau & payer →'; }
+
+  $('escForm').addEventListener('submit', function (ev) {
+    ev.preventDefault(); err.hidden = true;
+    var f = fF.value, ds = fD.value;
+    if (!ds) return erreur('Choisissez une date.');
+    if (f !== 'journee' && !fH.value) return erreur('Choisissez une heure d\'arrivée.');
+    var prenom = $('fPrenom').value.trim(), nom = $('fNom').value.trim(), email = $('fEmail').value.trim();
+    if (!prenom || !nom || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return erreur('Renseignez prénom, nom et une adresse e-mail valide.');
+    btn.disabled = true; btn.textContent = 'Réservation du créneau…';
+    var payload = { action: 'RESERVER_ESCALE', formule: f, date: ds, heureDebut: f === 'journee' ? '' : fH.value,
+                    nbHeures: f === 'heure' ? duree() : '', prenom: prenom, nom: nom, email: email, tel: $('fTel').value.trim() };
+    // Référence de secours si le serveur ne répond pas : la date reste lisible chez Stripe
+    var secours = 'ESCALE-' + ds + '-' + (f === 'journee' ? 'journee' : fH.value.replace(':', '') + '-' + duree() + 'h');
+    fetch(API, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(payload), redirect: 'follow' })
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        if (j && j.success && j.id) return partir(j.id);
+        if (j && j.error && String(j.error).indexOf('Action inconnue') === 0) return partir(secours);
+        delete occ[ds]; rafraichir();
+        erreur((j && j.message) || 'Réservation impossible pour le moment. Appelez le 06 51 50 97 18.');
+      })
+      .catch(function () { partir(secours); });
+  });
+})();
+</script>
 </body>
 </html>
