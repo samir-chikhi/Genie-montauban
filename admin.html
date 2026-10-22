@@ -1205,22 +1205,30 @@ function resetForm() {
   document.getElementById('r-usage-fg').style.display='none'; majHdebutVisible();
   document.getElementById('r-profil-fg').style.display='';
 
-  // Remplir le select des heures (24h/24, pas 30 min)
+  remplirHeures();
+}
+
+// Remplit le select des heures (24h/24, pas 30 min). Appelé aussi par editResa :
+// sans cela, modifier une réservation avant d'avoir ouvert « Nouvelle réservation »
+// laissait la liste réduite à 09:00 et l'heure ne pouvait pas être changée.
+function remplirHeures() {
   const hdSelect = document.getElementById('r-hdebut');
   if (hdSelect && hdSelect.options.length <= 1) {
+    hdSelect.innerHTML = '';
     HOURS.forEach(h => {
       const opt = document.createElement('option');
       opt.value = h;
       opt.textContent = h;
-      if (h === '09:00') opt.selected = true;
       hdSelect.appendChild(opt);
     });
+    hdSelect.value = '09:00';
   }
 }
 
 function editResa(id) {
   const r=DB.reservations.find(r=>r.id===id); if(!r) return;
   editId=id;
+  remplirHeures();
   document.getElementById('mresa-title').textContent='Modifier';
   ['prenom','nom','email','tel','orga','objet'].forEach(f=>gvSet('r-'+f, r[f]||''));
   gvSet('r-espace',r.espace); gvSet('r-usage',r.usage||'reunion');
