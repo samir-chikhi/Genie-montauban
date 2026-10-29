@@ -104,7 +104,7 @@ Flexibilité maximale
 | Bureau | Surface | Bail mensuel (18 €/m²) | Bail 1 an (17 €/m²) | Bail 3/6/9 (15 €/m²) ★ |
 | --- | --- | --- | --- | --- |
 | Louise Michel (0-01) Loué | 15 m² | Actuellement loué — écrivez-nous pour être prévenu d'une disponibilité | | |
-| Philippe Meirieu (0-03) | 24 m² | 432 €/mois HC | 408 €/mois HC | 360 €/mois HC |
+| Philippe Meirieu (0-03) Loué | 24 m² | Actuellement loué — écrivez-nous pour être prévenu d'une disponibilité | | |
 | Antoine Lavoisier (0-04) | 19 m² | 342 €/mois HC | 323 €/mois HC | 285 €/mois HC |
 | Aimé Césaire (1-07) Loué | 17 m² | Actuellement loué — écrivez-nous pour être prévenu d'une disponibilité | | |
 | Condorcet (1-08) Loué | 17 m² | Actuellement loué — écrivez-nous pour être prévenu d'une disponibilité | | |
