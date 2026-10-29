@@ -2,7 +2,7 @@
 title: Tarifs — Génie Montauban | Tiers-Lieu ESS
 description: Grille tarifaire complète du tiers-lieu Génie Montauban : coworking, salles de réunion, bureaux privatifs, domiciliation. Tarifs adhérents, locataires, associations.
 url: https://genie-montauban.fr/tarifs.html
-last_updated: 2026-10-23
+last_updated: 2026-10-29
 source: miroir markdown — version texte pour moteurs IA
 ---
 
@@ -54,7 +54,9 @@ Non-adhérent · tarif standard
 | Olympe de Gouges (1-12)Salle de réunion · 10-15 pers. | À l'heure | 30 € | 20 € | 15 € | Gratuit\* |
 | Demi-journée (4h) | 100 € | 60 € | 45 € | Gratuit\* |
 | Journée (8h) | 180 € | 100 € | 80 € | Gratuit\* |
-| Louise Michel (0-01)Bureau privatif · 15 m² | À l'heure | 30 € | 20 € | 15 € | Gratuit\* |
+| Antoine Lavoisier (0-04)Salle / bureau privé · 19 m² | À l'heure | 30 € | 20 € | 15 € | Gratuit\* |
+| Demi-journée (4h) | 100 € | 60 € | 45 € | Gratuit\* |
+| Journée (8h) | 180 € | 100 € | 80 € | Gratuit\* |
 | Maria Montessori (−1-14)PMR ♿ · 4 pers. | À l'heure | 20 € | 15 € | 10 € | Gratuit\* |
 | Demi-journée (4h) | 60 € | 45 € | 30 € | Gratuit\* |
 | Journée (8h) | 100 € | 80 € | 70 € | Gratuit\* |
@@ -101,7 +103,7 @@ Flexibilité maximale
 
 | Bureau | Surface | Bail mensuel (18 €/m²) | Bail 1 an (17 €/m²) | Bail 3/6/9 (15 €/m²) ★ |
 | --- | --- | --- | --- | --- |
-| Louise Michel (0-01) | 15 m² | 270 €/mois HC | 255 €/mois HC | 225 €/mois HC |
+| Louise Michel (0-01) Loué | 15 m² | Actuellement loué — écrivez-nous pour être prévenu d'une disponibilité | | |
 | Philippe Meirieu (0-03) | 24 m² | 432 €/mois HC | 408 €/mois HC | 360 €/mois HC |
 | Antoine Lavoisier (0-04) | 19 m² | 342 €/mois HC | 323 €/mois HC | 285 €/mois HC |
 | Aimé Césaire (1-07) Loué | 17 m² | Actuellement loué — écrivez-nous pour être prévenu d'une disponibilité | | |
