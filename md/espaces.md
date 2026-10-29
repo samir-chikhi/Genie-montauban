@@ -2,7 +2,7 @@
 title: Bureaux, coworking et salles de réunion à Montauban — Génie
 description: Les quatorze espaces du tiers-lieu Génie à Montauban : salles de réunion dès 20 €/h, coworking à la carte dès 4 €/h, bureaux en bail. Devis pour institutions et entreprises. 200 m de la gare, accès PMR.
 url: https://genie-montauban.fr/espaces.html
-last_updated: 2026-10-23
+last_updated: 2026-10-29
 source: miroir markdown — version texte pour moteurs IA
 ---
 
@@ -30,7 +30,7 @@ Bureau privatif dès 216 €/mois
 
 ## Salles de réunion
 
-4 espaces · 4 à 40 personnes
+5 espaces · 4 à 40 personnes
 
 À l'heure, à la demi-journée ou à la journée. Vidéoprojecteur et sono dans Bourdelle, écran TV dans Gouges, paperboard partout. **Gratuit pour les associations du quartier Villebourbon et les organisations syndicales d'employés et d'ouvriers** — c'est une décision politique, pas un geste commercial.
 
@@ -83,6 +83,23 @@ Salle de réunion lumineuse avec écran TV et paperboard. Idéale pour réunions
 Tarif plein. Adhérent dès 20 €/h · Locataire dès 15 €/h · Assos de Villebourbon et syndicats de salariés/ouvriers : **gratuit**.
 
 [Réserver →](reservation.html)
+
+0-04
+19 m²
+
+Bureau 0-04 · Rez-de-chaussée
+
+Antoine Lavoisier
+
+Salle polyvalente de 19 m² : réunion, formation ou bureau privé à la journée.
+
+- 1 heure30 €
+- ½ journée100 €
+- Journée180 €
+
+Tarif plein. Adhérent dès 20 €/h · Locataire dès 15 €/h · Assos de Villebourbon et syndicats de salariés/ouvriers : **gratuit**.
+
+[Réserver →](reservation.html?espace=lavoisier)
 
 -1-14
 PMR · 4 pers.
@@ -142,26 +159,19 @@ Tarif non-adhérent, hors charges. **Adhérent : 60 €/semaine, 180 €/mois** 
 
 6 bureaux · 12 à 24 m²
 
-Un bureau privatif à Montauban, loué à l'année et sans bail 3-6-9 obligatoire. Plus l'engagement est long, plus le loyer baisse. Trois bureaux sont actuellement occupés — on peut vous prévenir s'ils se libèrent.
+Un bureau privatif à Montauban, loué à l'année et sans bail 3-6-9 obligatoire. Plus l'engagement est long, plus le loyer baisse. Cinq bureaux sont actuellement occupés — on peut vous prévenir s'ils se libèrent.
 
 Nos six bureaux privatifs font de 12 à 24 m² et se louent meublés. Comptez de 15 à 18 €/m²/mois hors charges (charges : loyer + 23 %, pour l'électricité, la fibre, l'eau et le ménage) selon la durée d'engagement — du bail mensuel sans engagement au bail 3/6/9, en passant par le bail 1 an ; le détail est dans la [grille tarifaire complète](tarifs.html). Le plus petit bureau démarre à 216 €/mois, le plus grand tourne autour de 432 €/mois. L'accès badge 24h/7j est disponible en option (+5 €/mois), et vous partagez avec le reste du tiers-lieu l'imprimante, le café, la terrasse du rooftop et les salles de réunion à tarif locataire — celles-ci se [réservent en ligne](reservation.html). On est à 200 m de la gare de Montauban, accès PMR complet. Pour visiter un bureau ou demander un devis, écrivez-nous à [contact@genie-montauban.fr](mailto:contact@genie-montauban.fr).
 
-15 m²
+Loué · 15 m²
 
 Bureau 0-01 · Rez-de-chaussée
 
 Louise Michel
 
-- 1 heure30 €
-- ½ journée100 €
-- Journée180 €
-- Bail mensuel270 €/mois
-- Bail 1 an255 €/mois
-- Bail 3/6/9225 €/mois
+Actuellement loué
 
-Tarif plein. Adhérent dès 20 €/h · Locataire dès 15 €/h. Baux mensuels hors charges : plus l'engagement est long, plus le loyer baisse. [Nous contacter pour un bail](mailto:contact@genie-montauban.fr?subject=Location bureau Louise Michel).
-
-[Réserver à l'heure →](reservation.html?espace=michel)
+[Me prévenir s'il se libère →](mailto:contact@genie-montauban.fr?subject=Bureau Louise Michel — me prévenir en cas de disponibilité)
 
 0-03
 24 m²
@@ -242,7 +252,7 @@ Nous louons des salles pour ça — et c'est cette location qui finance le reste
 
 ### Réunir
 
-Quatre salles de 4 à 40 personnes, à l'heure, à la demi-journée ou à la journée. Vidéoprojecteur et
+Cinq salles de 4 à 40 personnes, à l'heure, à la demi-journée ou à la journée. Vidéoprojecteur et
 sono dans Bourdelle, écran et paperboard dans Gouges et Freinet, Montessori entièrement accessible PMR.
 Café, WiFi fibre et imprimante compris.
 

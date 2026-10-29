@@ -2,7 +2,7 @@
 title: Location de bureau privé à Montauban, près de la gare — Génie
 description: Bureaux privés meublés de 12 à 24 m² à louer à Montauban (Tarn-et-Garonne), à 200 m de la gare : au mois, à l'année ou en bail 3/6/9, dès 216 €/mois. Visite en semaine.
 url: https://genie-montauban.fr/bureau-prive.html
-last_updated: 2026-10-23
+last_updated: 2026-10-29
 source: miroir markdown — version texte pour moteurs IA
 ---
 
@@ -16,24 +16,9 @@ Bureaux meublés de 12 à 24 m², au mois, à l'année ou en bail 3/6/9. Plus vo
 
 Disponibles maintenant
 
-## Quatre bureaux libres
+## Trois bureaux libres
 
 Loyers mensuels hors charges (charges : loyer + 23 %, pour l'électricité, la fibre, l'eau et le ménage). Chaque bureau porte le nom d'une figure de l'éducation et de l'émancipation.
-
-15m²Bureau 0-01  
-Rez-de-chaussée
-
-Disponible
-
-### Louise Michel
-
-Institutrice et communarde, 1830–1905
-
-- Bail mensuel**270 €**
-- Bail 1 an**255 €**
-- Bail 3/6/9**225 €**
-
-[Visiter](#visite)[Essayer à l'heure](reservation.html?espace=michel)
 
 24m²Bureau 0-03  
 Rez-de-chaussée
@@ -63,7 +48,7 @@ Chimiste, 1743–1794
 - Bail 1 an**323 €**
 - Bail 3/6/9**285 €**
 
-[Visiter](#visite)
+[Visiter](#visite) [À la journée](reservation.html?espace=lavoisier)
 
 12m²Bureau -1-14  
 Rez-de-jardin · PMR
@@ -80,7 +65,7 @@ Médecin et pédagogue, 1870–1952
 
 [Visiter](#visite)[À l'heure](reservation.html?espace=montessori)
 
-Actuellement loués : Aristote (7 m²), Aimé Césaire (17 m²), Condorcet (17 m²), Baden Powell (16 m²) et Maryse Condé (partagé par MUSIVA, Génie, Topogramme et Myself). [Être prévenu quand l'un se libère](#visite)
+Actuellement loués : Louise Michel (15 m²), Aristote (7 m²), Aimé Césaire (17 m²), Condorcet (17 m²), Baden Powell (16 m²) et Maryse Condé (partagé par MUSIVA, Génie, Topogramme et Myself). [Être prévenu quand l'un se libère](#visite)
 
 ## Ce qui est compris
 
@@ -110,7 +95,7 @@ Téléphone
 
 Bureau qui vous intéresse
 Je ne sais pas encore
-Louise MichelPhilippe MeirieuAntoine LavoisierMaria MontessoriListe d'attente
+Philippe MeirieuAntoine LavoisierMaria MontessoriListe d'attente
 Pour quand ?
 
 Durée envisagée
