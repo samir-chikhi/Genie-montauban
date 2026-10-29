@@ -767,8 +767,8 @@ function chargerHistorique() {
       return;
     }
 
-    const ESPACE_NOM = { bourdelle:'Antoine Bourdelle', freinet:'Célestin Freinet', gouges:'Olympe de Gouges', michel:'Louise Michel', rousseau:'Jean-Jacques Rousseau', montessori:'Maria Montessori' };
-    const ESPACE_ICO = { bourdelle:'🏛️', freinet:'📋', gouges:'🤝', michel:'🚪', rousseau:'💻', montessori:'♿' };
+    const ESPACE_NOM = { bourdelle:'Antoine Bourdelle', freinet:'Célestin Freinet', gouges:'Olympe de Gouges', michel:'Louise Michel', rousseau:'Jean-Jacques Rousseau', montessori:'Maria Montessori', lavoisier:'Antoine Lavoisier' };
+    const ESPACE_ICO = { bourdelle:'🏛️', freinet:'📋', gouges:'🤝', michel:'🚪', rousseau:'💻', montessori:'♿', lavoisier:'🧪' };
 
     el.innerHTML = mesResas.map(r => {
       const dateF = r.date ? new Date(r.date + 'T12:00:00').toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}) : '—';
