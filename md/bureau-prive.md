@@ -16,24 +16,9 @@ Bureaux meublés de 12 à 24 m², au mois, à l'année ou en bail 3/6/9. Plus vo
 
 Disponibles maintenant
 
-## Trois bureaux libres
+## Deux bureaux libres
 
 Loyers mensuels hors charges (charges : loyer + 23 %, pour l'électricité, la fibre, l'eau et le ménage). Chaque bureau porte le nom d'une figure de l'éducation et de l'émancipation.
-
-24m²Bureau 0-03  
-Rez-de-chaussée
-
-Disponible
-
-### Philippe Meirieu
-
-Pédagogue, né en 1949
-
-- Bail mensuel**432 €**
-- Bail 1 an**408 €**
-- Bail 3/6/9**360 €**
-
-[Visiter](#visite)
 
 19m²Bureau 0-04  
 Rez-de-chaussée
@@ -65,7 +50,7 @@ Médecin et pédagogue, 1870–1952
 
 [Visiter](#visite)[À l'heure](reservation.html?espace=montessori)
 
-Actuellement loués : Louise Michel (15 m²), Aristote (7 m²), Aimé Césaire (17 m²), Condorcet (17 m²), Baden Powell (16 m²) et Maryse Condé (partagé par MUSIVA, Génie, Topogramme et Myself). [Être prévenu quand l'un se libère](#visite)
+Actuellement loués : Philippe Meirieu (24 m²), Louise Michel (15 m²), Aristote (7 m²), Aimé Césaire (17 m²), Condorcet (17 m²), Baden Powell (16 m²) et Maryse Condé (partagé par MUSIVA, Génie, Topogramme et Myself). [Être prévenu quand l'un se libère](#visite)
 
 ## Ce qui est compris
 
@@ -95,7 +80,7 @@ Téléphone
 
 Bureau qui vous intéresse
 Je ne sais pas encore
-Philippe MeirieuAntoine LavoisierMaria MontessoriListe d'attente
+Antoine LavoisierMaria MontessoriListe d'attente
 Pour quand ?
 
 Durée envisagée
