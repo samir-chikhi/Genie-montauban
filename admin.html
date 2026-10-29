@@ -328,6 +328,7 @@ textarea{resize:vertical;min-height:65px}
             <option value="rousseau">Rousseau</option>
             <option value="aristote">Aristote</option>
             <option value="montessori">Montessori</option>
+            <option value="lavoisier">Lavoisier</option>
           </select>
           <!-- Boutons Google Calendar -->
           <button id="cal-toggle-btn" class="btn btn-sm btn-cal" onclick="toggleCalendarView()" title="Afficher/masquer les événements Google Calendar">📅 Google Cal ✓</button>
@@ -375,6 +376,7 @@ textarea{resize:vertical;min-height:65px}
             <option value="rousseau">Rousseau</option>
             <option value="aristote">Aristote</option>
             <option value="montessori">Montessori</option>
+            <option value="lavoisier">Lavoisier</option>
           </select>
           <select id="f-usage" onchange="renderTable()">
             <option value="">Tous usages</option>
@@ -531,6 +533,7 @@ textarea{resize:vertical;min-height:65px}
             <option value="michel">Louise Michel (0-01) · Bureau privatif</option>
             <option value="rousseau">Jean-Jacques Rousseau (1-10) · Coworking</option>
             <option value="montessori">Maria Montessori (-1-14) · PMR</option>
+            <option value="lavoisier">Antoine Lavoisier (0-04) · 19 m²</option>
           </select>
         </div>
         <div class="fg" id="r-usage-fg">
@@ -730,7 +733,9 @@ const ESPACES_DEF = {
     tarifs_nomade:{ demi:12, journee:22, semaine:90, mois:200 } },
   montessori: { nom:'Maria Montessori',      ref:'-1-14', type:'both',    capacite:4,   icon:'♿',
     tarifs_reunion:{ MUSIVA:{heure:20,demi:60,journee:100}, adherent:{heure:15,demi:45,journee:80}, locataire:{heure:10,demi:30,journee:70}, asso:{heure:0,demi:0,journee:0} },
-    tarifs_nomade:{ demi:15, journee:27, semaine:100, mois:216 } }
+    tarifs_nomade:{ demi:15, journee:27, semaine:100, mois:216 } },
+  lavoisier : { nom:'Antoine Lavoisier',      ref:'0-04',  type:'reunion', capacite:6,   icon:'🧪',
+    tarifs_reunion:{ MUSIVA:{heure:30,demi:100,journee:180}, adherent:{heure:20,demi:60,journee:100}, locataire:{heure:15,demi:45,journee:80}, asso:{heure:0,demi:0,journee:0} } }
 };
 
 const DL = { heure:'Heure', demi:'½ journée', journee:'Journée', semaine:'Semaine', mois:'Mois' };
@@ -1445,7 +1450,7 @@ function renderDashboard() {
 
   const last30=new Date(); last30.setDate(last30.getDate()-30);
   const r30   = R.filter(r=>r.date&&new Date(r.date+'T12:00:00')>=last30&&r.statut!=='cancelled');
-  const colors = { bourdelle:'#7C3AED',freinet:'#0284C7',gouges:'#DB2777',michel:'#16A34A',rousseau:'#CA8A04',aristote:'#EA580C',montessori:'var(--sage)' };
+  const colors = { bourdelle:'#7C3AED',freinet:'#0284C7',gouges:'#DB2777',michel:'#16A34A',rousseau:'#CA8A04',aristote:'#EA580C',montessori:'var(--sage)',lavoisier:'#0D9488' };
 
   document.getElementById('occ-bars').innerHTML = Object.keys(ESPACES_DEF).map(k=>{
     const cnt = r30.filter(r=>r.espace===k).length;
