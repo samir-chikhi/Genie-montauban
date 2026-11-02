@@ -30,7 +30,7 @@ header.g-head { position: sticky; top: 0; left: auto; right: auto; z-index: 50; 
 .g-head .g-nav a[aria-current="page"] { box-shadow: inset 0 -2px 0 var(--g-brick); background: none; border-radius: 0; }
 .g-head button.g-burger { display: none; margin-left: auto; background: none; border: 0; padding: 10px; cursor: pointer; }
 .g-head .g-burger span { display: block; width: 24px; height: 2px; background: var(--g-navy); margin: 5px 0; }
-@media (max-width: 960px) {
+@media (max-width: 1180px) {
   .g-head button.g-burger { display: block; }
   .g-head nav.g-nav { display: none; position: absolute; top: 64px; left: 0; right: 0; flex-direction: column; align-items: stretch; background: #fff; border-bottom: 1px solid var(--g-border); padding: 8px 16px 16px; box-shadow: 0 8px 24px rgba(28,43,58,.1); }
   .g-head nav.g-nav.open { display: flex; }
@@ -68,3 +68,7 @@ footer.g-foot { display: block; background: var(--g-navy); color: rgba(255,255,2
 @media (max-width: 720px) { body.has-sticky .g-consent { bottom: 84px; } }
 .g-head .g-nav a { white-space: nowrap; }
 @media (min-width: 901px) and (max-width: 1180px) { .g-head .g-nav a { padding-left: 8px; padding-right: 8px; font-size: .9rem; } }
+
+/* Logo jamais écrasé par le menu : le texte garde sa largeur, le menu se resserre */
+.g-head a.g-logo { flex: 0 0 auto; white-space: nowrap; margin-right: 16px; }
+@media (min-width: 1181px) and (max-width: 1360px) { .g-head .g-nav a { padding-left: 7px; padding-right: 7px; font-size: .88rem; } .g-head .g-nav a.g-cta { padding: 8px 12px; margin-left: 4px; } }
