@@ -2,7 +2,7 @@
 title: Génie, tiers-lieu à Montauban : coworking, bureaux, salles
 description: Tiers-lieu associatif à 200 m de la gare de Montauban : coworking dès 4 €/h, bureaux privés au mois, salles de réunion de 4 à 40 personnes, accompagnement de projets et ateliers ouverts au quartier.
 url: https://genie-montauban.fr/
-last_updated: 2026-10-23
+last_updated: 2026-11-02
 source: miroir markdown — version texte pour moteurs IA
 ---
 
@@ -48,6 +48,36 @@ Les prochains rendez-vous](quartier.html)
 Pour les associations. Salles gratuites pour celles de Villebourbon.
 
 Proposer en 2 minutes](associations.html)
+[### Me former
+
+Micro-formations de 3 h animées par des experts locaux, avec des modules gratuits.
+
+Voir l'Académie](academie.html)
+[### Voir ce qui s'y passe
+
+Petits-déjeuners, afterworks, conférences, ateliers : l'agenda du lieu.
+
+Voir les activités](activites.html)
+[### Soutenir le lieu
+
+Adhérez à l'association : dès 10 €/an, et votre voix en assemblée dès 15 €/an.
+
+Adhérer](adherer.html)
+[### Comparer les tarifs
+
+Coworking, salles, bureaux, domiciliation : la grille complète, par profil.
+
+Voir les tarifs](tarifs.html)
+[### Visiter les espaces
+
+Quatorze espaces à 200 m de la gare, accessibles aux personnes à mobilité réduite.
+
+Voir les espaces](espaces.html)
+[### Comprendre le projet
+
+Tiers-lieu de l'ESS et d'éducation populaire : apprendre, entreprendre, décider ensemble.
+
+Lire le projet](le-projet.html)
 
 **200 m de la gare**Bus ligne 1, arrêt Gare
 
