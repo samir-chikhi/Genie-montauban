@@ -1,0 +1,30 @@
+<template>
+  <style>
+    @font-face { font-family: "Bricolage Grotesque"; src: url('assets/fonts/bricolage-grotesque-latin-variable.woff2') format('woff2'); font-weight: 200 800; }
+    @font-face { font-family: "DM Sans"; src: url('assets/fonts/dm-sans-latin-variable.woff2') format('woff2'); font-weight: 100 900; }
+    #root { position: absolute; inset: 0; background: #1C2B3A; font-family: "Bricolage Grotesque", sans-serif; overflow: hidden; }
+    #scene-6-label { position: absolute; left: 60px; top: 180px; padding: 8px 24px; border-radius: 40px; background: #B4532F; color: #fff; font: 700 34px "DM Sans", sans-serif; letter-spacing: .08em; }
+    #root .card { position: absolute; left: 60px; width: 960px; height: 330px; background: #F3EEEA; border-radius: 24px; display: flex; align-items: center; gap: 36px; padding: 0 36px 0 30px; }
+    #root .c1 { top: 260px; } #root .c2 { top: 610px; } #root .c3 { top: 960px; }
+    #root .tile { flex: 0 0 210px; height: 270px; background: #1C2B3A; border-radius: 105px 105px 14px 14px; display: grid; place-items: center; }
+    #root .tile svg { width: 96px; height: 96px; }
+    #root .tx h2 { margin: 0 0 10px; color: #1C2B3A; font-weight: 800; font-size: 50px; line-height: 1.05; letter-spacing: -.02em; }
+    #root .tx p { margin: 0 0 14px; color: #55606b; font: 500 33px/1.3 "DM Sans", sans-serif; }
+    #root .tx span { color: #B4532F; font: 700 34px "DM Sans", sans-serif; }
+  </style>
+  <div id="root" data-composition-id="scene-6" data-width="1080" data-height="1920">
+    <div id="scene-6-label">COMPRENDRE</div>
+    <div id="scene-6-c1" class="card c1"><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="#C9993E" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12.2V4.5h7.7l9.3 9.3a1.5 1.5 0 0 1 0 2.1l-5.6 5.6a1.5 1.5 0 0 1-2.1 0Z"/><circle cx="8" cy="9" r="1.3"/></svg></div><div class="tx"><h2>Comparer les tarifs</h2><p>Coworking, salles, bureaux, domiciliation.</p><span>La grille complète</span></div></div>
+    <div id="scene-6-c2" class="card c2"><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="#C9993E" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg></div><div class="tx"><h2>Visiter les espaces</h2><p>Quatorze espaces à 200 m de la gare, accès PMR.</p><span>Voir les espaces</span></div></div>
+    <div id="scene-6-c3" class="card c3"><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="#C9993E" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6.5 6.5 0 0 0-3.5 12c.6.5 1 1.2 1 2h5c0-.8.4-1.5 1-2A6.5 6.5 0 0 0 12 3Z"/></svg></div><div class="tx"><h2>Comprendre le projet</h2><p>Tiers-lieu de l'ESS et d'éducation populaire.</p><span>Le projet</span></div></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#scene-6-label", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.4, ease: "power3.out" }, 0);
+    ["c1","c2","c3"].forEach((c, i) => {
+      tl.fromTo("#scene-6-" + c, { opacity: 0, y: 70 }, { opacity: 1, y: 0, duration: 0.55, ease: "power3.out" }, 0.25 + i * 0.5);
+      tl.fromTo("#scene-6-" + c + " .tile", { scale: 0.85 }, { scale: 1, duration: 0.5, ease: "back.out(1.7)" }, 0.35 + i * 0.5);
+    });
+    window.__timelines["scene-6"] = tl;
+  </script>
+</template>

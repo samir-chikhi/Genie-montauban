@@ -3,29 +3,28 @@
     @font-face { font-family: "Bricolage Grotesque"; src: url('assets/fonts/bricolage-grotesque-latin-variable.woff2') format('woff2'); font-weight: 200 800; }
     @font-face { font-family: "DM Sans"; src: url('assets/fonts/dm-sans-latin-variable.woff2') format('woff2'); font-weight: 100 900; }
     #root { position: absolute; inset: 0; background: #1C2B3A; font-family: "Bricolage Grotesque", sans-serif; overflow: hidden; }
-    #scene-2-arch { position: absolute; left: 120px; top: 200px; width: 840px; height: 700px; border-radius: 420px 420px 28px 28px; overflow: hidden; }
-    #scene-2-arch img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    #scene-2-ring { position: absolute; left: 140px; top: 220px; width: 800px; height: 680px; border: 3px solid rgba(231,185,165,.55); border-bottom: 0; border-radius: 400px 400px 0 0; }
-    #scene-2-pill { position: absolute; left: 90px; top: 940px; padding: 10px 26px; border-radius: 40px; background: #B4532F; color: #FFFFFF; font: 700 38px "DM Sans", sans-serif; letter-spacing: .08em; }
-    #scene-2-text { position: absolute; left: 90px; right: 90px; top: 1020px; }
-    #scene-2-title { margin: 0; color: #F3EEEA; font-weight: 800; font-size: 120px; line-height: 1.04; letter-spacing: -.025em; }
-    #scene-2-sub { margin: 24px 0 0; color: rgba(243,238,234,.78); font: 500 40px "DM Sans", sans-serif; }
+    #scene-2-label { position: absolute; left: 60px; top: 180px; padding: 8px 24px; border-radius: 40px; background: #B4532F; color: #fff; font: 700 34px "DM Sans", sans-serif; letter-spacing: .08em; }
+    #root .card { position: absolute; left: 60px; width: 960px; height: 330px; background: #F3EEEA; border-radius: 24px; display: flex; align-items: center; gap: 36px; padding: 0 36px 0 30px; }
+    #root .c1 { top: 260px; } #root .c2 { top: 610px; } #root .c3 { top: 960px; }
+    #root .tile { flex: 0 0 210px; height: 270px; background: #1C2B3A; border-radius: 105px 105px 14px 14px; display: grid; place-items: center; }
+    #root .tile svg { width: 96px; height: 96px; }
+    #root .tx h2 { margin: 0 0 10px; color: #1C2B3A; font-weight: 800; font-size: 50px; line-height: 1.05; letter-spacing: -.02em; }
+    #root .tx p { margin: 0 0 14px; color: #55606b; font: 500 33px/1.3 "DM Sans", sans-serif; }
+    #root .tx span { color: #B4532F; font: 700 34px "DM Sans", sans-serif; }
   </style>
-  <div data-hf-id="hf-xuoy" id="root" data-composition-id="scene-2" data-width="1080" data-height="1920">
-    <div data-hf-id="hf-ch87" id="scene-2-arch"><img data-hf-id="hf-i7u1" id="scene-2-img" src="assets/img/coworking3-1600.webp" alt="" /></div>
-    <div data-hf-id="hf-so3x" id="scene-2-ring"></div>
-    <div data-hf-id="hf-pi7z" id="scene-2-pill">COWORKING</div>
-    <div data-hf-id="hf-2q4u" id="scene-2-text"><h1 data-hf-id="hf-1g5h" id="scene-2-title">Dès 4 €/h</h1>
-    <p data-hf-id="hf-3d2h" id="scene-2-sub">Open space · wifi fibre · café compris</p></div>
+  <div id="root" data-composition-id="scene-2" data-width="1080" data-height="1920">
+    <div id="scene-2-label">TRAVAILLER</div>
+    <div id="scene-2-c1" class="card c1"><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="#C9993E" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4.5" width="16" height="10.5" rx="1.5"/><path d="M2.5 19h19"/><path d="M9.5 15v4M14.5 15v4"/></svg></div><div class="tx"><h2>Travailler quelques heures</h2><p>Open space, sans abonnement. Wifi fibre, café compris.</p><span>Dès 4 €/h</span></div></div>
+    <div id="scene-2-c2" class="card c2"><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="#C9993E" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4.5"/><path d="M11.2 11.8 20 3"/><path d="m16.5 6.5 2.5 2.5"/><path d="m14 9 2 2"/></svg></div><div class="tx"><h2>Un bureau fermé, à moi</h2><p>Meublé, au mois ou à l'année. Badge 24 h/24 en option.</p><span>Bureaux privés</span></div></div>
+    <div id="scene-2-c3" class="card c3"><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="#C9993E" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11h18"/><path d="M6 11v8M18 11v8"/><circle cx="7" cy="5.5" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="17" cy="5.5" r="2"/></svg></div><div class="tx"><h2>Une salle de réunion</h2><p>De 4 à 40 personnes, à l'heure ou à la journée.</p><span>Dès 20 €/h</span></div></div>
   </div>
   <script>
     const tl = gsap.timeline({ paused: true });
-    tl.fromTo("#scene-2-arch", { clipPath: "inset(100% 0 0 0)" }, { clipPath: "inset(0% 0 0 0)", duration: 0.7, ease: "power3.out" }, 0);
-    tl.fromTo("#scene-2-img", { scale: 1.15 }, { scale: 1, duration: 4, ease: "power1.out" }, 0);
-    tl.fromTo("#scene-2-ring", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.out" }, 0.3);
-    tl.fromTo("#scene-2-pill", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.4, ease: "back.out(1.6)" }, 0.25);
-    tl.fromTo("#scene-2-title", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.55, ease: "power3.out" }, 0.4);
-    tl.fromTo("#scene-2-sub", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.out" }, 0.9);
+    tl.fromTo("#scene-2-label", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.4, ease: "power3.out" }, 0);
+    ["c1","c2","c3"].forEach((c, i) => {
+      tl.fromTo("#scene-2-" + c, { opacity: 0, y: 70 }, { opacity: 1, y: 0, duration: 0.55, ease: "power3.out" }, 0.25 + i * 0.5);
+      tl.fromTo("#scene-2-" + c + " .tile", { scale: 0.85 }, { scale: 1, duration: 0.5, ease: "back.out(1.7)" }, 0.35 + i * 0.5);
+    });
     window.__timelines["scene-2"] = tl;
   </script>
 </template>
