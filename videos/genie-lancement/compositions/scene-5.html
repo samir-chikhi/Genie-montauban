@@ -1,0 +1,31 @@
+<template>
+  <style>
+    @font-face { font-family: "Bricolage Grotesque"; src: url('assets/fonts/bricolage-grotesque-latin-variable.woff2') format('woff2'); font-weight: 200 800; }
+    @font-face { font-family: "DM Sans"; src: url('assets/fonts/dm-sans-latin-variable.woff2') format('woff2'); font-weight: 100 900; }
+    #root { position: absolute; inset: 0; background: #1C2B3A; font-family: "Bricolage Grotesque", sans-serif; overflow: hidden; }
+    #scene-5-arch { position: absolute; left: 120px; top: 200px; width: 840px; height: 640px; border-radius: 420px 420px 28px 28px; overflow: hidden; }
+    #scene-5-arch img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    #scene-5-ring { position: absolute; left: 140px; top: 220px; width: 800px; height: 620px; border: 3px solid rgba(231,185,165,.55); border-bottom: 0; border-radius: 400px 400px 0 0; }
+    #scene-5-pill { position: absolute; left: 90px; top: 880px; padding: 10px 26px; border-radius: 40px; background: #C9993E; color: #1C2B3A; font: 700 38px "DM Sans", sans-serif; letter-spacing: .08em; }
+    #scene-5-text { position: absolute; left: 90px; right: 90px; top: 960px; }
+    #scene-5-title { margin: 0; color: #F3EEEA; font-weight: 800; font-size: 96px; line-height: 1.04; letter-spacing: -.025em; }
+    #scene-5-sub { line-height: 1.4; margin: 24px 0 0; color: rgba(243,238,234,.78); font: 500 40px "DM Sans", sans-serif; }
+  </style>
+  <div data-hf-id="hf-fouv" id="root" data-composition-id="scene-5" data-width="1080" data-height="1920">
+    <div data-hf-id="hf-ure2" id="scene-5-arch"><img data-hf-id="hf-sapq" id="scene-5-img" src="assets/img/facade-1600.webp" alt="" /></div>
+    <div data-hf-id="hf-dq0k" id="scene-5-ring"></div>
+    <div data-hf-id="hf-83it" id="scene-5-pill">genie-montauban.fr</div>
+    <div data-hf-id="hf-4bgn" id="scene-5-text"><h1 data-hf-id="hf-xw88" id="scene-5-title">Sous le<br data-hf-id="hf-x5px">même toit.</h1>
+    <p data-hf-id="hf-kdmc" id="scene-5-sub">Tiers-lieu · Éducation populaire · ESS<br>12 rue du Génie, Montauban</p></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#scene-5-arch", { clipPath: "inset(100% 0 0 0)" }, { clipPath: "inset(0% 0 0 0)", duration: 0.7, ease: "power3.out" }, 0);
+    tl.fromTo("#scene-5-img", { scale: 1.15 }, { scale: 1, duration: 5, ease: "power1.out" }, 0);
+    tl.fromTo("#scene-5-ring", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.out" }, 0.3);
+    tl.fromTo("#scene-5-pill", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.4, ease: "back.out(1.6)" }, 0.25);
+    tl.fromTo("#scene-5-title", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.55, ease: "power3.out" }, 0.4);
+    tl.fromTo("#scene-5-sub", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.out" }, 0.9);
+    window.__timelines["scene-5"] = tl;
+  </script>
+</template>

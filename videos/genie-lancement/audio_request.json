@@ -1,0 +1,30 @@
+{
+  "provider": "heygen",
+  "speed": 1,
+  "lines": [
+    {
+      "id": "01",
+      "text": "Travailler, se réunir, lancer un projet."
+    },
+    {
+      "id": "02",
+      "text": "Une place en open space, dès quatre euros de l'heure. Café compris."
+    },
+    {
+      "id": "03",
+      "text": "Un bureau fermé, meublé, rien que pour vous."
+    },
+    {
+      "id": "04",
+      "text": "Des salles pour vos réunions, de quatre à quarante personnes."
+    },
+    {
+      "id": "05",
+      "text": "Génie, douze rue du Génie, à Montauban. Sous le même toit."
+    }
+  ],
+  "bgm": {
+    "mode": "retrieve",
+    "query": "warm acoustic instrumental, light, friendly, uplifting, soft guitar, community coworking space"
+  }
+}

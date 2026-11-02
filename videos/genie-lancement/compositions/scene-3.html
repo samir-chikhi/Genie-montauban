@@ -1,0 +1,31 @@
+<template>
+  <style>
+    @font-face { font-family: "Bricolage Grotesque"; src: url('assets/fonts/bricolage-grotesque-latin-variable.woff2') format('woff2'); font-weight: 200 800; }
+    @font-face { font-family: "DM Sans"; src: url('assets/fonts/dm-sans-latin-variable.woff2') format('woff2'); font-weight: 100 900; }
+    #root { position: absolute; inset: 0; background: #1C2B3A; font-family: "Bricolage Grotesque", sans-serif; overflow: hidden; }
+    #scene-3-arch { position: absolute; left: 120px; top: 200px; width: 840px; height: 700px; border-radius: 420px 420px 28px 28px; overflow: hidden; }
+    #scene-3-arch img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    #scene-3-ring { position: absolute; left: 140px; top: 220px; width: 800px; height: 680px; border: 3px solid rgba(231,185,165,.55); border-bottom: 0; border-radius: 400px 400px 0 0; }
+    #scene-3-pill { position: absolute; left: 90px; top: 940px; padding: 10px 26px; border-radius: 40px; background: #B4532F; color: #FFFFFF; font: 700 38px "DM Sans", sans-serif; letter-spacing: .08em; }
+    #scene-3-text { position: absolute; left: 90px; right: 90px; top: 1020px; }
+    #scene-3-title { margin: 0; color: #F3EEEA; font-weight: 800; font-size: 92px; line-height: 1.04; letter-spacing: -.025em; }
+    #scene-3-sub { margin: 24px 0 0; color: rgba(243,238,234,.78); font: 500 40px "DM Sans", sans-serif; }
+  </style>
+  <div data-hf-id="hf-67ol" id="root" data-composition-id="scene-3" data-width="1080" data-height="1920">
+    <div data-hf-id="hf-qk0k" id="scene-3-arch"><img data-hf-id="hf-o9ht" id="scene-3-img" src="assets/img/bureau-cheminee-1600.webp" alt="" /></div>
+    <div data-hf-id="hf-u61m" id="scene-3-ring"></div>
+    <div data-hf-id="hf-van9" id="scene-3-pill">BUREAUX</div>
+    <div data-hf-id="hf-qsi1" id="scene-3-text"><h1 data-hf-id="hf-87y0" id="scene-3-title">Un bureau fermé,<br data-hf-id="hf-x5px">meublé.</h1>
+    <p data-hf-id="hf-o8g9" id="scene-3-sub">Au mois ou à l'année</p></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#scene-3-arch", { clipPath: "inset(100% 0 0 0)" }, { clipPath: "inset(0% 0 0 0)", duration: 0.7, ease: "power3.out" }, 0);
+    tl.fromTo("#scene-3-img", { scale: 1.15 }, { scale: 1, duration: 4, ease: "power1.out" }, 0);
+    tl.fromTo("#scene-3-ring", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.out" }, 0.3);
+    tl.fromTo("#scene-3-pill", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.4, ease: "back.out(1.6)" }, 0.25);
+    tl.fromTo("#scene-3-title", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.55, ease: "power3.out" }, 0.4);
+    tl.fromTo("#scene-3-sub", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.out" }, 0.9);
+    window.__timelines["scene-3"] = tl;
+  </script>
+</template>
