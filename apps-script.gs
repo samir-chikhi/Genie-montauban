@@ -59,6 +59,9 @@ const CONFIG = {
   SESSION_ADMIN_H:    8,   // durée de validité d'une session admin
   SESSION_CLIENT_H:   24,  // durée de validité d'une session « Mon compte »
   RATE_LIMIT_MAX:     5,   // soumissions max / heure / email
+  // Associations du quartier dont les réservations sont gratuites : profil
+  // « asso » imposé côté serveur, même si la fiche Clients dit autre chose.
+  ASSOS_GRATUITES:    ['gaetan.deltour@fne82.org'],   // FNE 82
 };
 
 // ============================================================
@@ -807,6 +810,7 @@ function estAdherentAJour(email, ss) {
 
 // Profil facturable retenu par le serveur. Le navigateur n'a pas voix.
 function profilServeur(email, ss) {
+  if (CONFIG.ASSOS_GRATUITES.indexOf(String(email || '').toLowerCase().trim()) !== -1) return 'asso';
   const c = getProfilParEmail(email, ss);
   const declare = c ? String(c.profilTarifaire || '').toLowerCase().trim() : '';
   // Seuls locataire et asso peuvent avoir ete poses a la main par l'admin.
