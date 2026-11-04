@@ -21,3 +21,16 @@ RGPD-VIOLATION-2026-09.md
 CNIL-descriptif-a-coller.txt
 CNIL-fiche-de-saisie.md
 CNIL-mesures-suite-violation.txt
+
+# Documents internes : jamais dans le dépôt public (purgés de l historique le 04/11/2026)
+00_Synthese_Reunion/
+04_Perspectives_Strategie/
+05_Annexes_Procedures_Contrats/
+06_Archives/Audit_Genie_Complet_90_fichiers.docx
+SECURITE-URGENCE-2026-09.md
+SECURITE_admin.md
+AUDIT-SITE-2026.md
+RGPD-VIOLATION-2026-09.md
+20260923_memo_*.md
+apps-script.PROPOSE-v6.gs
+brag-output/
