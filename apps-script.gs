@@ -159,6 +159,35 @@ function sanit(v) {
   return s.substring(0, 2000);
 }
 
+// Nom d'espace saisi par le formulaire public : il est ré-affiché dans des
+// pages (Mon compte) et des e-mails. On ne garde que lettres, chiffres,
+// espaces, tiret, apostrophe et point ; si rien de valable ne reste, on
+// retombe sur la clé tarifaire canonique (ex. « bourdelle »).
+function nettoyerEspace(valeur, cle) {
+  var s = String(valeur == null ? '' : valeur).replace(/[^A-Za-z0-9À-ÿ '’.\-]/g, '').trim().substring(0, 60);
+  return s || cle || '';
+}
+
+// Limiteur « sur les échecs seulement » : consulter sans compter, puis
+// compter chaque échec. Un administrateur qui se trompe une fois ne s'use
+// pas un essai à chaque connexion réussie, et on est alerté quand le seuil
+// est atteint (tentative de force brute ou de blocage volontaire).
+function echecsConnexion(cle) {
+  try { return parseInt(CacheService.getScriptCache().get('ec_' + cle) || '0', 10); } catch (e) { return 0; }
+}
+function noterEchecConnexion(cle, seuil) {
+  try {
+    var cache = CacheService.getScriptCache();
+    var n = parseInt(cache.get('ec_' + cle) || '0', 10) + 1;
+    cache.put('ec_' + cle, String(n), 3600);
+    if (n === seuil) {
+      try { MailApp.sendEmail(CONFIG.EMAIL_ADMIN, 'Génie — ' + seuil + ' échecs de connexion admin (' + cle + ')',
+        'Le compte « ' + cle + ' » est verrouillé pendant 1 heure après ' + seuil + ' échecs.\n' +
+        'Si ce n\'est pas vous, quelqu\'un essaie de deviner un code. Aucun accès n\'a été accordé.'); } catch (e2) {}
+    }
+  } catch (e) {}
+}
+
 // true si l'appelant (clé = email) n'a pas dépassé le quota horaire
 function rateLimitOk(cle) {
   try {
@@ -220,8 +249,26 @@ function lireSessions() {
   } catch (e) { return {}; }
 }
 
+// Une Propriété du script ne peut pas dépasser 9 Ko : au-delà, setProperty
+// échoue et plus personne ne pourrait se connecter. On borne donc la taille
+// en écartant les sessions qui expirent le plus tôt.
+function borneSessions(sessions, expDe) {
+  var json = JSON.stringify(sessions);
+  while (json.length > 8000) {
+    var plusAncien = null, min = Infinity;
+    Object.keys(sessions).forEach(function(t) {
+      var e = expDe(sessions[t]);
+      if (e < min) { min = e; plusAncien = t; }
+    });
+    if (plusAncien === null) break;
+    delete sessions[plusAncien];
+    json = JSON.stringify(sessions);
+  }
+  return json;
+}
+
 function ecrireSessions(sessions) {
-  PropertiesService.getScriptProperties().setProperty('ADMIN_SESSIONS', JSON.stringify(sessions));
+  PropertiesService.getScriptProperties().setProperty('ADMIN_SESSIONS', borneSessions(sessions, expirationSession));
 }
 
 // Une session vaut soit un nombre (ancien format = expiration, rôle responsable),
@@ -282,8 +329,11 @@ function ecrireEquipe(eq) {
 }
 
 function genererCodeEquipe() {
+  // Aléa de la plateforme (UUID) et non Math.random(), qui est prévisible.
+  var octets = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,
+    Utilities.getUuid() + Utilities.getUuid() + Date.now());
   var code = '';
-  for (var i = 0; i < 8; i++) code += ALPHABET_CODE.charAt(Math.floor(Math.random() * ALPHABET_CODE.length));
+  for (var i = 0; i < 8; i++) code += ALPHABET_CODE.charAt((octets[i] & 0xFF) % ALPHABET_CODE.length);
   return code.substring(0, 4) + '-' + code.substring(4);
 }
 function normaliserCode(c) { return String(c || '').toUpperCase().replace(/[^A-Z0-9]/g, ''); }
@@ -369,7 +419,7 @@ function fermerSessionsDe(id) {
 function adminLoginEquipe(data) {
   var prenom = normaliserPrenom(data.prenom);
   if (!prenom) return { success: false, message: 'Indiquez votre prénom.' };
-  if (!rateLimitOk('adminlogin_' + prenom))
+  if (echecsConnexion('adminlogin_' + prenom) >= 5)
     return { success: false, error: 'TROP_DE_REQUETES', message: 'Trop de tentatives. Réessayez dans une heure.' };
   var code = normaliserCode(data.code);
   var eq = lireEquipe();
@@ -378,7 +428,10 @@ function adminLoginEquipe(data) {
     var m = eq[id];
     if (m.actif && normaliserPrenom(m.nom) === prenom && comparaisonConstante(hashMotDePasseAdmin(code, m.sel), m.hash)) trouve = id;
   });
-  if (!trouve) return { success: false, message: 'Prénom ou code incorrect.' };
+  if (!trouve) {
+    noterEchecConnexion('adminlogin_' + prenom, 5);
+    return { success: false, message: 'Prénom ou code incorrect.' };
+  }
   var m2 = eq[trouve];
   journaliser({ nom: m2.nom, role: m2.role }, 'Connexion', '', '');
   return { success: true, token: creerSessionAdmin(m2.role, m2.nom, trouve),
@@ -480,7 +533,8 @@ function lireSessionsClient() {
 }
 
 function ecrireSessionsClient(sessions) {
-  PropertiesService.getScriptProperties().setProperty('CLIENT_SESSIONS', JSON.stringify(sessions));
+  PropertiesService.getScriptProperties().setProperty('CLIENT_SESSIONS',
+    borneSessions(sessions, function(s) { return (s && s.exp) || 0; }));
 }
 
 function creerSessionClient(email) {
@@ -1169,6 +1223,11 @@ function creerReservation(data) {
     const rows   = sheet.getDataRange().getValues();
     const email  = String(data.email).toLowerCase();
     const cle    = cleEspace(data.espace);
+    // Le nom d'espace est ré-affiché tel quel dans « Mon compte » : on le
+    // nettoie avant tout enregistrement (audit sécurité 11/2026).
+    data.espace    = nettoyerEspace(data.espace, cle);
+    data.nomEspace = nettoyerEspace(data.nomEspace, data.espace);
+    data.typeEspace = nettoyerEspace(data.typeEspace, 'reunion');
     const debMin = hMin(data.heureDebut, 8 * 60);
     const finMin = hMin(hFin, debMin + 60);
 
@@ -1988,7 +2047,7 @@ function haWebhook(data, params) {
       logErreur('haWebhook', new Error('HELLOASSO_WEBHOOK_SECRET absent : notification refusée'));
       return { success: false, error: 'WEBHOOK_NON_CONFIGURE' };
     }
-    if (!params || String(params.whsecret || '') !== attendu) {
+    if (!params || !comparaisonConstante(String(params.whsecret || ''), attendu)) {
       logErreur('haWebhook', new Error('Notification refusée : secret absent ou incorrect'));
       return { success: false, error: 'NON_AUTORISE' };
     }
@@ -2585,7 +2644,7 @@ function adminLogin(data) {
     // Membre de l'équipe : prénom + code personnel
     if (data.code) return adminLoginEquipe(data);
     // Rate limiting anti force brute (5 essais/heure), avant toute lecture.
-    if (!rateLimitOk('adminlogin'))
+    if (echecsConnexion('adminlogin') >= 10)
       return { success: false, error: 'TROP_DE_REQUETES', message: 'Trop de tentatives. Réessayez dans une heure.' };
     const mdp   = String(data.password || '');
     const props = PropertiesService.getScriptProperties();
@@ -2593,7 +2652,10 @@ function adminLogin(data) {
     const sel   = props.getProperty('ADMIN_PASSWORD_SALT');
 
     if (hash && sel) {
-      if (!comparaisonConstante(hashMotDePasseAdmin(mdp, sel), hash)) return { success: false };
+      if (!comparaisonConstante(hashMotDePasseAdmin(mdp, sel), hash)) {
+        noterEchecConnexion('adminlogin', 10);
+        return { success: false };
+      }
       // Session serveur : token aléatoire, jamais dérivé du mot de passe
       return { success: true, token: creerSessionAdmin('responsable', 'Responsable', ''), role: 'responsable', nom: 'Responsable', expireDansH: CONFIG.SESSION_ADMIN_H };
     }
