@@ -35,7 +35,6 @@ PAGES = [
     ("adherer.html",                "0.7", "yearly"),
     ("le-projet.html",              "0.6", "yearly"),
     ("espaces.html",                "0.7", "monthly"),
-    ("reservation.html",            "0.9", "weekly"),
     ("tarifs.html",                 "0.9", "monthly"),
     ("activites.html",              "0.8", "weekly"),
     ("academie.html",               "0.8", "monthly"),
