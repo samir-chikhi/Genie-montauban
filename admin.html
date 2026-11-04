@@ -218,9 +218,15 @@ textarea{resize:vertical;min-height:65px}
   <div class="login-box">
     <h2>🔐 Génie Admin</h2>
     <p>Espace réservé à l'équipe Génie Montauban</p>
-    <input type="password" id="login-pwd" placeholder="Mot de passe" onkeydown="if(event.key==='Enter')checkLogin()">
+    <select id="login-qui" aria-label="Qui êtes-vous ?" style="width:100%;padding:11px;margin-bottom:10px;border-radius:8px;font:inherit">
+      <option value="__samir">Moi — Samir (super admin)</option>
+      <option value="Loic">Loic — accès Accueil</option>
+      <option value="Andrea">Andrea — accès Accueil</option>
+      <option value="Marcelle">Marcelle — accès Accueil</option>
+    </select>
+    <input type="password" id="login-pwd" placeholder="Mot de passe" autocomplete="current-password" onkeydown="if(event.key==='Enter')checkLogin()">
     <button onclick="checkLogin()">Se connecter</button>
-    <div class="login-err" id="login-err">Mot de passe incorrect.</div>
+    <div class="login-err" id="login-err">Identifiants incorrects.</div>
   </div>
 </div>
 
@@ -242,16 +248,17 @@ textarea{resize:vertical;min-height:65px}
     </div>
     <nav class="nav">
       <div class="nav-s">Principal</div>
-      <div class="nav-item active" onclick="go('dashboard')">📊 Tableau de bord</div>
+      <div class="nav-item active" onclick="go('dashboard')">☀️ Aujourd'hui</div>
       <div class="nav-item" onclick="go('planning')">📅 Planning</div>
       <div class="nav-item" onclick="go('reservations')">📋 Réservations</div>
       <div class="nav-s">Gestion</div>
       <div class="nav-item" onclick="go('adhesions')">🤝 Adhésions <span id="nav-adh-badge" class="nav-count" hidden></span></div>
-      <div class="nav-item" onclick="go('clients')">👥 Clients</div>
-      <div class="nav-item" onclick="go('membres')">💌 Inviter des membres</div>
-      <div class="nav-item" onclick="go('espaces')">🏢 Espaces & Tarifs</div>
-      <div class="nav-s">Outils</div>
-      <div class="nav-item" onclick="go('donnees')">💾 Données & Config</div>
+      <div class="nav-item" data-resp onclick="go('clients')">👥 Clients</div>
+      <div class="nav-item" data-resp onclick="go('membres')">💌 Inviter des membres</div>
+      <div class="nav-item" data-resp onclick="go('espaces')">🏢 Espaces & Tarifs</div>
+      <div class="nav-s" data-resp>Outils</div>
+      <div class="nav-item" data-resp onclick="go('equipe')">🧑‍🤝‍🧑 Équipe & journal</div>
+      <div class="nav-item" data-resp onclick="go('donnees')">💾 Données & Config</div>
     </nav>
     <div class="sync-bar">
       <div class="dot loading" id="dot"></div>
@@ -287,8 +294,26 @@ textarea{resize:vertical;min-height:65px}
 
       <!-- ════════════════ PAGE DASHBOARD ════════════════ -->
       <div id="page-dashboard" class="page active">
-        <div class="stats-grid" id="stats"></div>
-        <div style="display:grid;grid-template-columns:2fr 1fr;gap:18px">
+        <p style="font-size:18px;font-weight:600;margin:0 0 14px">Bonjour <span id="hello-nom"></span> <span style="font-size:12.5px;font-weight:400;opacity:.65">· rôle <span id="hello-role"></span></span>
+          <button class="btn btn-sm btn-ghost" style="float:right" onclick="toggleAide()">❓ Aide</button></p>
+        <div class="info-bar" id="aide-box" style="display:none;line-height:1.6">
+          <strong>Comment ça marche</strong><br>
+          1. Dans « À traiter », cliquez <b>Confirmer</b> ou <b>Refuser</b> : le client est prévenu par e-mail.<br>
+          2. <b>Modifier</b> change la date, l'horaire, la salle ou le prix. Si vous changez le prix, choisissez un motif.<br>
+          3. « Aujourd'hui et demain » montre qui vient et dans quelle salle.<br>
+          4. Un doute ? Ne supprimez rien : mettez la réservation « En attente » et prévenez le responsable.<br>
+          Toutes vos actions sont notées dans le journal.
+        </div>
+        <div class="card" style="margin-bottom:18px">
+          <div class="card-hd"><h3>📥 À traiter</h3><span class="badge b-pending" id="todo-count">0</span></div>
+          <div id="todo-list"></div>
+        </div>
+        <div class="card" style="margin-bottom:18px">
+          <div class="card-hd"><h3>📅 Aujourd'hui et demain</h3></div>
+          <div id="today-list"></div>
+        </div>
+        <div class="stats-grid" id="stats" data-resp-only-stats></div>
+        <div style="display:grid;grid-template-columns:2fr 1fr;gap:18px" data-resp-only-stats>
           <div class="card">
             <div class="card-hd">
               <h3>Réservations récentes</h3>
@@ -444,6 +469,35 @@ textarea{resize:vertical;min-height:65px}
         </div>
       </div>
 
+      <!-- ════════════════ PAGE ÉQUIPE ════════════════ -->
+      <div id="page-equipe" class="page">
+        <div class="info-bar">ℹ️ Chaque bénévole a son propre code. Le code n'est affiché qu'une seule fois, à la création : notez-le et transmettez-le à la personne. Retirer un bénévole coupe immédiatement son accès.</div>
+        <div class="card" style="padding:20px;margin-bottom:18px">
+          <h3 style="margin:0 0 10px">Ajouter un bénévole</h3>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+            <input type="text" id="eq-nom" placeholder="Prénom (ex. Marie)" style="padding:9px;border:1.5px solid var(--border,#ddd);border-radius:8px;font:inherit">
+            <select id="eq-role" style="padding:9px;border:1.5px solid var(--border,#ddd);border-radius:8px;font:inherit">
+              <option value="accueil">Accueil (réservations et adhésions)</option>
+              <option value="responsable">Responsable (accès complet)</option>
+            </select>
+            <button class="btn btn-primary" onclick="equipeAjouter()">Créer son code</button>
+          </div>
+          <div id="eq-code-box" style="display:none;margin-top:14px;padding:14px;border-radius:8px;background:#FFF8E1;border:1.5px solid #E0B84A">
+            <div style="font-size:13px">Code de <b id="eq-code-nom"></b> (à noter maintenant, il ne sera plus affiché) :</div>
+            <div id="eq-code" style="font-size:26px;font-weight:700;letter-spacing:2px;margin:6px 0;font-family:monospace"></div>
+            <button class="btn btn-sm btn-secondary" onclick="copierCode()">Copier</button>
+          </div>
+        </div>
+        <div class="card" style="margin-bottom:18px">
+          <div class="card-hd"><h3>Équipe</h3></div>
+          <div id="eq-liste"></div>
+        </div>
+        <div class="card">
+          <div class="card-hd"><h3>Journal des actions (300 dernières)</h3><button class="btn btn-sm btn-ghost" onclick="chargerJournal()">🔄 Actualiser</button></div>
+          <div class="tw"><table><thead><tr><th>Date</th><th>Qui</th><th>Action</th><th>Réf.</th><th>Détail</th></tr></thead><tbody id="journal-body"></tbody></table></div>
+        </div>
+      </div>
+
       <!-- ════════════════ PAGE ESPACES ════════════════ -->
       <div id="page-espaces" class="page">
         <div class="info-bar">ℹ️ Tarifs 2026 Génie Montauban. Modifications sauvegardées dans Google Sheets.</div>
@@ -592,6 +646,17 @@ textarea{resize:vertical;min-height:65px}
           <input type="number" id="r-montant-perso" min="0" step="0.5" placeholder="laisser vide = tarif grille">
           <span class="hint">Remplace le prix calculé. Pour un total sur plusieurs séances, c'est le prix PAR séance.</span>
         </div>
+        <div class="fg" id="r-motif-fg" style="display:none">
+          <label>Motif du changement de prix *</label>
+          <select id="r-motif">
+            <option value="">Choisir un motif</option>
+            <option>Tarif association</option>
+            <option>Geste commercial</option>
+            <option>Erreur de calcul</option>
+            <option>Accord avec le responsable</option>
+          </select>
+          <span class="hint">Obligatoire pour les bénévoles. Noté dans le journal.</span>
+        </div>
         <div class="fg">
           <label>Répéter</label>
           <select id="r-repeat">
@@ -630,8 +695,8 @@ textarea{resize:vertical;min-height:65px}
     </div>
     <div class="mfoot">
       <button class="btn btn-ghost" onclick="closeModal('mresa')">Annuler</button>
-      <button class="btn btn-secondary" onclick="saveResa(true)">💾 Enregistrer</button>
-      <button class="btn btn-primary" onclick="saveResa(false)">💾 + Email client</button>
+      <button class="btn btn-secondary" onclick="saveResa(true)">💾 Enregistrer sans prévenir le client</button>
+      <button class="btn btn-primary" onclick="saveResa(false)">💾 Enregistrer et prévenir le client</button>
     </div>
   </div>
 </div>
@@ -775,11 +840,35 @@ let showCal     = true;    // toggle affichage couche Calendar
 // v5 : le mot de passe est vérifié CÔTÉ SERVEUR (ADMIN_LOGIN) qui délivre
 // un token de session (8h), exigé ensuite par toutes les actions admin.
 let ADMIN_TOKEN = sessionStorage.getItem('genie_admin_token') || '';
+// Rôle : 'responsable' (tout) ou 'accueil' (bénévole). Ne sert qu'à masquer des boutons :
+// les droits sont vérifiés côté serveur.
+let ROLE = sessionStorage.getItem('genie_admin_role') || 'responsable';
+let WHO  = sessionStorage.getItem('genie_admin_nom') || '';
+const estResp = () => ROLE === 'responsable';
+
+// Liste déroulante : noms des membres actifs, lus côté serveur (repli : liste ci-dessus).
+async function chargerListeQui() {
+  try {
+    const r = await fetch(APPS_SCRIPT_URL_DEFAULT + '?action=EQUIPE_NOMS', { redirect: 'follow' });
+    const d = await r.json();
+    if (!d || !Array.isArray(d.equipe)) return;
+    const sel = document.getElementById('login-qui');
+    sel.innerHTML = '<option value="__samir">Moi — Samir (super admin)</option>' +
+      d.equipe.map(m => '<option value="' + esc(m.nom) + '">' + esc(m.nom) + ' — accès ' + (m.role === 'responsable' ? 'complet' : 'Accueil') + '</option>').join('');
+  } catch (e) { /* on garde la liste par défaut */ }
+}
+document.addEventListener('DOMContentLoaded', chargerListeQui);
 
 async function checkLogin() {
-  const pwd = document.getElementById('login-pwd').value;
+  const qui    = document.getElementById('login-qui').value;
+  const modeResp = qui === '__samir';
+  const pwd    = document.getElementById('login-pwd').value;
+  const prenom = modeResp ? '' : qui;
+  const code   = modeResp ? '' : pwd.trim();
   const err = document.getElementById('login-err');
-  if (!pwd) return;
+  if (modeResp ? !pwd : (!prenom || !code)) return;
+  const corps = modeResp ? { action: 'ADMIN_LOGIN', password: pwd }
+                         : { action: 'ADMIN_LOGIN', prenom, code };
   try {
     // Le mot de passe voyageait dans l'URL (?payload=…) : il atterrissait dans
     // l'historique du navigateur et dans les journaux d'exécution Apps Script.
@@ -790,26 +879,28 @@ async function checkLogin() {
       const r = await fetch(APPS_SCRIPT_URL_DEFAULT, {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({ action: 'ADMIN_LOGIN', password: pwd }),
+        body: JSON.stringify(corps),
         redirect: 'follow'
       });
       data = await r.json();
     } catch (ePost) {
       // Repli sur l'ancien appel si le POST échoue (déploiement non à jour).
       const url = new URL(APPS_SCRIPT_URL_DEFAULT);
-      url.searchParams.set('payload', JSON.stringify({ action: 'ADMIN_LOGIN', password: pwd }));
+      url.searchParams.set('payload', JSON.stringify(corps));
       const r2 = await fetch(url.toString(), { redirect: 'follow' });
       data = await r2.json();
     }
     if (data && data.success && data.token) {
       ADMIN_TOKEN = data.token;
       sessionStorage.setItem('genie_admin_token', ADMIN_TOKEN);
+      ROLE = data.role || 'responsable'; WHO = data.nom || '';
+      sessionStorage.setItem('genie_admin_role', ROLE); sessionStorage.setItem('genie_admin_nom', WHO);
       document.getElementById('login-pwd').value = '';
       document.getElementById('login-screen').classList.add('hidden');
       document.getElementById('main-layout').style.display = 'flex';
       init();
     } else {
-      err.textContent = (data && data.message) || 'Mot de passe incorrect.';
+      err.textContent = (data && data.message) || 'Identifiants incorrects.';
       err.style.display = 'block';
       setTimeout(() => err.style.display = 'none', 3500);
     }
@@ -823,7 +914,7 @@ async function checkLogin() {
 // Session expirée ou invalide → retour à l'écran de connexion
 function logoutAdmin() {
   ADMIN_TOKEN = '';
-  sessionStorage.removeItem('genie_admin_token');
+  sessionStorage.removeItem('genie_admin_token'); sessionStorage.removeItem('genie_admin_role'); sessionStorage.removeItem('genie_admin_nom');
   document.getElementById('main-layout').style.display = 'none';
   document.getElementById('login-screen').classList.remove('hidden');
 }
@@ -842,6 +933,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // INIT
 // ─────────────────────────────────────────────────────────
 function init() {
+  appliquerRole();
   const stored = localStorage.getItem('genie_script_url');
   SCRIPT_URL = stored || APPS_SCRIPT_URL_DEFAULT;
   document.getElementById('url-display').textContent = SCRIPT_URL || '—';
@@ -849,6 +941,17 @@ function init() {
   loadData(false);
   setInterval(() => loadData(false), 30000);
   go('dashboard');
+}
+
+// ─────────────────────────────────────────────────────────
+// RÔLE : adapte le menu et les boutons
+// ─────────────────────────────────────────────────────────
+function appliquerRole() {
+  const resp = estResp();
+  document.querySelectorAll('[data-resp]').forEach(el => { el.style.display = resp ? '' : 'none'; });
+  document.querySelectorAll('[data-resp-only-stats]').forEach(el => { el.style.display = resp ? '' : 'none'; });
+  const nm = document.getElementById('hello-nom'); if (nm) nm.textContent = resp ? (WHO && WHO !== 'Responsable' ? WHO : '') : WHO;
+  const rl = document.getElementById('hello-role'); if (rl) rl.textContent = resp ? 'responsable' : 'accueil';
 }
 
 // ─────────────────────────────────────────────────────────
@@ -978,9 +1081,16 @@ async function saveResa(silent) {
   const total = perso !== '' ? parseFloat(perso.replace(',','.')) || 0
                               : m + (badge?5:0) + (adhesion?50:0);
   const now   = new Date().toISOString();
+  // Changement de prix : par rapport au prix enregistré (modification) ou à la grille (création)
+  const prixRef = editId ? Number((DB.reservations.find(r=>r.id===editId)||{}).montant) : (m + (badge?5:0) + (adhesion?50:0));
+  const prixChange = Math.abs(total - (prixRef||0)) > 0.001;
+  const motifPrix = prixChange ? gv('r-motif') : '';
+  if (prixChange && !estResp() && !motifPrix) { toast('Choisissez le motif du changement de prix','err'); return; }
 
   const resa = {
     id         : editId || genId(),
+    sansEmail  : !!silent,
+    motifPrix,
     prenom, nom, email,
     tel        : gv('r-tel'),
     orga       : gv('r-orga'),
@@ -1194,8 +1304,21 @@ document.addEventListener('click', e => {
   if (e.target.classList.contains('overlay')) { e.target.classList.remove('open'); editId=null; }
 });
 
+function majMotif() {
+  const perso = gv('r-montant-perso').trim();
+  const usage=gv('r-usage'), profil=gv('r-profil'), duree=gv('r-duree'), nbH=parseInt(gv('r-nbh'))||1;
+  const grille = calcMontant(gv('r-espace'), usage, profil, duree, nbH) + (gvb('r-badge')?5:0) + (gvb('r-adhesion')?50:0);
+  const prevR = editId ? DB.reservations.find(r=>r.id===editId) : null;
+  const ref = prevR ? Number(prevR.montant) : grille;
+  const change = perso !== '' && Math.abs((parseFloat(perso.replace(',','.'))||0) - ref) > 0.001;
+  document.getElementById('r-motif-fg').style.display = change ? '' : 'none';
+  if (!change) document.getElementById('r-motif').value = '';
+}
+document.addEventListener('input', e => { if (e.target && e.target.id === 'r-montant-perso') majMotif(); });
+
 function resetForm() {
   editId=null;
+  const _m = document.getElementById('r-motif'); if (_m) { _m.value=''; document.getElementById('r-motif-fg').style.display='none'; }
   document.getElementById('mresa-title').textContent='Nouvelle réservation';
   ['r-prenom','r-nom','r-email','r-tel','r-orga','r-objet'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
   gvSet('r-espace',''); gvSet('r-usage','reunion'); gvSet('r-profil','locataire');
@@ -1258,7 +1381,109 @@ function editResa(id) {
   document.getElementById('mdetail').classList.remove('open');
   document.getElementById('mresa-title').textContent='Modifier';
   calcModalPrix();
+  document.getElementById('r-motif').value=''; document.getElementById('r-motif-fg').style.display='none';
   openModal('mresa');
+}
+
+// ─────────────────────────────────────────────────────────
+// ÉCRAN « AUJOURD'HUI »
+// ─────────────────────────────────────────────────────────
+function toggleAide() { const b=document.getElementById('aide-box'); b.style.display = b.style.display==='none' ? '' : 'none'; }
+
+function renderToday() {
+  const iso = d => { const x=new Date(d); x.setMinutes(x.getMinutes()-x.getTimezoneOffset()); return x.toISOString().split('T')[0]; };
+  const tod = iso(new Date()), dem = iso(new Date(Date.now()+86400000));
+  const btn = (cls, fn, txt) => `<button class="btn btn-sm ${cls}" onclick="${fn}">${txt}</button>`;
+  const ligne = (titre, sous, actions) => `<div style="display:flex;align-items:center;gap:8px;padding:11px 16px;border-top:1px solid var(--border,#eee);flex-wrap:wrap">
+      <div style="flex:1;min-width:200px"><div style="font-weight:600;font-size:14px">${titre}</div><div style="font-size:12.5px;opacity:.75">${sous}</div></div>${actions}</div>`;
+
+  const att = DB.reservations.filter(r=>r.statut==='pending').sort((a,b)=>String(a.date).localeCompare(String(b.date)));
+  const adh = (DB.adhesions||[]).filter(a=>a.statut==='pending');
+  const impayes = DB.reservations.filter(r=>r.statut==='confirmed' && r.paiement==='EN_ATTENTE_PAIEMENT' && r.date>=tod);
+  let h = '';
+  att.forEach(r => { h += ligne(
+    `${esc(r.nomEspace||r.espace)} · ${fDate(r.date)}${r.heureDebut?', '+esc(r.heureDebut)+'–'+esc(r.heureFin||''):''}`,
+    `${esc(r.prenom)} ${esc(r.nom)}${r.orga?' · '+esc(r.orga):''} · ${fMoney(r.montant)}`,
+    btn('btn-secondary', `editResa('${escId(r.id)}')`, '✏️ Modifier') +
+    btn('btn-sage', `confirmerAujourdhui('${escId(r.id)}')`, '✓ Confirmer') +
+    btn('btn-danger', `refuserAujourdhui('${escId(r.id)}')`, 'Refuser')); });
+  adh.forEach(a => { h += ligne(`Adhésion · ${esc(a.prenom||'')} ${esc(a.nom||'')}`, 'Demande à valider',
+    btn('btn-sage', `setAdhesionStatut('${esc(a.id)}','CONFIRME')`, '✓ Valider') +
+    btn('btn-danger', `setAdhesionStatut('${esc(a.id)}','ANNULE')`, 'Refuser')); });
+  impayes.forEach(r => { h += ligne(`Paiement attendu · ${esc(r.nomEspace||r.espace)} · ${fDate(r.date)}`,
+    `${esc(r.prenom)} ${esc(r.nom)} · ${fMoney(r.montant)} · confirmée, pas encore réglée`,
+    btn('btn-ghost', `showDetail('${escId(r.id)}')`, 'Voir')); });
+  const n = att.length + adh.length + impayes.length;
+  document.getElementById('todo-count').textContent = n;
+  document.getElementById('todo-list').innerHTML = h || '<div style="padding:18px 16px;color:var(--sage,#2e7d32);font-weight:600">✔ Rien à faire. Tout est à jour.</div>';
+
+  const jours = DB.reservations.filter(r=>(r.date===tod||r.date===dem) && r.statut!=='cancelled')
+    .sort((a,b)=>(a.date+(a.heureDebut||'')).localeCompare(b.date+(b.heureDebut||'')));
+  document.getElementById('today-list').innerHTML = jours.map(r => ligne(
+    `${r.date===tod?"Aujourd'hui":'Demain'} ${esc(r.heureDebut||'')}${r.heureFin?'–'+esc(r.heureFin):''} · ${esc(r.nomEspace||r.espace)}`,
+    `${esc(r.prenom)} ${esc(r.nom)}${r.participants>1?' · '+r.participants+' pers.':''}${r.statut==='pending'?' · <b>en attente</b>':''}`,
+    btn('btn-ghost', `showDetail('${escId(r.id)}')`, 'Voir'))).join('')
+    || "<div style='padding:18px 16px;opacity:.7'>Rien de prévu aujourd'hui ni demain.</div>";
+}
+
+async function confirmerAujourdhui(id) {
+  const r = DB.reservations.find(x=>x.id===id); if (!r) return;
+  if (!confirm('Confirmer cette réservation ? Le client sera prévenu par e-mail.')) return;
+  await updateStatut(id, 'confirmed');
+}
+async function refuserAujourdhui(id) {
+  const r = DB.reservations.find(x=>x.id===id); if (!r) return;
+  if (!confirm('Refuser cette réservation ? Elle sera annulée.')) return;
+  await updateStatut(id, 'cancelled');
+}
+
+// ─────────────────────────────────────────────────────────
+// ÉQUIPE & JOURNAL (responsable)
+// ─────────────────────────────────────────────────────────
+async function renderEquipe() {
+  const box = document.getElementById('eq-liste');
+  box.innerHTML = '<div style="padding:16px">Chargement…</div>';
+  try {
+    const d = await apiPost({ action:'EQUIPE_LISTE' });
+    box.innerHTML = (d.equipe||[]).map(m => `<div style="display:flex;align-items:center;gap:10px;padding:11px 16px;border-top:1px solid var(--border,#eee);flex-wrap:wrap;${m.actif?'':'opacity:.5'}">
+        <div style="flex:1;min-width:160px"><b>${esc(m.nom)}</b> <span style="font-size:12.5px;opacity:.7">· ${m.role==='responsable'?'responsable':'accueil'}${m.actif?'':' · retiré'}</span></div>
+        ${m.actif?`<button class="btn btn-sm btn-secondary" onclick="equipeNouveauCode('${escId(m.id)}')">Nouveau code</button>
+        <button class="btn btn-sm btn-danger" onclick="equipeRetirer('${escId(m.id)}','${esc(m.nom)}')">Retirer</button>`:
+        `<button class="btn btn-sm btn-secondary" onclick="equipeNouveauCode('${escId(m.id)}')">Réactiver (nouveau code)</button>`}
+      </div>`).join('') || "<div style='padding:16px;opacity:.7'>Aucun bénévole pour l'instant.</div>";
+  } catch(e) { box.innerHTML = '<div style="padding:16px;color:#b00">'+esc(e.message)+'</div>'; }
+  chargerJournal();
+}
+function afficherCode(nom, code) {
+  document.getElementById('eq-code-nom').textContent = nom;
+  document.getElementById('eq-code').textContent = code;
+  document.getElementById('eq-code-box').style.display = '';
+}
+function copierCode() { if (navigator.clipboard) navigator.clipboard.writeText(document.getElementById('eq-code').textContent).then(()=>toast('Code copié')); }
+async function equipeAjouter() {
+  const nom = gv('eq-nom').trim(); if (!nom) { toast('Indiquez un prénom','err'); return; }
+  try {
+    const d = await apiPost({ action:'EQUIPE_AJOUTER', nom, role: gv('eq-role') });
+    afficherCode(d.nom, d.code); document.getElementById('eq-nom').value=''; renderEquipe();
+  } catch(e) { toast('Erreur : '+e.message,'err'); }
+}
+async function equipeNouveauCode(id) {
+  if (!confirm("Générer un nouveau code ? L'ancien ne marchera plus et la personne sera déconnectée.")) return;
+  try { const d = await apiPost({ action:'EQUIPE_NOUVEAU_CODE', id }); afficherCode(d.nom, d.code); renderEquipe(); }
+  catch(e) { toast('Erreur : '+e.message,'err'); }
+}
+async function equipeRetirer(id, nom) {
+  if (!confirm('Retirer '+nom+' ? Son accès est coupé immédiatement.')) return;
+  try { await apiPost({ action:'EQUIPE_RETIRER', id }); toast('Accès retiré'); renderEquipe(); }
+  catch(e) { toast('Erreur : '+e.message,'err'); }
+}
+async function chargerJournal() {
+  const tb = document.getElementById('journal-body');
+  try {
+    const d = await apiPost({ action:'JOURNAL' });
+    tb.innerHTML = (d.journal||[]).map(j => `<tr><td>${esc(j.date)}</td><td>${esc(j.qui)}</td><td>${esc(j.action)}</td><td>${esc(j.cible)}</td><td>${esc(j.detail)}</td></tr>`).join('')
+      || '<tr><td colspan="5" style="text-align:center;padding:20px;opacity:.7">Journal vide</td></tr>';
+  } catch(e) { tb.innerHTML = '<tr><td colspan="5" style="color:#b00;padding:14px">'+esc(e.message)+'</td></tr>'; }
 }
 
 // ─────────────────────────────────────────────────────────
@@ -1358,7 +1583,8 @@ ${r.options?`<tr><td>Options</td><td>${esc(r.options)}</td></tr>`:''}
 // NAVIGATION
 // ─────────────────────────────────────────────────────────
 const PAGE_T = {
-  dashboard   : 'Tableau de bord',
+  dashboard   : "Aujourd'hui",
+  equipe      : 'Équipe et journal',
   planning    : 'Planning semaine',
   reservations: 'Réservations',
   adhesions   : 'Adhésions',
@@ -1407,7 +1633,7 @@ function go(name) {
   document.getElementById('ptitle').textContent = PAGE_T[name];
   document.getElementById('topbar-actions').innerHTML =
     `<button class="btn btn-ghost btn-sm" onclick="loadData(true)">🔄 Actualiser</button>` +
-    (!['espaces','donnees','adhesions','membres'].includes(name) ? `<button class="btn btn-primary" onclick="openModal('mresa')">➕ Nouvelle réservation</button>` : '');
+    (!['espaces','donnees','adhesions','membres','equipe'].includes(name) ? `<button class="btn btn-primary" onclick="openModal('mresa')">➕ Nouvelle réservation</button>` : '');
   refreshPage(name);
 }
 
@@ -1420,12 +1646,15 @@ function refreshPage(name) {
   else if (n==='clients')      renderClients();
   else if (n==='espaces')      renderEspaces();
   else if (n==='donnees')      renderDonnees();
+  else if (n==='equipe')       renderEquipe();
 }
 
 // ─────────────────────────────────────────────────────────
 // DASHBOARD
 // ─────────────────────────────────────────────────────────
 function renderDashboard() {
+  renderToday();
+  if (!estResp()) return;
   const R=DB.reservations, now=new Date(), m=now.getMonth(), y=now.getFullYear();
   const mR=R.filter(r=>{ const d=new Date(r.date+'T12:00:00'); return d.getMonth()===m&&d.getFullYear()===y&&r.statut!=='cancelled'; });
   const caM  = mR.reduce((s,r)=>s+Number(r.montant),0);
@@ -1631,7 +1860,7 @@ function showDetail(id) {
     <button class="btn btn-ghost" onclick="printResa('${escId(r.id)}')">🖨️ PDF</button>
     ${r.statut==='pending'?`<button class="btn btn-sage" onclick="updateStatut('${escId(r.id)}','confirmed')">✓ Confirmer</button>`:''}
     ${r.statut!=='cancelled'?`<button class="btn btn-danger btn-sm" onclick="updateStatut('${escId(r.id)}','cancelled')">Annuler</button>`:''}
-    <button class="btn btn-danger btn-sm" onclick="deleteResa('${escId(r.id)}')">🗑️</button>`;
+    ${estResp()?`<button class="btn btn-danger btn-sm" onclick="deleteResa('${escId(r.id)}')">🗑️</button>`:''}`;
 
   openModal('mdetail');
 }

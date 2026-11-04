@@ -224,12 +224,21 @@ function ecrireSessions(sessions) {
   PropertiesService.getScriptProperties().setProperty('ADMIN_SESSIONS', JSON.stringify(sessions));
 }
 
-function creerSessionAdmin() {
+// Une session vaut soit un nombre (ancien format = expiration, rôle responsable),
+// soit { exp, role, nom, id } pour un membre de l'équipe.
+function expirationSession(s) { return typeof s === 'number' ? s : (s && s.exp) || 0; }
+
+function creerSessionAdmin(role, nom, id) {
   var sessions = lireSessions();
   var now = Date.now();
-  Object.keys(sessions).forEach(function(t) { if (sessions[t] < now) delete sessions[t]; });
+  Object.keys(sessions).forEach(function(t) { if (expirationSession(sessions[t]) < now) delete sessions[t]; });
   var token = Utilities.getUuid() + '-' + hashSha256(String(Math.random()) + now).substring(0, 12);
-  sessions[token] = now + CONFIG.SESSION_ADMIN_H * 3600000;
+  sessions[token] = {
+    exp: now + CONFIG.SESSION_ADMIN_H * 3600000,
+    role: role || 'responsable',
+    nom: nom || 'Responsable',
+    id: id || ''
+  };
   ecrireSessions(sessions);
   return token;
 }
@@ -237,7 +246,15 @@ function creerSessionAdmin() {
 function verifierSessionAdmin(token) {
   if (!token) return false;
   var sessions = lireSessions();
-  return !!(sessions[token] && sessions[token] > Date.now());
+  return !!(sessions[token] && expirationSession(sessions[token]) > Date.now());
+}
+
+// { role, nom, id } de la session, ou null
+function infoSession(token) {
+  if (!verifierSessionAdmin(token)) return null;
+  var s = lireSessions()[token];
+  if (typeof s === 'number') return { role: 'responsable', nom: 'Responsable', id: '' };
+  return { role: s.role || 'responsable', nom: s.nom || '', id: s.id || '' };
 }
 
 // null si la session est valide, sinon l'objet d'erreur à renvoyer
@@ -245,6 +262,206 @@ function requireAdmin(data) {
   return verifierSessionAdmin(data && data.adminToken)
     ? null
     : { success: false, error: 'NON_AUTORISE', message: 'Session admin requise. Reconnectez-vous.' };
+}
+
+// ============================================================
+// ÉQUIPE (bénévoles) — codes personnels, rôles, journal
+// ============================================================
+// Rôles : 'responsable' (tout) ; 'accueil' (réservations et adhésions, sans
+// suppression définitive, sans tarifs/config/invitations/équipe).
+// Les codes ne sont JAMAIS stockés en clair : sel + hash dans les Propriétés
+// du script (propriété EQUIPE), comme le mot de passe responsable.
+var ALPHABET_CODE = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789'; // sans O/0/I/1/L
+
+function lireEquipe() {
+  try { return JSON.parse(PropertiesService.getScriptProperties().getProperty('EQUIPE') || '{}'); }
+  catch (e) { return {}; }
+}
+function ecrireEquipe(eq) {
+  PropertiesService.getScriptProperties().setProperty('EQUIPE', JSON.stringify(eq));
+}
+
+function genererCodeEquipe() {
+  var code = '';
+  for (var i = 0; i < 8; i++) code += ALPHABET_CODE.charAt(Math.floor(Math.random() * ALPHABET_CODE.length));
+  return code.substring(0, 4) + '-' + code.substring(4);
+}
+function normaliserCode(c) { return String(c || '').toUpperCase().replace(/[^A-Z0-9]/g, ''); }
+function normaliserPrenom(p) { return String(p || '').trim().toLowerCase(); }
+
+function adminEquipeListe() {
+  var eq = lireEquipe();
+  return { success: true, equipe: Object.keys(eq).map(function(id) {
+    return { id: id, nom: eq[id].nom, role: eq[id].role, actif: !!eq[id].actif, cree: eq[id].cree || '' };
+  }) };
+}
+
+// Liste publique des noms (menu déroulant de la page de connexion). Aucun code,
+// aucun hash : seulement prénom et niveau d'accès.
+function equipeNomsPublic() {
+  var eq = lireEquipe();
+  return { success: true, equipe: Object.keys(eq).filter(function(id) { return eq[id].actif; })
+    .map(function(id) { return { nom: eq[id].nom, role: eq[id].role }; }) };
+}
+
+// À exécuter UNE FOIS depuis l'éditeur Apps Script : crée Loic, Andrea et Marcelle
+// (accès Accueil) avec un code aléatoire chacun. Les codes s'affichent dans les
+// « Journaux d'exécution » et ne sont stockés nulle part en clair.
+// Relancer la fonction ne recrée pas un compte déjà actif.
+function creerBenevolesInitiaux() {
+  ['Loic', 'Andrea', 'Marcelle'].forEach(function(nom) {
+    var r = adminEquipeAjouter({ nom: nom, role: 'accueil' });
+    Logger.log(r.success ? nom + ' : ' + r.code : nom + ' : ' + r.error);
+  });
+  Logger.log('Notez chaque code maintenant et transmettez-le en privé. Il ne sera plus affiché.');
+}
+
+function adminEquipeAjouter(data) {
+  var nom = String(data.nom || '').trim();
+  if (!nom) return { success: false, error: 'Prénom obligatoire.' };
+  var role = data.role === 'responsable' ? 'responsable' : 'accueil';
+  var eq = lireEquipe();
+  var existe = Object.keys(eq).some(function(id) {
+    return eq[id].actif && normaliserPrenom(eq[id].nom) === normaliserPrenom(nom);
+  });
+  if (existe) return { success: false, error: 'Un membre actif porte déjà ce prénom. Ajoutez une initiale (ex. « Marie D »).' };
+  var code = genererCodeEquipe();
+  var sel = Utilities.getUuid();
+  var id = 'M' + Date.now();
+  eq[id] = { nom: nom, role: role, sel: sel, hash: hashMotDePasseAdmin(normaliserCode(code), sel),
+             actif: true, cree: new Date().toISOString() };
+  ecrireEquipe(eq);
+  return { success: true, id: id, nom: nom, role: role, code: code };
+}
+
+function adminEquipeNouveauCode(data) {
+  var eq = lireEquipe();
+  var m = eq[data.id];
+  if (!m) return { success: false, error: 'Membre introuvable.' };
+  var code = genererCodeEquipe();
+  m.sel = Utilities.getUuid();
+  m.hash = hashMotDePasseAdmin(normaliserCode(code), m.sel);
+  m.actif = true;
+  ecrireEquipe(eq);
+  fermerSessionsDe(data.id);
+  return { success: true, id: data.id, nom: m.nom, code: code };
+}
+
+function adminEquipeRetirer(data) {
+  var eq = lireEquipe();
+  if (!eq[data.id]) return { success: false, error: 'Membre introuvable.' };
+  eq[data.id].actif = false;
+  ecrireEquipe(eq);
+  fermerSessionsDe(data.id);
+  return { success: true };
+}
+
+function fermerSessionsDe(id) {
+  var sessions = lireSessions();
+  Object.keys(sessions).forEach(function(t) {
+    if (sessions[t] && typeof sessions[t] === 'object' && sessions[t].id === id) delete sessions[t];
+  });
+  ecrireSessions(sessions);
+}
+
+// Connexion d'un membre : prénom + code personnel. Limite de tentatives PAR
+// prénom, pour qu'une faute de frappe (ou un tiers) ne bloque pas les autres.
+function adminLoginEquipe(data) {
+  var prenom = normaliserPrenom(data.prenom);
+  if (!prenom) return { success: false, message: 'Indiquez votre prénom.' };
+  if (!rateLimitOk('adminlogin_' + prenom))
+    return { success: false, error: 'TROP_DE_REQUETES', message: 'Trop de tentatives. Réessayez dans une heure.' };
+  var code = normaliserCode(data.code);
+  var eq = lireEquipe();
+  var trouve = null;
+  Object.keys(eq).forEach(function(id) {
+    var m = eq[id];
+    if (m.actif && normaliserPrenom(m.nom) === prenom && comparaisonConstante(hashMotDePasseAdmin(code, m.sel), m.hash)) trouve = id;
+  });
+  if (!trouve) return { success: false, message: 'Prénom ou code incorrect.' };
+  var m2 = eq[trouve];
+  journaliser({ nom: m2.nom, role: m2.role }, 'Connexion', '', '');
+  return { success: true, token: creerSessionAdmin(m2.role, m2.nom, trouve),
+           role: m2.role, nom: m2.nom, expireDansH: CONFIG.SESSION_ADMIN_H };
+}
+
+// Journal : onglet « Journal » (date, qui, rôle, action, cible, détail).
+// Ne contient aucun secret. Une erreur de journal ne bloque jamais l'action.
+function journaliser(qui, action, cible, detail) {
+  try {
+    var ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+    var sh = ss.getSheetByName('Journal');
+    if (!sh) { sh = ss.insertSheet('Journal'); sh.appendRow(['date', 'qui', 'role', 'action', 'cible', 'detail']); }
+    sh.appendRow([Utilities.formatDate(new Date(), 'Europe/Paris', 'yyyy-MM-dd HH:mm:ss'),
+      (qui && qui.nom) || '', (qui && qui.role) || '', action, cible || '', detail || '']);
+  } catch (e) { logErreur('journaliser', e); }
+}
+
+function adminJournal() {
+  try {
+    var sh = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID).getSheetByName('Journal');
+    if (!sh) return { success: true, journal: [] };
+    var rows = sh.getDataRange().getValues().slice(1).slice(-300).reverse();
+    return { success: true, journal: rows.map(function(r) {
+      return { date: String(r[0]), qui: r[1], role: r[2], action: r[3], cible: r[4], detail: r[5] };
+    }) };
+  } catch (e) { logErreur('adminJournal', e); return { success: false, error: 'Journal illisible.' }; }
+}
+
+// Plafond de remise pour le rôle accueil (en % du prix de la grille).
+// 100 = pas de plafond. Au-delà, l'accord du responsable est requis.
+var PLAFOND_REMISE_ACCUEIL_PCT = 30;
+
+// Droits par action : true = tout membre connecté ; 'responsable' = réservé.
+var ACTIONS_ADMIN = {
+  addResa: true, updateResa: true, ADMIN_UPDATE_STATUS: true,
+  deleteResa: 'responsable', saveConfig: 'responsable', INVITER_MEMBRES: 'responsable',
+  EQUIPE_LISTE: 'responsable', EQUIPE_AJOUTER: 'responsable',
+  EQUIPE_NOUVEAU_CODE: 'responsable', EQUIPE_RETIRER: 'responsable', JOURNAL: 'responsable'
+};
+
+// Contrôle du prix saisi par un membre « accueil ». montantAvant = montant déjà
+// enregistré (ou montantBase pour une création). null si tout va bien.
+function controlerPrixAccueil(resa, montantAvant, qui) {
+  if (!qui || qui.role === "responsable") return null;
+  var montant = parseFloat(resa.montant) || 0;
+  var base = parseFloat(resa.montantBase) || 0;
+  // Prix inchangé : rien à contrôler (ex. simple confirmation d'une remise déjà accordée)
+  if (Math.abs(montant - (parseFloat(montantAvant) || 0)) <= 0.001) return null;
+  if (!String(resa.motifPrix || "").trim())
+    return { success: false, error: "Indiquez le motif du changement de prix." };
+  if (base > 0 && montant < base * (1 - PLAFOND_REMISE_ACCUEIL_PCT / 100) - 0.001)
+    return { success: false, error: "Remise supérieure à " + PLAFOND_REMISE_ACCUEIL_PCT + " % : l'accord du responsable est nécessaire." };
+  return null;
+}
+
+function routeAdmin(data) {
+  var err = requireAdmin(data);
+  if (err) return err;
+  var qui = infoSession(data.adminToken);
+  if (ACTIONS_ADMIN[data.action] === 'responsable' && qui.role !== 'responsable')
+    return { success: false, error: 'Cette action est réservée au responsable.' };
+  data._qui = qui;
+  var res;
+  switch (data.action) {
+    case 'addResa':  res = adminAddResa(data.resa, qui); break;
+    case 'updateResa': res = adminUpdateResa(data.resa, qui); break;
+    case 'deleteResa': res = adminDeleteResa(data.id); journaliser(qui, 'Suppression', data.id, ''); break;
+    case 'saveConfig': res = adminSaveConfig(data.config); break;
+    case 'ADMIN_UPDATE_STATUS': res = adminUpdateStatus(data);
+      journaliser(qui, 'Statut ' + data.type, data.id, data.statut); break;
+    case 'INVITER_MEMBRES': res = adminInviterMembres(data); break;
+    case 'EQUIPE_LISTE': res = adminEquipeListe(); break;
+    case 'EQUIPE_AJOUTER': res = adminEquipeAjouter(data);
+      journaliser(qui, 'Équipe : ajout', data.nom, data.role || 'accueil'); break;
+    case 'EQUIPE_NOUVEAU_CODE': res = adminEquipeNouveauCode(data);
+      journaliser(qui, 'Équipe : nouveau code', data.id, ''); break;
+    case 'EQUIPE_RETIRER': res = adminEquipeRetirer(data);
+      journaliser(qui, 'Équipe : retrait', data.id, ''); break;
+    case 'JOURNAL': res = adminJournal(); break;
+    default: res = { success: false, error: 'Action inconnue: ' + data.action };
+  }
+  return res;
 }
 
 // ============================================================
@@ -521,13 +738,14 @@ function doPost(e) {
       case 'SALON_VISITE':            return ok(salonVisite(data));
       case 'SALON_RAPPEL':            return ok(salonRappel(data));
       // ── Actions admin : session vérifiée côté serveur ──
-      case 'addResa':                 return ok(requireAdmin(data) || adminAddResa(data.resa));
-      case 'updateResa':              return ok(requireAdmin(data) || adminUpdateResa(data.resa));
-      case 'deleteResa':              return ok(requireAdmin(data) || adminDeleteResa(data.id));
-      case 'saveConfig':              return ok(requireAdmin(data) || adminSaveConfig(data.config));
-      case 'ADMIN_LOGIN':             return ok(adminLogin(data));
-      case 'ADMIN_UPDATE_STATUS':     return ok(requireAdmin(data) || adminUpdateStatus(data));
-      case 'INVITER_MEMBRES':         return ok(requireAdmin(data) || adminInviterMembres(data));
+      case 'addResa': return ok(routeAdmin(data));
+      case 'updateResa': return ok(routeAdmin(data));
+      case 'deleteResa': return ok(routeAdmin(data));
+      case 'saveConfig': return ok(routeAdmin(data));
+      case 'ADMIN_LOGIN': return ok(adminLogin(data));
+      case 'EQUIPE_LISTE': case 'EQUIPE_AJOUTER': case 'EQUIPE_NOUVEAU_CODE': case 'EQUIPE_RETIRER': case 'JOURNAL': return ok(routeAdmin(data));
+      case 'ADMIN_UPDATE_STATUS': return ok(routeAdmin(data));
+      case 'INVITER_MEMBRES': return ok(routeAdmin(data));
       default: return ok({ success: false, error: 'Action inconnue: ' + data.action });
     }
   } catch (err) {
@@ -546,6 +764,7 @@ function doGet(e) {
     if (a === 'GET_RESERVATIONS')  return ok(getReservations(e.parameter));
     if (a === 'VALIDER_TOKEN')     return ok(validerToken(e.parameter));
     if (a === 'GET_AVIS')          return ok(getAvis());
+    if (a === 'EQUIPE_NOMS')       return ok(equipeNomsPublic());
     // ── Lectures admin : session vérifiée côté serveur ──
     if (a === 'getAll' || a === 'ADMIN_GET_ALL')
       return ok(requireAdmin(e.parameter) || adminGetAll());
@@ -565,13 +784,14 @@ function doGet(e) {
         case 'INSCRIPTION_ACADEMIE': return ok(traiterInscriptionAcademie(data));
         case 'PROPOSITION_FORMATEUR': return ok(traiterPropositionFormateur(data));
         // ── Actions admin : session vérifiée côté serveur ──
-        case 'addResa':             return ok(requireAdmin(data) || adminAddResa(data.resa));
-        case 'updateResa':          return ok(requireAdmin(data) || adminUpdateResa(data.resa));
-        case 'deleteResa':          return ok(requireAdmin(data) || adminDeleteResa(data.id));
-        case 'ADMIN_LOGIN':         return ok(adminLogin(data));
-        case 'ADMIN_UPDATE_STATUS': return ok(requireAdmin(data) || adminUpdateStatus(data));
-        case 'INVITER_MEMBRES':     return ok(requireAdmin(data) || adminInviterMembres(data));
-        case 'saveConfig':          return ok(requireAdmin(data) || adminSaveConfig(data.config));
+        case 'addResa': return ok(routeAdmin(data));
+        case 'updateResa': return ok(routeAdmin(data));
+        case 'deleteResa': return ok(routeAdmin(data));
+        case 'ADMIN_LOGIN': return ok(adminLogin(data));
+        case 'EQUIPE_LISTE': case 'EQUIPE_AJOUTER': case 'EQUIPE_NOUVEAU_CODE': case 'EQUIPE_RETIRER': case 'JOURNAL': return ok(routeAdmin(data));
+        case 'ADMIN_UPDATE_STATUS': return ok(routeAdmin(data));
+        case 'INVITER_MEMBRES': return ok(routeAdmin(data));
+        case 'saveConfig': return ok(routeAdmin(data));
         case 'GET_RESERVATIONS_CLIENT': return ok(getReservationsClient(data));
         case 'GET_PROFIL':          return ok(getProfil(data));
         default: return ok({ success: false, error: 'Action inconnue: ' + data.action });
@@ -2133,8 +2353,10 @@ function adminGetAll() {
 // ADMIN — ADD RESA
 // CORRECTION v4.3 : bon ordre de colonnes + email notification
 // ============================================================
-function adminAddResa(resa) {
+function adminAddResa(resa, qui) {
   if (!resa) return { success: false, error: 'Données manquantes' };
+  var errPrix = controlerPrixAccueil(resa, resa.montantBase || resa.montant || 0, qui);
+  if (errPrix) return errPrix;
   try {
     const ss    = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
     const sheet = ss.getSheetByName('Reservations');
@@ -2170,8 +2392,10 @@ function adminAddResa(resa) {
       ''  // calendarEventId
     ]);
 
+    journaliser(qui, 'Réservation créée', resa.id, (resa.nomEspace||resa.espace||'') + ' ' + (resa.date||'') + ' · ' + (resa.montant||0) + ' €' + (resa.motifPrix ? ' (' + resa.motifPrix + ')' : ''));
+
     // Email client + admin
-    if (resa.email) {
+    if (resa.email && !resa.sansEmail) {
       const dl = resa.typeDuree === 'heure'
         ? (resa.nbHeures + 'h (' + formaterHeure(resa.heureDebut) + '→' + formaterHeure(resa.heureFin) + ')')
         : ({demi:'½ journée',journee:'Journée',semaine:'Semaine',mois:'Mois'}[resa.typeDuree] || resa.typeDuree);
@@ -2217,7 +2441,7 @@ function adminAddResa(resa) {
 // ADMIN — UPDATE RESA
 // CORRECTION v4.3 : bon ordre de colonnes (24 colonnes)
 // ============================================================
-function adminUpdateResa(resa) {
+function adminUpdateResa(resa, qui) {
   if (!resa) return { success: false, error: 'Données manquantes' };
   try {
     const ss    = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
@@ -2230,6 +2454,9 @@ function adminUpdateResa(resa) {
     for (let i = 1; i < rows.length; i++) {
       if (String(rows[i][0]) === String(resa.id)) {
         const newStatut = statutMap[resa.statut] || 'EN_ATTENTE';
+        const errPrix = controlerPrixAccueil(resa, rows[i][15], qui);
+        if (errPrix) return errPrix;
+        const avant = { montant: Number(rows[i][15]) || 0, date: rows[i][10], statut: String(rows[i][18]) };
         sheet.getRange(i + 1, 1, 1, 24).setValues([[
           resa.id,
           resa.prenom      || '',
@@ -2257,8 +2484,22 @@ function adminUpdateResa(resa) {
           rows[i][23]       || ''    // calendarEventId inchangé
         ]]);
 
+        var det = [];
+        if (avant.statut !== newStatut) det.push(avant.statut + ' → ' + newStatut);
+        if (avant.montant !== (Number(resa.montant) || 0)) det.push('prix ' + avant.montant + ' € → ' + (Number(resa.montant) || 0) + ' €' + (resa.motifPrix ? ' (' + resa.motifPrix + ')' : ''));
+        if (dateISO(avant.date) !== dateISO(resa.date)) det.push('date → ' + resa.date);
+        journaliser(qui, 'Réservation modifiée', resa.id, (det.join(' ; ') || 'autres champs') + (resa.sansEmail ? ' · client non prévenu' : ''));
+
+        if (newStatut === 'ANNULE' && avant.statut !== 'ANNULE' && rows[i][23]) {
+          try {
+            const cal = CalendarApp.getCalendarById(CONFIG.CALENDAR_ID);
+            const ev  = cal && cal.getEventById(String(rows[i][23]));
+            if (ev) ev.deleteEvent();
+          } catch (eCal) { Logger.log('Suppression événement Calendar impossible : ' + eCal.message); }
+        }
+
         if (newStatut === 'CONFIRME') {
-          envoyerEmailSafe(resa.email,
+          if (!resa.sansEmail) envoyerEmailSafe(resa.email,
             '✅ Réservation confirmée — ' + (resa.nomEspace||resa.espace) + ' — Génie Montauban',
             'Bonjour ' + (resa.prenom||resa.nom) + ',\n\nVotre réservation est confirmée !\n\n'
             + '• Espace    : ' + (resa.nomEspace||resa.espace) + '\n'
@@ -2267,7 +2508,7 @@ function adminUpdateResa(resa) {
             + '• Référence : ' + resa.id + '\n\nÀ bientôt !\n' + CONFIG.NOM_LIEU);
           remplacerEvenementCalendrier(sheet, i + 1, rows[i][23],
             resa.nomEspace||resa.espace, resa.date, resa.heureDebut, resa.heureFin,
-            (resa.prenom||'') + ' ' + resa.nom, resa.id, resa.email, true);
+            (resa.prenom||'') + ' ' + resa.nom, resa.id, resa.sansEmail ? '' : resa.email, true);
         }
         return { success: true, ok: true };
       }
@@ -2341,6 +2582,8 @@ function adminSaveConfig(config) {
 // ============================================================
 function adminLogin(data) {
   try {
+    // Membre de l'équipe : prénom + code personnel
+    if (data.code) return adminLoginEquipe(data);
     // Rate limiting anti force brute (5 essais/heure), avant toute lecture.
     if (!rateLimitOk('adminlogin'))
       return { success: false, error: 'TROP_DE_REQUETES', message: 'Trop de tentatives. Réessayez dans une heure.' };
@@ -2352,7 +2595,7 @@ function adminLogin(data) {
     if (hash && sel) {
       if (!comparaisonConstante(hashMotDePasseAdmin(mdp, sel), hash)) return { success: false };
       // Session serveur : token aléatoire, jamais dérivé du mot de passe
-      return { success: true, token: creerSessionAdmin(), expireDansH: CONFIG.SESSION_ADMIN_H };
+      return { success: true, token: creerSessionAdmin('responsable', 'Responsable', ''), role: 'responsable', nom: 'Responsable', expireDansH: CONFIG.SESSION_ADMIN_H };
     }
 
     // ── Repli le temps de la bascule : ancien hash non salé, resté dans la
@@ -2368,7 +2611,7 @@ function adminLogin(data) {
       message: 'Exécuter definirMotDePasseAdmin() dans l\'éditeur Apps Script.' };
     if (!comparaisonConstante(hashSha256(mdp), String(hashRow[1]))) return { success: false };
     rangerMotDePasseAdmin(mdp, ss);
-    return { success: true, token: creerSessionAdmin(), expireDansH: CONFIG.SESSION_ADMIN_H };
+    return { success: true, token: creerSessionAdmin('responsable', 'Responsable', ''), role: 'responsable', nom: 'Responsable', expireDansH: CONFIG.SESSION_ADMIN_H };
   } catch (err) {
     logErreur('adminLogin', err);
     return { success: false, error: 'ERREUR_SERVEUR' };
