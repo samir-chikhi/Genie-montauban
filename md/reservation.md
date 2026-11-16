@@ -2,7 +2,7 @@
 title: Réserver un espace — Génie Montauban
 description: Réservez un espace au tiers-lieu Génie Montauban : coworking, salles de réunion, bureaux. Réservation en ligne simple et rapide.
 url: https://genie-montauban.fr/reservation.html
-last_updated: 2026-11-04
+last_updated: 2026-11-16
 source: miroir markdown — version texte pour moteurs IA
 ---
 
@@ -84,7 +84,7 @@ Inclure l'adhésion Génie (à partir de 15€/an — accès aux tarifs adhéren
 
 ### Récapitulatif de votre demande
 
-⚠️ La réservation sera **confirmée par email** sous 24h par l'équipe Génie.
+💳 Le paiement en ligne **confirme immédiatement** votre créneau : vous recevez par email la confirmation, la facture et la convention de mise à disposition. En validant, vous acceptez les [conditions générales](cgv.html) et le [règlement intérieur](reglement-interieur-genie.html).
 
 Envoyer ma demande de réservation →
 
