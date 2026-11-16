@@ -62,6 +62,13 @@ const CONFIG = {
   // Associations du quartier dont les réservations sont gratuites : profil
   // « asso » imposé côté serveur, même si la fiche Clients dit autre chose.
   ASSOS_GRATUITES:    ['gaetan.deltour@fne82.org'],   // FNE 82
+  // ── Documents envoyés automatiquement (facture + convention) ──
+  RAISON_SOCIALE:     'Association Génie',
+  SIRET:              '',          // À COMPLÉTER : apparaît sur les factures
+  REPRESENTANT:       '',          // À COMPLÉTER : ex. « Prénom NOM, président »
+  EMAIL_CONTACT:      'contact@genie-montauban.fr',
+  MENTION_TVA:        'TVA non applicable — association exonérée, article 261-7 du CGI',
+  FACTURE_PREFIXE:    'GEN-',      // numéro : GEN-2026-0001, suite continue par année
 };
 
 // ============================================================
@@ -498,7 +505,7 @@ var PLAFOND_REMISE_ACCUEIL_PCT = 30;
 
 // Droits par action : true = tout membre connecté ; 'responsable' = réservé.
 var ACTIONS_ADMIN = {
-  addResa: true, updateResa: true, ADMIN_UPDATE_STATUS: true,
+  addResa: true, updateResa: true, ADMIN_UPDATE_STATUS: true, ENVOYER_DOCUMENTS: true,
   deleteResa: 'responsable', saveConfig: 'responsable', INVITER_MEMBRES: 'responsable',
   EQUIPE_LISTE: 'responsable', EQUIPE_AJOUTER: 'responsable',
   EQUIPE_NOUVEAU_CODE: 'responsable', EQUIPE_RETIRER: 'responsable', JOURNAL: 'responsable'
@@ -535,6 +542,8 @@ function routeAdmin(data) {
     case 'ADMIN_UPDATE_STATUS': res = adminUpdateStatus(data);
       journaliser(qui, 'Statut ' + data.type, data.id, data.statut); break;
     case 'INVITER_MEMBRES': res = adminInviterMembres(data); break;
+    case 'ENVOYER_DOCUMENTS': res = adminEnvoyerDocuments(data);
+      journaliser(qui, 'Documents envoyés', data.id, ''); break;
     case 'EQUIPE_LISTE': res = adminEquipeListe(); break;
     case 'EQUIPE_AJOUTER': res = adminEquipeAjouter(data);
       journaliser(qui, 'Équipe : ajout', data.nom, data.role || 'accueil'); break;
@@ -830,7 +839,7 @@ function doPost(e) {
       case 'saveConfig': return ok(routeAdmin(data));
       case 'ADMIN_LOGIN': return ok(adminLogin(data));
       case 'EQUIPE_LISTE': case 'EQUIPE_AJOUTER': case 'EQUIPE_NOUVEAU_CODE': case 'EQUIPE_RETIRER': case 'JOURNAL': return ok(routeAdmin(data));
-      case 'ADMIN_UPDATE_STATUS': return ok(routeAdmin(data));
+      case 'ADMIN_UPDATE_STATUS': case 'ENVOYER_DOCUMENTS': return ok(routeAdmin(data));
       case 'INVITER_MEMBRES': return ok(routeAdmin(data));
       default: return ok({ success: false, error: 'Action inconnue: ' + data.action });
     }
@@ -875,7 +884,7 @@ function doGet(e) {
         case 'deleteResa': return ok(routeAdmin(data));
         case 'ADMIN_LOGIN': return ok(adminLogin(data));
         case 'EQUIPE_LISTE': case 'EQUIPE_AJOUTER': case 'EQUIPE_NOUVEAU_CODE': case 'EQUIPE_RETIRER': case 'JOURNAL': return ok(routeAdmin(data));
-        case 'ADMIN_UPDATE_STATUS': return ok(routeAdmin(data));
+        case 'ADMIN_UPDATE_STATUS': case 'ENVOYER_DOCUMENTS': return ok(routeAdmin(data));
         case 'INVITER_MEMBRES': return ok(routeAdmin(data));
         case 'saveConfig': return ok(routeAdmin(data));
         case 'GET_RESERVATIONS_CLIENT': return ok(getReservationsClient(data));
@@ -1170,7 +1179,29 @@ function dateISO(v) {
 // Nombre de réservations actives qui chevauchent [debMin, finMin[
 // sur le même espace et la même date (Sheets + Google Calendar — ajout du 15/09)
 function compterChevauchements(rows, cle, dateStr, debMin, finMin, emailExclu) {
+  return listerChevauchements(rows, cle, dateStr, debMin, finMin, { email: emailExclu }).length;
+}
+
+// Plage [début, fin[ d'une réservation, en minutes depuis minuit. Une location
+// à la demi-journée / journée / semaine saisie SANS heures occupe toute la
+// journée (avant le 16/11/2026 elle ne bloquait que 8h-9h, d'où des doublons).
+function plageLigne(typeDuree, heureDebut, heureFin) {
+  var d = hMin(heureDebut, -1), f = hMin(heureFin, -1);
+  if (d >= 0 && f > d) return [d, f];
+  var t = String(typeDuree || 'heure');
+  if (t !== 'heure') return [0, 1440];
+  if (d < 0) d = 8 * 60;
+  return [d, d + 60];
+}
+
+// Liste lisible des occupations qui chevauchent [debMin, finMin[ : c'est le
+// SEUL contrôle de conflit, partagé par le site et par l'admin.
+//   exclu = { email, id } : lignes à ne pas compter (le client lui-même sur le
+//   site, la réservation en cours de modification dans l'admin).
+function listerChevauchements(rows, cle, dateStr, debMin, finMin, exclu) {
+  var pris = [];
   var n = 0;
+  exclu = exclu || {};
 
   // ── 1. Compter les réservations Sheets (statut actif) ──
   for (var i = 1; i < rows.length; i++) {
@@ -1178,10 +1209,15 @@ function compterChevauchements(rows, cle, dateStr, debMin, finMin, emailExclu) {
     if (statut === 'ANNULE' || statut === 'cancelled') continue;
     if (dateISO(rows[i][10]) !== dateStr) continue;
     if (cleEspaceRow(rows[i]) !== cle) continue;
-    if (emailExclu && String(rows[i][3] || '').toLowerCase() === emailExclu) continue;
-    var d = hMin(rows[i][13], 8 * 60);
-    var f = hMin(rows[i][14], d + 60);
-    if (debMin < f && finMin > d) n++;
+    if (exclu.email && String(rows[i][3] || '').toLowerCase() === exclu.email) continue;
+    if (exclu.id && String(rows[i][0]) === String(exclu.id)) continue;
+    var pl = plageLigne(rows[i][11], rows[i][13], rows[i][14]);
+    var d = pl[0], f = pl[1];
+    if (debMin < f && finMin > d) {
+      pris.push(String((rows[i][1] || '') + ' ' + (rows[i][2] || rows[i][3] || '')).trim() +
+        ' (' + rows[i][0] + ', ' + pad(Math.floor(d / 60)) + ':' + pad(d % 60) + '→' +
+        pad(Math.floor(f / 60) % 24) + ':' + pad(f % 60) + ')');
+    }
   }
 
   // ── 2. Ajouter les événements Google Calendar "orphelins" ──
@@ -1208,14 +1244,33 @@ function compterChevauchements(rows, cle, dateStr, debMin, finMin, emailExclu) {
         var evDebMin = evStart.getHours() * 60 + evStart.getMinutes();
         var evFinMin = evEnd.getHours() * 60 + evEnd.getMinutes();
 
-        if (debMin < evFinMin && finMin > evDebMin) n++;
+        if (ev.isAllDayEvent && ev.isAllDayEvent()) { evDebMin = 0; evFinMin = 1440; }
+        if (debMin < evFinMin && finMin > evDebMin) pris.push('agenda : « ' + ev.getTitle() + ' »');
       });
     }
   } catch (eCalCheck) {
     Logger.log('⚠️ Vérification Calendar échouée (ignorée) : ' + eCalCheck.message);
   }
 
-  return n;
+  return pris;
+}
+
+// Contrôle de conflit pour l'ADMIN (ajout, modification, confirmation).
+// Avant le 16/11/2026 l'admin écrivait sans rien vérifier : c'est ainsi
+// qu'une salle pouvait être louée deux fois sur le même créneau.
+// Renvoie null si le créneau est libre, sinon la réponse d'erreur.
+// `resa.forcer` (case « enregistrer quand même » de l'admin) lève le blocage.
+function refusSiCreneauPris(rows, resa) {
+  if (!resa || resa.forcer || resa.statut === 'cancelled') return null;
+  var cle = cleEspace(resa.espace) || cleEspace(resa.nomEspace);
+  var dateStr = dateISO(resa.date);
+  if (!cle || !/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return null;
+  var p = plageLigne(resa.typeDuree, resa.heureDebut, resa.heureFin);
+  var pris = listerChevauchements(rows, cle, dateStr, p[0], p[1], { id: resa.id });
+  if (pris.length < TARIFS[cle].capacite) return null;
+  return { success: false, code: 'CRENEAU_OCCUPE', conflits: pris,
+           error: 'Créneau déjà pris — ' + (resa.nomEspace || resa.espace) + ' le ' +
+                  formaterDate(dateStr) + ' : ' + pris.slice(0, 3).join(' ; ') };
 }
 
 function creerReservation(data) {
@@ -1336,9 +1391,13 @@ function creerReservation(data) {
       + '📅 Date : ' + formaterDate(data.date) + '\n'
       + '⏰ Horaire : ' + data.heureDebut + ' → ' + hFin + '\n'
       + '💰 Montant : ' + (montantAttendu !== null ? montantAttendu : (data.montantEstime || '?')) + ' €\n\n'
-      + 'L\'équipe confirme sous 24h ouvrées.\n📞 ' + CONFIG.TEL
+      + 'Le créneau vous est retenu ' + DELAI_PAIEMENT_MIN + ' minutes, le temps de régler en ligne.\n'
+      + 'Dès le paiement reçu, vous recevez automatiquement la confirmation, la facture\n'
+      + 'et la convention de mise à disposition. Sans paiement, le créneau est libéré.\n📞 ' + CONFIG.TEL
       + '\n\n' + CONFIG.NOM_LIEU + ' · ' + CONFIG.ADRESSE;
-    envoyerEmailSafe(data.email, '⏳ Demande reçue — ' + data.espace + ' le ' + formaterDate(data.date), corps);
+    // Gratuit : confirmé tout de suite (voir plus bas), pas de mail d'attente.
+    if (montantFacture > 0)
+      envoyerEmailSafe(data.email, '⏳ Créneau retenu, paiement attendu — ' + data.espace + ' le ' + formaterDate(data.date), corps);
     envoyerEmailSafe(CONFIG.EMAIL_ADMIN,
       '🔔 Réservation ' + id + ' — ' + data.espace + ' — ' + data.prenom + ' ' + data.nom,
       'ID : ' + id + '\nEspace : ' + data.espace + '\nDate : ' + data.date +
@@ -1348,8 +1407,15 @@ function creerReservation(data) {
       (ecart > 0.5 ? '\n⚠️ ÉCART DE PRIX : vérifier avant confirmation !' : '') +
       '\n\n👉 Confirmer dans l\'admin : ' + CONFIG.URL_SITE + '/admin.html');
     const evId = ajouterAuCalendrier(data.espace, data.date, data.heureDebut, hFin,
-      data.prenom + ' ' + data.nom, id, data.email, false);
-    if (evId) sheet.getRange(sheet.getLastRow(), 24).setValue(evId);
+      data.prenom + ' ' + data.nom, id, data.email, montantFacture === 0);
+    if (evId) sheet.getRange(ligne, 24).setValue(evId);
+    // Créneau gratuit (association du quartier…) : rien à encaisser, donc
+    // rien à attendre. Confirmé d'office, convention envoyée dans la foulée.
+    if (montantFacture === 0) {
+      sheet.getRange(ligne, 19).setValue('CONFIRME');
+      try { envoyerDocumentsReservation(sheet, ligne, {}); }
+      catch (eDoc) { logErreur('creerReservation/documents', eDoc); }
+    }
     // Paiement immediat : le creneau est tenu par la ligne EN_ATTENTE
     // (la detection de conflit la compte deja), et le client part payer
     // dans la foulee. libererCreneauxExpires() le rendra si rien n'arrive.
@@ -1373,6 +1439,7 @@ function creerReservation(data) {
         'Le client peut réessayer depuis la page ; sinon, encaisser autrement.');
     }
     return { success: true, id: id, paiementUrl: paiementUrl, montant: montantFacture,
+             confirmee: montantFacture === 0,
              paiementIndisponible: montantFacture > 0 && !paiementUrl };
   } catch (err) {
     logErreur('creerReservation', err);
@@ -1530,8 +1597,9 @@ function getDisponibilites(params) {
       if (dat < dateDebut || dat > dateFin) continue;
       if (!occup[esp]) occup[esp] = {};
       if (!occup[esp][dat]) occup[esp][dat] = [];
-      let cur = hMin(row[13], 8 * 60);       // robuste (cellule heure ou texte)
-      const end = hMin(row[14], cur + 60);
+      const plage = plageLigne(row[11], row[13], row[14]);   // même règle que le contrôle de conflit
+      let cur = plage[0];
+      const end = plage[1];
       while (cur < end) {
         occup[esp][dat].push(pad(Math.floor(cur / 60)) + ':' + pad(cur % 60));
         cur += 30;
@@ -1990,9 +2058,12 @@ function haCheckout(o) {
 //   data = { id, email }
 function relancerPaiement(data) {
   const id    = String(data.id || '').trim();
+  // Lien « Régler ma réservation » reçu par e-mail : il porte une clé signée
+  // (cleLienPaiement) à la place de l'adresse, qui n'a pas à figurer dans une URL.
+  const parLien = !!data.cle && comparaisonConstante(String(data.cle), cleLienPaiement(id));
   const email = String(data.email || '').trim().toLowerCase();
-  if (!id || !email) return { success: false, error: 'CHAMPS_MANQUANTS', message: 'Référence et email requis.' };
-  if (!rateLimitOk('relance_' + email))
+  if (!id || (!email && !parLien)) return { success: false, error: 'CHAMPS_MANQUANTS', message: 'Référence et email requis.' };
+  if (!rateLimitOk('relance_' + (email || id)))
     return { success: false, error: 'TROP_DE_REQUETES', message: 'Trop de tentatives. Réessayez dans une heure ou appelez le ' + CONFIG.TEL + '.' };
   const lock = LockService.getScriptLock();
   lock.waitLock(20000);
@@ -2002,17 +2073,18 @@ function relancerPaiement(data) {
     const rows  = sheet.getDataRange().getValues();
     for (let i = 1; i < rows.length; i++) {
       if (String(rows[i][0]) !== id) continue;
-      if (String(rows[i][3]).trim().toLowerCase() !== email) break;   // même réponse qu'un id inconnu
+      if (!parLien && String(rows[i][3]).trim().toLowerCase() !== email) break;   // même réponse qu'un id inconnu
       if (String(rows[i][26]) === 'PAYE')
         return { success: false, error: 'DEJA_PAYE', message: 'Cette réservation est déjà réglée.' };
-      if (String(rows[i][18]) !== 'EN_ATTENTE')
+      // CONFIRME sans paiement = réservation validée par l'équipe, à régler.
+      if (String(rows[i][18]) !== 'EN_ATTENTE' && String(rows[i][18]) !== 'CONFIRME')
         return { success: false, error: 'RESA_CLOSE',
                  message: 'Ce créneau n\'est plus réservé (délai de paiement dépassé). Merci de refaire une demande.' };
       const montant = parseFloat(rows[i][15]) || 0;
       if (montant <= 0) return { success: false, error: 'GRATUIT', message: 'Aucun paiement n\'est dû.' };
       const co = haCheckout({ id: id, type: 'reservation', montant: montant,
         libelle: (rows[i][8] || rows[i][6]) + ' — ' + formaterDateCourte(rows[i][10]),
-        prenom: rows[i][1], nom: rows[i][2], email: email });
+        prenom: rows[i][1], nom: rows[i][2], email: email || String(rows[i][3]).trim().toLowerCase() });
       if (!co || !co.url)
         return { success: false, error: 'PAIEMENT_INDISPONIBLE',
                  message: 'Le paiement en ligne est momentanément indisponible. Réessayez dans quelques minutes ou appelez le ' + CONFIG.TEL + '.' };
@@ -2187,6 +2259,8 @@ function haWebhook(data, params) {
             ' : ' + recuCts + ' < ' + attenduCts));
           return { success: true, ignore: 'montant insuffisant' };
         }
+        // HelloAsso rejoue ses notifications : ne pas renvoyer les documents.
+        if (String(rows[i][26]) === 'PAYE') return { success: true, ignore: 'deja traite' };
         sheet.getRange(i + 1, 27).setValue('PAYE');                    // paymentState
         sheet.getRange(i + 1, 28).setValue(d.paymentReceiptUrl || ''); // recu
         sheet.getRange(i + 1, 27).setBackground('#D4EDDA').setFontColor('#155724');
@@ -2196,7 +2270,13 @@ function haWebhook(data, params) {
           remplacerEvenementCalendrier(sheet, i + 1, rows[i][23], rows[i][7], rows[i][10], rows[i][13], rows[i][14],
             rows[i][1] + ' ' + rows[i][2], rows[i][0], rows[i][3], true);
         } catch (eCal) { logErreur('haWebhook/calendrier', eCal); }
-        envoyerEmailSafe(rows[i][3], '✅ Paiement reçu — ' + rows[i][7] + ' — ' + formaterDate(dateISO(rows[i][10])),
+        // Un seul e-mail au client : confirmation + facture acquittée +
+        // convention + règlement intérieur. Le message simple ci-dessous ne
+        // part que si la fabrication des documents échoue.
+        var docsEnvoyes = false;
+        try { docsEnvoyes = envoyerDocumentsReservation(sheet, i + 1, {}); }
+        catch (eDoc) { logErreur('haWebhook/documents', eDoc); }
+        if (!docsEnvoyes) envoyerEmailSafe(rows[i][3], '✅ Paiement reçu — ' + rows[i][7] + ' — ' + formaterDate(dateISO(rows[i][10])),
           'Bonjour ' + (rows[i][1] || rows[i][2]) + ',\n\nVotre paiement est bien reçu, '
           + 'votre réservation est confirmée.\n\n'
           + '• Espace    : ' + rows[i][7] + '\n'
@@ -2217,6 +2297,271 @@ function haWebhook(data, params) {
     return { success: true, ignore: 'reservation introuvable : ' + resaId };
   } catch (err) {
     logErreur('haWebhook', err);
+    return { success: false, error: 'ERREUR_SERVEUR', message: err.message };
+  }
+}
+
+// ============================================================
+// DOCUMENTS AUTOMATIQUES — facture, convention, règlement intérieur
+// ============================================================
+// Un seul e-mail au client, avec en pièces jointes (PDF) :
+//   • la facture, si la réservation est payante (acquittée ou « à régler ») ;
+//   • la convention de mise à disposition, toujours ;
+//   • le règlement intérieur (fabriqué depuis la page du site).
+// Il part tout seul : paiement HelloAsso reçu, réservation gratuite validée,
+// réservation confirmée depuis l'admin. Copie cachée à l'adresse du Génie :
+// la boîte mail sert d'archive, rien à ranger à la main.
+// Colonnes ajoutées à l'onglet Reservations : 30 = n° de facture,
+// 31 = date d'envoi des documents. Le numéro est attribué UNE fois, dans
+// une suite continue par année (compteur dans les Propriétés du script).
+
+function echapper(v) {
+  return String(v == null ? '' : v).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function euros(n) { return (Number(n) || 0).toFixed(2).replace('.', ',') + ' €'; }
+
+// Clé du lien « Régler ma réservation » : dérivée d'un secret du script, donc
+// impossible à fabriquer pour la réservation de quelqu'un d'autre.
+function cleLienPaiement(id) {
+  var secret = PropertiesService.getScriptProperties().getProperty('HELLOASSO_WEBHOOK_SECRET');
+  if (!secret || !id) return '';
+  return hashSha256('payer|' + id + '|' + secret).slice(0, 32);
+}
+
+function lienPaiement(id) {
+  var k = cleLienPaiement(id);
+  return k ? CONFIG.URL_SITE + '/reservation.html?payer=' + encodeURIComponent(id) + '&k=' + k : '';
+}
+
+function resaDepuisLigne(row) {
+  var p = plageLigne(row[11], row[13], row[14]);
+  return {
+    id: String(row[0] || ''), prenom: String(row[1] || ''), nom: String(row[2] || ''),
+    email: String(row[3] || '').trim(), orga: String(row[5] || ''),
+    espace: String(row[7] || row[6] || ''), date: dateISO(row[10]),
+    hDeb: formaterHeure(row[13]), hFin: formaterHeure(row[14]),
+    journeeEntiere: p[0] === 0 && p[1] === 1440,
+    nbHeures: row[12], montant: Number(row[15]) || 0, options: String(row[17] || ''),
+    participants: row[19] || '', objet: String(row[20] || ''),
+    payState: String(row[26] || ''), recu: String(row[27] || ''),
+    numeroFacture: String(row[29] || '')
+  };
+}
+
+function horaireLisible(r) {
+  return r.journeeEntiere ? 'journée' : (r.hDeb + ' → ' + r.hFin);
+}
+
+function assurerColonnesDocs(sheet) {
+  var max = sheet.getMaxColumns();
+  if (max < 31) sheet.insertColumnsAfter(max, 31 - max);
+  var tetes = sheet.getRange(1, 30, 1, 2).getValues()[0];
+  if (!tetes[0]) sheet.getRange(1, 30).setValue('numeroFacture');
+  if (!tetes[1]) sheet.getRange(1, 31).setValue('documentsEnvoyesLe');
+}
+
+// Numéro de facture de la ligne : relu s'il existe, sinon attribué sous verrou.
+function numeroFacture(sheet, ligne) {
+  var deja = String(sheet.getRange(ligne, 30).getValue() || '');
+  if (deja) return deja;
+  var lock = LockService.getScriptLock();
+  lock.waitLock(20000);
+  try {
+    deja = String(sheet.getRange(ligne, 30).getValue() || '');
+    if (deja) return deja;
+    var props = PropertiesService.getScriptProperties();
+    var an = Utilities.formatDate(new Date(), 'Europe/Paris', 'yyyy');
+    var n = (parseInt(props.getProperty('FACTURE_SEQ_' + an), 10) || 0) + 1;
+    props.setProperty('FACTURE_SEQ_' + an, String(n));
+    var numero = CONFIG.FACTURE_PREFIXE + an + '-' + ('000' + n).slice(-4);
+    sheet.getRange(ligne, 30).setValue(numero);
+    return numero;
+  } finally { lock.releaseLock(); }
+}
+
+function gabaritDocument(titre, reference, corps) {
+  return '<html><head><meta charset="utf-8"><style>'
+    + 'body{font-family:Arial,Helvetica,sans-serif;font-size:10.5pt;color:#1c1410;margin:26px}'
+    + 'h1{font-size:19pt;margin:0}h2{font-size:11pt;color:#c4622d;margin:14px 0 3px}'
+    + 'p{margin:4px 0;line-height:1.45}.gris{color:#8c7b6b;font-size:9pt}'
+    + 'table{width:100%;border-collapse:collapse;margin:12px 0}'
+    + 'td,th{padding:7px 9px;border-bottom:1px solid #e8dfd4;text-align:left;vertical-align:top}'
+    + 'th{background:#fdf7ef;font-size:8.5pt;text-transform:uppercase;color:#8c7b6b}'
+    + '.d{text-align:right;white-space:nowrap}.tot td{font-weight:bold;font-size:12.5pt;border-top:2px solid #c4622d}'
+    + '.sansb td{border:0;padding:0 0 10px}.pied{margin-top:22px;padding-top:8px;border-top:1px solid #ddd5c8;font-size:8pt;color:#8c7b6b;text-align:center}'
+    + '</style></head><body>'
+    + '<table class="sansb"><tr><td><h1>Génie <span style="color:#c4622d">Montauban</span></h1>'
+    + '<div class="gris">Tiers-lieu associatif</div></td>'
+    + '<td class="d"><strong style="font-size:14pt">' + echapper(titre) + '</strong><br>'
+    + '<span class="gris">' + echapper(reference) + '</span></td></tr></table>'
+    + corps
+    + '<div class="pied">' + echapper(CONFIG.RAISON_SOCIALE) + ' — ' + echapper(CONFIG.ADRESSE)
+    + (CONFIG.SIRET ? ' — SIRET ' + echapper(CONFIG.SIRET) : '')
+    + '<br>' + echapper(CONFIG.EMAIL_CONTACT) + ' — ' + echapper(CONFIG.TEL) + ' — ' + echapper(CONFIG.URL_SITE.replace('https://', ''))
+    + '</div></body></html>';
+}
+
+function blocParties(r) {
+  var client = (r.orga ? '<strong>' + echapper(r.orga) + '</strong><br>' : '')
+    + echapper((r.prenom + ' ' + r.nom).trim()) + '<br>' + echapper(r.email);
+  return '<table class="sansb"><tr><td style="width:50%"><span class="gris">ÉMETTEUR</span><br><strong>'
+    + echapper(CONFIG.RAISON_SOCIALE) + '</strong><br>' + echapper(CONFIG.ADRESSE)
+    + (CONFIG.SIRET ? '<br>SIRET ' + echapper(CONFIG.SIRET) : '')
+    + '</td><td><span class="gris">CLIENT</span><br>' + client + '</td></tr></table>';
+}
+
+function factureHtml(r, numero, paye) {
+  var aujourdhui = formaterDate(Utilities.formatDate(new Date(), 'Europe/Paris', 'yyyy-MM-dd'));
+  var designation = 'Mise à disposition de l\'espace « ' + echapper(r.espace) + ' »<br>'
+    + '<span class="gris">Le ' + echapper(formaterDate(r.date)) + ', ' + echapper(horaireLisible(r))
+    + (r.options ? ' — options : ' + echapper(r.options) : '')
+    + ' — réservation ' + echapper(r.id) + '</span>';
+  var reglement = paye
+    ? '<p><strong>Facture acquittée</strong> — réglée en ligne par carte bancaire (HelloAsso).</p>'
+    : '<p><strong>À régler à réception</strong>, en ligne (lien dans l\'e-mail), par virement ou sur place.</p>'
+      + '<p class="gris">Clients professionnels : tout retard de paiement entraîne des pénalités au taux de '
+      + 'trois fois le taux d\'intérêt légal et une indemnité forfaitaire de recouvrement de 40 €.</p>';
+  return gabaritDocument('FACTURE', 'N° ' + numero + ' — ' + aujourdhui,
+    blocParties(r)
+    + '<table><tr><th>Désignation</th><th class="d">Montant</th></tr>'
+    + '<tr><td>' + designation + '</td><td class="d">' + euros(r.montant) + '</td></tr>'
+    + '<tr class="tot"><td>Total net à payer</td><td class="d">' + euros(r.montant) + '</td></tr></table>'
+    + '<p class="gris">' + echapper(CONFIG.MENTION_TVA) + '</p>' + reglement);
+}
+
+function conventionHtml(r) {
+  var aujourdhui = formaterDate(Utilities.formatDate(new Date(), 'Europe/Paris', 'yyyy-MM-dd'));
+  var utilisateur = (r.orga ? echapper(r.orga) + ', représenté(e) par ' : '')
+    + echapper((r.prenom + ' ' + r.nom).trim());
+  var art = function (titre, texte) { return '<h2>' + titre + '</h2><p>' + texte + '</p>'; };
+  return gabaritDocument('CONVENTION', 'Mise à disposition — ' + r.id,
+    '<p><strong>Entre</strong> ' + echapper(CONFIG.RAISON_SOCIALE) + ', ' + echapper(CONFIG.ADRESSE)
+    + (CONFIG.REPRESENTANT ? ', représentée par ' + echapper(CONFIG.REPRESENTANT) : '')
+    + ', ci-après « Génie »,</p>'
+    + '<p><strong>et</strong> ' + utilisateur + ' (' + echapper(r.email) + '), ci-après « l\'Utilisateur ».</p>'
+    + art('Article 1 — Objet',
+        'Génie met à la disposition de l\'Utilisateur l\'espace désigné ci-dessous, à titre ponctuel '
+        + 'et précaire. La présente convention ne constitue pas un bail.')
+    + '<table><tr><th>Espace</th><th>Date</th><th>Horaire</th><th>Participants</th><th class="d">Participation</th></tr>'
+    + '<tr><td>' + echapper(r.espace) + '</td><td>' + echapper(formaterDate(r.date)) + '</td><td>'
+    + echapper(horaireLisible(r)) + '</td><td>' + echapper(r.participants || '—') + '</td><td class="d">'
+    + (r.montant > 0 ? euros(r.montant) : 'Gratuit') + '</td></tr></table>'
+    + (r.objet ? '<p class="gris">Objet déclaré : ' + echapper(r.objet) + '</p>' : '')
+    + art('Article 2 — Usage des lieux',
+        'L\'Utilisateur occupe l\'espace pour l\'objet déclaré, dans la limite de sa capacité d\'accueil '
+        + 'et des horaires réservés (installation et rangement compris). Il ne peut ni le céder ni le sous-louer.')
+    + art('Article 3 — État des lieux et matériel',
+        'L\'espace est remis propre et en état de fonctionnement. L\'Utilisateur le restitue rangé et dans '
+        + 'le même état, signale sans délai tout dysfonctionnement et répond des dégradations causées par '
+        + 'lui-même ou ses invités, facturées au coût de remise en état.')
+    + art('Article 4 — Responsabilité et assurance',
+        'L\'Utilisateur est responsable des personnes qu\'il accueille et déclare être couvert par une '
+        + 'assurance responsabilité civile. Génie n\'est pas responsable des pertes ou vols d\'effets personnels.')
+    + art('Article 5 — Sécurité et règlement intérieur',
+        'L\'Utilisateur respecte et fait respecter les consignes de sécurité, les règles d\'accès et le '
+        + 'règlement intérieur de Génie, joint à l\'envoi et consultable sur '
+        + echapper(CONFIG.URL_SITE) + '/reglement-interieur-genie.html.')
+    + art('Article 6 — Conditions financières et annulation',
+        (r.montant > 0
+          ? 'La participation indiquée ci-dessus fait l\'objet d\'une facture. '
+          : 'La mise à disposition est consentie à titre gratuit. ')
+        + 'Annulation plus de 7 jours avant : remboursement intégral ; entre 3 et 7 jours : 50 % ; '
+        + 'moins de 72 heures : aucun remboursement, sauf force majeure justifiée. Les conditions générales '
+        + 'de vente (' + echapper(CONFIG.URL_SITE) + '/cgv.html) complètent la présente convention.')
+    + art('Article 7 — Acceptation',
+        'La validation de la réservation, son règlement ou, à défaut, l\'entrée dans les lieux vaut '
+        + 'acceptation sans réserve de la présente convention, des conditions générales de vente et du '
+        + 'règlement intérieur.')
+    + '<p style="margin-top:14px">Établie à Montauban le ' + aujourdhui + ', par voie électronique — réservation '
+    + echapper(r.id) + '.</p>');
+}
+
+function pdfDepuisHtml(html, nom) {
+  return Utilities.newBlob(html, 'text/html', nom + '.html').getAs('application/pdf').setName(nom + '.pdf');
+}
+
+// Règlement intérieur en PDF, fabriqué depuis la page du site (une seule
+// source à tenir à jour). null si la page est illisible : l'e-mail donne
+// alors simplement le lien.
+function reglementInterieurPdf() {
+  try {
+    var rep = UrlFetchApp.fetch(CONFIG.URL_SITE + '/reglement-interieur-genie.html', { muteHttpExceptions: true });
+    if (rep.getResponseCode() !== 200) return null;
+    var page = rep.getContentText('UTF-8');
+    var a = page.indexOf('<!-- /g:header -->'), b = page.indexOf('<!-- g:footer -->');
+    if (a === -1 || b <= a) return null;
+    var contenu = page.slice(a + 18, b)
+      .replace(/<(script|style|svg|nav|button)[\s\S]*?<\/\1>/gi, '')
+      .replace(/<img[^>]*>/gi, '');
+    if (contenu.replace(/<[^>]+>/g, '').trim().length < 200) return null;
+    return pdfDepuisHtml(gabaritDocument('RÈGLEMENT INTÉRIEUR', 'Génie Montauban', contenu),
+      'Reglement-interieur-Genie');
+  } catch (e) { logErreur('reglementInterieurPdf', e); return null; }
+}
+
+// Fabrique les documents de la ligne et les envoie au client. true si parti.
+//   opts.modifiee : la réservation était déjà confirmée (changement de créneau).
+function envoyerDocumentsReservation(sheet, ligne, opts) {
+  opts = opts || {};
+  assurerColonnesDocs(sheet);
+  var r = resaDepuisLigne(sheet.getRange(ligne, 1, 1, 31).getValues()[0]);
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(r.email)) return false;
+  var paye = r.payState === 'PAYE';
+  var pieces = [], liste = [];
+  if (r.montant > 0) {
+    var numero = numeroFacture(sheet, ligne);
+    pieces.push(pdfDepuisHtml(factureHtml(r, numero, paye), 'Facture-' + numero));
+    liste.push('la facture ' + numero + (paye ? ' (acquittée)' : ''));
+  }
+  pieces.push(pdfDepuisHtml(conventionHtml(r), 'Convention-' + r.id));
+  liste.push('la convention de mise à disposition');
+  var ri = reglementInterieurPdf();
+  if (ri) { pieces.push(ri); liste.push('le règlement intérieur'); }
+
+  var aRegler = r.montant > 0 && !paye;
+  var lien = aRegler ? lienPaiement(r.id) : '';
+  var accroche = opts.modifiee ? 'Votre réservation a été modifiée. Voici le créneau à jour.'
+    : paye ? 'Votre paiement est bien reçu : votre réservation est confirmée.'
+    : 'Votre réservation est confirmée.';
+  var corps = 'Bonjour ' + (r.prenom || r.nom) + ',\n\n' + accroche + '\n\n'
+    + '• Espace    : ' + r.espace + '\n'
+    + '• Date      : ' + formaterDate(r.date) + '\n'
+    + '• Horaire   : ' + horaireLisible(r) + '\n'
+    + '• Référence : ' + r.id + '\n'
+    + '• Montant   : ' + (r.montant > 0 ? euros(r.montant) + (paye ? ' (réglé)' : ' (à régler)') : 'gratuit') + '\n'
+    + (aRegler ? (lien
+        ? '\n💳 Régler en ligne (paiement sécurisé HelloAsso, sans frais) :\n' + lien + '\n'
+        : '\nRèglement sur place ou par virement — nous revenons vers vous.\n') : '')
+    + '\nEn pièces jointes : ' + liste.join(', ') + '.\n'
+    + (ri ? '' : 'Règlement intérieur : ' + CONFIG.URL_SITE + '/reglement-interieur-genie.html\n')
+    + 'Conditions générales : ' + CONFIG.URL_SITE + '/cgv.html\n'
+    + (paye && r.recu ? 'Reçu HelloAsso : ' + r.recu + '\n' : '')
+    + '\nUne question ? ' + CONFIG.TEL + ' · ' + CONFIG.EMAIL_CONTACT
+    + '\n\nÀ bientôt !\n' + CONFIG.NOM_LIEU + ' · ' + CONFIG.ADRESSE;
+  var sujet = (opts.modifiee ? '✏️ Réservation modifiée — ' : '✅ Réservation confirmée — ')
+    + r.espace + ' — ' + formaterDate(r.date);
+  var parti = envoyerEmailSafe(r.email, sujet, corps,
+    { attachments: pieces, bcc: CONFIG.EMAIL_ADMIN, name: CONFIG.NOM_LIEU });
+  if (parti) sheet.getRange(ligne, 31).setValue(new Date().toISOString());
+  return parti;
+}
+
+// Admin — bouton « Documents » : (r)envoie facture + convention au client.
+function adminEnvoyerDocuments(data) {
+  try {
+    const sheet = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID).getSheetByName('Reservations');
+    const ids = sheet.getRange(1, 1, sheet.getLastRow(), 1).getValues();
+    for (let i = 1; i < ids.length; i++) {
+      if (String(ids[i][0]) !== String(data.id)) continue;
+      return envoyerDocumentsReservation(sheet, i + 1, {})
+        ? { success: true, ok: true }
+        : { success: false, error: 'Envoi impossible : adresse e-mail du client absente ou invalide.' };
+    }
+    return { success: false, error: 'ID non trouvé : ' + data.id };
+  } catch (err) {
+    logErreur('adminEnvoyerDocuments', err);
     return { success: false, error: 'ERREUR_SERVEUR', message: err.message };
   }
 }
@@ -2250,6 +2595,21 @@ function libererCreneauxExpires() {
       sheet.getRange(i + 1, 19).setValue('ANNULE');
       sheet.getRange(i + 1, 19).setBackground('#F8D7DA').setFontColor('#721C24');
       sheet.getRange(i + 1, 27).setValue('EXPIRE');
+      // Sans ça, l'événement « ⏳ » restait dans l'agenda alors que le
+      // créneau était libre : on croyait la salle prise.
+      if (rows[i][23]) {
+        try {
+          const cal = CalendarApp.getCalendarById(CONFIG.CALENDAR_ID);
+          const ev  = cal && cal.getEventById(String(rows[i][23]));
+          if (ev) ev.deleteEvent();
+          sheet.getRange(i + 1, 24).setValue('');
+        } catch (eCal) { Logger.log('Suppression événement expiré impossible : ' + eCal.message); }
+      }
+      if (rows[i][3]) envoyerEmailSafe(rows[i][3],
+        'Créneau libéré — ' + (rows[i][7] || rows[i][6]) + ' le ' + formaterDate(dateISO(rows[i][10])),
+        'Bonjour ' + (rows[i][1] || '') + ',\n\nNous n\'avons pas reçu le paiement de votre réservation '
+        + rows[i][0] + ' : le créneau a été libéré.\n\nIl suffit de refaire une demande sur '
+        + CONFIG.URL_SITE + '/reservation.html\nUne question ? ' + CONFIG.TEL + '\n\n' + CONFIG.NOM_LIEU);
       n++;
     }
     if (n) logErreur('libererCreneauxExpires', new Error(n + ' creneau(x) libere(s)'));
@@ -2455,6 +2815,16 @@ function adminAddResa(resa, qui) {
     const statutMap = { pending:'EN_ATTENTE', confirmed:'CONFIRME', cancelled:'ANNULE', completed:'TERMINE' };
     const now = new Date().toISOString();
 
+    // Verrou + contrôle de conflit : même garde-fou que le formulaire public.
+    const lock = LockService.getScriptLock();
+    try { lock.waitLock(20000); }
+    catch (eLock) { return { success: false, error: 'Serveur occupé, merci de réessayer.' }; }
+    let ligne;
+    try {
+    const refus = refusSiCreneauPris(sheet.getDataRange().getValues(), resa);
+    if (refus) return refus;
+    if (resa.forcer) journaliser(qui, 'Créneau forcé', resa.id, (resa.nomEspace||resa.espace||'') + ' ' + (resa.date||''));
+
     // Écriture dans le nouveau schéma (24 colonnes)
     sheet.appendRow([
       resa.id          || ('RSV-' + Date.now()),
@@ -2482,11 +2852,14 @@ function adminAddResa(resa, qui) {
       now,
       ''  // calendarEventId
     ]);
+    ligne = sheet.getLastRow();
+    } finally { lock.releaseLock(); }
 
     journaliser(qui, 'Réservation créée', resa.id, (resa.nomEspace||resa.espace||'') + ' ' + (resa.date||'') + ' · ' + (resa.montant||0) + ' €' + (resa.motifPrix ? ' (' + resa.motifPrix + ')' : ''));
 
-    // Email client + admin
-    if (resa.email && !resa.sansEmail) {
+    // Email client + admin. Une réservation créée directement « confirmée »
+    // reçoit à la place l'e-mail complet avec documents (plus bas).
+    if (resa.email && !resa.sansEmail && resa.statut !== 'confirmed') {
       const dl = resa.typeDuree === 'heure'
         ? (resa.nbHeures + 'h (' + formaterHeure(resa.heureDebut) + '→' + formaterHeure(resa.heureFin) + ')')
         : ({demi:'½ journée',journee:'Journée',semaine:'Semaine',mois:'Mois'}[resa.typeDuree] || resa.typeDuree);
@@ -2516,9 +2889,13 @@ function adminAddResa(resa, qui) {
     }
 
     if (resa.statut === 'confirmed') {
-      remplacerEvenementCalendrier(sheet, sheet.getLastRow(), '',
+      remplacerEvenementCalendrier(sheet, ligne, '',
         resa.nomEspace||resa.espace, resa.date, resa.heureDebut, resa.heureFin,
         (resa.prenom||'') + ' ' + (resa.nom||''), resa.id, resa.email, true);
+      if (resa.email && !resa.sansEmail) {
+        try { envoyerDocumentsReservation(sheet, ligne, {}); }
+        catch (eDoc) { logErreur('adminAddResa/documents', eDoc); }
+      }
     }
 
     return { success: true, ok: true, id: resa.id };
@@ -2547,7 +2924,17 @@ function adminUpdateResa(resa, qui) {
         const newStatut = statutMap[resa.statut] || 'EN_ATTENTE';
         const errPrix = controlerPrixAccueil(resa, rows[i][15], qui);
         if (errPrix) return errPrix;
+        if (newStatut !== 'ANNULE') {
+          const refus = refusSiCreneauPris(rows, resa);
+          if (refus) return refus;
+          if (resa.forcer) journaliser(qui, 'Créneau forcé', resa.id, (resa.nomEspace||resa.espace||'') + ' ' + (resa.date||''));
+        }
         const avant = { montant: Number(rows[i][15]) || 0, date: rows[i][10], statut: String(rows[i][18]) };
+        const pAvant = plageLigne(rows[i][11], rows[i][13], rows[i][14]);
+        const pApres = plageLigne(resa.typeDuree, resa.heureDebut, resa.heureFin);
+        const creneauChange = dateISO(avant.date) !== dateISO(resa.date)
+          || pAvant[0] !== pApres[0] || pAvant[1] !== pApres[1]
+          || cleEspaceRow(rows[i]) !== (cleEspace(resa.espace) || cleEspace(resa.nomEspace));
         sheet.getRange(i + 1, 1, 1, 24).setValues([[
           resa.id,
           resa.prenom      || '',
@@ -2590,16 +2977,24 @@ function adminUpdateResa(resa, qui) {
         }
 
         if (newStatut === 'CONFIRME') {
-          if (!resa.sansEmail) envoyerEmailSafe(resa.email,
-            '✅ Réservation confirmée — ' + (resa.nomEspace||resa.espace) + ' — Génie Montauban',
-            'Bonjour ' + (resa.prenom||resa.nom) + ',\n\nVotre réservation est confirmée !\n\n'
-            + '• Espace    : ' + (resa.nomEspace||resa.espace) + '\n'
-            + '• Date      : ' + formaterDate(dateISO(resa.date)) + '\n'
-            + '• Horaire   : ' + formaterHeure(resa.heureDebut) + ' → ' + formaterHeure(resa.heureFin) + '\n'
-            + '• Référence : ' + resa.id + '\n\nÀ bientôt !\n' + CONFIG.NOM_LIEU);
           remplacerEvenementCalendrier(sheet, i + 1, rows[i][23],
             resa.nomEspace||resa.espace, resa.date, resa.heureDebut, resa.heureFin,
             (resa.prenom||'') + ' ' + resa.nom, resa.id, resa.sansEmail ? '' : resa.email, true);
+          // Le client n'est écrit que lorsque ça le concerne : passage à
+          // « confirmé », ou changement de salle / date / horaire. Avant,
+          // chaque enregistrement renvoyait « Réservation confirmée ».
+          if (resa.email && !resa.sansEmail && (avant.statut !== 'CONFIRME' || creneauChange)) {
+            let docs = false;
+            try { docs = envoyerDocumentsReservation(sheet, i + 1, { modifiee: avant.statut === 'CONFIRME' }); }
+            catch (eDoc) { logErreur('adminUpdateResa/documents', eDoc); }
+            if (!docs) envoyerEmailSafe(resa.email,
+              '✅ Réservation confirmée — ' + (resa.nomEspace||resa.espace) + ' — Génie Montauban',
+              'Bonjour ' + (resa.prenom||resa.nom) + ',\n\nVotre réservation est confirmée !\n\n'
+              + '• Espace    : ' + (resa.nomEspace||resa.espace) + '\n'
+              + '• Date      : ' + formaterDate(dateISO(resa.date)) + '\n'
+              + '• Horaire   : ' + formaterHeure(resa.heureDebut) + ' → ' + formaterHeure(resa.heureFin) + '\n'
+              + '• Référence : ' + resa.id + '\n\nÀ bientôt !\n' + CONFIG.NOM_LIEU);
+          }
         }
         return { success: true, ok: true };
       }
