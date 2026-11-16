@@ -64,8 +64,9 @@ const CONFIG = {
   ASSOS_GRATUITES:    ['gaetan.deltour@fne82.org'],   // FNE 82
   // ── Documents envoyés automatiquement (facture + convention) ──
   RAISON_SOCIALE:     'Association Génie',
-  SIRET:              '',          // À COMPLÉTER : apparaît sur les factures
-  REPRESENTANT:       '',          // À COMPLÉTER : ex. « Prénom NOM, président »
+  SIRET:              '100 178 730 00014',
+  RNA:                'W822009896',
+  REPRESENTANT:       'Samir CHIKHI, directeur',
   EMAIL_CONTACT:      'contact@genie-montauban.fr',
   MENTION_TVA:        'TVA non applicable — association exonérée, article 261-7 du CGI',
   FACTURE_PREFIXE:    'GEN-',      // numéro : GEN-2026-0001, suite continue par année
@@ -2399,6 +2400,7 @@ function gabaritDocument(titre, reference, corps) {
     + corps
     + '<div class="pied">' + echapper(CONFIG.RAISON_SOCIALE) + ' — ' + echapper(CONFIG.ADRESSE)
     + (CONFIG.SIRET ? ' — SIRET ' + echapper(CONFIG.SIRET) : '')
+    + (CONFIG.RNA ? ' — RNA ' + echapper(CONFIG.RNA) : '')
     + '<br>' + echapper(CONFIG.EMAIL_CONTACT) + ' — ' + echapper(CONFIG.TEL) + ' — ' + echapper(CONFIG.URL_SITE.replace('https://', ''))
     + '</div></body></html>';
 }
