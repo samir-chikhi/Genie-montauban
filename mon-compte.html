@@ -481,6 +481,7 @@ function ouvrirEspaceClient() {
 
   // Mettre à jour les prix selon profil
   majPrixEspaces();
+  chargerTarifsNegocies();
 
   // Init calendrier
   const now = new Date();
@@ -494,13 +495,37 @@ function ouvrirEspaceClient() {
   afficherProfil();
 }
 
+// ===== TARIFS NÉGOCIÉS (feuille Locataires_Genie, valables jusqu'à une date) =====
+// Le serveur reste maître du montant facturé ; ceci n'affiche que le bon prix.
+let NEGO = {};
+function tarifEspace(espace, profil) {
+  const t = TARIFS[espace];
+  const grille = t ? (t[profil] != null ? t[profil] : t.plein) : 0;
+  const n = NEGO[String(espace).toLowerCase()] || NEGO['*'];
+  return (n > 0 && n < grille) ? n : grille;
+}
+async function chargerTarifsNegocies() {
+  try {
+    const r = await fetch(APPS_SCRIPT_URL, {
+      method: 'POST', headers: { 'Content-Type': 'text/plain' }, redirect: 'follow',
+      body: JSON.stringify({ action: 'GET_TARIFS_NEGOCIES', email: CLIENT.email })
+    });
+    const d = JSON.parse(await r.text());
+    if (d && d.tarifs && Object.keys(d.tarifs).length) {
+      NEGO = d.tarifs;
+      majPrixEspaces();
+      majRecap();
+    }
+  } catch (e) { /* prix de la grille conservé */ }
+}
+
 // ===== MAJ PRIX SELON PROFIL =====
 function majPrixEspaces() {
   const profil = CLIENT.profilTarifaire || 'plein';
   Object.entries(TARIFS).forEach(([espace, tarifs]) => {
     const el = document.getElementById('prix-' + espace);
     if (!el) return;
-    const tarif = tarifs[profil] || tarifs.plein;
+    const tarif = tarifEspace(espace, profil);
     if (profil === 'asso' && tarif === 0) {
       el.textContent = 'Gratuit ✅';
       el.style.color = 'var(--vert)';
@@ -649,7 +674,7 @@ function majRecap() {
   document.getElementById('r-part').textContent = document.getElementById('nb-part')?.value || '—';
 
   const profil = CLIENT?.profilTarifaire || 'plein';
-  const tarif = S.espace && TARIFS[S.espace] ? (TARIFS[S.espace][profil] || TARIFS[S.espace].plein) : 0;
+  const tarif = S.espace && TARIFS[S.espace] ? tarifEspace(S.espace, profil) : 0;
   const badge = document.getElementById('opt-badge')?.checked ? 5 : 0;
   const total = Math.round(tarif * S.duree + badge);
   document.getElementById('r-total').textContent = total + ' €';
@@ -675,7 +700,7 @@ async function soumettre() {
 
   const equips = [...document.querySelectorAll('#card-options input[type=checkbox]:not(#opt-badge):checked')].map(c => c.closest('label').textContent.trim()).join(', ');
   const profil = CLIENT?.profilTarifaire || 'plein';
-  const tarif = S.espace && TARIFS[S.espace] ? (TARIFS[S.espace][profil] || TARIFS[S.espace].plein) : 0;
+  const tarif = S.espace && TARIFS[S.espace] ? tarifEspace(S.espace, profil) : 0;
   const badge = document.getElementById('opt-badge')?.checked ? 5 : 0;
 
   const payload = {

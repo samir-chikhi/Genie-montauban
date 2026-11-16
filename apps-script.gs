@@ -126,6 +126,37 @@ function tarifHoraireNegocie(email, cle, dateResa, ss) {
   return 0;
 }
 
+// Tarifs negocies encore valables aujourd'hui pour un email, pour l'affichage
+// du formulaire (le montant facture reste recalcule par creerReservation).
+// Ne renvoie que { cleEspace: prix } ; la cle '*' vaut « tous les espaces ».
+function getTarifsNegocies(data) {
+  try {
+    var email = String(data && data.email || '').toLowerCase().trim();
+    if (!email || !rateLimitOk('nego_' + email)) return { success: true, tarifs: {} };
+    var ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+    var sh = ss.getSheetByName('Locataires_Genie');
+    var out = {};
+    if (sh && sh.getLastRow() >= 2) {
+      var aujourdhui = Utilities.formatDate(new Date(), 'Europe/Paris', 'yyyy-MM-dd');
+      var rows = sh.getDataRange().getValues();
+      for (var i = 1; i < rows.length; i++) {
+        if (String(rows[i][0]).toLowerCase().trim() !== email) continue;
+        var prix = parseFloat(String(rows[i][2]).replace(',', '.'));
+        if (!(prix > 0)) continue;
+        var fin = rows[i][3];
+        if (fin) {
+          var f = fin instanceof Date ? Utilities.formatDate(fin, 'Europe/Paris', 'yyyy-MM-dd') : String(fin).slice(0, 10);
+          if (f < aujourdhui) continue;
+        }
+        var esp = String(rows[i][1] || '').trim();
+        var cle = esp ? cleEspace(esp) : '*';
+        if (cle) out[cle] = prix;
+      }
+    }
+    return { success: true, tarifs: out };
+  } catch (e) { logErreur('getTarifsNegocies', e); return { success: true, tarifs: {} }; }
+}
+
 function cleEspaceRow(row) {
   return cleEspace(row[6]) || cleEspace(row[7]);
 }
@@ -782,7 +813,8 @@ function doPost(e) {
       case 'DEMANDER_LIEN':           return ok(demanderLienMagique(data));
       case 'GET_PROFIL':              return ok(getProfil(data));
       case 'RESERVER':                return ok(creerReservation(data));
-      case 'RESERVER_ESCALE':         return ok(creerReservationEscale(data));
+      case 'GET_TARIFS_NEGOCIES':     return ok(getTarifsNegocies(data));
+      case 'RESERVER_ESCALE':        return ok(creerReservationEscale(data));
       case 'GET_RESERVATIONS_CLIENT': return ok(getReservationsClient(data));
       case 'RELANCER_PAIEMENT':       return ok(relancerPaiement(data));
       case 'ADHERER':                 return ok(creerAdhesion(data));
