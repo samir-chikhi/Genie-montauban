@@ -405,7 +405,7 @@ input[type=radio],input[type=checkbox]{width:auto;height:auto;padding:0;border:n
       <div class="recap-rows" id="recapRows"></div>
     </div>
     <p style="font-size:.82rem;color:var(--gray);margin-bottom:16px">
-      ⚠️ La réservation sera <strong>confirmée par email</strong> sous 24h par l'équipe Génie.
+      💳 Le paiement en ligne <strong>confirme immédiatement</strong> votre créneau : vous recevez par email la confirmation, la facture et la convention de mise à disposition. En validant, vous acceptez les <a href="cgv.html" target="_blank" rel="noopener">conditions générales</a> et le <a href="reglement-interieur-genie.html" target="_blank" rel="noopener">règlement intérieur</a>.
     </p>
     <button class="btn-submit" id="btnEnvoyer" onclick="envoyerReservation()">
       Envoyer ma demande de réservation →
@@ -420,7 +420,7 @@ input[type=radio],input[type=checkbox]{width:auto;height:auto;padding:0;border:n
 <div class="success-card" id="successCard">
   <div class="success-icon">🎉</div>
   <h2>Demande envoyée !</h2>
-  <p>Votre demande a été reçue. L'équipe Génie vous confirmera par email sous 24h.</p>
+  <p id="successTexte">Votre demande a été reçue. L'équipe Génie vous confirmera par email sous 24h.</p>
   <div class="success-ref" id="successRef">REF-XXXXXX</div>
   <br><br>
   <button class="btn-modify" onclick="nouvelleReservation()">📅 Nouvelle réservation</button>
@@ -1055,6 +1055,8 @@ async function envoyerReservation() {
   document.getElementById('mainPage').style.display = 'none';
   document.getElementById('successCard').classList.add('visible');
   document.getElementById('successRef').textContent = recap.ref;
+  if (data.confirmee) document.getElementById('successTexte').textContent =
+    'Votre réservation est confirmée. La convention de mise à disposition et le règlement intérieur viennent de vous être envoyés par email.';
   updateSteps(4);
   window.scrollTo({top:0, behavior:'smooth'});
 }
@@ -1077,6 +1079,8 @@ function afficherCartePaiement(cas, r) {
       'Votre demande est bien enregistrée et le créneau vous est réservé, mais le lien de paiement HelloAsso n' + String.fromCharCode(39) + 'a pas pu être créé. Réessayez dans quelques instants.'],
     erreur: ['Le paiement n' + String.fromCharCode(39) + 'a pas abouti',
       'Aucun montant n' + String.fromCharCode(39) + 'a été débité. Le créneau vous reste réservé 30 minutes : vous pouvez réessayer.'],
+    lien: ['Régler votre réservation',
+      'Cliquez sur le bouton pour payer en ligne (paiement sécurisé HelloAsso, sans frais). Vous recevrez ensuite votre facture acquittée par email.'],
     abandon: ['Paiement non finalisé',
       'Votre demande est enregistrée. Le créneau vous reste réservé 30 minutes, le temps de régler.']
   };
@@ -1092,7 +1096,7 @@ function afficherCartePaiement(cas, r) {
 async function relancerPaiement() {
   let r = {};
   try { r = JSON.parse(sessionStorage.getItem('genie_resa') || '{}'); } catch (e) {}
-  if (!r.ref || !r.email) { toast('Référence introuvable — Appelez le 06 51 50 97 18', 'err'); return; }
+  if (!r.ref || !(r.email || r.cle)) { toast('Référence introuvable — Appelez le 06 51 50 97 18', 'err'); return; }
   const btn = document.getElementById('btnRelancer');
   btn.disabled = true;
   btn.textContent = '⏳ Préparation du paiement…';
@@ -1100,7 +1104,7 @@ async function relancerPaiement() {
   try {
     const resp = await fetch(SCRIPT_URL, {
       method: 'POST', headers: { 'Content-Type': 'text/plain' }, redirect: 'follow',
-      body: JSON.stringify({ action: 'RELANCER_PAIEMENT', id: r.ref, email: r.email })
+      body: JSON.stringify({ action: 'RELANCER_PAIEMENT', id: r.ref, email: r.email, cle: r.cle })
     });
     data = await lireJson(resp);
   } catch (e) {}
@@ -1125,6 +1129,15 @@ async function relancerPaiement() {
   let r = {};
   try { r = JSON.parse(sessionStorage.getItem('genie_resa') || '{}'); } catch (e) {}
 
+  // Lien « Régler ma réservation » reçu par email (réservation confirmée
+  // par l'équipe) : ?payer=<référence>&k=<clé signée>, sans adresse email.
+  if (q.get('payer') && q.get('k')) {
+    r = { ref: q.get('payer'), cle: q.get('k') };
+    try { sessionStorage.setItem('genie_resa', JSON.stringify(r)); } catch (e) {}
+    afficherCartePaiement('lien', r);
+    return;
+  }
+
   // Si returnUrl contient deja « ?paiement=ok », HelloAsso peut ajouter ses
   // parametres avec un second « ? » : on accepte « ok?checkoutIntentId=… ».
   const p    = String(q.get('paiement') || '').split('?')[0];
@@ -1137,7 +1150,7 @@ async function relancerPaiement() {
     return;
   }
   if (p !== 'ok') {
-    if (!p && r.ref && r.email) afficherCartePaiement('abandon', r);
+    if (!p && r.ref && (r.email || r.cle)) afficherCartePaiement('abandon', r);
     return;
   }
 

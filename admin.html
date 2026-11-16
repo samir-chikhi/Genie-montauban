@@ -1130,7 +1130,7 @@ async function saveResa(silent) {
         : { ...resa, id: 'RSV-' + Date.now() + '-' + k, date: dISO,
             createdAt: new Date().toISOString() };
       if (k > 0) r.date = dISO;
-      await apiPost({ action: editId ? 'updateResa' : 'addResa', resa: r });
+      await apiPostResa(editId ? 'updateResa' : 'addResa', r);
       creees.push({ ...r, montant:total, nbHeures:nbH, participants:parseInt(r.participants) });
     }
     const full = creees[0];
@@ -1142,9 +1142,11 @@ async function saveResa(silent) {
     }
     hideLoader();
     closeModal('mresa');
-    toast(editId ? 'Modifiée ! 📅 Calendar mis à jour.'
-                 : (nbSeances>1 ? nbSeances+' séances créées ! 📅' : 'Créée ! 📅 Événement Calendar créé.'));
-    if (!silent) sendEmail(resa);
+    // Plus de brouillon Gmail à envoyer à la main : le serveur écrit au
+    // client (confirmation + facture + convention + règlement intérieur).
+    const docs = !silent && resa.statut === 'confirmed' && resa.email ? ' 📨 Documents envoyés au client.' : '';
+    toast((editId ? 'Modifiée ! 📅 Calendar mis à jour.'
+                 : (nbSeances>1 ? nbSeances+' séances créées ! 📅' : 'Créée ! 📅 Événement Calendar créé.')) + docs);
     renderDashboard(); renderTable();
     setTimeout(() => loadData(false), 3000);
   } catch(e) {
@@ -1153,12 +1155,36 @@ async function saveResa(silent) {
   }
 }
 
+// Enregistre une réservation. Si le serveur répond que le créneau est déjà
+// pris, on montre QUI l'occupe et on ne passe outre que sur confirmation.
+async function apiPostResa(action, resa) {
+  try {
+    return await apiPost({ action, resa });
+  } catch (e) {
+    if (!/^Créneau déjà pris/.test(e.message)) throw e;
+    hideLoader();
+    if (!confirm('⚠️ ' + e.message + '\n\nEnregistrer quand même (double occupation) ?'))
+      throw new Error('créneau déjà pris, rien n\'a été enregistré.');
+    showLoader('Enregistrement…', 'Double occupation acceptée');
+    return await apiPost({ action, resa: { ...resa, forcer: true } });
+  }
+}
+
+async function envoyerDocuments(id) {
+  if (!confirm('Envoyer au client la facture, la convention et le règlement intérieur ?')) return;
+  showLoader('Envoi des documents…','');
+  try {
+    await apiPost({ action:'ENVOYER_DOCUMENTS', id });
+    hideLoader(); toast('📨 Documents envoyés au client (copie dans la boîte du Génie)');
+  } catch(e) { hideLoader(); toast('Erreur : '+e.message,'err'); }
+}
+
 async function updateStatut(id, statut) {
   const r = DB.reservations.find(r=>r.id===id); if(!r) return;
   showLoader('Mise à jour…','');
   const u = { ...r, statut, updatedAt:new Date().toISOString(), montant:String(r.montant), nbHeures:String(r.nbHeures), participants:String(r.participants) };
   try {
-    await apiPost({ action:'updateResa', resa:u });
+    await apiPostResa('updateResa', u);
     r.statut = statut;
     hideLoader(); closeModal('mdetail');
     toast('Statut mis à jour');
@@ -1858,6 +1884,7 @@ function showDetail(id) {
     <button class="btn btn-secondary" onclick="editResa('${escId(r.id)}')">✏️ Modifier</button>
     <button class="btn btn-secondary" onclick="sendEmail(DB.reservations.find(x=>x.id==='${escId(r.id)}'))">📧 Email</button>
     <button class="btn btn-ghost" onclick="printResa('${escId(r.id)}')">🖨️ PDF</button>
+    ${r.statut==='confirmed'&&r.email?`<button class="btn btn-ghost" onclick="envoyerDocuments('${escId(r.id)}')">📨 Documents</button>`:''}
     ${r.statut==='pending'?`<button class="btn btn-sage" onclick="updateStatut('${escId(r.id)}','confirmed')">✓ Confirmer</button>`:''}
     ${r.statut!=='cancelled'?`<button class="btn btn-danger btn-sm" onclick="updateStatut('${escId(r.id)}','cancelled')">Annuler</button>`:''}
     ${estResp()?`<button class="btn btn-danger btn-sm" onclick="deleteResa('${escId(r.id)}')">🗑️</button>`:''}`;
