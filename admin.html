@@ -366,7 +366,6 @@ textarea{resize:vertical;min-height:65px}
             <option value="gouges">De Gouges</option>
             <option value="michel">Louise Michel</option>
             <option value="rousseau">Rousseau</option>
-            <option value="aristote">Aristote</option>
             <option value="montessori">Montessori</option>
             <option value="lavoisier">Lavoisier</option>
           </select>
@@ -414,7 +413,6 @@ textarea{resize:vertical;min-height:65px}
             <option value="gouges">De Gouges</option>
             <option value="michel">Louise Michel</option>
             <option value="rousseau">Rousseau</option>
-            <option value="aristote">Aristote</option>
             <option value="montessori">Montessori</option>
             <option value="lavoisier">Lavoisier</option>
           </select>
@@ -809,7 +807,7 @@ const ESPACES_DEF = {
   // inchangés (corrects, hors périmètre L'Escale).
   rousseau  : { nom:'Jean-Jacques Rousseau', ref:'1-10',  type:'nomade',  capacite:20,  icon:'💻', sous_type:'coworking',
     tarifs_nomade:{ demi:9, journee:15, semaine:60, mois:180 } },
-  aristote  : { nom:'Aristote',              ref:'—',     type:'nomade',  capacite:7,   icon:'🚪', sous_type:'prive',
+  aristote  : { nom:'Aristote',              ref:'—',     type:'nomade',  capacite:7,   icon:'🚪', sous_type:'prive', nonLouable:true, // local photocopieuse : ne se loue pas (gardé pour les anciennes résas)
     tarifs_nomade:{ demi:12, journee:22, semaine:90, mois:200 } },
   montessori: { nom:'Maria Montessori',      ref:'-1-14', type:'both',    capacite:4,   icon:'♿',
     tarifs_reunion:{ MUSIVA:{heure:20,demi:60,journee:100}, adherent:{heure:15,demi:45,journee:80}, locataire:{heure:10,demi:30,journee:70}, asso:{heure:0,demi:0,journee:0} },
@@ -1727,7 +1725,7 @@ function renderDashboard() {
   const r30   = R.filter(r=>r.date&&new Date(r.date+'T12:00:00')>=last30&&r.statut!=='cancelled');
   const colors = { bourdelle:'#7C3AED',freinet:'#0284C7',gouges:'#DB2777',michel:'#16A34A',rousseau:'#CA8A04',aristote:'#EA580C',montessori:'var(--sage)',lavoisier:'#0D9488' };
 
-  document.getElementById('occ-bars').innerHTML = Object.keys(ESPACES_DEF).map(k=>{
+  document.getElementById('occ-bars').innerHTML = Object.keys(ESPACES_DEF).filter(k=>!ESPACES_DEF[k].nonLouable).map(k=>{
     const cnt = r30.filter(r=>r.espace===k).length;
     const pct = Math.min(100, cnt*8);
     return `<div class="occ-row">
@@ -2127,7 +2125,7 @@ function renderClients() {
 // ESPACES & TARIFS
 // ─────────────────────────────────────────────────────────
 function renderEspaces() {
-  document.getElementById('espaces-grid').innerHTML = Object.entries(ESPACES_DEF).map(([k,e])=>{
+  document.getElementById('espaces-grid').innerHTML = Object.entries(ESPACES_DEF).filter(([k,e])=>!e.nonLouable).map(([k,e])=>{
     let c=`<div class="card"><div class="card-hd"><h3>${e.icon} ${e.nom}</h3><span style="font-size:12px;color:var(--muted)">${e.ref} · ${e.capacite} pers.</span></div><div class="card-body">`;
 
     if (e.tarifs_reunion) {
