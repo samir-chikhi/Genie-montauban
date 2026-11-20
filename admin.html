@@ -1731,7 +1731,7 @@ function renderDashboard() {
     const cnt = r30.filter(r=>r.espace===k).length;
     const pct = Math.min(100, cnt*8);
     return `<div class="occ-row">
-      <div class="occ-name">${ESPACES_DEF[k].icon} ${ESPACES_DEF[k].nom.split(' ')[0]}</div>
+      <div class="occ-name">${ESPACES_DEF[k].icon} ${ESPACES_DEF[k].nom.split(' ').pop()}</div>
       <div class="occ-bg"><div class="occ-fill" style="width:${pct}%;background:${colors[k]}"></div></div>
       <div class="occ-pct" style="color:${colors[k]}">${pct}%</div>
     </div>`;
