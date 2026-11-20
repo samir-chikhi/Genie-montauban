@@ -1737,7 +1737,10 @@ function caSallesExercice(R, now) {
     const cle = r.id && String(r.id).startsWith('CAL-') ? r.id
       : [String(r.email||r.nom||'').toLowerCase().trim(), k, d, r.heureDebut].join('|');
     if (vus.has(cle)) return; vus.add(cle);
-    const m = montantNum(r.montant);
+    // L'adhésion prise avec la réservation (option « Adhésion Génie (50€/an) »)
+    // est incluse dans le montant : ce n'est pas de la location, on la retire.
+    const adh = String(r.options||'').match(/adh[ée]sion[^0-9€]*?(\d+(?:[.,]\d+)?)\s*€/i);
+    const m = Math.max(0, montantNum(r.montant) - (adh ? montantNum(adh[1]) : 0));
     const passee = d < tod || (d === tod && String(r.heureFin||'23:59') <= hNow);
     if (passee) { realise += m; nbR++; } else aVenir += m;
   });
