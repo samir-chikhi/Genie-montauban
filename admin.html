@@ -1726,7 +1726,10 @@ function caSallesExercice(R, now) {
   let realise = 0, aVenir = 0, nbR = 0;
   R.forEach(r => {
     if (r.statut !== 'confirmed') return;
-    const k = cleEspaceResa(r), e = ESPACES_DEF[k];
+    // Anciennes lignes (été 2026) saisies avec « salle » sans nom de salle :
+    // ce sont bien des locations de salle, comptées sous une clé à part.
+    const k = cleEspaceResa(r) || (/^salle$/i.test(String(r.espace||r.nomEspace||'').trim()) ? 'salle' : null);
+    const e = k === 'salle' ? { type:'reunion' } : ESPACES_DEF[k];
     if (!e || e.type === 'nomade') return;
     const d = String(r.date||'').slice(0,10);
     if (d < debut || d > fin) return;
