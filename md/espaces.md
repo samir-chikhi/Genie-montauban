@@ -2,7 +2,7 @@
 title: Bureaux, coworking et salles de réunion à Montauban — Génie
 description: Les quatorze espaces du tiers-lieu Génie à Montauban : salles de réunion dès 20 €/h, coworking à la carte dès 4 €/h, bureaux en bail. Devis pour institutions et entreprises. 200 m de la gare, accès PMR.
 url: https://genie-montauban.fr/espaces.html
-last_updated: 2026-11-02
+last_updated: 2026-11-20
 source: miroir markdown — version texte pour moteurs IA
 ---
 
@@ -117,22 +117,6 @@ Salle totalement accessible PMR. Usage flexible : réunion ou bureau nomade priv
 Tarif plein. Adhérent dès 15 €/h · Locataire dès 10 €/h · Assos de Villebourbon et syndicats de salariés/ouvriers : **gratuit**.
 
 [Réserver →](reservation.html)
-
-## Bureaux nomades
-
-1 espace · actuellement loué
-
-Un bureau privé à la demi-journée, à la semaine ou au mois, sans bail ni engagement — pour le télétravail, les visioconférences et les journées où il faut vraiment du calme. Notre bureau nomade est actuellement loué ; écrivez-nous pour être prévenu·e s'il se libère, ou voyez [L'Escale du Génie](coworking-nomade.html) pour une place en espace ouvert.
-
-Loué · 7 m²
-
-Bureau 1-13 · 1er étage
-
-Aristote
-
-Actuellement loué
-
-[Me prévenir s'il se libère →](mailto:contact@genie-montauban.fr?subject=Bureau Aristote — me prévenir en cas de disponibilité)
 
 ## Coworking
 

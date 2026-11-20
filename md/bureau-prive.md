@@ -2,7 +2,7 @@
 title: Location de bureau privé à Montauban, près de la gare — Génie
 description: Bureaux privés meublés de 12 à 24 m² à louer à Montauban (Tarn-et-Garonne), à 200 m de la gare : au mois, à l'année ou en bail 3/6/9, dès 216 €/mois. Visite en semaine.
 url: https://genie-montauban.fr/bureau-prive.html
-last_updated: 2026-11-02
+last_updated: 2026-11-20
 source: miroir markdown — version texte pour moteurs IA
 ---
 
@@ -50,7 +50,7 @@ Médecin et pédagogue, 1870–1952
 
 [Visiter](#visite)[À l'heure](reservation.html?espace=montessori)
 
-Actuellement loués : Philippe Meirieu (24 m²), Louise Michel (15 m²), Aristote (7 m²), Aimé Césaire (17 m²), Condorcet (17 m²), Baden Powell (16 m²) et Maryse Condé (partagé par MUSIVA, Génie, Topogramme et Myself). [Être prévenu quand l'un se libère](#visite)
+Actuellement loués : Philippe Meirieu (24 m²), Louise Michel (15 m²), Aimé Césaire (17 m²), Condorcet (17 m²), Baden Powell (16 m²) et Maryse Condé (partagé par MUSIVA, Génie, Topogramme et Myself). [Être prévenu quand l'un se libère](#visite)
 
 ## Ce qui est compris
 
