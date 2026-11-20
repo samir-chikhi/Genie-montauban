@@ -806,6 +806,15 @@ const ESPACES_DEF = {
 const DL = { heure:'Heure', demi:'½ journée', journee:'Journée', semaine:'Semaine', mois:'Mois' };
 // 24h/24 avec pas de 30 min (depuis 00:00 à 23:30)
 const HOURS = Array.from({length:48},(_,i)=>{const h=Math.floor(i/2);const m=(i%2)*30;return String(h).padStart(2,'0')+':'+String(m).padStart(2,'0');});
+// Planning affiché de 07:30 à 23:30 (dernière case 23:00–23:30). Les créneaux hors plage
+// sont ramenés dans la première/dernière case pour rester visibles.
+const PLAN_START = 7*60+30, PLAN_END = 23*60+30;
+const PLAN_HOURS = HOURS.filter(h=>{const [a,b]=h.split(':').map(Number);const t=a*60+b;return t>=PLAN_START&&t<PLAN_END;});
+// Position d'un événement : index de case + décalage en px (cases de 48px = 30 min)
+function planPos(min){
+  const c = Math.max(PLAN_START, Math.min(PLAN_END-30, min));
+  return { idx: Math.floor((c-PLAN_START)/30), off: Math.round(((c-PLAN_START)%30)/30*48) };
+}
 
 // ─────────────────────────────────────────────────────────
 // HELPERS
@@ -1769,7 +1778,7 @@ function renderPlanBody(days, today) {
   const resas  = DB.reservations.filter(r=>r.statut!=='cancelled'&&(!filter||r.espace===filter));
 
   let body = '<div class="time-col">' +
-    HOURS.map(h=>`<div class="ts">${h}</div>`).join('') +
+    PLAN_HOURS.map(h=>`<div class="ts">${h}</div>`).join('') +
     '</div>';
 
   days.forEach(day => {
@@ -1784,26 +1793,30 @@ function renderPlanBody(days, today) {
 
     body += '<div class="dcol">';
 
-    HOURS.forEach((hour, hi) => {
-      const hNum = parseInt(hour);
-
+    const NS = PLAN_HOURS.length;
+    PLAN_HOURS.forEach((hour, hi) => {
       // Réservations Sheets
-      const sheetsEvts = dr.filter(r=>parseInt((r.heureDebut||'0').split(':')[0])===hNum);
+      const sheetsEvts = dr.filter(r=>{const [a,b]=(r.heureDebut||'0:0').split(':').map(Number);return planPos(a*60+(b||0)).idx===hi;});
       const htmlSheets = sheetsEvts.map(r=>{
+        const [a,b]=(r.heureDebut||'0:0').split(':').map(Number);
+        const p  = planPos(a*60+(b||0));
         const dh = r.typeDuree==='heure' ? Number(r.nbHeures) : (r.typeDuree==='demi'?4:8);
-        const ht = Math.min(dh*48, HOURS.length*48-hi*48);
-        return `<div class="ev ev-${escId(r.espace)}" style="height:${ht-3}px;top:1px;left:1px;right:${calDay.length?'52%':'1px'}"
+        const ht = Math.max(24, Math.min(dh*96, (NS-hi)*48-p.off));
+        return `<div class="ev ev-${escId(r.espace)}" style="height:${ht-3}px;top:${p.off+1}px;left:1px;right:${calDay.length?'52%':'1px'}"
           onclick="showDetail('${escId(r.id)}')" title="${esc(r.prenom)} ${esc(r.nom)}">
           ${esc(r.prenom)} ${esc(String(r.nom).charAt(0))}.<br>${esc(r.heureDebut||'')}
         </div>`;
       }).join('');
 
       // Événements Google Calendar
-      const calEvts = calDay.filter(ev=>new Date(ev.start).getHours()===hNum);
+      const calEvts = calDay.filter(ev=>{const s=new Date(ev.start);return planPos(s.getHours()*60+s.getMinutes()).idx===hi;});
       const htmlCal = calEvts.map(ev=>{
         const s  = new Date(ev.start), e=new Date(ev.end);
-        const dH = (e-s)/3600000;
-        const ht = Math.min(dH*48, HOURS.length*48-hi*48);
+        const sm = s.getHours()*60+s.getMinutes();
+        const p  = planPos(sm);
+        // Durée visible : on rogne ce qui dépasse la plage 07:30–23:30
+        const vis = Math.min((e-s)/60000, PLAN_END-Math.max(sm,PLAN_START));
+        const ht = Math.max(24, Math.min(vis/30*48, (NS-hi)*48-p.off));
         const hd = `${String(s.getHours()).padStart(2,'0')}:${String(s.getMinutes()).padStart(2,'0')}`;
         const safeId    = ev.calEventId.replace(/'/g,"\\'");
         const safeTitle = ev.title.replace(/'/g,"\\'");
