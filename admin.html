@@ -1696,6 +1696,51 @@ function refreshPage(name) {
 // ─────────────────────────────────────────────────────────
 // DASHBOARD
 // ─────────────────────────────────────────────────────────
+// CA des locations de salles sur l'exercice comptable (= année civile, cf.
+// 03_Financier_Comptabilite/historique.md). Ne compte que les réservations
+// CONFIRMÉES et déjà passées ; le coworking / bureaux nomades (type 'nomade',
+// ex. Escale dans Rousseau) est exclu. Les confirmées futures sont « à venir ».
+function montantNum(v) {
+  if (typeof v === 'number') return v;
+  const n = parseFloat(String(v||'').replace(/[^\d,.-]/g,'').replace(',', '.'));
+  return isNaN(n) ? 0 : n;
+}
+// Même règle que cleEspace() d'apps-script.gs : la colonne espace contient
+// selon les lignes 'bourdelle', 'Antoine Bourdelle', 'olympe' ou rien (le nom
+// est alors dans nomEspace, ex. « FNE82 - … - Bourdelle »).
+function cleEspaceResa(r) {
+  const cles = Object.keys(ESPACES_DEF);
+  for (const v of [r.espace, r.nomEspace]) {
+    const s = String(v||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
+    const k = cles.find(c => s.includes(c));
+    if (k) return k;
+    if (s.includes('olympe')) return 'gouges';
+  }
+  return null;
+}
+function caSallesExercice(R, now) {
+  const debut = now.getFullYear() + '-01-01', fin = now.getFullYear() + '-12-31';
+  const tod   = now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
+  const hNow  = String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
+  const vus = new Set();
+  let realise = 0, aVenir = 0, nbR = 0;
+  R.forEach(r => {
+    if (r.statut !== 'confirmed') return;
+    const k = cleEspaceResa(r), e = ESPACES_DEF[k];
+    if (!e || e.type === 'nomade') return;
+    const d = String(r.date||'').slice(0,10);
+    if (d < debut || d > fin) return;
+    // Doublon strict (même identifiant, ou même client + salle + date + heure) compté une seule fois
+    const cle = r.id && String(r.id).startsWith('CAL-') ? r.id
+      : [String(r.email||r.nom||'').toLowerCase().trim(), k, d, r.heureDebut].join('|');
+    if (vus.has(cle)) return; vus.add(cle);
+    const m = montantNum(r.montant);
+    const passee = d < tod || (d === tod && String(r.heureFin||'23:59') <= hNow);
+    if (passee) { realise += m; nbR++; } else aVenir += m;
+  });
+  return { realise, aVenir, nbR };
+}
+
 function renderDashboard() {
   renderToday();
   if (!estResp()) return;
@@ -1703,12 +1748,13 @@ function renderDashboard() {
   const mR=R.filter(r=>{ const d=new Date(r.date+'T12:00:00'); return d.getMonth()===m&&d.getFullYear()===y&&r.statut!=='cancelled'; });
   const caM  = mR.reduce((s,r)=>s+Number(r.montant),0);
   const tod  = now.toISOString().split('T')[0];
+  const caEx = caSallesExercice(R, now);
 
   document.getElementById('stats').innerHTML=`
     <div class="stat-card sc-brick"><div class="stat-label">CA du mois</div><div class="stat-value">${fMoney(caM)}</div><div class="stat-sub">${mR.length} réservation(s)</div></div>
     <div class="stat-card sc-gold"><div class="stat-label">Total réservations</div><div class="stat-value">${R.filter(r=>r.statut!=='cancelled').length}</div><div class="stat-sub">${R.filter(r=>r.statut==='pending').length} en attente</div></div>
     <div class="stat-card sc-sage"><div class="stat-label">Aujourd'hui</div><div class="stat-value">${R.filter(r=>r.date===tod&&r.statut!=='cancelled').length}</div><div class="stat-sub">réservation(s)</div></div>
-    <div class="stat-card sc-steel"><div class="stat-label">CA total</div><div class="stat-value">${fMoney(R.filter(r=>r.statut!=='cancelled').reduce((s,r)=>s+Number(r.montant),0))}</div><div class="stat-sub">depuis ouverture</div></div>`;
+    <div class="stat-card sc-steel"><div class="stat-label">CA salles ${y}</div><div class="stat-value">${fMoney(caEx.realise)}</div><div class="stat-sub">${caEx.nbR} location(s) passée(s) · ${caEx.aVenir ? fMoney(caEx.aVenir)+' à venir' : 'rien à venir'}</div></div>`;
 
   document.getElementById('recent-body').innerHTML = R.slice(0,8).map(r=>
     `<tr style="cursor:pointer" onclick="showDetail('${escId(r.id)}')">
