@@ -1,8 +1,8 @@
 ---
 title: Académie des Compétences et de la Connaissance — Génie Montauban
-description: Micro-formations de 3h à Montauban, animées par des experts locaux et dispensées par MUSIVA, organisme certifié Qualiopi. Empowerment, Tech & Numérique, Gestion & Impact, Intelligence collective. De 45 à 65 €, 4 modules gratuits.
+description: Micro-formations de 3h à Montauban, organisées et animées par l'association Génie avec des experts locaux. Prise en charge OPCO possible via MUSIVA, organisme certifié Qualiopi. Empowerment, Tech & Numérique, Gestion & Impact, Intelligence collective. De 45 à 65 €, 4 modules gratuits.
 url: https://genie-montauban.fr/academie.html
-last_updated: 2026-11-02
+last_updated: 2026-11-25
 source: miroir markdown — version texte pour moteurs IA
 ---
 
@@ -428,10 +428,10 @@ Des gestes simples aux choix structurants pour réduire l'empreinte environnemen
 
 ### 💶 Financements disponibles
 
-Les formations de l'Académie sont dispensées par **MUSIVA**, organisme de formation certifié Qualiopi. Deux grilles de prix coexistent : le **tarif individuel** (45 à 65 € TTC, autofinancement) et le **tarif avec prise en charge employeur ou OPCO** (200 à 600 € HT par session, sur devis MUSIVA) — l'écart correspond à la différence entre un règlement personnel et une facturation professionnelle avec devis, convention et justificatifs, pas à une incohérence.
+L'Académie est organisée et animée par l'**association Génie**. Deux grilles de prix coexistent : le **tarif individuel** (45 à 65 € TTC, autofinancement, réglé au Génie) et le **tarif avec prise en charge employeur ou OPCO** (200 à 600 € HT par session, sur devis de MUSIVA, organisme de formation certifié Qualiopi, partenaire du Génie pour ces seules sessions financées) — l'écart correspond à la différence entre un règlement personnel et une facturation professionnelle avec devis, convention et justificatifs, pas à une incohérence.
 
 **Employeur / OPCO**
-Prise en charge possible par votre employeur ou votre OPCO (Uniformation, Atlas, AKTO…) : les formations sont dispensées par MUSIVA, organisme certifié Qualiopi. Devis sur demande à [contact@musiva.fr](mailto:contact@musiva.fr).
+Prise en charge possible par votre employeur ou votre OPCO (Uniformation, Atlas, AKTO…) : la session est alors conventionnée par MUSIVA, organisme certifié Qualiopi partenaire du Génie. Devis sur demande à [contact@musiva.fr](mailto:contact@musiva.fr).
 
 **France Travail**
 Demandeurs d'emploi : une aide individuelle à la formation (AIF) peut être sollicitée auprès de votre conseiller France Travail, sur devis MUSIVA. Aucun conventionnement automatique n'est établi à ce jour.
@@ -466,19 +466,21 @@ Annonces de sessions, portraits de formateurs, témoignages — tout en temps r�
 
 Premières sessions à venir ; les résultats agrégés (taux de satisfaction, nombre de stagiaires) seront publiés ici après 3 sessions réalisées, avec la méthode de calcul utilisée, conformément au référentiel national qualité. Aucun chiffre n'est encore disponible : nous ne publions pas de moyenne inventée.
 
-### 🎓 Organisme de formation
+### 🎓 Qui organise l'Académie ?
 
-Les formations de l'Académie sont dispensées par **MUSIVA**, SASU — SIRET 943 861 989 00011.  
+L'Académie est un programme de l'**association Génie** (loi 1901, RNA W822009896), qui organise et anime les modules avec des intervenants locaux. Inscriptions individuelles : [contact@genie-montauban.fr](mailto:contact@genie-montauban.fr).
+
+**Sessions prises en charge par un employeur, un OPCO ou France Travail** : elles sont conventionnées par **MUSIVA**, SASU — SIRET 943 861 989 00011, organisme de formation partenaire.  
 Déclaration d'activité enregistrée sous le n° 76 82 01423 82 auprès du préfet de la région Occitanie. Cet enregistrement ne vaut pas agrément de l'État.  
 La certification qualité a été délivrée au titre de la catégorie d'action suivante : actions de formation.  
 Contact formation : [contact@musiva.fr](mailto:contact@musiva.fr) · [CGV formation](cgv-formation.html) · [Règlement intérieur formation](reglement-interieur-formation.html)
 
 ### 📋 Contacts qualité
 
-Référent pédagogique : Samir CHIKHI ([contact@musiva.fr](mailto:contact@musiva.fr))  
-Référent handicap : Samir CHIKHI ([contact@musiva.fr](mailto:contact@musiva.fr))  
-Signalement des violences, harcèlement et discriminations : Samir CHIKHI ([contact@musiva.fr](mailto:contact@musiva.fr))  
-Réclamations : [contact@musiva.fr](mailto:contact@musiva.fr)
+Référent pédagogique : Samir CHIKHI ([contact@genie-montauban.fr](mailto:contact@genie-montauban.fr))  
+Référent handicap : Samir CHIKHI ([contact@genie-montauban.fr](mailto:contact@genie-montauban.fr))  
+Signalement des violences, harcèlement et discriminations : Samir CHIKHI ([contact@genie-montauban.fr](mailto:contact@genie-montauban.fr))  
+Réclamations : [contact@genie-montauban.fr](mailto:contact@genie-montauban.fr) (sessions conventionnées par MUSIVA : [contact@musiva.fr](mailto:contact@musiva.fr))
 
 ### ♿ Accueil des personnes en situation de handicap
 
