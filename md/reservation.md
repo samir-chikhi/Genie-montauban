@@ -84,6 +84,16 @@ Formation ou atelier
 Vente / activité commerciale
 Autre (précisez ci-dessous)
 
+Vous réservez en tant que \*
+
+Particulier
+Association
+Professionnel (entreprise, indépendant…)
+
+Attestation d'assurance RC pro (facultatif maintenant)
+
+Responsabilité civile professionnelle. Si vous ne l'avez pas sous la main, nous vous la demanderons par e-mail : votre réservation n'est pas bloquée.
+
 Pièce d'identité avec photo (première réservation au Génie)
 
 Carte d'identité, passeport, permis de conduire ou titre de séjour. Vue uniquement par l'équipe pour vérifier votre identité, puis supprimée : elle n'est enregistrée nulle part sur le site. Inutile si vous êtes déjà venu.
