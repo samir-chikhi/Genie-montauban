@@ -1085,6 +1085,10 @@ function setCalState(txt, color) {
 async function saveResa(silent) {
   const prenom=gv('r-prenom'), nom=gv('r-nom'), email=gv('r-email'), date=gv('r-date'), espace=gv('r-espace');
   if (!prenom||!nom||!email||!date||!espace) { toast('Champs * obligatoires','err'); return; }
+  // Montessori : pas de location le week-end (entrée autonome par clé)
+  if (espace === 'montessori' && [0,6].includes(new Date(date + 'T12:00:00').getDay())) {
+    toast('Montessori ne se loue pas le week-end (entrée autonome par clé).','err'); return;
+  }
 
   const usage=gv('r-usage'), profil=gv('r-profil'), duree=gv('r-duree'), nbH=parseInt(gv('r-nbh'))||1;
   const hd=gv('r-hdebut'), hf=heureFin(hd,duree,nbH);

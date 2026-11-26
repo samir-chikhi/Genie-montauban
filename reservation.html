@@ -675,7 +675,7 @@ const ESPACES = [
     tarifs:{ plein:{heure:30,demi:100,journee:180}, adherent:{heure:20,demi:60,journee:100},  locataire:{heure:15,demi:45,journee:80},   asso:{heure:0,demi:0,journee:0} }},
   { id:'gouges',      icon:'📋', nom:'Olympe de Gouges',         cap:'10-15 pers. · 1er',        type:'salle',
     tarifs:{ plein:{heure:30,demi:100,journee:180}, adherent:{heure:20,demi:60,journee:100},  locataire:{heure:15,demi:45,journee:80},   asso:{heure:0,demi:0,journee:0} }},
-  { id:'montessori',  icon:'♿', nom:'Maria Montessori',         cap:'PMR · 4 pers.',         type:'salle',
+  { id:'montessori',  icon:'♿', nom:'Maria Montessori',         cap:'PMR · 4 pers. · lun–ven', type:'salle', semaineSeule:true,
     tarifs:{ plein:{heure:20,demi:60,journee:100},  adherent:{heure:15,demi:45,journee:80},   locataire:{heure:10,demi:30,journee:70},   asso:{heure:0,demi:0,journee:0} }},
   { id:'lavoisier',   icon:'🧪', nom:'Antoine Lavoisier',        cap:'19 m² · RDC',           type:'salle',
     tarifs:{ plein:{heure:30,demi:100,journee:180}, adherent:{heure:20,demi:60,journee:100},  locataire:{heure:15,demi:45,journee:80},   asso:{heure:0,demi:0,journee:0} }},
@@ -878,9 +878,10 @@ function revenirEnEdition() {
     toast('Choisissez une durée', '');
     return;
   }
-  if (!document.getElementById('fDate').value) {
+  if (!document.getElementById('fDate').value || weekendInterdit(document.getElementById('fDate').value)) {
     document.getElementById('fDate').scrollIntoView({behavior:'smooth', block:'center'});
     document.getElementById('fDate').focus();
+    if (document.getElementById('fDate').value) toast('Cette salle ne se loue pas le week-end : choisissez un jour du lundi au vendredi.', 'err');
     return;
   }
   if (document.getElementById('fPrenom').value.trim().length < 2) {
@@ -936,6 +937,14 @@ function toast(msg, type) {
 // ══════════════════════════════════════════════════
 // ENVOI — GET ?payload= via SCRIPT_URL corrigé
 // ══════════════════════════════════════════════════
+// Salles fermées le week-end (Montessori : entrée autonome par clé)
+function weekendInterdit(dateStr) {
+  const e = ESPACES.find(x => x.id === espaceId);
+  if (!e || !e.semaineSeule || !dateStr) return false;
+  const j = new Date(dateStr + 'T12:00:00').getDay();
+  return j === 0 || j === 6;
+}
+
 async function envoyerReservation() {
   if (!espaceId)  { toast('Choisissez un espace.', 'err'); revenirEnEdition(); return; }
   if (!duree)     { toast('Choisissez une durée.', 'err'); revenirEnEdition(); return; }
@@ -944,6 +953,7 @@ async function envoyerReservation() {
   const nom   = (document.getElementById('fPrenom').value.trim() + ' ' + document.getElementById('fNom').value.trim()).trim();
   const email = document.getElementById('fEmail').value.trim();
   if (!date)  { toast('Indiquez une date.', 'err'); document.getElementById('fDate').focus(); return; }
+  if (weekendInterdit(date)) { toast('Cette salle ne se loue pas le week-end : choisissez un jour du lundi au vendredi.', 'err'); revenirEnEdition(); return; }
   if (!heure) { toast('Indiquez une heure.', 'err'); document.getElementById('fHeure').focus(); return; }
   const heureFin_input = document.getElementById('fHeureFin').value;
   if (!heureFin_input) { toast("Indiquez une heure de fin.", 'err'); document.getElementById('fHeureFin').focus(); return; }

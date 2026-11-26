@@ -103,6 +103,20 @@ function cleEspace(nom) {
   return null;
 }
 
+// Salles non louées le samedi ni le dimanche. Montessori : entrée autonome
+// par clé, pas de location le week-end (demande de Samir, 26/11/2026).
+// Contrôle serveur, sans contournement possible (même « forcer » en admin).
+const SALLES_SEMAINE_SEULE = ['montessori'];
+function refusSiWeekend(espace, dateStr) {
+  var cle = cleEspace(espace);
+  var d = dateISO(dateStr);
+  if (!cle || SALLES_SEMAINE_SEULE.indexOf(cle) === -1 || !/^\d{4}-\d{2}-\d{2}$/.test(d)) return null;
+  var j = new Date(d + 'T12:00:00').getDay();
+  if (j !== 0 && j !== 6) return null;
+  return { success: false, code: 'FERME_WEEKEND', error: 'FERME_WEEKEND',
+           message: 'La salle Maria Montessori ne se loue pas le week-end. Choisissez un jour du lundi au vendredi.' };
+}
+
 // Clé espace d'une ligne de réservation. La colonne 6 (espace) porte le nom
 // réel de la salle ('Antoine Bourdelle') ; la colonne 7 peut contenir le type
 // ('salle'/'nomade'). On résout donc col6 en priorité, puis col7 en secours.
@@ -1287,6 +1301,8 @@ function creerReservation(data) {
     return { success: false, error: 'HEURE_INVALIDE' };
   if (!data.duree || isNaN(parseFloat(data.duree)) || parseFloat(data.duree) <= 0)
     return { success: false, error: 'DUREE_INVALIDE' };
+  var refusWE = refusSiWeekend(data.espace, data.date);
+  if (refusWE) return refusWE;
   if (!rateLimitOk(data.email))
     return { success: false, error: 'TROP_DE_REQUETES', message: 'Trop de demandes. Réessayez dans une heure ou appelez le ' + CONFIG.TEL + '.' };
 
@@ -2808,6 +2824,8 @@ function adminGetAll() {
 // ============================================================
 function adminAddResa(resa, qui) {
   if (!resa) return { success: false, error: 'Données manquantes' };
+  var refusWE = refusSiWeekend(resa.espace || resa.nomEspace, resa.date);
+  if (refusWE && resa.statut !== 'cancelled') return { success: false, error: refusWE.message };
   var errPrix = controlerPrixAccueil(resa, resa.montantBase || resa.montant || 0, qui);
   if (errPrix) return errPrix;
   try {
@@ -2927,6 +2945,8 @@ function adminUpdateResa(resa, qui) {
         const errPrix = controlerPrixAccueil(resa, rows[i][15], qui);
         if (errPrix) return errPrix;
         if (newStatut !== 'ANNULE') {
+          const refusWE = refusSiWeekend(resa.espace || resa.nomEspace, resa.date);
+          if (refusWE) return { success: false, error: refusWE.message };
           const refus = refusSiCreneauPris(rows, resa);
           if (refus) return refus;
           if (resa.forcer) journaliser(qui, 'Créneau forcé', resa.id, (resa.nomEspace||resa.espace||'') + ' ' + (resa.date||''));

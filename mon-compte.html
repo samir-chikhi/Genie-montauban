@@ -575,7 +575,9 @@ function renderCal() {
     const dateStr = y + '-' + pad(m+1) + '-' + pad(d);
     const el = document.createElement('div'); el.className = 'cal-day'; el.textContent = d;
     if (date.toDateString() === today.toDateString()) el.classList.add('today');
-    if (date < today) { el.classList.add('past'); }
+    // Montessori : pas de location le week-end (entrée autonome par clé)
+    const weFerme = S.espace === 'Montessori' && (date.getDay() === 0 || date.getDay() === 6);
+    if (date < today || weFerme) { el.classList.add('past'); if (weFerme) el.title = 'Salle non louée le week-end'; }
     else {
       const occ = S.espace && S.reservations[S.espace] && S.reservations[S.espace][dateStr];
       if (occ && occ.length >= 40) el.classList.add('full');
