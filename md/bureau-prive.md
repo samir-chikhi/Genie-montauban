@@ -61,7 +61,9 @@ Disponible
 
 Pédagogue, 1896–1966
 
-Notre salle de réunion, louable aussi comme bureau au mois ou à l'année. Tarif sur demande.
+- Bail mensuel**432 €**
+- Bail 1 an**408 €**
+- Bail 3/6/9**360 €**
 
 [Visiter](#visite)[À l'heure](reservation.html?espace=freinet)
 
