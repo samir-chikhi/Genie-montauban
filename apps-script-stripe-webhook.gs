@@ -121,6 +121,11 @@ function stripeWebhook(evt, params) {
         var props2 = PropertiesService.getScriptProperties();
         var cRue = props2.getProperty('ESCALE_CODE_PORTE_RUE') || '(code porte de rue — à communiquer)';
         var cInt = props2.getProperty('ESCALE_CODE_PORTE_INT') || '(code porte intérieure — à communiquer)';
+        // Code personnel SwitchBot si activé (apps-script-switchbot.gs), sinon code fixe.
+        if (typeof sbCodePourLigne === 'function') {
+          try { var cPerso = sbCodePourLigne(r); if (cPerso) cInt = cPerso + ' puis ✓ (code personnel, actif 15 min avant et jusqu\'à 15 min après votre créneau)'; }
+          catch (eSb) { logErreur('stripeWebhook/switchbot', eSb); }
+        }
         if (emailR) {
           envoyerEmailSafe(emailR,
             '✅ L\'Escale du Génie — c\'est réservé le ' + formaterDate(dateR) + ' à ' + hDebR,

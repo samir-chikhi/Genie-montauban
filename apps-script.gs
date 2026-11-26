@@ -2525,7 +2525,8 @@ function reglementInterieurPdf() {
 function envoyerDocumentsReservation(sheet, ligne, opts) {
   opts = opts || {};
   assurerColonnesDocs(sheet);
-  var r = resaDepuisLigne(sheet.getRange(ligne, 1, 1, 31).getValues()[0]);
+  var brute = sheet.getRange(ligne, 1, 1, 31).getValues()[0];
+  var r = resaDepuisLigne(brute);
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(r.email)) return false;
   var paye = r.payState === 'PAYE';
   var pieces = [], liste = [];
@@ -2541,6 +2542,12 @@ function envoyerDocumentsReservation(sheet, ligne, opts) {
 
   var aRegler = r.montant > 0 && !paye;
   var lien = aRegler ? lienPaiement(r.id) : '';
+  // Code porte personnel (apps-script-switchbot.gs) : seulement une fois
+  // réglé ou gratuit — le paiement vaut accès.
+  var acces = '';
+  if (!aRegler && typeof sbTexteAcces === 'function') {
+    try { acces = sbTexteAcces(brute); } catch (eSb) { logErreur('envoyerDocuments/switchbot', eSb); }
+  }
   var accroche = opts.modifiee ? 'Votre réservation a été modifiée. Voici le créneau à jour.'
     : paye ? 'Votre paiement est bien reçu : votre réservation est confirmée.'
     : 'Votre réservation est confirmée.';
@@ -2553,6 +2560,7 @@ function envoyerDocumentsReservation(sheet, ligne, opts) {
     + (aRegler ? (lien
         ? '\n💳 Régler en ligne (paiement sécurisé HelloAsso, sans frais) :\n' + lien + '\n'
         : '\nRèglement sur place ou par virement — nous revenons vers vous.\n') : '')
+    + acces
     + '\nEn pièces jointes : ' + liste.join(', ') + '.\n'
     + (ri ? '' : 'Règlement intérieur : ' + CONFIG.URL_SITE + '/reglement-interieur-genie.html\n')
     + 'Conditions générales : ' + CONFIG.URL_SITE + '/cgv.html\n'
@@ -2991,6 +2999,9 @@ function adminUpdateResa(resa, qui) {
         if (dateISO(avant.date) !== dateISO(resa.date)) det.push('date → ' + resa.date);
         journaliser(qui, 'Réservation modifiée', resa.id, (det.join(' ; ') || 'autres champs') + (resa.sansEmail ? ' · client non prévenu' : ''));
 
+        if (newStatut === 'ANNULE' && avant.statut !== 'ANNULE' && typeof sbAnnulerCodeResa === 'function') {
+          try { sbAnnulerCodeResa(resa.id); } catch (eSb) { logErreur('adminUpdateResa/switchbot', eSb); }
+        }
         if (newStatut === 'ANNULE' && avant.statut !== 'ANNULE' && rows[i][23]) {
           try {
             const cal = CalendarApp.getCalendarById(CONFIG.CALENDAR_ID);
@@ -3042,6 +3053,9 @@ function adminDeleteResa(id) {
       if (String(rows[i][0]) === String(id)) {
         // Nouveau schéma : statut en col 19 (index 18)
         sheet.getRange(i + 1, 19).setValue('ANNULE');
+        if (typeof sbAnnulerCodeResa === 'function') {
+          try { sbAnnulerCodeResa(id); } catch (eSb) { logErreur('adminDeleteResa/switchbot', eSb); }
+        }
         // Supprimer l'événement Google Calendar lié (v5)
         try {
           const calEventId = String(rows[i][23] || '');
