@@ -123,8 +123,11 @@ function stripeWebhook(evt, params) {
         var cInt = props2.getProperty('ESCALE_CODE_PORTE_INT') || '(code porte intérieure — à communiquer)';
         // Code personnel SwitchBot si activé (apps-script-switchbot.gs), sinon code fixe.
         if (typeof sbCodePourLigne === 'function') {
-          try { var cPerso = sbCodePourLigne(r); if (cPerso) cInt = cPerso + ' puis ✓ (code personnel, actif 15 min avant et jusqu\'à 15 min après votre créneau)'; }
-          catch (eSb) { logErreur('stripeWebhook/switchbot', eSb); }
+          var cPerso = null;
+          try { cPerso = sbCodePourLigne(r); } catch (eSb) { logErreur('stripeWebhook/switchbot', eSb); }
+          if (cPerso) cInt = cPerso + ' puis ✓ (code personnel, actif 15 min avant et jusqu\'à 15 min après votre créneau)';
+          // Plus de code fixe en secours : l'équipe est alertée et envoie le code.
+          else if (typeof sbActif === 'function' && sbActif()) cInt = 'votre code personnel vous est envoyé par e-mail très vite (léger retard technique)';
         }
         if (emailR) {
           envoyerEmailSafe(emailR,
@@ -204,6 +207,15 @@ function stripeWebhook(evt, params) {
     var props = PropertiesService.getScriptProperties();
     var codeRue = props.getProperty('ESCALE_CODE_PORTE_RUE') || '(code porte de rue — à communiquer)';
     var codeInt = props.getProperty('ESCALE_CODE_PORTE_INT') || '(code porte intérieure — à communiquer)';
+    // Code personnel SwitchBot : carnet = 6 mois, achat sans créneau = 7 jours.
+    if (typeof sbCodeDuree === 'function' && sbActif()) {
+      var carnet = /Carnet/.test(libelle), sbD = null;
+      try { sbD = sbCodeDuree(idResa, carnet ? 182 : 7); } catch (eSb) { logErreur('stripeWebhook/switchbot carnet', eSb); }
+      codeInt = sbD
+        ? sbD.code + ' puis ✓ (code personnel, valable jusqu\'au ' + formaterDate(Utilities.formatDate(sbD.fin, Session.getScriptTimeZone(), 'yyyy-MM-dd'))
+          + ' — merci de ne pas le communiquer)'
+        : 'votre code personnel vous est envoyé par e-mail très vite (léger retard technique)';
+    }
 
     if (email) {
       envoyerEmailSafe(email,

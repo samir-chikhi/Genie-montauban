@@ -119,6 +119,11 @@ function sbLireCodes() {
 function sbEcrireCodes(codes) {
   var limite = Date.now() - 86400000;
   Object.keys(codes).forEach(function (id) { if (codes[id].f < limite) delete codes[id]; });
+  // Une propriété est limitée à 9 Ko : au-delà, on oublie les entrées qui
+  // finissent le plus tôt (le code reste valable sur le clavier, on perd
+  // seulement la possibilité de le retirer à l'annulation).
+  var cles = Object.keys(codes).sort(function (a, b) { return codes[a].f - codes[b].f; });
+  while (JSON.stringify(codes).length > 8500 && cles.length) delete codes[cles.shift()];
   sbProps().setProperty('SB_CODES', JSON.stringify(codes));
 }
 
@@ -157,6 +162,20 @@ function sbCodePourLigne(row) {
   codes[id] = { c: cree.code, n: cree.nom, s: sig, f: fen[1].getTime() };
   sbEcrireCodes(codes);
   return cree.code;
+}
+
+// Code valable N jours à partir de maintenant (carnet L'Escale : 182 j ;
+// achat sans créneau : 7 j). null si inactif ou en échec (admin alerté).
+function sbCodeDuree(reference, jours) {
+  if (!sbActif()) return null;
+  var debut = new Date(Date.now() + SB_MARGE_MIN * 60000);          // actif tout de suite
+  var fin = new Date(Date.now() + jours * 86400000);
+  var cree = sbCreerCode(reference, debut, fin);
+  if (!cree) return null;
+  var codes = sbLireCodes();
+  codes[String(reference)] = { c: cree.code, n: cree.nom, s: 'duree', f: fin.getTime() };
+  sbEcrireCodes(codes);
+  return { code: cree.code, fin: fin };
 }
 
 // Bloc « ACCÈS » à insérer dans l'e-mail de confirmation ('' si rien à dire).
