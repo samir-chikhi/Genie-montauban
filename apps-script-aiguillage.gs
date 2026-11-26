@@ -169,20 +169,140 @@ function decisionDemande(p) {
   return page('Introuvable', 'Réservation ' + echapper(id) + ' introuvable.');
 }
 
-// Clients, colonne Q : « identité vérifiée le … ». Crée la fiche si besoin.
+// Ligne de la fiche Clients (1-based) pour la réservation r ; crée la fiche si besoin.
+function ligneClientPourResa(sh, r) {
+  var email = String(r[3] || '').toLowerCase(), rows = sh.getDataRange().getValues();
+  for (var i = 1; i < rows.length; i++) if (String(rows[i][4] || '').toLowerCase() === email) return i + 1;
+  var now = new Date().toISOString();
+  sh.appendRow(['CLI-' + Date.now(), now, r[1], r[2], email, r[4], r[5] ? 'structure' : 'particulier', r[5],
+    'plein', 'ACTIF', '', '', '', '', 1, now]);
+  return sh.getLastRow();
+}
+
+// Clients, colonne Q : « identité vérifiée le … ».
 function marquerIdentiteVerifiee(r) {
   try {
     var sh = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID).getSheetByName('Clients');
     if (!sh.getRange(1, 17).getValue()) sh.getRange(1, 17).setValue('identiteVerifiee');
-    var email = String(r[3] || '').toLowerCase(), rows = sh.getDataRange().getValues(), ligne = 0;
-    for (var i = 1; i < rows.length; i++) if (String(rows[i][4] || '').toLowerCase() === email) { ligne = i + 1; break; }
-    if (!ligne) {
-      var now = new Date().toISOString();
-      sh.appendRow(['CLI-' + Date.now(), now, r[1], r[2], email, r[4], r[5] ? 'structure' : 'particulier', r[5],
-        'plein', 'ACTIF', '', '', '', '', 1, now]);
-      ligne = sh.getLastRow();
-    }
-    sh.getRange(ligne, 17).setValue('vérifiée le ' + Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'dd/MM/yyyy')
+    sh.getRange(ligneClientPourResa(sh, r), 17).setValue('vérifiée le ' + Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'dd/MM/yyyy')
       + ' (pièce reçue avec la demande ' + r[0] + ')');
   } catch (e) { logErreur('marquerIdentiteVerifiee', e); }
+}
+
+// ============================================================
+// ASSURANCE RC — PROFESSIONNELS SEULEMENT, NON BLOQUANT (Samir, 26/11/2026)
+// ============================================================
+// Un particulier ou une association n'a rien à fournir. Un professionnel
+// réserve normalement ; si aucune attestation valable n'est enregistrée
+// (Clients, colonne R « rcValideJusquau »), on la lui demande et l'équipe
+// reçoit un lien pour enregistrer sa date de fin. Rappel 30 et 7 jours
+// avant l'échéance (déclencheur de 17h, via rappelsVeille).
+var URL_EXEC_GENIE = 'https://script.google.com/macros/s/AKfycbyJ-Dk-yZZNdfxFigchP953rNyjSLJv4oOVUbxzuAbX4kuBfwTFBJvnnLuJMLWRnd9c4w/exec';
+
+function echapperHtml(s) { return String(s).replace(/[&<>"']/g, function (c) { return '&#' + c.charCodeAt(0) + ';'; }); }
+
+function rcFinClient(email, ss) {
+  var c = ss.getSheetByName('Clients').getDataRange().getValues();
+  for (var j = 1; j < c.length; j++) {
+    if (String(c[j][4] || '').toLowerCase() === email && c[j][17]) return dateISO(c[j][17]);
+  }
+  return '';
+}
+
+function cleRC(id) {
+  var secret = PropertiesService.getScriptProperties().getProperty('HELLOASSO_WEBHOOK_SECRET');
+  return secret ? hashSha256('rc|' + id + '|' + secret).slice(0, 32) : '';
+}
+function lienRC(id) { return URL_EXEC_GENIE + '?action=RC&id=' + encodeURIComponent(id) + '&k=' + cleRC(id); }
+
+// Appelé par creerReservation() pour toute réservation de salle.
+function traiterAssurancePro(data, email, ss, id) {
+  try {
+    if (String(data.statutClient || '') !== 'professionnel') return;
+    var fin = rcFinClient(email, ss);
+    if (fin && fin >= data.date) return;                       // attestation valable : rien à faire
+    var piece = null, a = data.attestation;
+    if (a && a.data && String(a.data).length < PIECE_MAX_OCTETS * 1.4) {
+      var mime = /^(image\/(jpeg|png|webp)|application\/pdf)$/.test(String(a.type)) ? a.type : 'image/jpeg';
+      piece = Utilities.newBlob(Utilities.base64Decode(String(a.data)), mime,
+        'attestation-rc-' + id + (mime === 'application/pdf' ? '.pdf' : '.jpg'));
+    }
+    var props = PropertiesService.getScriptProperties(), demandes = {};
+    try { demandes = JSON.parse(props.getProperty('RC_DEMANDES') || '{}'); } catch (e) {}
+    if (!piece && demandes[email] && Date.now() - demandes[email] < 30 * 86400000) return;  // déjà demandée ce mois-ci
+    if (!piece) envoyerEmailSafe(email, '📄 Votre attestation d\'assurance — Génie',
+      'Bonjour ' + data.prenom + ',\n\nMerci pour votre réservation ' + id + '.\n\n'
+      + 'Comme vous venez à titre professionnel, merci de nous envoyer votre attestation d\'assurance '
+      + 'responsabilité civile professionnelle' + (fin ? ' (celle que nous avons a expiré le ' + formaterDate(fin) + ')' : '')
+      + ' : il suffit de répondre à cet e-mail avec le document (PDF ou photo).\n'
+      + 'Votre réservation n\'est pas bloquée pour autant. Nous la conservons jusqu\'à sa date de fin et vous '
+      + 'préviendrons avant qu\'elle expire.\n\n' + CONFIG.NOM_LIEU + ' · ' + CONFIG.TEL,
+      { name: CONFIG.NOM_LIEU, replyTo: CONFIG.EMAIL_CONTACT });
+    envoyerEmailSafe(CONFIG.EMAIL_ADMIN, '📄 Assurance RC pro — ' + data.prenom + ' ' + data.nom + (data.structure ? ' (' + data.structure + ')' : ''),
+      'Réservation ' + id + ' (' + data.espace + ', ' + formaterDate(data.date) + ') par un professionnel.\n\n'
+      + (piece ? 'L\'attestation est en pièce jointe.' : 'Aucune attestation valable enregistrée : le client est invité à répondre avec la sienne.')
+      + '\n\nQuand vous l\'avez vérifiée, enregistrez sa date de fin de validité (rappels automatiques ensuite) :\n'
+      + lienRC(id) + '\n\nRien ne bloque la réservation.', piece ? { attachments: [piece] } : undefined);
+    demandes[email] = Date.now();
+    props.setProperty('RC_DEMANDES', JSON.stringify(demandes));
+  } catch (err) { logErreur('traiterAssurancePro', err); }
+}
+
+// Page du lien « enregistrer la date de fin » : formulaire, puis enregistrement.
+function pageRC(p) {
+  var id = String(p.id || '');
+  var page = function (titre, corps) {
+    return HtmlService.createHtmlOutput('<meta name="viewport" content="width=device-width,initial-scale=1">'
+      + '<div style="font-family:system-ui,sans-serif;max-width:520px;margin:40px auto;padding:0 16px;line-height:1.5">'
+      + '<h2>' + titre + '</h2>' + corps + '</div>').setTitle('Génie — assurance');
+  };
+  if (!id || !p.k || !comparaisonConstante(String(p.k), cleRC(id))) return page('Lien invalide', '<p>Ce lien n\'est pas valable.</p>');
+  var rs = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID).getSheetByName('Reservations').getDataRange().getValues();
+  var r = null;
+  for (var i = 1; i < rs.length; i++) if (String(rs[i][0]) === id) { r = rs[i]; break; }
+  if (!r) return page('Introuvable', '<p>Réservation introuvable.</p>');
+  var qui = echapperHtml(r[1] + ' ' + r[2] + (r[5] ? ' (' + r[5] + ')' : ''));
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(String(p.fin || ''))) {
+    return page('Attestation RC pro', '<p>' + qui + '</p><form method="get" action="' + URL_EXEC_GENIE + '" target="_top">'
+      + '<input type="hidden" name="action" value="RC"><input type="hidden" name="id" value="' + echapperHtml(id) + '">'
+      + '<input type="hidden" name="k" value="' + echapperHtml(p.k) + '">'
+      + '<label>Valable jusqu\'au : <input type="date" name="fin" required style="padding:8px;font:inherit"></label><br><br>'
+      + '<button style="padding:12px 20px;border:0;border-radius:8px;background:#2e7d32;color:#fff;font:inherit">Enregistrer</button></form>');
+  }
+  var sh = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID).getSheetByName('Clients');
+  if (!sh.getRange(1, 18).getValue()) sh.getRange(1, 18).setValue('rcValideJusquau');
+  var ligne = ligneClientPourResa(sh, r);
+  sh.getRange(ligne, 18).setValue(p.fin);
+  sh.getRange(ligne, 7).setValue('professionnel');
+  journaliser({ nom: 'Lien e-mail', role: 'responsable' }, 'Assurance RC enregistrée', id, String(r[3]) + ' → ' + p.fin);
+  return page('✅ Enregistré', '<p>' + qui + '<br>Attestation valable jusqu\'au <b>' + formaterDate(p.fin)
+    + '</b>. Le client sera prévenu 30 jours puis 7 jours avant l\'échéance.</p>');
+}
+
+// Rappels d'échéance (appelé chaque jour par rappelsVeille, à 17h).
+function rappelsAssurance() {
+  try {
+    var tz = Session.getScriptTimeZone(), auj = new Date();
+    var dans = function (n) { return Utilities.formatDate(new Date(auj.getTime() + n * 86400000), tz, 'yyyy-MM-dd'); };
+    var ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+    var c = ss.getSheetByName('Clients').getDataRange().getValues();
+    var rs = ss.getSheetByName('Reservations').getDataRange().getValues();
+    for (var j = 1; j < c.length; j++) {
+      var fin = c[j][17] ? dateISO(c[j][17]) : '', email = String(c[j][4] || '');
+      if (!fin || !email) continue;
+      var n = fin === dans(30) ? 30 : fin === dans(7) ? 7 : 0;
+      if (!n) continue;
+      envoyerEmailSafe(email, '📄 Votre attestation d\'assurance expire le ' + formaterDate(fin),
+        'Bonjour ' + (c[j][2] || '') + ',\n\nL\'attestation d\'assurance responsabilité civile professionnelle que nous avons '
+        + 'pour vous expire dans ' + n + ' jours (le ' + formaterDate(fin) + ').\n'
+        + 'Merci de répondre à cet e-mail avec la nouvelle attestation dès que vous l\'avez.\n\n' + CONFIG.NOM_LIEU + ' · ' + CONFIG.TEL,
+        { name: CONFIG.NOM_LIEU, replyTo: CONFIG.EMAIL_CONTACT });
+      var derniere = '';   // dernière réservation du client : sert de clé au lien d'enregistrement
+      for (var i = rs.length - 1; i >= 1 && !derniere; i--) if (String(rs[i][3] || '').toLowerCase() === email.toLowerCase()) derniere = String(rs[i][0]);
+      envoyerEmailSafe(CONFIG.EMAIL_ADMIN, '📄 RC pro à renouveler (J-' + n + ') — ' + (c[j][2] || '') + ' ' + (c[j][3] || ''),
+        'L\'attestation de ' + (c[j][2] || '') + ' ' + (c[j][3] || '') + (c[j][7] ? ' (' + c[j][7] + ')' : '') + ' expire le '
+        + formaterDate(fin) + '. Le client a été relancé.'
+        + (derniere ? '\n\nQuand vous recevez la nouvelle, enregistrez sa date de fin :\n' + lienRC(derniere) : ''));
+    }
+  } catch (e) { logErreur('rappelsAssurance', e); }
 }

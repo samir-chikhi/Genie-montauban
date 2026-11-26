@@ -875,6 +875,7 @@ function doGet(e) {
     const a = e.parameter.action || '';
     // Liens ACCEPTER / REFUSER des e-mails de demande (apps-script-aiguillage.gs)
     if (a === 'DECISION' && typeof decisionDemande === 'function') return decisionDemande(e.parameter);
+    if (a === 'RC' && typeof pageRC === 'function') return pageRC(e.parameter);
     if (a === 'GET_DISPO')         return ok(getDisponibilites(e.parameter));
     if (a === 'GET_RESERVATIONS')  return ok(getReservations(e.parameter));
     if (a === 'VALIDER_TOKEN')     return ok(validerToken(e.parameter));
@@ -1395,7 +1396,7 @@ function creerReservation(data) {
       montantServeur === null ? montantClient : montantServeur,
       montantServeur === null ? montantClient : montantServeur,
       sanit(data.options), 'EN_ATTENTE', parseInt(data.participants) || 1,
-      sanit((data.usage ? '[' + data.usage + '] ' : '') + (data.message || '')), now, now, '']);
+      sanit((data.usage ? '[' + data.usage + (data.statutClient ? ' · ' + data.statutClient : '') + '] ' : '') + (data.message || '')), now, now, '']);
     const ligne          = sheet.getLastRow();
     sheet.getRange(ligne, 29).setValue('Site web'); // source (recommandation memoire Issam Chahlal, sept. 2026)
     const montantFacture = montantServeur === null ? montantClient : montantServeur;
@@ -1411,6 +1412,8 @@ function creerReservation(data) {
     // Aiguillage (apps-script-aiguillage.gs) : première venue, événement,
     // vente, formation, jauge, horaires → validation de l'équipe AVANT tout
     // paiement. Sinon, on continue vers le paiement immédiat.
+    // Assurance RC : professionnels seulement, jamais bloquant.
+    if (typeof traiterAssurancePro === 'function') traiterAssurancePro(data, email, ss, id);
     var motifs = [];
     if (typeof motifsValidation === 'function') {
       try { motifs = motifsValidation(data, email, ss, rows, cle, debMin, finMin); }

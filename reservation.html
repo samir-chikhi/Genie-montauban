@@ -394,6 +394,19 @@ input[type=radio],input[type=checkbox]{width:auto;height:auto;padding:0;border:n
           <option value="autre">Autre (précisez ci-dessous)</option>
         </select>
       </div>
+      <div class="form-group">
+        <label for="fStatut">Vous réservez en tant que <span class="req">*</span></label>
+        <select id="fStatut" required onchange="document.getElementById('grpAttest').style.display = this.value === 'professionnel' ? '' : 'none'">
+          <option value="particulier">Particulier</option>
+          <option value="association">Association</option>
+          <option value="professionnel">Professionnel (entreprise, indépendant…)</option>
+        </select>
+      </div>
+      <div class="form-group" id="grpAttest" style="display:none">
+        <label for="fAttest">Attestation d'assurance RC pro <small>(facultatif maintenant)</small></label>
+        <input type="file" id="fAttest" accept="image/*,application/pdf">
+        <small style="display:block;margin-top:4px;opacity:.75">Responsabilité civile professionnelle. Si vous ne l'avez pas sous la main, nous vous la demanderons par e-mail : votre réservation n'est pas bloquée.</small>
+      </div>
       <div class="form-group full">
         <label for="fPiece">Pièce d'identité avec photo <small>(première réservation au Génie)</small></label>
         <input type="file" id="fPiece" accept="image/*,application/pdf">
@@ -966,8 +979,8 @@ function weekendInterdit(dateStr) {
 
 // Pièce d'identité → { nom, type, data(base64) } ; photo réduite à 1600 px
 // en JPEG pour un envoi léger. null si aucun fichier.
-async function lirePieceIdentite() {
-  const f = document.getElementById('fPiece').files[0];
+async function lirePieceIdentite(idChamp) {
+  const f = document.getElementById(idChamp).files[0];
   if (!f) return null;
   const enB64 = blob => new Promise((ok, ko) => { const r = new FileReader();
     r.onload = () => ok(String(r.result).split(',')[1]); r.onerror = ko; r.readAsDataURL(blob); });
@@ -1028,7 +1041,9 @@ async function envoyerReservation() {
     duree       : nbH,
     participants: Math.max(1, parseInt(document.getElementById('fPers').value, 10) || 1),
     usage       : document.getElementById('fUsage').value,
-    piece       : await lirePieceIdentite(),
+    piece       : await lirePieceIdentite('fPiece'),
+    statutClient: document.getElementById('fStatut').value,
+    attestation : document.getElementById('fStatut').value === 'professionnel' ? await lirePieceIdentite('fAttest') : null,
     prenom      : prenom,
     nom         : nomFam,
     email       : email,
@@ -1065,7 +1080,7 @@ async function envoyerReservation() {
     // reponse du serveur, sinon la reservation serait creee deux fois.
     try {
       // (sans la pièce d'identité : trop lourde pour une URL)
-      const resp2 = await fetch(SCRIPT_URL + '?payload=' + encodeURIComponent(JSON.stringify(Object.assign({}, payload, { piece: null }))), { redirect: 'follow' });
+      const resp2 = await fetch(SCRIPT_URL + '?payload=' + encodeURIComponent(JSON.stringify(Object.assign({}, payload, { piece: null, attestation: null }))), { redirect: 'follow' });
       data = await lireJson(resp2);
     } catch (e2) {
       data = null;

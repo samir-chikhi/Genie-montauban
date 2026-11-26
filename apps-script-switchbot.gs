@@ -303,6 +303,7 @@ function rappelsVeille(opts) {
     Object.keys(envoyes).forEach(function (id) { if (envoyes[id] < limite) delete envoyes[id]; });
     sbProps().setProperty('RAPPELS_ENVOYES', JSON.stringify(envoyes));
   }
+  if (!opts.simulation && typeof rappelsAssurance === 'function') rappelsAssurance();
   var groupe = sbTexteOccupation(demain, rows);
   var recap = 'Arrivées du ' + formaterDate(demain) + ' (les clients ont reçu leur rappel) :\n\n'
     + (arrivees.join('\n') || '(aucune réservation en ligne)')
