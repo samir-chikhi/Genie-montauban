@@ -140,6 +140,7 @@ function stripeWebhook(evt, params) {
             '   – Porte de rue     : ' + cRue + '\n' +
             '   – Porte intérieure : ' + cInt + '\n\n' +
             'Prenez une place libre dans l\'espace ouvert, servez-vous un thé, installez-vous.\n\n' +
+            (typeof escaleDemandePiece === 'function' ? escaleDemandePiece(refResa) : '') +
             'Première venue ? Pensez à régler l\'adhésion à l\'association\n' +
             '(elle couvre l\'assurance, se prend une fois pour l\'année) :\n' +
             CONFIG.URL_SITE + '/adherer.html\n\n' +

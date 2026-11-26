@@ -876,6 +876,7 @@ function doGet(e) {
     // Liens ACCEPTER / REFUSER des e-mails de demande (apps-script-aiguillage.gs)
     if (a === 'DECISION' && typeof decisionDemande === 'function') return decisionDemande(e.parameter);
     if (a === 'RC' && typeof pageRC === 'function') return pageRC(e.parameter);
+    if (a === 'IDV' && typeof pageIdentiteVerifiee === 'function') return pageIdentiteVerifiee(e.parameter);
     if (a === 'GET_DISPO')         return ok(getDisponibilites(e.parameter));
     if (a === 'GET_RESERVATIONS')  return ok(getReservations(e.parameter));
     if (a === 'VALIDER_TOKEN')     return ok(validerToken(e.parameter));
@@ -1578,6 +1579,8 @@ function creerReservationEscale(data) {
     var evId = ajouterAuCalendrier('L\'Escale (Rousseau)', data.date, hDeb, hFin,
       data.prenom + ' ' + data.nom, id, email, false);
     if (evId) sheet.getRange(ligne, 24).setValue(evId);
+    // Nouveau coworker : pièce d'identité à l'équipe, ou demandée après paiement.
+    if (typeof escalePieceIdentite === 'function') escalePieceIdentite(data, email, ss, rows, id);
     return { success: true, id: id, date: data.date, heureDebut: hDeb, heureFin: hFin,
              nbHeures: nbH, montant: montant };
   } catch (err) {
@@ -2564,10 +2567,11 @@ function envoyerDocumentsReservation(sheet, ligne, opts) {
 
   var aRegler = r.montant > 0 && !paye;
   var lien = aRegler ? lienPaiement(r.id) : '';
-  // Code porte personnel (apps-script-switchbot.gs) : seulement une fois
-  // réglé ou gratuit — le paiement vaut accès.
+  // Code porte personnel (apps-script-switchbot.gs) pour toute réservation
+  // CONFIRMÉE. Le site ne confirme qu'au paiement ; une réservation confirmée
+  // sans paiement l'a été par l'équipe (téléphone, virement, locataire…).
   var acces = '';
-  if (!aRegler && typeof sbTexteAcces === 'function') {
+  if (String(brute[18]) === 'CONFIRME' && typeof sbTexteAcces === 'function') {
     try { acces = sbTexteAcces(brute); } catch (eSb) { logErreur('envoyerDocuments/switchbot', eSb); }
   }
   var accroche = opts.modifiee ? 'Votre réservation a été modifiée. Voici le créneau à jour.'

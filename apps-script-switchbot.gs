@@ -275,16 +275,16 @@ function rappelsVeille(opts) {
     arrivees.push('• ' + horaireLisible(r) + ' — ' + r.espace + ' — ' + (r.prenom + ' ' + r.nom).trim() +
       (r.orga ? ' (' + r.orga + ')' : '') + (aRegler ? ' — ⚠️ pas encore réglé' : ''));
     if (envoyes[r.id] || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(r.email)) continue;
+    // Toute réservation confirmée reçoit son code (au plus tard ici, la veille).
     var acces = '';
-    if (!aRegler) { try { acces = sbTexteAcces(row); } catch (eSb) { logErreur('rappelsVeille/switchbot ' + r.id, eSb); } }
+    try { acces = sbTexteAcces(row); } catch (eSb) { logErreur('rappelsVeille/switchbot ' + r.id, eSb); }
     var corps = 'Bonjour ' + (r.prenom || r.nom) + ',\n\n'
       + 'Petit rappel : nous vous attendons demain au Génie.\n\n'
       + '• Espace    : ' + r.espace + '\n'
       + '• Date      : ' + formaterDate(r.date) + '\n'
       + '• Horaire   : ' + horaireLisible(r) + '\n'
       + '• Référence : ' + r.id + '\n'
-      + (aRegler ? '\n💳 Votre réservation n\'est pas encore réglée : ' + (lienPaiement(r.id) || 'merci de nous contacter') + '\n'
-                   + 'Le code d\'accès vous sera envoyé dès réception du paiement.\n' : '')
+      + (aRegler ? '\n💳 Votre réservation n\'est pas encore réglée : ' + (lienPaiement(r.id) || 'merci de nous contacter') + '\n' : '')
       + acces
       + '\nPour que chacun travaille dans de bonnes conditions :\n'
       + '  – c\'est un lieu de travail partagé : calme et respect des autres ;\n'

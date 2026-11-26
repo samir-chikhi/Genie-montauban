@@ -104,7 +104,7 @@ function traiterDemandeAValider(sheet, ligne, data, motifs, montant, id, hFin) {
     + (data.message ? 'Message : ' + data.message + '\n' : '')
     + '\n🪪 Pièce d\'identité : ' + (piece ? 'en pièce jointe. Après décision, supprimez cet e-mail : '
        + 'la pièce n\'est conservée nulle part ailleurs.' : (premiere ? 'non fournie (le client est invité à répondre avec).' : 'non requise.'))
-    + '\n\n✅ ACCEPTER (le client reçoit confirmation' + (montant > 0 ? ' + lien de paiement' : ' + code d\'accès') + ') :\n'
+    + '\n\n✅ ACCEPTER (le client reçoit confirmation + code d\'accès' + (montant > 0 ? ' + lien de paiement' : '') + ') :\n'
     + lienDecision(id, 'ok')
     + '\n\n❌ REFUSER (le client est prévenu poliment, le créneau est libéré) :\n' + lienDecision(id, 'non')
     + '\n\nOu depuis l\'admin : ' + CONFIG.URL_SITE + '/admin.html';
@@ -151,8 +151,8 @@ function decisionDemande(p) {
         catch (eCal) { logErreur('decisionDemande/calendrier', eCal); }
         try { envoyerDocumentsReservation(sheet, ligne, {}); } catch (eDoc) { logErreur('decisionDemande/documents', eDoc); }
         journaliser({ nom: 'Lien e-mail', role: 'responsable' }, 'Demande acceptée', id, '');
-        return page('✅ Demande acceptée', resume + '<br>Le client a reçu la confirmation'
-          + ((Number(r[15]) || 0) > 0 ? ' et le lien de paiement (le code d\'accès partira au paiement).' : ' et son code d\'accès.'));
+        return page('✅ Demande acceptée', resume + '<br>Le client a reçu la confirmation, son code d\'accès'
+          + ((Number(r[15]) || 0) > 0 ? ' et le lien de paiement.' : '.'));
       }
       sheet.getRange(ligne, 19).setValue('ANNULE').setBackground('#F8D7DA').setFontColor('#721C24');
       sheet.getRange(ligne, 27).setValue('REFUSE');
@@ -187,6 +187,69 @@ function marquerIdentiteVerifiee(r) {
     sh.getRange(ligneClientPourResa(sh, r), 17).setValue('vérifiée le ' + Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'dd/MM/yyyy')
       + ' (pièce reçue avec la demande ' + r[0] + ')');
   } catch (e) { logErreur('marquerIdentiteVerifiee', e); }
+}
+
+// ============================================================
+// L'ESCALE — PIÈCE D'IDENTITÉ DES NOUVEAUX (automatique, non bloquant)
+// ============================================================
+// Un nouveau coworker réserve et paie sans attendre. S'il joint sa pièce,
+// elle part en pièce jointe à l'équipe (lien « identité vérifiée ») ; sinon,
+// l'e-mail de confirmation Stripe lui demande de répondre avec. Rien n'est
+// stocké : la propriété ESC_PIECES ne garde que « jointe » / « manquante ».
+function escalePieceIdentite(data, email, ss, rows, id) {
+  try {
+    if (clientConnu(email, ss, rows)) return;
+    var props = PropertiesService.getScriptProperties(), suivi = {};
+    try { suivi = JSON.parse(props.getProperty('ESC_PIECES') || '{}'); } catch (e) {}
+    var limite = Date.now() - 30 * 86400000;
+    Object.keys(suivi).forEach(function (k) { if (suivi[k].t < limite) delete suivi[k]; });
+    var piece = null, p = data.piece;
+    if (p && p.data && String(p.data).length < PIECE_MAX_OCTETS * 1.4) {
+      var mime = /^(image\/(jpeg|png|webp)|application\/pdf)$/.test(String(p.type)) ? p.type : 'image/jpeg';
+      piece = Utilities.newBlob(Utilities.base64Decode(String(p.data)), mime, 'piece-identite-' + id + (mime === 'application/pdf' ? '.pdf' : '.jpg'));
+    }
+    suivi[id] = { s: piece ? 'jointe' : 'manquante', t: Date.now() };
+    props.setProperty('ESC_PIECES', JSON.stringify(suivi));
+    if (piece) envoyerEmailSafe(CONFIG.EMAIL_ADMIN, '🪪 Nouveau client L\'Escale — ' + data.prenom + ' ' + data.nom,
+      'Nouveau coworker à L\'Escale : ' + data.prenom + ' ' + data.nom + ' (' + email + '), le ' + formaterDate(data.date)
+      + '.\nSa pièce d\'identité est en pièce jointe (paiement Stripe en cours : si le créneau expire, ignorez ce message).\n\n'
+      + 'Après vérification, marquez son identité comme vérifiée (ses prochaines réservations de salle passeront directement) :\n'
+      + URL_EXEC_GENIE + '?action=IDV&id=' + encodeURIComponent(id) + '&k=' + cleRC('idv' + id)
+      + '\n\nPuis supprimez cet e-mail : la pièce n\'est conservée nulle part ailleurs.', { attachments: [piece] });
+  } catch (err) { logErreur('escalePieceIdentite', err); }
+}
+
+// Ligne à ajouter à l'e-mail de confirmation Stripe si la pièce manque.
+function escaleDemandePiece(id) {
+  try {
+    var s = JSON.parse(PropertiesService.getScriptProperties().getProperty('ESC_PIECES') || '{}')[id];
+    if (!s || s.s !== 'manquante') return '';
+    return '🪪 Première venue : merci de répondre à cet e-mail avec la photo d\'une pièce d\'identité avec photo '
+      + '(carte d\'identité, passeport, permis de conduire ou titre de séjour). Elle sert uniquement à vérifier '
+      + 'votre identité et n\'est pas conservée.\n\n';
+  } catch (e) { return ''; }
+}
+
+// Lien « identité vérifiée » (deux temps, comme les décisions).
+function pageIdentiteVerifiee(p) {
+  var id = String(p.id || '');
+  var page = function (titre, corps) {
+    return HtmlService.createHtmlOutput('<meta name="viewport" content="width=device-width,initial-scale=1">'
+      + '<div style="font-family:system-ui,sans-serif;max-width:520px;margin:40px auto;padding:0 16px;line-height:1.5">'
+      + '<h2>' + titre + '</h2>' + corps + '</div>').setTitle('Génie — identité');
+  };
+  if (!id || !p.k || !comparaisonConstante(String(p.k), cleRC('idv' + id))) return page('Lien invalide', '<p>Ce lien n\'est pas valable.</p>');
+  var rs = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID).getSheetByName('Reservations').getDataRange().getValues();
+  var r = null;
+  for (var i = 1; i < rs.length; i++) if (String(rs[i][0]) === id) { r = rs[i]; break; }
+  if (!r) return page('Introuvable', '<p>Réservation introuvable.</p>');
+  var qui = echapperHtml(r[1] + ' ' + r[2]);
+  if (p.confirm !== '1') return page('Identité vérifiée ?', '<p>' + qui + '</p><a target="_top" href="' + URL_EXEC_GENIE
+    + '?action=IDV&id=' + encodeURIComponent(id) + '&k=' + encodeURIComponent(p.k) + '&confirm=1" style="display:inline-block;padding:12px 20px;'
+    + 'border-radius:8px;background:#2e7d32;color:#fff;text-decoration:none">✅ Oui, la pièce est conforme</a>');
+  marquerIdentiteVerifiee(r);
+  journaliser({ nom: 'Lien e-mail', role: 'responsable' }, 'Identité vérifiée', id, String(r[3]));
+  return page('✅ Enregistré', '<p>' + qui + ' : identité vérifiée. Pensez à supprimer l\'e-mail qui contenait la pièce.</p>');
 }
 
 // ============================================================
