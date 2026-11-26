@@ -2,7 +2,7 @@
 title: Location de bureau privé à Montauban, près de la gare — Génie
 description: Bureaux privés meublés de 12 à 24 m² à louer à Montauban (Tarn-et-Garonne), à 200 m de la gare : au mois, à l'année ou en bail 3/6/9, dès 216 €/mois. Visite en semaine.
 url: https://genie-montauban.fr/bureau-prive.html
-last_updated: 2026-11-20
+last_updated: 2026-11-26
 source: miroir markdown — version texte pour moteurs IA
 ---
 
@@ -16,7 +16,7 @@ Bureaux meublés de 12 à 24 m², au mois, à l'année ou en bail 3/6/9. Plus vo
 
 Disponibles maintenant
 
-## Deux bureaux libres
+## Trois espaces libres
 
 Loyers mensuels hors charges (charges : loyer + 23 %, pour l'électricité, la fibre, l'eau et le ménage). Chaque bureau porte le nom d'une figure de l'éducation et de l'émancipation.
 
@@ -48,7 +48,22 @@ Médecin et pédagogue, 1870–1952
 - Mois, adhérent**216 €**
 - Semaine**100–145 €**
 
-[Visiter](#visite)[À l'heure](reservation.html?espace=montessori)
+Aussi à la journée, du lundi au vendredi (le jeudi est déjà loué à l'année).
+
+[Visiter](#visite)[À la journée](reservation.html?espace=montessori)
+
+10–15pers.Salle 1-11  
+1er étage
+
+Disponible
+
+### Célestin Freinet
+
+Pédagogue, 1896–1966
+
+Notre salle de réunion, louable aussi comme bureau au mois ou à l'année. Tarif sur demande.
+
+[Visiter](#visite)[À l'heure](reservation.html?espace=freinet)
 
 Actuellement loués : Philippe Meirieu (24 m²), Louise Michel (15 m²), Aimé Césaire (17 m²), Condorcet (17 m²), Baden Powell (16 m²) et Maryse Condé (partagé par MUSIVA, Génie, Topogramme et Myself). [Être prévenu quand l'un se libère](#visite)
 
@@ -80,7 +95,7 @@ Téléphone
 
 Bureau qui vous intéresse
 Je ne sais pas encore
-Antoine LavoisierMaria MontessoriListe d'attente
+Antoine LavoisierMaria MontessoriCélestin FreinetListe d'attente
 Pour quand ?
 
 Durée envisagée

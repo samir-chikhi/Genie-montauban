@@ -36,13 +36,13 @@ Vidéoprojecteur et sono. Formations, assemblées, événements.
 
 [Réserver](reservation.html?espace=bourdelle)
 
-20pers.1er étage
+10–15pers.1er étage
 
 ### Célestin Freinet
 
 Pédagogue, 1896–1966
 
-Salle modulable avec paperboard. Ateliers, réunions d'équipe.
+Salle modulable avec paperboard. Ateliers, réunions d'équipe. Aussi louable comme bureau [au mois ou à l'année](bureau-prive.html).
 
 - 1 heure**30 €**
 - ½ journée**100 €**
@@ -73,7 +73,7 @@ accès PMR
 
 Médecin et pédagogue, 1870–1952
 
-De plain-pied, entrée dédiée. Entretiens, petit comité. Du lundi au vendredi uniquement.
+De plain-pied, entrée dédiée. Entretiens, petit comité. Réservable à la journée, du lundi au vendredi (le jeudi est déjà loué à l'année).
 
 - 1 heure**20 €**
 - ½ journée**60 €**

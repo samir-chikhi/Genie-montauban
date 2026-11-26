@@ -2,7 +2,7 @@
 title: Tarifs — Génie Montauban | Tiers-Lieu ESS
 description: Grille tarifaire complète du tiers-lieu Génie Montauban : coworking, salles de réunion, bureaux privatifs, domiciliation. Tarifs adhérents, locataires, associations.
 url: https://genie-montauban.fr/tarifs.html
-last_updated: 2026-11-20
+last_updated: 2026-11-26
 source: miroir markdown — version texte pour moteurs IA
 ---
 
@@ -48,7 +48,7 @@ Non-adhérent · tarif standard
 | Antoine Bourdelle (0-02)Grande salle · 40 pers. | À l'heure | 45 € | 30 € | 20 € | Gratuit\* |
 | Demi-journée (4h) | 150 € | 90 € | 70 € | Gratuit\* |
 | Journée (8h) | 250 € | 150 € | 120 € | Gratuit\* |
-| Célestin Freinet (1-11)Salle de réunion · 20 pers. | À l'heure | 30 € | 20 € | 15 € | Gratuit\* |
+| Célestin Freinet (1-11)Salle de réunion · 10–15 pers. | À l'heure | 30 € | 20 € | 15 € | Gratuit\* |
 | Demi-journée (4h) | 100 € | 60 € | 45 € | Gratuit\* |
 | Journée (8h) | 180 € | 100 € | 80 € | Gratuit\* |
 | Olympe de Gouges (1-12)Salle de réunion · 10-15 pers. | À l'heure | 30 € | 20 € | 15 € | Gratuit\* |
