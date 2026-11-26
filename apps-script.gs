@@ -103,18 +103,19 @@ function cleEspace(nom) {
   return null;
 }
 
-// Salles non louées le samedi ni le dimanche. Montessori : entrée autonome
-// par clé, pas de location le week-end (demande de Samir, 26/11/2026).
+// Jours où une salle n'est pas louable (0 = dimanche … 6 = samedi).
+// Montessori : entrée autonome par clé, pas de location le week-end ; le
+// jeudi est loué à l'année (demandes de Samir, 26/11/2026).
 // Contrôle serveur, sans contournement possible (même « forcer » en admin).
-const SALLES_SEMAINE_SEULE = ['montessori'];
+const JOURS_FERMES = { montessori: [0, 4, 6] };
 function refusSiWeekend(espace, dateStr) {
   var cle = cleEspace(espace);
   var d = dateISO(dateStr);
-  if (!cle || SALLES_SEMAINE_SEULE.indexOf(cle) === -1 || !/^\d{4}-\d{2}-\d{2}$/.test(d)) return null;
+  if (!cle || !JOURS_FERMES[cle] || !/^\d{4}-\d{2}-\d{2}$/.test(d)) return null;
   var j = new Date(d + 'T12:00:00').getDay();
-  if (j !== 0 && j !== 6) return null;
-  return { success: false, code: 'FERME_WEEKEND', error: 'FERME_WEEKEND',
-           message: 'La salle Maria Montessori ne se loue pas le week-end. Choisissez un jour du lundi au vendredi.' };
+  if (JOURS_FERMES[cle].indexOf(j) === -1) return null;
+  return { success: false, code: 'JOUR_FERME', error: 'JOUR_FERME',
+           message: 'La salle Maria Montessori ne se loue pas le jeudi ni le week-end. Choisissez un lundi, mardi, mercredi ou vendredi.' };
 }
 
 // Clé espace d'une ligne de réservation. La colonne 6 (espace) porte le nom
