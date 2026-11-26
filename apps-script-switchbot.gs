@@ -179,6 +179,77 @@ function sbAnnulerCodeResa(id) {
   sbEcrireCodes(codes);
 }
 
+// ── RAPPEL DE LA VEILLE (déclencheur quotidien à 17h) ─────────
+// Chaque client confirmé pour demain reçoit : créneau, code d'accès (si
+// réglé ou gratuit), règles de la maison. L'admin reçoit la liste des
+// arrivées du lendemain. Le code est créé ici s'il n'existait pas encore
+// (réservations confirmées avant la mise en service).
+// Installation : exécuter une fois installerRappelVeille() dans l'éditeur.
+function installerRappelVeille() {
+  ScriptApp.getProjectTriggers().forEach(function (t) {
+    if (t.getHandlerFunction() === 'rappelsVeille') ScriptApp.deleteTrigger(t);
+  });
+  ScriptApp.newTrigger('rappelsVeille').timeBased().everyDays(1).atHour(17).create();
+  Logger.log('OK — rappel de la veille programmé chaque jour vers 17h.');
+}
+
+function rappelsVeille(opts) {
+  opts = opts || {};
+  var tz = Session.getScriptTimeZone();
+  var demain = Utilities.formatDate(new Date(Date.now() + 86400000), tz, 'yyyy-MM-dd');
+  var sheet = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID).getSheetByName('Reservations');
+  var rows = sheet.getDataRange().getValues();
+  var envoyes = {};
+  try { envoyes = JSON.parse(sbProps().getProperty('RAPPELS_ENVOYES') || '{}'); } catch (e) {}
+  var arrivees = [];
+  for (var i = 1; i < rows.length; i++) {
+    var row = rows[i];
+    if (String(row[18]) !== 'CONFIRME' || dateISO(row[10]) !== demain) continue;
+    var r = resaDepuisLigne(row);
+    var aRegler = r.montant > 0 && r.payState !== 'PAYE';
+    arrivees.push('• ' + horaireLisible(r) + ' — ' + r.espace + ' — ' + (r.prenom + ' ' + r.nom).trim() +
+      (r.orga ? ' (' + r.orga + ')' : '') + (aRegler ? ' — ⚠️ pas encore réglé' : ''));
+    if (envoyes[r.id] || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(r.email)) continue;
+    var acces = '';
+    if (!aRegler) { try { acces = sbTexteAcces(row); } catch (eSb) { logErreur('rappelsVeille/switchbot ' + r.id, eSb); } }
+    var corps = 'Bonjour ' + (r.prenom || r.nom) + ',\n\n'
+      + 'Petit rappel : nous vous attendons demain au Génie.\n\n'
+      + '• Espace    : ' + r.espace + '\n'
+      + '• Date      : ' + formaterDate(r.date) + '\n'
+      + '• Horaire   : ' + horaireLisible(r) + '\n'
+      + '• Référence : ' + r.id + '\n'
+      + (aRegler ? '\n💳 Votre réservation n\'est pas encore réglée : ' + (lienPaiement(r.id) || 'merci de nous contacter') + '\n'
+                   + 'Le code d\'accès vous sera envoyé dès réception du paiement.\n' : '')
+      + acces
+      + '\nPour que chacun travaille dans de bonnes conditions :\n'
+      + '  – c\'est un lieu de travail partagé : calme et respect des autres ;\n'
+      + '  – seules les personnes prévues dans la réservation entrent (visiteurs à déclarer avant) ;\n'
+      + '  – respectez les consignes de sécurité et la jauge, ne bloquez pas les issues ;\n'
+      + '  – laissez l\'espace rangé et refermez derrière vous.\n'
+      + 'Règlement intérieur : ' + CONFIG.URL_SITE + '/reglement-interieur-genie.html\n'
+      + '\nUn empêchement ou un souci sur place ? ' + CONFIG.TEL + ' · ' + CONFIG.EMAIL_CONTACT
+      + '\n\nÀ demain !\n' + CONFIG.NOM_LIEU + ' · ' + CONFIG.ADRESSE;
+    if (opts.simulation) { Logger.log('— SIMULATION, non envoyé à ' + r.email + ' —\n' + corps); continue; }
+    if (envoyerEmailSafe(r.email, '⏰ Demain au Génie — ' + r.espace + ', ' + horaireLisible(r), corps,
+        { name: CONFIG.NOM_LIEU })) envoyes[r.id] = demain;
+  }
+  if (!opts.simulation) {
+    var limite = Utilities.formatDate(new Date(Date.now() - 7 * 86400000), tz, 'yyyy-MM-dd');
+    Object.keys(envoyes).forEach(function (id) { if (envoyes[id] < limite) delete envoyes[id]; });
+    sbProps().setProperty('RAPPELS_ENVOYES', JSON.stringify(envoyes));
+    if (arrivees.length) envoyerEmailSafe(CONFIG.EMAIL_ADMIN,
+      '📅 Demain au Génie : ' + arrivees.length + ' réservation(s)',
+      'Arrivées du ' + formaterDate(demain) + ' (les clients ont reçu leur rappel) :\n\n' + arrivees.join('\n'));
+  }
+  return arrivees.length;
+}
+
+// Aperçu sans rien envoyer (affiche les e-mails de demain dans le journal).
+// ⚠ Crée tout de même les codes manquants si SWITCHBOT_ACTIF = oui.
+function testerRappelVeille() {
+  Logger.log(rappelsVeille({ simulation: true }) + ' réservation(s) demain.');
+}
+
 // ── TESTS À LANCER DEPUIS L'ÉDITEUR ──────────────────────────
 // 1) testerSwitchBot : vérifie les clés, trouve le clavier, l'enregistre.
 function testerSwitchBot() {
