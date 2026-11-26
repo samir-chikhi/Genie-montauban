@@ -521,7 +521,7 @@ var PLAFOND_REMISE_ACCUEIL_PCT = 30;
 
 // Droits par action : true = tout membre connecté ; 'responsable' = réservé.
 var ACTIONS_ADMIN = {
-  addResa: true, updateResa: true, ADMIN_UPDATE_STATUS: true, ENVOYER_DOCUMENTS: true,
+  addResa: true, updateResa: true, ADMIN_UPDATE_STATUS: true, ENVOYER_DOCUMENTS: true, CODE_VISITEUR: true,
   deleteResa: 'responsable', saveConfig: 'responsable', INVITER_MEMBRES: 'responsable',
   EQUIPE_LISTE: 'responsable', EQUIPE_AJOUTER: 'responsable',
   EQUIPE_NOUVEAU_CODE: 'responsable', EQUIPE_RETIRER: 'responsable', JOURNAL: 'responsable'
@@ -568,6 +568,8 @@ function routeAdmin(data) {
     case 'EQUIPE_RETIRER': res = adminEquipeRetirer(data);
       journaliser(qui, 'Équipe : retrait', data.id, ''); break;
     case 'JOURNAL': res = adminJournal(); break;
+    case 'CODE_VISITEUR': res = (typeof adminCodeVisiteur === 'function')
+      ? adminCodeVisiteur(data, qui) : { success: false, error: 'Module SwitchBot absent' }; break;
     default: res = { success: false, error: 'Action inconnue: ' + data.action };
   }
   return res;
@@ -855,7 +857,7 @@ function doPost(e) {
       case 'saveConfig': return ok(routeAdmin(data));
       case 'ADMIN_LOGIN': return ok(adminLogin(data));
       case 'EQUIPE_LISTE': case 'EQUIPE_AJOUTER': case 'EQUIPE_NOUVEAU_CODE': case 'EQUIPE_RETIRER': case 'JOURNAL': return ok(routeAdmin(data));
-      case 'ADMIN_UPDATE_STATUS': case 'ENVOYER_DOCUMENTS': return ok(routeAdmin(data));
+      case 'ADMIN_UPDATE_STATUS': case 'ENVOYER_DOCUMENTS': case 'CODE_VISITEUR': return ok(routeAdmin(data));
       case 'INVITER_MEMBRES': return ok(routeAdmin(data));
       default: return ok({ success: false, error: 'Action inconnue: ' + data.action });
     }
@@ -900,7 +902,7 @@ function doGet(e) {
         case 'deleteResa': return ok(routeAdmin(data));
         case 'ADMIN_LOGIN': return ok(adminLogin(data));
         case 'EQUIPE_LISTE': case 'EQUIPE_AJOUTER': case 'EQUIPE_NOUVEAU_CODE': case 'EQUIPE_RETIRER': case 'JOURNAL': return ok(routeAdmin(data));
-        case 'ADMIN_UPDATE_STATUS': case 'ENVOYER_DOCUMENTS': return ok(routeAdmin(data));
+        case 'ADMIN_UPDATE_STATUS': case 'ENVOYER_DOCUMENTS': case 'CODE_VISITEUR': return ok(routeAdmin(data));
         case 'INVITER_MEMBRES': return ok(routeAdmin(data));
         case 'saveConfig': return ok(routeAdmin(data));
         case 'GET_RESERVATIONS_CLIENT': return ok(getReservationsClient(data));

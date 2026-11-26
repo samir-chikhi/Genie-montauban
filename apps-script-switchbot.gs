@@ -74,7 +74,9 @@ function sbCodeAleatoire() {
 
 // Crée sur le clavier un code valable de (debut - 15 min) à (fin + 15 min).
 // Renvoie { code, nom } ou null si échec (l'admin est alors prévenu).
-function sbCreerCode(reference, debut, fin) {
+// type : 'timeLimit' (valable pendant la plage) ou 'disposable' (un seul
+// passage dans la plage).
+function sbCreerCode(reference, debut, fin, type) {
   try {
     var code = sbCodeAleatoire();
     var nom = 'G' + String(reference).replace(/[^A-Za-z0-9]/g, '').slice(-10) +
@@ -83,7 +85,7 @@ function sbCreerCode(reference, debut, fin) {
     var a = Math.floor((fin.getTime() + SB_MARGE_MIN * 60000) / 1000);
     sbFetch('post', '/devices/' + sbKeypadId() + '/commands', {
       commandType: 'command', command: 'createKey',
-      parameter: { name: nom, type: 'timeLimit', password: code, startTime: de, endTime: a }
+      parameter: { name: nom, type: type || 'timeLimit', password: code, startTime: de, endTime: a }
     });
     return { code: code, nom: nom };
   } catch (err) {
@@ -179,6 +181,69 @@ function sbAnnulerCodeResa(id) {
   sbEcrireCodes(codes);
 }
 
+// ── CODE VISITEUR (admin → « Code porte pour un visiteur ») ───
+// Réunion d'association, rendez-vous, intervenant… sans réservation en
+// ligne. data : { nom, date 'yyyy-MM-dd', heureDebut 'HH:MM', heureFin,
+// unique (bool : un seul passage), email (facultatif) }.
+function adminCodeVisiteur(data, qui) {
+  var nom = String(data.nom || '').trim().slice(0, 60);
+  var date = String(data.date || '');
+  var hd = hMin(data.heureDebut, -1), hf = hMin(data.heureFin, -1);
+  if (!nom || !/^\d{4}-\d{2}-\d{2}$/.test(date) || hd < 0 || hf <= hd)
+    return { success: false, error: 'Indiquez un nom, une date et un horaire valides.' };
+  var y = +date.slice(0, 4), m = +date.slice(5, 7) - 1, d = +date.slice(8, 10);
+  var debut = new Date(y, m, d, 0, hd), fin = new Date(y, m, d, 0, hf);
+  if (fin.getTime() < Date.now()) return { success: false, error: 'Ce créneau est déjà passé.' };
+  var id = 'VIS-' + Date.now();
+  var cree = sbCreerCode(id, debut, fin, data.unique ? 'disposable' : 'timeLimit');
+  if (!cree) return { success: false, error: 'Code non créé (Hub hors ligne ?). Un e-mail d\'alerte est parti.' };
+  var plage = String(data.heureDebut).slice(0, 5) + ' → ' + String(data.heureFin).slice(0, 5);
+  var codes = sbLireCodes();
+  codes[id] = { c: cree.code, n: cree.nom, s: 'visiteur', f: fin.getTime(),
+                v: { nom: nom, date: date, plage: plage, deb: hd, unique: !!data.unique } };
+  sbEcrireCodes(codes);
+  var message = 'Bonjour, voici votre accès au Génie (' + CONFIG.ADRESSE + ') le ' + formaterDate(date) +
+    ' de ' + plage + ' :\n• Porte de rue : ' + (sbProps().getProperty('ESCALE_CODE_PORTE_RUE') || '—') +
+    '\n• Porte intérieure : ' + cree.code + ' puis ✓' +
+    (data.unique ? ' (un seul passage)' : ' (actif 15 min avant et jusqu\'à 15 min après)') +
+    '\nMerci de ne pas le diffuser. Une question : ' + CONFIG.TEL;
+  var email = String(data.email || '').trim();
+  var envoye = false;
+  if (/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email))
+    envoye = envoyerEmailSafe(email, '🔑 Votre accès au Génie — ' + formaterDate(date), message + '\n\n' + CONFIG.NOM_LIEU,
+      { name: CONFIG.NOM_LIEU });
+  journaliser(qui, 'Code visiteur', id, nom + ' · ' + date + ' ' + plage + (data.unique ? ' · 1 passage' : '') + (envoye ? ' · e-mail envoyé' : ''));
+  return { success: true, id: id, code: cree.code, message: message, emailEnvoye: envoye };
+}
+
+// Récap « qui occupe quoi » d'une date, en texte court pour le groupe
+// WhatsApp des locataires. Discret : organisation ou « Prénom N. »,
+// coworkers de L'Escale seulement comptés.
+function sbTexteOccupation(dateStr, rows) {
+  var lignes = [], escale = 0;
+  for (var i = 1; i < rows.length; i++) {
+    var row = rows[i];
+    if (String(row[18]) !== 'CONFIRME' || dateISO(row[10]) !== dateStr) continue;
+    var idR = String(row[0]);
+    if (/^(ESC|STRIPE)-/.test(idR)) { escale++; continue; }
+    var r = resaDepuisLigne(row);
+    var p = plageLigne(row[11], row[13], row[14]);
+    var qui = r.orga || ((r.prenom + ' ' + (r.nom ? r.nom.charAt(0) + '.' : '')).trim());
+    lignes.push([p[0], '• ' + horaireLisible(r) + ' · ' + r.espace + ' · ' + qui]);
+  }
+  var codes = sbLireCodes();
+  Object.keys(codes).forEach(function (k) {
+    var v = codes[k].v;
+    if (v && v.date === dateStr) lignes.push([v.deb, '• ' + v.plage + ' · ' + v.nom + ' (visiteurs)']);
+  });
+  lignes.sort(function (a, b) { return a[0] - b[0]; });
+  if (!lignes.length && !escale) return '';
+  return '📅 Génie — occupation du ' + formaterDate(dateStr) + '\n'
+    + lignes.map(function (l) { return l[1]; }).join('\n')
+    + (escale ? '\n• L\'Escale (coworking) : ' + escale + ' place(s) réservée(s)' : '')
+    + '\nBonne journée à tous !';
+}
+
 // ── RAPPEL DE LA VEILLE (déclencheur quotidien à 17h) ─────────
 // Chaque client confirmé pour demain reçoit : créneau, code d'accès (si
 // réglé ou gratuit), règles de la maison. L'admin reçoit la liste des
@@ -237,11 +302,28 @@ function rappelsVeille(opts) {
     var limite = Utilities.formatDate(new Date(Date.now() - 7 * 86400000), tz, 'yyyy-MM-dd');
     Object.keys(envoyes).forEach(function (id) { if (envoyes[id] < limite) delete envoyes[id]; });
     sbProps().setProperty('RAPPELS_ENVOYES', JSON.stringify(envoyes));
-    if (arrivees.length) envoyerEmailSafe(CONFIG.EMAIL_ADMIN,
-      '📅 Demain au Génie : ' + arrivees.length + ' réservation(s)',
-      'Arrivées du ' + formaterDate(demain) + ' (les clients ont reçu leur rappel) :\n\n' + arrivees.join('\n'));
   }
+  var groupe = sbTexteOccupation(demain, rows);
+  var recap = 'Arrivées du ' + formaterDate(demain) + ' (les clients ont reçu leur rappel) :\n\n'
+    + (arrivees.join('\n') || '(aucune réservation en ligne)')
+    + (groupe ? '\n\n────────\n📲 Pour le groupe WhatsApp des locataires — touchez ce lien depuis '
+       + 'votre téléphone, choisissez le groupe, envoyez :\nhttps://wa.me/?text=' + encodeURIComponent(groupe)
+       + (sbProps().getProperty('WHATSAPP_GROUPE') ? '\n(Groupe des locataires : ' + sbProps().getProperty('WHATSAPP_GROUPE') + ')' : '')
+       + '\n\nTexte (à copier si besoin) :\n' + groupe : '');
+  if (opts.simulation) Logger.log('— E-MAIL ADMIN (simulation) —\n' + recap);
+  else if (groupe) envoyerEmailSafe(CONFIG.EMAIL_ADMIN,
+      '📅 Demain au Génie : ' + arrivees.length + ' réservation(s)', recap);
   return arrivees.length;
+}
+
+// Test du code visiteur (crée puis retire un code « un seul passage »).
+function testerCodeVisiteur() {
+  var tz = Session.getScriptTimeZone(), t = new Date(Date.now() + 20 * 60000), t2 = new Date(Date.now() + 50 * 60000);
+  var r = adminCodeVisiteur({ nom: 'TEST code visiteur', date: Utilities.formatDate(t, tz, 'yyyy-MM-dd'),
+    heureDebut: Utilities.formatDate(t, tz, 'HH:mm'), heureFin: Utilities.formatDate(t2, tz, 'HH:mm'), unique: true },
+    { nom: 'Test éditeur', role: 'responsable' });
+  Logger.log(JSON.stringify(r));
+  if (r.success) { var c = sbLireCodes(); sbSupprimerCode(c[r.id].n); delete c[r.id]; sbEcrireCodes(c); Logger.log('Code de test retiré.'); }
 }
 
 // Aperçu sans rien envoyer (affiche les e-mails de demain dans le journal).

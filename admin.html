@@ -327,6 +327,33 @@ textarea{resize:vertical;min-height:65px}
           <div class="card-hd"><h3>📅 Aujourd'hui et demain</h3></div>
           <div id="today-list"></div>
         </div>
+        <div class="card" style="margin-bottom:18px;padding:18px 20px">
+          <h3 style="margin:0 0 6px">🔑 Code porte pour un visiteur</h3>
+          <p style="margin:0 0 12px;font-size:13px;opacity:.75">Réunion d'association, rendez-vous, intervenant… Le code ne marche que sur ce créneau (15 min de marge), puis s'efface tout seul.</p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+            <input type="text" id="vis-nom" placeholder="Qui ? (ex. Réunion asso Les Voisins)" style="flex:1;min-width:220px;padding:9px;border:1.5px solid var(--border,#ddd);border-radius:8px;font:inherit">
+            <input type="date" id="vis-date" style="padding:9px;border:1.5px solid var(--border,#ddd);border-radius:8px;font:inherit">
+            <input type="time" id="vis-deb" value="09:00" step="900" style="padding:9px;border:1.5px solid var(--border,#ddd);border-radius:8px;font:inherit">
+            <span>→</span>
+            <input type="time" id="vis-fin" value="12:00" step="900" style="padding:9px;border:1.5px solid var(--border,#ddd);border-radius:8px;font:inherit">
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:10px">
+            <select id="vis-type" style="padding:9px;border:1.5px solid var(--border,#ddd);border-radius:8px;font:inherit">
+              <option value="groupe">Plusieurs personnes : valable tout le créneau</option>
+              <option value="unique">Une seule personne : un seul passage</option>
+            </select>
+            <input type="email" id="vis-email" placeholder="E-mail du visiteur (facultatif)" style="flex:1;min-width:200px;padding:9px;border:1.5px solid var(--border,#ddd);border-radius:8px;font:inherit">
+            <button class="btn btn-primary" id="vis-btn" onclick="creerCodeVisiteur()">Créer le code</button>
+          </div>
+          <div id="vis-res" style="display:none;margin-top:14px;padding:14px;border-radius:8px;background:#FFF8E1;border:1.5px solid #E0B84A">
+            <div style="font-size:13px">Code pour <b id="vis-res-nom"></b> :</div>
+            <div id="vis-res-code" style="font-size:26px;font-weight:700;letter-spacing:2px;margin:6px 0;font-family:monospace"></div>
+            <div id="vis-res-info" style="font-size:12.5px;opacity:.8;margin-bottom:8px"></div>
+            <button class="btn btn-sm btn-secondary" onclick="copierMessageVisiteur()">Copier le message</button>
+            <a class="btn btn-sm btn-secondary" id="vis-res-wa" target="_blank" rel="noopener">Envoyer par WhatsApp</a>
+            <a class="btn btn-sm btn-secondary" id="vis-res-sms">Envoyer par SMS</a>
+          </div>
+        </div>
         <div class="stats-grid" id="stats" data-resp-only-stats></div>
         <div style="display:grid;grid-template-columns:2fr 1fr;gap:18px" data-resp-only-stats>
           <div class="card">
@@ -1483,6 +1510,38 @@ async function refuserAujourdhui(id) {
   const r = DB.reservations.find(x=>x.id===id); if (!r) return;
   if (!confirm('Refuser cette réservation ? Elle sera annulée.')) return;
   await updateStatut(id, 'cancelled');
+}
+
+// ─────────────────────────────────────────────────────────
+// CODE PORTE VISITEUR (SwitchBot)
+// ─────────────────────────────────────────────────────────
+let MSG_VISITEUR = '';
+document.addEventListener('DOMContentLoaded', () => {
+  const e = document.getElementById('vis-date');
+  if (e && !e.value) e.value = new Date().toLocaleDateString('sv'); // aaaa-mm-jj local
+});
+async function creerCodeVisiteur() {
+  const nom = gv('vis-nom').trim(), date = gv('vis-date'), heureDebut = gv('vis-deb'), heureFin = gv('vis-fin');
+  if (!nom || !date || !heureDebut || !heureFin) { toast('Indiquez qui, la date et l\'horaire', 'err'); return; }
+  const btn = document.getElementById('vis-btn'); btn.disabled = true; btn.textContent = 'Création…';
+  try {
+    const d = await apiPost({ action:'CODE_VISITEUR', nom, date, heureDebut, heureFin,
+      unique: gv('vis-type') === 'unique', email: gv('vis-email').trim() });
+    if (!d.success) throw new Error(d.error || 'échec');
+    MSG_VISITEUR = d.message;
+    document.getElementById('vis-res-nom').textContent = nom;
+    document.getElementById('vis-res-code').textContent = d.code;
+    document.getElementById('vis-res-info').textContent = (d.emailEnvoye ? 'E-mail envoyé au visiteur. ' : '') +
+      'Il apparaît aussi dans le récap de la veille.';
+    document.getElementById('vis-res-wa').href = 'https://wa.me/?text=' + encodeURIComponent(d.message);
+    document.getElementById('vis-res-sms').href = 'sms:?&body=' + encodeURIComponent(d.message);
+    document.getElementById('vis-res').style.display = '';
+    toast('Code créé');
+  } catch(e) { toast('Erreur : ' + e.message, 'err'); }
+  finally { btn.disabled = false; btn.textContent = 'Créer le code'; }
+}
+function copierMessageVisiteur() {
+  if (navigator.clipboard) navigator.clipboard.writeText(MSG_VISITEUR).then(()=>toast('Message copié'));
 }
 
 // ─────────────────────────────────────────────────────────
