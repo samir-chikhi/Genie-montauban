@@ -380,6 +380,25 @@ input[type=radio],input[type=checkbox]{width:auto;height:auto;padding:0;border:n
         <label for="fOrga">Organisation / Structure</label>
         <input type="text" id="fOrga" autocomplete="organization" placeholder="Entreprise, association…">
       </div>
+      <div class="form-group">
+        <label for="fPers">Nombre de personnes <span class="req">*</span></label>
+        <input type="number" id="fPers" min="1" max="200" value="1" required>
+      </div>
+      <div class="form-group">
+        <label for="fUsage">Pour quoi faire ? <span class="req">*</span></label>
+        <select id="fUsage" required>
+          <option value="reunion">Réunion / travail</option>
+          <option value="formation">Formation ou atelier</option>
+          <option value="evenement">Événement ouvert au public</option>
+          <option value="vente">Vente / activité commerciale</option>
+          <option value="autre">Autre (précisez ci-dessous)</option>
+        </select>
+      </div>
+      <div class="form-group full">
+        <label for="fPiece">Pièce d'identité avec photo <small>(première réservation au Génie)</small></label>
+        <input type="file" id="fPiece" accept="image/*,application/pdf">
+        <small style="display:block;margin-top:4px;opacity:.75">Carte d'identité, passeport, permis de conduire ou titre de séjour. Vue uniquement par l'équipe pour vérifier votre identité, puis supprimée : elle n'est enregistrée nulle part sur le site. Inutile si vous êtes déjà venu.</small>
+      </div>
       <div class="form-group full">
         <label for="fMsg">Précisions / Besoins spéciaux</label>
         <textarea id="fMsg" placeholder="Matériel souhaité, accessibilité, réf. de modification…"></textarea>
@@ -945,6 +964,27 @@ function weekendInterdit(dateStr) {
   return e.joursFermes.includes(j);
 }
 
+// Pièce d'identité → { nom, type, data(base64) } ; photo réduite à 1600 px
+// en JPEG pour un envoi léger. null si aucun fichier.
+async function lirePieceIdentite() {
+  const f = document.getElementById('fPiece').files[0];
+  if (!f) return null;
+  const enB64 = blob => new Promise((ok, ko) => { const r = new FileReader();
+    r.onload = () => ok(String(r.result).split(',')[1]); r.onerror = ko; r.readAsDataURL(blob); });
+  if (f.type === 'application/pdf') return f.size < 6e6 ? { nom: f.name, type: f.type, data: await enB64(f) } : null;
+  try {
+    const img = await createImageBitmap(f);
+    const k = Math.min(1, 1600 / Math.max(img.width, img.height));
+    const c = document.createElement('canvas');
+    c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+    c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+    const blob = await new Promise(ok => c.toBlob(ok, 'image/jpeg', 0.82));
+    return { nom: 'piece.jpg', type: 'image/jpeg', data: await enB64(blob) };
+  } catch (e) {
+    return f.size < 6e6 ? { nom: f.name, type: f.type || 'image/jpeg', data: await enB64(f) } : null;
+  }
+}
+
 async function envoyerReservation() {
   if (!espaceId)  { toast('Choisissez un espace.', 'err'); revenirEnEdition(); return; }
   if (!duree)     { toast('Choisissez une durée.', 'err'); revenirEnEdition(); return; }
@@ -986,7 +1026,9 @@ async function envoyerReservation() {
     date        : date,
     heureDebut  : heure,
     duree       : nbH,
-    participants: 1,
+    participants: Math.max(1, parseInt(document.getElementById('fPers').value, 10) || 1),
+    usage       : document.getElementById('fUsage').value,
+    piece       : await lirePieceIdentite(),
     prenom      : prenom,
     nom         : nomFam,
     email       : email,
@@ -1022,7 +1064,8 @@ async function envoyerReservation() {
     // (doGet accepte aussi RESERVER via ?payload=). Jamais apres une
     // reponse du serveur, sinon la reservation serait creee deux fois.
     try {
-      const resp2 = await fetch(SCRIPT_URL + '?payload=' + encodeURIComponent(JSON.stringify(payload)), { redirect: 'follow' });
+      // (sans la pièce d'identité : trop lourde pour une URL)
+      const resp2 = await fetch(SCRIPT_URL + '?payload=' + encodeURIComponent(JSON.stringify(Object.assign({}, payload, { piece: null }))), { redirect: 'follow' });
       data = await lireJson(resp2);
     } catch (e2) {
       data = null;
@@ -1065,6 +1108,9 @@ async function envoyerReservation() {
   document.getElementById('mainPage').style.display = 'none';
   document.getElementById('successCard').classList.add('visible');
   document.getElementById('successRef').textContent = recap.ref;
+  if (data.aValider) document.getElementById('successTexte').textContent =
+    'Votre demande est bien reçue et le créneau vous est gardé. L\'équipe la vérifie (' + (data.motifs || []).join(', ') +
+    ') et vous répond sous 24 h par e-mail' + (data.montant > 0 ? ', avec le lien de paiement.' : '.');
   if (data.confirmee) document.getElementById('successTexte').textContent =
     'Votre réservation est confirmée. La convention de mise à disposition et le règlement intérieur viennent de vous être envoyés par email.';
   updateSteps(4);

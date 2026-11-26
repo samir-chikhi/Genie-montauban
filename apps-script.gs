@@ -873,6 +873,8 @@ function doPost(e) {
 function doGet(e) {
   try {
     const a = e.parameter.action || '';
+    // Liens ACCEPTER / REFUSER des e-mails de demande (apps-script-aiguillage.gs)
+    if (a === 'DECISION' && typeof decisionDemande === 'function') return decisionDemande(e.parameter);
     if (a === 'GET_DISPO')         return ok(getDisponibilites(e.parameter));
     if (a === 'GET_RESERVATIONS')  return ok(getReservations(e.parameter));
     if (a === 'VALIDER_TOKEN')     return ok(validerToken(e.parameter));
@@ -1393,7 +1395,7 @@ function creerReservation(data) {
       montantServeur === null ? montantClient : montantServeur,
       montantServeur === null ? montantClient : montantServeur,
       sanit(data.options), 'EN_ATTENTE', parseInt(data.participants) || 1,
-      sanit(data.message), now, now, '']);
+      sanit((data.usage ? '[' + data.usage + '] ' : '') + (data.message || '')), now, now, '']);
     const ligne          = sheet.getLastRow();
     sheet.getRange(ligne, 29).setValue('Site web'); // source (recommandation memoire Issam Chahlal, sept. 2026)
     const montantFacture = montantServeur === null ? montantClient : montantServeur;
@@ -1406,6 +1408,21 @@ function creerReservation(data) {
         }
       }
     } catch(e) {}
+    // Aiguillage (apps-script-aiguillage.gs) : première venue, événement,
+    // vente, formation, jauge, horaires → validation de l'équipe AVANT tout
+    // paiement. Sinon, on continue vers le paiement immédiat.
+    var motifs = [];
+    if (typeof motifsValidation === 'function') {
+      try { motifs = motifsValidation(data, email, ss, rows, cle, debMin, finMin); }
+      catch (eA) { logErreur('creerReservation/aiguillage', eA); }
+    }
+    if (motifs.length) {
+      const evIdV = ajouterAuCalendrier(data.espace, data.date, data.heureDebut, hFin,
+        data.prenom + ' ' + data.nom, id, data.email, false);
+      if (evIdV) sheet.getRange(ligne, 24).setValue(evIdV);
+      traiterDemandeAValider(sheet, ligne, data, motifs, montantFacture, id, hFin);
+      return { success: true, id: id, aValider: true, motifs: motifs, montant: montantFacture };
+    }
     const corps = 'Bonjour ' + data.prenom + ',\n\nVotre demande de réservation est enregistrée.\n\n'
       + '📋 Référence : ' + id + '\n📍 Espace : ' + data.espace + '\n'
       + '📅 Date : ' + formaterDate(data.date) + '\n'
