@@ -771,8 +771,24 @@ function genererSessionAdminDepuisEditeur() {
 // ============================================================
 var SUPABASE_URL_MEMBRES = 'https://thlppdjdepvgkislacel.supabase.co';
 
+// Une clé ne contient jamais d'espace : un copier-coller en avait glissé un
+// au milieu (« Invalid API key » à l'invitation, 26/11/2026).
+function cleSupabase_() {
+  return String(PropertiesService.getScriptProperties().getProperty('SUPABASE_SERVICE_KEY') || '').replace(/\s+/g, '');
+}
+
+// Diagnostic depuis l'éditeur : la clé est-elle acceptée par Supabase ?
+function testerSupabase() {
+  var brute = String(PropertiesService.getScriptProperties().getProperty('SUPABASE_SERVICE_KEY') || '');
+  [['telle quelle', brute], ['sans espaces', brute.replace(/\s+/g, '')]].forEach(function (c) {
+    var r = UrlFetchApp.fetch(SUPABASE_URL_MEMBRES + '/auth/v1/admin/users?per_page=1',
+      { headers: { apikey: c[1], Authorization: 'Bearer ' + c[1] }, muteHttpExceptions: true });
+    Logger.log('Clé ' + c[0] + ' (' + c[1].length + ' caractères) → HTTP ' + r.getResponseCode() + ' ' + r.getContentText().slice(0, 80));
+  });
+}
+
 function adminInviterMembres(data) {
-  var cle = PropertiesService.getScriptProperties().getProperty('SUPABASE_SERVICE_KEY');
+  var cle = cleSupabase_();
   if (!cle) return { success: false, error: 'SUPABASE_SERVICE_KEY manquante dans les Propriétés du script.' };
   var brut = String((data && data.emails) || '');
   var emails = brut.split(/[\s,;]+/).filter(function (x) { return x; });
