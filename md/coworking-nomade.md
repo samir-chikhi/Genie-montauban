@@ -2,7 +2,7 @@
 title: Coworking à Montauban dès 4 €/h, sans abonnement — Génie
 description: Espace de coworking à Montauban, à 200 m de la gare : une place à l'heure (4 €), en demi-journée (9 €) ou à la journée (15 €). Wifi fibre, café, accès PMR. Réservation en ligne, sans abonnement ni engagement.
 url: https://genie-montauban.fr/coworking-nomade.html
-last_updated: 2026-11-02
+last_updated: 2026-11-26
 source: miroir markdown — version texte pour moteurs IA
 ---
 
@@ -60,6 +60,9 @@ Nom
 
 E-mail 
 Téléphone (facultatif)
+
+Première venue ? Pièce d'identité avec photo 
+Carte d'identité, passeport, permis ou titre de séjour. Vue uniquement par l'équipe, puis supprimée : rien n'est enregistré sur le site. Inutile si vous êtes déjà venu.
 
 Réserver ce créneau & payer →
 
