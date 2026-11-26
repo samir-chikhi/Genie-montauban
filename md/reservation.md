@@ -74,6 +74,20 @@ Téléphone
 
 Organisation / Structure
 
+Nombre de personnes \*
+
+Pour quoi faire ? \*
+
+Réunion / travail
+Formation ou atelier
+Événement ouvert au public
+Vente / activité commerciale
+Autre (précisez ci-dessous)
+
+Pièce d'identité avec photo (première réservation au Génie)
+
+Carte d'identité, passeport, permis de conduire ou titre de séjour. Vue uniquement par l'équipe pour vérifier votre identité, puis supprimée : elle n'est enregistrée nulle part sur le site. Inutile si vous êtes déjà venu.
+
 Précisions / Besoins spéciaux
 
 Ajouter l'accès badge 24h/7j (+5€/mois)
